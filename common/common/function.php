@@ -36,3 +36,24 @@ function post($name,$default = false,$fitt = false){
         return $default;
     }
 }
+
+function get($name,$default = false,$fitt = false){
+    if(isset($_GET[$name])){
+        if($fitt){
+            switch ($fitt){
+                case 'int':
+                    if(is_numeric($_GET[$name])){
+                        return $_GET[$name];
+                    }else{
+                        return $default;
+                    }
+                break;
+                default: ;
+            }
+        }else{
+            return $_GET[$name];
+        }
+    }else{
+        return $default;
+    }
+}

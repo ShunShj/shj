@@ -33,3 +33,7 @@ if(DEBUG){
 
 include COMMON.'/common/function.php';
 include COMMON.'/kfw.php';
+
+spl_autoload_register('\common\kfw::load');
+
+\common\kfw::run();

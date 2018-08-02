@@ -7,7 +7,9 @@
     ],
     "require":{
         "php": ">= 5.3.0",
-        "filp/whoops":"*"
+        "filp/whoops":"*",
+        "catfan/medoo":"*",
+        "symfony/var-dumper":"*"
     },
     "repositories": {
       "packagist": {

@@ -24,6 +24,7 @@ class kfw{
         $action = $route->action;
         $ctrlFile = APP.'/ctrl/'.$ctrlClass.'Ctrl.php';
         $ctrlClass = '\\'.MODULE.'\ctrl\\'.$ctrlClass.'Ctrl';
+        //p($_SERVER['PATH_INFO']);die;
         if(is_file($ctrlFile)){
             include $ctrlFile;
             $ctrl = new $ctrlClass;
