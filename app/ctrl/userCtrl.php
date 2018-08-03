@@ -11,11 +11,10 @@ use common\lib\Controller;
 class userCtrl extends Controller{
 
     public function index(){
-
         $model = new \app\model\userModel();
         $res = $model->all();
         $this->assign('data',$res);
-        $this->display('index.html');
+        $this->display('user/index.html');
 
     }
 
