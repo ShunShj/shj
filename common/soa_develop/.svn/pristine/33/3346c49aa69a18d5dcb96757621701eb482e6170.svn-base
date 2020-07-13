@@ -1,0 +1,33 @@
+<?php
+namespace app\index\model\system_alert_event;
+use think\Model;
+use app\common\help\Help;
+use think\config;
+use think\Db;
+class SystemMail extends Model{ 
+	
+	private $_languageList;
+
+    public function initialize()
+    {
+    	$this->_languageList = config('systom_setting')['language_list'];
+    	parent::initialize(); 
+    }
+
+    /***
+    * 添加系统邮件
+    */
+    public function addSystemMail($params){
+    	$data['inbox'] = $params['email'];
+    	$data['content'] = $params['content'];
+    	$data['url'] = $params['url'];
+    	$data['status'] = $params['status'];
+    	$data['create_time'] = time();
+
+        Db::table('system_mail')->insert($data);
+		$system_mail_id = Db::name('system_mail')->getLastInsID(); 
+		return $system_mail_id;
+
+    }
+
+}

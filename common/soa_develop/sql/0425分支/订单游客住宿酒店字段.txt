@@ -1,0 +1,4 @@
+ALTER TABLE `company_order_accommodation`
+MODIFY COLUMN `check_in_hotel`  varchar(300) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '提前入住酒店，逗号隔开' AFTER `check_on`,
+MODIFY COLUMN `check_on_hotel`  varchar(300) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '延后退房酒店，多个逗号隔开' AFTER `check_in_hotel`;
+

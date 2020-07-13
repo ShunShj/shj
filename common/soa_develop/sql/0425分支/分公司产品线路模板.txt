@@ -1,0 +1,21 @@
+CREATE TABLE `branch_product_route_template` (
+`branch_product_number`  varchar(30) NULL COMMENT '分公司产品编号' ,
+`route_number`  varchar(30) NULL COMMENT '线路模板编号' 
+);
+
+ALTER TABLE `branch_product_route_template`
+ADD COLUMN `currency_id`  int(10) NULL COMMENT '货币ID' AFTER `route_number`,
+ADD COLUMN `distributor_price`  float(10,2) NULL COMMENT '代理价格' AFTER `currency_id`,
+ADD COLUMN `customer_price`  float(10,2) NULL COMMENT '直客价格' AFTER `distributor_price`;
+
+ALTER TABLE `branch_product_route_template`
+ADD COLUMN `create_time`  int(10) NULL COMMENT '创建时间' AFTER `customer_price`,
+ADD COLUMN `create_user_id`  int(10) NULL COMMENT '创建人ID' AFTER `create_time`,
+ADD COLUMN `update_time`  int(10) NULL COMMENT '修改时间' AFTER `create_user_id`,
+ADD COLUMN `update_user_id`  int(10) NULL COMMENT '修改人ID' AFTER `update_time`;
+
+ALTER TABLE `branch_product_route_template`
+CHANGE COLUMN `currency_id` `price_currency_id`  int(10) NULL DEFAULT NULL COMMENT '货币ID' AFTER `route_number`;
+
+
+

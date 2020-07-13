@@ -1,0 +1,689 @@
+<?php
+
+namespace app\index\model\branchcompany;
+use think\Model;
+use app\index\model\branchcompany\BranchProductTeam;
+use app\index\model\branchcompany\BranchProductSource;
+use app\index\model\branchcompany\BranchProductRouteTemplate;
+use app\index\model\product\TeamProduct;
+use app\index\model\product\TeamProductAllocation;
+use app\index\service\SourceService;
+use app\common\help\Help;
+use app\index\service\PublicService;
+use think\config;
+use think\Db;
+class BranchProduct extends Model{
+    //protected $connection = ['database' => 'erp'];
+    protected $table = 'branch_product';
+    private $_languageList;
+    private $_branch_product_team;
+    private $_branch_product_source;
+    private $_branch_product_route_template;
+    private $_team_product;
+    private $_team_product_allocation;
+    private $_source_service;
+    private $_public_service;
+    public function initialize()
+    {
+        $this->_languageList = config('systom_setting')['language_list'];
+        $this->_branch_product_source = new  BranchProductSource();
+        $this->_branch_product_team = new  BranchProductTeam();
+        $this->_team_product = new  TeamProduct();
+        $this->_team_product_allocation = new  TeamProductAllocation();
+        $this->_source_service = new SourceService();
+        $this->_public_service = new PublicService();
+        $this->_branch_product_route_template = new BranchProductRouteTemplate();
+        parent::initialize();
+
+    }
+
+    /**
+     * 添加分公司产品
+     * 胡
+     */
+    public function addBranchProduct($params){
+
+        $t = time();
+       
+        $data['branch_product_number'] = $params['branch_product_number'];
+        $data['branch_product_name'] = $params['branch_product_name'];
+        $data['branch_product_begin_time'] = $params['branch_product_begin_time'];
+       
+        $data['branch_product_type_id'] = $params['branch_product_type_id'];
+		if(!empty($params['remark'])){
+			$data['remark'] = $params['remark'];
+		}
+		if(!empty($params['branch_product_end_time'])){
+			$data['branch_product_end_time'] = $params['branch_product_end_time'];
+		}
+
+        if(!empty($params['type'])){
+            $data['type'] = $params['type'];
+        }
+		
+		$data['locked'] = 1;
+        $data['create_time'] = $t;
+        $data['create_user_id'] = $params['branch_product_user_id'] ? $params['branch_product_user_id'] : $params['now_user_id'];
+        $data['update_time'] = $t;
+        $data['update_user_id'] = $params['branch_product_user_id'] ? $params['branch_product_user_id'] : $params['now_user_id'];
+        $data['company_id'] = $params['user_company_id'];
+        $data['status'] = $params['status'];
+		//$team_product_array = $params['team_product_array'];
+		$route_template_array = $params['route_template_array'];
+										 
+		
+		$source_array = $params['source_array'];//自己的资源
+        $this->startTrans();
+        try{
+            $pk_id = $this->insertGetId($data);
+            $branch_product_number = $this->_public_service->setNumber('branch_product', 'branch_product_id', $pk_id, 'branch_product_number', $data['branch_product_number'], $pk_id);
+            
+			for($i=0;$i<count($route_template_array);$i++){
+				$route_template_params = [
+					'branch_product_number'=>$branch_product_number,
+					'route_number'=>$route_template_array[$i]['route_number'],
+					'price_currency_id'=>$route_template_array[$i]['price_currency_id'],
+					'distributor_price'=>$route_template_array[$i]['distributor_price'],
+					'customer_price'=>$route_template_array[$i]['customer_price'],
+					'now_user_id'=>$params['now_user_id']							
+				];
+				
+				
+				$this->_branch_product_route_template->addBranchProductRouteTemplate($route_template_params);
+			}
+            
+            
+//             $pk_number = $data['branch_product_number'];
+// 			for($i=0;$i<count($team_product_array);$i++){
+// 				$team_product_array_params=[
+// 					'branch_product_number'=>$pk_number,
+// 					'team_product_number'=>$team_product_array[$i]['team_product_number'],
+// 					'team_product_name'=>$team_product_array[$i]['team_product_name'],
+// 					'supplier_name'=>$team_product_array[$i]['supplier_name'],
+// 					'branch_cost'=>$team_product_array[$i]['branch_cost'],
+// 					'branch_distributor_price'=>$team_product_array[$i]['branch_distributor_price'],
+// 					'branch_customer_price'=>$team_product_array[$i]['branch_customer_price'],
+// 					'cost_currency_id'=>$team_product_array[$i]['cost_currency_id'],
+// 					'price_currency_id'=>$team_product_array[$i]['price_currency_id'],
+// 					'now_user_id'=>$params['now_user_id'],
+// 					'settlement_type'=>$team_product_array[$i]['settlement_type']	
+						
+// 				];
+// 				$branch_product_team_id = $this->_branch_product_team->addBranchProductTeam($team_product_array_params);
+				
+// 				//判断是否实真实结算
+
+
+
+// 				if($team_product_array[$i]['settlement_type']==2){//如果是真实结算
+// 					//通过团队产品编号获取团队产品ID
+// 					$team_product_params = [
+// 						'team_product_number'=>	$team_product_array[$i]['team_product_number']
+// 					];
+// 					$team_product_result = $this->_team_product->getTeamProduct($team_product_params);
+					
+					
+// 					$team_product_allocation_params = [
+// 						'team_product_id'=>$team_product_result[0]['team_product_id']	
+// 					];
+// 					$team_product_allocation_result = $this->_team_product_allocation->getTeamProductAllocation($team_product_allocation_params);
+					
+// 					for($k=0;$k<count($team_product_allocation_result);$k++){
+// 						if($team_product_allocation_result[$k]['supplier_type_id']!=11){
+// 							//通过资源的类型以及ID查询资源数据
+// 							$source_service_params = [
+// 								'source_id'=>$team_product_allocation_result[$k]['source_id'],
+// 								'supplier_type_id'=>$team_product_allocation_result[$k]['supplier_type_id'],
+// 							];
+// 							$source_service_result = $this->_source_service->getSource($source_service_params);
+							
+							
+							
+// 							$branch_product_source_params = [
+// 								'branch_product_number'=> $pk_number,
+// 								'supplier_type_id' => $team_product_allocation_result[$k]['supplier_type_id'],
+// 								'source_number'=> $source_service_result['source_number'],
+// 								'source_name'=> $source_service_result['source_name'],
+// 								'source_cost'=>  $team_product_allocation_result[$k]['source_total_price'],
+// 								'source_distributor_price'=>  $team_product_allocation_result[$k]['source_total_price'],
+// 								'source_customer_price'=> $team_product_allocation_result[$k]['source_total_price'],
+// 								'cost_currency_id'=>  $team_product_allocation_result[$k]['payment_currency_id'],
+// 								'price_currency_id'=>  $team_product_allocation_result[$k]['payment_currency_id'],
+// 								'source_id'=>$source_service_result['source_id'],
+// 								'team_product_number'=>$team_product_array[$i]['team_product_number'],
+// 								'is_team_product'=> 1,
+// 								'supplier_name'=>$source_service_result['company_name'],
+// 								'now_user_id'=>$params['now_user_id'],
+// 								'branch_product_team_id'=>$branch_product_team_id
+// 							];
+// 							$branch_product_source_result  = $this->_branch_product_source->addBranchProductSource($branch_product_source_params);
+								
+// 						}
+
+// 					}
+// 				}
+				
+				
+				
+				
+// 				$own_expense_array = $team_product_array[$i]['own_expens_source_array'];
+				
+			
+// 				for($o=0;$o<count($own_expense_array);$o++){
+// 					$branch_product_source_params = [
+// 						'branch_product_number'=> $pk_number,
+// 						'supplier_type_id' => $own_expense_array[$o]['supplier_type_id'],
+// 						'source_number'=> $own_expense_array[$o]['source_number'],
+// 						'source_name'=> $own_expense_array[$o]['source_name'],
+// 						'source_cost'=> $own_expense_array[$o]['source_cost'],
+// 						'source_distributor_price'=> (float)$own_expense_array[$o]['source_distributor_price'],
+// 						'source_customer_price'=>(float) $own_expense_array[$o]['source_customer_price'],
+// 						'cost_currency_id'=> $own_expense_array[$o]['cost_currency_id'],
+// 						'price_currency_id'=>$own_expense_array[$o]['price_currency_id'],
+// 						'source_id'=>$own_expense_array[$o]['source_id'],
+// 						'team_product_number'=>$team_product_array[$i]['team_product_number'],
+// 						'is_team_product'=> 1,
+// 						'supplier_name'=> $own_expense_array[$o]['supplier_name'],
+// 						'now_user_id'=>$params['now_user_id'],
+// 						'branch_product_team_id'=>$branch_product_team_id	
+// 					];
+					
+					
+					
+// 					$branch_product_source_result  = $this->_branch_product_source->addBranchProductSource($branch_product_source_params);
+					
+// 				}
+				
+
+// 			}
+			
+			for($j=0;$j<count($source_array);$j++){
+				$branch_product_source_params = [
+					'branch_product_number'=> $branch_product_number,
+					'supplier_type_id' => $source_array[$j]['supplier_type_id'],
+					'source_number'=> $source_array[$j]['source_number'],
+					'source_name'=> $source_array[$j]['source_name'],
+					'source_cost'=> $source_array[$j]['source_cost'],
+					'source_distributor_price'=> $source_array[$j]['source_distributor_price'],
+					'source_customer_price'=> $source_array[$j]['source_customer_price'],
+					'cost_currency_id'=> (float)$source_array[$j]['cost_currency_id'],
+					'price_currency_id'=> (float)$source_array[$j]['price_currency_id'],
+					'source_id'=>$source_array[$j]['source_id'],
+
+					'is_team_product'=> 2,
+					'supplier_name'=> $source_array[$j]['supplier_name'],
+					'now_user_id'=>$params['now_user_id'],
+				
+				];
+					
+					
+					
+				$branch_product_source_result  = $this->_branch_product_source->addBranchProductSource($branch_product_source_params);
+					
+			}
+            // 提交事务
+            $this->commit();
+            $result = $branch_product_number;
+
+        } catch (\Exception $e) {
+            $result = $e->getMessage();
+            // 回滚事务
+            $this->rollback();
+
+        }
+
+        return $result;
+    }
+
+    /**
+     * 获取分公司产品数据
+     * 胡
+     */
+    public function getBranchProduct($params,$is_count=false,$is_page=false,$page=null,$page_size=20){
+    	$data = "1=1";
+    	if($params['is_like']==1){
+    		if(!empty($params['branch_product_name'])){
+    			$data.= " and branch_product.branch_product_name like '%".$params['branch_product_name']."%'";
+    		}
+    		if(!empty($params['branch_product_number'])){
+    			$data.= " and branch_product.branch_product_number like '%".$params['branch_product_number']."%'";
+    		}
+//    		if(!empty($params['create_user_name'])){
+//    			$data.= " and user.nickname like '%".$params['create_user_name']."%'";
+//    		}
+    	}else{
+    		
+    		if(!empty($params['branch_product_name'])){
+    			$data.= " and branch_product.branch_product_name like '%".$params['branch_product_name']."%'";
+    		}
+    		if(!empty($params['branch_product_number'])){
+    			$data.= " and branch_product.branch_product_number = '".$params['branch_product_number']."'";
+    		}
+//    		if(!empty($params['create_user_name'])){
+//    			$data.= " and user.nickname = '".$params['create_user_name']."'";
+//    		}
+    	}
+		
+    	if(isset($params['status']) && $params['status']<2){
+    		$data.= " and branch_product.status = ".$params['status'];
+    	}
+        if(!empty($params['search_user_id'])){
+            $data.= " and branch_product.create_user_id = ".$params['search_user_id'];
+        }
+    	if(!empty($params['branch_product_id'])){
+    		$data.= " and branch_product.branch_product_id = '".$params['branch_product_id']."'";
+    	}
+    	if(!empty($params['branch_product_type_id'])){
+    		$data.= " and branch_product.branch_product_type_id = '".$params['branch_product_type_id']."'";
+    	}
+
+        if(is_numeric($params['company_id'])){
+            $data.= " and branch_product.company_id = '".$params['company_id']."'";
+        }
+        if(is_numeric($params['locked'])){
+        	$data.= " and branch_product.locked = ".$params['locked'];
+        }
+
+        if(is_numeric($params['type'])){
+            $data.= " and branch_product.type = ".$params['type'];
+        }
+		
+        if($is_count==true){
+            $result = $this->table("branch_product")->where($data)->count();
+        }else {
+            if ($is_page == true) {
+                $result = $this->table("branch_product")->
+                join("company", 'company.company_id= branch_product.company_id', 'left')->
+                join('user','user.user_id=branch_product.create_user_id','left')->
+                where($data)->limit($page, $page_size)->order('create_time desc')->
+                field(['branch_product.branch_product_id', 'branch_product.branch_product_number', 'branch_product.branch_product_name',
+                    'branch_product.branch_product_begin_time', 'branch_product.branch_product_end_time', 'branch_product.company_id',
+                    'branch_product.remark',
+                    'company.company_name',
+                	"branch_product.branch_product_type_id",
+                	"(select branch_product_type_name from branch_product_type where branch_product_type.branch_product_type_id = branch_product.branch_product_type_id) as branch_product_type_name",	
+					'branch_product.locked',
+                	"company.currency_id as price_currency_id",
+                    "company.currency_id as cost_currency_id",
+                    "(select nickname  from user where user.user_id = branch_product.create_user_id)" => 'create_user_name',
+                    "(select nickname  from user where user.user_id = branch_product.update_user_id)" => 'update_user_name',
+                    'branch_product.create_user_id', 'branch_product.create_time', 'branch_product.update_user_id',
+                    'branch_product.update_time', 'branch_product.status'])->select();
+            }else{
+                $result = $this->table("branch_product")->
+                join("company", 'company.company_id= branch_product.company_id', 'left')->
+                join('user','user.user_id=branch_product.create_user_id','left')->
+                where($data)->order('create_time desc')->
+                field(['branch_product.branch_product_id', 'branch_product.branch_product_number', 'branch_product.branch_product_name',
+                    'branch_product.branch_product_begin_time', 'branch_product.branch_product_end_time', 'branch_product.company_id',
+                    'branch_product.remark',
+                    'company.company_name',
+                	"branch_product.branch_product_type_id",
+                	"(select branch_product_type_name from branch_product_type where branch_product_type.branch_product_type_id = branch_product.branch_product_type_id) as branch_product_type_name",
+                	'branch_product.locked',
+                	"company.currency_id as price_currency_id",
+                    "company.currency_id as cost_currency_id",
+                	"(select currency_name from currency where currency.currency_id =company.language_id)"=>"price_currency_name",
+                	"(select nickname  from user where user.user_id = branch_product.create_user_id)" => 'create_user_name',
+                 	'user.nickname'=>'create_user_name',
+                    'branch_product.create_user_id', 'branch_product.create_time', 'branch_product.update_user_id',
+                    'branch_product.update_time', 'branch_product.status'])->
+                select();
+               
+            }
+        }
+
+        //获取货币名字
+        for($i=0;$i<count($result);$i++){
+            $price_currency_id = $result[$i]['price_currency_id'];
+            $source = Db::table('currency')->where(array("currency_id" => $price_currency_id))->select();
+            $result[$i]['price_currency_name']=$source[0]['currency_name'];
+        }
+
+        return $result;
+
+    }
+	
+    /**
+     * 修改 分公司产品状态
+     */
+    public function updateBranchProductStatusByBranchProductNumber($params){
+
+    	$t = time();    	
+    	$data['status'] = $params['status'];
+    	$data['update_user_id'] = $params['now_user_id'];   	
+    	$data['update_time'] = $t;
+    	
+
+    	$this->startTrans();
+    	try{
+    		$this->where(" branch_product_number = '".$params['branch_product_number']."'")->update($data);
+
+    		$result = 1;
+    		// 提交事务
+    		$this->commit();
+    	
+    	} catch (\Exception $e) {
+    		$result = $e->getMessage();
+    		// 回滚事务
+    		$this->rollback();
+    	
+    	}
+    	return $result;
+    }
+
+    /**
+     * 修改分公司产品 根据branch_product_number
+     */
+    public function updateBranchProductByBranchProductNumber($params){
+
+        $t = time();
+        if(!empty($params['branch_product_name'])){
+        	$data['branch_product_name'] = $params['branch_product_name'];
+
+        }
+        if(!empty($params['branch_product_begin_time'])){
+        	$data['branch_product_begin_time'] = $params['branch_product_begin_time'];
+        
+        }
+//         if(!empty($params['branch_product_end_time'])){
+//         	$data['branch_product_end_time'] = $params['branch_product_end_time'];
+        	
+//         }
+        if(!empty($params['branch_product_type_id'])){
+        	$data['branch_product_type_id'] = $params['branch_product_type_id'];
+        	 
+        }
+        if(!empty($params['remark'])){
+        	$data['remark'] = $params['remark'];
+        	
+        } 
+        if(is_numeric($params['status'])){
+            $data['status'] = $params['status'];
+
+        }
+
+        if(!empty($params['type'])){
+            $data['type'] = $params['type'];
+
+        }
+
+
+        $data['update_user_id'] = $params['branch_product_user_id'] ? $params['branch_product_user_id'] : $params['now_user_id'];
+
+        $data['update_time'] = $t;
+
+
+
+        $team_product_array = $params['team_product_array'];
+        $route_template_array = $params['route_template_array'];
+        $source_array = $params['source_array'];//自己的资源
+        $pk_number = $params['branch_product_number'];
+        $this->startTrans();
+        try{
+            $this->where(" branch_product_number = '".$params['branch_product_number']."'")->update($data);
+			//先删除该分公司下的线路模板
+			$this->table("branch_product_route_template")->where(" branch_product_number = '".$params['branch_product_number']."'")->delete();
+			
+            for($i=0;$i<count($route_template_array);$i++){
+            	$route_template_params = [
+            		'branch_product_number'=>$pk_number,
+            		'route_number'=>$route_template_array[$i]['route_number'],
+            		'price_currency_id'=>$route_template_array[$i]['price_currency_id'],
+            		'distributor_price'=>$route_template_array[$i]['distributor_price'],
+            		'customer_price'=>$route_template_array[$i]['customer_price'],
+            		'now_user_id'=>$params['now_user_id']
+            	];
+            	$this->_branch_product_route_template->addBranchProductRouteTemplate($route_template_params);
+            }
+            
+            
+            
+            
+			$update_status = [
+				'status'=>0,
+				//'branch_product_number'=>	$params['branch_product_number']
+			];
+// 			$this->table('branch_product_team')->where(" branch_product_number = '".$pk_number."'")->update($update_status);
+ 			$this->table('branch_product_source')->where(" branch_product_number = '".$pk_number."'")->update($update_status);
+			
+// 			for($i=0;$i<count($team_product_array);$i++){
+// 				$team_product_array_params=[
+// 						'branch_product_number'=>$pk_number,
+// 						'team_product_number'=>$team_product_array[$i]['team_product_number'],
+// 						'team_product_name'=>$team_product_array[$i]['team_product_name'],
+// 						'supplier_name'=>$team_product_array[$i]['supplier_name'],
+// 						'branch_cost'=>$team_product_array[$i]['branch_cost'],
+// 						'branch_distributor_price'=>$team_product_array[$i]['branch_distributor_price'],
+// 						'branch_customer_price'=>$team_product_array[$i]['branch_customer_price'],
+// 						'cost_currency_id'=>$team_product_array[$i]['cost_currency_id'],
+// 						'price_currency_id'=>$team_product_array[$i]['price_currency_id'],
+// 						'now_user_id'=>$params['now_user_id'],
+// 						'settlement_type'=>$team_product_array[$i]['settlement_type']
+			
+// 				];
+// 				$branch_product_team_id = $this->_branch_product_team->addBranchProductTeam($team_product_array_params);
+			
+// 				//判断是否实真实结算
+			
+			
+			
+// 				if($team_product_array[$i]['settlement_type']==2){//如果是真实结算
+// 					//通过团队产品编号获取团队产品ID
+// 					$team_product_params = [
+// 							'team_product_number'=>	$team_product_array[$i]['team_product_number']
+// 					];
+// 					$team_product_result = $this->_team_product->getTeamProduct($team_product_params);
+						
+						
+// 					$team_product_allocation_params = [
+// 							'team_product_id'=>$team_product_result[0]['team_product_id']
+// 					];
+// 					$team_product_allocation_result = $this->_team_product_allocation->getTeamProductAllocation($team_product_allocation_params);
+						
+// 					for($k=0;$k<count($team_product_allocation_result);$k++){
+// 						if($team_product_allocation_result[$k]['supplier_type_id']!=11){
+// 							//通过资源的类型以及ID查询资源数据
+// 							$source_service_params = [
+// 									'source_id'=>$team_product_allocation_result[$k]['source_id'],
+// 									'supplier_type_id'=>$team_product_allocation_result[$k]['supplier_type_id'],
+// 							];
+// 							$source_service_result = $this->_source_service->getSource($source_service_params);
+								
+								
+								
+// 							$branch_product_source_params = [
+// 									'branch_product_number'=> $pk_number,
+// 									'supplier_type_id' => $team_product_allocation_result[$k]['supplier_type_id'],
+// 									'source_number'=> $source_service_result['source_number'],
+// 									'source_name'=> $source_service_result['source_name'],
+// 									'source_cost'=>  $team_product_allocation_result[$k]['source_total_price'],
+// 									'source_distributor_price'=>  $team_product_allocation_result[$k]['source_total_price'],
+// 									'source_customer_price'=> $team_product_allocation_result[$k]['source_total_price'],
+// 									'cost_currency_id'=>  $team_product_allocation_result[$k]['payment_currency_id'],
+// 									'price_currency_id'=>  $team_product_allocation_result[$k]['payment_currency_id'],
+// 									'source_id'=>$source_service_result['source_id'],
+// 									'team_product_number'=>$team_product_array[$i]['team_product_number'],
+// 									'is_team_product'=> 1,
+// 									'supplier_name'=>$source_service_result['company_name'],
+// 									'now_user_id'=>$params['now_user_id'],
+// 									'branch_product_team_id'=>$branch_product_team_id
+// 							];
+// 							$branch_product_source_result  = $this->_branch_product_source->addBranchProductSource($branch_product_source_params);
+			
+// 						}
+			
+// 					}
+// 				}
+			
+			
+			
+			
+// 				$own_expense_array = $team_product_array[$i]['own_expens_source_array'];
+// 				for($j=0;$j<count($own_expense_array);$j++){
+// 					$branch_product_source_params = [
+// 							'branch_product_number'=> $pk_number,
+// 							'supplier_type_id' => $own_expense_array[$j]['supplier_type_id'],
+// 							'source_number'=> $own_expense_array[$j]['source_number'],
+// 							'source_name'=> $own_expense_array[$j]['source_name'],
+// 							'source_cost'=> $own_expense_array[$j]['source_cost'],
+// 							'source_distributor_price'=> $own_expense_array[$j]['source_distributor_price'],
+// 							'source_customer_price'=> $own_expense_array[$j]['source_customer_price'],
+// 							'cost_currency_id'=> (float)$own_expense_array[$j]['cost_currency_id'],
+// 							'price_currency_id'=> (float)$own_expense_array[$j]['price_currency_id'],
+// 							'source_id'=>$own_expense_array[$j]['source_id'],
+// 							'team_product_number'=>$team_product_array[$i]['team_product_number'],
+// 							'is_team_product'=> 1,
+// 							'supplier_name'=> $own_expense_array[$j]['supplier_name'],
+// 							'now_user_id'=>$params['now_user_id'],
+// 							'branch_product_team_id'=>$branch_product_team_id
+// 					];
+						
+						
+						
+// 					$branch_product_source_result  = $this->_branch_product_source->addBranchProductSource($branch_product_source_params);
+						
+// 				}
+			
+			
+// 			}
+				
+			for($j=0;$j<count($source_array);$j++){
+				$branch_product_source_params = [
+						'branch_product_number'=> $pk_number,
+						'supplier_type_id' => $source_array[$j]['supplier_type_id'],
+						'source_number'=> $source_array[$j]['source_number'],
+						'source_name'=> $source_array[$j]['source_name'],
+						'source_cost'=> $source_array[$j]['source_cost'],
+						'source_distributor_price'=> $source_array[$j]['source_distributor_price'],
+						'source_customer_price'=> $source_array[$j]['source_customer_price'],
+						'cost_currency_id'=> (float)$source_array[$j]['cost_currency_id'],
+						'price_currency_id'=> (float)$source_array[$j]['price_currency_id'],
+						'source_id'=>$source_array[$j]['source_id'],
+			
+						'is_team_product'=> 2,
+						'supplier_name'=> $source_array[$j]['supplier_name'],
+						'now_user_id'=>$params['now_user_id'],
+			
+				];
+					
+					
+					
+				$branch_product_source_result  = $this->_branch_product_source->addBranchProductSource($branch_product_source_params);
+					
+			}
+            
+            $result = 1;
+            // 提交事务
+            $this->commit();
+
+        } catch (\Exception $e) {
+            $result = $e->getMessage();
+            // 回滚事务
+            $this->rollback();
+
+        }
+        return $result;
+    }
+    
+    /**
+     * 锁定分公司产品
+     */
+    public function updateBranchProductLocked($params){
+    	
+
+    	$t = time();
+   
+    	$data['locked'] = 1;
+    	
+    	
+
+
+    	$this->startTrans();
+    	try{
+    		
+    		//先删除该分公司下的线路模板
+    		$this->where(" branch_product_number = '".$params['branch_product_number']."'")->update($data);
+
+    		$result = 1;
+    		// 提交事务
+    		$this->commit();
+    	
+    	} catch (\Exception $e) {
+    		$result = $e->getMessage();
+    		// 回滚事务
+    		$this->rollback();
+    	
+    	}
+    	return $result;    	
+    	
+    	
+    }
+
+
+    public function updateBranchProductStatusByRouteTemplateId($params){
+
+        $t = time();
+        $data['branch_product.status'] = $params['status'];
+        $data['branch_product.update_user_id'] = $params['now_user_id'];
+        $data['branch_product.update_time'] = $t;
+
+        $where = " 1=1 ";
+        if (!empty($params['route_template_id']))
+        {
+            $where .= " and route_template.route_template_id = ". $params['route_template_id'];
+        }
+
+        if (!empty($params['branch_product_type_id']))
+        {
+            $where .= " and branch_product.branch_product_type_id = ". $params['branch_product_type_id'];
+        }
+
+        $this->startTrans();
+        try{
+            $this->alias('branch_product')
+                ->join('branch_product_route_template', 'branch_product_route_template.branch_product_number = branch_product.branch_product_number')
+                ->join('route_template','route_template.route_number = branch_product_route_template.route_number')
+                ->where($where)->update($data);
+
+            $result = 1;
+            // 提交事务
+            $this->commit();
+
+        } catch (\Exception $e) {
+            $result = $e->getMessage();
+
+            // 回滚事务
+            $this->rollback();
+
+        }
+        return $result;
+    }
+
+
+    public function getOneBranchProduct($branch_product_id){
+        $result = $this->table("branch_product")->where(['branch_product_id' => $branch_product_id])->find();
+        return $result;
+    }
+
+    public function getBranchProductByRouteTemplateId($route_template_id)
+    {
+        try
+        {
+            $result = $this->table("branch_product")->alias('branch_product')
+                ->field(['branch_product.*'])
+                ->join('branch_product_route_template', 'branch_product.branch_product_number = branch_product_route_template.branch_product_number')
+                ->join('route_template', 'route_template.route_number = branch_product_route_template.route_number')
+                ->where(['route_template.route_template_id' => $route_template_id])->select();
+        }
+        catch (Exception $e)
+        {
+            $result = $e->getMessage();
+            \think\Response::create(['code' => '400', 'msg' =>$result], 'json')->send();
+            exit();
+        }
+
+        return $result;
+    }
+
+}

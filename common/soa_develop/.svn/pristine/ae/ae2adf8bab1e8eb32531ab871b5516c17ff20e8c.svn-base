@@ -1,0 +1,104 @@
+<?php
+
+namespace app\index\model\branchcompany;
+use think\Model;
+use app\index\service\PublicService;
+class CompanyOrderAnnex extends Model{
+
+    protected $table = 'company_order_annex';
+    private $_languageList;
+    private $_public_service;
+    public function initialize()
+    {
+        $this->_languageList = config('systom_setting')['language_list'];
+        $this->_public_service = new PublicService();
+        parent::initialize();
+
+    }
+
+    /**
+     * 添加 订单附件
+     *
+     */
+    public function addCompanyOrderAnnex($params){
+
+        $data['company_order_number'] = $params['company_order_number'];
+        $data['url'] = $params['url'];
+        $data['create_user_id'] = $params['create_user_id'];
+        $data['create_time'] = time();
+        $data['status'] = 1;
+
+        $this->startTrans();
+        try{
+            $this->where(['company_order_number' => $params['company_order_number']])->update(['status' => 0]);
+            $result = $this->insertGetId($data);
+            
+            // 提交事务
+           $this->commit();
+
+        } catch (\Exception $e) {
+            $result = $e->getMessage();
+            // 回滚事务
+            $this->rollback();
+
+            \think\Response::create(['code' => '400', 'msg' =>$result], 'json')->send();
+            exit();
+        }
+
+        return $result;
+    }
+
+
+    public function getCompanyOrderAnnex($params)
+    {
+        $data = " 1=1 ";
+        if(!empty($params['company_order_number'])){
+            $data.= " and company_order_annex.company_order_number = '".$params['company_order_number']."'";
+        }
+
+        if(isset($params['create_user_id'])){
+            $data.= " and company_order_annex.create_user_id = ".$params['create_user_id'];
+        }
+
+        if(isset($params['status'])){
+            $data.= " and company_order_annex.status = ".$params['status'];
+        }
+
+
+        try{
+            $result = $this->field(['company_order_annex.*', 'user.username'])
+                ->join('user','user.user_id = company_order_annex.create_user_id','left')
+                ->where($data)->select();
+
+        } catch (\Exception $e) {
+            $result = $e->getMessage();
+
+            \think\Response::create(['code' => '400', 'msg' =>$result], 'json')->send();
+            exit();
+
+        }
+
+        return $result;
+    }
+
+    public function delCompanyOrderAnnex($params)
+    {
+        $where['company_order_annex_id'] = $params['company_order_annex_id'];
+        $where['create_user_id'] = $params['now_user_id'];
+
+        try{
+            $result = $this->where($where)->update(['status' => -1]);
+
+        } catch (\Exception $e) {
+            $result = $e->getMessage();
+
+            \think\Response::create(['code' => '400', 'msg' =>$result], 'json')->send();
+            exit();
+
+        }
+
+        return $result;
+    }
+
+
+}

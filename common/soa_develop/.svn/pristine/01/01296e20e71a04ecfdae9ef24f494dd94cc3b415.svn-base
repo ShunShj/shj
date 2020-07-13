@@ -1,0 +1,20 @@
+#审批添加一些字段
+ALTER TABLE `finance_approve`
+MODIFY COLUMN `status`  int(11) NULL DEFAULT NULL COMMENT '1审批中2审批结束3撤销' AFTER `attachment`,
+ADD COLUMN `revocation_status`  int(10) NULL COMMENT '1 申请撤销 2 同意撤销 3 拒绝撤销' AFTER `attachment`,
+ADD COLUMN `revocation_apply_time`  int(10) NULL COMMENT '撤销申请时间' AFTER `revocation_status`,
+ADD COLUMN `revocation_approve_time`  int(10) NULL COMMENT '确认撤销审批时间' AFTER `revocation_apply_time`;
+#财务审批添加一些字段
+ALTER TABLE `finance_approve`
+ADD COLUMN `revocation_approve_user_id`  int NULL COMMENT '撤销审批人ID' AFTER `revocation_approve_time`,
+ADD COLUMN `revocation_opinion`  varchar(255) NULL COMMENT '撤销意见' AFTER `revocation_approve_user_id`;
+
+
+DROP TABLE IF EXISTS `finance_approve_allocation`;
+CREATE TABLE `finance_approve_allocation` (
+  `finance_approve_allocation_id` int(10) DEFAULT NULL COMMENT '财务审批金额去向ID',
+  `finance_approve_id` int(10) DEFAULT NULL,
+  `money` decimal(10,2) DEFAULT NULL COMMENT '金额',
+  `allocation_type` int(11) DEFAULT NULL COMMENT '分配 1 实收实付 2 账户',
+  `create_time` int(10) DEFAULT NULL COMMENT '创建时间'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='财务审批金额去向';

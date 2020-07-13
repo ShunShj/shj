@@ -1,0 +1,94 @@
+﻿#应收添加团队产品ID字段
+ALTER TABLE `receivable`
+ADD COLUMN `team_product_id`  int(10) NULL COMMENT '团队产品编号' AFTER `source_type_id`;
+#应付添加团队产品ID字段
+ALTER TABLE `cope`
+ADD COLUMN `team_product_id`  int(10) NULL COMMENT '团队产品编号' AFTER `source_type_id`;
+
+#实收加个锁定
+ALTER TABLE `receivable_info`
+ADD COLUMN `is_locked`  int(10) NULL DEFAULT 0 COMMENT '1锁定0不锁定' AFTER `fee_type_type`;
+
+ALTER TABLE `receivable_info`
+ADD COLUMN `supplier_name`  varchar(100) NULL COMMENT '供应商名称' AFTER `is_locked`;
+
+#添加sn号
+ALTER TABLE `receivable_info`
+ADD COLUMN `sn_number`  varchar(100) NULL COMMENT 'sn号' AFTER `supplier_name`;
+
+#添加pts
+ALTER TABLE `receivable_info`
+ADD COLUMN `pts`  tinyint(1) NULL DEFAULT 0 COMMENT '1是 0否' AFTER `sn_number`;
+
+ALTER TABLE `company_order_product_diy`
+ADD COLUMN `netamt`  varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT 'NetAmt' AFTER `receivable_number`,
+ADD COLUMN `gst`  varchar(30) NULL COMMENT 'GST' AFTER `netamt`,
+ADD COLUMN `pst`  varchar(30) NULL AFTER `gst`,
+ADD COLUMN `hst`  varchar(30) NULL AFTER `pst`,
+ADD COLUMN `otx`  varchar(30) NULL COMMENT 'OTX' AFTER `hst`,
+ADD COLUMN `invamt`  varchar(30) NULL COMMENT 'InvAmt' AFTER `otx`,
+ADD COLUMN `estcost`  varchar(30) NULL COMMENT 'EstCost' AFTER `invamt`,
+ADD COLUMN `paidamt`  varchar(30) NULL COMMENT 'PaidAmt' AFTER `estcost`,
+ADD COLUMN `balance`  varchar(30) NULL COMMENT 'Balance' AFTER `paidamt`;
+
+
+
+ALTER TABLE `company_order_product_source`
+ADD COLUMN `netamt`  varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT 'NetAmt' AFTER `team_product_receivable_type`,
+ADD COLUMN `gst`  varchar(30) NULL COMMENT 'GST' AFTER `netamt`,
+ADD COLUMN `pst`  varchar(30) NULL AFTER `gst`,
+ADD COLUMN `hst`  varchar(30) NULL AFTER `pst`,
+ADD COLUMN `otx`  varchar(30) NULL COMMENT 'OTX' AFTER `hst`,
+ADD COLUMN `invamt`  varchar(30) NULL COMMENT 'InvAmt' AFTER `otx`,
+ADD COLUMN `estcost`  varchar(30) NULL COMMENT 'EstCost' AFTER `invamt`,
+ADD COLUMN `paidamt`  varchar(30) NULL COMMENT 'PaidAmt' AFTER `estcost`,
+ADD COLUMN `balance`  varchar(30) NULL COMMENT 'Balance' AFTER `paidamt`;
+
+
+
+ALTER TABLE `company_order_product_team`
+ADD COLUMN `netamt`  varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT 'NetAmt' AFTER `team_product_receivable_type`,
+ADD COLUMN `gst`  varchar(30) NULL COMMENT 'GST' AFTER `netamt`,
+ADD COLUMN `pst`  varchar(30) NULL AFTER `gst`,
+ADD COLUMN `hst`  varchar(30) NULL AFTER `pst`,
+ADD COLUMN `otx`  varchar(30) NULL COMMENT 'OTX' AFTER `hst`,
+ADD COLUMN `invamt`  varchar(30) NULL COMMENT 'InvAmt' AFTER `otx`,
+ADD COLUMN `estcost`  varchar(30) NULL COMMENT 'EstCost' AFTER `invamt`,
+ADD COLUMN `paidamt`  varchar(30) NULL COMMENT 'PaidAmt' AFTER `estcost`,
+ADD COLUMN `balance`  varchar(30) NULL COMMENT 'Balance' AFTER `paidamt`;
+#实收加 汇兑损溢字段
+ALTER TABLE `receivable_info`
+ADD COLUMN `exg_rate_gain`  decimal(10,2) NULL COMMENT '汇兑损溢' AFTER `pts`;
+
+
+#receivable_info添加 account_number字段
+ALTER TABLE `receivable_info`
+ADD COLUMN `account_number`  varchar(30) NULL COMMENT 'AccountNumber' AFTER `status`;
+
+
+#company_order_product_source 修改otx字段 添加 tax_cd字段
+ALTER TABLE `company_order_product_source`
+CHANGE COLUMN `otx` `p_otx`  varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT 'OTX' AFTER `hst`,
+ADD COLUMN `tax_cd`  varchar(30) NULL COMMENT '税号' AFTER `tax_id`;
+
+#company_order_product_team 修改otx字段 添加 tax_cd字段
+ALTER TABLE `company_order_product_team`
+CHANGE COLUMN `otx` `p_otx`  varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT 'OTX' AFTER `hst`,
+ADD COLUMN `tax_cd`  varchar(30) NULL COMMENT '税号' AFTER `tax_id`;
+
+
+#company_order_product_div 修改otx字段 添加 tax_cd字段
+ALTER TABLE `company_order_product_diy`
+CHANGE COLUMN `otx` `p_otx`  varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT 'OTX' AFTER `hst`,
+ADD COLUMN `tax_cd`  varchar(30) NULL COMMENT '税号' AFTER `tax_id`;
+
+
+
+
+
+
+
+
+
+
+

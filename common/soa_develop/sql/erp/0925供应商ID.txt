@@ -1,0 +1,3 @@
+ALTER TABLE `finance_approve`
+ADD COLUMN `supplier_id`  int(10) NULL COMMENT '供应商ID' AFTER `team_product_id`;
+

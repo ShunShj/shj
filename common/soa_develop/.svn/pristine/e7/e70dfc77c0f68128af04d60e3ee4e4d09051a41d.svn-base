@@ -1,0 +1,405 @@
+<?php
+
+namespace app\index\model\source;
+use think\Model;
+use app\common\help\Help;
+use think\config;
+use think\Db;
+class Flight extends Model{
+    //protected $connection = ['database' => 'erp'];
+    protected $table = 'flight';
+    private $_languageList;
+    public function initialize()
+    {
+    	$this->_languageList = config('systom_setting')['language_list'];
+    	parent::initialize();
+    
+    }
+
+    /**
+     * 添加航班
+     * 胡
+     */
+    public function addFlight($params){
+    	$t = time();
+
+    	$data['source_number'] = $params['source_number'];
+    	$data['flight_number'] = $params['flight_number'];
+    	$data['shipping_space'] = $params['shipping_space'];
+    	$data['begin_country_id'] = $params['begin_country_id'];
+    	$data['end_country_id'] = $params['end_country_id'];
+    	$data['company_id'] = $params['choose_company_id'];
+        if(isset($params['remark'])){
+    		$data['remark'] = $params['remark'];
+    	}
+        if(isset($params['airplane_type_name'])){
+            $data['airplane_type_name'] = $params['airplane_type_name'];
+        }
+    	$data['supplier_id'] = $params['supplier_id'];
+		$data['belong_supplier_id'] = $params['supplier_id'];
+    	$data['supplier_type'] = 1;
+    	
+    	
+    	$data['default_language_id'] = $params['lang_id'];
+    	$data['create_time'] = $t;  	
+    	$data['create_user_id'] = $params['user_id'];
+    	$data['update_time'] = $t;
+    	$data['update_user_id'] = $params['user_id'];
+    	$data['status'] = $params['status'];
+        $data['type'] = $params['type'];
+    	
+    	Db::startTrans();
+    	try{
+    		$pk_id = Db::name('flight')->insertGetId($data);
+
+    		$language_data['source_number'] = $params['source_number'];
+    		$language_data['airplane_type_name'] = $params['airplane_type_name'];
+    		$language_data['language_id']=$params['lang_id'];
+    		$language_data['create_time'] = $t;
+    		$language_data['create_user_id'] = $params['user_id'];
+    		$language_data['update_time'] = $t;
+    		$language_data['update_user_id'] = $params['user_id'];
+    		$language_data['status'] = 1;
+    		Db::name('flight_language')->insertGetId($language_data);
+    		//统价
+  			$source_price['normal_price']=$params['normal_price'];
+  			$source_price['normal_settlement_price']=$params['normal_settlement_price'];
+            $source_price['payment_currency_type']=$params['payment_currency_type'];
+
+  			$source_price['supplier_type_id'] = 4;
+  			$source_price['pk_id'] = $pk_id;
+  			Db::name('source_price')->insert($source_price);
+
+  			//判断是否有代理商
+  			if(!empty($params['agent_id'])){
+  				$data['source_number'] =	help::getNumber(54);
+  				$data['supplier_id'] =	$params['agent_id'];
+  				$data['belong_supplier_id'] =	$params['supplier_id'];
+  				$data['supplier_type'] = 2;
+  				$pk_id = Db::name('flight')->insertGetId($data);
+  				$source_price['pk_id'] = $pk_id;
+  				Db::name('source_price')->insert($source_price);
+  				$language_data['source_number'] = $data['source_number'];
+  				$language_data['status'] = 1;
+  				Db::name('flight_language')->insert($language_data);
+  			} 			
+    		$result = 1;
+    		// 提交事务
+    		Db::commit();
+    
+    	} catch (\Exception $e) {
+    		$result = $e->getMessage();
+    		// 回滚事务
+    		Db::rollback();
+    		//\think\Response::create(['code' => '400', 'msg' =>$result], 'json')->send();
+    		//exit();
+    
+    	}
+    
+    	return $result;
+    }
+    
+    /**
+     * 获取航班
+     * 胡
+     */
+    public function getFlight($params,$is_count=false,$is_page=false,$page=null,$page_size=20){
+
+    	$data = "1=1 ";
+    	
+    	if($params['is_branch_product'] == 1){
+    	    if(!empty($params['source_number'])){
+    			$data.= " and flight.source_number like '%".$params['source_number']."%'";
+    		}
+    		if(!empty($params['source_name'])){
+    			$data.= " and flight.flight_number like '%".$params['source_name']."%'";
+    		}
+    		if(!empty($params['supplier_name'])){
+    			$data.= " and supplier_name like '%".$params['supplier_name']."%'";
+    		}
+    	}else{
+    		if(!empty($params['source_number'])){
+    			$data.= " and flight.source_number= '".$params['source_number']."'";
+    		}
+    		if(!empty($params['flight_number'])){
+    			$data.= " and flight.flight_number like'%".$params['flight_number']."%'";
+    		}
+    	}
+    	
+
+    	if(is_numeric($params['status'])){
+    		$data.= " and flight.status = ".$params['status'];
+    	}
+    	if(!empty($params['flight_id'])){
+    		$data.= " and flight.flight_id = '".$params['flight_id']."'";
+    	}
+//     	if(isset($params['level_id'])){
+//     		$data.= " and flight.super_config_info_id = '".$params['level_id']."'";
+//     	}
+    	if(!empty($params['begin_country_id'])){
+    		$data.= " and flight.begin_country_id = '".$params['begin_country_id']."'";
+    	}
+    	if(!empty($params['end_country_id'])){
+    		$data.= " and flight.end_country_id = '".$params['end_country_id']."'";
+    	}
+    	if(!empty($params['supplier_id'])){
+    		$data.= " and flight.supplier_id = '".$params['supplier_id']."'";
+    	}	
+        if(!empty($params['supplier_type'])){
+    		$data.= " and flight.supplier_type = '".$params['supplier_type']."'";
+    	}
+    	if(!empty($params['belong_supplier_id'])){
+    		$data.= " and flight.belong_supplier_id = '".$params['belong_supplier_id']."'";
+    	}
+    	if(is_numeric($params['company_id'])){
+    		$data.= " and flight.company_id = '".$params['company_id']."'";
+    	}
+        if($is_count==true){
+            $result = $this->table("flight")->where($data)->count();
+        }else {
+            if ($is_page == true) {
+                $result = $this->table("flight")->
+                join("source_price", 'source_price.pk_id = flight.flight_id and source_price.supplier_type_id=4', 'left')->
+                join('currency', 'currency.currency_id = source_price.payment_currency_type')->
+                join('supplier', 'supplier.supplier_id = flight.supplier_id')->
+                join('company', 'company.company_id= flight.company_id')->
+                where($data)->limit($page, $page_size)->order('create_time desc')->
+                field(['flight.flight_id', "flight.source_number",
+                    "flight.airplane_type_name", 'flight.flight_number',
+                    'flight.remark', 'flight.shipping_space',
+                    'flight.supplier_id', 'supplier.supplier_name',
+                    'flight.supplier_type', 'flight.belong_supplier_id',
+                    'flight.begin_country_id', 'flight.end_country_id',
+                    'flight.default_language_id','flight.type',
+                    //	'flight.super_config_info_id as level_id','super_config_info.super_config_info_name as level_name',
+                    "(select country_name  from country where country.country_id= flight.begin_country_id)"=> 'begin_country_name',
+                    "(select country_name  from country where country.country_id= flight.end_country_id)"=> 'end_country_name',
+                    "flight.company_id", 'company.company_name',
+                    'source_price.normal_price', 'source_price.normal_settlement_price',
+                    'source_price.payment_currency_type', 'currency.currency_name','currency.unit',
+                    "(select nickname  from user where user.user_id = flight.create_user_id)"=> 'create_user_name',
+                    "(select nickname  from user where user.user_id = flight.update_user_id)"=> 'update_user_name',
+                    'flight.update_time', 'flight.create_time', "flight.status",
+                ])->select();
+            }else{
+                $result = $this->table("flight")->alias('flight')->
+                join("source_price",'source_price.pk_id = flight.flight_id and source_price.supplier_type_id=4','left')->
+                join('currency','currency.currency_id = source_price.payment_currency_type')->
+                join('supplier','supplier.supplier_id = flight.supplier_id')->
+                join('company','company.company_id= flight.company_id')->
+                where($data)->order('create_time desc')->
+                field(['flight.flight_id',"flight.source_number",
+                    "flight.airplane_type_name",'flight.flight_number',
+                    'flight.remark','flight.shipping_space',
+                    'flight.supplier_id','supplier.supplier_name',
+                    'flight.supplier_type','flight.belong_supplier_id',
+                    'flight.begin_country_id','flight.end_country_id',
+                    'flight.default_language_id','flight.type',
+                    //	'flight.super_config_info_id as level_id','super_config_info.super_config_info_name as level_name',
+                    "(select country_name  from country where country.country_id= flight.begin_country_id)"=>'begin_country_name',
+                    "(select country_name  from country where country.country_id= flight.end_country_id)"=>'end_country_name',
+                    "flight.company_id",'company.company_name',
+                    'source_price.normal_price','source_price.normal_settlement_price',
+                    'source_price.payment_currency_type','currency.currency_name','currency.unit',
+                    "(select nickname  from user where user.user_id = flight.create_user_id)"=>'create_user_name',
+                    "(select nickname  from user where user.user_id = flight.update_user_id)"=>'update_user_name',
+                    'flight.update_time','flight.create_time',"flight.status",
+                ])->select();
+            }
+        }
+
+
+
+        return $result;
+    
+    }
+    /**
+     * 获取航班数据根据用餐_ID与lang_id
+     */
+    public function getFlightByFlightIdLangId($params){
+    
+    	$lang_id = $params['lang_id'];
+    	$data['language_id'] = $lang_id;
+    	$data['source_number'] = $params['source_number'];
+    	$result = $this->table('flight_language')->
+    	where($data)->find();
+    	 
+    	return $result;
+    }
+    
+    /**
+     * 修改用餐多语言数据根据用餐多语言ID
+     */
+    public function updateFlightLanguageByFlightLanguageId($params){
+    
+    	$t = time();
+    	$user_id = $params['user_id'];
+    
+    	$original_number = $params['data'][0]['source_number'];
+    
+    	$original_data['source_number'] = $original_number;
+    
+    
+    	$params = $params['data'];
+    
+    	//原始数据主键
+    	$original_result = $this->getFlight($original_data);
+    
+    	$default_language_id = $original_result[0]['default_language_id'];
+    
+    	$this->startTrans();
+    	try{
+    		for($i=0;$i<count($params);$i++){
+    
+    			$data = [];
+    			if(!trim($params[$i]['airplane_type_name'])==''){
+    					
+    				$data['airplane_type_name'] = $params[$i]['airplane_type_name'];
+    				$data['update_time'] = $t;
+    				$data['update_user_id'] = $user_id;
+    
+    				if(is_numeric($params[$i]['flight_language_id'])){
+    
+    					$this->table('flight_language')->where("flight_language_id = ".$params[$i]['flight_language_id'])->update($data);
+    
+    					//再查询是否是原始数据  如果是原始数据那么原始 数据也要更改
+    					if($default_language_id == $params[$i]['lang_id']){
+    							
+    						$this->where("source_number = '$original_number'")->update($data);
+    
+    					}
+    				}else{
+    
+    					$data['create_time'] = $t;
+    					$data['create_user_id'] = $user_id;
+    					$data['status'] = 1;
+    					$data['source_number'] = $original_number;
+    					$data['language_id'] = $params[$i]['lang_id'];
+    					$this->table("flight_language")->insert($data);
+    
+    				}
+    			}
+    		}
+    
+    		$result = 1;
+    		// 提交事务
+    		$this->commit();
+    		 
+    	} catch (\Exception $e) {
+    		$result = $e->getMessage();
+    		// 回滚事务
+    		$this->rollback();
+    		 
+    	}
+    
+    	return $result;
+    
+    }
+    
+    
+    /**
+     * 修改航班
+     */
+    public function updateFlightByFlightId($params){
+    
+    	$t = time();
+    	
+    	if(!empty($params['flight_number'])){
+    		$data['flight_number'] = $params['flight_number'];
+    	
+    	}
+        if(isset($params['remark'])){
+            $data['remark'] = $params['remark'];
+        }
+        if(isset($params['airplane_type_name'])){
+            $data['airplane_type_name'] = $params['airplane_type_name'];
+        }
+    	if(!empty($params['supplier_id'])){
+    		$data['belong_supplier_id'] = $params['supplier_id'];
+    		 
+    	}
+    	if(!empty($params['agent_id'])){
+    		$data['supplier_id'] = $params['agent_id'];
+    		 
+    	}
+    	if(!empty($params['shipping_space'])){
+    		$data['shipping_space'] = $params['shipping_space'];
+    		 
+    	}
+    	if(!empty($params['begin_country_id'])){
+    		$data['begin_country_id'] = $params['begin_country_id'];
+    		 
+    	}
+    	if(!empty($params['end_country_id'])){
+    		$data['end_country_id'] = $params['end_country_id'];
+    		 
+    	}
+        if(!empty($params['choose_company_id'])){
+            $data['company_id'] = $params['choose_company_id'];
+
+        }
+    	if(!empty($params['status'])){
+    		$data['status'] = $params['status'];
+    		 
+    	}
+        if(!empty($params['type'])){
+            $data['type'] = $params['type'];
+
+        }
+
+
+    	$data['update_user_id'] = $params['user_id'];   
+    	$data['update_time'] = $t;
+
+    
+    
+    	$source_price=[];
+    	Db::startTrans();
+    	try{
+    		Db::name('flight')->where("flight_id = ".$params['flight_id'])->update($data);
+
+            error_log(print_r(Db::name('flight')->getLastSql(),1));
+    	//统价
+    		if(!empty($params['normal_price']) ){
+	    		$source_price['normal_price']=$params['normal_price'];
+
+    		}
+    		if(!empty($params['normal_settlement_price'])){
+    			
+    			$source_price['normal_settlement_price']=$params['normal_settlement_price'];
+    			
+    		}
+            if(!empty($params['payment_currency_type'])){
+
+                $source_price['payment_currency_type']=$params['payment_currency_type'];
+
+            }
+    		Db::name('source_price')->where("supplier_type_id = 4 and pk_id = ".$params['flight_id'])->update($source_price);
+    		$result = 1;
+    		// 提交事务
+    		Db::commit();
+    
+    	} catch (\Exception $e) {
+    		$result = $e->getMessage();
+    		// 回滚事务
+    		Db::rollback();
+    
+    	}
+
+    	return $result;
+    }
+
+    /**
+     * getOneFlight
+     *
+     * 获取一条航班信息
+     * @author shj
+     * @return void
+     * Date: 2019/2/27
+     * Time: 11:55
+     */
+    public function getOneFlight($flight_id){
+        $result = $this->table("flight")->where(['flight_id' => $flight_id])->find();
+        return $result;
+    }
+}

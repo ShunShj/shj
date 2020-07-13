@@ -1,0 +1,47 @@
+/*
+ Navicat Premium Data Transfer
+
+ Source Server         : 192.168.11.122
+ Source Server Type    : MySQL
+ Source Server Version : 100109
+ Source Host           : 192.168.11.122:3306
+ Source Schema         : erp
+
+ Target Server Type    : MySQL
+ Target Server Version : 100109
+ File Encoding         : 65001
+
+ Date: 06/11/2019 17:10:10
+*/
+
+SET NAMES utf8mb4;
+SET FOREIGN_KEY_CHECKS = 0;
+
+-- ----------------------------
+-- Table structure for season
+-- ----------------------------
+DROP TABLE IF EXISTS `season`;
+CREATE TABLE `season`  (
+  `season_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `season_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '季节名称',
+  `content` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `create_time` int(11) UNSIGNED DEFAULT NULL,
+  `create_user_id` int(11) UNSIGNED DEFAULT NULL,
+  `update_time` int(11) UNSIGNED DEFAULT NULL,
+  `update_user_id` int(11) UNSIGNED DEFAULT NULL,
+  `status` tinyint(4) UNSIGNED DEFAULT 1 COMMENT '1显示0不显示默认显示',
+  PRIMARY KEY (`season_id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
+
+SET FOREIGN_KEY_CHECKS = 1;
+
+
+
+ALTER TABLE `user`
+MODIFY COLUMN `status`  tinyint(4) NULL DEFAULT NULL COMMENT '1启用2禁用3锁定' AFTER `update_user_id`;
+
+
+
+ALTER TABLE `user`
+ADD COLUMN `base_password`  int NULL COMMENT '1 初始密码' AFTER `default_bill_template_id`;
+

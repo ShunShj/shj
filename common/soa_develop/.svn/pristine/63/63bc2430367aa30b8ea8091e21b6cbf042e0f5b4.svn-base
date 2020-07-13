@@ -1,0 +1,141 @@
+<?php
+namespace app\index\controller;
+use app\common\help\Help;
+use think\config as thinkConfig;
+use app\index\controller\Base;
+use think\Model;
+use app\index\model\develop\Importing;
+use app\index\model\system\Currency;
+
+class Develop extends Base
+{
+	private $_language;
+    //_lang Base里的属性，
+    public function __construct()
+    {
+    	$this->_language = config("systom_setting")['language_default'];
+        parent::__construct();
+    }
+	/**
+	 * 获取导入数据
+	 */
+    public function getImporting(){
+    	$importing = new Importing();
+    	$importing_result = $importing->getImporting();
+    	$this->outPut($importing_result);
+    }
+    
+    /**
+     * 做导入功能
+     */
+    public function daoruWorking(){
+    	set_time_limit(0);
+    	ini_set("max_execution_time",0);
+    	$params = $this->input();   
+    	$paramRule = [
+ 			'importing_id' => 'mumber',
+
+    	];    		
+    	$this->paramCheckRule($paramRule,$params);
+    	$importing = new Importing();
+    	if($params['importing_id'] == 1){//货币管理
+    		$result = $importing->addCurrency($params);
+    	}
+    	if($params['importing_id'] == 2){//语言管理
+    		$result = $importing->addLanguage($params);
+    	}    	
+    	if($params['importing_id'] == 3){//国家管理
+    		$result = $importing->addCountry($params);
+    	}  
+    	if($params['importing_id'] == 4){//公司管理
+    		$result = $importing->addCompany($params);
+    	}
+    	if($params['importing_id'] == 5){//部门管理
+    		$result = $importing->addDepartment($params);
+    	}
+    	if($params['importing_id'] == 6){//职位管理
+    		$result = $importing->addJob($params);
+    	}   
+    	if($params['importing_id'] == 7){//线路类型
+    		$result = $importing->addRole($params);
+    	}
+    	if($params['importing_id'] == 8){//线路类型
+    		$result = $importing->addRouteType($params);
+    	}
+    	if($params['importing_id'] == 9){//用户
+    		$result = $importing->addUser($params);
+    	}   
+    	if($params['importing_id'] == 10){//回执单模板 
+    		$result = $importing->addReturnReceipt($params);
+    	}
+    	if($params['importing_id'] == 11){//供应商
+    		$result = $importing->addSupplier($params);
+    	}
+    	if($params['importing_id'] == 12){//团队产品
+    		
+    		$result = $importing->addTeamProduct($params);
+    	}
+    	if($params['importing_id'] == 13){//行程内容
+    	
+    		$result = $importing->addTeamProductJourney($params);
+    	}
+    	if($params['importing_id'] == 14){//游客
+    		 
+    		$result = $importing->addCustomer($params);
+    	}
+    	if($params['importing_id'] == 15){//经销商
+    		 
+    		$result = $importing->addDistributor($params);
+    	}
+        if($params['importing_id'] == 16){ //利润表-预计
+            $result = $importing->addProfitStatement($params);
+        }
+        if($params['importing_id'] == 17){ //新团队产品
+        	$result = $importing->addTeamProductNew($params);
+        }
+        if($params['importing_id'] == 18){ //新团队产品-开团时间
+        	$result = $importing->addTeamProductNewBeginTime($params);
+        }
+        if($params['importing_id'] == 19){ //新团队产品-行程
+        	$result = $importing->addTeamProductJounery($params);
+        }
+        if($params['importing_id'] == 20){ //团队产品关系表
+        	$result = $importing->addTeamProductRelation($params);
+        }
+        if($params['importing_id'] == 21){ //订单关系表
+            $result = $importing->addBookRelation($params);
+        }
+        if($params['importing_id'] == 22){ //酒店资源
+            $result = $importing->addHotelSource($params);
+        }
+        if($params['importing_id'] == 23){ //多伦多订单资源
+        	$result = $importing->addCompanyOrder($params);
+        }
+        $this->outPut($result);
+    }
+    //把订单和团队产品相关联
+    public function plan_booking(){
+    	$importiong = new Importing();
+    	$plan_data = $importiong->get_plan();
+    	 
+	 	for($i=0;$i<count($plan_data);$i++){
+	 		$where['tour_id'] = $plan_data[$i]['tour_id'];
+    		$where['tour_date'] = $plan_data[$i]['tour_date'];
+    		$result = $importiong->get_booking($where);
+    		if(!empty($result)){
+    			$add_result['plan_id'] = $plan_data[$i]['plan_id'];
+    			$add_result['bk_id'] = $result['bk_id'];
+    			$importiong->add_booking($add_result);
+    		}
+
+	 	}
+    }
+    public function addTeamProductAndBk(){
+    	
+    	set_time_limit(0);
+    	$importing = new Importing();
+    	$importing->addTeamProductAndBk();
+    	$this->outPut(1);
+    }
+    
+}

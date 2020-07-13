@@ -1,0 +1,697 @@
+<?php
+namespace app\index\controller;
+use app\common\help\Help;
+use app\index\model\finance\SalesReport;
+use think\config;
+use think\Model;
+use think\Controller;
+use app\index\model\finance\Receivable;
+use app\index\model\finance\ReceivableInfo;
+use app\index\model\finance\ReceivableCustomer;
+use app\index\model\finance\Cope;
+use app\index\model\finance\CopeInfo;
+use app\index\model\finance\TravelAgencyReimbursement;
+use app\index\model\finance\TravelAgencyReimbursementReceivableCustomer;
+use app\index\model\finance\TravelAgencyReimbursementCope;
+use app\index\model\finance\TravelAgencyReimbursementReceivable;
+use app\index\model\system\Company;
+use app\index\model\source\Supplier;
+use app\index\model\btob\Distributor;
+use app\index\model\finance\CompanyApportionProportion;
+use app\index\model\finance\ApportionProportion;
+use app\index\model\finance\ApportionProportionInfo;
+class Finance extends Base
+{
+	private $_language;
+	private $_company_apportion_proprotion;
+	private $_apportion_proportion;
+	private $_apportion_proportion_info;
+	private $_company;
+	private $_distributor;
+	private $_supplier;
+    //_lang Base里的属性，
+    public function __construct()
+    {
+    	$this->_language = config("systom_setting")['language_default'];
+    	$this->_company_apportion_proportion =  new CompanyApportionProportion();
+    	$this->_apportion_proportion =  new ApportionProportion();
+    	$this->_apportion_proportion_info =  new ApportionProportionInfo();
+    	$this->_company = new Company();
+    	$this->_distributor = new Distributor();
+    	$this->_supplier = new Supplier();
+        parent::__construct();
+    }
+
+    /***
+    * 获取发团毛利统计
+    * Hugh
+    */
+    public function getGrossProfitStatistics(){
+       $params = $this->input(); 
+       $cope = new Cope();
+       if(isset($params['page'])){
+
+            $page_size =  isset($params['page_size'])?$params['page_size']:Contents::PAGE_SIZE;
+            $page = ($params['page']-1)*$page_size;
+            $count = $cope->grossProfitStatistics($params, true);
+            $result = $cope->grossProfitStatistics($params,false,'true',$page,$page_size);
+            $data = [
+                'count'=>$count,
+                'list'=>$result,
+                'page_count'=>ceil($count/$page_size)
+            ];
+            return $this->output($data);
+        }
+       $result = $cope->grossProfitStatistics($params);
+       $this->outPut($result);
+    }
+
+    /****
+    *  获取成本报表列表
+    *  Hugh
+    */
+    public function getCostSheet(){
+       $params = $this->input(); 
+
+       $cope = new Cope();
+       $result = $cope->costSheet($params);
+
+       //var_dump($result);exit;
+       $this->outPut($result); 
+    }
+
+
+    /**
+     * 添加应收
+     * 王
+     */
+    public function addReceivable(){
+    	$params = $this->input();
+    	
+    	$paramRule = [
+			'payment_company_id'=>'number',
+            'order_number'=>'string',
+   		    'product_type'=>'number',
+    		'product_name'=>'string',
+    		'currency_id'=>'number',
+            'receivable_money'=>'number',
+    		
+
+    	
+    	];
+    	$this->paramCheckRule($paramRule,$params);
+    	
+    	$receivable = new Receivable();
+    	$params['receivable_number'] = Help::getNumber(5);
+    	$receivable_result = $receivable->addReceivable($params);
+    	//有了应收编号后把用户插入数据库
+    	$receivable_customer = new ReceivableCustomer();
+    	$receivable_customer_result = $receivable_customer->addReceivableCustomer($params);
+    	$this->outPut($receivable_result);
+    }
+
+    /**
+     * 获取应收
+     * 王
+     */
+    public function getReceivable(){
+    	$params = $this->input();
+        $receivable = new Receivable();
+        if(isset($params['page'])){
+            $page_size =  isset($params['page_size'])?$params['page_size']:Contents::PAGE_SIZE;
+            $page = ($params['page']-1)*$page_size;
+            $count = $receivable->getReceivable($params, true);
+            $receivable_result = $receivable->getReceivable($params,false,'true',$page,$page_size);
+        }else{
+            $receivable_result = $receivable->getReceivable($params);
+        }
+        $receivable_customer = new ReceivableCustomer();
+        //获取应收的顾客
+        for($i=0;$i<count($receivable_result);$i++){
+        	$receivable_customer_params['receivable_number'] = $receivable_result[$i]['receivable_number'];
+        	$receivable_customer_params['status']=1;
+        	$receivable_result[$i]['customer_info'] = $receivable_customer->getReceivableCustomer($receivable_customer_params);
+        	//开始做判断
+        	if($receivable_result[$i]['payment_object_type'] == 1){
+        		$company_params['company_id'] = $receivable_result[$i]['payment_object_id'];
+        		$company_result = $this->_company->getCompany($company_params);
+        		$receivable_result[$i]['payment_object_name'] = $company_result[0]['company_name'];
+        	}else if($receivable_result[$i]['payment_object_type'] == 2){
+        		$supplier_params['supplier_id'] = $receivable_result[$i]['payment_object_id'];
+        		$supplier_result = $this->_supplier->getSupplier($supplier_params);
+        		$receivable_result[$i]['payment_object_name'] = $supplier_result[0]['supplier_name'];
+        	}else if($receivable_result[$i]['payment_object_type'] == 3){
+        		$distributor_params['distributor_id'] = $receivable_result[$i]['payment_object_id'];
+        		
+        		$distributor_result = $this->_distributor->getDistributor($distributor_params);
+        		$receivable_result[$i]['payment_object_name'] = $distributor_result[0]['distributor_name'];
+        	}else{
+        		$receivable_result[$i]['payment_object_name'] ='直客';
+        	}
+        	$get_fee_type_params = [
+        		'fee_type_code'=>$receivable_result[$i]['fee_type_code']	
+        	];
+        	$fee_type_name = Help::getFeeType($get_fee_type_params);
+        	$receivable_result[$i]['fee_type_name'] = $fee_type_name['fee_type_name'];
+        }
+        if(isset($params['page'])) {
+            $data = [
+                'count'      => $count,
+                'list'       => $receivable_result,
+                'page_count' => ceil($count / $page_size)
+            ];
+            return $this->output($data);
+        }
+    	$this->outPut($receivable_result);
+    }
+    /**
+     * 修改应收
+     * 王
+     */
+    public function updateReceivableByReceivableNumber(){
+        $params = $this->input();
+
+        $paramRule = [
+
+            'receivable_number'=>'string',
+            //'user_id'=>'number',
+
+        ];
+        $this->paramCheckRule($paramRule,$params);
+        $receivable = new Receivable();
+        $receivable_result = $receivable->updateReceivableByReceivableNumber($params);
+        //有了应收编号后把用户插入数据库
+        $receivable_customer = new ReceivableCustomer();
+        $params['key'] = 1;
+        $receivable_customer_result = $receivable_customer->updateReceivableCustomer($params);
+        
+        //修改应付
+        //通过应收编号获取
+        $receivable_info_result = $receivable->getReceivable(['receivable_number'=>$params['receivable_number']]);
+        
+        //修改应付
+        $cope = new Cope();
+        $cope_params = [
+        	'public_number'=>$receivable_info_result[0]['public_number'],
+        	'cope_money'=>$params['receivable_money']	
+        ];
+        $cope->updateCopeByPublicNumber($cope_params);
+        
+        
+        $this->outPut($receivable_result);
+
+    }
+    /**
+     * 添加批量应收
+     * 王
+     */
+    public function addReceivableInfo(){
+        $params = $this->input();
+
+        $paramRule = [
+        	
+            'receivable_voucher'=>'string',
+            'voucher_time'=>'number',
+            'payment_currency_id'=>'number',        		
+            'payment_type'=>'number',
+          
+         
+        	'receivable_info'=>'array'	
+          
+
+
+        ];
+        $this->paramCheckRule($paramRule,$params);
+        $receivable_info = new ReceivableInfo();
+        $params['payment_number'] = Help::getNumber(200);
+        $receivable_info_result = $receivable_info->addReceivableInfo($params);
+        $this->outPut($receivable_info_result);
+    }
+    /**
+     * 获取应收详细
+     * 王
+     */
+    public function getReceivableInfo(){
+        $params = $this->input();
+        $receivable_info = new ReceivableInfo();
+
+        $receivable_info_result = $receivable_info->getReceivableInfo($params);
+        $this->outPut($receivable_info_result);
+    }
+
+	/**
+	 * 查询应收的顾客通过应收编号
+	 */
+    public function getReceivableCustomerByReceivableNumber(){
+    	$params = $this->input(); 	
+    	$paramRule = [
+    			'receivable_number'=>'string',    	
+    	];
+    	$this->paramCheckRule($paramRule,$params);
+    	$receibable = new ReceivableCustomer();
+    	
+    	$receibable_result = $receibable->getReceivableCustomer($params);
+    	$this->outPut($receibable_result);
+    	
+    	
+    }
+    /**
+     * 修改应收详情根据应收详情ID
+     */
+    public function  updateReceivableInfoByReceivableInfoId(){
+    	$params = $this->input();
+    	$paramRule = [
+    
+    			'receivable_info_id'=>'number',
+    			'payment_stage'=>'number',
+    			'payment_currency_id'=>'number',
+    			'payment_money'=>'string',
+    			'payment_type'=>'number'
+    
+    	];
+    	$this->paramCheckRule($paramRule,$params);
+    
+    	$receivable_info = new ReceivableInfo();
+    	$receivable_info_result = $receivable_info->updateReceivableInfoByReceivableInfoId($params);
+    	$this->outPut($receivable_info_result);
+    }
+    //通过团队产品编号查询以及分公司ID查询
+    
+    /**
+     * 添加应付
+     */
+    public function addCope(){
+    	
+    	$params = $this->input();
+    	$paramRule = [
+    		'receivable_company_id'=>'number',    			
+    		'cope_currency_id'=>'number',    		
+    		'product_type'=>'number',
+    		'product_name'=>'string',
+    		'cope_money'=>'number',
+    		'status'=>'number',
+    		'user_id'=>'number'
+    	];
+
+    	$this->paramCheckRule($paramRule,$params);    	
+    	$cope =new Cope();
+    	$params['cope_number'] = help::getNumber(6);
+    	$result = $cope->addCope($params);
+    	$this->outPut($result);
+    	
+    }
+    
+    /**
+     * 获取应付
+     */
+    public function getCope(){
+        $params = $this->input();
+        $cope = new Cope();
+
+        if(isset($params['page'])){
+            $page_size =  isset($params['page_size'])?$params['page_size']:Contents::PAGE_SIZE;
+            $page = ($params['page']-1)*$page_size;
+            $count = $cope->getCope($params, true);
+            $cope_result = $cope->getCope($params,false,'true',$page,$page_size);
+        }else{
+            $cope_result = $cope->getCope($params);
+        }
+        for($i=0;$i<count($cope_result);$i++){
+        
+        	if($cope_result[$i]['receivable_object_type'] == 1){
+        		$company_params['company_id'] = $cope_result[$i]['receivable_object_id'];
+        		$company_result = $this->_company->getCompany($company_params);
+        		$cope_result[$i]['receivable_object_name'] = $company_result[0]['company_name'];
+        	}else if($cope_result[$i]['receivable_object_type'] == 2){
+        		$supplier_params['supplier_id'] = $cope_result[$i]['receivable_object_id'];
+        		$supplier_result = $this->_supplier->getSupplier($supplier_params);
+        		$cope_result[$i]['receivable_object_name'] = $supplier_result[0]['supplier_name'];
+        	}else if($cope_result[$i]['receivable_object_type'] == 3){
+        		$distributor_params['distributor_id'] = $cope_result[$i]['receivable_object_id'];
+        		$distributor_result = $this->_distributor->getDistributor($distributor_params);
+        
+        		$cope_result[$i]['receivable_object_name'] = $distributor_result[0]['distributor_name'];
+        	}else{
+        	
+        		$cope_result[$i]['receivable_object_name'] ='直客';
+        	}      
+        	$get_fee_type_params = [
+        		'fee_type_code'=>$cope_result[$i]['fee_type_code']
+        	];
+        	 
+        	$fee_type_name = Help::getFeeType($get_fee_type_params);
+        	$cope_result[$i]['fee_type_name'] = $fee_type_name['fee_type_name'];
+        }
+        if(isset($params['page'])) {
+            $data = [
+                'count'      => $count,
+                'list'       => $cope_result,
+                'page_count' => ceil($count / $page_size)
+            ];
+            return $this->output($data);
+        }
+
+        $this->outPut($cope_result);
+    }
+    /**
+     * 修改应付
+     * 王
+     */
+    public function updateCopeByCopeNumber(){
+        $params = $this->input();
+        $paramRule = [
+
+            'cope_number'=>'string',
+            'user_id'=>'number',
+
+        ];
+        $this->paramCheckRule($paramRule,$params);
+        $cope = new Cope();
+        $cope_result = $cope->updateCopeByCopeNumber($params);
+        $this->outPut($cope_result);
+
+    }
+
+    /**
+     * 修改应付批量
+     * 王
+     */
+    public function updateCopeInfoByCopeNumber(){
+        $params = $this->input();
+        $paramRule = [
+
+            'cope_number'=>'string',
+            'user_id'=>'number',
+
+        ];
+        $this->paramCheckRule($paramRule,$params);
+        $cope_info = new CopeInfo();
+        $cope_info_result = $cope_info->updateCopeInfoByCopeNumber($params);
+        $this->outPut($cope_info_result);
+
+    }
+    
+    /**
+     * 修改应收顾客
+     */
+    public function updateReceivableCustomer(){
+    	$params = $this->input();
+    	$paramRule = [
+    	
+    		'receivable_number'=>'string',
+    		
+    	
+    	];
+    	$this->paramCheckRule($paramRule,$params);
+    	$receivable_customer = new ReceivableCustomer();
+    	$receivable_customer_result = $receivable_customer->updateReceivableCustomer($params);
+
+    	$this->outPut($receivable_customer_result);
+
+    	
+    }
+    /**
+     * 添加批量添加应付
+     * 王
+     */
+    public function addCopeInfo(){
+    	$params = $this->input();
+    
+    	$paramRule = [
+    			 
+    		'cope_voucher'=>'string',
+    		'voucher_time'=>'number',
+    		'payment_currency_id'=>'number',
+    		'payment_type'=>'number',
+    
+    	
+    		'cope_info'=>'array'
+    
+    
+    
+    	];
+    	$this->paramCheckRule($paramRule,$params);
+    	$cope_info = new CopeInfo();
+    	$params['payment_number'] = Help::getNumber(200);
+    	$cope_info_result = $cope_info->addCopeInfo($params);
+    	$this->outPut($cope_info_result);
+    }    
+    /**
+     * 添加地接报账
+     */
+    public function addTravelAgencyReimbursement(){
+    	$params = $this->input();
+    	$paramRule = [
+    			 
+    		'team_product_number'=>'string',
+	 
+    	];
+   
+    	$this->paramCheckRule($paramRule,$params);
+    	
+
+    	$traval_agency_receivable =  new TravelAgencyReimbursement();
+    	$team_product_number = $params['team_product_number'];
+    	$team_product_number_arr = explode(',',$team_product_number);
+
+    	for($i=0;$i<count($team_product_number_arr);$i++){
+    		$params['travel_number'] = Help::getNumber(9);
+    		$params['team_product_number'] = $team_product_number_arr[$i];
+    		$result = $traval_agency_receivable->addTravelAgencyReimbursement($params);
+    	}
+
+
+    	
+    	$this->outPut($result);
+    	
+    	
+    }
+    /**
+     * 修改地接报账
+     */
+    public function updateTravelAgencyReimbursementByTravelAgencyReimbursementNumber(){
+    	$params = $this->input();
+    	$paramRule = [   
+    		'travel_number'=>'string'
+    	];    	
+    	$this->paramCheckRule($paramRule,$params);
+    	
+    	
+    	$traval_agency_receivable =  new TravelAgencyReimbursement();
+    	
+    	$result = $traval_agency_receivable->updateTravelAgencyReimbursement($params);
+    	
+    	$this->outPut($result);
+    	 
+    	 
+    }    
+    /**
+     * 获取地接报账
+     */
+    public function getTravelAgencyReimbursement(){
+    	$params = $this->input();
+    	$traval_agency_reimbursement =  new TravelAgencyReimbursement();
+    	$traval_agency_reimbursement_cope =new  TravelAgencyReimbursementCope();
+    	$traval_agency_reimbursement_receivable =new  TravelAgencyReimbursementReceivable();
+    	$traval_agency_reimbursement_receivable_customer = new TravelAgencyReimbursementReceivableCustomer();
+
+        if(isset($params['page'])){
+
+            $page_size =  isset($params['page_size'])?$params['page_size']:Contents::PAGE_SIZE;
+            $page = ($params['page']-1)*$page_size;
+            $count = $traval_agency_reimbursement->getTravelAgencyReimbursement($params, true);
+
+            $result = $traval_agency_reimbursement->getTravelAgencyReimbursement($params,false,'true',$page,$page_size);
+
+
+        }else{
+            $result = $traval_agency_reimbursement->getTravelAgencyReimbursement($params);
+        }
+    	//拿到数据后循环获取应收与应付
+    	for($i=0;$i<count($result);$i++){
+    		$travel_agency_reimbursement_number = $result[$i]['travel_agency_reimbursement_number'];
+    		$result[$i]['receivable_info'] = [];
+    		$result_receivable = [];
+    		$result_cope = [];
+    		$receivable_customer = [];
+    		$receivable_info_array = [];
+    		$data = [
+    			'status'=>1,
+    			'travel_agency_reimbursement_number'=>$travel_agency_reimbursement_number	
+    		];
+    		$result_cope[] = $traval_agency_reimbursement_cope->getTravelAgencyReimbursementCope($data);
+    		$result[$i]['cope_info']= $result_cope[0];
+    		$result_receivable[] = $traval_agency_reimbursement_receivable->getTravelAgencyReimbursementReceivable($data);
+    		$result[$i]['receivable_info']= $result_receivable[0];
+    		$result[$i]['receivable_info']['customer_info'] = [];
+    		//通过receivable_info数据获取游客信息
+    		$receivable_info_array = $result[$i]['receivable_info'];
+    	
+    		for($j=0;$j<count($receivable_info_array);$j++){
+    			
+    			$travel_agency_reimbursement_receivable_customer_params['travel_agency_reimbursement_receivable_id'] = $receivable_info_array[$j]['travel_agency_reimbursement_receivable_id'];
+     			$receivable_customer[]= $traval_agency_reimbursement_receivable_customer->getTravelAgencyReimbursementReceivableCustomer($travel_agency_reimbursement_receivable_customer_params);
+     			$receivable_info_array[$j]['customer_info'] = $receivable_customer[0];
+    		}
+    	}
+        if(isset($params['page'])) {
+            $data = [
+                'count'      => $count,
+                'list'       => $result,
+                'page_count' => ceil($count / $page_size)
+            ];
+            return $this->output($data);
+        }
+    	$this->outPut($result);
+    	
+    }
+    
+    /**
+     * 获取分摊列表
+     */
+    
+    public function getApportionProportionList(){
+    	$params = $this->input();
+    	$paramRule = [
+    		'year'=>'number'
+    	];
+    	$this->paramCheckRule($paramRule,$params);
+    	$list = [];
+    	//开始循环 
+    	
+    	for($i=1;$i<13;$i++){
+    		if($i<10){
+    			$k='0'.$i;
+    			
+    		}else{
+    			$k=$i;
+    		}
+    		$apportion_proportion_params = [
+    			'status'=>1,
+    			'company_id'=>$params['company_id'],
+    			'year'=>$params['year'],
+    			'month'=>$i
+    		];
+    		//开始 查询 
+    		$list[$i] = $this->_apportion_proportion->getApportionProportion($apportion_proportion_params);
+    	}
+    	$this->outPut($list);
+    	
+    }
+    
+    
+    //获取费用分摊比率
+    public function getCompanyApportionProportion(){
+		//首先获取所有公司
+    	$company = new Company();
+    	$company_params['status'] = 1;
+    	$company_result  = $company->getCompany($company_params);
+    	
+    	//循环 去寻找比率有则返回，没返回0
+    	for($i=0;$i<count($company_result);$i++){
+    		$company_result_params['company_id'] = $company_result[$i]['company_id'];
+    		$company_apportion_proportion_result = $this->_company_apportion_proportion->getCompanyApportionProportion($company_result_params);
+    	
+    		if($company_apportion_proportion_result[0]['apportion_proportion']>0){
+    			$company_result[$i]['apportion_proportion'] =  $company_apportion_proportion_result[0]['apportion_proportion'];
+    		}else{
+    			$company_result[$i]['apportion_proportion'] =  0;
+    		}
+    	}
+    	$this->outPut($company_result);    	
+    	
+    }
+    
+    //设置费用分摊比率
+    public function updateCompanyApportionProportion(){
+    	$params = $this->input();
+    	$paramRule = [
+    		'company_apportion_proportion_array'=>'array'
+    	];
+    	$this->paramCheckRule($paramRule,$params);
+  
+    	$company_apportion_proportion_result  = $this->_company_apportion_proportion->updateApportionProportion($params);
+    	$this->outPut($company_apportion_proportion_result);
+    }
+    /**
+     * 添加分摊
+     */
+    public function addApportionProportion(){
+    	
+    	
+    	$params = $this->input();
+    	$paramRule = [
+    		'project_name'=>'string',
+    		'total_money'=>'srring',
+    		'year'=>'string',
+    		'month'=>'string',	
+    		'apportion_proportion_array'=>'array'
+    	];
+    	$this->paramCheckRule($paramRule,$params);
+    	
+    	$result = $this->_apportion_proportion->addApportionProportin($params);
+    	$this->outPut($result);
+    	
+    }
+    
+    /**
+     * 查询分摊
+     */
+    public function getApportionProportion(){
+    	$params = $this->input();
+    	$paramRule = [
+    		'year'=>'string',
+    		'month'=>'string'	
+
+    	];
+    	$this->paramCheckRule($paramRule,$params);    	
+    	$apportion_proportion_result =  $this->_apportion_proportion->getApportionProportion($params);
+    	$all_money = 0;//合计
+    	for($i=0;$i<count($apportion_proportion_result);$i++){
+     		$apportion_proportion_info_params = [
+     			'apportion_proportion_id'=>$apportion_proportion_result[$i]['apportion_proportion_id']	
+     		];
+    		$apportion_proportion_result[$i]['apportion_proportion_info'] = [];
+    	
+    		$apportion_proportion_result[$i]['apportion_proportion_info'] = $this->_apportion_proportion_info->getApportionProportionInfo($apportion_proportion_info_params);
+    		$all_money+=$apportion_proportion_result[$i]['total_money'];
+    	}
+    	if(count($apportion_proportion_result)>0){
+    		$apportion_proportion_result[0]['all_money'] = $all_money;
+    	}
+    	
+    	$this->outPut($apportion_proportion_result);
+    	
+    }
+    /**
+     * 修改分摊
+     */
+    public function updateApportionProportionByApportionProportionId(){
+    	$params = $this->input();
+    	$paramRule = [
+			'apportion_proportion_id'=>'string'
+
+    	];
+    	$this->paramCheckRule($paramRule,$params);
+    	$apportion_proportion_result =  $this->_apportion_proportion->updateApportionProportionByApportionProportionId($params);
+
+    	$this->outPut($apportion_proportion_result);
+    	 
+    }
+
+    /**
+     * 获取销售报表
+     */
+    public function getSalesReport(){
+        $params = $this->input();
+        $paramRule = [
+
+        ];
+        $this->paramCheckRule($paramRule,$params);
+        $sales_report = new SalesReport();
+
+        $sales_report_number_result = $sales_report->getSalesReport($params);
+
+        $this->outPut($sales_report_number_result);
+    }
+}	

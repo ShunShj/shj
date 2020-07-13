@@ -1,0 +1,950 @@
+---------------------------------------------------------------
+[ 2018-10-18T19:51:51+08:00 ] 127.0.0.1 POST /source/getSingleSourceLanguage
+[ info ] 127.0.0.1:7002/source/getSingleSourceLanguage [运行时间：0.421651s][吞吐率：2.37req/s] [内存消耗：3,100.91kb] [文件加载：54]
+[ info ] [ LANG ] E:\xampp\htdocs\soaerp\thinkphp\lang\zh-cn.php
+[ info ] [ BIND ] 'index'
+[ info ] [ ROUTE ] array (
+  'type' => 'module',
+  'module' => 
+  array (
+    0 => 'index',
+    1 => 'source',
+    2 => 'getSingleSourceLanguage',
+  ),
+)
+[ info ] [ HEADER ] array (
+  'host' => '127.0.0.1:7002',
+  'accept' => 'application/json',
+  'content-length' => '88',
+  'content-type' => 'application/x-www-form-urlencoded',
+)
+[ info ] [ PARAM ] array (
+  '{"source_number":"OTH20180905083201","appKey":"nexus","appSecret":"nexusIt","lang_id":1}' => '',
+)
+[ info ] [ LANG ] E:\xampp\htdocs\soaerp\public/../application/index\lang\zh-cn.php
+[ info ] [ DB ] INIT mysql
+[ info ] [ RUN ] app\index\controller\Source->getSingleSourceLanguage[ E:\xampp\htdocs\soaerp\application\index\controller\Source.php ]
+[ info ] [ DB ] INIT mysql
+[ info ] [ LOG ] INIT File
+[ sql ] [ DB ] CONNECT:[ UseTime:0.021374s ] mysql:host=192.168.11.100;port=3306;dbname=log;charset=utf8
+[ sql ] [ SQL ] CREATE TABLE IF NOT EXISTS soaerp_log_20181018 LIKE soaerp_log [ RunTime:0.022229s ]
+[ sql ] [ SQL ] CREATE TABLE IF NOT EXISTS soaerp_log_20181018 LIKE soaerp_log [ RunTime:0.013683s ]
+[ sql ] [ DB ] CONNECT:[ UseTime:0.009919s ] mysql:host=192.168.11.100;port=3306;dbname=erp;charset=utf8
+[ sql ] [ SQL ] SHOW COLUMNS FROM `language` [ RunTime:0.052438s ]
+[ sql ] [ SQL ] SELECT `language`.`language_id`,`language`.`language_name`,`language`.`create_time`,(select nickname  from user where user.user_id = language.create_user_id) AS `create_user_name`,(select nickname  from user where user.user_id = language.update_user_id) AS `update_user_name`,`language`.`update_time`,`language`.`status` FROM `language` `language` WHERE  `status` = 1 ORDER BY `create_time` DESC [ RunTime:0.025655s ]
+[ sql ] [ SQL ] SHOW COLUMNS FROM `single_source_language` [ RunTime:0.034967s ]
+[ sql ] [ SQL ] SELECT * FROM `single_source_language` WHERE  `language_id` = 3  AND `source_number` = 'OTH20180905083201' LIMIT 1 [ RunTime:0.015193s ]
+[ sql ] [ SQL ] SELECT * FROM `single_source_language` WHERE  `language_id` = 2  AND `source_number` = 'OTH20180905083201' LIMIT 1 [ RunTime:0.007119s ]
+[ sql ] [ SQL ] SELECT * FROM `single_source_language` WHERE  `language_id` = 1  AND `source_number` = 'OTH20180905083201' LIMIT 1 [ RunTime:0.024511s ]
+[ sql ] [ SQL ] CREATE TABLE IF NOT EXISTS soaerp_log_20181018 LIKE soaerp_log [ RunTime:0.003127s ]
+[ sql ] [ SQL ] CREATE TABLE IF NOT EXISTS soaerp_log_20181018 LIKE soaerp_log [ RunTime:0.004060s ]
+[ sql ] [ SQL ] SHOW COLUMNS FROM `soaerp_log_20181018` [ RunTime:0.025778s ]
+[ sql ] [ SQL ] INSERT INTO `soaerp_log_20181018` (`params` , `time` , `type` , `result` , `url`) VALUES ('{\"source_number\":\"OTH20180905083201\",\"appKey\":\"nexus\",\"appSecret\":\"nexusIt\",\"lang_id\":1}' , 1539863511 , 1 , '[{\"language_id\":3,\"language_name\":\"japan\",\"create_time\":1532402015,\"create_user_name\":\"\\u80e1\\u4f0a\\u654f\",\"update_user_name\":\"admin\",\"update_time\":1534304089,\"status\":1,\"language_info\":{\"single_source_language_id\":65,\"source_number\":\"OTH20180905083201\",\"single_source_name\":\"\\u4eba\\u5996\\u8868\\u6f143\",\"language_id\":3,\"create_time\":1539863432,\"create_user_id\":8,\"update_time\":1539863432,\"update_user_id\":8,\"status\":1}},{\"language_id\":2,\"language_name\":\"english\",\"create_time\":1532401866,\"create_user_name\":\"\\u80e1\\u4f0a\\u654f\",\"update_user_name\":\"\\u80e1\\u4f0a\\u654f\",\"update_time\":1532574269,\"status\":1,\"language_info\":null},{\"language_id\":1,\"language_name\":\"\\u4e2d\\u6587\",\"create_time\":1532400025,\"create_user_name\":\"admin\",\"update_user_name\":\"admin\",\"update_time\":1534303834,\"status\":1,\"language_info\":{\"single_source_language_id\":46,\"source_number\":\"OTH20180905083201\",\"single_source_name\":\"\\u4eba\\u5996\\u8868\\u6f141\",\"language_id\":1,\"create_time\":1534500861,\"create_user_id\":1,\"update_time\":1534500861,\"update_user_id\":1,\"status\":1}}]' , '127.0.0.1:7002/source/getSingleSourceLanguage') [ RunTime:0.052778s ]
+---------------------------------------------------------------
+[ 2018-10-18T19:51:56+08:00 ] 127.0.0.1 POST /source/updateSingleSourceLanguageBySingleSourceLanguageId
+[ info ] 127.0.0.1:7002/source/updateSingleSourceLanguageBySingleSourceLanguageId [运行时间：0.340851s][吞吐率：2.93req/s] [内存消耗：3,091.74kb] [文件加载：57]
+[ info ] [ LANG ] E:\xampp\htdocs\soaerp\thinkphp\lang\zh-cn.php
+[ info ] [ BIND ] 'index'
+[ info ] [ ROUTE ] array (
+  'type' => 'module',
+  'module' => 
+  array (
+    0 => 'index',
+    1 => 'source',
+    2 => 'updateSingleSourceLanguageBySingleSourceLanguageId',
+  ),
+)
+[ info ] [ HEADER ] array (
+  'host' => '127.0.0.1:7002',
+  'accept' => 'application/json',
+  'content-length' => '473',
+  'content-type' => 'application/x-www-form-urlencoded',
+)
+[ info ] [ PARAM ] array (
+  '{"data":' => 
+  array (
+    '{"lang_id":"3","single_source_language_id":"65","source_number":"OTH20180905083201","single_source_name":"\\u4eba\\u5996\\u8868\\u6f143"},{"lang_id":"2","single_source_language_id":"","source_number":"OTH20180905083201","single_source_name":"\\u4eba\\u5996\\u8868\\u6f142"},{"lang_id":"1","single_source_language_id":"46","source_number":"OTH20180905083201","single_source_name":"\\u4eba\\u5996\\u8868\\u6f141"}' => '',
+  ),
+)
+[ info ] [ LANG ] E:\xampp\htdocs\soaerp\public/../application/index\lang\zh-cn.php
+[ info ] [ DB ] INIT mysql
+[ info ] [ RUN ] app\index\controller\Source->updateSingleSourceLanguageBySingleSourceLanguageId[ E:\xampp\htdocs\soaerp\application\index\controller\Source.php ]
+[ info ] [ DB ] INIT mysql
+[ info ] [ LOG ] INIT File
+[ sql ] [ DB ] CONNECT:[ UseTime:0.008896s ] mysql:host=192.168.11.100;port=3306;dbname=log;charset=utf8
+[ sql ] [ SQL ] CREATE TABLE IF NOT EXISTS soaerp_log_20181018 LIKE soaerp_log [ RunTime:0.006958s ]
+[ sql ] [ SQL ] CREATE TABLE IF NOT EXISTS soaerp_log_20181018 LIKE soaerp_log [ RunTime:0.002772s ]
+[ sql ] [ DB ] CONNECT:[ UseTime:0.007017s ] mysql:host=192.168.11.100;port=3306;dbname=erp;charset=utf8
+[ sql ] [ SQL ] SHOW COLUMNS FROM `single_source` [ RunTime:0.010328s ]
+[ sql ] [ SQL ] SELECT `single_source`.`single_source_id`,`single_source`.`single_source_name`,`single_source`.`source_number`,`single_source`.`default_language_id`,`single_source`.`remark`,`single_source`.`supplier_id`,`supplier`.`supplier_name`,`single_source`.`supplier_type`,`single_source`.`belong_supplier_id`,(select supplier2.supplier_name  from supplier as supplier2 where supplier2.supplier_id = single_source.belong_supplier_id) AS `belong_supplier_name`,`single_source`.`company_id`,`company`.`company_name`,`source_price`.`normal_price`,`source_price`.`normal_settlement_price`,(select nickname  from user where user.user_id = single_source.create_user_id) AS `create_user_name`,(select nickname  from user where user.user_id = single_source.update_user_id) AS `update_user_name`,`single_source`.`update_time`,`single_source`.`create_time`,`single_source`.`status` FROM `single_source` `single_source` LEFT JOIN `source_price` ON `source_price`.`pk_id`=single_source.single_source_id and source_price.supplier_type_id=10 INNER JOIN `supplier` ON `supplier`.`supplier_id`=`single_source`.`supplier_id` INNER JOIN `company` ON `company`.`company_id`=`single_source`.`company_id` WHERE  (  1=1  and single_source.source_number = 'OTH20180905083201' ) [ RunTime:0.006366s ]
+[ sql ] [ SQL ] SHOW COLUMNS FROM `single_source_language` [ RunTime:0.010995s ]
+[ sql ] [ SQL ] INSERT INTO `single_source_language` (`single_source_name` , `update_time` , `update_user_id` , `create_time` , `create_user_id` , `status` , `source_number` , `language_id`) VALUES ('人妖表演3' , 1539863516 , 8 , 1539863516 , 8 , 1 , 'OTH20180905083201' , 3) [ RunTime:0.034439s ]
+[ sql ] [ SQL ] INSERT INTO `single_source_language` (`single_source_name` , `update_time` , `update_user_id` , `create_time` , `create_user_id` , `status` , `source_number` , `language_id`) VALUES ('人妖表演2' , 1539863516 , 8 , 1539863516 , 8 , 1 , 'OTH20180905083201' , 2) [ RunTime:0.002678s ]
+[ sql ] [ SQL ] INSERT INTO `single_source_language` (`single_source_name` , `update_time` , `update_user_id` , `create_time` , `create_user_id` , `status` , `source_number` , `language_id`) VALUES ('人妖表演1' , 1539863516 , 8 , 1539863516 , 8 , 1 , 'OTH20180905083201' , 1) [ RunTime:0.001675s ]
+[ sql ] [ SQL ] CREATE TABLE IF NOT EXISTS soaerp_log_20181018 LIKE soaerp_log [ RunTime:0.100156s ]
+[ sql ] [ SQL ] CREATE TABLE IF NOT EXISTS soaerp_log_20181018 LIKE soaerp_log [ RunTime:0.002301s ]
+[ sql ] [ SQL ] SHOW COLUMNS FROM `soaerp_log_20181018` [ RunTime:0.008211s ]
+[ sql ] [ SQL ] INSERT INTO `soaerp_log_20181018` (`params` , `time` , `type` , `result` , `url`) VALUES ('{\"data\":[{\"lang_id\":\"3\",\"single_source_language_id\":\"65\",\"source_number\":\"OTH20180905083201\",\"single_source_name\":\"\\u4eba\\u5996\\u8868\\u6f143\"},{\"lang_id\":\"2\",\"single_source_language_id\":\"\",\"source_number\":\"OTH20180905083201\",\"single_source_name\":\"\\u4eba\\u5996\\u8868\\u6f142\"},{\"lang_id\":\"1\",\"single_source_language_id\":\"46\",\"source_number\":\"OTH20180905083201\",\"single_source_name\":\"\\u4eba\\u5996\\u8868\\u6f141\"}],\"user_id\":8,\"appKey\":\"nexus\",\"appSecret\":\"nexusIt\",\"lang_id\":1}' , 1539863516 , 1 , '1' , '127.0.0.1:7002/source/updateSingleSourceLanguageBySingleSourceLanguageId') [ RunTime:0.036383s ]
+[ error ] [8]未定义数组索引: company_id[E:\xampp\htdocs\soaerp\application\index\model\source\SingleSource.php:114]
+[ error ] [8]未定义数组索引: vehicle_language_id[E:\xampp\htdocs\soaerp\application\index\model\source\SingleSource.php:191]
+[ error ] [8]未定义数组索引: vehicle_language_id[E:\xampp\htdocs\soaerp\application\index\model\source\SingleSource.php:191]
+[ error ] [8]未定义数组索引: vehicle_language_id[E:\xampp\htdocs\soaerp\application\index\model\source\SingleSource.php:191]
+---------------------------------------------------------------
+[ 2018-10-18T19:51:59+08:00 ] 127.0.0.1 POST /source/getSingleSource
+[ info ] 127.0.0.1:7002/source/getSingleSource [运行时间：0.267270s][吞吐率：3.74req/s] [内存消耗：3,257.83kb] [文件加载：57]
+[ info ] [ LANG ] E:\xampp\htdocs\soaerp\thinkphp\lang\zh-cn.php
+[ info ] [ BIND ] 'index'
+[ info ] [ ROUTE ] array (
+  'type' => 'module',
+  'module' => 
+  array (
+    0 => 'index',
+    1 => 'source',
+    2 => 'getSingleSource',
+  ),
+)
+[ info ] [ HEADER ] array (
+  'host' => '127.0.0.1:7002',
+  'accept' => 'application/json',
+  'content-length' => '52',
+  'content-type' => 'application/x-www-form-urlencoded',
+)
+[ info ] [ PARAM ] array (
+  '{"appKey":"nexus","appSecret":"nexusIt","lang_id":1}' => '',
+)
+[ info ] [ LANG ] E:\xampp\htdocs\soaerp\public/../application/index\lang\zh-cn.php
+[ info ] [ DB ] INIT mysql
+[ info ] [ RUN ] app\index\controller\Source->getSingleSource[ E:\xampp\htdocs\soaerp\application\index\controller\Source.php ]
+[ info ] [ DB ] INIT mysql
+[ info ] [ LOG ] INIT File
+[ sql ] [ DB ] CONNECT:[ UseTime:0.010341s ] mysql:host=192.168.11.100;port=3306;dbname=log;charset=utf8
+[ sql ] [ SQL ] CREATE TABLE IF NOT EXISTS soaerp_log_20181018 LIKE soaerp_log [ RunTime:0.007367s ]
+[ sql ] [ SQL ] CREATE TABLE IF NOT EXISTS soaerp_log_20181018 LIKE soaerp_log [ RunTime:0.005121s ]
+[ sql ] [ DB ] CONNECT:[ UseTime:0.016696s ] mysql:host=192.168.11.100;port=3306;dbname=erp;charset=utf8
+[ sql ] [ SQL ] SHOW COLUMNS FROM `single_source` [ RunTime:0.017848s ]
+[ sql ] [ SQL ] SELECT `single_source`.`single_source_id`,`single_source`.`single_source_name`,`single_source`.`source_number`,`single_source`.`default_language_id`,`single_source`.`remark`,`single_source`.`supplier_id`,`supplier`.`supplier_name`,`single_source`.`supplier_type`,`single_source`.`belong_supplier_id`,(select supplier2.supplier_name  from supplier as supplier2 where supplier2.supplier_id = single_source.belong_supplier_id) AS `belong_supplier_name`,`single_source`.`company_id`,`company`.`company_name`,`source_price`.`normal_price`,`source_price`.`normal_settlement_price`,(select nickname  from user where user.user_id = single_source.create_user_id) AS `create_user_name`,(select nickname  from user where user.user_id = single_source.update_user_id) AS `update_user_name`,`single_source`.`update_time`,`single_source`.`create_time`,`single_source`.`status` FROM `single_source` `single_source` LEFT JOIN `source_price` ON `source_price`.`pk_id`=single_source.single_source_id and source_price.supplier_type_id=10 INNER JOIN `supplier` ON `supplier`.`supplier_id`=`single_source`.`supplier_id` INNER JOIN `company` ON `company`.`company_id`=`single_source`.`company_id` WHERE  (  1=1  ) [ RunTime:0.010303s ]
+[ sql ] [ SQL ] CREATE TABLE IF NOT EXISTS soaerp_log_20181018 LIKE soaerp_log [ RunTime:0.001615s ]
+[ sql ] [ SQL ] CREATE TABLE IF NOT EXISTS soaerp_log_20181018 LIKE soaerp_log [ RunTime:0.001840s ]
+[ sql ] [ SQL ] SHOW COLUMNS FROM `soaerp_log_20181018` [ RunTime:0.009861s ]
+[ sql ] [ SQL ] INSERT INTO `soaerp_log_20181018` (`params` , `time` , `type` , `result` , `url`) VALUES ('{\"appKey\":\"nexus\",\"appSecret\":\"nexusIt\",\"lang_id\":1}' , 1539863519 , 1 , '[{\"single_source_id\":45,\"single_source_name\":\"\\u6742\\u62802\",\"source_number\":\"OTH20180905083200\",\"default_language_id\":1,\"remark\":null,\"supplier_id\":16,\"supplier_name\":\"\\u4eba\\u5996\\u8868\\u6f14\\u6709\\u9650\\u516c\\u53f8\",\"supplier_type\":1,\"belong_supplier_id\":16,\"belong_supplier_name\":\"\\u4eba\\u5996\\u8868\\u6f14\\u6709\\u9650\\u516c\\u53f8\",\"company_id\":2,\"company_name\":\"\\u8054\\u8c0a\\u5047\\u671f-\\u7ebd\\u7ea6\\u516c\\u53f8\",\"normal_price\":222,\"normal_settlement_price\":2,\"create_user_name\":\"admin\",\"update_user_name\":\"admin\",\"update_time\":1536660038,\"create_time\":1534475469,\"status\":1},{\"single_source_id\":46,\"single_source_name\":\"\\u4eba\\u5996\\u8868\\u6f141\",\"source_number\":\"OTH20180905083201\",\"default_language_id\":1,\"remark\":\"\\u597d\\u7684\",\"supplier_id\":16,\"supplier_name\":\"\\u4eba\\u5996\\u8868\\u6f14\\u6709\\u9650\\u516c\\u53f8\",\"supplier_type\":1,\"belong_supplier_id\":16,\"belong_supplier_name\":\"\\u4eba\\u5996\\u8868\\u6f14\\u6709\\u9650\\u516c\\u53f8\",\"company_id\":1,\"company_name\":\"\\u8054\\u8c0a\\u5047\\u671f-\\u52a0\\u62ff\\u5927\\u516c\\u53f8\",\"normal_price\":200,\"normal_settlement_price\":2,\"create_user_name\":\"admin\",\"update_user_name\":\"admin\",\"update_time\":1534500861,\"create_time\":1534500861,\"status\":1},{\"single_source_id\":47,\"single_source_name\":\"\\u4eba\\u5996\\u8868\\u6f141\",\"source_number\":\"OTH20180905083202\",\"default_language_id\":1,\"remark\":\"\\u597d\\u7684\",\"supplier_id\":2,\"supplier_name\":\"\\u643a\\u7a0b\",\"supplier_type\":2,\"belong_supplier_id\":16,\"belong_supplier_name\":\"\\u4eba\\u5996\\u8868\\u6f14\\u6709\\u9650\\u516c\\u53f8\",\"company_id\":3,\"company_name\":\"\\u4e0a\\u6d77\\u5357\\u4e9a\\u6709\\u9650\\u516c\\u53f8\",\"normal_price\":200,\"normal_settlement_price\":2,\"create_user_name\":\"admin\",\"update_user_name\":\"admin\",\"update_time\":1534500861,\"create_time\":1534500861,\"status\":1},{\"single_source_id\":48,\"single_source_name\":\"\\u98de\\u5200\\u8868\\u6f14\",\"source_number\":\"OTH20180905083203\",\"default_language_id\":1,\"remark\":\"\\u597d\\u770b\\u7684\",\"supplier_id\":16,\"supplier_name\":\"\\u4eba\\u5996\\u8868\\u6f14\\u6709\\u9650\\u516c\\u53f8\",\"supplier_type\":1,\"belong_supplier_id\":16,\"belong_supplier_name\":\"\\u4eba\\u5996\\u8868\\u6f14\\u6709\\u9650\\u516c\\u53f8\",\"company_id\":4,\"company_name\":\"\\u8054\\u8c0a\\u5047\\u671f-\\u591a\\u4f26\\u591a\\u516c\\u53f8\",\"normal_price\":100,\"normal_settlement_price\":2,\"create_user_name\":\"admin\",\"update_user_name\":\"admin\",\"update_time\":1534500962,\"create_time\":1534500962,\"status\":1},{\"single_source_id\":49,\"single_source_name\":\"\\u98de\\u5200\\u8868\\u6f142\",\"source_number\":\"OTH20180905083204\",\"default_language_id\":1,\"remark\":\"\\u597d\\u770b\\u76842\",\"supplier_id\":2,\"supplier_name\":\"\\u643a\\u7a0b\",\"supplier_type\":2,\"belong_supplier_id\":16,\"belong_supplier_name\":\"\\u4eba\\u5996\\u8868\\u6f14\\u6709\\u9650\\u516c\\u53f8\",\"company_id\":1,\"company_name\":\"\\u8054\\u8c0a\\u5047\\u671f-\\u52a0\\u62ff\\u5927\\u516c\\u53f8\",\"normal_price\":100,\"normal_settlement_price\":2,\"create_user_name\":\"admin\",\"update_user_name\":\"admin\",\"update_time\":1534819299,\"create_time\":1534500962,\"status\":1},{\"single_source_id\":50,\"single_source_name\":\"\\u5927\\u8c61\\u8868\\u6f14\\u548c\\u7334\\u5b50\\u8868\\u6f14\",\"source_number\":\"OTH20180905083205\",\"default_language_id\":1,\"remark\":null,\"supplier_id\":2,\"supplier_name\":\"\\u643a\\u7a0b\",\"supplier_type\":2,\"belong_supplier_id\":31,\"belong_supplier_name\":\"\\u6742\\u6280\\u56e2\\u8868\\u6f14\\u6709\\u9650\\u516c\\u53f8\",\"company_id\":1,\"company_name\":\"\\u8054\\u8c0a\\u5047\\u671f-\\u52a0\\u62ff\\u5927\\u516c\\u53f8\",\"normal_price\":155,\"normal_settlement_price\":2,\"create_user_name\":\"admin\",\"update_user_name\":\"admin\",\"update_time\":1535006858,\"create_time\":1535006767,\"status\":1},{\"single_source_id\":51,\"single_source_name\":\"\\u5927\\u8c61\\u8868\\u6f14\\u548c\\u72ee\\u5b50\\u8868\\u6f14\",\"source_number\":\"OTH20180905083206\",\"default_language_id\":1,\"remark\":null,\"supplier_id\":2,\"supplier_name\":\"\\u643a\\u7a0b\",\"supplier_type\":2,\"belong_supplier_id\":16,\"belong_supplier_name\":\"\\u4eba\\u5996\\u8868\\u6f14\\u6709\\u9650\\u516c\\u53f8\",\"company_id\":1,\"company_name\":\"\\u8054\\u8c0a\\u5047\\u671f-\\u52a0\\u62ff\\u5927\\u516c\\u53f8\",\"normal_price\":155,\"normal_settlement_price\":2,\"create_user_name\":\"admin\",\"update_user_name\":\"admin\",\"update_time\":1535006793,\"create_time\":1535006767,\"status\":1},{\"single_source_id\":52,\"single_source_name\":\"\\u9a6f\\u864e\\u8868\\u6f14\",\"source_number\":\"OTH20180905083207\",\"default_language_id\":1,\"remark\":null,\"supplier_id\":31,\"supplier_name\":\"\\u6742\\u6280\\u56e2\\u8868\\u6f14\\u6709\\u9650\\u516c\\u53f8\",\"supplier_type\":1,\"belong_supplier_id\":31,\"belong_supplier_name\":\"\\u6742\\u6280\\u56e2\\u8868\\u6f14\\u6709\\u9650\\u516c\\u53f8\",\"company_id\":1,\"company_name\":\"\\u8054\\u8c0a\\u5047\\u671f-\\u52a0\\u62ff\\u5927\\u516c\\u53f8\",\"normal_price\":266,\"normal_settlement_price\":2,\"create_user_name\":\"admin\",\"update_user_name\":\"admin\",\"update_time\":1535007900,\"create_time\":1535007900,\"status\":1},{\"single_source_id\":53,\"single_source_name\":\"\\u9a6f\\u864e\\u8868\\u6f14\\u52a0\\u8df3\\u706b\\u5708\",\"source_number\":\"OTH20180905083208\",\"default_language_id\":1,\"remark\":\"\\u201c\\u9a6f\\u864e\\u8868\\u6f14\\u201d\\u7531\\u4fc4\\u7f57\\u65af\\u56fd\\u5bb6\\u4eba\\u6c11\\u6f14\\u5458\\u5df4\\u8fde\\u79d1.\\u5c3c\\u53e4\\u62c9.\\u5361\\u5c14\\u52c3\\u7ef4\\u5947\\u6f14\\u51fa\\u30021990\\u5e74\\u8499\\u7279\\u5361\\u7f57\\u6742\\u6280\\u8282\\u83b7\\u5f97\\u9ad8\\u5956\\u9879\\u201c\\u91d1\\u5c0f\\u4e11\\u5956\\u201d\\u3002\\uff08\\u8fd9\\u662f\\u9a6c\\u620f\\u754c\\u4e2d\\u7684\\u5965\\u65af\\u5361\\u5956\\uff09\\u88ab\\u4fc4\\u7f57\\u65af\\u603b\\u7edf\\u666e\\u4eac\\u6388\\u4e88\\u56fd\\u5bb6\\u9a6c\\u620f\\u827a\\u672f\\u7279\\u7ea7\\u6d25\\u8d34\\u5956\\u91d1\\u3002\",\"supplier_id\":2,\"supplier_name\":\"\\u643a\\u7a0b\",\"supplier_type\":2,\"belong_supplier_id\":21,\"belong_supplier_name\":\"im-visa\",\"company_id\":1,\"company_name\":\"\\u8054\\u8c0a\\u5047\\u671f-\\u52a0\\u62ff\\u5927\\u516c\\u53f8\",\"normal_price\":1,\"normal_settlement_price\":1,\"create_user_name\":\"admin\",\"update_user_name\":\"admin\",\"update_time\":1535009439,\"create_time\":1535007900,\"status\":1},{\"single_source_id\":54,\"single_source_name\":\"\\u6d4b\\u8bd50830\",\"source_number\":\"OTH20180905083209\",\"default_language_id\":1,\"remark\":null,\"supplier_id\":31,\"supplier_name\":\"\\u6742\\u6280\\u56e2\\u8868\\u6f14\\u6709\\u9650\\u516c\\u53f8\",\"supplier_type\":1,\"belong_supplier_id\":31,\"belong_supplier_name\":\"\\u6742\\u6280\\u56e2\\u8868\\u6f14\\u6709\\u9650\\u516c\\u53f8\",\"company_id\":1,\"company_name\":\"\\u8054\\u8c0a\\u5047\\u671f-\\u52a0\\u62ff\\u5927\\u516c\\u53f8\",\"normal_price\":0,\"normal_settlement_price\":0,\"create_user_name\":\"\\u5218\\u51b0\\u5029\",\"update_user_name\":\"\\u5218\\u51b0\\u5029\",\"update_time\":1535592874,\"create_time\":1535592874,\"status\":1},{\"single_source_id\":55,\"single_source_name\":\"\\u6d4b\\u8bd50830\",\"source_number\":\"OTH20180905083210\",\"default_language_id\":1,\"remark\":null,\"supplier_id\":2,\"supplier_name\":\"\\u643a\\u7a0b\",\"supplier_type\":2,\"belong_supplier_id\":21,\"belong_supplier_name\":\"im-visa\",\"company_id\":1,\"company_name\":\"\\u8054\\u8c0a\\u5047\\u671f-\\u52a0\\u62ff\\u5927\\u516c\\u53f8\",\"normal_price\":0,\"normal_settlement_price\":0,\"create_user_name\":\"\\u5218\\u51b0\\u5029\",\"update_user_name\":\"\\u5218\\u51b0\\u5029\",\"update_time\":1535592874,\"create_time\":1535592874,\"status\":1},{\"single_source_id\":56,\"single_source_name\":\"\\u95ee\\u6211\\u53bb\",\"source_number\":\"OTH20180911291271\",\"default_language_id\":1,\"remark\":\"3123\",\"supplier_id\":16,\"supplier_name\":\"\\u4eba\\u5996\\u8868\\u6f14\\u6709\\u9650\\u516c\\u53f8\",\"supplier_type\":1,\"belong_supplier_id\":16,\"belong_supplier_name\":\"\\u4eba\\u5996\\u8868\\u6f14\\u6709\\u9650\\u516c\\u53f8\",\"company_id\":1,\"company_name\":\"\\u8054\\u8c0a\\u5047\\u671f-\\u52a0\\u62ff\\u5927\\u516c\\u53f8\",\"normal_price\":2,\"normal_settlement_price\":2,\"create_user_name\":\"admin\",\"update_user_name\":\"admin\",\"update_time\":1536659293,\"create_time\":1536659293,\"status\":1},{\"single_source_id\":57,\"single_source_name\":\"\\u95ee\\u6211\\u53bb\",\"source_number\":\"OTH20180911291279\",\"default_language_id\":1,\"remark\":\"3123\",\"supplier_id\":2,\"supplier_name\":\"\\u643a\\u7a0b\",\"supplier_type\":2,\"belong_supplier_id\":16,\"belong_supplier_name\":\"\\u4eba\\u5996\\u8868\\u6f14\\u6709\\u9650\\u516c\\u53f8\",\"company_id\":1,\"company_name\":\"\\u8054\\u8c0a\\u5047\\u671f-\\u52a0\\u62ff\\u5927\\u516c\\u53f8\",\"normal_price\":2,\"normal_settlement_price\":2,\"create_user_name\":\"admin\",\"update_user_name\":\"admin\",\"update_time\":1536659293,\"create_time\":1536659293,\"status\":1},{\"single_source_id\":58,\"single_source_name\":\"342432\",\"source_number\":\"OTH20180911913401\",\"default_language_id\":1,\"remark\":\"32432\",\"supplier_id\":16,\"supplier_name\":\"\\u4eba\\u5996\\u8868\\u6f14\\u6709\\u9650\\u516c\\u53f8\",\"supplier_type\":1,\"belong_supplier_id\":16,\"belong_supplier_name\":\"\\u4eba\\u5996\\u8868\\u6f14\\u6709\\u9650\\u516c\\u53f8\",\"company_id\":1,\"company_name\":\"\\u8054\\u8c0a\\u5047\\u671f-\\u52a0\\u62ff\\u5927\\u516c\\u53f8\",\"normal_price\":3,\"normal_settlement_price\":3,\"create_user_name\":\"admin\",\"update_user_name\":\"admin\",\"update_time\":1536659448,\"create_time\":1536659448,\"status\":1},{\"single_source_id\":59,\"single_source_name\":\"1\",\"source_number\":\"OTH20181003666262\",\"default_language_id\":1,\"remark\":null,\"supplier_id\":16,\"supplier_name\":\"\\u4eba\\u5996\\u8868\\u6f14\\u6709\\u9650\\u516c\\u53f8\",\"supplier_type\":1,\"belong_supplier_id\":16,\"belong_supplier_name\":\"\\u4eba\\u5996\\u8868\\u6f14\\u6709\\u9650\\u516c\\u53f8\",\"company_id\":1,\"company_name\":\"\\u8054\\u8c0a\\u5047\\u671f-\\u52a0\\u62ff\\u5927\\u516c\\u53f8\",\"normal_price\":1,\"normal_settlement_price\":1,\"create_user_name\":\"\\u80e1\\u4f0a\\u654f\",\"update_user_name\":\"\\u80e1\\u4f0a\\u654f\",\"update_time\":1538534405,\"create_time\":1538534405,\"status\":1},{\"single_source_id\":60,\"single_source_name\":\"1\",\"source_number\":\"OTH20181003666263\",\"default_language_id\":1,\"remark\":\"2\",\"supplier_id\":39,\"supplier_name\":\"\\u4e1c\\u5357\\u4e9a\\u5730\\u63a5\\u793e\",\"supplier_type\":2,\"belong_supplier_id\":16,\"belong_supplier_name\":\"\\u4eba\\u5996\\u8868\\u6f14\\u6709\\u9650\\u516c\\u53f8\",\"company_id\":1,\"company_name\":\"\\u8054\\u8c0a\\u5047\\u671f-\\u52a0\\u62ff\\u5927\\u516c\\u53f8\",\"normal_price\":2,\"normal_settlement_price\":2,\"create_user_name\":\"\\u80e1\\u4f0a\\u654f\",\"update_user_name\":\"\\u80e1\\u4f0a\\u654f\",\"update_time\":1538535074,\"create_time\":1538534405,\"status\":1},{\"single_source_id\":61,\"single_source_name\":\"jdskd\",\"source_number\":\"OTH20181008269002\",\"default_language_id\":1,\"remark\":\"3424\",\"supplier_id\":31,\"supplier_name\":\"\\u6742\\u6280\\u56e2\\u8868\\u6f14\\u6709\\u9650\\u516c\\u53f8\",\"supplier_type\":1,\"belong_supplier_id\":31,\"belong_supplier_name\":\"\\u6742\\u6280\\u56e2\\u8868\\u6f14\\u6709\\u9650\\u516c\\u53f8\",\"company_id\":1,\"company_name\":\"\\u8054\\u8c0a\\u5047\\u671f-\\u52a0\\u62ff\\u5927\\u516c\\u53f8\",\"normal_price\":2,\"normal_settlement_price\":2,\"create_user_name\":\"admin\",\"update_user_name\":\"admin\",\"update_time\":1538997788,\"create_time\":1538997788,\"status\":1}]' , '127.0.0.1:7002/source/getSingleSource') [ RunTime:0.058906s ]
+[ error ] [8]未定义数组索引: company_id[E:\xampp\htdocs\soaerp\application\index\model\source\SingleSource.php:114]
+---------------------------------------------------------------
+[ 2018-10-18T19:52:28+08:00 ] 127.0.0.1 POST /source/getSingleSource
+[ info ] 127.0.0.1:7002/source/getSingleSource [运行时间：0.169906s][吞吐率：5.89req/s] [内存消耗：3,257.82kb] [文件加载：57]
+[ info ] [ LANG ] E:\xampp\htdocs\soaerp\thinkphp\lang\zh-cn.php
+[ info ] [ BIND ] 'index'
+[ info ] [ ROUTE ] array (
+  'type' => 'module',
+  'module' => 
+  array (
+    0 => 'index',
+    1 => 'source',
+    2 => 'getSingleSource',
+  ),
+)
+[ info ] [ HEADER ] array (
+  'host' => '127.0.0.1:7002',
+  'accept' => 'application/json',
+  'content-length' => '52',
+  'content-type' => 'application/x-www-form-urlencoded',
+)
+[ info ] [ PARAM ] array (
+  '{"appKey":"nexus","appSecret":"nexusIt","lang_id":1}' => '',
+)
+[ info ] [ LANG ] E:\xampp\htdocs\soaerp\public/../application/index\lang\zh-cn.php
+[ info ] [ DB ] INIT mysql
+[ info ] [ RUN ] app\index\controller\Source->getSingleSource[ E:\xampp\htdocs\soaerp\application\index\controller\Source.php ]
+[ info ] [ DB ] INIT mysql
+[ info ] [ LOG ] INIT File
+[ sql ] [ DB ] CONNECT:[ UseTime:0.011569s ] mysql:host=192.168.11.100;port=3306;dbname=log;charset=utf8
+[ sql ] [ SQL ] CREATE TABLE IF NOT EXISTS soaerp_log_20181018 LIKE soaerp_log [ RunTime:0.007380s ]
+[ sql ] [ SQL ] CREATE TABLE IF NOT EXISTS soaerp_log_20181018 LIKE soaerp_log [ RunTime:0.004067s ]
+[ sql ] [ DB ] CONNECT:[ UseTime:0.009945s ] mysql:host=192.168.11.100;port=3306;dbname=erp;charset=utf8
+[ sql ] [ SQL ] SHOW COLUMNS FROM `single_source` [ RunTime:0.010838s ]
+[ sql ] [ SQL ] SELECT `single_source`.`single_source_id`,`single_source`.`single_source_name`,`single_source`.`source_number`,`single_source`.`default_language_id`,`single_source`.`remark`,`single_source`.`supplier_id`,`supplier`.`supplier_name`,`single_source`.`supplier_type`,`single_source`.`belong_supplier_id`,(select supplier2.supplier_name  from supplier as supplier2 where supplier2.supplier_id = single_source.belong_supplier_id) AS `belong_supplier_name`,`single_source`.`company_id`,`company`.`company_name`,`source_price`.`normal_price`,`source_price`.`normal_settlement_price`,(select nickname  from user where user.user_id = single_source.create_user_id) AS `create_user_name`,(select nickname  from user where user.user_id = single_source.update_user_id) AS `update_user_name`,`single_source`.`update_time`,`single_source`.`create_time`,`single_source`.`status` FROM `single_source` `single_source` LEFT JOIN `source_price` ON `source_price`.`pk_id`=single_source.single_source_id and source_price.supplier_type_id=10 INNER JOIN `supplier` ON `supplier`.`supplier_id`=`single_source`.`supplier_id` INNER JOIN `company` ON `company`.`company_id`=`single_source`.`company_id` WHERE  (  1=1  ) [ RunTime:0.007353s ]
+[ sql ] [ SQL ] CREATE TABLE IF NOT EXISTS soaerp_log_20181018 LIKE soaerp_log [ RunTime:0.003196s ]
+[ sql ] [ SQL ] CREATE TABLE IF NOT EXISTS soaerp_log_20181018 LIKE soaerp_log [ RunTime:0.002256s ]
+[ sql ] [ SQL ] SHOW COLUMNS FROM `soaerp_log_20181018` [ RunTime:0.010816s ]
+[ sql ] [ SQL ] INSERT INTO `soaerp_log_20181018` (`params` , `time` , `type` , `result` , `url`) VALUES ('{\"appKey\":\"nexus\",\"appSecret\":\"nexusIt\",\"lang_id\":1}' , 1539863548 , 1 , '[{\"single_source_id\":45,\"single_source_name\":\"\\u6742\\u62802\",\"source_number\":\"OTH20180905083200\",\"default_language_id\":1,\"remark\":null,\"supplier_id\":16,\"supplier_name\":\"\\u4eba\\u5996\\u8868\\u6f14\\u6709\\u9650\\u516c\\u53f8\",\"supplier_type\":1,\"belong_supplier_id\":16,\"belong_supplier_name\":\"\\u4eba\\u5996\\u8868\\u6f14\\u6709\\u9650\\u516c\\u53f8\",\"company_id\":2,\"company_name\":\"\\u8054\\u8c0a\\u5047\\u671f-\\u7ebd\\u7ea6\\u516c\\u53f8\",\"normal_price\":222,\"normal_settlement_price\":2,\"create_user_name\":\"admin\",\"update_user_name\":\"admin\",\"update_time\":1536660038,\"create_time\":1534475469,\"status\":1},{\"single_source_id\":46,\"single_source_name\":\"\\u4eba\\u5996\\u8868\\u6f141\",\"source_number\":\"OTH20180905083201\",\"default_language_id\":1,\"remark\":\"\\u597d\\u7684\",\"supplier_id\":16,\"supplier_name\":\"\\u4eba\\u5996\\u8868\\u6f14\\u6709\\u9650\\u516c\\u53f8\",\"supplier_type\":1,\"belong_supplier_id\":16,\"belong_supplier_name\":\"\\u4eba\\u5996\\u8868\\u6f14\\u6709\\u9650\\u516c\\u53f8\",\"company_id\":1,\"company_name\":\"\\u8054\\u8c0a\\u5047\\u671f-\\u52a0\\u62ff\\u5927\\u516c\\u53f8\",\"normal_price\":200,\"normal_settlement_price\":2,\"create_user_name\":\"admin\",\"update_user_name\":\"admin\",\"update_time\":1534500861,\"create_time\":1534500861,\"status\":1},{\"single_source_id\":47,\"single_source_name\":\"\\u4eba\\u5996\\u8868\\u6f141\",\"source_number\":\"OTH20180905083202\",\"default_language_id\":1,\"remark\":\"\\u597d\\u7684\",\"supplier_id\":2,\"supplier_name\":\"\\u643a\\u7a0b\",\"supplier_type\":2,\"belong_supplier_id\":16,\"belong_supplier_name\":\"\\u4eba\\u5996\\u8868\\u6f14\\u6709\\u9650\\u516c\\u53f8\",\"company_id\":3,\"company_name\":\"\\u4e0a\\u6d77\\u5357\\u4e9a\\u6709\\u9650\\u516c\\u53f8\",\"normal_price\":200,\"normal_settlement_price\":2,\"create_user_name\":\"admin\",\"update_user_name\":\"admin\",\"update_time\":1534500861,\"create_time\":1534500861,\"status\":1},{\"single_source_id\":48,\"single_source_name\":\"\\u98de\\u5200\\u8868\\u6f14\",\"source_number\":\"OTH20180905083203\",\"default_language_id\":1,\"remark\":\"\\u597d\\u770b\\u7684\",\"supplier_id\":16,\"supplier_name\":\"\\u4eba\\u5996\\u8868\\u6f14\\u6709\\u9650\\u516c\\u53f8\",\"supplier_type\":1,\"belong_supplier_id\":16,\"belong_supplier_name\":\"\\u4eba\\u5996\\u8868\\u6f14\\u6709\\u9650\\u516c\\u53f8\",\"company_id\":4,\"company_name\":\"\\u8054\\u8c0a\\u5047\\u671f-\\u591a\\u4f26\\u591a\\u516c\\u53f8\",\"normal_price\":100,\"normal_settlement_price\":2,\"create_user_name\":\"admin\",\"update_user_name\":\"admin\",\"update_time\":1534500962,\"create_time\":1534500962,\"status\":1},{\"single_source_id\":49,\"single_source_name\":\"\\u98de\\u5200\\u8868\\u6f142\",\"source_number\":\"OTH20180905083204\",\"default_language_id\":1,\"remark\":\"\\u597d\\u770b\\u76842\",\"supplier_id\":2,\"supplier_name\":\"\\u643a\\u7a0b\",\"supplier_type\":2,\"belong_supplier_id\":16,\"belong_supplier_name\":\"\\u4eba\\u5996\\u8868\\u6f14\\u6709\\u9650\\u516c\\u53f8\",\"company_id\":1,\"company_name\":\"\\u8054\\u8c0a\\u5047\\u671f-\\u52a0\\u62ff\\u5927\\u516c\\u53f8\",\"normal_price\":100,\"normal_settlement_price\":2,\"create_user_name\":\"admin\",\"update_user_name\":\"admin\",\"update_time\":1534819299,\"create_time\":1534500962,\"status\":1},{\"single_source_id\":50,\"single_source_name\":\"\\u5927\\u8c61\\u8868\\u6f14\\u548c\\u7334\\u5b50\\u8868\\u6f14\",\"source_number\":\"OTH20180905083205\",\"default_language_id\":1,\"remark\":null,\"supplier_id\":2,\"supplier_name\":\"\\u643a\\u7a0b\",\"supplier_type\":2,\"belong_supplier_id\":31,\"belong_supplier_name\":\"\\u6742\\u6280\\u56e2\\u8868\\u6f14\\u6709\\u9650\\u516c\\u53f8\",\"company_id\":1,\"company_name\":\"\\u8054\\u8c0a\\u5047\\u671f-\\u52a0\\u62ff\\u5927\\u516c\\u53f8\",\"normal_price\":155,\"normal_settlement_price\":2,\"create_user_name\":\"admin\",\"update_user_name\":\"admin\",\"update_time\":1535006858,\"create_time\":1535006767,\"status\":1},{\"single_source_id\":51,\"single_source_name\":\"\\u5927\\u8c61\\u8868\\u6f14\\u548c\\u72ee\\u5b50\\u8868\\u6f14\",\"source_number\":\"OTH20180905083206\",\"default_language_id\":1,\"remark\":null,\"supplier_id\":2,\"supplier_name\":\"\\u643a\\u7a0b\",\"supplier_type\":2,\"belong_supplier_id\":16,\"belong_supplier_name\":\"\\u4eba\\u5996\\u8868\\u6f14\\u6709\\u9650\\u516c\\u53f8\",\"company_id\":1,\"company_name\":\"\\u8054\\u8c0a\\u5047\\u671f-\\u52a0\\u62ff\\u5927\\u516c\\u53f8\",\"normal_price\":155,\"normal_settlement_price\":2,\"create_user_name\":\"admin\",\"update_user_name\":\"admin\",\"update_time\":1535006793,\"create_time\":1535006767,\"status\":1},{\"single_source_id\":52,\"single_source_name\":\"\\u9a6f\\u864e\\u8868\\u6f14\",\"source_number\":\"OTH20180905083207\",\"default_language_id\":1,\"remark\":null,\"supplier_id\":31,\"supplier_name\":\"\\u6742\\u6280\\u56e2\\u8868\\u6f14\\u6709\\u9650\\u516c\\u53f8\",\"supplier_type\":1,\"belong_supplier_id\":31,\"belong_supplier_name\":\"\\u6742\\u6280\\u56e2\\u8868\\u6f14\\u6709\\u9650\\u516c\\u53f8\",\"company_id\":1,\"company_name\":\"\\u8054\\u8c0a\\u5047\\u671f-\\u52a0\\u62ff\\u5927\\u516c\\u53f8\",\"normal_price\":266,\"normal_settlement_price\":2,\"create_user_name\":\"admin\",\"update_user_name\":\"admin\",\"update_time\":1535007900,\"create_time\":1535007900,\"status\":1},{\"single_source_id\":53,\"single_source_name\":\"\\u9a6f\\u864e\\u8868\\u6f14\\u52a0\\u8df3\\u706b\\u5708\",\"source_number\":\"OTH20180905083208\",\"default_language_id\":1,\"remark\":\"\\u201c\\u9a6f\\u864e\\u8868\\u6f14\\u201d\\u7531\\u4fc4\\u7f57\\u65af\\u56fd\\u5bb6\\u4eba\\u6c11\\u6f14\\u5458\\u5df4\\u8fde\\u79d1.\\u5c3c\\u53e4\\u62c9.\\u5361\\u5c14\\u52c3\\u7ef4\\u5947\\u6f14\\u51fa\\u30021990\\u5e74\\u8499\\u7279\\u5361\\u7f57\\u6742\\u6280\\u8282\\u83b7\\u5f97\\u9ad8\\u5956\\u9879\\u201c\\u91d1\\u5c0f\\u4e11\\u5956\\u201d\\u3002\\uff08\\u8fd9\\u662f\\u9a6c\\u620f\\u754c\\u4e2d\\u7684\\u5965\\u65af\\u5361\\u5956\\uff09\\u88ab\\u4fc4\\u7f57\\u65af\\u603b\\u7edf\\u666e\\u4eac\\u6388\\u4e88\\u56fd\\u5bb6\\u9a6c\\u620f\\u827a\\u672f\\u7279\\u7ea7\\u6d25\\u8d34\\u5956\\u91d1\\u3002\",\"supplier_id\":2,\"supplier_name\":\"\\u643a\\u7a0b\",\"supplier_type\":2,\"belong_supplier_id\":21,\"belong_supplier_name\":\"im-visa\",\"company_id\":1,\"company_name\":\"\\u8054\\u8c0a\\u5047\\u671f-\\u52a0\\u62ff\\u5927\\u516c\\u53f8\",\"normal_price\":1,\"normal_settlement_price\":1,\"create_user_name\":\"admin\",\"update_user_name\":\"admin\",\"update_time\":1535009439,\"create_time\":1535007900,\"status\":1},{\"single_source_id\":54,\"single_source_name\":\"\\u6d4b\\u8bd50830\",\"source_number\":\"OTH20180905083209\",\"default_language_id\":1,\"remark\":null,\"supplier_id\":31,\"supplier_name\":\"\\u6742\\u6280\\u56e2\\u8868\\u6f14\\u6709\\u9650\\u516c\\u53f8\",\"supplier_type\":1,\"belong_supplier_id\":31,\"belong_supplier_name\":\"\\u6742\\u6280\\u56e2\\u8868\\u6f14\\u6709\\u9650\\u516c\\u53f8\",\"company_id\":1,\"company_name\":\"\\u8054\\u8c0a\\u5047\\u671f-\\u52a0\\u62ff\\u5927\\u516c\\u53f8\",\"normal_price\":0,\"normal_settlement_price\":0,\"create_user_name\":\"\\u5218\\u51b0\\u5029\",\"update_user_name\":\"\\u5218\\u51b0\\u5029\",\"update_time\":1535592874,\"create_time\":1535592874,\"status\":1},{\"single_source_id\":55,\"single_source_name\":\"\\u6d4b\\u8bd50830\",\"source_number\":\"OTH20180905083210\",\"default_language_id\":1,\"remark\":null,\"supplier_id\":2,\"supplier_name\":\"\\u643a\\u7a0b\",\"supplier_type\":2,\"belong_supplier_id\":21,\"belong_supplier_name\":\"im-visa\",\"company_id\":1,\"company_name\":\"\\u8054\\u8c0a\\u5047\\u671f-\\u52a0\\u62ff\\u5927\\u516c\\u53f8\",\"normal_price\":0,\"normal_settlement_price\":0,\"create_user_name\":\"\\u5218\\u51b0\\u5029\",\"update_user_name\":\"\\u5218\\u51b0\\u5029\",\"update_time\":1535592874,\"create_time\":1535592874,\"status\":1},{\"single_source_id\":56,\"single_source_name\":\"\\u95ee\\u6211\\u53bb\",\"source_number\":\"OTH20180911291271\",\"default_language_id\":1,\"remark\":\"3123\",\"supplier_id\":16,\"supplier_name\":\"\\u4eba\\u5996\\u8868\\u6f14\\u6709\\u9650\\u516c\\u53f8\",\"supplier_type\":1,\"belong_supplier_id\":16,\"belong_supplier_name\":\"\\u4eba\\u5996\\u8868\\u6f14\\u6709\\u9650\\u516c\\u53f8\",\"company_id\":1,\"company_name\":\"\\u8054\\u8c0a\\u5047\\u671f-\\u52a0\\u62ff\\u5927\\u516c\\u53f8\",\"normal_price\":2,\"normal_settlement_price\":2,\"create_user_name\":\"admin\",\"update_user_name\":\"admin\",\"update_time\":1536659293,\"create_time\":1536659293,\"status\":1},{\"single_source_id\":57,\"single_source_name\":\"\\u95ee\\u6211\\u53bb\",\"source_number\":\"OTH20180911291279\",\"default_language_id\":1,\"remark\":\"3123\",\"supplier_id\":2,\"supplier_name\":\"\\u643a\\u7a0b\",\"supplier_type\":2,\"belong_supplier_id\":16,\"belong_supplier_name\":\"\\u4eba\\u5996\\u8868\\u6f14\\u6709\\u9650\\u516c\\u53f8\",\"company_id\":1,\"company_name\":\"\\u8054\\u8c0a\\u5047\\u671f-\\u52a0\\u62ff\\u5927\\u516c\\u53f8\",\"normal_price\":2,\"normal_settlement_price\":2,\"create_user_name\":\"admin\",\"update_user_name\":\"admin\",\"update_time\":1536659293,\"create_time\":1536659293,\"status\":1},{\"single_source_id\":58,\"single_source_name\":\"342432\",\"source_number\":\"OTH20180911913401\",\"default_language_id\":1,\"remark\":\"32432\",\"supplier_id\":16,\"supplier_name\":\"\\u4eba\\u5996\\u8868\\u6f14\\u6709\\u9650\\u516c\\u53f8\",\"supplier_type\":1,\"belong_supplier_id\":16,\"belong_supplier_name\":\"\\u4eba\\u5996\\u8868\\u6f14\\u6709\\u9650\\u516c\\u53f8\",\"company_id\":1,\"company_name\":\"\\u8054\\u8c0a\\u5047\\u671f-\\u52a0\\u62ff\\u5927\\u516c\\u53f8\",\"normal_price\":3,\"normal_settlement_price\":3,\"create_user_name\":\"admin\",\"update_user_name\":\"admin\",\"update_time\":1536659448,\"create_time\":1536659448,\"status\":1},{\"single_source_id\":59,\"single_source_name\":\"1\",\"source_number\":\"OTH20181003666262\",\"default_language_id\":1,\"remark\":null,\"supplier_id\":16,\"supplier_name\":\"\\u4eba\\u5996\\u8868\\u6f14\\u6709\\u9650\\u516c\\u53f8\",\"supplier_type\":1,\"belong_supplier_id\":16,\"belong_supplier_name\":\"\\u4eba\\u5996\\u8868\\u6f14\\u6709\\u9650\\u516c\\u53f8\",\"company_id\":1,\"company_name\":\"\\u8054\\u8c0a\\u5047\\u671f-\\u52a0\\u62ff\\u5927\\u516c\\u53f8\",\"normal_price\":1,\"normal_settlement_price\":1,\"create_user_name\":\"\\u80e1\\u4f0a\\u654f\",\"update_user_name\":\"\\u80e1\\u4f0a\\u654f\",\"update_time\":1538534405,\"create_time\":1538534405,\"status\":1},{\"single_source_id\":60,\"single_source_name\":\"1\",\"source_number\":\"OTH20181003666263\",\"default_language_id\":1,\"remark\":\"2\",\"supplier_id\":39,\"supplier_name\":\"\\u4e1c\\u5357\\u4e9a\\u5730\\u63a5\\u793e\",\"supplier_type\":2,\"belong_supplier_id\":16,\"belong_supplier_name\":\"\\u4eba\\u5996\\u8868\\u6f14\\u6709\\u9650\\u516c\\u53f8\",\"company_id\":1,\"company_name\":\"\\u8054\\u8c0a\\u5047\\u671f-\\u52a0\\u62ff\\u5927\\u516c\\u53f8\",\"normal_price\":2,\"normal_settlement_price\":2,\"create_user_name\":\"\\u80e1\\u4f0a\\u654f\",\"update_user_name\":\"\\u80e1\\u4f0a\\u654f\",\"update_time\":1538535074,\"create_time\":1538534405,\"status\":1},{\"single_source_id\":61,\"single_source_name\":\"jdskd\",\"source_number\":\"OTH20181008269002\",\"default_language_id\":1,\"remark\":\"3424\",\"supplier_id\":31,\"supplier_name\":\"\\u6742\\u6280\\u56e2\\u8868\\u6f14\\u6709\\u9650\\u516c\\u53f8\",\"supplier_type\":1,\"belong_supplier_id\":31,\"belong_supplier_name\":\"\\u6742\\u6280\\u56e2\\u8868\\u6f14\\u6709\\u9650\\u516c\\u53f8\",\"company_id\":1,\"company_name\":\"\\u8054\\u8c0a\\u5047\\u671f-\\u52a0\\u62ff\\u5927\\u516c\\u53f8\",\"normal_price\":2,\"normal_settlement_price\":2,\"create_user_name\":\"admin\",\"update_user_name\":\"admin\",\"update_time\":1538997788,\"create_time\":1538997788,\"status\":1}]' , '127.0.0.1:7002/source/getSingleSource') [ RunTime:0.037569s ]
+[ error ] [8]未定义数组索引: company_id[E:\xampp\htdocs\soaerp\application\index\model\source\SingleSource.php:114]
+---------------------------------------------------------------
+[ 2018-10-18T19:52:29+08:00 ] 127.0.0.1 POST /source/getSingleSourceLanguage
+[ info ] 127.0.0.1:7002/source/getSingleSourceLanguage [运行时间：0.229345s][吞吐率：4.36req/s] [内存消耗：3,096.35kb] [文件加载：54]
+[ info ] [ LANG ] E:\xampp\htdocs\soaerp\thinkphp\lang\zh-cn.php
+[ info ] [ BIND ] 'index'
+[ info ] [ ROUTE ] array (
+  'type' => 'module',
+  'module' => 
+  array (
+    0 => 'index',
+    1 => 'source',
+    2 => 'getSingleSourceLanguage',
+  ),
+)
+[ info ] [ HEADER ] array (
+  'host' => '127.0.0.1:7002',
+  'accept' => 'application/json',
+  'content-length' => '88',
+  'content-type' => 'application/x-www-form-urlencoded',
+)
+[ info ] [ PARAM ] array (
+  '{"source_number":"OTH20180905083200","appKey":"nexus","appSecret":"nexusIt","lang_id":1}' => '',
+)
+[ info ] [ LANG ] E:\xampp\htdocs\soaerp\public/../application/index\lang\zh-cn.php
+[ info ] [ DB ] INIT mysql
+[ info ] [ RUN ] app\index\controller\Source->getSingleSourceLanguage[ E:\xampp\htdocs\soaerp\application\index\controller\Source.php ]
+[ info ] [ DB ] INIT mysql
+[ info ] [ LOG ] INIT File
+[ sql ] [ DB ] CONNECT:[ UseTime:0.011097s ] mysql:host=192.168.11.100;port=3306;dbname=log;charset=utf8
+[ sql ] [ SQL ] CREATE TABLE IF NOT EXISTS soaerp_log_20181018 LIKE soaerp_log [ RunTime:0.004959s ]
+[ sql ] [ SQL ] CREATE TABLE IF NOT EXISTS soaerp_log_20181018 LIKE soaerp_log [ RunTime:0.003694s ]
+[ sql ] [ DB ] CONNECT:[ UseTime:0.017032s ] mysql:host=192.168.11.100;port=3306;dbname=erp;charset=utf8
+[ sql ] [ SQL ] SHOW COLUMNS FROM `language` [ RunTime:0.007469s ]
+[ sql ] [ SQL ] SELECT `language`.`language_id`,`language`.`language_name`,`language`.`create_time`,(select nickname  from user where user.user_id = language.create_user_id) AS `create_user_name`,(select nickname  from user where user.user_id = language.update_user_id) AS `update_user_name`,`language`.`update_time`,`language`.`status` FROM `language` `language` WHERE  `status` = 1 ORDER BY `create_time` DESC [ RunTime:0.004653s ]
+[ sql ] [ SQL ] SHOW COLUMNS FROM `single_source_language` [ RunTime:0.010831s ]
+[ sql ] [ SQL ] SELECT * FROM `single_source_language` WHERE  `language_id` = 3  AND `source_number` = 'OTH20180905083200' LIMIT 1 [ RunTime:0.004025s ]
+[ sql ] [ SQL ] SELECT * FROM `single_source_language` WHERE  `language_id` = 2  AND `source_number` = 'OTH20180905083200' LIMIT 1 [ RunTime:0.004058s ]
+[ sql ] [ SQL ] SELECT * FROM `single_source_language` WHERE  `language_id` = 1  AND `source_number` = 'OTH20180905083200' LIMIT 1 [ RunTime:0.005536s ]
+[ sql ] [ SQL ] CREATE TABLE IF NOT EXISTS soaerp_log_20181018 LIKE soaerp_log [ RunTime:0.002080s ]
+[ sql ] [ SQL ] CREATE TABLE IF NOT EXISTS soaerp_log_20181018 LIKE soaerp_log [ RunTime:0.002303s ]
+[ sql ] [ SQL ] SHOW COLUMNS FROM `soaerp_log_20181018` [ RunTime:0.012168s ]
+[ sql ] [ SQL ] INSERT INTO `soaerp_log_20181018` (`params` , `time` , `type` , `result` , `url`) VALUES ('{\"source_number\":\"OTH20180905083200\",\"appKey\":\"nexus\",\"appSecret\":\"nexusIt\",\"lang_id\":1}' , 1539863549 , 1 , '[{\"language_id\":3,\"language_name\":\"japan\",\"create_time\":1532402015,\"create_user_name\":\"\\u80e1\\u4f0a\\u654f\",\"update_user_name\":\"admin\",\"update_time\":1534304089,\"status\":1,\"language_info\":null},{\"language_id\":2,\"language_name\":\"english\",\"create_time\":1532401866,\"create_user_name\":\"\\u80e1\\u4f0a\\u654f\",\"update_user_name\":\"\\u80e1\\u4f0a\\u654f\",\"update_time\":1532574269,\"status\":1,\"language_info\":null},{\"language_id\":1,\"language_name\":\"\\u4e2d\\u6587\",\"create_time\":1532400025,\"create_user_name\":\"admin\",\"update_user_name\":\"admin\",\"update_time\":1534303834,\"status\":1,\"language_info\":{\"single_source_language_id\":45,\"source_number\":\"OTH20180905083200\",\"single_source_name\":\"\\u6742\\u62802\",\"language_id\":1,\"create_time\":1534475469,\"create_user_id\":1,\"update_time\":1536660038,\"update_user_id\":1,\"status\":1}}]' , '127.0.0.1:7002/source/getSingleSourceLanguage') [ RunTime:0.038776s ]
+---------------------------------------------------------------
+[ 2018-10-18T19:52:32+08:00 ] 127.0.0.1 POST /source/getSingleSource
+[ info ] 127.0.0.1:7002/source/getSingleSource [运行时间：0.247940s][吞吐率：4.03req/s] [内存消耗：3,257.82kb] [文件加载：57]
+[ info ] [ LANG ] E:\xampp\htdocs\soaerp\thinkphp\lang\zh-cn.php
+[ info ] [ BIND ] 'index'
+[ info ] [ ROUTE ] array (
+  'type' => 'module',
+  'module' => 
+  array (
+    0 => 'index',
+    1 => 'source',
+    2 => 'getSingleSource',
+  ),
+)
+[ info ] [ HEADER ] array (
+  'host' => '127.0.0.1:7002',
+  'accept' => 'application/json',
+  'content-length' => '52',
+  'content-type' => 'application/x-www-form-urlencoded',
+)
+[ info ] [ PARAM ] array (
+  '{"appKey":"nexus","appSecret":"nexusIt","lang_id":1}' => '',
+)
+[ info ] [ LANG ] E:\xampp\htdocs\soaerp\public/../application/index\lang\zh-cn.php
+[ info ] [ DB ] INIT mysql
+[ info ] [ RUN ] app\index\controller\Source->getSingleSource[ E:\xampp\htdocs\soaerp\application\index\controller\Source.php ]
+[ info ] [ DB ] INIT mysql
+[ info ] [ LOG ] INIT File
+[ sql ] [ DB ] CONNECT:[ UseTime:0.017484s ] mysql:host=192.168.11.100;port=3306;dbname=log;charset=utf8
+[ sql ] [ SQL ] CREATE TABLE IF NOT EXISTS soaerp_log_20181018 LIKE soaerp_log [ RunTime:0.006394s ]
+[ sql ] [ SQL ] CREATE TABLE IF NOT EXISTS soaerp_log_20181018 LIKE soaerp_log [ RunTime:0.003837s ]
+[ sql ] [ DB ] CONNECT:[ UseTime:0.009940s ] mysql:host=192.168.11.100;port=3306;dbname=erp;charset=utf8
+[ sql ] [ SQL ] SHOW COLUMNS FROM `single_source` [ RunTime:0.018094s ]
+[ sql ] [ SQL ] SELECT `single_source`.`single_source_id`,`single_source`.`single_source_name`,`single_source`.`source_number`,`single_source`.`default_language_id`,`single_source`.`remark`,`single_source`.`supplier_id`,`supplier`.`supplier_name`,`single_source`.`supplier_type`,`single_source`.`belong_supplier_id`,(select supplier2.supplier_name  from supplier as supplier2 where supplier2.supplier_id = single_source.belong_supplier_id) AS `belong_supplier_name`,`single_source`.`company_id`,`company`.`company_name`,`source_price`.`normal_price`,`source_price`.`normal_settlement_price`,(select nickname  from user where user.user_id = single_source.create_user_id) AS `create_user_name`,(select nickname  from user where user.user_id = single_source.update_user_id) AS `update_user_name`,`single_source`.`update_time`,`single_source`.`create_time`,`single_source`.`status` FROM `single_source` `single_source` LEFT JOIN `source_price` ON `source_price`.`pk_id`=single_source.single_source_id and source_price.supplier_type_id=10 INNER JOIN `supplier` ON `supplier`.`supplier_id`=`single_source`.`supplier_id` INNER JOIN `company` ON `company`.`company_id`=`single_source`.`company_id` WHERE  (  1=1  ) [ RunTime:0.012440s ]
+[ sql ] [ SQL ] CREATE TABLE IF NOT EXISTS soaerp_log_20181018 LIKE soaerp_log [ RunTime:0.003498s ]
+[ sql ] [ SQL ] CREATE TABLE IF NOT EXISTS soaerp_log_20181018 LIKE soaerp_log [ RunTime:0.003637s ]
+[ sql ] [ SQL ] SHOW COLUMNS FROM `soaerp_log_20181018` [ RunTime:0.046830s ]
+[ sql ] [ SQL ] INSERT INTO `soaerp_log_20181018` (`params` , `time` , `type` , `result` , `url`) VALUES ('{\"appKey\":\"nexus\",\"appSecret\":\"nexusIt\",\"lang_id\":1}' , 1539863552 , 1 , '[{\"single_source_id\":45,\"single_source_name\":\"\\u6742\\u62802\",\"source_number\":\"OTH20180905083200\",\"default_language_id\":1,\"remark\":null,\"supplier_id\":16,\"supplier_name\":\"\\u4eba\\u5996\\u8868\\u6f14\\u6709\\u9650\\u516c\\u53f8\",\"supplier_type\":1,\"belong_supplier_id\":16,\"belong_supplier_name\":\"\\u4eba\\u5996\\u8868\\u6f14\\u6709\\u9650\\u516c\\u53f8\",\"company_id\":2,\"company_name\":\"\\u8054\\u8c0a\\u5047\\u671f-\\u7ebd\\u7ea6\\u516c\\u53f8\",\"normal_price\":222,\"normal_settlement_price\":2,\"create_user_name\":\"admin\",\"update_user_name\":\"admin\",\"update_time\":1536660038,\"create_time\":1534475469,\"status\":1},{\"single_source_id\":46,\"single_source_name\":\"\\u4eba\\u5996\\u8868\\u6f141\",\"source_number\":\"OTH20180905083201\",\"default_language_id\":1,\"remark\":\"\\u597d\\u7684\",\"supplier_id\":16,\"supplier_name\":\"\\u4eba\\u5996\\u8868\\u6f14\\u6709\\u9650\\u516c\\u53f8\",\"supplier_type\":1,\"belong_supplier_id\":16,\"belong_supplier_name\":\"\\u4eba\\u5996\\u8868\\u6f14\\u6709\\u9650\\u516c\\u53f8\",\"company_id\":1,\"company_name\":\"\\u8054\\u8c0a\\u5047\\u671f-\\u52a0\\u62ff\\u5927\\u516c\\u53f8\",\"normal_price\":200,\"normal_settlement_price\":2,\"create_user_name\":\"admin\",\"update_user_name\":\"admin\",\"update_time\":1534500861,\"create_time\":1534500861,\"status\":1},{\"single_source_id\":47,\"single_source_name\":\"\\u4eba\\u5996\\u8868\\u6f141\",\"source_number\":\"OTH20180905083202\",\"default_language_id\":1,\"remark\":\"\\u597d\\u7684\",\"supplier_id\":2,\"supplier_name\":\"\\u643a\\u7a0b\",\"supplier_type\":2,\"belong_supplier_id\":16,\"belong_supplier_name\":\"\\u4eba\\u5996\\u8868\\u6f14\\u6709\\u9650\\u516c\\u53f8\",\"company_id\":3,\"company_name\":\"\\u4e0a\\u6d77\\u5357\\u4e9a\\u6709\\u9650\\u516c\\u53f8\",\"normal_price\":200,\"normal_settlement_price\":2,\"create_user_name\":\"admin\",\"update_user_name\":\"admin\",\"update_time\":1534500861,\"create_time\":1534500861,\"status\":1},{\"single_source_id\":48,\"single_source_name\":\"\\u98de\\u5200\\u8868\\u6f14\",\"source_number\":\"OTH20180905083203\",\"default_language_id\":1,\"remark\":\"\\u597d\\u770b\\u7684\",\"supplier_id\":16,\"supplier_name\":\"\\u4eba\\u5996\\u8868\\u6f14\\u6709\\u9650\\u516c\\u53f8\",\"supplier_type\":1,\"belong_supplier_id\":16,\"belong_supplier_name\":\"\\u4eba\\u5996\\u8868\\u6f14\\u6709\\u9650\\u516c\\u53f8\",\"company_id\":4,\"company_name\":\"\\u8054\\u8c0a\\u5047\\u671f-\\u591a\\u4f26\\u591a\\u516c\\u53f8\",\"normal_price\":100,\"normal_settlement_price\":2,\"create_user_name\":\"admin\",\"update_user_name\":\"admin\",\"update_time\":1534500962,\"create_time\":1534500962,\"status\":1},{\"single_source_id\":49,\"single_source_name\":\"\\u98de\\u5200\\u8868\\u6f142\",\"source_number\":\"OTH20180905083204\",\"default_language_id\":1,\"remark\":\"\\u597d\\u770b\\u76842\",\"supplier_id\":2,\"supplier_name\":\"\\u643a\\u7a0b\",\"supplier_type\":2,\"belong_supplier_id\":16,\"belong_supplier_name\":\"\\u4eba\\u5996\\u8868\\u6f14\\u6709\\u9650\\u516c\\u53f8\",\"company_id\":1,\"company_name\":\"\\u8054\\u8c0a\\u5047\\u671f-\\u52a0\\u62ff\\u5927\\u516c\\u53f8\",\"normal_price\":100,\"normal_settlement_price\":2,\"create_user_name\":\"admin\",\"update_user_name\":\"admin\",\"update_time\":1534819299,\"create_time\":1534500962,\"status\":1},{\"single_source_id\":50,\"single_source_name\":\"\\u5927\\u8c61\\u8868\\u6f14\\u548c\\u7334\\u5b50\\u8868\\u6f14\",\"source_number\":\"OTH20180905083205\",\"default_language_id\":1,\"remark\":null,\"supplier_id\":2,\"supplier_name\":\"\\u643a\\u7a0b\",\"supplier_type\":2,\"belong_supplier_id\":31,\"belong_supplier_name\":\"\\u6742\\u6280\\u56e2\\u8868\\u6f14\\u6709\\u9650\\u516c\\u53f8\",\"company_id\":1,\"company_name\":\"\\u8054\\u8c0a\\u5047\\u671f-\\u52a0\\u62ff\\u5927\\u516c\\u53f8\",\"normal_price\":155,\"normal_settlement_price\":2,\"create_user_name\":\"admin\",\"update_user_name\":\"admin\",\"update_time\":1535006858,\"create_time\":1535006767,\"status\":1},{\"single_source_id\":51,\"single_source_name\":\"\\u5927\\u8c61\\u8868\\u6f14\\u548c\\u72ee\\u5b50\\u8868\\u6f14\",\"source_number\":\"OTH20180905083206\",\"default_language_id\":1,\"remark\":null,\"supplier_id\":2,\"supplier_name\":\"\\u643a\\u7a0b\",\"supplier_type\":2,\"belong_supplier_id\":16,\"belong_supplier_name\":\"\\u4eba\\u5996\\u8868\\u6f14\\u6709\\u9650\\u516c\\u53f8\",\"company_id\":1,\"company_name\":\"\\u8054\\u8c0a\\u5047\\u671f-\\u52a0\\u62ff\\u5927\\u516c\\u53f8\",\"normal_price\":155,\"normal_settlement_price\":2,\"create_user_name\":\"admin\",\"update_user_name\":\"admin\",\"update_time\":1535006793,\"create_time\":1535006767,\"status\":1},{\"single_source_id\":52,\"single_source_name\":\"\\u9a6f\\u864e\\u8868\\u6f14\",\"source_number\":\"OTH20180905083207\",\"default_language_id\":1,\"remark\":null,\"supplier_id\":31,\"supplier_name\":\"\\u6742\\u6280\\u56e2\\u8868\\u6f14\\u6709\\u9650\\u516c\\u53f8\",\"supplier_type\":1,\"belong_supplier_id\":31,\"belong_supplier_name\":\"\\u6742\\u6280\\u56e2\\u8868\\u6f14\\u6709\\u9650\\u516c\\u53f8\",\"company_id\":1,\"company_name\":\"\\u8054\\u8c0a\\u5047\\u671f-\\u52a0\\u62ff\\u5927\\u516c\\u53f8\",\"normal_price\":266,\"normal_settlement_price\":2,\"create_user_name\":\"admin\",\"update_user_name\":\"admin\",\"update_time\":1535007900,\"create_time\":1535007900,\"status\":1},{\"single_source_id\":53,\"single_source_name\":\"\\u9a6f\\u864e\\u8868\\u6f14\\u52a0\\u8df3\\u706b\\u5708\",\"source_number\":\"OTH20180905083208\",\"default_language_id\":1,\"remark\":\"\\u201c\\u9a6f\\u864e\\u8868\\u6f14\\u201d\\u7531\\u4fc4\\u7f57\\u65af\\u56fd\\u5bb6\\u4eba\\u6c11\\u6f14\\u5458\\u5df4\\u8fde\\u79d1.\\u5c3c\\u53e4\\u62c9.\\u5361\\u5c14\\u52c3\\u7ef4\\u5947\\u6f14\\u51fa\\u30021990\\u5e74\\u8499\\u7279\\u5361\\u7f57\\u6742\\u6280\\u8282\\u83b7\\u5f97\\u9ad8\\u5956\\u9879\\u201c\\u91d1\\u5c0f\\u4e11\\u5956\\u201d\\u3002\\uff08\\u8fd9\\u662f\\u9a6c\\u620f\\u754c\\u4e2d\\u7684\\u5965\\u65af\\u5361\\u5956\\uff09\\u88ab\\u4fc4\\u7f57\\u65af\\u603b\\u7edf\\u666e\\u4eac\\u6388\\u4e88\\u56fd\\u5bb6\\u9a6c\\u620f\\u827a\\u672f\\u7279\\u7ea7\\u6d25\\u8d34\\u5956\\u91d1\\u3002\",\"supplier_id\":2,\"supplier_name\":\"\\u643a\\u7a0b\",\"supplier_type\":2,\"belong_supplier_id\":21,\"belong_supplier_name\":\"im-visa\",\"company_id\":1,\"company_name\":\"\\u8054\\u8c0a\\u5047\\u671f-\\u52a0\\u62ff\\u5927\\u516c\\u53f8\",\"normal_price\":1,\"normal_settlement_price\":1,\"create_user_name\":\"admin\",\"update_user_name\":\"admin\",\"update_time\":1535009439,\"create_time\":1535007900,\"status\":1},{\"single_source_id\":54,\"single_source_name\":\"\\u6d4b\\u8bd50830\",\"source_number\":\"OTH20180905083209\",\"default_language_id\":1,\"remark\":null,\"supplier_id\":31,\"supplier_name\":\"\\u6742\\u6280\\u56e2\\u8868\\u6f14\\u6709\\u9650\\u516c\\u53f8\",\"supplier_type\":1,\"belong_supplier_id\":31,\"belong_supplier_name\":\"\\u6742\\u6280\\u56e2\\u8868\\u6f14\\u6709\\u9650\\u516c\\u53f8\",\"company_id\":1,\"company_name\":\"\\u8054\\u8c0a\\u5047\\u671f-\\u52a0\\u62ff\\u5927\\u516c\\u53f8\",\"normal_price\":0,\"normal_settlement_price\":0,\"create_user_name\":\"\\u5218\\u51b0\\u5029\",\"update_user_name\":\"\\u5218\\u51b0\\u5029\",\"update_time\":1535592874,\"create_time\":1535592874,\"status\":1},{\"single_source_id\":55,\"single_source_name\":\"\\u6d4b\\u8bd50830\",\"source_number\":\"OTH20180905083210\",\"default_language_id\":1,\"remark\":null,\"supplier_id\":2,\"supplier_name\":\"\\u643a\\u7a0b\",\"supplier_type\":2,\"belong_supplier_id\":21,\"belong_supplier_name\":\"im-visa\",\"company_id\":1,\"company_name\":\"\\u8054\\u8c0a\\u5047\\u671f-\\u52a0\\u62ff\\u5927\\u516c\\u53f8\",\"normal_price\":0,\"normal_settlement_price\":0,\"create_user_name\":\"\\u5218\\u51b0\\u5029\",\"update_user_name\":\"\\u5218\\u51b0\\u5029\",\"update_time\":1535592874,\"create_time\":1535592874,\"status\":1},{\"single_source_id\":56,\"single_source_name\":\"\\u95ee\\u6211\\u53bb\",\"source_number\":\"OTH20180911291271\",\"default_language_id\":1,\"remark\":\"3123\",\"supplier_id\":16,\"supplier_name\":\"\\u4eba\\u5996\\u8868\\u6f14\\u6709\\u9650\\u516c\\u53f8\",\"supplier_type\":1,\"belong_supplier_id\":16,\"belong_supplier_name\":\"\\u4eba\\u5996\\u8868\\u6f14\\u6709\\u9650\\u516c\\u53f8\",\"company_id\":1,\"company_name\":\"\\u8054\\u8c0a\\u5047\\u671f-\\u52a0\\u62ff\\u5927\\u516c\\u53f8\",\"normal_price\":2,\"normal_settlement_price\":2,\"create_user_name\":\"admin\",\"update_user_name\":\"admin\",\"update_time\":1536659293,\"create_time\":1536659293,\"status\":1},{\"single_source_id\":57,\"single_source_name\":\"\\u95ee\\u6211\\u53bb\",\"source_number\":\"OTH20180911291279\",\"default_language_id\":1,\"remark\":\"3123\",\"supplier_id\":2,\"supplier_name\":\"\\u643a\\u7a0b\",\"supplier_type\":2,\"belong_supplier_id\":16,\"belong_supplier_name\":\"\\u4eba\\u5996\\u8868\\u6f14\\u6709\\u9650\\u516c\\u53f8\",\"company_id\":1,\"company_name\":\"\\u8054\\u8c0a\\u5047\\u671f-\\u52a0\\u62ff\\u5927\\u516c\\u53f8\",\"normal_price\":2,\"normal_settlement_price\":2,\"create_user_name\":\"admin\",\"update_user_name\":\"admin\",\"update_time\":1536659293,\"create_time\":1536659293,\"status\":1},{\"single_source_id\":58,\"single_source_name\":\"342432\",\"source_number\":\"OTH20180911913401\",\"default_language_id\":1,\"remark\":\"32432\",\"supplier_id\":16,\"supplier_name\":\"\\u4eba\\u5996\\u8868\\u6f14\\u6709\\u9650\\u516c\\u53f8\",\"supplier_type\":1,\"belong_supplier_id\":16,\"belong_supplier_name\":\"\\u4eba\\u5996\\u8868\\u6f14\\u6709\\u9650\\u516c\\u53f8\",\"company_id\":1,\"company_name\":\"\\u8054\\u8c0a\\u5047\\u671f-\\u52a0\\u62ff\\u5927\\u516c\\u53f8\",\"normal_price\":3,\"normal_settlement_price\":3,\"create_user_name\":\"admin\",\"update_user_name\":\"admin\",\"update_time\":1536659448,\"create_time\":1536659448,\"status\":1},{\"single_source_id\":59,\"single_source_name\":\"1\",\"source_number\":\"OTH20181003666262\",\"default_language_id\":1,\"remark\":null,\"supplier_id\":16,\"supplier_name\":\"\\u4eba\\u5996\\u8868\\u6f14\\u6709\\u9650\\u516c\\u53f8\",\"supplier_type\":1,\"belong_supplier_id\":16,\"belong_supplier_name\":\"\\u4eba\\u5996\\u8868\\u6f14\\u6709\\u9650\\u516c\\u53f8\",\"company_id\":1,\"company_name\":\"\\u8054\\u8c0a\\u5047\\u671f-\\u52a0\\u62ff\\u5927\\u516c\\u53f8\",\"normal_price\":1,\"normal_settlement_price\":1,\"create_user_name\":\"\\u80e1\\u4f0a\\u654f\",\"update_user_name\":\"\\u80e1\\u4f0a\\u654f\",\"update_time\":1538534405,\"create_time\":1538534405,\"status\":1},{\"single_source_id\":60,\"single_source_name\":\"1\",\"source_number\":\"OTH20181003666263\",\"default_language_id\":1,\"remark\":\"2\",\"supplier_id\":39,\"supplier_name\":\"\\u4e1c\\u5357\\u4e9a\\u5730\\u63a5\\u793e\",\"supplier_type\":2,\"belong_supplier_id\":16,\"belong_supplier_name\":\"\\u4eba\\u5996\\u8868\\u6f14\\u6709\\u9650\\u516c\\u53f8\",\"company_id\":1,\"company_name\":\"\\u8054\\u8c0a\\u5047\\u671f-\\u52a0\\u62ff\\u5927\\u516c\\u53f8\",\"normal_price\":2,\"normal_settlement_price\":2,\"create_user_name\":\"\\u80e1\\u4f0a\\u654f\",\"update_user_name\":\"\\u80e1\\u4f0a\\u654f\",\"update_time\":1538535074,\"create_time\":1538534405,\"status\":1},{\"single_source_id\":61,\"single_source_name\":\"jdskd\",\"source_number\":\"OTH20181008269002\",\"default_language_id\":1,\"remark\":\"3424\",\"supplier_id\":31,\"supplier_name\":\"\\u6742\\u6280\\u56e2\\u8868\\u6f14\\u6709\\u9650\\u516c\\u53f8\",\"supplier_type\":1,\"belong_supplier_id\":31,\"belong_supplier_name\":\"\\u6742\\u6280\\u56e2\\u8868\\u6f14\\u6709\\u9650\\u516c\\u53f8\",\"company_id\":1,\"company_name\":\"\\u8054\\u8c0a\\u5047\\u671f-\\u52a0\\u62ff\\u5927\\u516c\\u53f8\",\"normal_price\":2,\"normal_settlement_price\":2,\"create_user_name\":\"admin\",\"update_user_name\":\"admin\",\"update_time\":1538997788,\"create_time\":1538997788,\"status\":1}]' , '127.0.0.1:7002/source/getSingleSource') [ RunTime:0.068867s ]
+[ error ] [8]未定义数组索引: company_id[E:\xampp\htdocs\soaerp\application\index\model\source\SingleSource.php:114]
+---------------------------------------------------------------
+[ 2018-10-18T19:52:35+08:00 ] 127.0.0.1 POST /source/getSingleSourceLanguage
+[ info ] 127.0.0.1:7002/source/getSingleSourceLanguage [运行时间：0.176082s][吞吐率：5.68req/s] [内存消耗：3,100.80kb] [文件加载：54]
+[ info ] [ LANG ] E:\xampp\htdocs\soaerp\thinkphp\lang\zh-cn.php
+[ info ] [ BIND ] 'index'
+[ info ] [ ROUTE ] array (
+  'type' => 'module',
+  'module' => 
+  array (
+    0 => 'index',
+    1 => 'source',
+    2 => 'getSingleSourceLanguage',
+  ),
+)
+[ info ] [ HEADER ] array (
+  'host' => '127.0.0.1:7002',
+  'accept' => 'application/json',
+  'content-length' => '88',
+  'content-type' => 'application/x-www-form-urlencoded',
+)
+[ info ] [ PARAM ] array (
+  '{"source_number":"OTH20180905083201","appKey":"nexus","appSecret":"nexusIt","lang_id":1}' => '',
+)
+[ info ] [ LANG ] E:\xampp\htdocs\soaerp\public/../application/index\lang\zh-cn.php
+[ info ] [ DB ] INIT mysql
+[ info ] [ RUN ] app\index\controller\Source->getSingleSourceLanguage[ E:\xampp\htdocs\soaerp\application\index\controller\Source.php ]
+[ info ] [ DB ] INIT mysql
+[ info ] [ LOG ] INIT File
+[ sql ] [ DB ] CONNECT:[ UseTime:0.016924s ] mysql:host=192.168.11.100;port=3306;dbname=log;charset=utf8
+[ sql ] [ SQL ] CREATE TABLE IF NOT EXISTS soaerp_log_20181018 LIKE soaerp_log [ RunTime:0.004141s ]
+[ sql ] [ SQL ] CREATE TABLE IF NOT EXISTS soaerp_log_20181018 LIKE soaerp_log [ RunTime:0.002084s ]
+[ sql ] [ DB ] CONNECT:[ UseTime:0.017150s ] mysql:host=192.168.11.100;port=3306;dbname=erp;charset=utf8
+[ sql ] [ SQL ] SHOW COLUMNS FROM `language` [ RunTime:0.010937s ]
+[ sql ] [ SQL ] SELECT `language`.`language_id`,`language`.`language_name`,`language`.`create_time`,(select nickname  from user where user.user_id = language.create_user_id) AS `create_user_name`,(select nickname  from user where user.user_id = language.update_user_id) AS `update_user_name`,`language`.`update_time`,`language`.`status` FROM `language` `language` WHERE  `status` = 1 ORDER BY `create_time` DESC [ RunTime:0.004298s ]
+[ sql ] [ SQL ] SHOW COLUMNS FROM `single_source_language` [ RunTime:0.008411s ]
+[ sql ] [ SQL ] SELECT * FROM `single_source_language` WHERE  `language_id` = 3  AND `source_number` = 'OTH20180905083201' LIMIT 1 [ RunTime:0.004859s ]
+[ sql ] [ SQL ] SELECT * FROM `single_source_language` WHERE  `language_id` = 2  AND `source_number` = 'OTH20180905083201' LIMIT 1 [ RunTime:0.007809s ]
+[ sql ] [ SQL ] SELECT * FROM `single_source_language` WHERE  `language_id` = 1  AND `source_number` = 'OTH20180905083201' LIMIT 1 [ RunTime:0.004564s ]
+[ sql ] [ SQL ] CREATE TABLE IF NOT EXISTS soaerp_log_20181018 LIKE soaerp_log [ RunTime:0.001968s ]
+[ sql ] [ SQL ] CREATE TABLE IF NOT EXISTS soaerp_log_20181018 LIKE soaerp_log [ RunTime:0.001977s ]
+[ sql ] [ SQL ] SHOW COLUMNS FROM `soaerp_log_20181018` [ RunTime:0.010410s ]
+[ sql ] [ SQL ] INSERT INTO `soaerp_log_20181018` (`params` , `time` , `type` , `result` , `url`) VALUES ('{\"source_number\":\"OTH20180905083201\",\"appKey\":\"nexus\",\"appSecret\":\"nexusIt\",\"lang_id\":1}' , 1539863555 , 1 , '[{\"language_id\":3,\"language_name\":\"japan\",\"create_time\":1532402015,\"create_user_name\":\"\\u80e1\\u4f0a\\u654f\",\"update_user_name\":\"admin\",\"update_time\":1534304089,\"status\":1,\"language_info\":{\"single_source_language_id\":65,\"source_number\":\"OTH20180905083201\",\"single_source_name\":\"\\u4eba\\u5996\\u8868\\u6f143\",\"language_id\":3,\"create_time\":1539863432,\"create_user_id\":8,\"update_time\":1539863432,\"update_user_id\":8,\"status\":1}},{\"language_id\":2,\"language_name\":\"english\",\"create_time\":1532401866,\"create_user_name\":\"\\u80e1\\u4f0a\\u654f\",\"update_user_name\":\"\\u80e1\\u4f0a\\u654f\",\"update_time\":1532574269,\"status\":1,\"language_info\":null},{\"language_id\":1,\"language_name\":\"\\u4e2d\\u6587\",\"create_time\":1532400025,\"create_user_name\":\"admin\",\"update_user_name\":\"admin\",\"update_time\":1534303834,\"status\":1,\"language_info\":{\"single_source_language_id\":46,\"source_number\":\"OTH20180905083201\",\"single_source_name\":\"\\u4eba\\u5996\\u8868\\u6f141\",\"language_id\":1,\"create_time\":1534500861,\"create_user_id\":1,\"update_time\":1534500861,\"update_user_id\":1,\"status\":1}}]' , '127.0.0.1:7002/source/getSingleSourceLanguage') [ RunTime:0.022931s ]
+---------------------------------------------------------------
+[ 2018-10-18T19:52:41+08:00 ] 127.0.0.1 POST /source/updateSingleSourceLanguageBySingleSourceLanguageId
+[ info ] 127.0.0.1:7002/source/updateSingleSourceLanguageBySingleSourceLanguageId [运行时间：0.287028s][吞吐率：3.48req/s] [内存消耗：3,087.23kb] [文件加载：57]
+[ info ] [ LANG ] E:\xampp\htdocs\soaerp\thinkphp\lang\zh-cn.php
+[ info ] [ BIND ] 'index'
+[ info ] [ ROUTE ] array (
+  'type' => 'module',
+  'module' => 
+  array (
+    0 => 'index',
+    1 => 'source',
+    2 => 'updateSingleSourceLanguageBySingleSourceLanguageId',
+  ),
+)
+[ info ] [ HEADER ] array (
+  'host' => '127.0.0.1:7002',
+  'accept' => 'application/json',
+  'content-length' => '473',
+  'content-type' => 'application/x-www-form-urlencoded',
+)
+[ info ] [ PARAM ] array (
+  '{"data":' => 
+  array (
+    '{"lang_id":"3","single_source_language_id":"65","source_number":"OTH20180905083201","single_source_name":"\\u4eba\\u5996\\u8868\\u6f141"},{"lang_id":"2","single_source_language_id":"","source_number":"OTH20180905083201","single_source_name":"\\u4eba\\u5996\\u8868\\u6f142"},{"lang_id":"1","single_source_language_id":"46","source_number":"OTH20180905083201","single_source_name":"\\u4eba\\u5996\\u8868\\u6f143"}' => '',
+  ),
+)
+[ info ] [ LANG ] E:\xampp\htdocs\soaerp\public/../application/index\lang\zh-cn.php
+[ info ] [ DB ] INIT mysql
+[ info ] [ RUN ] app\index\controller\Source->updateSingleSourceLanguageBySingleSourceLanguageId[ E:\xampp\htdocs\soaerp\application\index\controller\Source.php ]
+[ info ] [ DB ] INIT mysql
+[ info ] [ LOG ] INIT File
+[ sql ] [ DB ] CONNECT:[ UseTime:0.019741s ] mysql:host=192.168.11.100;port=3306;dbname=log;charset=utf8
+[ sql ] [ SQL ] CREATE TABLE IF NOT EXISTS soaerp_log_20181018 LIKE soaerp_log [ RunTime:0.008273s ]
+[ sql ] [ SQL ] CREATE TABLE IF NOT EXISTS soaerp_log_20181018 LIKE soaerp_log [ RunTime:0.003322s ]
+[ sql ] [ DB ] CONNECT:[ UseTime:0.016732s ] mysql:host=192.168.11.100;port=3306;dbname=erp;charset=utf8
+[ sql ] [ SQL ] SHOW COLUMNS FROM `single_source` [ RunTime:0.018493s ]
+[ sql ] [ SQL ] SELECT `single_source`.`single_source_id`,`single_source`.`single_source_name`,`single_source`.`source_number`,`single_source`.`default_language_id`,`single_source`.`remark`,`single_source`.`supplier_id`,`supplier`.`supplier_name`,`single_source`.`supplier_type`,`single_source`.`belong_supplier_id`,(select supplier2.supplier_name  from supplier as supplier2 where supplier2.supplier_id = single_source.belong_supplier_id) AS `belong_supplier_name`,`single_source`.`company_id`,`company`.`company_name`,`source_price`.`normal_price`,`source_price`.`normal_settlement_price`,(select nickname  from user where user.user_id = single_source.create_user_id) AS `create_user_name`,(select nickname  from user where user.user_id = single_source.update_user_id) AS `update_user_name`,`single_source`.`update_time`,`single_source`.`create_time`,`single_source`.`status` FROM `single_source` `single_source` LEFT JOIN `source_price` ON `source_price`.`pk_id`=single_source.single_source_id and source_price.supplier_type_id=10 INNER JOIN `supplier` ON `supplier`.`supplier_id`=`single_source`.`supplier_id` INNER JOIN `company` ON `company`.`company_id`=`single_source`.`company_id` WHERE  (  1=1  and single_source.source_number = 'OTH20180905083201' ) [ RunTime:0.009821s ]
+[ sql ] [ SQL ] SHOW COLUMNS FROM `single_source_language` [ RunTime:0.012631s ]
+[ sql ] [ SQL ] UPDATE `single_source_language`  SET `single_source_name`='人妖表演1',`update_time`=1539863561,`update_user_id`=8  WHERE  (  single_source_language_id = 65 ) [ RunTime:0.015003s ]
+[ sql ] [ SQL ] INSERT INTO `single_source_language` (`single_source_name` , `update_time` , `update_user_id` , `create_time` , `create_user_id` , `status` , `source_number` , `language_id`) VALUES ('人妖表演2' , 1539863561 , 8 , 1539863561 , 8 , 1 , 'OTH20180905083201' , 2) [ RunTime:0.031359s ]
+[ sql ] [ SQL ] UPDATE `single_source_language`  SET `single_source_name`='人妖表演3',`update_time`=1539863561,`update_user_id`=8  WHERE  (  single_source_language_id = 46 ) [ RunTime:0.022812s ]
+[ sql ] [ SQL ] UPDATE `single_source`  SET `single_source_name`='人妖表演3',`update_time`=1539863561,`update_user_id`=8  WHERE  (  source_number = 'OTH20180905083201' ) [ RunTime:0.006241s ]
+[ sql ] [ SQL ] CREATE TABLE IF NOT EXISTS soaerp_log_20181018 LIKE soaerp_log [ RunTime:0.002818s ]
+[ sql ] [ SQL ] CREATE TABLE IF NOT EXISTS soaerp_log_20181018 LIKE soaerp_log [ RunTime:0.003413s ]
+[ sql ] [ SQL ] SHOW COLUMNS FROM `soaerp_log_20181018` [ RunTime:0.015107s ]
+[ sql ] [ SQL ] INSERT INTO `soaerp_log_20181018` (`params` , `time` , `type` , `result` , `url`) VALUES ('{\"data\":[{\"lang_id\":\"3\",\"single_source_language_id\":\"65\",\"source_number\":\"OTH20180905083201\",\"single_source_name\":\"\\u4eba\\u5996\\u8868\\u6f141\"},{\"lang_id\":\"2\",\"single_source_language_id\":\"\",\"source_number\":\"OTH20180905083201\",\"single_source_name\":\"\\u4eba\\u5996\\u8868\\u6f142\"},{\"lang_id\":\"1\",\"single_source_language_id\":\"46\",\"source_number\":\"OTH20180905083201\",\"single_source_name\":\"\\u4eba\\u5996\\u8868\\u6f143\"}],\"user_id\":8,\"appKey\":\"nexus\",\"appSecret\":\"nexusIt\",\"lang_id\":1}' , 1539863561 , 1 , '1' , '127.0.0.1:7002/source/updateSingleSourceLanguageBySingleSourceLanguageId') [ RunTime:0.023586s ]
+[ error ] [8]未定义数组索引: company_id[E:\xampp\htdocs\soaerp\application\index\model\source\SingleSource.php:114]
+---------------------------------------------------------------
+[ 2018-10-18T19:52:44+08:00 ] 127.0.0.1 POST /source/getSingleSource
+[ info ] 127.0.0.1:7002/source/getSingleSource [运行时间：0.148448s][吞吐率：6.74req/s] [内存消耗：3,257.80kb] [文件加载：57]
+[ info ] [ LANG ] E:\xampp\htdocs\soaerp\thinkphp\lang\zh-cn.php
+[ info ] [ BIND ] 'index'
+[ info ] [ ROUTE ] array (
+  'type' => 'module',
+  'module' => 
+  array (
+    0 => 'index',
+    1 => 'source',
+    2 => 'getSingleSource',
+  ),
+)
+[ info ] [ HEADER ] array (
+  'host' => '127.0.0.1:7002',
+  'accept' => 'application/json',
+  'content-length' => '52',
+  'content-type' => 'application/x-www-form-urlencoded',
+)
+[ info ] [ PARAM ] array (
+  '{"appKey":"nexus","appSecret":"nexusIt","lang_id":1}' => '',
+)
+[ info ] [ LANG ] E:\xampp\htdocs\soaerp\public/../application/index\lang\zh-cn.php
+[ info ] [ DB ] INIT mysql
+[ info ] [ RUN ] app\index\controller\Source->getSingleSource[ E:\xampp\htdocs\soaerp\application\index\controller\Source.php ]
+[ info ] [ DB ] INIT mysql
+[ info ] [ LOG ] INIT File
+[ sql ] [ DB ] CONNECT:[ UseTime:0.009505s ] mysql:host=192.168.11.100;port=3306;dbname=log;charset=utf8
+[ sql ] [ SQL ] CREATE TABLE IF NOT EXISTS soaerp_log_20181018 LIKE soaerp_log [ RunTime:0.005758s ]
+[ sql ] [ SQL ] CREATE TABLE IF NOT EXISTS soaerp_log_20181018 LIKE soaerp_log [ RunTime:0.003096s ]
+[ sql ] [ DB ] CONNECT:[ UseTime:0.009315s ] mysql:host=192.168.11.100;port=3306;dbname=erp;charset=utf8
+[ sql ] [ SQL ] SHOW COLUMNS FROM `single_source` [ RunTime:0.011687s ]
+[ sql ] [ SQL ] SELECT `single_source`.`single_source_id`,`single_source`.`single_source_name`,`single_source`.`source_number`,`single_source`.`default_language_id`,`single_source`.`remark`,`single_source`.`supplier_id`,`supplier`.`supplier_name`,`single_source`.`supplier_type`,`single_source`.`belong_supplier_id`,(select supplier2.supplier_name  from supplier as supplier2 where supplier2.supplier_id = single_source.belong_supplier_id) AS `belong_supplier_name`,`single_source`.`company_id`,`company`.`company_name`,`source_price`.`normal_price`,`source_price`.`normal_settlement_price`,(select nickname  from user where user.user_id = single_source.create_user_id) AS `create_user_name`,(select nickname  from user where user.user_id = single_source.update_user_id) AS `update_user_name`,`single_source`.`update_time`,`single_source`.`create_time`,`single_source`.`status` FROM `single_source` `single_source` LEFT JOIN `source_price` ON `source_price`.`pk_id`=single_source.single_source_id and source_price.supplier_type_id=10 INNER JOIN `supplier` ON `supplier`.`supplier_id`=`single_source`.`supplier_id` INNER JOIN `company` ON `company`.`company_id`=`single_source`.`company_id` WHERE  (  1=1  ) [ RunTime:0.007314s ]
+[ sql ] [ SQL ] CREATE TABLE IF NOT EXISTS soaerp_log_20181018 LIKE soaerp_log [ RunTime:0.001817s ]
+[ sql ] [ SQL ] CREATE TABLE IF NOT EXISTS soaerp_log_20181018 LIKE soaerp_log [ RunTime:0.001765s ]
+[ sql ] [ SQL ] SHOW COLUMNS FROM `soaerp_log_20181018` [ RunTime:0.009539s ]
+[ sql ] [ SQL ] INSERT INTO `soaerp_log_20181018` (`params` , `time` , `type` , `result` , `url`) VALUES ('{\"appKey\":\"nexus\",\"appSecret\":\"nexusIt\",\"lang_id\":1}' , 1539863564 , 1 , '[{\"single_source_id\":45,\"single_source_name\":\"\\u6742\\u62802\",\"source_number\":\"OTH20180905083200\",\"default_language_id\":1,\"remark\":null,\"supplier_id\":16,\"supplier_name\":\"\\u4eba\\u5996\\u8868\\u6f14\\u6709\\u9650\\u516c\\u53f8\",\"supplier_type\":1,\"belong_supplier_id\":16,\"belong_supplier_name\":\"\\u4eba\\u5996\\u8868\\u6f14\\u6709\\u9650\\u516c\\u53f8\",\"company_id\":2,\"company_name\":\"\\u8054\\u8c0a\\u5047\\u671f-\\u7ebd\\u7ea6\\u516c\\u53f8\",\"normal_price\":222,\"normal_settlement_price\":2,\"create_user_name\":\"admin\",\"update_user_name\":\"admin\",\"update_time\":1536660038,\"create_time\":1534475469,\"status\":1},{\"single_source_id\":46,\"single_source_name\":\"\\u4eba\\u5996\\u8868\\u6f143\",\"source_number\":\"OTH20180905083201\",\"default_language_id\":1,\"remark\":\"\\u597d\\u7684\",\"supplier_id\":16,\"supplier_name\":\"\\u4eba\\u5996\\u8868\\u6f14\\u6709\\u9650\\u516c\\u53f8\",\"supplier_type\":1,\"belong_supplier_id\":16,\"belong_supplier_name\":\"\\u4eba\\u5996\\u8868\\u6f14\\u6709\\u9650\\u516c\\u53f8\",\"company_id\":1,\"company_name\":\"\\u8054\\u8c0a\\u5047\\u671f-\\u52a0\\u62ff\\u5927\\u516c\\u53f8\",\"normal_price\":200,\"normal_settlement_price\":2,\"create_user_name\":\"admin\",\"update_user_name\":\"\\u80e1\\u4f0a\\u654f\",\"update_time\":1539863561,\"create_time\":1534500861,\"status\":1},{\"single_source_id\":47,\"single_source_name\":\"\\u4eba\\u5996\\u8868\\u6f141\",\"source_number\":\"OTH20180905083202\",\"default_language_id\":1,\"remark\":\"\\u597d\\u7684\",\"supplier_id\":2,\"supplier_name\":\"\\u643a\\u7a0b\",\"supplier_type\":2,\"belong_supplier_id\":16,\"belong_supplier_name\":\"\\u4eba\\u5996\\u8868\\u6f14\\u6709\\u9650\\u516c\\u53f8\",\"company_id\":3,\"company_name\":\"\\u4e0a\\u6d77\\u5357\\u4e9a\\u6709\\u9650\\u516c\\u53f8\",\"normal_price\":200,\"normal_settlement_price\":2,\"create_user_name\":\"admin\",\"update_user_name\":\"admin\",\"update_time\":1534500861,\"create_time\":1534500861,\"status\":1},{\"single_source_id\":48,\"single_source_name\":\"\\u98de\\u5200\\u8868\\u6f14\",\"source_number\":\"OTH20180905083203\",\"default_language_id\":1,\"remark\":\"\\u597d\\u770b\\u7684\",\"supplier_id\":16,\"supplier_name\":\"\\u4eba\\u5996\\u8868\\u6f14\\u6709\\u9650\\u516c\\u53f8\",\"supplier_type\":1,\"belong_supplier_id\":16,\"belong_supplier_name\":\"\\u4eba\\u5996\\u8868\\u6f14\\u6709\\u9650\\u516c\\u53f8\",\"company_id\":4,\"company_name\":\"\\u8054\\u8c0a\\u5047\\u671f-\\u591a\\u4f26\\u591a\\u516c\\u53f8\",\"normal_price\":100,\"normal_settlement_price\":2,\"create_user_name\":\"admin\",\"update_user_name\":\"admin\",\"update_time\":1534500962,\"create_time\":1534500962,\"status\":1},{\"single_source_id\":49,\"single_source_name\":\"\\u98de\\u5200\\u8868\\u6f142\",\"source_number\":\"OTH20180905083204\",\"default_language_id\":1,\"remark\":\"\\u597d\\u770b\\u76842\",\"supplier_id\":2,\"supplier_name\":\"\\u643a\\u7a0b\",\"supplier_type\":2,\"belong_supplier_id\":16,\"belong_supplier_name\":\"\\u4eba\\u5996\\u8868\\u6f14\\u6709\\u9650\\u516c\\u53f8\",\"company_id\":1,\"company_name\":\"\\u8054\\u8c0a\\u5047\\u671f-\\u52a0\\u62ff\\u5927\\u516c\\u53f8\",\"normal_price\":100,\"normal_settlement_price\":2,\"create_user_name\":\"admin\",\"update_user_name\":\"admin\",\"update_time\":1534819299,\"create_time\":1534500962,\"status\":1},{\"single_source_id\":50,\"single_source_name\":\"\\u5927\\u8c61\\u8868\\u6f14\\u548c\\u7334\\u5b50\\u8868\\u6f14\",\"source_number\":\"OTH20180905083205\",\"default_language_id\":1,\"remark\":null,\"supplier_id\":2,\"supplier_name\":\"\\u643a\\u7a0b\",\"supplier_type\":2,\"belong_supplier_id\":31,\"belong_supplier_name\":\"\\u6742\\u6280\\u56e2\\u8868\\u6f14\\u6709\\u9650\\u516c\\u53f8\",\"company_id\":1,\"company_name\":\"\\u8054\\u8c0a\\u5047\\u671f-\\u52a0\\u62ff\\u5927\\u516c\\u53f8\",\"normal_price\":155,\"normal_settlement_price\":2,\"create_user_name\":\"admin\",\"update_user_name\":\"admin\",\"update_time\":1535006858,\"create_time\":1535006767,\"status\":1},{\"single_source_id\":51,\"single_source_name\":\"\\u5927\\u8c61\\u8868\\u6f14\\u548c\\u72ee\\u5b50\\u8868\\u6f14\",\"source_number\":\"OTH20180905083206\",\"default_language_id\":1,\"remark\":null,\"supplier_id\":2,\"supplier_name\":\"\\u643a\\u7a0b\",\"supplier_type\":2,\"belong_supplier_id\":16,\"belong_supplier_name\":\"\\u4eba\\u5996\\u8868\\u6f14\\u6709\\u9650\\u516c\\u53f8\",\"company_id\":1,\"company_name\":\"\\u8054\\u8c0a\\u5047\\u671f-\\u52a0\\u62ff\\u5927\\u516c\\u53f8\",\"normal_price\":155,\"normal_settlement_price\":2,\"create_user_name\":\"admin\",\"update_user_name\":\"admin\",\"update_time\":1535006793,\"create_time\":1535006767,\"status\":1},{\"single_source_id\":52,\"single_source_name\":\"\\u9a6f\\u864e\\u8868\\u6f14\",\"source_number\":\"OTH20180905083207\",\"default_language_id\":1,\"remark\":null,\"supplier_id\":31,\"supplier_name\":\"\\u6742\\u6280\\u56e2\\u8868\\u6f14\\u6709\\u9650\\u516c\\u53f8\",\"supplier_type\":1,\"belong_supplier_id\":31,\"belong_supplier_name\":\"\\u6742\\u6280\\u56e2\\u8868\\u6f14\\u6709\\u9650\\u516c\\u53f8\",\"company_id\":1,\"company_name\":\"\\u8054\\u8c0a\\u5047\\u671f-\\u52a0\\u62ff\\u5927\\u516c\\u53f8\",\"normal_price\":266,\"normal_settlement_price\":2,\"create_user_name\":\"admin\",\"update_user_name\":\"admin\",\"update_time\":1535007900,\"create_time\":1535007900,\"status\":1},{\"single_source_id\":53,\"single_source_name\":\"\\u9a6f\\u864e\\u8868\\u6f14\\u52a0\\u8df3\\u706b\\u5708\",\"source_number\":\"OTH20180905083208\",\"default_language_id\":1,\"remark\":\"\\u201c\\u9a6f\\u864e\\u8868\\u6f14\\u201d\\u7531\\u4fc4\\u7f57\\u65af\\u56fd\\u5bb6\\u4eba\\u6c11\\u6f14\\u5458\\u5df4\\u8fde\\u79d1.\\u5c3c\\u53e4\\u62c9.\\u5361\\u5c14\\u52c3\\u7ef4\\u5947\\u6f14\\u51fa\\u30021990\\u5e74\\u8499\\u7279\\u5361\\u7f57\\u6742\\u6280\\u8282\\u83b7\\u5f97\\u9ad8\\u5956\\u9879\\u201c\\u91d1\\u5c0f\\u4e11\\u5956\\u201d\\u3002\\uff08\\u8fd9\\u662f\\u9a6c\\u620f\\u754c\\u4e2d\\u7684\\u5965\\u65af\\u5361\\u5956\\uff09\\u88ab\\u4fc4\\u7f57\\u65af\\u603b\\u7edf\\u666e\\u4eac\\u6388\\u4e88\\u56fd\\u5bb6\\u9a6c\\u620f\\u827a\\u672f\\u7279\\u7ea7\\u6d25\\u8d34\\u5956\\u91d1\\u3002\",\"supplier_id\":2,\"supplier_name\":\"\\u643a\\u7a0b\",\"supplier_type\":2,\"belong_supplier_id\":21,\"belong_supplier_name\":\"im-visa\",\"company_id\":1,\"company_name\":\"\\u8054\\u8c0a\\u5047\\u671f-\\u52a0\\u62ff\\u5927\\u516c\\u53f8\",\"normal_price\":1,\"normal_settlement_price\":1,\"create_user_name\":\"admin\",\"update_user_name\":\"admin\",\"update_time\":1535009439,\"create_time\":1535007900,\"status\":1},{\"single_source_id\":54,\"single_source_name\":\"\\u6d4b\\u8bd50830\",\"source_number\":\"OTH20180905083209\",\"default_language_id\":1,\"remark\":null,\"supplier_id\":31,\"supplier_name\":\"\\u6742\\u6280\\u56e2\\u8868\\u6f14\\u6709\\u9650\\u516c\\u53f8\",\"supplier_type\":1,\"belong_supplier_id\":31,\"belong_supplier_name\":\"\\u6742\\u6280\\u56e2\\u8868\\u6f14\\u6709\\u9650\\u516c\\u53f8\",\"company_id\":1,\"company_name\":\"\\u8054\\u8c0a\\u5047\\u671f-\\u52a0\\u62ff\\u5927\\u516c\\u53f8\",\"normal_price\":0,\"normal_settlement_price\":0,\"create_user_name\":\"\\u5218\\u51b0\\u5029\",\"update_user_name\":\"\\u5218\\u51b0\\u5029\",\"update_time\":1535592874,\"create_time\":1535592874,\"status\":1},{\"single_source_id\":55,\"single_source_name\":\"\\u6d4b\\u8bd50830\",\"source_number\":\"OTH20180905083210\",\"default_language_id\":1,\"remark\":null,\"supplier_id\":2,\"supplier_name\":\"\\u643a\\u7a0b\",\"supplier_type\":2,\"belong_supplier_id\":21,\"belong_supplier_name\":\"im-visa\",\"company_id\":1,\"company_name\":\"\\u8054\\u8c0a\\u5047\\u671f-\\u52a0\\u62ff\\u5927\\u516c\\u53f8\",\"normal_price\":0,\"normal_settlement_price\":0,\"create_user_name\":\"\\u5218\\u51b0\\u5029\",\"update_user_name\":\"\\u5218\\u51b0\\u5029\",\"update_time\":1535592874,\"create_time\":1535592874,\"status\":1},{\"single_source_id\":56,\"single_source_name\":\"\\u95ee\\u6211\\u53bb\",\"source_number\":\"OTH20180911291271\",\"default_language_id\":1,\"remark\":\"3123\",\"supplier_id\":16,\"supplier_name\":\"\\u4eba\\u5996\\u8868\\u6f14\\u6709\\u9650\\u516c\\u53f8\",\"supplier_type\":1,\"belong_supplier_id\":16,\"belong_supplier_name\":\"\\u4eba\\u5996\\u8868\\u6f14\\u6709\\u9650\\u516c\\u53f8\",\"company_id\":1,\"company_name\":\"\\u8054\\u8c0a\\u5047\\u671f-\\u52a0\\u62ff\\u5927\\u516c\\u53f8\",\"normal_price\":2,\"normal_settlement_price\":2,\"create_user_name\":\"admin\",\"update_user_name\":\"admin\",\"update_time\":1536659293,\"create_time\":1536659293,\"status\":1},{\"single_source_id\":57,\"single_source_name\":\"\\u95ee\\u6211\\u53bb\",\"source_number\":\"OTH20180911291279\",\"default_language_id\":1,\"remark\":\"3123\",\"supplier_id\":2,\"supplier_name\":\"\\u643a\\u7a0b\",\"supplier_type\":2,\"belong_supplier_id\":16,\"belong_supplier_name\":\"\\u4eba\\u5996\\u8868\\u6f14\\u6709\\u9650\\u516c\\u53f8\",\"company_id\":1,\"company_name\":\"\\u8054\\u8c0a\\u5047\\u671f-\\u52a0\\u62ff\\u5927\\u516c\\u53f8\",\"normal_price\":2,\"normal_settlement_price\":2,\"create_user_name\":\"admin\",\"update_user_name\":\"admin\",\"update_time\":1536659293,\"create_time\":1536659293,\"status\":1},{\"single_source_id\":58,\"single_source_name\":\"342432\",\"source_number\":\"OTH20180911913401\",\"default_language_id\":1,\"remark\":\"32432\",\"supplier_id\":16,\"supplier_name\":\"\\u4eba\\u5996\\u8868\\u6f14\\u6709\\u9650\\u516c\\u53f8\",\"supplier_type\":1,\"belong_supplier_id\":16,\"belong_supplier_name\":\"\\u4eba\\u5996\\u8868\\u6f14\\u6709\\u9650\\u516c\\u53f8\",\"company_id\":1,\"company_name\":\"\\u8054\\u8c0a\\u5047\\u671f-\\u52a0\\u62ff\\u5927\\u516c\\u53f8\",\"normal_price\":3,\"normal_settlement_price\":3,\"create_user_name\":\"admin\",\"update_user_name\":\"admin\",\"update_time\":1536659448,\"create_time\":1536659448,\"status\":1},{\"single_source_id\":59,\"single_source_name\":\"1\",\"source_number\":\"OTH20181003666262\",\"default_language_id\":1,\"remark\":null,\"supplier_id\":16,\"supplier_name\":\"\\u4eba\\u5996\\u8868\\u6f14\\u6709\\u9650\\u516c\\u53f8\",\"supplier_type\":1,\"belong_supplier_id\":16,\"belong_supplier_name\":\"\\u4eba\\u5996\\u8868\\u6f14\\u6709\\u9650\\u516c\\u53f8\",\"company_id\":1,\"company_name\":\"\\u8054\\u8c0a\\u5047\\u671f-\\u52a0\\u62ff\\u5927\\u516c\\u53f8\",\"normal_price\":1,\"normal_settlement_price\":1,\"create_user_name\":\"\\u80e1\\u4f0a\\u654f\",\"update_user_name\":\"\\u80e1\\u4f0a\\u654f\",\"update_time\":1538534405,\"create_time\":1538534405,\"status\":1},{\"single_source_id\":60,\"single_source_name\":\"1\",\"source_number\":\"OTH20181003666263\",\"default_language_id\":1,\"remark\":\"2\",\"supplier_id\":39,\"supplier_name\":\"\\u4e1c\\u5357\\u4e9a\\u5730\\u63a5\\u793e\",\"supplier_type\":2,\"belong_supplier_id\":16,\"belong_supplier_name\":\"\\u4eba\\u5996\\u8868\\u6f14\\u6709\\u9650\\u516c\\u53f8\",\"company_id\":1,\"company_name\":\"\\u8054\\u8c0a\\u5047\\u671f-\\u52a0\\u62ff\\u5927\\u516c\\u53f8\",\"normal_price\":2,\"normal_settlement_price\":2,\"create_user_name\":\"\\u80e1\\u4f0a\\u654f\",\"update_user_name\":\"\\u80e1\\u4f0a\\u654f\",\"update_time\":1538535074,\"create_time\":1538534405,\"status\":1},{\"single_source_id\":61,\"single_source_name\":\"jdskd\",\"source_number\":\"OTH20181008269002\",\"default_language_id\":1,\"remark\":\"3424\",\"supplier_id\":31,\"supplier_name\":\"\\u6742\\u6280\\u56e2\\u8868\\u6f14\\u6709\\u9650\\u516c\\u53f8\",\"supplier_type\":1,\"belong_supplier_id\":31,\"belong_supplier_name\":\"\\u6742\\u6280\\u56e2\\u8868\\u6f14\\u6709\\u9650\\u516c\\u53f8\",\"company_id\":1,\"company_name\":\"\\u8054\\u8c0a\\u5047\\u671f-\\u52a0\\u62ff\\u5927\\u516c\\u53f8\",\"normal_price\":2,\"normal_settlement_price\":2,\"create_user_name\":\"admin\",\"update_user_name\":\"admin\",\"update_time\":1538997788,\"create_time\":1538997788,\"status\":1}]' , '127.0.0.1:7002/source/getSingleSource') [ RunTime:0.033877s ]
+[ error ] [8]未定义数组索引: company_id[E:\xampp\htdocs\soaerp\application\index\model\source\SingleSource.php:114]
+---------------------------------------------------------------
+[ 2018-10-18T19:52:50+08:00 ] 127.0.0.1 POST /source/getSingleSourceLanguage
+[ info ] 127.0.0.1:7002/source/getSingleSourceLanguage [运行时间：0.279986s][吞吐率：3.57req/s] [内存消耗：3,096.41kb] [文件加载：54]
+[ info ] [ LANG ] E:\xampp\htdocs\soaerp\thinkphp\lang\zh-cn.php
+[ info ] [ BIND ] 'index'
+[ info ] [ ROUTE ] array (
+  'type' => 'module',
+  'module' => 
+  array (
+    0 => 'index',
+    1 => 'source',
+    2 => 'getSingleSourceLanguage',
+  ),
+)
+[ info ] [ HEADER ] array (
+  'host' => '127.0.0.1:7002',
+  'accept' => 'application/json',
+  'content-length' => '88',
+  'content-type' => 'application/x-www-form-urlencoded',
+)
+[ info ] [ PARAM ] array (
+  '{"source_number":"OTH20180905083202","appKey":"nexus","appSecret":"nexusIt","lang_id":1}' => '',
+)
+[ info ] [ LANG ] E:\xampp\htdocs\soaerp\public/../application/index\lang\zh-cn.php
+[ info ] [ DB ] INIT mysql
+[ info ] [ RUN ] app\index\controller\Source->getSingleSourceLanguage[ E:\xampp\htdocs\soaerp\application\index\controller\Source.php ]
+[ info ] [ DB ] INIT mysql
+[ info ] [ LOG ] INIT File
+[ sql ] [ DB ] CONNECT:[ UseTime:0.017142s ] mysql:host=192.168.11.100;port=3306;dbname=log;charset=utf8
+[ sql ] [ SQL ] CREATE TABLE IF NOT EXISTS soaerp_log_20181018 LIKE soaerp_log [ RunTime:0.007484s ]
+[ sql ] [ SQL ] CREATE TABLE IF NOT EXISTS soaerp_log_20181018 LIKE soaerp_log [ RunTime:0.003031s ]
+[ sql ] [ DB ] CONNECT:[ UseTime:0.016417s ] mysql:host=192.168.11.100;port=3306;dbname=erp;charset=utf8
+[ sql ] [ SQL ] SHOW COLUMNS FROM `language` [ RunTime:0.011739s ]
+[ sql ] [ SQL ] SELECT `language`.`language_id`,`language`.`language_name`,`language`.`create_time`,(select nickname  from user where user.user_id = language.create_user_id) AS `create_user_name`,(select nickname  from user where user.user_id = language.update_user_id) AS `update_user_name`,`language`.`update_time`,`language`.`status` FROM `language` `language` WHERE  `status` = 1 ORDER BY `create_time` DESC [ RunTime:0.005323s ]
+[ sql ] [ SQL ] SHOW COLUMNS FROM `single_source_language` [ RunTime:0.009072s ]
+[ sql ] [ SQL ] SELECT * FROM `single_source_language` WHERE  `language_id` = 3  AND `source_number` = 'OTH20180905083202' LIMIT 1 [ RunTime:0.006016s ]
+[ sql ] [ SQL ] SELECT * FROM `single_source_language` WHERE  `language_id` = 2  AND `source_number` = 'OTH20180905083202' LIMIT 1 [ RunTime:0.020947s ]
+[ sql ] [ SQL ] SELECT * FROM `single_source_language` WHERE  `language_id` = 1  AND `source_number` = 'OTH20180905083202' LIMIT 1 [ RunTime:0.049386s ]
+[ sql ] [ SQL ] CREATE TABLE IF NOT EXISTS soaerp_log_20181018 LIKE soaerp_log [ RunTime:0.014095s ]
+[ sql ] [ SQL ] CREATE TABLE IF NOT EXISTS soaerp_log_20181018 LIKE soaerp_log [ RunTime:0.001633s ]
+[ sql ] [ SQL ] SHOW COLUMNS FROM `soaerp_log_20181018` [ RunTime:0.025675s ]
+[ sql ] [ SQL ] INSERT INTO `soaerp_log_20181018` (`params` , `time` , `type` , `result` , `url`) VALUES ('{\"source_number\":\"OTH20180905083202\",\"appKey\":\"nexus\",\"appSecret\":\"nexusIt\",\"lang_id\":1}' , 1539863570 , 1 , '[{\"language_id\":3,\"language_name\":\"japan\",\"create_time\":1532402015,\"create_user_name\":\"\\u80e1\\u4f0a\\u654f\",\"update_user_name\":\"admin\",\"update_time\":1534304089,\"status\":1,\"language_info\":null},{\"language_id\":2,\"language_name\":\"english\",\"create_time\":1532401866,\"create_user_name\":\"\\u80e1\\u4f0a\\u654f\",\"update_user_name\":\"\\u80e1\\u4f0a\\u654f\",\"update_time\":1532574269,\"status\":1,\"language_info\":null},{\"language_id\":1,\"language_name\":\"\\u4e2d\\u6587\",\"create_time\":1532400025,\"create_user_name\":\"admin\",\"update_user_name\":\"admin\",\"update_time\":1534303834,\"status\":1,\"language_info\":{\"single_source_language_id\":47,\"source_number\":\"OTH20180905083202\",\"single_source_name\":\"\\u4eba\\u5996\\u8868\\u6f141\",\"language_id\":1,\"create_time\":1534500861,\"create_user_id\":1,\"update_time\":1534500861,\"update_user_id\":1,\"status\":1}}]' , '127.0.0.1:7002/source/getSingleSourceLanguage') [ RunTime:0.033236s ]
+---------------------------------------------------------------
+[ 2018-10-18T19:53:03+08:00 ] 127.0.0.1 POST /source/updateSingleSourceLanguageBySingleSourceLanguageId
+[ info ] 127.0.0.1:7002/source/updateSingleSourceLanguageBySingleSourceLanguageId [运行时间：0.288469s][吞吐率：3.47req/s] [内存消耗：3,087.53kb] [文件加载：57]
+[ info ] [ LANG ] E:\xampp\htdocs\soaerp\thinkphp\lang\zh-cn.php
+[ info ] [ BIND ] 'index'
+[ info ] [ ROUTE ] array (
+  'type' => 'module',
+  'module' => 
+  array (
+    0 => 'index',
+    1 => 'source',
+    2 => 'updateSingleSourceLanguageBySingleSourceLanguageId',
+  ),
+)
+[ info ] [ HEADER ] array (
+  'host' => '127.0.0.1:7002',
+  'accept' => 'application/json',
+  'content-length' => '474',
+  'content-type' => 'application/x-www-form-urlencoded',
+)
+[ info ] [ PARAM ] array (
+  '{"data":' => 
+  array (
+    '{"lang_id":"3","single_source_language_id":"","source_number":"OTH20180905083202","single_source_name":"\\u4eba\\u5996\\u8868\\u6f1444"},{"lang_id":"2","single_source_language_id":"","source_number":"OTH20180905083202","single_source_name":"\\u4eba\\u5996\\u8868\\u6f1433"},{"lang_id":"1","single_source_language_id":"47","source_number":"OTH20180905083202","single_source_name":"\\u4eba\\u5996\\u8868\\u6f1422"}' => '',
+  ),
+)
+[ info ] [ LANG ] E:\xampp\htdocs\soaerp\public/../application/index\lang\zh-cn.php
+[ info ] [ DB ] INIT mysql
+[ info ] [ RUN ] app\index\controller\Source->updateSingleSourceLanguageBySingleSourceLanguageId[ E:\xampp\htdocs\soaerp\application\index\controller\Source.php ]
+[ info ] [ DB ] INIT mysql
+[ info ] [ LOG ] INIT File
+[ sql ] [ DB ] CONNECT:[ UseTime:0.017803s ] mysql:host=192.168.11.100;port=3306;dbname=log;charset=utf8
+[ sql ] [ SQL ] CREATE TABLE IF NOT EXISTS soaerp_log_20181018 LIKE soaerp_log [ RunTime:0.005119s ]
+[ sql ] [ SQL ] CREATE TABLE IF NOT EXISTS soaerp_log_20181018 LIKE soaerp_log [ RunTime:0.003671s ]
+[ sql ] [ DB ] CONNECT:[ UseTime:0.015061s ] mysql:host=192.168.11.100;port=3306;dbname=erp;charset=utf8
+[ sql ] [ SQL ] SHOW COLUMNS FROM `single_source` [ RunTime:0.007977s ]
+[ sql ] [ SQL ] SELECT `single_source`.`single_source_id`,`single_source`.`single_source_name`,`single_source`.`source_number`,`single_source`.`default_language_id`,`single_source`.`remark`,`single_source`.`supplier_id`,`supplier`.`supplier_name`,`single_source`.`supplier_type`,`single_source`.`belong_supplier_id`,(select supplier2.supplier_name  from supplier as supplier2 where supplier2.supplier_id = single_source.belong_supplier_id) AS `belong_supplier_name`,`single_source`.`company_id`,`company`.`company_name`,`source_price`.`normal_price`,`source_price`.`normal_settlement_price`,(select nickname  from user where user.user_id = single_source.create_user_id) AS `create_user_name`,(select nickname  from user where user.user_id = single_source.update_user_id) AS `update_user_name`,`single_source`.`update_time`,`single_source`.`create_time`,`single_source`.`status` FROM `single_source` `single_source` LEFT JOIN `source_price` ON `source_price`.`pk_id`=single_source.single_source_id and source_price.supplier_type_id=10 INNER JOIN `supplier` ON `supplier`.`supplier_id`=`single_source`.`supplier_id` INNER JOIN `company` ON `company`.`company_id`=`single_source`.`company_id` WHERE  (  1=1  and single_source.source_number = 'OTH20180905083202' ) [ RunTime:0.009074s ]
+[ sql ] [ SQL ] SHOW COLUMNS FROM `single_source_language` [ RunTime:0.009042s ]
+[ sql ] [ SQL ] INSERT INTO `single_source_language` (`single_source_name` , `update_time` , `update_user_id` , `create_time` , `create_user_id` , `status` , `source_number` , `language_id`) VALUES ('人妖表演44' , 1539863583 , 8 , 1539863583 , 8 , 1 , 'OTH20180905083202' , 3) [ RunTime:0.005621s ]
+[ sql ] [ SQL ] INSERT INTO `single_source_language` (`single_source_name` , `update_time` , `update_user_id` , `create_time` , `create_user_id` , `status` , `source_number` , `language_id`) VALUES ('人妖表演33' , 1539863583 , 8 , 1539863583 , 8 , 1 , 'OTH20180905083202' , 2) [ RunTime:0.001496s ]
+[ sql ] [ SQL ] UPDATE `single_source_language`  SET `single_source_name`='人妖表演22',`update_time`=1539863583,`update_user_id`=8  WHERE  (  single_source_language_id = 47 ) [ RunTime:0.018002s ]
+[ sql ] [ SQL ] UPDATE `single_source`  SET `single_source_name`='人妖表演22',`update_time`=1539863583,`update_user_id`=8  WHERE  (  source_number = 'OTH20180905083202' ) [ RunTime:0.007507s ]
+[ sql ] [ SQL ] CREATE TABLE IF NOT EXISTS soaerp_log_20181018 LIKE soaerp_log [ RunTime:0.004199s ]
+[ sql ] [ SQL ] CREATE TABLE IF NOT EXISTS soaerp_log_20181018 LIKE soaerp_log [ RunTime:0.002299s ]
+[ sql ] [ SQL ] SHOW COLUMNS FROM `soaerp_log_20181018` [ RunTime:0.012361s ]
+[ sql ] [ SQL ] INSERT INTO `soaerp_log_20181018` (`params` , `time` , `type` , `result` , `url`) VALUES ('{\"data\":[{\"lang_id\":\"3\",\"single_source_language_id\":\"\",\"source_number\":\"OTH20180905083202\",\"single_source_name\":\"\\u4eba\\u5996\\u8868\\u6f1444\"},{\"lang_id\":\"2\",\"single_source_language_id\":\"\",\"source_number\":\"OTH20180905083202\",\"single_source_name\":\"\\u4eba\\u5996\\u8868\\u6f1433\"},{\"lang_id\":\"1\",\"single_source_language_id\":\"47\",\"source_number\":\"OTH20180905083202\",\"single_source_name\":\"\\u4eba\\u5996\\u8868\\u6f1422\"}],\"user_id\":8,\"appKey\":\"nexus\",\"appSecret\":\"nexusIt\",\"lang_id\":1}' , 1539863583 , 1 , '1' , '127.0.0.1:7002/source/updateSingleSourceLanguageBySingleSourceLanguageId') [ RunTime:0.047547s ]
+[ error ] [8]未定义数组索引: company_id[E:\xampp\htdocs\soaerp\application\index\model\source\SingleSource.php:114]
+---------------------------------------------------------------
+[ 2018-10-18T19:53:07+08:00 ] 127.0.0.1 POST /source/getSingleSource
+[ info ] 127.0.0.1:7002/source/getSingleSource [运行时间：0.205817s][吞吐率：4.86req/s] [内存消耗：3,257.94kb] [文件加载：57]
+[ info ] [ LANG ] E:\xampp\htdocs\soaerp\thinkphp\lang\zh-cn.php
+[ info ] [ BIND ] 'index'
+[ info ] [ ROUTE ] array (
+  'type' => 'module',
+  'module' => 
+  array (
+    0 => 'index',
+    1 => 'source',
+    2 => 'getSingleSource',
+  ),
+)
+[ info ] [ HEADER ] array (
+  'host' => '127.0.0.1:7002',
+  'accept' => 'application/json',
+  'content-length' => '52',
+  'content-type' => 'application/x-www-form-urlencoded',
+)
+[ info ] [ PARAM ] array (
+  '{"appKey":"nexus","appSecret":"nexusIt","lang_id":1}' => '',
+)
+[ info ] [ LANG ] E:\xampp\htdocs\soaerp\public/../application/index\lang\zh-cn.php
+[ info ] [ DB ] INIT mysql
+[ info ] [ RUN ] app\index\controller\Source->getSingleSource[ E:\xampp\htdocs\soaerp\application\index\controller\Source.php ]
+[ info ] [ DB ] INIT mysql
+[ info ] [ LOG ] INIT File
+[ sql ] [ DB ] CONNECT:[ UseTime:0.009098s ] mysql:host=192.168.11.100;port=3306;dbname=log;charset=utf8
+[ sql ] [ SQL ] CREATE TABLE IF NOT EXISTS soaerp_log_20181018 LIKE soaerp_log [ RunTime:0.006380s ]
+[ sql ] [ SQL ] CREATE TABLE IF NOT EXISTS soaerp_log_20181018 LIKE soaerp_log [ RunTime:0.002766s ]
+[ sql ] [ DB ] CONNECT:[ UseTime:0.017514s ] mysql:host=192.168.11.100;port=3306;dbname=erp;charset=utf8
+[ sql ] [ SQL ] SHOW COLUMNS FROM `single_source` [ RunTime:0.018521s ]
+[ sql ] [ SQL ] SELECT `single_source`.`single_source_id`,`single_source`.`single_source_name`,`single_source`.`source_number`,`single_source`.`default_language_id`,`single_source`.`remark`,`single_source`.`supplier_id`,`supplier`.`supplier_name`,`single_source`.`supplier_type`,`single_source`.`belong_supplier_id`,(select supplier2.supplier_name  from supplier as supplier2 where supplier2.supplier_id = single_source.belong_supplier_id) AS `belong_supplier_name`,`single_source`.`company_id`,`company`.`company_name`,`source_price`.`normal_price`,`source_price`.`normal_settlement_price`,(select nickname  from user where user.user_id = single_source.create_user_id) AS `create_user_name`,(select nickname  from user where user.user_id = single_source.update_user_id) AS `update_user_name`,`single_source`.`update_time`,`single_source`.`create_time`,`single_source`.`status` FROM `single_source` `single_source` LEFT JOIN `source_price` ON `source_price`.`pk_id`=single_source.single_source_id and source_price.supplier_type_id=10 INNER JOIN `supplier` ON `supplier`.`supplier_id`=`single_source`.`supplier_id` INNER JOIN `company` ON `company`.`company_id`=`single_source`.`company_id` WHERE  (  1=1  ) [ RunTime:0.030600s ]
+[ sql ] [ SQL ] CREATE TABLE IF NOT EXISTS soaerp_log_20181018 LIKE soaerp_log [ RunTime:0.003371s ]
+[ sql ] [ SQL ] CREATE TABLE IF NOT EXISTS soaerp_log_20181018 LIKE soaerp_log [ RunTime:0.003406s ]
+[ sql ] [ SQL ] SHOW COLUMNS FROM `soaerp_log_20181018` [ RunTime:0.012526s ]
+[ sql ] [ SQL ] INSERT INTO `soaerp_log_20181018` (`params` , `time` , `type` , `result` , `url`) VALUES ('{\"appKey\":\"nexus\",\"appSecret\":\"nexusIt\",\"lang_id\":1}' , 1539863587 , 1 , '[{\"single_source_id\":45,\"single_source_name\":\"\\u6742\\u62802\",\"source_number\":\"OTH20180905083200\",\"default_language_id\":1,\"remark\":null,\"supplier_id\":16,\"supplier_name\":\"\\u4eba\\u5996\\u8868\\u6f14\\u6709\\u9650\\u516c\\u53f8\",\"supplier_type\":1,\"belong_supplier_id\":16,\"belong_supplier_name\":\"\\u4eba\\u5996\\u8868\\u6f14\\u6709\\u9650\\u516c\\u53f8\",\"company_id\":2,\"company_name\":\"\\u8054\\u8c0a\\u5047\\u671f-\\u7ebd\\u7ea6\\u516c\\u53f8\",\"normal_price\":222,\"normal_settlement_price\":2,\"create_user_name\":\"admin\",\"update_user_name\":\"admin\",\"update_time\":1536660038,\"create_time\":1534475469,\"status\":1},{\"single_source_id\":46,\"single_source_name\":\"\\u4eba\\u5996\\u8868\\u6f143\",\"source_number\":\"OTH20180905083201\",\"default_language_id\":1,\"remark\":\"\\u597d\\u7684\",\"supplier_id\":16,\"supplier_name\":\"\\u4eba\\u5996\\u8868\\u6f14\\u6709\\u9650\\u516c\\u53f8\",\"supplier_type\":1,\"belong_supplier_id\":16,\"belong_supplier_name\":\"\\u4eba\\u5996\\u8868\\u6f14\\u6709\\u9650\\u516c\\u53f8\",\"company_id\":1,\"company_name\":\"\\u8054\\u8c0a\\u5047\\u671f-\\u52a0\\u62ff\\u5927\\u516c\\u53f8\",\"normal_price\":200,\"normal_settlement_price\":2,\"create_user_name\":\"admin\",\"update_user_name\":\"\\u80e1\\u4f0a\\u654f\",\"update_time\":1539863561,\"create_time\":1534500861,\"status\":1},{\"single_source_id\":47,\"single_source_name\":\"\\u4eba\\u5996\\u8868\\u6f1422\",\"source_number\":\"OTH20180905083202\",\"default_language_id\":1,\"remark\":\"\\u597d\\u7684\",\"supplier_id\":2,\"supplier_name\":\"\\u643a\\u7a0b\",\"supplier_type\":2,\"belong_supplier_id\":16,\"belong_supplier_name\":\"\\u4eba\\u5996\\u8868\\u6f14\\u6709\\u9650\\u516c\\u53f8\",\"company_id\":3,\"company_name\":\"\\u4e0a\\u6d77\\u5357\\u4e9a\\u6709\\u9650\\u516c\\u53f8\",\"normal_price\":200,\"normal_settlement_price\":2,\"create_user_name\":\"admin\",\"update_user_name\":\"\\u80e1\\u4f0a\\u654f\",\"update_time\":1539863583,\"create_time\":1534500861,\"status\":1},{\"single_source_id\":48,\"single_source_name\":\"\\u98de\\u5200\\u8868\\u6f14\",\"source_number\":\"OTH20180905083203\",\"default_language_id\":1,\"remark\":\"\\u597d\\u770b\\u7684\",\"supplier_id\":16,\"supplier_name\":\"\\u4eba\\u5996\\u8868\\u6f14\\u6709\\u9650\\u516c\\u53f8\",\"supplier_type\":1,\"belong_supplier_id\":16,\"belong_supplier_name\":\"\\u4eba\\u5996\\u8868\\u6f14\\u6709\\u9650\\u516c\\u53f8\",\"company_id\":4,\"company_name\":\"\\u8054\\u8c0a\\u5047\\u671f-\\u591a\\u4f26\\u591a\\u516c\\u53f8\",\"normal_price\":100,\"normal_settlement_price\":2,\"create_user_name\":\"admin\",\"update_user_name\":\"admin\",\"update_time\":1534500962,\"create_time\":1534500962,\"status\":1},{\"single_source_id\":49,\"single_source_name\":\"\\u98de\\u5200\\u8868\\u6f142\",\"source_number\":\"OTH20180905083204\",\"default_language_id\":1,\"remark\":\"\\u597d\\u770b\\u76842\",\"supplier_id\":2,\"supplier_name\":\"\\u643a\\u7a0b\",\"supplier_type\":2,\"belong_supplier_id\":16,\"belong_supplier_name\":\"\\u4eba\\u5996\\u8868\\u6f14\\u6709\\u9650\\u516c\\u53f8\",\"company_id\":1,\"company_name\":\"\\u8054\\u8c0a\\u5047\\u671f-\\u52a0\\u62ff\\u5927\\u516c\\u53f8\",\"normal_price\":100,\"normal_settlement_price\":2,\"create_user_name\":\"admin\",\"update_user_name\":\"admin\",\"update_time\":1534819299,\"create_time\":1534500962,\"status\":1},{\"single_source_id\":50,\"single_source_name\":\"\\u5927\\u8c61\\u8868\\u6f14\\u548c\\u7334\\u5b50\\u8868\\u6f14\",\"source_number\":\"OTH20180905083205\",\"default_language_id\":1,\"remark\":null,\"supplier_id\":2,\"supplier_name\":\"\\u643a\\u7a0b\",\"supplier_type\":2,\"belong_supplier_id\":31,\"belong_supplier_name\":\"\\u6742\\u6280\\u56e2\\u8868\\u6f14\\u6709\\u9650\\u516c\\u53f8\",\"company_id\":1,\"company_name\":\"\\u8054\\u8c0a\\u5047\\u671f-\\u52a0\\u62ff\\u5927\\u516c\\u53f8\",\"normal_price\":155,\"normal_settlement_price\":2,\"create_user_name\":\"admin\",\"update_user_name\":\"admin\",\"update_time\":1535006858,\"create_time\":1535006767,\"status\":1},{\"single_source_id\":51,\"single_source_name\":\"\\u5927\\u8c61\\u8868\\u6f14\\u548c\\u72ee\\u5b50\\u8868\\u6f14\",\"source_number\":\"OTH20180905083206\",\"default_language_id\":1,\"remark\":null,\"supplier_id\":2,\"supplier_name\":\"\\u643a\\u7a0b\",\"supplier_type\":2,\"belong_supplier_id\":16,\"belong_supplier_name\":\"\\u4eba\\u5996\\u8868\\u6f14\\u6709\\u9650\\u516c\\u53f8\",\"company_id\":1,\"company_name\":\"\\u8054\\u8c0a\\u5047\\u671f-\\u52a0\\u62ff\\u5927\\u516c\\u53f8\",\"normal_price\":155,\"normal_settlement_price\":2,\"create_user_name\":\"admin\",\"update_user_name\":\"admin\",\"update_time\":1535006793,\"create_time\":1535006767,\"status\":1},{\"single_source_id\":52,\"single_source_name\":\"\\u9a6f\\u864e\\u8868\\u6f14\",\"source_number\":\"OTH20180905083207\",\"default_language_id\":1,\"remark\":null,\"supplier_id\":31,\"supplier_name\":\"\\u6742\\u6280\\u56e2\\u8868\\u6f14\\u6709\\u9650\\u516c\\u53f8\",\"supplier_type\":1,\"belong_supplier_id\":31,\"belong_supplier_name\":\"\\u6742\\u6280\\u56e2\\u8868\\u6f14\\u6709\\u9650\\u516c\\u53f8\",\"company_id\":1,\"company_name\":\"\\u8054\\u8c0a\\u5047\\u671f-\\u52a0\\u62ff\\u5927\\u516c\\u53f8\",\"normal_price\":266,\"normal_settlement_price\":2,\"create_user_name\":\"admin\",\"update_user_name\":\"admin\",\"update_time\":1535007900,\"create_time\":1535007900,\"status\":1},{\"single_source_id\":53,\"single_source_name\":\"\\u9a6f\\u864e\\u8868\\u6f14\\u52a0\\u8df3\\u706b\\u5708\",\"source_number\":\"OTH20180905083208\",\"default_language_id\":1,\"remark\":\"\\u201c\\u9a6f\\u864e\\u8868\\u6f14\\u201d\\u7531\\u4fc4\\u7f57\\u65af\\u56fd\\u5bb6\\u4eba\\u6c11\\u6f14\\u5458\\u5df4\\u8fde\\u79d1.\\u5c3c\\u53e4\\u62c9.\\u5361\\u5c14\\u52c3\\u7ef4\\u5947\\u6f14\\u51fa\\u30021990\\u5e74\\u8499\\u7279\\u5361\\u7f57\\u6742\\u6280\\u8282\\u83b7\\u5f97\\u9ad8\\u5956\\u9879\\u201c\\u91d1\\u5c0f\\u4e11\\u5956\\u201d\\u3002\\uff08\\u8fd9\\u662f\\u9a6c\\u620f\\u754c\\u4e2d\\u7684\\u5965\\u65af\\u5361\\u5956\\uff09\\u88ab\\u4fc4\\u7f57\\u65af\\u603b\\u7edf\\u666e\\u4eac\\u6388\\u4e88\\u56fd\\u5bb6\\u9a6c\\u620f\\u827a\\u672f\\u7279\\u7ea7\\u6d25\\u8d34\\u5956\\u91d1\\u3002\",\"supplier_id\":2,\"supplier_name\":\"\\u643a\\u7a0b\",\"supplier_type\":2,\"belong_supplier_id\":21,\"belong_supplier_name\":\"im-visa\",\"company_id\":1,\"company_name\":\"\\u8054\\u8c0a\\u5047\\u671f-\\u52a0\\u62ff\\u5927\\u516c\\u53f8\",\"normal_price\":1,\"normal_settlement_price\":1,\"create_user_name\":\"admin\",\"update_user_name\":\"admin\",\"update_time\":1535009439,\"create_time\":1535007900,\"status\":1},{\"single_source_id\":54,\"single_source_name\":\"\\u6d4b\\u8bd50830\",\"source_number\":\"OTH20180905083209\",\"default_language_id\":1,\"remark\":null,\"supplier_id\":31,\"supplier_name\":\"\\u6742\\u6280\\u56e2\\u8868\\u6f14\\u6709\\u9650\\u516c\\u53f8\",\"supplier_type\":1,\"belong_supplier_id\":31,\"belong_supplier_name\":\"\\u6742\\u6280\\u56e2\\u8868\\u6f14\\u6709\\u9650\\u516c\\u53f8\",\"company_id\":1,\"company_name\":\"\\u8054\\u8c0a\\u5047\\u671f-\\u52a0\\u62ff\\u5927\\u516c\\u53f8\",\"normal_price\":0,\"normal_settlement_price\":0,\"create_user_name\":\"\\u5218\\u51b0\\u5029\",\"update_user_name\":\"\\u5218\\u51b0\\u5029\",\"update_time\":1535592874,\"create_time\":1535592874,\"status\":1},{\"single_source_id\":55,\"single_source_name\":\"\\u6d4b\\u8bd50830\",\"source_number\":\"OTH20180905083210\",\"default_language_id\":1,\"remark\":null,\"supplier_id\":2,\"supplier_name\":\"\\u643a\\u7a0b\",\"supplier_type\":2,\"belong_supplier_id\":21,\"belong_supplier_name\":\"im-visa\",\"company_id\":1,\"company_name\":\"\\u8054\\u8c0a\\u5047\\u671f-\\u52a0\\u62ff\\u5927\\u516c\\u53f8\",\"normal_price\":0,\"normal_settlement_price\":0,\"create_user_name\":\"\\u5218\\u51b0\\u5029\",\"update_user_name\":\"\\u5218\\u51b0\\u5029\",\"update_time\":1535592874,\"create_time\":1535592874,\"status\":1},{\"single_source_id\":56,\"single_source_name\":\"\\u95ee\\u6211\\u53bb\",\"source_number\":\"OTH20180911291271\",\"default_language_id\":1,\"remark\":\"3123\",\"supplier_id\":16,\"supplier_name\":\"\\u4eba\\u5996\\u8868\\u6f14\\u6709\\u9650\\u516c\\u53f8\",\"supplier_type\":1,\"belong_supplier_id\":16,\"belong_supplier_name\":\"\\u4eba\\u5996\\u8868\\u6f14\\u6709\\u9650\\u516c\\u53f8\",\"company_id\":1,\"company_name\":\"\\u8054\\u8c0a\\u5047\\u671f-\\u52a0\\u62ff\\u5927\\u516c\\u53f8\",\"normal_price\":2,\"normal_settlement_price\":2,\"create_user_name\":\"admin\",\"update_user_name\":\"admin\",\"update_time\":1536659293,\"create_time\":1536659293,\"status\":1},{\"single_source_id\":57,\"single_source_name\":\"\\u95ee\\u6211\\u53bb\",\"source_number\":\"OTH20180911291279\",\"default_language_id\":1,\"remark\":\"3123\",\"supplier_id\":2,\"supplier_name\":\"\\u643a\\u7a0b\",\"supplier_type\":2,\"belong_supplier_id\":16,\"belong_supplier_name\":\"\\u4eba\\u5996\\u8868\\u6f14\\u6709\\u9650\\u516c\\u53f8\",\"company_id\":1,\"company_name\":\"\\u8054\\u8c0a\\u5047\\u671f-\\u52a0\\u62ff\\u5927\\u516c\\u53f8\",\"normal_price\":2,\"normal_settlement_price\":2,\"create_user_name\":\"admin\",\"update_user_name\":\"admin\",\"update_time\":1536659293,\"create_time\":1536659293,\"status\":1},{\"single_source_id\":58,\"single_source_name\":\"342432\",\"source_number\":\"OTH20180911913401\",\"default_language_id\":1,\"remark\":\"32432\",\"supplier_id\":16,\"supplier_name\":\"\\u4eba\\u5996\\u8868\\u6f14\\u6709\\u9650\\u516c\\u53f8\",\"supplier_type\":1,\"belong_supplier_id\":16,\"belong_supplier_name\":\"\\u4eba\\u5996\\u8868\\u6f14\\u6709\\u9650\\u516c\\u53f8\",\"company_id\":1,\"company_name\":\"\\u8054\\u8c0a\\u5047\\u671f-\\u52a0\\u62ff\\u5927\\u516c\\u53f8\",\"normal_price\":3,\"normal_settlement_price\":3,\"create_user_name\":\"admin\",\"update_user_name\":\"admin\",\"update_time\":1536659448,\"create_time\":1536659448,\"status\":1},{\"single_source_id\":59,\"single_source_name\":\"1\",\"source_number\":\"OTH20181003666262\",\"default_language_id\":1,\"remark\":null,\"supplier_id\":16,\"supplier_name\":\"\\u4eba\\u5996\\u8868\\u6f14\\u6709\\u9650\\u516c\\u53f8\",\"supplier_type\":1,\"belong_supplier_id\":16,\"belong_supplier_name\":\"\\u4eba\\u5996\\u8868\\u6f14\\u6709\\u9650\\u516c\\u53f8\",\"company_id\":1,\"company_name\":\"\\u8054\\u8c0a\\u5047\\u671f-\\u52a0\\u62ff\\u5927\\u516c\\u53f8\",\"normal_price\":1,\"normal_settlement_price\":1,\"create_user_name\":\"\\u80e1\\u4f0a\\u654f\",\"update_user_name\":\"\\u80e1\\u4f0a\\u654f\",\"update_time\":1538534405,\"create_time\":1538534405,\"status\":1},{\"single_source_id\":60,\"single_source_name\":\"1\",\"source_number\":\"OTH20181003666263\",\"default_language_id\":1,\"remark\":\"2\",\"supplier_id\":39,\"supplier_name\":\"\\u4e1c\\u5357\\u4e9a\\u5730\\u63a5\\u793e\",\"supplier_type\":2,\"belong_supplier_id\":16,\"belong_supplier_name\":\"\\u4eba\\u5996\\u8868\\u6f14\\u6709\\u9650\\u516c\\u53f8\",\"company_id\":1,\"company_name\":\"\\u8054\\u8c0a\\u5047\\u671f-\\u52a0\\u62ff\\u5927\\u516c\\u53f8\",\"normal_price\":2,\"normal_settlement_price\":2,\"create_user_name\":\"\\u80e1\\u4f0a\\u654f\",\"update_user_name\":\"\\u80e1\\u4f0a\\u654f\",\"update_time\":1538535074,\"create_time\":1538534405,\"status\":1},{\"single_source_id\":61,\"single_source_name\":\"jdskd\",\"source_number\":\"OTH20181008269002\",\"default_language_id\":1,\"remark\":\"3424\",\"supplier_id\":31,\"supplier_name\":\"\\u6742\\u6280\\u56e2\\u8868\\u6f14\\u6709\\u9650\\u516c\\u53f8\",\"supplier_type\":1,\"belong_supplier_id\":31,\"belong_supplier_name\":\"\\u6742\\u6280\\u56e2\\u8868\\u6f14\\u6709\\u9650\\u516c\\u53f8\",\"company_id\":1,\"company_name\":\"\\u8054\\u8c0a\\u5047\\u671f-\\u52a0\\u62ff\\u5927\\u516c\\u53f8\",\"normal_price\":2,\"normal_settlement_price\":2,\"create_user_name\":\"admin\",\"update_user_name\":\"admin\",\"update_time\":1538997788,\"create_time\":1538997788,\"status\":1}]' , '127.0.0.1:7002/source/getSingleSource') [ RunTime:0.037735s ]
+[ error ] [8]未定义数组索引: company_id[E:\xampp\htdocs\soaerp\application\index\model\source\SingleSource.php:114]
+---------------------------------------------------------------
+[ 2018-10-18T20:11:41+08:00 ] 127.0.0.1 POST /source/getSingleSource
+[ info ] 127.0.0.1:7002/source/getSingleSource [运行时间：0.245794s][吞吐率：4.07req/s] [内存消耗：3,263.52kb] [文件加载：57]
+[ info ] [ LANG ] E:\xampp\htdocs\soaerp\thinkphp\lang\zh-cn.php
+[ info ] [ BIND ] 'index'
+[ info ] [ ROUTE ] array (
+  'type' => 'module',
+  'module' => 
+  array (
+    0 => 'index',
+    1 => 'source',
+    2 => 'getSingleSource',
+  ),
+)
+[ info ] [ HEADER ] array (
+  'host' => '127.0.0.1:7002',
+  'accept' => 'application/json',
+  'content-length' => '52',
+  'content-type' => 'application/x-www-form-urlencoded',
+)
+[ info ] [ PARAM ] array (
+  '{"appKey":"nexus","appSecret":"nexusIt","lang_id":1}' => '',
+)
+[ info ] [ LANG ] E:\xampp\htdocs\soaerp\public/../application/index\lang\zh-cn.php
+[ info ] [ DB ] INIT mysql
+[ info ] [ RUN ] app\index\controller\Source->getSingleSource[ E:\xampp\htdocs\soaerp\application\index\controller\Source.php ]
+[ info ] [ DB ] INIT mysql
+[ info ] [ LOG ] INIT File
+[ sql ] [ DB ] CONNECT:[ UseTime:0.017081s ] mysql:host=192.168.11.100;port=3306;dbname=log;charset=utf8
+[ sql ] [ SQL ] CREATE TABLE IF NOT EXISTS soaerp_log_20181018 LIKE soaerp_log [ RunTime:0.006844s ]
+[ sql ] [ SQL ] CREATE TABLE IF NOT EXISTS soaerp_log_20181018 LIKE soaerp_log [ RunTime:0.002878s ]
+[ sql ] [ DB ] CONNECT:[ UseTime:0.017113s ] mysql:host=192.168.11.100;port=3306;dbname=erp;charset=utf8
+[ sql ] [ SQL ] SHOW COLUMNS FROM `single_source` [ RunTime:0.013814s ]
+[ sql ] [ SQL ] SELECT `single_source`.`single_source_id`,`single_source`.`single_source_name`,`single_source`.`source_number`,`single_source`.`default_language_id`,`single_source`.`remark`,`single_source`.`supplier_id`,`supplier`.`supplier_name`,`single_source`.`supplier_type`,`single_source`.`belong_supplier_id`,(select supplier2.supplier_name  from supplier as supplier2 where supplier2.supplier_id = single_source.belong_supplier_id) AS `belong_supplier_name`,`single_source`.`company_id`,`company`.`company_name`,`source_price`.`normal_price`,`source_price`.`normal_settlement_price`,(select nickname  from user where user.user_id = single_source.create_user_id) AS `create_user_name`,(select nickname  from user where user.user_id = single_source.update_user_id) AS `update_user_name`,`single_source`.`update_time`,`single_source`.`create_time`,`single_source`.`status` FROM `single_source` `single_source` LEFT JOIN `source_price` ON `source_price`.`pk_id`=single_source.single_source_id and source_price.supplier_type_id=10 INNER JOIN `supplier` ON `supplier`.`supplier_id`=`single_source`.`supplier_id` INNER JOIN `company` ON `company`.`company_id`=`single_source`.`company_id` WHERE  (  1=1  ) [ RunTime:0.052762s ]
+[ sql ] [ SQL ] CREATE TABLE IF NOT EXISTS soaerp_log_20181018 LIKE soaerp_log [ RunTime:0.002037s ]
+[ sql ] [ SQL ] CREATE TABLE IF NOT EXISTS soaerp_log_20181018 LIKE soaerp_log [ RunTime:0.002434s ]
+[ sql ] [ SQL ] SHOW COLUMNS FROM `soaerp_log_20181018` [ RunTime:0.013375s ]
+[ sql ] [ SQL ] INSERT INTO `soaerp_log_20181018` (`params` , `time` , `type` , `result` , `url`) VALUES ('{\"appKey\":\"nexus\",\"appSecret\":\"nexusIt\",\"lang_id\":1}' , 1539864700 , 1 , '[{\"single_source_id\":45,\"single_source_name\":\"\\u6742\\u62802\",\"source_number\":\"OTH20180905083200\",\"default_language_id\":1,\"remark\":null,\"supplier_id\":16,\"supplier_name\":\"\\u4eba\\u5996\\u8868\\u6f14\\u6709\\u9650\\u516c\\u53f8\",\"supplier_type\":1,\"belong_supplier_id\":16,\"belong_supplier_name\":\"\\u4eba\\u5996\\u8868\\u6f14\\u6709\\u9650\\u516c\\u53f8\",\"company_id\":2,\"company_name\":\"\\u8054\\u8c0a\\u5047\\u671f-\\u7ebd\\u7ea6\\u516c\\u53f8\",\"normal_price\":222,\"normal_settlement_price\":2,\"create_user_name\":\"admin\",\"update_user_name\":\"admin\",\"update_time\":1536660038,\"create_time\":1534475469,\"status\":1},{\"single_source_id\":46,\"single_source_name\":\"\\u4eba\\u5996\\u8868\\u6f143\",\"source_number\":\"OTH20180905083201\",\"default_language_id\":1,\"remark\":\"\\u597d\\u7684\",\"supplier_id\":16,\"supplier_name\":\"\\u4eba\\u5996\\u8868\\u6f14\\u6709\\u9650\\u516c\\u53f8\",\"supplier_type\":1,\"belong_supplier_id\":16,\"belong_supplier_name\":\"\\u4eba\\u5996\\u8868\\u6f14\\u6709\\u9650\\u516c\\u53f8\",\"company_id\":1,\"company_name\":\"\\u8054\\u8c0a\\u5047\\u671f-\\u52a0\\u62ff\\u5927\\u516c\\u53f8\",\"normal_price\":200,\"normal_settlement_price\":2,\"create_user_name\":\"admin\",\"update_user_name\":\"\\u80e1\\u4f0a\\u654f\",\"update_time\":1539863561,\"create_time\":1534500861,\"status\":1},{\"single_source_id\":47,\"single_source_name\":\"\\u4eba\\u5996\\u8868\\u6f1422\",\"source_number\":\"OTH20180905083202\",\"default_language_id\":1,\"remark\":\"\\u597d\\u7684\",\"supplier_id\":2,\"supplier_name\":\"\\u643a\\u7a0b\",\"supplier_type\":2,\"belong_supplier_id\":16,\"belong_supplier_name\":\"\\u4eba\\u5996\\u8868\\u6f14\\u6709\\u9650\\u516c\\u53f8\",\"company_id\":3,\"company_name\":\"\\u4e0a\\u6d77\\u5357\\u4e9a\\u6709\\u9650\\u516c\\u53f8\",\"normal_price\":200,\"normal_settlement_price\":2,\"create_user_name\":\"admin\",\"update_user_name\":\"\\u80e1\\u4f0a\\u654f\",\"update_time\":1539863583,\"create_time\":1534500861,\"status\":1},{\"single_source_id\":48,\"single_source_name\":\"\\u98de\\u5200\\u8868\\u6f14\",\"source_number\":\"OTH20180905083203\",\"default_language_id\":1,\"remark\":\"\\u597d\\u770b\\u7684\",\"supplier_id\":16,\"supplier_name\":\"\\u4eba\\u5996\\u8868\\u6f14\\u6709\\u9650\\u516c\\u53f8\",\"supplier_type\":1,\"belong_supplier_id\":16,\"belong_supplier_name\":\"\\u4eba\\u5996\\u8868\\u6f14\\u6709\\u9650\\u516c\\u53f8\",\"company_id\":4,\"company_name\":\"\\u8054\\u8c0a\\u5047\\u671f-\\u591a\\u4f26\\u591a\\u516c\\u53f8\",\"normal_price\":100,\"normal_settlement_price\":2,\"create_user_name\":\"admin\",\"update_user_name\":\"admin\",\"update_time\":1534500962,\"create_time\":1534500962,\"status\":1},{\"single_source_id\":49,\"single_source_name\":\"\\u98de\\u5200\\u8868\\u6f142\",\"source_number\":\"OTH20180905083204\",\"default_language_id\":1,\"remark\":\"\\u597d\\u770b\\u76842\",\"supplier_id\":2,\"supplier_name\":\"\\u643a\\u7a0b\",\"supplier_type\":2,\"belong_supplier_id\":16,\"belong_supplier_name\":\"\\u4eba\\u5996\\u8868\\u6f14\\u6709\\u9650\\u516c\\u53f8\",\"company_id\":1,\"company_name\":\"\\u8054\\u8c0a\\u5047\\u671f-\\u52a0\\u62ff\\u5927\\u516c\\u53f8\",\"normal_price\":100,\"normal_settlement_price\":2,\"create_user_name\":\"admin\",\"update_user_name\":\"admin\",\"update_time\":1534819299,\"create_time\":1534500962,\"status\":1},{\"single_source_id\":50,\"single_source_name\":\"\\u5927\\u8c61\\u8868\\u6f14\\u548c\\u7334\\u5b50\\u8868\\u6f14\",\"source_number\":\"OTH20180905083205\",\"default_language_id\":1,\"remark\":null,\"supplier_id\":2,\"supplier_name\":\"\\u643a\\u7a0b\",\"supplier_type\":2,\"belong_supplier_id\":31,\"belong_supplier_name\":\"\\u6742\\u6280\\u56e2\\u8868\\u6f14\\u6709\\u9650\\u516c\\u53f8\",\"company_id\":1,\"company_name\":\"\\u8054\\u8c0a\\u5047\\u671f-\\u52a0\\u62ff\\u5927\\u516c\\u53f8\",\"normal_price\":155,\"normal_settlement_price\":2,\"create_user_name\":\"admin\",\"update_user_name\":\"admin\",\"update_time\":1535006858,\"create_time\":1535006767,\"status\":1},{\"single_source_id\":51,\"single_source_name\":\"\\u5927\\u8c61\\u8868\\u6f14\\u548c\\u72ee\\u5b50\\u8868\\u6f14\",\"source_number\":\"OTH20180905083206\",\"default_language_id\":1,\"remark\":null,\"supplier_id\":2,\"supplier_name\":\"\\u643a\\u7a0b\",\"supplier_type\":2,\"belong_supplier_id\":16,\"belong_supplier_name\":\"\\u4eba\\u5996\\u8868\\u6f14\\u6709\\u9650\\u516c\\u53f8\",\"company_id\":1,\"company_name\":\"\\u8054\\u8c0a\\u5047\\u671f-\\u52a0\\u62ff\\u5927\\u516c\\u53f8\",\"normal_price\":155,\"normal_settlement_price\":2,\"create_user_name\":\"admin\",\"update_user_name\":\"admin\",\"update_time\":1535006793,\"create_time\":1535006767,\"status\":1},{\"single_source_id\":52,\"single_source_name\":\"\\u9a6f\\u864e\\u8868\\u6f14\",\"source_number\":\"OTH20180905083207\",\"default_language_id\":1,\"remark\":null,\"supplier_id\":31,\"supplier_name\":\"\\u6742\\u6280\\u56e2\\u8868\\u6f14\\u6709\\u9650\\u516c\\u53f8\",\"supplier_type\":1,\"belong_supplier_id\":31,\"belong_supplier_name\":\"\\u6742\\u6280\\u56e2\\u8868\\u6f14\\u6709\\u9650\\u516c\\u53f8\",\"company_id\":1,\"company_name\":\"\\u8054\\u8c0a\\u5047\\u671f-\\u52a0\\u62ff\\u5927\\u516c\\u53f8\",\"normal_price\":266,\"normal_settlement_price\":2,\"create_user_name\":\"admin\",\"update_user_name\":\"admin\",\"update_time\":1535007900,\"create_time\":1535007900,\"status\":1},{\"single_source_id\":53,\"single_source_name\":\"\\u9a6f\\u864e\\u8868\\u6f14\\u52a0\\u8df3\\u706b\\u5708\",\"source_number\":\"OTH20180905083208\",\"default_language_id\":1,\"remark\":\"\\u201c\\u9a6f\\u864e\\u8868\\u6f14\\u201d\\u7531\\u4fc4\\u7f57\\u65af\\u56fd\\u5bb6\\u4eba\\u6c11\\u6f14\\u5458\\u5df4\\u8fde\\u79d1.\\u5c3c\\u53e4\\u62c9.\\u5361\\u5c14\\u52c3\\u7ef4\\u5947\\u6f14\\u51fa\\u30021990\\u5e74\\u8499\\u7279\\u5361\\u7f57\\u6742\\u6280\\u8282\\u83b7\\u5f97\\u9ad8\\u5956\\u9879\\u201c\\u91d1\\u5c0f\\u4e11\\u5956\\u201d\\u3002\\uff08\\u8fd9\\u662f\\u9a6c\\u620f\\u754c\\u4e2d\\u7684\\u5965\\u65af\\u5361\\u5956\\uff09\\u88ab\\u4fc4\\u7f57\\u65af\\u603b\\u7edf\\u666e\\u4eac\\u6388\\u4e88\\u56fd\\u5bb6\\u9a6c\\u620f\\u827a\\u672f\\u7279\\u7ea7\\u6d25\\u8d34\\u5956\\u91d1\\u3002\",\"supplier_id\":2,\"supplier_name\":\"\\u643a\\u7a0b\",\"supplier_type\":2,\"belong_supplier_id\":21,\"belong_supplier_name\":\"im-visa\",\"company_id\":1,\"company_name\":\"\\u8054\\u8c0a\\u5047\\u671f-\\u52a0\\u62ff\\u5927\\u516c\\u53f8\",\"normal_price\":1,\"normal_settlement_price\":1,\"create_user_name\":\"admin\",\"update_user_name\":\"admin\",\"update_time\":1535009439,\"create_time\":1535007900,\"status\":1},{\"single_source_id\":54,\"single_source_name\":\"\\u6d4b\\u8bd50830\",\"source_number\":\"OTH20180905083209\",\"default_language_id\":1,\"remark\":null,\"supplier_id\":31,\"supplier_name\":\"\\u6742\\u6280\\u56e2\\u8868\\u6f14\\u6709\\u9650\\u516c\\u53f8\",\"supplier_type\":1,\"belong_supplier_id\":31,\"belong_supplier_name\":\"\\u6742\\u6280\\u56e2\\u8868\\u6f14\\u6709\\u9650\\u516c\\u53f8\",\"company_id\":1,\"company_name\":\"\\u8054\\u8c0a\\u5047\\u671f-\\u52a0\\u62ff\\u5927\\u516c\\u53f8\",\"normal_price\":0,\"normal_settlement_price\":0,\"create_user_name\":\"\\u5218\\u51b0\\u5029\",\"update_user_name\":\"\\u5218\\u51b0\\u5029\",\"update_time\":1535592874,\"create_time\":1535592874,\"status\":1},{\"single_source_id\":55,\"single_source_name\":\"\\u6d4b\\u8bd50830\",\"source_number\":\"OTH20180905083210\",\"default_language_id\":1,\"remark\":null,\"supplier_id\":2,\"supplier_name\":\"\\u643a\\u7a0b\",\"supplier_type\":2,\"belong_supplier_id\":21,\"belong_supplier_name\":\"im-visa\",\"company_id\":1,\"company_name\":\"\\u8054\\u8c0a\\u5047\\u671f-\\u52a0\\u62ff\\u5927\\u516c\\u53f8\",\"normal_price\":0,\"normal_settlement_price\":0,\"create_user_name\":\"\\u5218\\u51b0\\u5029\",\"update_user_name\":\"\\u5218\\u51b0\\u5029\",\"update_time\":1535592874,\"create_time\":1535592874,\"status\":1},{\"single_source_id\":56,\"single_source_name\":\"\\u95ee\\u6211\\u53bb\",\"source_number\":\"OTH20180911291271\",\"default_language_id\":1,\"remark\":\"3123\",\"supplier_id\":16,\"supplier_name\":\"\\u4eba\\u5996\\u8868\\u6f14\\u6709\\u9650\\u516c\\u53f8\",\"supplier_type\":1,\"belong_supplier_id\":16,\"belong_supplier_name\":\"\\u4eba\\u5996\\u8868\\u6f14\\u6709\\u9650\\u516c\\u53f8\",\"company_id\":1,\"company_name\":\"\\u8054\\u8c0a\\u5047\\u671f-\\u52a0\\u62ff\\u5927\\u516c\\u53f8\",\"normal_price\":2,\"normal_settlement_price\":2,\"create_user_name\":\"admin\",\"update_user_name\":\"admin\",\"update_time\":1536659293,\"create_time\":1536659293,\"status\":1},{\"single_source_id\":57,\"single_source_name\":\"\\u95ee\\u6211\\u53bb\",\"source_number\":\"OTH20180911291279\",\"default_language_id\":1,\"remark\":\"3123\",\"supplier_id\":2,\"supplier_name\":\"\\u643a\\u7a0b\",\"supplier_type\":2,\"belong_supplier_id\":16,\"belong_supplier_name\":\"\\u4eba\\u5996\\u8868\\u6f14\\u6709\\u9650\\u516c\\u53f8\",\"company_id\":1,\"company_name\":\"\\u8054\\u8c0a\\u5047\\u671f-\\u52a0\\u62ff\\u5927\\u516c\\u53f8\",\"normal_price\":2,\"normal_settlement_price\":2,\"create_user_name\":\"admin\",\"update_user_name\":\"admin\",\"update_time\":1536659293,\"create_time\":1536659293,\"status\":1},{\"single_source_id\":58,\"single_source_name\":\"342432\",\"source_number\":\"OTH20180911913401\",\"default_language_id\":1,\"remark\":\"32432\",\"supplier_id\":16,\"supplier_name\":\"\\u4eba\\u5996\\u8868\\u6f14\\u6709\\u9650\\u516c\\u53f8\",\"supplier_type\":1,\"belong_supplier_id\":16,\"belong_supplier_name\":\"\\u4eba\\u5996\\u8868\\u6f14\\u6709\\u9650\\u516c\\u53f8\",\"company_id\":1,\"company_name\":\"\\u8054\\u8c0a\\u5047\\u671f-\\u52a0\\u62ff\\u5927\\u516c\\u53f8\",\"normal_price\":3,\"normal_settlement_price\":3,\"create_user_name\":\"admin\",\"update_user_name\":\"admin\",\"update_time\":1536659448,\"create_time\":1536659448,\"status\":1},{\"single_source_id\":59,\"single_source_name\":\"1\",\"source_number\":\"OTH20181003666262\",\"default_language_id\":1,\"remark\":null,\"supplier_id\":16,\"supplier_name\":\"\\u4eba\\u5996\\u8868\\u6f14\\u6709\\u9650\\u516c\\u53f8\",\"supplier_type\":1,\"belong_supplier_id\":16,\"belong_supplier_name\":\"\\u4eba\\u5996\\u8868\\u6f14\\u6709\\u9650\\u516c\\u53f8\",\"company_id\":1,\"company_name\":\"\\u8054\\u8c0a\\u5047\\u671f-\\u52a0\\u62ff\\u5927\\u516c\\u53f8\",\"normal_price\":1,\"normal_settlement_price\":1,\"create_user_name\":\"\\u80e1\\u4f0a\\u654f\",\"update_user_name\":\"\\u80e1\\u4f0a\\u654f\",\"update_time\":1538534405,\"create_time\":1538534405,\"status\":1},{\"single_source_id\":60,\"single_source_name\":\"1\",\"source_number\":\"OTH20181003666263\",\"default_language_id\":1,\"remark\":\"2\",\"supplier_id\":39,\"supplier_name\":\"\\u4e1c\\u5357\\u4e9a\\u5730\\u63a5\\u793e\",\"supplier_type\":2,\"belong_supplier_id\":16,\"belong_supplier_name\":\"\\u4eba\\u5996\\u8868\\u6f14\\u6709\\u9650\\u516c\\u53f8\",\"company_id\":1,\"company_name\":\"\\u8054\\u8c0a\\u5047\\u671f-\\u52a0\\u62ff\\u5927\\u516c\\u53f8\",\"normal_price\":2,\"normal_settlement_price\":2,\"create_user_name\":\"\\u80e1\\u4f0a\\u654f\",\"update_user_name\":\"\\u80e1\\u4f0a\\u654f\",\"update_time\":1538535074,\"create_time\":1538534405,\"status\":1},{\"single_source_id\":61,\"single_source_name\":\"jdskd\",\"source_number\":\"OTH20181008269002\",\"default_language_id\":1,\"remark\":\"3424\",\"supplier_id\":31,\"supplier_name\":\"\\u6742\\u6280\\u56e2\\u8868\\u6f14\\u6709\\u9650\\u516c\\u53f8\",\"supplier_type\":1,\"belong_supplier_id\":31,\"belong_supplier_name\":\"\\u6742\\u6280\\u56e2\\u8868\\u6f14\\u6709\\u9650\\u516c\\u53f8\",\"company_id\":1,\"company_name\":\"\\u8054\\u8c0a\\u5047\\u671f-\\u52a0\\u62ff\\u5927\\u516c\\u53f8\",\"normal_price\":2,\"normal_settlement_price\":2,\"create_user_name\":\"admin\",\"update_user_name\":\"admin\",\"update_time\":1538997788,\"create_time\":1538997788,\"status\":1}]' , '127.0.0.1:7002/source/getSingleSource') [ RunTime:0.055354s ]
+[ error ] [8]未定义数组索引: company_id[E:\xampp\htdocs\soaerp\application\index\model\source\SingleSource.php:114]
+---------------------------------------------------------------
+[ 2018-10-18T20:11:43+08:00 ] 127.0.0.1 POST /source/getSupplier
+[ info ] 127.0.0.1:7002/source/getSupplier [运行时间：0.229483s][吞吐率：4.36req/s] [内存消耗：3,052.92kb] [文件加载：54]
+[ info ] [ LANG ] E:\xampp\htdocs\soaerp\thinkphp\lang\zh-cn.php
+[ info ] [ BIND ] 'index'
+[ info ] [ ROUTE ] array (
+  'type' => 'module',
+  'module' => 
+  array (
+    0 => 'index',
+    1 => 'source',
+    2 => 'getSupplier',
+  ),
+)
+[ info ] [ HEADER ] array (
+  'host' => '127.0.0.1:7002',
+  'accept' => 'application/json',
+  'content-length' => '74',
+  'content-type' => 'application/x-www-form-urlencoded',
+)
+[ info ] [ PARAM ] array (
+  '{"supplier_type_id":11,"appKey":"nexus","appSecret":"nexusIt","lang_id":1}' => '',
+)
+[ info ] [ LANG ] E:\xampp\htdocs\soaerp\public/../application/index\lang\zh-cn.php
+[ info ] [ DB ] INIT mysql
+[ info ] [ RUN ] app\index\controller\Source->getSupplier[ E:\xampp\htdocs\soaerp\application\index\controller\Source.php ]
+[ info ] [ DB ] INIT mysql
+[ info ] [ LOG ] INIT File
+[ sql ] [ DB ] CONNECT:[ UseTime:0.007485s ] mysql:host=192.168.11.100;port=3306;dbname=log;charset=utf8
+[ sql ] [ SQL ] CREATE TABLE IF NOT EXISTS soaerp_log_20181018 LIKE soaerp_log [ RunTime:0.004803s ]
+[ sql ] [ SQL ] CREATE TABLE IF NOT EXISTS soaerp_log_20181018 LIKE soaerp_log [ RunTime:0.003098s ]
+[ sql ] [ DB ] CONNECT:[ UseTime:0.015708s ] mysql:host=192.168.11.100;port=3306;dbname=erp;charset=utf8
+[ sql ] [ SQL ] SHOW COLUMNS FROM `supplier` [ RunTime:0.016271s ]
+[ sql ] [ SQL ] SELECT `supplier`.`supplier_id`,`supplier`.`supplier_name`,`supplier`.`supplier_type_id`,`supplier_type`.`supplier_type_name`,supplier.country_id as city_id,country.country_name as city_name,country.pid as city_pid,`supplier`.`level_name`,`supplier`.`linkman`,`supplier`.`address`,`supplier`.`zip_code`,`supplier`.`phone`,`supplier`.`website`,`supplier`.`fax`,`supplier`.`email`,`supplier`.`supplier_number`,`supplier`.`remark`,`supplier`.`default_language_id`,`supplier`.`company_id`,`company`.`company_name`,(select nickname  from user where user.user_id = supplier_type.create_user_id) AS `create_user_name`,(select nickname  from user where user.user_id = supplier_type.update_user_id) AS `update_user_name`,(select country_name  from country as country2 where country2.country_id= city_pid) AS `province_name`,(select country_id  from country as country2 where country2.country_id= city_pid) AS `province_id`,(select country_name  from country as country2 where country2.country_id= (select pid  from country as country2 where country2.country_id= country.pid)) AS `country_name`,(select country_id  from country as country2 where country2.country_id= (select pid  from country as country2 where country2.country_id= country.pid)) AS `country_id`,`supplier`.`update_time`,`supplier`.`create_time`,`supplier`.`status` FROM `supplier` `supplier` LEFT JOIN `country` ON `supplier`.`country_id`=`country`.`country_id` INNER JOIN `supplier_type` ON `supplier_type`.`supplier_type_id`=`supplier`.`supplier_type_id` INNER JOIN `company` ON `company`.`company_id`=`supplier`.`company_id` WHERE  (  1=1  and supplier.supplier_type_id = '11' ) [ RunTime:0.034517s ]
+[ sql ] [ SQL ] CREATE TABLE IF NOT EXISTS soaerp_log_20181018 LIKE soaerp_log [ RunTime:0.002994s ]
+[ sql ] [ SQL ] CREATE TABLE IF NOT EXISTS soaerp_log_20181018 LIKE soaerp_log [ RunTime:0.002951s ]
+[ sql ] [ SQL ] SHOW COLUMNS FROM `soaerp_log_20181018` [ RunTime:0.016035s ]
+[ sql ] [ SQL ] INSERT INTO `soaerp_log_20181018` (`params` , `time` , `type` , `result` , `url`) VALUES ('{\"supplier_type_id\":11,\"appKey\":\"nexus\",\"appSecret\":\"nexusIt\",\"lang_id\":1}' , 1539864703 , 1 , '[{\"supplier_id\":41,\"supplier_name\":\"\\u4e1c\\u5357\\u4e9a\\u65c5\\u6e38\\u516c\\u53f8\",\"supplier_type_id\":11,\"supplier_type_name\":\"\\u81ea\\u8d39\\u9879\\u76ee\",\"city_id\":8,\"city_name\":\"\\u5fb7\\u56fd\\u5730\\u533a1\",\"city_pid\":7,\"level_name\":\"1\",\"linkman\":\"1\",\"address\":\"1\",\"zip_code\":\"1@qq.com\",\"phone\":\"1\",\"website\":\"1\",\"fax\":\"1\",\"email\":\"1@qq.com\",\"supplier_number\":\"LTA20181003125231\",\"remark\":\"1\",\"default_language_id\":1,\"company_id\":24,\"company_name\":\"\\u8054\\u8c0a\\u5047\\u671f-\\u534e\\u76db\\u987f\\u516c\\u53f8\",\"create_user_name\":\"admin\",\"update_user_name\":\"admin\",\"province_name\":\"\\u5fb7\\u56fd\\u57ce\\u5e021\",\"province_id\":7,\"country_name\":\"\\u5fb7\\u56fd\",\"country_id\":6,\"update_time\":1539067053,\"create_time\":1538531362,\"status\":1}]' , '127.0.0.1:7002/source/getSupplier') [ RunTime:0.044792s ]
+---------------------------------------------------------------
+[ 2018-10-18T20:11:44+08:00 ] 127.0.0.1 POST /source/getSupplier
+[ info ] 127.0.0.1:7002/source/getSupplier [运行时间：0.165732s][吞吐率：6.03req/s] [内存消耗：3,052.92kb] [文件加载：54]
+[ info ] [ LANG ] E:\xampp\htdocs\soaerp\thinkphp\lang\zh-cn.php
+[ info ] [ BIND ] 'index'
+[ info ] [ ROUTE ] array (
+  'type' => 'module',
+  'module' => 
+  array (
+    0 => 'index',
+    1 => 'source',
+    2 => 'getSupplier',
+  ),
+)
+[ info ] [ HEADER ] array (
+  'host' => '127.0.0.1:7002',
+  'accept' => 'application/json',
+  'content-length' => '74',
+  'content-type' => 'application/x-www-form-urlencoded',
+)
+[ info ] [ PARAM ] array (
+  '{"supplier_type_id":11,"appKey":"nexus","appSecret":"nexusIt","lang_id":1}' => '',
+)
+[ info ] [ LANG ] E:\xampp\htdocs\soaerp\public/../application/index\lang\zh-cn.php
+[ info ] [ DB ] INIT mysql
+[ info ] [ RUN ] app\index\controller\Source->getSupplier[ E:\xampp\htdocs\soaerp\application\index\controller\Source.php ]
+[ info ] [ DB ] INIT mysql
+[ info ] [ LOG ] INIT File
+[ sql ] [ DB ] CONNECT:[ UseTime:0.014759s ] mysql:host=192.168.11.100;port=3306;dbname=log;charset=utf8
+[ sql ] [ SQL ] CREATE TABLE IF NOT EXISTS soaerp_log_20181018 LIKE soaerp_log [ RunTime:0.004023s ]
+[ sql ] [ SQL ] CREATE TABLE IF NOT EXISTS soaerp_log_20181018 LIKE soaerp_log [ RunTime:0.002390s ]
+[ sql ] [ DB ] CONNECT:[ UseTime:0.015426s ] mysql:host=192.168.11.100;port=3306;dbname=erp;charset=utf8
+[ sql ] [ SQL ] SHOW COLUMNS FROM `supplier` [ RunTime:0.015639s ]
+[ sql ] [ SQL ] SELECT `supplier`.`supplier_id`,`supplier`.`supplier_name`,`supplier`.`supplier_type_id`,`supplier_type`.`supplier_type_name`,supplier.country_id as city_id,country.country_name as city_name,country.pid as city_pid,`supplier`.`level_name`,`supplier`.`linkman`,`supplier`.`address`,`supplier`.`zip_code`,`supplier`.`phone`,`supplier`.`website`,`supplier`.`fax`,`supplier`.`email`,`supplier`.`supplier_number`,`supplier`.`remark`,`supplier`.`default_language_id`,`supplier`.`company_id`,`company`.`company_name`,(select nickname  from user where user.user_id = supplier_type.create_user_id) AS `create_user_name`,(select nickname  from user where user.user_id = supplier_type.update_user_id) AS `update_user_name`,(select country_name  from country as country2 where country2.country_id= city_pid) AS `province_name`,(select country_id  from country as country2 where country2.country_id= city_pid) AS `province_id`,(select country_name  from country as country2 where country2.country_id= (select pid  from country as country2 where country2.country_id= country.pid)) AS `country_name`,(select country_id  from country as country2 where country2.country_id= (select pid  from country as country2 where country2.country_id= country.pid)) AS `country_id`,`supplier`.`update_time`,`supplier`.`create_time`,`supplier`.`status` FROM `supplier` `supplier` LEFT JOIN `country` ON `supplier`.`country_id`=`country`.`country_id` INNER JOIN `supplier_type` ON `supplier_type`.`supplier_type_id`=`supplier`.`supplier_type_id` INNER JOIN `company` ON `company`.`company_id`=`supplier`.`company_id` WHERE  (  1=1  and supplier.supplier_type_id = '11' ) [ RunTime:0.007990s ]
+[ sql ] [ SQL ] CREATE TABLE IF NOT EXISTS soaerp_log_20181018 LIKE soaerp_log [ RunTime:0.002508s ]
+[ sql ] [ SQL ] CREATE TABLE IF NOT EXISTS soaerp_log_20181018 LIKE soaerp_log [ RunTime:0.002324s ]
+[ sql ] [ SQL ] SHOW COLUMNS FROM `soaerp_log_20181018` [ RunTime:0.010118s ]
+[ sql ] [ SQL ] INSERT INTO `soaerp_log_20181018` (`params` , `time` , `type` , `result` , `url`) VALUES ('{\"supplier_type_id\":11,\"appKey\":\"nexus\",\"appSecret\":\"nexusIt\",\"lang_id\":1}' , 1539864703 , 1 , '[{\"supplier_id\":41,\"supplier_name\":\"\\u4e1c\\u5357\\u4e9a\\u65c5\\u6e38\\u516c\\u53f8\",\"supplier_type_id\":11,\"supplier_type_name\":\"\\u81ea\\u8d39\\u9879\\u76ee\",\"city_id\":8,\"city_name\":\"\\u5fb7\\u56fd\\u5730\\u533a1\",\"city_pid\":7,\"level_name\":\"1\",\"linkman\":\"1\",\"address\":\"1\",\"zip_code\":\"1@qq.com\",\"phone\":\"1\",\"website\":\"1\",\"fax\":\"1\",\"email\":\"1@qq.com\",\"supplier_number\":\"LTA20181003125231\",\"remark\":\"1\",\"default_language_id\":1,\"company_id\":24,\"company_name\":\"\\u8054\\u8c0a\\u5047\\u671f-\\u534e\\u76db\\u987f\\u516c\\u53f8\",\"create_user_name\":\"admin\",\"update_user_name\":\"admin\",\"province_name\":\"\\u5fb7\\u56fd\\u57ce\\u5e021\",\"province_id\":7,\"country_name\":\"\\u5fb7\\u56fd\",\"country_id\":6,\"update_time\":1539067053,\"create_time\":1538531362,\"status\":1}]' , '127.0.0.1:7002/source/getSupplier') [ RunTime:0.033547s ]
+---------------------------------------------------------------
+[ 2018-10-18T20:11:46+08:00 ] 127.0.0.1 POST /source/getOwnExpense
+[ info ] 127.0.0.1:7002/source/getOwnExpense [运行时间：0.163571s][吞吐率：6.11req/s] [内存消耗：3,142.55kb] [文件加载：57]
+[ info ] [ LANG ] E:\xampp\htdocs\soaerp\thinkphp\lang\zh-cn.php
+[ info ] [ BIND ] 'index'
+[ info ] [ ROUTE ] array (
+  'type' => 'module',
+  'module' => 
+  array (
+    0 => 'index',
+    1 => 'source',
+    2 => 'getOwnExpense',
+  ),
+)
+[ info ] [ HEADER ] array (
+  'host' => '127.0.0.1:7002',
+  'accept' => 'application/json',
+  'content-length' => '52',
+  'content-type' => 'application/x-www-form-urlencoded',
+)
+[ info ] [ PARAM ] array (
+  '{"appKey":"nexus","appSecret":"nexusIt","lang_id":1}' => '',
+)
+[ info ] [ LANG ] E:\xampp\htdocs\soaerp\public/../application/index\lang\zh-cn.php
+[ info ] [ DB ] INIT mysql
+[ info ] [ RUN ] app\index\controller\Source->getOwnExpense[ E:\xampp\htdocs\soaerp\application\index\controller\Source.php ]
+[ info ] [ DB ] INIT mysql
+[ info ] [ LOG ] INIT File
+[ sql ] [ DB ] CONNECT:[ UseTime:0.015871s ] mysql:host=192.168.11.100;port=3306;dbname=log;charset=utf8
+[ sql ] [ SQL ] CREATE TABLE IF NOT EXISTS soaerp_log_20181018 LIKE soaerp_log [ RunTime:0.004772s ]
+[ sql ] [ SQL ] CREATE TABLE IF NOT EXISTS soaerp_log_20181018 LIKE soaerp_log [ RunTime:0.002630s ]
+[ sql ] [ DB ] CONNECT:[ UseTime:0.008279s ] mysql:host=192.168.11.100;port=3306;dbname=erp;charset=utf8
+[ sql ] [ SQL ] SHOW COLUMNS FROM `own_expense` [ RunTime:0.010844s ]
+[ sql ] [ SQL ] SELECT `own_expense`.`own_expense_id`,`own_expense`.`own_expense_name`,`own_expense`.`source_number`,`own_expense`.`default_language_id`,`own_expense`.`remark`,`own_expense`.`supplier_id`,`supplier`.`supplier_name`,`own_expense`.`supplier_type`,`own_expense`.`belong_supplier_id`,(select supplier2.supplier_name  from supplier as supplier2 where supplier2.supplier_id = own_expense.belong_supplier_id) AS `belong_supplier_name`,`own_expense`.`company_id`,`company`.`company_name`,`own_expense`.`create_time`,`source_price`.`payment_currency_type`,`source_price`.`normal_price`,`source_price`.`normal_settlement_price`,(select nickname  from user where user.user_id = own_expense.create_user_id) AS `create_user_name`,(select nickname  from user where user.user_id = own_expense.update_user_id) AS `update_user_name`,`own_expense`.`update_time`,`own_expense`.`status` FROM `own_expense` `own_expense` LEFT JOIN `source_price` ON `source_price`.`pk_id`=own_expense.own_expense_id and source_price.supplier_type_id=11 INNER JOIN `supplier` ON `supplier`.`supplier_id`=`own_expense`.`supplier_id` INNER JOIN `company` ON `company`.`company_id`=`own_expense`.`company_id` WHERE  (  1=1  ) [ RunTime:0.007599s ]
+[ sql ] [ SQL ] CREATE TABLE IF NOT EXISTS soaerp_log_20181018 LIKE soaerp_log [ RunTime:0.001768s ]
+[ sql ] [ SQL ] CREATE TABLE IF NOT EXISTS soaerp_log_20181018 LIKE soaerp_log [ RunTime:0.001776s ]
+[ sql ] [ SQL ] SHOW COLUMNS FROM `soaerp_log_20181018` [ RunTime:0.007619s ]
+[ sql ] [ SQL ] INSERT INTO `soaerp_log_20181018` (`params` , `time` , `type` , `result` , `url`) VALUES ('{\"appKey\":\"nexus\",\"appSecret\":\"nexusIt\",\"lang_id\":1}' , 1539864706 , 1 , '[{\"own_expense_id\":20,\"own_expense_name\":\"\\u5927\\u8c61\\u8df3\\u821e\",\"source_number\":\"OEX20181008537530\",\"default_language_id\":1,\"remark\":\"\\u597d\\u770b\\u5b89\\u5a1c\",\"supplier_id\":41,\"supplier_name\":\"\\u4e1c\\u5357\\u4e9a\\u65c5\\u6e38\\u516c\\u53f8\",\"supplier_type\":1,\"belong_supplier_id\":41,\"belong_supplier_name\":\"\\u4e1c\\u5357\\u4e9a\\u65c5\\u6e38\\u516c\\u53f8\",\"company_id\":24,\"company_name\":\"\\u8054\\u8c0a\\u5047\\u671f-\\u534e\\u76db\\u987f\\u516c\\u53f8\",\"create_time\":1539002490,\"payment_currency_type\":1,\"normal_price\":21,\"normal_settlement_price\":21,\"create_user_name\":\"admin\",\"update_user_name\":\"admin\",\"update_time\":1539002490,\"status\":1},{\"own_expense_id\":21,\"own_expense_name\":\"\\u5927\\u8c61\\u8df3\\u821e\",\"source_number\":\"OEX20181008537530\",\"default_language_id\":1,\"remark\":\"\\u597d\\u770b\\u5b89\\u5a1c\",\"supplier_id\":2,\"supplier_name\":\"\\u643a\\u7a0b\",\"supplier_type\":2,\"belong_supplier_id\":41,\"belong_supplier_name\":\"\\u4e1c\\u5357\\u4e9a\\u65c5\\u6e38\\u516c\\u53f8\",\"company_id\":24,\"company_name\":\"\\u8054\\u8c0a\\u5047\\u671f-\\u534e\\u76db\\u987f\\u516c\\u53f8\",\"create_time\":1539002490,\"payment_currency_type\":1,\"normal_price\":21,\"normal_settlement_price\":21,\"create_user_name\":\"admin\",\"update_user_name\":\"admin\",\"update_time\":1539002490,\"status\":1},{\"own_expense_id\":22,\"own_expense_name\":\"\\u7cbe\\u6cb9\\u6309\\u6469\",\"source_number\":\"OEX20181008383064\",\"default_language_id\":1,\"remark\":\"\\u723d\\u554a\",\"supplier_id\":41,\"supplier_name\":\"\\u4e1c\\u5357\\u4e9a\\u65c5\\u6e38\\u516c\\u53f8\",\"supplier_type\":1,\"belong_supplier_id\":41,\"belong_supplier_name\":\"\\u4e1c\\u5357\\u4e9a\\u65c5\\u6e38\\u516c\\u53f8\",\"company_id\":24,\"company_name\":\"\\u8054\\u8c0a\\u5047\\u671f-\\u534e\\u76db\\u987f\\u516c\\u53f8\",\"create_time\":1539002927,\"payment_currency_type\":1,\"normal_price\":550,\"normal_settlement_price\":500,\"create_user_name\":\"admin\",\"update_user_name\":\"admin\",\"update_time\":1539002927,\"status\":1},{\"own_expense_id\":23,\"own_expense_name\":\"\\u86c7\\u6bd2\\u9152\",\"source_number\":\"OEX20181010941795\",\"default_language_id\":1,\"remark\":\"1113\",\"supplier_id\":41,\"supplier_name\":\"\\u4e1c\\u5357\\u4e9a\\u65c5\\u6e38\\u516c\\u53f8\",\"supplier_type\":1,\"belong_supplier_id\":41,\"belong_supplier_name\":\"\\u4e1c\\u5357\\u4e9a\\u65c5\\u6e38\\u516c\\u53f8\",\"company_id\":24,\"company_name\":\"\\u8054\\u8c0a\\u5047\\u671f-\\u534e\\u76db\\u987f\\u516c\\u53f8\",\"create_time\":1539132790,\"payment_currency_type\":1,\"normal_price\":80,\"normal_settlement_price\":80,\"create_user_name\":\"admin\",\"update_user_name\":\"admin\",\"update_time\":1539132790,\"status\":1},{\"own_expense_id\":24,\"own_expense_name\":\"\\u86c7\\u6bd2\\u9152\",\"source_number\":\"OEX20181010941795\",\"default_language_id\":1,\"remark\":\"1113\",\"supplier_id\":3,\"supplier_name\":\"\\u9a74\\u5988\\u5988\",\"supplier_type\":2,\"belong_supplier_id\":41,\"belong_supplier_name\":\"\\u4e1c\\u5357\\u4e9a\\u65c5\\u6e38\\u516c\\u53f8\",\"company_id\":24,\"company_name\":\"\\u8054\\u8c0a\\u5047\\u671f-\\u534e\\u76db\\u987f\\u516c\\u53f8\",\"create_time\":1539132790,\"payment_currency_type\":1,\"normal_price\":80,\"normal_settlement_price\":80,\"create_user_name\":\"admin\",\"update_user_name\":\"admin\",\"update_time\":1539132790,\"status\":1}]' , '127.0.0.1:7002/source/getOwnExpense') [ RunTime:0.049774s ]
+[ error ] [8]未定义数组索引: company_id[E:\xampp\htdocs\soaerp\application\index\model\source\OwnExpense.php:110]
+---------------------------------------------------------------
+[ 2018-10-18T20:13:54+08:00 ] 127.0.0.1 POST /source/getOwnExpense
+[ info ] 127.0.0.1:7002/source/getOwnExpense [运行时间：0.187669s][吞吐率：5.33req/s] [内存消耗：3,142.55kb] [文件加载：57]
+[ info ] [ LANG ] E:\xampp\htdocs\soaerp\thinkphp\lang\zh-cn.php
+[ info ] [ BIND ] 'index'
+[ info ] [ ROUTE ] array (
+  'type' => 'module',
+  'module' => 
+  array (
+    0 => 'index',
+    1 => 'source',
+    2 => 'getOwnExpense',
+  ),
+)
+[ info ] [ HEADER ] array (
+  'host' => '127.0.0.1:7002',
+  'accept' => 'application/json',
+  'content-length' => '52',
+  'content-type' => 'application/x-www-form-urlencoded',
+)
+[ info ] [ PARAM ] array (
+  '{"appKey":"nexus","appSecret":"nexusIt","lang_id":1}' => '',
+)
+[ info ] [ LANG ] E:\xampp\htdocs\soaerp\public/../application/index\lang\zh-cn.php
+[ info ] [ DB ] INIT mysql
+[ info ] [ RUN ] app\index\controller\Source->getOwnExpense[ E:\xampp\htdocs\soaerp\application\index\controller\Source.php ]
+[ info ] [ DB ] INIT mysql
+[ info ] [ LOG ] INIT File
+[ sql ] [ DB ] CONNECT:[ UseTime:0.014974s ] mysql:host=192.168.11.100;port=3306;dbname=log;charset=utf8
+[ sql ] [ SQL ] CREATE TABLE IF NOT EXISTS soaerp_log_20181018 LIKE soaerp_log [ RunTime:0.003872s ]
+[ sql ] [ SQL ] CREATE TABLE IF NOT EXISTS soaerp_log_20181018 LIKE soaerp_log [ RunTime:0.002017s ]
+[ sql ] [ DB ] CONNECT:[ UseTime:0.016980s ] mysql:host=192.168.11.100;port=3306;dbname=erp;charset=utf8
+[ sql ] [ SQL ] SHOW COLUMNS FROM `own_expense` [ RunTime:0.009744s ]
+[ sql ] [ SQL ] SELECT `own_expense`.`own_expense_id`,`own_expense`.`own_expense_name`,`own_expense`.`source_number`,`own_expense`.`default_language_id`,`own_expense`.`remark`,`own_expense`.`supplier_id`,`supplier`.`supplier_name`,`own_expense`.`supplier_type`,`own_expense`.`belong_supplier_id`,(select supplier2.supplier_name  from supplier as supplier2 where supplier2.supplier_id = own_expense.belong_supplier_id) AS `belong_supplier_name`,`own_expense`.`company_id`,`company`.`company_name`,`own_expense`.`create_time`,`source_price`.`payment_currency_type`,`source_price`.`normal_price`,`source_price`.`normal_settlement_price`,(select nickname  from user where user.user_id = own_expense.create_user_id) AS `create_user_name`,(select nickname  from user where user.user_id = own_expense.update_user_id) AS `update_user_name`,`own_expense`.`update_time`,`own_expense`.`status` FROM `own_expense` `own_expense` LEFT JOIN `source_price` ON `source_price`.`pk_id`=own_expense.own_expense_id and source_price.supplier_type_id=11 INNER JOIN `supplier` ON `supplier`.`supplier_id`=`own_expense`.`supplier_id` INNER JOIN `company` ON `company`.`company_id`=`own_expense`.`company_id` WHERE  (  1=1  ) [ RunTime:0.015903s ]
+[ sql ] [ SQL ] CREATE TABLE IF NOT EXISTS soaerp_log_20181018 LIKE soaerp_log [ RunTime:0.001964s ]
+[ sql ] [ SQL ] CREATE TABLE IF NOT EXISTS soaerp_log_20181018 LIKE soaerp_log [ RunTime:0.002416s ]
+[ sql ] [ SQL ] SHOW COLUMNS FROM `soaerp_log_20181018` [ RunTime:0.007662s ]
+[ sql ] [ SQL ] INSERT INTO `soaerp_log_20181018` (`params` , `time` , `type` , `result` , `url`) VALUES ('{\"appKey\":\"nexus\",\"appSecret\":\"nexusIt\",\"lang_id\":1}' , 1539864834 , 1 , '[{\"own_expense_id\":20,\"own_expense_name\":\"\\u5927\\u8c61\\u8df3\\u821e\",\"source_number\":\"OEX20181008537531\",\"default_language_id\":1,\"remark\":\"\\u597d\\u770b\\u5b89\\u5a1c\",\"supplier_id\":41,\"supplier_name\":\"\\u4e1c\\u5357\\u4e9a\\u65c5\\u6e38\\u516c\\u53f8\",\"supplier_type\":1,\"belong_supplier_id\":41,\"belong_supplier_name\":\"\\u4e1c\\u5357\\u4e9a\\u65c5\\u6e38\\u516c\\u53f8\",\"company_id\":24,\"company_name\":\"\\u8054\\u8c0a\\u5047\\u671f-\\u534e\\u76db\\u987f\\u516c\\u53f8\",\"create_time\":1539002490,\"payment_currency_type\":1,\"normal_price\":21,\"normal_settlement_price\":21,\"create_user_name\":\"admin\",\"update_user_name\":\"admin\",\"update_time\":1539002490,\"status\":1},{\"own_expense_id\":21,\"own_expense_name\":\"\\u5927\\u8c61\\u8df3\\u821e\",\"source_number\":\"OEX20181008537530\",\"default_language_id\":1,\"remark\":\"\\u597d\\u770b\\u5b89\\u5a1c\",\"supplier_id\":2,\"supplier_name\":\"\\u643a\\u7a0b\",\"supplier_type\":2,\"belong_supplier_id\":41,\"belong_supplier_name\":\"\\u4e1c\\u5357\\u4e9a\\u65c5\\u6e38\\u516c\\u53f8\",\"company_id\":24,\"company_name\":\"\\u8054\\u8c0a\\u5047\\u671f-\\u534e\\u76db\\u987f\\u516c\\u53f8\",\"create_time\":1539002490,\"payment_currency_type\":1,\"normal_price\":21,\"normal_settlement_price\":21,\"create_user_name\":\"admin\",\"update_user_name\":\"admin\",\"update_time\":1539002490,\"status\":1},{\"own_expense_id\":22,\"own_expense_name\":\"\\u7cbe\\u6cb9\\u6309\\u6469\",\"source_number\":\"OEX20181008383064\",\"default_language_id\":1,\"remark\":\"\\u723d\\u554a\",\"supplier_id\":41,\"supplier_name\":\"\\u4e1c\\u5357\\u4e9a\\u65c5\\u6e38\\u516c\\u53f8\",\"supplier_type\":1,\"belong_supplier_id\":41,\"belong_supplier_name\":\"\\u4e1c\\u5357\\u4e9a\\u65c5\\u6e38\\u516c\\u53f8\",\"company_id\":24,\"company_name\":\"\\u8054\\u8c0a\\u5047\\u671f-\\u534e\\u76db\\u987f\\u516c\\u53f8\",\"create_time\":1539002927,\"payment_currency_type\":1,\"normal_price\":550,\"normal_settlement_price\":500,\"create_user_name\":\"admin\",\"update_user_name\":\"admin\",\"update_time\":1539002927,\"status\":1},{\"own_expense_id\":23,\"own_expense_name\":\"\\u86c7\\u6bd2\\u9152\",\"source_number\":\"OEX20181010941791\",\"default_language_id\":1,\"remark\":\"1113\",\"supplier_id\":41,\"supplier_name\":\"\\u4e1c\\u5357\\u4e9a\\u65c5\\u6e38\\u516c\\u53f8\",\"supplier_type\":1,\"belong_supplier_id\":41,\"belong_supplier_name\":\"\\u4e1c\\u5357\\u4e9a\\u65c5\\u6e38\\u516c\\u53f8\",\"company_id\":24,\"company_name\":\"\\u8054\\u8c0a\\u5047\\u671f-\\u534e\\u76db\\u987f\\u516c\\u53f8\",\"create_time\":1539132790,\"payment_currency_type\":1,\"normal_price\":80,\"normal_settlement_price\":80,\"create_user_name\":\"admin\",\"update_user_name\":\"admin\",\"update_time\":1539132790,\"status\":1},{\"own_expense_id\":24,\"own_expense_name\":\"\\u86c7\\u6bd2\\u9152\",\"source_number\":\"OEX20181010941795\",\"default_language_id\":1,\"remark\":\"1113\",\"supplier_id\":3,\"supplier_name\":\"\\u9a74\\u5988\\u5988\",\"supplier_type\":2,\"belong_supplier_id\":41,\"belong_supplier_name\":\"\\u4e1c\\u5357\\u4e9a\\u65c5\\u6e38\\u516c\\u53f8\",\"company_id\":24,\"company_name\":\"\\u8054\\u8c0a\\u5047\\u671f-\\u534e\\u76db\\u987f\\u516c\\u53f8\",\"create_time\":1539132790,\"payment_currency_type\":1,\"normal_price\":80,\"normal_settlement_price\":80,\"create_user_name\":\"admin\",\"update_user_name\":\"admin\",\"update_time\":1539132790,\"status\":1}]' , '127.0.0.1:7002/source/getOwnExpense') [ RunTime:0.049941s ]
+[ error ] [8]未定义数组索引: company_id[E:\xampp\htdocs\soaerp\application\index\model\source\OwnExpense.php:110]
+---------------------------------------------------------------
+[ 2018-10-18T20:13:55+08:00 ] 127.0.0.1 POST /source/getOwnExpenseLanguage
+[ info ] 127.0.0.1:7002/source/getOwnExpenseLanguage [运行时间：0.208859s][吞吐率：4.79req/s] [内存消耗：3,101.95kb] [文件加载：54]
+[ info ] [ LANG ] E:\xampp\htdocs\soaerp\thinkphp\lang\zh-cn.php
+[ info ] [ BIND ] 'index'
+[ info ] [ ROUTE ] array (
+  'type' => 'module',
+  'module' => 
+  array (
+    0 => 'index',
+    1 => 'source',
+    2 => 'getOwnExpenseLanguage',
+  ),
+)
+[ info ] [ HEADER ] array (
+  'host' => '127.0.0.1:7002',
+  'accept' => 'application/json',
+  'content-length' => '88',
+  'content-type' => 'application/x-www-form-urlencoded',
+)
+[ info ] [ PARAM ] array (
+  '{"source_number":"OEX20181008537531","appKey":"nexus","appSecret":"nexusIt","lang_id":1}' => '',
+)
+[ info ] [ LANG ] E:\xampp\htdocs\soaerp\public/../application/index\lang\zh-cn.php
+[ info ] [ DB ] INIT mysql
+[ info ] [ RUN ] app\index\controller\Source->getOwnExpenseLanguage[ E:\xampp\htdocs\soaerp\application\index\controller\Source.php ]
+[ info ] [ DB ] INIT mysql
+[ info ] [ LOG ] INIT File
+[ sql ] [ DB ] CONNECT:[ UseTime:0.007632s ] mysql:host=192.168.11.100;port=3306;dbname=log;charset=utf8
+[ sql ] [ SQL ] CREATE TABLE IF NOT EXISTS soaerp_log_20181018 LIKE soaerp_log [ RunTime:0.004561s ]
+[ sql ] [ SQL ] CREATE TABLE IF NOT EXISTS soaerp_log_20181018 LIKE soaerp_log [ RunTime:0.002650s ]
+[ sql ] [ DB ] CONNECT:[ UseTime:0.016179s ] mysql:host=192.168.11.100;port=3306;dbname=erp;charset=utf8
+[ sql ] [ SQL ] SHOW COLUMNS FROM `language` [ RunTime:0.014252s ]
+[ sql ] [ SQL ] SELECT `language`.`language_id`,`language`.`language_name`,`language`.`create_time`,(select nickname  from user where user.user_id = language.create_user_id) AS `create_user_name`,(select nickname  from user where user.user_id = language.update_user_id) AS `update_user_name`,`language`.`update_time`,`language`.`status` FROM `language` `language` WHERE  `status` = 1 ORDER BY `create_time` DESC [ RunTime:0.036077s ]
+[ sql ] [ SQL ] SHOW COLUMNS FROM `own_expense_language` [ RunTime:0.015587s ]
+[ sql ] [ SQL ] SELECT * FROM `own_expense_language` WHERE  `language_id` = 3  AND `source_number` = 'OEX20181008537531' LIMIT 1 [ RunTime:0.004848s ]
+[ sql ] [ SQL ] SELECT * FROM `own_expense_language` WHERE  `language_id` = 2  AND `source_number` = 'OEX20181008537531' LIMIT 1 [ RunTime:0.003962s ]
+[ sql ] [ SQL ] SELECT * FROM `own_expense_language` WHERE  `language_id` = 1  AND `source_number` = 'OEX20181008537531' LIMIT 1 [ RunTime:0.005748s ]
+[ sql ] [ SQL ] CREATE TABLE IF NOT EXISTS soaerp_log_20181018 LIKE soaerp_log [ RunTime:0.001970s ]
+[ sql ] [ SQL ] CREATE TABLE IF NOT EXISTS soaerp_log_20181018 LIKE soaerp_log [ RunTime:0.001901s ]
+[ sql ] [ SQL ] SHOW COLUMNS FROM `soaerp_log_20181018` [ RunTime:0.007254s ]
+[ sql ] [ SQL ] INSERT INTO `soaerp_log_20181018` (`params` , `time` , `type` , `result` , `url`) VALUES ('{\"source_number\":\"OEX20181008537531\",\"appKey\":\"nexus\",\"appSecret\":\"nexusIt\",\"lang_id\":1}' , 1539864835 , 1 , '[{\"language_id\":3,\"language_name\":\"japan\",\"create_time\":1532402015,\"create_user_name\":\"\\u80e1\\u4f0a\\u654f\",\"update_user_name\":\"admin\",\"update_time\":1534304089,\"status\":1,\"language_info\":null},{\"language_id\":2,\"language_name\":\"english\",\"create_time\":1532401866,\"create_user_name\":\"\\u80e1\\u4f0a\\u654f\",\"update_user_name\":\"\\u80e1\\u4f0a\\u654f\",\"update_time\":1532574269,\"status\":1,\"language_info\":null},{\"language_id\":1,\"language_name\":\"\\u4e2d\\u6587\",\"create_time\":1532400025,\"create_user_name\":\"admin\",\"update_user_name\":\"admin\",\"update_time\":1534303834,\"status\":1,\"language_info\":{\"own_expense_language_id\":20,\"source_number\":\"OEX20181008537531\",\"own_expense_name\":\"\\u5927\\u8c61\\u8df3\\u821e\",\"language_id\":1,\"create_time\":1539002490,\"create_user_id\":1,\"update_time\":1539002490,\"update_user_id\":1,\"status\":1}}]' , '127.0.0.1:7002/source/getOwnExpenseLanguage') [ RunTime:0.035953s ]
+---------------------------------------------------------------
+[ 2018-10-18T20:13:59+08:00 ] 127.0.0.1 POST /source/getOwnExpense
+[ info ] 127.0.0.1:7002/source/getOwnExpense [运行时间：0.178850s][吞吐率：5.59req/s] [内存消耗：3,142.55kb] [文件加载：57]
+[ info ] [ LANG ] E:\xampp\htdocs\soaerp\thinkphp\lang\zh-cn.php
+[ info ] [ BIND ] 'index'
+[ info ] [ ROUTE ] array (
+  'type' => 'module',
+  'module' => 
+  array (
+    0 => 'index',
+    1 => 'source',
+    2 => 'getOwnExpense',
+  ),
+)
+[ info ] [ HEADER ] array (
+  'host' => '127.0.0.1:7002',
+  'accept' => 'application/json',
+  'content-length' => '52',
+  'content-type' => 'application/x-www-form-urlencoded',
+)
+[ info ] [ PARAM ] array (
+  '{"appKey":"nexus","appSecret":"nexusIt","lang_id":1}' => '',
+)
+[ info ] [ LANG ] E:\xampp\htdocs\soaerp\public/../application/index\lang\zh-cn.php
+[ info ] [ DB ] INIT mysql
+[ info ] [ RUN ] app\index\controller\Source->getOwnExpense[ E:\xampp\htdocs\soaerp\application\index\controller\Source.php ]
+[ info ] [ DB ] INIT mysql
+[ info ] [ LOG ] INIT File
+[ sql ] [ DB ] CONNECT:[ UseTime:0.017982s ] mysql:host=192.168.11.100;port=3306;dbname=log;charset=utf8
+[ sql ] [ SQL ] CREATE TABLE IF NOT EXISTS soaerp_log_20181018 LIKE soaerp_log [ RunTime:0.005834s ]
+[ sql ] [ SQL ] CREATE TABLE IF NOT EXISTS soaerp_log_20181018 LIKE soaerp_log [ RunTime:0.003146s ]
+[ sql ] [ DB ] CONNECT:[ UseTime:0.010756s ] mysql:host=192.168.11.100;port=3306;dbname=erp;charset=utf8
+[ sql ] [ SQL ] SHOW COLUMNS FROM `own_expense` [ RunTime:0.012510s ]
+[ sql ] [ SQL ] SELECT `own_expense`.`own_expense_id`,`own_expense`.`own_expense_name`,`own_expense`.`source_number`,`own_expense`.`default_language_id`,`own_expense`.`remark`,`own_expense`.`supplier_id`,`supplier`.`supplier_name`,`own_expense`.`supplier_type`,`own_expense`.`belong_supplier_id`,(select supplier2.supplier_name  from supplier as supplier2 where supplier2.supplier_id = own_expense.belong_supplier_id) AS `belong_supplier_name`,`own_expense`.`company_id`,`company`.`company_name`,`own_expense`.`create_time`,`source_price`.`payment_currency_type`,`source_price`.`normal_price`,`source_price`.`normal_settlement_price`,(select nickname  from user where user.user_id = own_expense.create_user_id) AS `create_user_name`,(select nickname  from user where user.user_id = own_expense.update_user_id) AS `update_user_name`,`own_expense`.`update_time`,`own_expense`.`status` FROM `own_expense` `own_expense` LEFT JOIN `source_price` ON `source_price`.`pk_id`=own_expense.own_expense_id and source_price.supplier_type_id=11 INNER JOIN `supplier` ON `supplier`.`supplier_id`=`own_expense`.`supplier_id` INNER JOIN `company` ON `company`.`company_id`=`own_expense`.`company_id` WHERE  (  1=1  ) [ RunTime:0.007345s ]
+[ sql ] [ SQL ] CREATE TABLE IF NOT EXISTS soaerp_log_20181018 LIKE soaerp_log [ RunTime:0.003616s ]
+[ sql ] [ SQL ] CREATE TABLE IF NOT EXISTS soaerp_log_20181018 LIKE soaerp_log [ RunTime:0.002332s ]
+[ sql ] [ SQL ] SHOW COLUMNS FROM `soaerp_log_20181018` [ RunTime:0.009307s ]
+[ sql ] [ SQL ] INSERT INTO `soaerp_log_20181018` (`params` , `time` , `type` , `result` , `url`) VALUES ('{\"appKey\":\"nexus\",\"appSecret\":\"nexusIt\",\"lang_id\":1}' , 1539864839 , 1 , '[{\"own_expense_id\":20,\"own_expense_name\":\"\\u5927\\u8c61\\u8df3\\u821e\",\"source_number\":\"OEX20181008537531\",\"default_language_id\":1,\"remark\":\"\\u597d\\u770b\\u5b89\\u5a1c\",\"supplier_id\":41,\"supplier_name\":\"\\u4e1c\\u5357\\u4e9a\\u65c5\\u6e38\\u516c\\u53f8\",\"supplier_type\":1,\"belong_supplier_id\":41,\"belong_supplier_name\":\"\\u4e1c\\u5357\\u4e9a\\u65c5\\u6e38\\u516c\\u53f8\",\"company_id\":24,\"company_name\":\"\\u8054\\u8c0a\\u5047\\u671f-\\u534e\\u76db\\u987f\\u516c\\u53f8\",\"create_time\":1539002490,\"payment_currency_type\":1,\"normal_price\":21,\"normal_settlement_price\":21,\"create_user_name\":\"admin\",\"update_user_name\":\"admin\",\"update_time\":1539002490,\"status\":1},{\"own_expense_id\":21,\"own_expense_name\":\"\\u5927\\u8c61\\u8df3\\u821e\",\"source_number\":\"OEX20181008537530\",\"default_language_id\":1,\"remark\":\"\\u597d\\u770b\\u5b89\\u5a1c\",\"supplier_id\":2,\"supplier_name\":\"\\u643a\\u7a0b\",\"supplier_type\":2,\"belong_supplier_id\":41,\"belong_supplier_name\":\"\\u4e1c\\u5357\\u4e9a\\u65c5\\u6e38\\u516c\\u53f8\",\"company_id\":24,\"company_name\":\"\\u8054\\u8c0a\\u5047\\u671f-\\u534e\\u76db\\u987f\\u516c\\u53f8\",\"create_time\":1539002490,\"payment_currency_type\":1,\"normal_price\":21,\"normal_settlement_price\":21,\"create_user_name\":\"admin\",\"update_user_name\":\"admin\",\"update_time\":1539002490,\"status\":1},{\"own_expense_id\":22,\"own_expense_name\":\"\\u7cbe\\u6cb9\\u6309\\u6469\",\"source_number\":\"OEX20181008383064\",\"default_language_id\":1,\"remark\":\"\\u723d\\u554a\",\"supplier_id\":41,\"supplier_name\":\"\\u4e1c\\u5357\\u4e9a\\u65c5\\u6e38\\u516c\\u53f8\",\"supplier_type\":1,\"belong_supplier_id\":41,\"belong_supplier_name\":\"\\u4e1c\\u5357\\u4e9a\\u65c5\\u6e38\\u516c\\u53f8\",\"company_id\":24,\"company_name\":\"\\u8054\\u8c0a\\u5047\\u671f-\\u534e\\u76db\\u987f\\u516c\\u53f8\",\"create_time\":1539002927,\"payment_currency_type\":1,\"normal_price\":550,\"normal_settlement_price\":500,\"create_user_name\":\"admin\",\"update_user_name\":\"admin\",\"update_time\":1539002927,\"status\":1},{\"own_expense_id\":23,\"own_expense_name\":\"\\u86c7\\u6bd2\\u9152\",\"source_number\":\"OEX20181010941791\",\"default_language_id\":1,\"remark\":\"1113\",\"supplier_id\":41,\"supplier_name\":\"\\u4e1c\\u5357\\u4e9a\\u65c5\\u6e38\\u516c\\u53f8\",\"supplier_type\":1,\"belong_supplier_id\":41,\"belong_supplier_name\":\"\\u4e1c\\u5357\\u4e9a\\u65c5\\u6e38\\u516c\\u53f8\",\"company_id\":24,\"company_name\":\"\\u8054\\u8c0a\\u5047\\u671f-\\u534e\\u76db\\u987f\\u516c\\u53f8\",\"create_time\":1539132790,\"payment_currency_type\":1,\"normal_price\":80,\"normal_settlement_price\":80,\"create_user_name\":\"admin\",\"update_user_name\":\"admin\",\"update_time\":1539132790,\"status\":1},{\"own_expense_id\":24,\"own_expense_name\":\"\\u86c7\\u6bd2\\u9152\",\"source_number\":\"OEX20181010941795\",\"default_language_id\":1,\"remark\":\"1113\",\"supplier_id\":3,\"supplier_name\":\"\\u9a74\\u5988\\u5988\",\"supplier_type\":2,\"belong_supplier_id\":41,\"belong_supplier_name\":\"\\u4e1c\\u5357\\u4e9a\\u65c5\\u6e38\\u516c\\u53f8\",\"company_id\":24,\"company_name\":\"\\u8054\\u8c0a\\u5047\\u671f-\\u534e\\u76db\\u987f\\u516c\\u53f8\",\"create_time\":1539132790,\"payment_currency_type\":1,\"normal_price\":80,\"normal_settlement_price\":80,\"create_user_name\":\"admin\",\"update_user_name\":\"admin\",\"update_time\":1539132790,\"status\":1}]' , '127.0.0.1:7002/source/getOwnExpense') [ RunTime:0.052472s ]
+[ error ] [8]未定义数组索引: company_id[E:\xampp\htdocs\soaerp\application\index\model\source\OwnExpense.php:110]
+---------------------------------------------------------------
+[ 2018-10-18T20:14:07+08:00 ] 127.0.0.1 POST /source/getOwnExpenseLanguage
+[ info ] 127.0.0.1:7002/source/getOwnExpenseLanguage [运行时间：0.303100s][吞吐率：3.30req/s] [内存消耗：3,101.95kb] [文件加载：54]
+[ info ] [ LANG ] E:\xampp\htdocs\soaerp\thinkphp\lang\zh-cn.php
+[ info ] [ BIND ] 'index'
+[ info ] [ ROUTE ] array (
+  'type' => 'module',
+  'module' => 
+  array (
+    0 => 'index',
+    1 => 'source',
+    2 => 'getOwnExpenseLanguage',
+  ),
+)
+[ info ] [ HEADER ] array (
+  'host' => '127.0.0.1:7002',
+  'accept' => 'application/json',
+  'content-length' => '88',
+  'content-type' => 'application/x-www-form-urlencoded',
+)
+[ info ] [ PARAM ] array (
+  '{"source_number":"OEX20181008537531","appKey":"nexus","appSecret":"nexusIt","lang_id":1}' => '',
+)
+[ info ] [ LANG ] E:\xampp\htdocs\soaerp\public/../application/index\lang\zh-cn.php
+[ info ] [ DB ] INIT mysql
+[ info ] [ RUN ] app\index\controller\Source->getOwnExpenseLanguage[ E:\xampp\htdocs\soaerp\application\index\controller\Source.php ]
+[ info ] [ DB ] INIT mysql
+[ info ] [ LOG ] INIT File
+[ sql ] [ DB ] CONNECT:[ UseTime:0.016524s ] mysql:host=192.168.11.100;port=3306;dbname=log;charset=utf8
+[ sql ] [ SQL ] CREATE TABLE IF NOT EXISTS soaerp_log_20181018 LIKE soaerp_log [ RunTime:0.005893s ]
+[ sql ] [ SQL ] CREATE TABLE IF NOT EXISTS soaerp_log_20181018 LIKE soaerp_log [ RunTime:0.003156s ]
+[ sql ] [ DB ] CONNECT:[ UseTime:0.011796s ] mysql:host=192.168.11.100;port=3306;dbname=erp;charset=utf8
+[ sql ] [ SQL ] SHOW COLUMNS FROM `language` [ RunTime:0.102008s ]
+[ sql ] [ SQL ] SELECT `language`.`language_id`,`language`.`language_name`,`language`.`create_time`,(select nickname  from user where user.user_id = language.create_user_id) AS `create_user_name`,(select nickname  from user where user.user_id = language.update_user_id) AS `update_user_name`,`language`.`update_time`,`language`.`status` FROM `language` `language` WHERE  `status` = 1 ORDER BY `create_time` DESC [ RunTime:0.007522s ]
+[ sql ] [ SQL ] SHOW COLUMNS FROM `own_expense_language` [ RunTime:0.012874s ]
+[ sql ] [ SQL ] SELECT * FROM `own_expense_language` WHERE  `language_id` = 3  AND `source_number` = 'OEX20181008537531' LIMIT 1 [ RunTime:0.006354s ]
+[ sql ] [ SQL ] SELECT * FROM `own_expense_language` WHERE  `language_id` = 2  AND `source_number` = 'OEX20181008537531' LIMIT 1 [ RunTime:0.007250s ]
+[ sql ] [ SQL ] SELECT * FROM `own_expense_language` WHERE  `language_id` = 1  AND `source_number` = 'OEX20181008537531' LIMIT 1 [ RunTime:0.006581s ]
+[ sql ] [ SQL ] CREATE TABLE IF NOT EXISTS soaerp_log_20181018 LIKE soaerp_log [ RunTime:0.003550s ]
+[ sql ] [ SQL ] CREATE TABLE IF NOT EXISTS soaerp_log_20181018 LIKE soaerp_log [ RunTime:0.002449s ]
+[ sql ] [ SQL ] SHOW COLUMNS FROM `soaerp_log_20181018` [ RunTime:0.014659s ]
+[ sql ] [ SQL ] INSERT INTO `soaerp_log_20181018` (`params` , `time` , `type` , `result` , `url`) VALUES ('{\"source_number\":\"OEX20181008537531\",\"appKey\":\"nexus\",\"appSecret\":\"nexusIt\",\"lang_id\":1}' , 1539864847 , 1 , '[{\"language_id\":3,\"language_name\":\"japan\",\"create_time\":1532402015,\"create_user_name\":\"\\u80e1\\u4f0a\\u654f\",\"update_user_name\":\"admin\",\"update_time\":1534304089,\"status\":1,\"language_info\":null},{\"language_id\":2,\"language_name\":\"english\",\"create_time\":1532401866,\"create_user_name\":\"\\u80e1\\u4f0a\\u654f\",\"update_user_name\":\"\\u80e1\\u4f0a\\u654f\",\"update_time\":1532574269,\"status\":1,\"language_info\":null},{\"language_id\":1,\"language_name\":\"\\u4e2d\\u6587\",\"create_time\":1532400025,\"create_user_name\":\"admin\",\"update_user_name\":\"admin\",\"update_time\":1534303834,\"status\":1,\"language_info\":{\"own_expense_language_id\":20,\"source_number\":\"OEX20181008537531\",\"own_expense_name\":\"\\u5927\\u8c61\\u8df3\\u821e\",\"language_id\":1,\"create_time\":1539002490,\"create_user_id\":1,\"update_time\":1539002490,\"update_user_id\":1,\"status\":1}}]' , '127.0.0.1:7002/source/getOwnExpenseLanguage') [ RunTime:0.049182s ]
+---------------------------------------------------------------
+[ 2018-10-18T20:14:10+08:00 ] 127.0.0.1 POST /source/updateOwnExpenseLanguageByOwnExpenseLanguageId
+[ info ] 127.0.0.1:7002/source/updateOwnExpenseLanguageByOwnExpenseLanguageId [运行时间：0.249824s][吞吐率：4.00req/s] [内存消耗：3,092.63kb] [文件加载：57]
+[ info ] [ LANG ] E:\xampp\htdocs\soaerp\thinkphp\lang\zh-cn.php
+[ info ] [ BIND ] 'index'
+[ info ] [ ROUTE ] array (
+  'type' => 'module',
+  'module' => 
+  array (
+    0 => 'index',
+    1 => 'source',
+    2 => 'updateOwnExpenseLanguageByOwnExpenseLanguageId',
+  ),
+)
+[ info ] [ HEADER ] array (
+  'host' => '127.0.0.1:7002',
+  'accept' => 'application/json',
+  'content-length' => '411',
+  'content-type' => 'application/x-www-form-urlencoded',
+)
+[ info ] [ PARAM ] array (
+  '{"data":' => 
+  array (
+    '{"lang_id":"3","own_expense_language_id":"","source_number":"OEX20181008537531","own_expense_name":"1"},{"lang_id":"2","own_expense_language_id":"","source_number":"OEX20181008537531","own_expense_name":"2"},{"lang_id":"1","own_expense_language_id":"20","source_number":"OEX20181008537531","own_expense_name":"\\u5927\\u8c61\\u8df3\\u821e3"}' => '',
+  ),
+)
+[ info ] [ LANG ] E:\xampp\htdocs\soaerp\public/../application/index\lang\zh-cn.php
+[ info ] [ DB ] INIT mysql
+[ info ] [ RUN ] app\index\controller\Source->updateOwnExpenseLanguageByOwnExpenseLanguageId[ E:\xampp\htdocs\soaerp\application\index\controller\Source.php ]
+[ info ] [ DB ] INIT mysql
+[ info ] [ LOG ] INIT File
+[ sql ] [ DB ] CONNECT:[ UseTime:0.007381s ] mysql:host=192.168.11.100;port=3306;dbname=log;charset=utf8
+[ sql ] [ SQL ] CREATE TABLE IF NOT EXISTS soaerp_log_20181018 LIKE soaerp_log [ RunTime:0.008048s ]
+[ sql ] [ SQL ] CREATE TABLE IF NOT EXISTS soaerp_log_20181018 LIKE soaerp_log [ RunTime:0.002859s ]
+[ sql ] [ DB ] CONNECT:[ UseTime:0.008127s ] mysql:host=192.168.11.100;port=3306;dbname=erp;charset=utf8
+[ sql ] [ SQL ] SHOW COLUMNS FROM `own_expense` [ RunTime:0.012752s ]
+[ sql ] [ SQL ] SELECT `own_expense`.`own_expense_id`,`own_expense`.`own_expense_name`,`own_expense`.`source_number`,`own_expense`.`default_language_id`,`own_expense`.`remark`,`own_expense`.`supplier_id`,`supplier`.`supplier_name`,`own_expense`.`supplier_type`,`own_expense`.`belong_supplier_id`,(select supplier2.supplier_name  from supplier as supplier2 where supplier2.supplier_id = own_expense.belong_supplier_id) AS `belong_supplier_name`,`own_expense`.`company_id`,`company`.`company_name`,`own_expense`.`create_time`,`source_price`.`payment_currency_type`,`source_price`.`normal_price`,`source_price`.`normal_settlement_price`,(select nickname  from user where user.user_id = own_expense.create_user_id) AS `create_user_name`,(select nickname  from user where user.user_id = own_expense.update_user_id) AS `update_user_name`,`own_expense`.`update_time`,`own_expense`.`status` FROM `own_expense` `own_expense` LEFT JOIN `source_price` ON `source_price`.`pk_id`=own_expense.own_expense_id and source_price.supplier_type_id=11 INNER JOIN `supplier` ON `supplier`.`supplier_id`=`own_expense`.`supplier_id` INNER JOIN `company` ON `company`.`company_id`=`own_expense`.`company_id` WHERE  (  1=1  and own_expense.source_number = 'OEX20181008537531' ) [ RunTime:0.005262s ]
+[ sql ] [ SQL ] SHOW COLUMNS FROM `own_expense_language` [ RunTime:0.006340s ]
+[ sql ] [ SQL ] INSERT INTO `own_expense_language` (`own_expense_name` , `update_time` , `update_user_id` , `create_time` , `create_user_id` , `status` , `source_number` , `language_id`) VALUES ('1' , 1539864850 , 8 , 1539864850 , 8 , 1 , 'OEX20181008537531' , 3) [ RunTime:0.009508s ]
+[ sql ] [ SQL ] INSERT INTO `own_expense_language` (`own_expense_name` , `update_time` , `update_user_id` , `create_time` , `create_user_id` , `status` , `source_number` , `language_id`) VALUES ('2' , 1539864850 , 8 , 1539864850 , 8 , 1 , 'OEX20181008537531' , 2) [ RunTime:0.001587s ]
+[ sql ] [ SQL ] UPDATE `own_expense_language`  SET `own_expense_name`='大象跳舞3',`update_time`=1539864850,`update_user_id`=8  WHERE  (  own_expense_language_id = 20 ) [ RunTime:0.003994s ]
+[ sql ] [ SQL ] UPDATE `own_expense`  SET `own_expense_name`='大象跳舞3',`update_time`=1539864850,`update_user_id`=8  WHERE  (  source_number = 'OEX20181008537531' ) [ RunTime:0.003590s ]
+[ sql ] [ SQL ] CREATE TABLE IF NOT EXISTS soaerp_log_20181018 LIKE soaerp_log [ RunTime:0.003820s ]
+[ sql ] [ SQL ] CREATE TABLE IF NOT EXISTS soaerp_log_20181018 LIKE soaerp_log [ RunTime:0.001534s ]
+[ sql ] [ SQL ] SHOW COLUMNS FROM `soaerp_log_20181018` [ RunTime:0.008288s ]
+[ sql ] [ SQL ] INSERT INTO `soaerp_log_20181018` (`params` , `time` , `type` , `result` , `url`) VALUES ('{\"data\":[{\"lang_id\":\"3\",\"own_expense_language_id\":\"\",\"source_number\":\"OEX20181008537531\",\"own_expense_name\":\"1\"},{\"lang_id\":\"2\",\"own_expense_language_id\":\"\",\"source_number\":\"OEX20181008537531\",\"own_expense_name\":\"2\"},{\"lang_id\":\"1\",\"own_expense_language_id\":\"20\",\"source_number\":\"OEX20181008537531\",\"own_expense_name\":\"\\u5927\\u8c61\\u8df3\\u821e3\"}],\"user_id\":8,\"appKey\":\"nexus\",\"appSecret\":\"nexusIt\",\"lang_id\":1}' , 1539864850 , 1 , '1' , '127.0.0.1:7002/source/updateOwnExpenseLanguageByOwnExpenseLanguageId') [ RunTime:0.035786s ]
+[ error ] [8]未定义数组索引: company_id[E:\xampp\htdocs\soaerp\application\index\model\source\OwnExpense.php:110]
+---------------------------------------------------------------
+[ 2018-10-18T20:14:13+08:00 ] 127.0.0.1 POST /source/getOwnExpense
+[ info ] 127.0.0.1:7002/source/getOwnExpense [运行时间：0.160980s][吞吐率：6.21req/s] [内存消耗：3,142.59kb] [文件加载：57]
+[ info ] [ LANG ] E:\xampp\htdocs\soaerp\thinkphp\lang\zh-cn.php
+[ info ] [ BIND ] 'index'
+[ info ] [ ROUTE ] array (
+  'type' => 'module',
+  'module' => 
+  array (
+    0 => 'index',
+    1 => 'source',
+    2 => 'getOwnExpense',
+  ),
+)
+[ info ] [ HEADER ] array (
+  'host' => '127.0.0.1:7002',
+  'accept' => 'application/json',
+  'content-length' => '52',
+  'content-type' => 'application/x-www-form-urlencoded',
+)
+[ info ] [ PARAM ] array (
+  '{"appKey":"nexus","appSecret":"nexusIt","lang_id":1}' => '',
+)
+[ info ] [ LANG ] E:\xampp\htdocs\soaerp\public/../application/index\lang\zh-cn.php
+[ info ] [ DB ] INIT mysql
+[ info ] [ RUN ] app\index\controller\Source->getOwnExpense[ E:\xampp\htdocs\soaerp\application\index\controller\Source.php ]
+[ info ] [ DB ] INIT mysql
+[ info ] [ LOG ] INIT File
+[ sql ] [ DB ] CONNECT:[ UseTime:0.008438s ] mysql:host=192.168.11.100;port=3306;dbname=log;charset=utf8
+[ sql ] [ SQL ] CREATE TABLE IF NOT EXISTS soaerp_log_20181018 LIKE soaerp_log [ RunTime:0.005913s ]
+[ sql ] [ SQL ] CREATE TABLE IF NOT EXISTS soaerp_log_20181018 LIKE soaerp_log [ RunTime:0.003240s ]
+[ sql ] [ DB ] CONNECT:[ UseTime:0.012203s ] mysql:host=192.168.11.100;port=3306;dbname=erp;charset=utf8
+[ sql ] [ SQL ] SHOW COLUMNS FROM `own_expense` [ RunTime:0.011679s ]
+[ sql ] [ SQL ] SELECT `own_expense`.`own_expense_id`,`own_expense`.`own_expense_name`,`own_expense`.`source_number`,`own_expense`.`default_language_id`,`own_expense`.`remark`,`own_expense`.`supplier_id`,`supplier`.`supplier_name`,`own_expense`.`supplier_type`,`own_expense`.`belong_supplier_id`,(select supplier2.supplier_name  from supplier as supplier2 where supplier2.supplier_id = own_expense.belong_supplier_id) AS `belong_supplier_name`,`own_expense`.`company_id`,`company`.`company_name`,`own_expense`.`create_time`,`source_price`.`payment_currency_type`,`source_price`.`normal_price`,`source_price`.`normal_settlement_price`,(select nickname  from user where user.user_id = own_expense.create_user_id) AS `create_user_name`,(select nickname  from user where user.user_id = own_expense.update_user_id) AS `update_user_name`,`own_expense`.`update_time`,`own_expense`.`status` FROM `own_expense` `own_expense` LEFT JOIN `source_price` ON `source_price`.`pk_id`=own_expense.own_expense_id and source_price.supplier_type_id=11 INNER JOIN `supplier` ON `supplier`.`supplier_id`=`own_expense`.`supplier_id` INNER JOIN `company` ON `company`.`company_id`=`own_expense`.`company_id` WHERE  (  1=1  ) [ RunTime:0.007370s ]
+[ sql ] [ SQL ] CREATE TABLE IF NOT EXISTS soaerp_log_20181018 LIKE soaerp_log [ RunTime:0.002388s ]
+[ sql ] [ SQL ] CREATE TABLE IF NOT EXISTS soaerp_log_20181018 LIKE soaerp_log [ RunTime:0.004154s ]
+[ sql ] [ SQL ] SHOW COLUMNS FROM `soaerp_log_20181018` [ RunTime:0.009299s ]
+[ sql ] [ SQL ] INSERT INTO `soaerp_log_20181018` (`params` , `time` , `type` , `result` , `url`) VALUES ('{\"appKey\":\"nexus\",\"appSecret\":\"nexusIt\",\"lang_id\":1}' , 1539864853 , 1 , '[{\"own_expense_id\":20,\"own_expense_name\":\"\\u5927\\u8c61\\u8df3\\u821e3\",\"source_number\":\"OEX20181008537531\",\"default_language_id\":1,\"remark\":\"\\u597d\\u770b\\u5b89\\u5a1c\",\"supplier_id\":41,\"supplier_name\":\"\\u4e1c\\u5357\\u4e9a\\u65c5\\u6e38\\u516c\\u53f8\",\"supplier_type\":1,\"belong_supplier_id\":41,\"belong_supplier_name\":\"\\u4e1c\\u5357\\u4e9a\\u65c5\\u6e38\\u516c\\u53f8\",\"company_id\":24,\"company_name\":\"\\u8054\\u8c0a\\u5047\\u671f-\\u534e\\u76db\\u987f\\u516c\\u53f8\",\"create_time\":1539002490,\"payment_currency_type\":1,\"normal_price\":21,\"normal_settlement_price\":21,\"create_user_name\":\"admin\",\"update_user_name\":\"\\u80e1\\u4f0a\\u654f\",\"update_time\":1539864850,\"status\":1},{\"own_expense_id\":21,\"own_expense_name\":\"\\u5927\\u8c61\\u8df3\\u821e\",\"source_number\":\"OEX20181008537530\",\"default_language_id\":1,\"remark\":\"\\u597d\\u770b\\u5b89\\u5a1c\",\"supplier_id\":2,\"supplier_name\":\"\\u643a\\u7a0b\",\"supplier_type\":2,\"belong_supplier_id\":41,\"belong_supplier_name\":\"\\u4e1c\\u5357\\u4e9a\\u65c5\\u6e38\\u516c\\u53f8\",\"company_id\":24,\"company_name\":\"\\u8054\\u8c0a\\u5047\\u671f-\\u534e\\u76db\\u987f\\u516c\\u53f8\",\"create_time\":1539002490,\"payment_currency_type\":1,\"normal_price\":21,\"normal_settlement_price\":21,\"create_user_name\":\"admin\",\"update_user_name\":\"admin\",\"update_time\":1539002490,\"status\":1},{\"own_expense_id\":22,\"own_expense_name\":\"\\u7cbe\\u6cb9\\u6309\\u6469\",\"source_number\":\"OEX20181008383064\",\"default_language_id\":1,\"remark\":\"\\u723d\\u554a\",\"supplier_id\":41,\"supplier_name\":\"\\u4e1c\\u5357\\u4e9a\\u65c5\\u6e38\\u516c\\u53f8\",\"supplier_type\":1,\"belong_supplier_id\":41,\"belong_supplier_name\":\"\\u4e1c\\u5357\\u4e9a\\u65c5\\u6e38\\u516c\\u53f8\",\"company_id\":24,\"company_name\":\"\\u8054\\u8c0a\\u5047\\u671f-\\u534e\\u76db\\u987f\\u516c\\u53f8\",\"create_time\":1539002927,\"payment_currency_type\":1,\"normal_price\":550,\"normal_settlement_price\":500,\"create_user_name\":\"admin\",\"update_user_name\":\"admin\",\"update_time\":1539002927,\"status\":1},{\"own_expense_id\":23,\"own_expense_name\":\"\\u86c7\\u6bd2\\u9152\",\"source_number\":\"OEX20181010941791\",\"default_language_id\":1,\"remark\":\"1113\",\"supplier_id\":41,\"supplier_name\":\"\\u4e1c\\u5357\\u4e9a\\u65c5\\u6e38\\u516c\\u53f8\",\"supplier_type\":1,\"belong_supplier_id\":41,\"belong_supplier_name\":\"\\u4e1c\\u5357\\u4e9a\\u65c5\\u6e38\\u516c\\u53f8\",\"company_id\":24,\"company_name\":\"\\u8054\\u8c0a\\u5047\\u671f-\\u534e\\u76db\\u987f\\u516c\\u53f8\",\"create_time\":1539132790,\"payment_currency_type\":1,\"normal_price\":80,\"normal_settlement_price\":80,\"create_user_name\":\"admin\",\"update_user_name\":\"admin\",\"update_time\":1539132790,\"status\":1},{\"own_expense_id\":24,\"own_expense_name\":\"\\u86c7\\u6bd2\\u9152\",\"source_number\":\"OEX20181010941795\",\"default_language_id\":1,\"remark\":\"1113\",\"supplier_id\":3,\"supplier_name\":\"\\u9a74\\u5988\\u5988\",\"supplier_type\":2,\"belong_supplier_id\":41,\"belong_supplier_name\":\"\\u4e1c\\u5357\\u4e9a\\u65c5\\u6e38\\u516c\\u53f8\",\"company_id\":24,\"company_name\":\"\\u8054\\u8c0a\\u5047\\u671f-\\u534e\\u76db\\u987f\\u516c\\u53f8\",\"create_time\":1539132790,\"payment_currency_type\":1,\"normal_price\":80,\"normal_settlement_price\":80,\"create_user_name\":\"admin\",\"update_user_name\":\"admin\",\"update_time\":1539132790,\"status\":1}]' , '127.0.0.1:7002/source/getOwnExpense') [ RunTime:0.037216s ]
+[ error ] [8]未定义数组索引: company_id[E:\xampp\htdocs\soaerp\application\index\model\source\OwnExpense.php:110]
+---------------------------------------------------------------
+[ 2018-10-18T20:14:17+08:00 ] 127.0.0.1 POST /source/getOwnExpenseLanguage
+[ info ] 127.0.0.1:7002/source/getOwnExpenseLanguage [运行时间：0.263767s][吞吐率：3.79req/s] [内存消耗：3,110.38kb] [文件加载：54]
+[ info ] [ LANG ] E:\xampp\htdocs\soaerp\thinkphp\lang\zh-cn.php
+[ info ] [ BIND ] 'index'
+[ info ] [ ROUTE ] array (
+  'type' => 'module',
+  'module' => 
+  array (
+    0 => 'index',
+    1 => 'source',
+    2 => 'getOwnExpenseLanguage',
+  ),
+)
+[ info ] [ HEADER ] array (
+  'host' => '127.0.0.1:7002',
+  'accept' => 'application/json',
+  'content-length' => '88',
+  'content-type' => 'application/x-www-form-urlencoded',
+)
+[ info ] [ PARAM ] array (
+  '{"source_number":"OEX20181008537531","appKey":"nexus","appSecret":"nexusIt","lang_id":1}' => '',
+)
+[ info ] [ LANG ] E:\xampp\htdocs\soaerp\public/../application/index\lang\zh-cn.php
+[ info ] [ DB ] INIT mysql
+[ info ] [ RUN ] app\index\controller\Source->getOwnExpenseLanguage[ E:\xampp\htdocs\soaerp\application\index\controller\Source.php ]
+[ info ] [ DB ] INIT mysql
+[ info ] [ LOG ] INIT File
+[ sql ] [ DB ] CONNECT:[ UseTime:0.017329s ] mysql:host=192.168.11.100;port=3306;dbname=log;charset=utf8
+[ sql ] [ SQL ] CREATE TABLE IF NOT EXISTS soaerp_log_20181018 LIKE soaerp_log [ RunTime:0.010143s ]
+[ sql ] [ SQL ] CREATE TABLE IF NOT EXISTS soaerp_log_20181018 LIKE soaerp_log [ RunTime:0.005977s ]
+[ sql ] [ DB ] CONNECT:[ UseTime:0.017942s ] mysql:host=192.168.11.100;port=3306;dbname=erp;charset=utf8
+[ sql ] [ SQL ] SHOW COLUMNS FROM `language` [ RunTime:0.014421s ]
+[ sql ] [ SQL ] SELECT `language`.`language_id`,`language`.`language_name`,`language`.`create_time`,(select nickname  from user where user.user_id = language.create_user_id) AS `create_user_name`,(select nickname  from user where user.user_id = language.update_user_id) AS `update_user_name`,`language`.`update_time`,`language`.`status` FROM `language` `language` WHERE  `status` = 1 ORDER BY `create_time` DESC [ RunTime:0.006152s ]
+[ sql ] [ SQL ] SHOW COLUMNS FROM `own_expense_language` [ RunTime:0.010195s ]
+[ sql ] [ SQL ] SELECT * FROM `own_expense_language` WHERE  `language_id` = 3  AND `source_number` = 'OEX20181008537531' LIMIT 1 [ RunTime:0.006643s ]
+[ sql ] [ SQL ] SELECT * FROM `own_expense_language` WHERE  `language_id` = 2  AND `source_number` = 'OEX20181008537531' LIMIT 1 [ RunTime:0.007029s ]
+[ sql ] [ SQL ] SELECT * FROM `own_expense_language` WHERE  `language_id` = 1  AND `source_number` = 'OEX20181008537531' LIMIT 1 [ RunTime:0.006283s ]
+[ sql ] [ SQL ] CREATE TABLE IF NOT EXISTS soaerp_log_20181018 LIKE soaerp_log [ RunTime:0.002321s ]
+[ sql ] [ SQL ] CREATE TABLE IF NOT EXISTS soaerp_log_20181018 LIKE soaerp_log [ RunTime:0.002721s ]
+[ sql ] [ SQL ] SHOW COLUMNS FROM `soaerp_log_20181018` [ RunTime:0.015549s ]
+[ sql ] [ SQL ] INSERT INTO `soaerp_log_20181018` (`params` , `time` , `type` , `result` , `url`) VALUES ('{\"source_number\":\"OEX20181008537531\",\"appKey\":\"nexus\",\"appSecret\":\"nexusIt\",\"lang_id\":1}' , 1539864857 , 1 , '[{\"language_id\":3,\"language_name\":\"japan\",\"create_time\":1532402015,\"create_user_name\":\"\\u80e1\\u4f0a\\u654f\",\"update_user_name\":\"admin\",\"update_time\":1534304089,\"status\":1,\"language_info\":{\"own_expense_language_id\":25,\"source_number\":\"OEX20181008537531\",\"own_expense_name\":\"1\",\"language_id\":3,\"create_time\":1539864850,\"create_user_id\":8,\"update_time\":1539864850,\"update_user_id\":8,\"status\":1}},{\"language_id\":2,\"language_name\":\"english\",\"create_time\":1532401866,\"create_user_name\":\"\\u80e1\\u4f0a\\u654f\",\"update_user_name\":\"\\u80e1\\u4f0a\\u654f\",\"update_time\":1532574269,\"status\":1,\"language_info\":{\"own_expense_language_id\":26,\"source_number\":\"OEX20181008537531\",\"own_expense_name\":\"2\",\"language_id\":2,\"create_time\":1539864850,\"create_user_id\":8,\"update_time\":1539864850,\"update_user_id\":8,\"status\":1}},{\"language_id\":1,\"language_name\":\"\\u4e2d\\u6587\",\"create_time\":1532400025,\"create_user_name\":\"admin\",\"update_user_name\":\"admin\",\"update_time\":1534303834,\"status\":1,\"language_info\":{\"own_expense_language_id\":20,\"source_number\":\"OEX20181008537531\",\"own_expense_name\":\"\\u5927\\u8c61\\u8df3\\u821e3\",\"language_id\":1,\"create_time\":1539002490,\"create_user_id\":1,\"update_time\":1539864850,\"update_user_id\":8,\"status\":1}}]' , '127.0.0.1:7002/source/getOwnExpenseLanguage') [ RunTime:0.043525s ]

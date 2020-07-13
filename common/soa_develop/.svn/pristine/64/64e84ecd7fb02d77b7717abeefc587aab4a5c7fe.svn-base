@@ -1,0 +1,111 @@
+<?php
+namespace app\index\controller;
+use app\common\help\Help;
+use think\config;
+use think\Model;
+use think\Controller;
+use app\index\model\examine_and_approve\ApprovalType; 
+use app\index\model\examine_and_approve\LimitsForExaminityAndApprovingAuthority; 
+use app\index\model\examine_and_approve\ExamineAndApprove as m_ExamineAndApprove; 
+/**
+* 审核
+**/
+class ExamineAndApprove extends Base
+{
+	public $mApprovalType; //审批类型模型
+	public $mLimitsForExaminityAndApprovingAuthority; //角色审批权限
+	public $mExamineAndApprove; //审批内容
+
+	public function __construct()
+    {
+    	$this->mApprovalType = new ApprovalType(); 
+    	$this->mLimitsForExaminityAndApprovingAuthority = new LimitsForExaminityAndApprovingAuthority();  
+    	$this->mExamineAndApprove = new m_ExamineAndApprove();
+    	parent::__construct();
+    }
+
+	 /**
+	* 获得审批类型
+	*/
+	public function obtain_approval_type(){ 
+ 		$params = $this->input(); 
+ 		$result = $this->mApprovalType->obtain_approval_type($params);
+       	$this->outPut($result); 
+	}
+
+	/**
+	* 编辑角色审批权限
+	*/
+	public function up_limits_for_examinity_and_approving_authority(){
+		$params = $this->input(); 
+ 		$result = $this->mLimitsForExaminityAndApprovingAuthority->up_limits_for_examinity_and_approving_authority($params);
+       	$this->outPut($result); 
+	}
+
+
+	/**
+	* 获取角色审批权限
+	*/
+	public function sel_limits_for_examinity_and_approving_authority(){
+		$params = $this->input(); 
+		// $params['role_id'] = 10;
+		// $params['status'] = 1; 
+
+ 		$result = $this->mLimitsForExaminityAndApprovingAuthority->sel_limits_for_examinity_and_approving_authority($params);
+       	$this->outPut($result);
+	}
+
+	/**
+	* 添加审批内容
+	*/
+	public function addExamineAndApprove(){
+		$params = $this->input(); 
+		$result = $this->mExamineAndApprove->addExamineAndApprove($params);
+       	$this->outPut($result);
+	}
+
+	/**
+	* 修改审批内容
+	*/
+	public function upExamineAndApproveStatus(){
+		$params = $this->input(); 
+		$result = $this->mExamineAndApprove->upExamineAndApproveStatus($params);
+       	$this->outPut($result);
+	}
+
+	/**
+	* 获取审批内容
+	**/
+	public function selExamineAndApprove(){
+		$params = $this->input(); 
+		// $params['nickname'] = '刘冰倩';
+		
+	
+		
+		$result = $this->mExamineAndApprove->selExamineAndApprove($params);
+       	$this->outPut($result);
+	}
+	
+
+	/**
+	* 我发起的
+	*/
+	public function iLaunched(){
+		$params = $this->input(); 
+		$result = $this->mExamineAndApprove->iLaunched($params);
+       	$this->outPut($result);
+	}
+
+
+	/***
+	* 我审核的
+	****/
+	public function iChecked(){
+		$params = $this->input(); 
+		$result = $this->mExamineAndApprove->iChecked($params);
+       	$this->outPut($result);
+	}
+
+
+
+}

@@ -1,0 +1,190 @@
+<?php
+
+namespace app\index\model\ota_slide;
+use app\common\help\Help;
+use think\Model;
+use app\index\model\ota_slide\OtaAdvertisingSubtitle as AdvertisingSubtitleModel;
+use app\index\model\ota_slide\OtaAdvertisingProduct as AdvertisingProductModel;
+use think\config;
+use think\Db;
+class OtaAdvertising extends Model{
+    protected $table = 'ota_advertising';
+
+    public function initialize()
+    {
+        parent::initialize();
+    }
+
+    public function addOtaAdvertising($params){
+
+        $t = time();
+        if(isset($params['more_title'])){
+            $data['more_title'] = $params['more_title'];
+        }
+        if(isset($params['title'])){
+            $data['title'] = $params['title'];
+        }
+        if(isset($params['style'])){
+            $data['style'] = $params['style'];
+        }
+        if(isset($params['more_url'])){
+            $data['more_url'] = $params['more_url'];
+        }
+        if(isset($params['href_type'])){
+            $data['href_type'] = $params['href_type'];
+        }
+        if(isset($params['without_href'])){
+            $data['without_href'] = $params['without_href'];
+        }
+        if(isset($params['interior_type'])){
+            $data['interior_type'] = $params['interior_type'];
+        }
+        if(isset($params['interior_uuid'])){
+            $data['interior_uuid'] = $params['interior_uuid'];
+        }
+        if(isset($params['content'])){
+            $data['content'] = $params['content'];
+        }
+        $data['website_uuid'] = $params['website_uuid'];
+        $data['company_id'] = $params['choose_company_id'];
+        $data['status'] = $params['status'];
+        $data['update_user_id'] = $params['user_id'];
+        $data['update_time'] = $t;
+        $data['create_user_id'] = $params['user_id'];
+        $data['create_time'] = $t;
+        $data['uuid'] = Help::getUuid();
+
+        Db::startTrans();
+        try{
+            Db::name('ota_advertising')->insertGetId($data);
+
+            $result = 1;
+            // 提交事务
+            Db::commit();
+
+        } catch (\Exception $e) {
+            $result = $e->getMessage();
+            // 回滚事务
+            Db::rollback();
+            //\think\Response::create(['code' => '400', 'msg' =>$result], 'json')->send();
+            //exit();
+
+        }
+
+        return $result;
+    }
+
+    public function getOneOtaAdvertising($params){
+        $data['ota_advertising_id'] = $params['ota_advertising_id'];
+        $result = $this->table("ota_advertising")->where($data)->find();
+
+        return $result;
+    }
+
+    public function getOtaAdvertisingList($params,$is_count=false,$is_page=false,$page=null,$page_size=20){
+        $data = "1=1 ";
+        if($params['status'] < 2){
+            $data.= " and ota_advertising.status= ".$params['status'];
+        }
+        if(!empty($params['title'])){
+            $data.= " and ota_advertising.title like'%".$params['title']."%'";
+        }
+        if(isset($params['choose_company_id'])){
+            $data.= " and ota_advertising.company_id = ".$params['choose_company_id'];
+        }
+        if(isset($params['website_uuid'])) {
+            $data .= " and ota_advertising.website_uuid= '" . $params['website_uuid'] . "'";
+        }
+        if(isset($params['uuid'])) {
+            $data .= " and ota_advertising.uuid= '" . $params['uuid'] . "'";
+        }
+        if($is_count==true){
+            $result = $this->table("ota_advertising")->where($data)->count();
+        }else {
+            if ($is_page == true) {
+
+                $result = $this->table("ota_advertising")
+                    ->join('user','user.user_id = ota_advertising.update_user_id', 'left')
+                    ->where($data)
+                    ->limit($page, $page_size)
+                    ->field(['ota_advertising.*','user.nickname'])
+                    ->select();
+
+            } else {
+                $result = $this->table("ota_advertising")
+                    ->where($data)
+                    ->field(['ota_advertising.*'])
+                    ->select();
+                foreach ($result as $k=>$v){
+                    $where1['ota_advertising_uuid'] = $v['uuid'];
+                    $where1['status'] = 1;
+                    $model1 = new AdvertisingSubtitleModel();
+                    $result1 = $model1->getOtaAdvertisingSubtitleList($where1);
+                    $result[$k]['subtitle_array'] = $result1;
+                    $where2['ota_advertising_uuid'] = $v['uuid'];
+                    $where2['status'] = 1;
+                    $model2 = new AdvertisingProductModel();
+                    $result2 = $model2->getOtaAdvertisingProductList($where1);
+                    $result[$k]['product_array'] = $result2;
+
+                }
+            }
+        }
+        return $result;
+    }
+
+
+    public function updateOtaAdvertisingById($params){
+        $t = time();
+
+        if(isset($params['more_title'])){
+            $data['more_title'] = $params['more_title'];
+        }
+        if(isset($params['title'])){
+            $data['title'] = $params['title'];
+        }
+        if(isset($params['style'])){
+            $data['style'] = $params['style'];
+        }
+        if(isset($params['more_url'])){
+            $data['more_url'] = $params['more_url'];
+        }
+        if(isset($params['href_type'])){
+            $data['href_type'] = $params['href_type'];
+        }
+        if(isset($params['without_href'])){
+            $data['without_href'] = $params['without_href'];
+        }
+        if(isset($params['interior_type'])){
+            $data['interior_type'] = $params['interior_type'];
+        }
+        if(isset($params['interior_uuid'])){
+            $data['interior_uuid'] = $params['interior_uuid'];
+        }
+        if(isset($params['content'])){
+            $data['content'] = $params['content'];
+        }
+        $data['company_id'] = $params['choose_company_id'];
+        $data['status'] = $params['status'];
+        $data['update_user_id'] = $params['user_id'];
+        $data['update_time'] = $t;
+        Db::startTrans();
+        try{
+            Db::name('ota_advertising')->where("ota_advertising_id = ".$params['ota_advertising_id'])->update($data);
+
+            $result = 1;
+            // 提交事务
+            Db::commit();
+
+        } catch (\Exception $e) {
+            $result = $e->getMessage();
+            // 回滚事务
+            Db::rollback();
+
+        }
+        return $result;
+
+
+    }
+
+}

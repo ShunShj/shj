@@ -1,0 +1,3 @@
+ALTER TABLE `route_type`
+ADD COLUMN `route_type_code`  varchar(30) NULL COMMENT '线路类型编码' AFTER `route_type_name`;
+

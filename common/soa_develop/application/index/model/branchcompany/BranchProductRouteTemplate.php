@@ -1,0 +1,116 @@
+<?php
+
+namespace app\index\model\branchcompany;
+use think\Model;
+use app\common\help\Help;
+use think\config;
+use think\Db;
+class BranchProductRouteTemplate extends Model{
+    //protected $connection = ['database' => 'erp'];
+    protected $table = 'branch_product_route_template';
+    private $_languageList;
+    public function initialize()
+    {
+        $this->_languageList = config('systom_setting')['language_list'];
+        parent::initialize();
+
+    }
+
+    /**
+     * 添加分公司产品的线路模板
+     * 王
+     */
+    public function addBranchProductRouteTemplate($params)
+    {
+        $t = time();
+
+        $data['branch_product_number'] = $params['branch_product_number'];
+
+    
+        $data['route_number'] = $params['route_number'];
+        $data['distributor_price'] = (float)$params['distributor_price'];
+        $data['customer_price'] = (float)$params['customer_price'];
+        
+        
+        
+        $data['price_currency_id'] = $params['price_currency_id'];
+
+        $data['create_time'] = $t;
+        $data['create_user_id'] = $params['now_user_id'];
+        $data['update_time'] = $t;
+        $data['update_user_id'] = $params['now_user_id'];
+     
+		
+        $this->startTrans();
+        try{
+            $pk_id = $this->insertGetId($data);
+            $result =  $pk_id;
+            // 提交事务
+            $this->commit();
+            
+
+        } catch (\Exception $e) {
+            $result = $e->getMessage();
+            // 回滚事务
+            $this->rollback();
+
+        }
+     
+		
+         return $result;
+    }
+	/**
+	 * 获取分公司的线路模板信息
+	 */
+    public function getBranchProductRouteTemplate($params){
+    	$data = '1=1';
+    	if(!empty($params['branch_product_number'])){
+    		$data.=" and bprt.branch_product_number ='".$params['branch_product_number']."'";
+    	}
+    	
+    	if(!empty($params['route_number'])){
+    		$data.=" and bprt.route_number ='".$params['route_number']."'";
+    	}   	
+    	$result= $this->table("branch_product_route_template")->alias("bprt")->
+    	join('currency','currency.currency_id = bprt.price_currency_id','left')->
+    	join('route_template','route_template.route_number = bprt.route_number','left')->
+    	join('route_type','route_type.route_type_id = route_template.route_type_id','left')->
+    	where($data)->
+    	field(['bprt.branch_product_number','bprt.route_number','route_type.route_type_name',
+				'bprt.price_currency_id','bprt.distributor_price','bprt.customer_price','bprt.create_time',
+    			'bprt.create_user_id','bprt.update_time','bprt.update_user_id','currency.currency_name as price_currency_name',
+    			"(select nickname  from user where user.user_id = bprt.create_user_id)"=>'create_user_name',
+    			"(select nickname  from user where user.user_id = bprt.update_user_id)"=>'update_user_name'
+    	])->select();
+    	
+
+    	return $result;
+    }
+    
+    /**
+     * 删除分公司线路模板
+     * 
+     */
+    public function delBranchProductRouteTemplate($params){
+    	$where = [
+    			'branch_product_number'=>$params['branch_product_number'],
+    			'route_number'=>$params['route_number']
+    	];
+    	$this->startTrans();
+    	try{
+    		
+    		$result =   $this->where($where)->delete();	
+    		// 提交事务
+    		$this->commit();
+    	
+    	
+    	} catch (\Exception $e) {
+    		$result = $e->getMessage();
+    		// 回滚事务
+    		$this->rollback();
+    	
+    	}
+
+    	return $result;
+    }
+}

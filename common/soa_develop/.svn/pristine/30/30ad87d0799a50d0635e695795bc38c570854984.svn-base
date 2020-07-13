@@ -1,0 +1,200 @@
+<?php
+namespace app\index\model\finance;
+use app\index\controller\Branchcompany;
+use app\index\service\CompanyOrderService;
+use think\Model;
+use app\common\help\Help;
+use think\config;
+use think\Db;
+
+class SalesReport extends Model
+{
+    protected $table = 'branch_product_type';
+    private $_languageList;
+
+    public function initialize()
+    {
+        $this->_languageList = config('systom_setting')['language_list'];
+        parent::initialize();
+
+    }
+
+    public function getSalesReport($params){
+
+        $start = strtotime($params['startDate']);
+        $end = strtotime($params['endDate']);
+        if($params['startDate'] && $params['endDate']){
+            $where['create_time'] = array(array('gt',$start),array('lt',$end)) ;
+        }
+
+        $data = "branch_product_type.status=1";
+        if(!empty($params['company_id'])) {
+            $data.=" and branch_product_type.company_id=".$params['company_id'];
+        }
+        if(!empty($params['branch_product_type_name'])){
+            $data.=" and branch_product_type.branch_product_type_name like '%".$params['branch_product_type_name']."%'";
+        }
+        if(!empty($params['branch_product_type'])){
+            $data.=" and branch_product_type.branch_product_type_id =".$params['branch_product_type'];
+        }
+
+        $result = $this->table("branch_product_type")
+            ->join("company", 'company.company_id = branch_product_type.company_id', 'left')
+            ->where($data)->order('branch_product_type.create_time desc')
+            ->field(['branch_product_type.branch_product_type_id', 'branch_product_type.company_id', 'company.company_name',
+                'branch_product_type.branch_product_type_name'])
+            ->select();
+
+        $model = new CompanyOrderService();
+
+        foreach ($result as $key=>$val){
+            //产品总数
+//            $a = $this->table('branch_product')
+//                ->where('branch_product.status = 1 and branch_product.branch_product_type_id = '.$val['branch_product_type_id'])
+//                ->count();
+            //产品号列表
+            $b = $this->table('branch_product')
+                ->where('branch_product.status = 1 and branch_product.branch_product_type_id = '.$val['branch_product_type_id'])
+                ->column('branch_product_number');
+            //订单总数
+//            $c = $this->table('company_order_product')
+//                ->where('status',1)
+//                ->where('branch_product_number','IN',$b)
+//                ->count();
+            //订单号列表
+
+            $d = $this->table('company_order_product')
+                ->where('status',1)
+                ->where($where)
+                ->where('branch_product_number','IN',$b)
+                ->column('company_order_number');
+            //收客数
+            $e = $this->table('company_order_customer')
+                ->where('status','gt',0)
+                ->where('company_order_number','IN',$d)
+                ->count();
+            //产品总数
+            $a=count($b);
+            //订单号总数
+            $c=count($d);
+            if(!empty($d)){
+                foreach ($d as $k=>$v){
+                    $list[$key][$d[$k]] = $model->getCompanyOrderReceivableInfo(['company_order_number'=>$d[$k]]);
+                }
+            }
+            $result[$key]['product_total'] = $a;
+            $result[$key]['product_order_total'] = $c;
+            $result[$key]['customer_total'] = $e;
+            $result[$key]['average_customer_total'] = $e/$c ? : 0;
+            $result[$key]['sale_total_price'] = array_sum(array_map(function($val){return $val['total'];}, $list[$key])) ? : 0;
+            $result[$key]['average_sale_price'] = $result[$key]['sale_total_price']/$c ? : 0;
+            $result[$key]['average_sale_customer_price'] = $result[$key]['sale_total_price']/$e ? : 0;
+            $result[$key]['finance_receivable'] = array_sum(array_map(function($val){return $val['finance_receivable'];}, $list[$key])) ? : 0;
+            $result[$key]['miss_sale_receivable'] = array_sum(array_map(function($val){return $val['miss_sale_receivable'];}, $list[$key])) ? : 0;
+        }
+
+        return $result;
+
+    }
+
+
+    public function getSalesReportAgent($params){
+        $data = "company_order.status>0";
+
+        if(!empty($params['create_by'])) {
+            $userInfo = $this->table("user")->where('nickname','eq',$params['create_by'])->find();
+            if($userInfo){
+                $data.=" and company_order.create_user_id=".$userInfo['user_id'];
+            }
+        }
+
+        if(!empty($params['company_id'])) {
+            $data.=" and company_order.company_id=".$params['company_id'];
+        }
+        if(!empty($params['wr'])) {
+            $data.=" and company_order.wr=".$params['wr'];
+        }
+
+        $start = strtotime($params['startDate']);
+        $end = strtotime($params['endDate']);
+        if($params['startDate'] && $params['endDate']){
+            $where['create_time'] = array(array('gt',$start),array('lt',$end)) ;
+        }
+
+        $result = $this->table("company_order")
+            ->join('user', 'user.user_id = company_order.create_user_id', 'left')
+            ->where($data)
+            ->where($where)
+            ->field(['company_order.company_order_number,company_order.wr,company_order.create_user_id,user.nickname'])
+            ->select();
+
+        foreach($result as $k => $v){
+            $names[$v['create_user_id']] = $v['nickname'];
+        }
+        $names = array_unique($names);
+
+        foreach ($names as $key=>$val){
+            $data1[$val.'1']['nickname'] = $val;
+            $data1[$val.'1']['wr'] = 1;
+            $data1[$val.'1']['user_id'] = $key;
+            foreach ($result as $k => $v){
+                if($result[$k]['wr'] == 1 && $result[$k]['nickname'] == $val){
+                    $data1[$val.'1']['company_order_number'][] = $result[$k]['company_order_number'];
+                }
+                if($result[$k]['wr'] == 2 && $result[$k]['nickname'] == $val){
+                    $data1[$val.'2']['company_order_number'][] = $result[$k]['company_order_number'];
+                }
+            }
+            $data1[$val.'2']['nickname'] = $val;
+            $data1[$val.'2']['user_id'] = $key;
+            $data1[$val.'2']['wr'] = 2;
+        }
+
+        $model = new CompanyOrderService();
+
+
+        foreach ($data1 as $key=>$val){
+
+            $d = $val['company_order_number'];
+
+            $type = $this->table("company_order_product")
+                ->join('branch_product', 'branch_product.branch_product_number = company_order_product.branch_product_number', 'left')
+                ->join('branch_product_type','branch_product_type.branch_product_type_id = branch_product.branch_product_type_id','left')
+                ->where('company_order_number','IN',$d)
+                ->field(['company_order_product.company_order_number,branch_product_type.branch_product_type_name'])
+                ->select();
+
+            foreach ($type as $k1=>$v1){
+                $data1[$key]['test'][$v1['branch_product_type_name']]['type'] = $v1['branch_product_type_name'];
+                //$data1[$key]['test'][$v1['branch_product_type_name']]['company_order_number'][] = $v1['company_order_number'];
+                $data1[$key]['test'][$v1['branch_product_type_name']]['customer_total'] += $this->table('company_order_customer')
+                    ->where('status','gt',0)
+                    ->where('company_order_number','IN',$v1['company_order_number'])
+                    ->count();
+                $data1[$key]['test'][$v1['branch_product_type_name']]['sale_total_price'] += $model->getCompanyOrderReceivableInfo(['company_order_number'=>$v1['company_order_number']])['total'];
+            }
+
+
+            //收客数
+            $e = $this->table('company_order_customer')
+                ->where('status','gt',0)
+                ->where('company_order_number','IN',$d)
+                ->count();
+            //订单号总数
+            if(!empty($d)){
+                foreach ($d as $k=>$v){
+                    $list[$key][$d[$k]] = $model->getCompanyOrderReceivableInfo(['company_order_number'=>$d[$k]]);
+                }
+            }
+            $user = $this->table("user")->where('user_id','eq',$val['user_id'])->find();
+            $company_name = $this->table("company")->where('company_id','eq',$user['company_id'])->find();
+            $data1[$key]['company_name'] = $company_name['company_name'];
+            $data1[$key]['customer_total'] = $e;
+            $data1[$key]['sale_total_price'] = array_sum(array_map(function($val){return $val['total'];}, $list[$key])) ? : 0;
+            //$data1[$key]['test'] = $type;
+        }
+
+        return $data1;
+
+    }
+}

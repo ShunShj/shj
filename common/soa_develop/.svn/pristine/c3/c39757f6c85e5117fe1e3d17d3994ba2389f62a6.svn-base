@@ -1,0 +1,3 @@
+ALTER TABLE `receivable_info`
+MODIFY COLUMN `payment_type`  int(11) NULL DEFAULT NULL COMMENT 'Ö§¸¶·½Ê½1cash2check3debit card4credit card(mc)5credit card(vs)6 credit card(ax) 7 direct depsit 8 others9paypal' AFTER `payment_currency_id`;
+

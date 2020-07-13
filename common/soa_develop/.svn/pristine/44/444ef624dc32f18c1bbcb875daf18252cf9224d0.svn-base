@@ -1,0 +1,29 @@
+ALTER TABLE `receipts_pay`
+ADD COLUMN `payment_number`  varchar(50) NULL COMMENT '付款编号' AFTER `company_id`,
+ADD COLUMN `deposite_user_id`  int(10) NULL COMMENT '定金负责人ID' AFTER `payment_number`,
+ADD COLUMN `deposite_payment_time`  int(10) NULL COMMENT '定金支付时间' AFTER `deposite_user_id`;
+
+ALTER TABLE `receipts_pay`
+CHANGE COLUMN `deposite_user_id` `deposit_user_id`  int(10) NULL DEFAULT NULL COMMENT '定金负责人ID' AFTER `payment_number`,
+CHANGE COLUMN `deposite_payment_time` `deposit_payment_time`  int(10) NULL DEFAULT NULL COMMENT '定金支付时间' AFTER `deposit_user_id`;
+
+
+
+ALTER TABLE `receivable`
+ADD COLUMN `tax_money`  decimal(10,2) NULL COMMENT '税费' AFTER `receivable_money`;
+ALTER TABLE `receivable`
+MODIFY COLUMN `tax_money`  decimal(10,2) NULL DEFAULT 0 COMMENT '税费' AFTER `receivable_money`;
+
+ALTER TABLE `cope`
+ADD COLUMN `tax_money`  decimal(10,2) NULL DEFAULT 0 COMMENT '税费' AFTER `cope_money`;
+
+ALTER TABLE `team_product`
+ADD COLUMN `is_profit_approve`  tinyint(4) NULL DEFAULT 0 COMMENT '利润表是否审核 1审核0未审核' AFTER `plur_status`;
+
+
+
+ALTER TABLE `company_order`
+ADD COLUMN `company_order_status`  tinyint(4) NULL DEFAULT 1 COMMENT '订单状态 1未确认 2已确认 3 取消中 4 已取消' AFTER `locked`;
+
+
+

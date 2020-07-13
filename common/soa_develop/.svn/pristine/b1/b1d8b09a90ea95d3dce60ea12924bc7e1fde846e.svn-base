@@ -1,0 +1,773 @@
+<?php
+
+namespace app\index\model\finance;
+use think\Model;
+use app\common\help\Help;
+use think\config;
+use think\Db;
+use app\index\model\finance\Cope;
+use app\index\model\finance\ReceivableCustomer;
+class Receivable extends Model{
+    //protected $connection = ['database' => 'erp'];
+    protected $table = 'receivable';
+    private $_languageList;
+    private	$_cope;
+    public function initialize()
+    {
+    	
+    	$this->_receivable_customer = new ReceivableCustomer();
+        $this->_languageList = config('systom_setting')['language_list'];
+        $this->_cope = new Cope();
+        parent::initialize();
+
+    }
+
+    /**
+     * 添加应收
+     * 胡
+     */
+    public function addReceivable($params){
+	
+	
+        $t = time();
+		$user_id = $params['now_user_id'];
+        $data['receivable_number'] = Help::getNumber(5);
+        
+        //订单
+        if(!empty($params['order_number'])){ 
+        	$data['order_number'] = $params['order_number'];
+        }
+        if(!empty($params['team_product_number'])){
+        	$data['team_product_number'] = $params['team_product_number'];
+        }
+        if(!empty($params['product_name'])){
+        	$data['product_name'] = $params['product_name'];
+        }
+        if(!empty($params['source_type_id'])){
+        	$data['source_type_id'] = $params['source_type_id'];
+        }
+        if(!empty($params['source_number'])){
+        	$data['source_number'] = $params['source_number'];
+        }
+        if(!empty($params['payment_object_type'])){
+        	$data['payment_object_type'] = $params['payment_object_type'];
+        }
+        if(!empty($params['payment_object_id'])){
+        	$data['payment_object_id'] = $params['payment_object_id'];
+        }
+
+        if(!empty($params['receivable_currency_id'])){
+        	$data['receivable_currency_id'] = $params['receivable_currency_id'];
+        }
+        if(!empty($params['price'])){
+        	$data['price'] = $params['price'];
+        }
+        if(!empty($params['unit'])){
+        	$data['unit'] = $params['unit'];
+        }
+        if(!empty($params['remark'])){
+        	$data['remark'] = $params['remark'];
+        }    
+        $data['fee_type_code'] = $params['fee_type_code'];
+        
+        
+        $data['fee_type_type'] = $params['fee_type_type'];
+       
+        $data['receivable_money'] = $params['receivable_money'];
+     
+
+        $data['public_number'] = $data['receivable_number'];
+        
+        $data['company_id'] = $params['company_id'];
+
+
+        $data['is_auto'] = $params['is_auto'];
+        $data['create_time'] = $t;
+        $data['update_time'] = $t;
+        $data['create_user_id'] = $user_id;
+        $data['update_user_id'] = $user_id;
+		$data['status'] = 1;
+		
+		
+		
+		
+		$cope_count = 0;
+        //$params
+        //判断 如果是 应收公司那么就 会有应付公司
+        if($params['payment_object_type'] ==1){
+        	$data_cope['cope_number'] = Help::getNumber(5);
+            if(!empty($params['order_number'])){ 
+        		$data_cope['order_number'] = $params['order_number'];
+        	}
+        	if(!empty($params['team_product_number'])){
+        		$data_cope['team_product_number'] = $params['team_product_number'];
+        	}
+        	if(!empty($params['product_name'])){
+        		$data_cope['product_name'] = $params['product_name'];
+        	}
+        	if($params['fee_type_code']==64){
+        		$data_cope['fee_type_code'] = 31;
+        		
+        	}
+        	if(!empty($params['source_type_id'])){
+        		$data_cope['source_type_id'] = $params['source_type_id'];
+        	}
+        	if($params['fee_type_type']==201){
+        		$data_cope['fee_type_type']=104;
+        	}else if($params['fee_type_type']==203){
+        		$data_cope['fee_type_type']=207;
+        	}
+        	
+        	
+        	if($params['fee_type_code']==58){
+        		$data_cope['fee_type_code']=253;
+        	}else if($params['fee_type_code']==59){
+        		$data_cope['fee_type_code']=254;
+        	}else if($params['fee_type_code']==60){
+        		$data_cope['fee_type_code']=255;
+        	}else if($params['fee_type_code']==61){
+        		$data_cope['fee_type_code']=256;
+        	}else if($params['fee_type_code']==62){
+        		$data_cope['fee_type_code']=257;
+        	}else if($params['fee_type_code']==63){
+        		$data_cope['fee_type_code']=258;
+        	}else if($params['fee_type_code']==64){
+        		$data_cope['fee_type_code']=259;
+        	}else if($params['fee_type_code']==65){
+        		$data_cope['fee_type_code']=260;
+        	}else if($params['fee_type_code']==66){
+        		$data_cope['fee_type_code']=261;
+        	}else if($params['fee_type_code']==67){
+        		$data_cope['fee_type_code']=262;
+        	}else if($params['fee_type_code']==68){
+        		$data_cope['fee_type_code']=263;
+        	}else if($params['fee_type_code']==69){
+        		$data_cope['fee_type_code']=264;
+        	}
+        	
+        	
+        	$data_cope['receivable_object_id'] = $params['company_id'];
+
+        	$data_cope['receivable_object_type'] = 1;
+        
+        	$data_cope['cope_money'] = $params['receivable_money'];
+        		
+        
+        	$data_cope['cope_currency_id'] = $params['receivable_currency_id'];
+              	
+        
+        	$data_cope['public_number'] = $data['receivable_number'];
+        	
+        	$data_cope['is_auto'] = $params['is_auto'];
+        	$data_cope['company_id'] = $params['payment_object_id'];
+        	$data_cope['create_time'] = $t;
+        	$data_cope['create_user_id'] = $user_id;
+        	$data_cope['update_time'] = $t;
+        	$data_cope['update_user_id'] = $user_id;
+        	$data_cope['status'] = 1;
+        	$cope_count = 1;
+        }
+ 
+        $this->startTrans();
+        try{
+            $pk_id = $this->insertGetId($data);
+            $pk_number = $data['receivable_number'];
+            
+            $receivable_customer_params = [
+            	'company_order_customer_id'=>$params['company_order_customer_id'],
+            	'receivable_number'=>$data['receivable_number'],
+            	'now_user_id'=>$user_id
+            ];
+            $this->_receivable_customer->addReceivableCustomer($receivable_customer_params);
+            if($cope_count == 1){
+            	$this->table("cope")->insert($data_cope);
+            }
+			
+			
+            // 提交事务
+            $this->commit();
+            $result = $pk_number;
+
+        } catch (\Exception $e) {
+            $result = $e->getMessage();
+            // 回滚事务
+            $this->rollback();
+
+        }
+		
+        return $result;
+    }
+    /**
+     * 自动添加
+     * 胡
+     */
+    public function addReceivableAuto($params){
+    
+    	$t = time();
+    	$data['receivable_number'] = Help::getNumber(5);
+    	if(isset($params['order_number'])){
+    		$data['order_number'] = $params['order_number'];
+    	}
+    	if(isset($params['product_type'])){
+    		$data['product_type'] = $params['product_type'];
+    	}
+    	
+    	$data['product_name'] = $params['product_name'];
+    
+    	$data['payment_company_id'] = $params['payment_company_id'];
+    
+    	
+    	$data['currency_id'] = $params['currency_id'];
+    	$data['receivable_money'] = $params['receivable_money'];
+    	$data['public_number'] = $data['receivable_number'];
+    	
+    	if(isset($params['company_id'])){
+    		$data['company_id'] = $params['company_id'];
+    	}
+    	if(isset($params['product_type'])){
+    		$data['product_type'] = $params['product_type'];
+    	}   	
+    	$data['resource_type']= $params['resource_type'];//手动添加
+    	$data['create_time'] = $t;
+    	$data['create_user_id'] = $params['now_user_id'];
+    	$data['update_time'] = $t;
+    	$data['update_user_id'] = $params['now_user_id'];
+    	$data['status'] = $params['status'];
+    
+    
+    	$this->startTrans();
+    	try{
+    		$pk_id = $this->insertGetId($data);
+    		$pk_number = $data['receivable_number'];
+    
+    		// 提交事务
+    		$this->commit();
+    		$result = $pk_number;
+    
+    	} catch (\Exception $e) {
+    		$result = $e->getMessage();
+    		// 回滚事务
+    		$this->rollback();
+    
+    	}
+    
+    	return $result;
+    }
+    /**
+     * 获取应收
+     * 王
+     */
+    public function getReceivable($params,$is_count=false,$is_page=false,$page=null,$page_size=20){
+		
+    	$data = "1=1";
+    	if(!empty($params['team_product_number'])){
+    		$data.= " and receivable.team_product_number = '".$params['team_product_number']."'";
+    	}
+    	if(!empty($params['source_number'])){
+    		$data.= " and receivable.source_number = '".$params['source_number']."'";
+    	}
+        if(!empty($params['receivable_number'])){
+            $data.= " and receivable.receivable_number = '".$params['receivable_number']."'";
+        }
+        if(!empty($params['order_number'])){
+        	$data.= " and receivable.order_number = '".$params['order_number']."'";
+        }
+        if(!empty($params['product_name'])){
+        	$data.= " and receivable.product_name = '".$params['product_name']."'";
+        }
+        
+        if(!empty($params['payment_object_type'])){
+        	$data.= " and receivable.payment_object_type = '".$params['payment_object_type']."'";
+        }
+        if(!empty($params['payment_object_id'])){
+        	$data.= " and receivable.payment_object_id = '".$params['payment_object_id']."'";
+        }       
+        if(is_numeric($params['company_id'])){
+        	$data.= " and receivable.company_id = '".$params['company_id']."'";
+        	 
+        }
+        if(!empty($params['fee_type_type'])){
+        	$data.= " and receivable.fee_type_type = '".$params['fee_type_type']."'";
+        }
+        if(!empty($params['is_auto'])){
+        	$data.= " and receivable.is_auto = '".$params['is_auto']."'";
+        }
+        if(!empty($params['order_number'])){
+        	$data.= " and receivable.order_number = '".$params['order_number']."'";
+        }
+        if(!empty($params['public_number'])){
+        	$data.= " and receivable.public_number = '".$params['public_number']."'";
+        }
+    	if(is_numeric($params['status'])){
+    		$data.= " and receivable.status = ".$params['status'];
+    	}
+    	if(!empty($params['create_time_diy_day'])){
+			$data.=" and from_unixtime(receivable.create_time,'%Y%m%d') >=".$params['create_time_diy_day'];
+		}
+	
+        if($is_count==true){
+            $result = $this->where($data)->count();
+        }else {
+            if ($is_page == true) {
+                $result = $this->table("receivable")->alias("receivable")->
+                join("company", "company.company_id = receivable.company_id", 'left')->
+                join("currency", "currency.currency_id = receivable.receivable_currency_id", 'left')->
+                where($data)->limit($page, $page_size)->order('create_time desc')->
+                field(['receivable.receivable_id', 'receivable.receivable_number', 'receivable.team_product_number',
+                    'receivable.source_number', 'receivable.source_type_id', 'receivable.order_number',
+                    'receivable.product_name',
+                    'receivable.payment_object_id', 'receivable.payment_object_type',
+                    'receivable.receivable_money', 'receivable.receivable_currency_id',
+                	"(select unit  from currency where currency.currency_id = receivable.receivable_currency_id)"=>'unit',
+                    'receivable.remark', 'receivable.public_number',
+                    'company.company_name', 'currency.currency_name',
+                    'receivable.fee_type_code', 'receivable.is_auto', 'receivable.fee_type_type',
+                    'receivable.travel_agency_reimbursement_number',
+                    "(select if(sum(payment_money)>0,sum(payment_money),0) from  receivable_info  where receivable_info.receivable_number = receivable.receivable_number and receivable_info.status=1) as true_receipt",//应收总金额
+                    "(select nickname  from user where user.user_id = receivable.create_user_id)" => 'create_user_name',
+                    "(select nickname  from user where user.user_id = receivable.update_user_id)" => 'update_user_name',
+                    'receivable.create_time', "receivable.status"])->select();
+            } else {
+                $result = $this->table("receivable")->alias("receivable")->
+                join("company", "company.company_id = receivable.company_id", 'left')->
+                join("currency", "currency.currency_id = receivable.receivable_currency_id", 'left')->
+                where($data)->order('create_time desc')->
+                field(['receivable.receivable_id', 'receivable.receivable_number', 'receivable.team_product_number',
+                    'receivable.source_number', 'receivable.source_type_id', 'receivable.order_number',
+                    'receivable.product_name',
+                    'receivable.payment_object_id', 'receivable.payment_object_type',
+                    'receivable.receivable_money', 'receivable.receivable_currency_id',
+                	"(select unit  from currency where currency.currency_id = receivable.receivable_currency_id)"=>'unit',
+                    'receivable.remark', 'receivable.public_number',
+                    'company.company_name', 'currency.currency_name',
+                    'receivable.fee_type_code', 'receivable.is_auto', 'receivable.fee_type_type',
+                    'receivable.travel_agency_reimbursement_number',
+                    "(select if(sum(payment_money)>0,sum(payment_money),0) from  receivable_info  where receivable_info.receivable_number = receivable.receivable_number and receivable_info.status=1) as true_receipt",//应收总金额
+                    "(select nickname  from user where user.user_id = receivable.create_user_id)" => 'create_user_name',
+                    "(select nickname  from user where user.user_id = receivable.update_user_id)" => 'update_user_name',
+                    'receivable.create_time', "receivable.status"])->select();
+            }
+        }
+
+        return $result;
+
+    }
+    /**
+     * 修改应收 根据receivable_number
+     */
+    public function updateReceivableByReceivableNumber($params){
+
+        $t = time();
+		$user_id = $params['now_user_id'];
+
+        
+        //订单
+        if(!empty($params['order_number'])){ 
+        	$data['order_number'] = $params['order_number'];
+        }
+        if(!empty($params['team_product_number'])){
+        	$data['team_product_number'] = $params['team_product_number'];
+        }
+        if(!empty($params['product_name'])){
+        	$data['product_name'] = $params['product_name'];
+        }
+        if(!empty($params['source_type_id'])){
+        	$data['source_type_id'] = $params['source_type_id'];
+        }
+        if(!empty($params['source_number'])){
+        	$data['source_number'] = $params['source_number'];
+        }
+        if(!empty($params['payment_object_type'])){
+        	$data['payment_object_type'] = $params['payment_object_type'];
+        }
+        if(!empty($params['payment_object_id'])){
+        	$data['payment_object_id'] = $params['payment_object_id'];
+        }
+
+        if(!empty($params['receivable_currency_id'])){
+        	$data['receivable_currency_id'] = $params['receivable_currency_id'];
+        }
+        if(!empty($params['price'])){
+        	$data['price'] = $params['price'];
+        }
+        if(!empty($params['unit'])){
+        	$data['unit'] = $params['unit'];
+        }
+        if(!empty($params['remark'])){
+        	$data['remark'] = $params['remark'];
+        }    
+        $data['fee_type_code'] = $params['fee_type_code'];
+        
+        
+       
+        $data['receivable_money'] = $params['receivable_money'];
+     
+        
+  
+        $data['update_time'] = $t;
+
+        $data['update_user_id'] = $user_id;
+		$data['status'] = 1;
+	
+        $data_where['receivable_number'] = $params['receivable_number'];
+        
+        
+        $this->startTrans();
+        try{
+        	
+        	
+            $this->where($data_where)->update($data);
+			//通过应收去查询PUBLIC
+			
+			$receivable_result = $this->getReceivable($data_where);
+			
+			$receivable_public_number = $receivable_result[0]['public_number'];
+			//通过public去修改应付的代码
+			
+			if(!empty($params['order_number'])){
+				$data_cope['order_number'] = $params['order_number'];
+			}
+			if(!empty($params['team_product_number'])){
+				$data_cope['team_product_number'] = $params['team_product_number'];
+			}
+			if(!empty($params['product_name'])){
+				$data_cope['product_name'] = $params['product_name'];
+			}
+
+			if(!empty($params['source_type_id'])){
+				$data_cope['source_type_id'] = $params['source_type_id'];
+			}
+			if($params['fee_type_type']==201){
+				$data_cope['fee_type_type']=104;
+			}
+			if($params['fee_type_code']==34){
+				$data_cope['fee_type_code']=70;
+			}else if($params['fee_type_code']==35){
+				$data_cope['fee_type_code']=71;
+			}else if($params['fee_type_code']==36){
+				$data_cope['fee_type_code']=72;
+			}else if($params['fee_type_code']==37){
+				$data_cope['fee_type_code']=73;
+			}else if($params['fee_type_code']==38){
+				$data_cope['fee_type_code']=74;
+			}else if($params['fee_type_code']==39){
+				$data_cope['fee_type_code']=75;
+			}else if($params['fee_type_code']==40){
+				$data_cope['fee_type_code']=76;
+			}else if($params['fee_type_code']==41){
+				$data_cope['fee_type_code']=77;
+			}else if($params['fee_type_code']==42){
+				$data_cope['fee_type_code']=78;
+			}else if($params['fee_type_code']==43){
+				$data_cope['fee_type_code']=79;
+			}else if($params['fee_type_code']==44){
+				$data_cope['fee_type_code']=80;
+			}else if($params['fee_type_code']==45){
+				$data_cope['fee_type_code']=81;
+			}
+			 
+			 
+			$data_cope['receivable_object_id'] = $params['company_id'];
+
+			
+			$data_cope['cope_money'] = $params['receivable_money'];
+			
+			
+			$data_cope['cope_currency_id'] = $params['receivable_currency_id'];
+			 
+			
+		
+			 
+	
+			$data_cope['company_id'] = $params['payment_object_id'];
+
+			
+			$data_cope['now_user_id'] = $user_id;
+			$data_cope['status'] = 1;
+			$data_cope['public_number'] = $receivable_public_number;
+			$this->_cope->updateCopeByPublicNumber($data_cope);
+			
+			$receivable_customer_params = [
+					'company_order_customer_id'=>$params['company_order_customer_id'],
+					'receivable_number'=> $params['receivable_number'],
+					'now_user_id'=>$user_id
+			];
+			$this->_receivable_customer->addReceivableCustomer($receivable_customer_params);
+            $result = 1;
+            // 提交事务
+            $this->commit();
+
+        } catch (\Exception $e) {
+            $result = $e->getMessage();
+            // 回滚事务
+            $this->rollback();
+
+        }
+        return $result;
+    }
+
+    /**
+     * 修改应收根据public_number
+     */
+    public function updateReceivableByPublicNumber($params){
+    
+    	$t = time();
+    
+    	if(!empty($params['receivable_money'])){
+    		$data['receivable_money'] = $params['receivable_money'];
+    
+    	}
+    	if(is_numeric($params['status'])){
+    		$data['status'] = $params['status'];
+    	
+    	}   
+    	$data['update_user_id'] = $params['now_user_id'];
+    	$data['update_time'] = $t;
+    
+    	$data_where['public_number'] = $params['public_number'];
+    	
+   
+    	$this->startTrans();
+    	try{
+    		$this->where($data_where)->update($data);
+    		
+    		
+    		
+    		$receivable_result = $this->getReceivable($data_where);
+    		$receivable_customer_params = [
+    			'company_order_customer_id'=>$params['company_order_customer_id'],
+    			'receivable_number'=> $receivable_result[0]['receivable_number'],
+    			'now_user_id'=> $params['now_user_id']
+    		];
+    		$this->_receivable_customer->addReceivableCustomer($receivable_customer_params);
+    		$result = 1;
+    		// 提交事务
+    		$this->commit();
+    
+    	} catch (\Exception $e) {
+    		$result = $e->getMessage();
+    		// 回滚事务
+    		$this->rollback();
+    
+    	}
+    	return $result;
+    }
+    /**
+     * 添加团队产品其他应付
+     * 韩
+     */
+    public function addTeamProductOtherReceivable($params){
+    	//首先根据团队产品账号查询出地接账号编号 否则就添加
+    	$team_product_number = $params['team_product_number'];
+    	$user_id = $params['now_user_id'];
+    	$t = time();
+    	$company_id = $params['user_company_id'];
+    
+    	$team_product_other_info = $params['team_product_other_info'];
+    	$receivable_customer = new  ReceivableCustomer();
+    	$cope = new  Cope();
+    	//开始应付 应收//先把团队其他变成0
+    	$cope_data['status'] = 0;
+    	$this->table('cope')->where("resource_type = 4 and team_product_number = '".$team_product_number."'")->update($cope_data);
+    	$this->table('receivable')->where("resource_type = 4 and team_product_number = '".$team_product_number."'")->update($cope_data);
+    	    	 
+    	$this->startTrans();
+    	try{
+    		for($i=0;$i<count($team_product_other_info);$i++){
+    			$receivable_number = $team_product_other_info[$i]['receivable_number'];
+    			
+    			$order_number = $team_product_other_info[$i]['order_number'];
+    			$payment_company_id = $team_product_other_info[$i]['payment_company_id'];
+    			$product_type = $team_product_other_info[$i]['product_type'];
+    			
+    			if(isset($team_product_other_info[$i]['product_source_type_id'])){
+    				$source_type_id = $team_product_other_info[$i]['product_source_type_id'];
+    			}else{
+    				$source_type_id = 0;
+    			}
+    			
+    			$product_name = $team_product_other_info[$i]['product_name'];
+    			
+    			$currency_id = $team_product_other_info[$i]['currency_id'];
+    			
+			
+    			$receivable_money = $team_product_other_info[$i]['receivable_money'];
+    			$company_order_customer_id = $team_product_other_info[$i]['company_order_customer_id'];
+    			
+    			if(!empty($receivable_number)){//如果有数据 那走修改
+    				$data['order_number'] = $order_number;
+    				$data['payment_company_id'] = $payment_company_id;
+    				$data['product_source_type_id'] = $source_type_id;
+    				$data['product_name'] = $product_name;
+    				$data['currency_id'] = $currency_id;    			
+    				$data['receivable_money'] = $receivable_money;
+    				$data['update_time'] = $t;
+    				$data['update_user_id'] = $user_id;
+    				$data['status'] = 1;
+    				$this->where("receivable_number = '".$receivable_number."'")->update($data);
+    				//再把应付的价格修改
+    				//先通过应收编号获取公共编号
+    				$receivable_result = $this->getReceivable("receivable_number = '$receivable_number'");
+    				$public_number = $receivable_result[0]['public_number'];
+    				
+    				$data_cope['status'] = 1;
+    				$data_cope['public_number'] = $public_number;
+    				$data_cope['cope_money'] = $receivable_money;
+    				$data_cope['source_type_id'] = $source_type_id;
+    				$cope->updateCopeByPublicNumber($data_cope);
+    				
+    			}else{//新增
+    				$data['order_number'] = $order_number;
+    				$data['payment_company_id'] = $payment_company_id;
+    				$data['receivable_number'] = Help::getNumber(5);
+    				$data['team_product_number']=$team_product_number;
+    				$data['product_source_type_id'] = $source_type_id;
+    				$data['product_name'] = $product_name;
+    				$data['product_type'] = $product_type;
+    				$data['currency_id'] = $currency_id;    			
+    				$data['receivable_money'] = $receivable_money;
+    				$data['resource_type'] = 4;
+    				$data['update_time'] = $t;
+    				$data['update_user_id'] = $user_id;
+    				$data['create_user_id'] = $user_id;
+    				$data['public_number'] = $data['receivable_number'];
+    				$data['create_time'] = $t;
+    				$data['status'] = 1;
+    				$this->insert($data);
+    				$receivable_number=$data['receivable_number'];
+    				//添加应付
+    				$data_cope['cope_number']=Help::getNumber(6);
+    				$data_cope['product_type'] = $product_type;
+    				$data_cope['product_name']=$product_name;
+    				$data_cope['team_product_number']=$team_product_number;
+    				$data_cope['receivable_company_id'] = $payment_company_id;
+    				$data_cope['source_type_id'] = $source_type_id;
+    				$data_cope['cope_money'] = $receivable_money;
+    				$data_cope['cope_currency_id'] = $currency_id;
+    				$data_cope['company_id'] = $company_id;
+    				$data_cope['cope_money'] = $receivable_money;
+    				$data_cope['resource_type'] = 4;
+    				$data_cope['unit'] = 1;
+    				$data_cope['price'] = 0;
+    				$data_cope['update_time'] = $t;
+    				$data_cope['update_user_id'] = $user_id;
+    				$data_cope['create_user_id'] = $user_id;
+    				$data_cope['public_number'] = $data['receivable_number'];
+    				$data_cope['create_time'] = $t;
+    				$data_cope['status'] = 1;
+    				$this->table('cope')->insert($data_cope);
+    			}
+    			
+    			//先把游客删除为0
+    			$receivable_customer_params1['status']=0;
+    			$this->table('receivable_customer')->where("receivable_number = '$receivable_number'")->update($receivable_customer_params1);
+    			//开始添加游客信息
+				$receivable_customer_params = [
+					'receivable_number'=> $receivable_number,
+					'company_order_customer_id'=>$company_order_customer_id,
+					'user_id'=>$user_id	
+				];
+			
+				$receivable_customer->addReceivableCustomer($receivable_customer_params);
+    			
+    		}
+    		 
+    		// 提交事务
+    		$this->commit();
+    		$result = 1;
+    		 
+    	} catch (\Exception $e) {
+    		$result = $e->getMessage();
+    		// 回滚事务
+    		$this->rollback();
+    		 
+    	}
+    
+    	return $result;
+    } 
+    
+    //把应收状态变更为0
+    public function updateStatusByData($params){
+    
+    
+    	// 		if($params['product_type']>=2){
+    	// 			$data['source_type_id'] = $params['product_type'];
+    	// 			$where['product_type'] = 2;
+    	// 		}else{
+    	// 			$where['product_type'] = $params['product_type'];
+    	// 		}
+    	if(!empty($params['order_number'])){
+    		$where['order_number'] = $params['order_number'];
+    
+    	}
+    	if(!empty($params['fee_type_type'])){
+    		$where['fee_type_type'] = $params['fee_type_type'];
+    
+    	}
+
+    	if(!empty($params['fee_type_code'])){
+    		$where['fee_type_code'] = $params['fee_type_code'];
+    	
+    	}
+    	if(!empty($params['is_auto'])){
+    		$where['is_auto'] = $params['is_auto'];
+    
+    	}
+    	$data['status'] = 0;
+    	
+    	$this->startTrans();
+    	try{
+    		$this->where($where)->update($data);
+    	
+    		$result = 1;
+    		// 提交事务
+    		$this->commit();
+    
+    	} catch (\Exception $e) {
+    		$result = $e->getMessage();
+    		// 回滚事务
+    		$this->rollback();
+    
+    	}
+    	return $result;
+    
+    }  
+    
+    /**
+     * 获取营业额
+     */
+    public function getReceivableSum($params){
+    	$data='status =1 ';
+		if(!empty($params['create_time_day'])){
+			$data.=" and from_unixtime(create_time,'%Y%m%d') = '".$params['create_time_day']."'";
+		}
+		if(!empty($params['create_time_month'])){
+			$data.=" and from_unixtime(create_time,'%Y%m') = '".$params['create_time_month']."'";
+		}
+		if(!empty($params['company_id'])){
+			$data.=" and company_id = ".$params['company_id'];
+		}
+	
+    	return $this->where($data)->field(['if(sum(receivable_money)>0,sum(receivable_money),0) as receivable_money'])->select();
+    	
+    }
+    //获取未收账款排名
+    public function getMissPaymentCompany($params){
+    	$data = 'and 1=1';
+    	if(!empty($params['company_id'])){
+    		$data.=" and company_id= ".$params['company_id'];
+    	}
+    	
+   
+    	$sql="SELECT receivable_number,payment_object_id,receivable_money,
+    		(select company_name from company where company_id = payment_object_id) as company_name,	
+			(select if(sum(payment_money)>0,sum(payment_money),0) from receivable_info where receivable_info.receivable_number=receivable.receivable_number and status=1) as true_money
+			
+			FROM `receivable` where status =1 and payment_object_type=1 $data";
+    	
+    
+    	$result = $this->query($sql);
+    	
+    	return $result;
+    }
+}

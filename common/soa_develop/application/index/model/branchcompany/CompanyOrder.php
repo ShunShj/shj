@@ -1,0 +1,752 @@
+<?php
+
+namespace app\index\model\branchcompany;
+use http\Exception;
+use think\Model;
+use app\common\help\Help;
+use app\index\service\PublicService;
+use app\index\model\system\Company;
+use think\config;
+use think\Db;
+class CompanyOrder extends Model{
+    //protected $connection = ['database' => 'erp'];
+    protected $table = 'company_order';
+    private $_languageList;
+    private $_public_service;
+    public function initialize()
+    {
+        $this->_languageList = config('systom_setting')['language_list'];
+        $this->_public_service = new PublicService();
+        parent::initialize();
+
+    }
+
+    /**
+     * 添加分公司 订单
+     * 胡
+     */
+    public function addCompanyOrder($params){
+
+        $t = time();
+        $data['company_order_number']=$params['company_order_number'];
+        $data['company_id'] = $params['user_company_id'] ? $params['user_company_id'] : $params['company_id'];
+       
+        $data['wr'] = $params['wr'];
+        
+        if(!empty($params['clientsource'])){
+        	$data['clientsource'] = $params['clientsource'];
+        
+        }
+        
+     
+        $data['channel_type'] = $params['channel_type'];
+        if(!empty($params['distributor_id'])){
+        	$data['distributor_id'] = $params['distributor_id'];
+
+        }
+        if(isset($params['contect_name'])){
+        	$data['contect_name'] = $params['contect_name'];
+        
+        }
+        if(isset($params['tel'])){
+        	$data['tel'] = $params['tel'];
+        
+        }
+        if(isset($params['email'])){
+        	$data['email'] = $params['email'];
+        
+        }
+        if(isset($params['contect_language_id'])){
+        	$data['contect_language_id'] = $params['contect_language_id'];
+        
+        }
+        if(isset($params['contect_country_id'])){
+        	$data['contect_country_id'] = $params['contect_country_id'];
+        
+        }        
+        if(isset($params['content_zip_code'])){
+        	$data['content_zip_code'] = $params['content_zip_code'];
+        
+        }
+        if(isset($params['content_address'])){
+        	$data['content_address'] = $params['content_address'];
+        
+        }
+        
+        $data['begin_time'] = $params['begin_time'];
+        if(!empty($params['begin_city'])){
+        	$data['begin_city'] = $params['begin_city'];
+        }
+        if(!empty($params['end_time'])){
+        	$data['end_time'] = $params['end_time'];
+        }
+        
+        
+        
+        if(isset($params['remark'])){
+        	$data['remark'] = $params['remark'];
+        }
+        if(isset($params['description'])){
+        	$data['description'] = $params['description'];
+        }
+
+
+        //网站订单时 关联用户的uuid
+        if(isset($params['ota_members_uuid'])){
+            $data['ota_members_uuid'] = $params['ota_members_uuid'];
+        }
+        //网站订单时 网站的uuid
+        if(isset($params['website_uuid'])){
+            $data['website_uuid'] = $params['website_uuid'];
+        }
+        //网站订单时 官网订单的状态
+        if(isset($params['order_status'])){
+            $data['order_status'] = $params['order_status'];
+        }
+
+        //网站订单时 选择的旅游产品的uuid
+        if(isset($params['product_uuid'])){
+            $data['product_uuid'] = $params['product_uuid'];
+        }
+
+        //网站订单时 选择的旅游产品的规格的uuid
+        if(isset($params['spec_uuid'])){
+            $data['spec_uuid'] = $params['spec_uuid'];
+        }
+
+        //网站订单时 选择的旅游产品的规格的团队产品uuid（发团日期不同
+        if(isset($params['ota_product_team_uuid'])){
+            $data['ota_product_team_uuid'] = $params['ota_product_team_uuid'];
+        }
+
+        //b2b订单时 是否勾选了小费
+        if(isset($params['is_tipping_paid'])){
+            $data['is_tipping_paid'] = $params['is_tipping_paid'];
+        }
+
+        //订单类型  1erp订单 2网站订单 3b2b订单
+        if(isset($params['order_type'])){
+            $data['order_type'] = $params['order_type'];
+        }
+        
+        $data['buy_order_time'] = $params['buy_order_time'];
+        $data['create_time'] = $t;
+        $data['create_user_id'] = $params['now_user_id'];
+        $data['update_time'] = $t;
+        $data['update_user_id'] = $params['now_user_id'];
+        $data['status'] = -1;
+		$company = new Company();
+        //persions_count  非必填
+        if (is_numeric($params['persions_count'])) $data['persions_count'] = $params['persions_count'];
+
+        try{
+        	$params_order =[
+        		company_id=>$data['company_id']
+        	];
+        	$order_count = $this->getCompanyOrder($params_order);
+        	$order_count = count($order_count)+1;
+        	$company_result = $company->getCompany($params_order);
+        	$company_biaoshi = $company_result[0]['booking_identification'];
+        	$data['company_order_number'] = $params['company_order_number'].$company_biaoshi."-".$order_count;
+		
+           	$this->insertGetId($data);
+			//开始查询改公司有多少订单了
+           	$result = $data['company_order_number'];
+			//查询公司标识
+			
+          
+            	
+            //网站订单时各状态时间记录表
+            Db::table('ota_order_time')->insert(['company_order_number' => $result, 'create_time' => $t]);
+
+            // 提交事务
+            $this->commit();
+
+        } catch (\Exception $e) {
+            $result = $e->getMessage();
+            // 回滚事务
+            $this->rollback();
+
+        }
+	
+        return $result;
+    }
+
+    /**
+     * 获取公司订单
+     * 胡
+     */
+    public function getCompanyOrder($params,$is_count=false){
+
+ 
+    	$data = "1=1 ";
+		if(isset($params['is_company_order_search']) && $params['is_company_order_search']==1){
+			if(!empty($params['begin_create_time'])){
+				$data.= " and FROM_UNIXTIME(company_order.create_time,'%Y%m%d') >= ".date('Ymd',$params['begin_create_time']);
+			}
+			if(!empty($params['end_create_time'])){
+				$data.= " and FROM_UNIXTIME(company_order.create_time,'%Y%m%d') <= ".date('Ymd',$params['end_create_time']);
+			}
+			if(!empty($params['begin_begin_time'])){
+				$data.= " and FROM_UNIXTIME(company_order.begin_time,'%Y%m%d') >= ".date('Ymd',$params['begin_begin_time']);
+			}	
+			if(!empty($params['end_begin_time'])){
+				$data.= " and FROM_UNIXTIME(company_order.begin_time,'%Y%m%d') <= ".date('Ymd',$params['end_begin_time']);
+			}
+			if(!empty($params['company_order_number'])){
+				$data.= " and company_order.company_order_number like '%".$params['company_order_number']."%'";
+			}
+
+			if(!empty($params['create_user_name'])){
+				$data.= " and user.nickname like '%".$params['create_user_name']."%'";
+				
+				
+			}
+			if(!empty($params['order_name'])){
+				$data.= " and company_order.order_name like '%".$params['order_name']."%'";
+			
+			
+			}
+
+			if(!empty($params['distributor_name'])){
+				$data.= " and distributor.distributor_id = ".$params['distributor_name'];
+			
+			
+			}
+			if(!empty($params['contect_name'])){
+				$data.= " and company_order.contect_name like '%".$params['contect_name']."%'";
+				//$data.= " user.nickname like '%白%'";
+					
+			}
+			if(!empty($params['company_id'])){
+				$data.= " and company_order.company_id = ".$params['company_id'];
+				$company_data =" and company_id = ".$params['company_id'];
+			}
+			
+		}else{
+			if($params['is_like']==1){
+				if(!empty($params['begin_create_time'])){
+					$data.= " and FROM_UNIXTIME(company_order.create_time,'%Y%m%d') >= ".date('Ymd',$params['begin_create_time']);
+				}
+				if(!empty($params['end_create_time'])){
+					$data.= " and FROM_UNIXTIME(company_order.create_time,'%Y%m%d') <= ".date('Ymd',$params['end_create_time']);
+				}
+				if(!empty($params['begin_begin_time'])){
+					$data.= " and FROM_UNIXTIME(company_order.begin_time,'%Y%m%d') >= ".date('Ymd',$params['begin_begin_time']);
+				}
+				if(!empty($params['end_begin_time'])){
+					$data.= " and FROM_UNIXTIME(company_order.begin_time,'%Y%m%d') <= ".date('Ymd',$params['end_begin_time']);
+				}
+				if(!empty($params['company_order_number'])){
+					$data.= " and company_order.company_order_number like '%".$params['company_order_number']."%'";
+				}
+				
+				if(!empty($params['create_user_name'])){
+					$data.= " and user.nickname like '%".$params['create_user_name']."%'";
+				
+				
+				}
+				if(!empty($params['order_name'])){
+					$data.= " and company_order.order_name like '%".$params['order_name']."%'";
+						
+						
+				}
+				
+				if(!empty($params['distributor_name'])){
+					$data.= " and distributor.distributor_id = ".$params['distributor_name'];
+						
+						
+				}
+				if(!empty($params['contect_name'])){
+					$data.= " and company_order.contect_name like '%".$params['contect_name']."%'";
+					//$data.= " user.nickname like '%白%'";
+							
+				}			
+			}else{
+				if(!empty($params['company_order_number'])){
+					$data.= " and company_order.company_order_number = '".$params['company_order_number']."'";
+				}
+			}
+			
+
+			
+			if(isset($params['company_order_id'])){
+				$data.= " and company_order.company_order_id = ".$params['company_order_id'];
+			}
+			
+			if(is_numeric($params['status'])){
+				$data.= " and company_order.status = ".$params['status'];
+			}
+			if(!empty($params['company_id'])){
+				$data.= " and company_order.company_id = ".$params['company_id'];
+				$company_data =" and company_id = ".$params['company_id'];
+			}else{
+				$company_data = " and 1=1";
+			}			
+			
+			
+		}
+		if(is_numeric($params['status'])){
+			$data.= " and company_order.status = ".$params['status'];
+		}
+		if(isset($params['page'])){
+			$page = ($params['page']-1)*$params['limit'];
+		}
+		if(is_numeric($params['not_del_data']) && $params['not_del_data'] == 1){
+			$data.= " and company_order.status >=0 ";
+		}
+
+        if(!empty($params['website_uuid'])){
+            $data.= " and company_order.website_uuid = '".$params['website_uuid'] ."'";
+        }
+
+        if(!empty($params['ota_members_uuid'])){
+            $data.= " and company_order.ota_members_uuid = '".$params['ota_members_uuid'] ."'";
+        }
+
+        if(!empty($params['order_status'])){
+            $data.= " and company_order.order_status = ".$params['order_status'];
+        }
+
+        if(!empty($params['product_name'])){
+            $data.= " and ota_product.title like '%".$params['product_name']."%'";
+        }
+
+
+        if(!empty($params['channel_type'])){
+            $data.= " and company_order.channel_type = ".$params['channel_type'];
+        }
+
+        if(is_numeric($params['company_order_status'])){
+        	$data.= " and company_order.company_order_status = ".$params['company_order_status'];
+        	
+       
+        	
+        }
+        
+        //代理商统计时 代理商公司id
+        if (!empty($params['distributor_company_id']))
+        {
+            $data.= " and distributor.company_id = ".$params['distributor_company_id'];
+        }
+
+        if(!empty($params['customer_name'])){
+        	$data.= " and (select  count(*) from company_order_customer  left join customer on customer.customer_id = company_order_customer.customer_id where CONCAT(customer.customer_first_name,customer.customer_last_name) like '%".$params['customer_name']."%' and  company_order_customer.company_order_number = company_order.company_order_number)>=1 ";
+        }
+ 
+        if($is_count==true){
+            $result = $this->table("company_order")->alias("company_order")->
+            join("company",'company.company_id = company_order.company_id','left')->
+            join('user','user.user_id = company_order.create_user_id','left')->
+            join('distributor','distributor.distributor_id = company_order.distributor_id','left')->
+            join('ota_product','ota_product.uuid = company_order.product_uuid','left')->
+            where($data)->count();
+        }else {
+            if (isset($params['page'])) {
+
+                $result= $this->table("company_order")->alias("company_order")->
+				join("company",'company.company_id = company_order.company_id','left')->
+				join('user','user.user_id = company_order.create_user_id','left')->
+				join('distributor','distributor.distributor_id = company_order.distributor_id','left')->
+                join('ota_product','ota_product.uuid = company_order.product_uuid','left')->
+                where($data)->limit($page, $params['limit'])->
+                field(['company_order.company_order_number','company_order.order_name','company_order.company_order_id',
+                        'company_order.buy_order_time','company_order.wr','company_order.clientsource',
+                        'company_order.begin_time','company_order.begin_city','company_order.end_time',
+                        'company_order.channel_type',
+                        'company_order.distributor_id', 'distributor.distributor_name',
+                        'company_order.description','company_order.company_order_status',
+                        'company_order.contect_name','company_order.tel','company_order.email','company_order.operations_type_id',
+                		'company_order.contect_language_id','company_order.contect_country_id','company_order.content_zip_code','company_order.content_address',
+                		'company_order.remark','company_order.company_id','company.company_name',
+                        'company_order.persions_count',
+                        "(select count(*) from company_order_customer where company_order_customer.company_order_number = company_order.company_order_number and company_order_customer.status>0) as customer_count",
+                    	"(select title from ota_product where ota_product.uuid = company_order.product_uuid)"=>'product_name',
+
+                        "(select nickname  from user where user.user_id = company_order.create_user_id)"=>'create_user_name',
+                        "(select nickname  from user where user.user_id = company_order.update_user_id)"=>'update_user_name',
+                        'company_order.create_user_id','company_order.create_time','company_order.update_user_id',
+                        'company_order.update_time','company_order.locked','company_order.order_status','company_order.status'])->order("company_order.create_time desc")->
+
+                select();
+            }else{
+
+                $result= $this->table("company_order")->alias("company_order")->
+                join("company",'company.company_id = company_order.company_id','left')->
+                join('user','user.user_id = company_order.create_user_id','left')->
+                join('distributor','distributor.distributor_id = company_order.distributor_id','left')->
+                join('ota_product','ota_product.uuid = company_order.product_uuid','left')->
+                where($data)->
+                field(['company_order.company_order_number','company_order.order_name','company_order.company_order_id',
+                    'company_order.buy_order_time','company_order.wr','company_order.clientsource',
+                    'company_order.begin_time','company_order.begin_city','company_order.end_time',
+                    'company_order.channel_type',
+                    'company_order.distributor_id', 'distributor.distributor_name',
+                    'company_order.description','company_order.company_order_status',
+                    'company_order.contect_name','company_order.tel','company_order.email','company_order.operations_type_id',
+                	'company_order.contect_language_id','company_order.contect_country_id','company_order.content_zip_code','company_order.content_address',
+                    'company_order.remark','company_order.company_id','company.company_name',
+					'company_order.persions_count',
+                    "(select count(*) from company_order_customer where company_order_customer.company_order_number = company_order.company_order_number and company_order_customer.status>0) as customer_count",
+                    "(select title from ota_product where ota_product.uuid = company_order.product_uuid)"=>'product_name',
+                    "(select nickname  from user where user.user_id = company_order.create_user_id)"=>'create_user_name',
+                    "(select nickname  from user where user.user_id = company_order.update_user_id)"=>'update_user_name',
+                    'company_order.create_user_id','company_order.create_time','company_order.update_user_id',
+                    'company_order.update_time','company_order.locked','company_order.order_status','company_order.status'])->order("company_order.create_time desc")->
+
+                select();
+            }
+
+        }
+	
+        return $result;
+
+    }
+	/**
+	 * 获取公司订单——专门为分销商账单为写
+	 */
+    public function getCompanyOrderForDistributorBill($params){
+    	$data='1=1 and co.status =1 and co.channel_type=1 and co.distributor_id ='.$params['distributor_id'];
+    	//$company_order_create_from_time = $params[''];
+    	//$company_order_create_to_time = $params['company_order_create_to_time'];
+    	//$company_order_begin_time = $params['company_order_begin_time'];
+    	//$company_order_end_time = $params['company_order_end_time'];
+    	if(!empty($params['company_id'])){
+    		$data.=" and ".$params['company_id']."=co.company_id";
+    	}
+    	
+    	if(!empty($params['company_order_create_from_time'])){
+    		$data.=" and ".$params['company_order_create_from_time']."<=co.create_time";
+    	}
+    	if(!empty($params['company_order_create_to_time'])){
+    		$data.=" and ".$params['company_order_create_to_time'].">=co.create_time";
+    	}
+    	if(!empty($params['company_order_begin_time'])){
+    		$data.=" and ".$params['company_order_begin_time']."<= co.begin_time";
+    	}
+    	if(!empty($params['company_order_end_time'])){
+    		$data.=" and ".$params['company_order_end_time'].">=co.begin_time";
+    	}
+    	
+    	$result = $this->table('company_order')->alias('co')->
+    	join("receivable r","co.company_order_number = r.order_number and r.status =1 and r.payment_object_type=3 and r.payment_object_id =".$params['distributor_id'],'left')->
+    	where($data)->field(['co.company_order_id','co.company_order_number',"FROM_UNIXTIME(co.create_time,'%Y%m%d') as create_time","FROM_UNIXTIME(co.begin_time,'%Y%m%d') as begin_time",
+    	"if(r.receivable_money>0,r.receivable_money,0) as payment_money",'r.receivable_number','r.receivable_currency_id',
+    	"(select if(sum(payment_money)>0,sum(payment_money),0) from receivable_info where receivable_info.receivable_number = r.receivable_number) true_payment",
+    	"(select currency_name from currency where currency.currency_id = r.receivable_currency_id) as currency_name",
+    	"(select unit from currency where currency.currency_id = r.receivable_currency_id) as unit",
+    	"(select nickname  from user where user.user_id = co.create_user_id)"=>'create_user_name',
+    	'r.fee_type_code'		
+    	])->select();
+		
+    	return $result;
+    }
+
+    /**
+     * 修改公司 订单根据公司 订单编号
+     */
+    public function updateCompanyOrderByCompanyOrderNumber($params){
+
+        $t = time();
+
+        if(!empty($params['wr'])){
+        	$data['wr'] = $params['wr'];
+
+        }
+        if(!empty($params['clientsource'])){
+        	$data['clientsource'] = $params['clientsource'];
+
+        }
+        if(!empty($params['channel_type'])){
+        	$data['channel_type'] = $params['channel_type'];
+        
+        }
+
+        if(!empty($params['begin_time'])){
+            $data['begin_time'] = $params['begin_time'];
+
+        }
+        if(!empty($params['begin_city'])){
+        	$data['begin_city'] = $params['begin_city'];
+        
+        }
+        if(!empty($params['end_time'])){
+            $data['end_time'] = $params['end_time'];
+
+        }
+        
+        if(!empty($params['distributor_id'])){
+        	$data['distributor_id'] = $params['distributor_id'];
+        
+        }       
+        if(isset($params['description'])){
+        	$data['description'] = $params['description'];
+        
+        }
+
+        if(isset($params['contect_name'])){
+        	$data['contect_name'] = $params['contect_name'];
+
+        }
+        if(isset($params['tel'])){
+        	$data['tel'] = $params['tel'];
+
+        }
+        if(isset($params['email'])){
+        	$data['email'] = $params['email'];
+
+        }
+        if(isset($params['contect_language_id'])){
+        	$data['contect_language_id'] = $params['contect_language_id'];
+        
+        }
+        if(isset($params['contect_country_id'])){
+        	$data['contect_country_id'] = $params['contect_country_id'];
+        
+        }
+        if(isset($params['content_zip_code'])){
+        	$data['content_zip_code'] = $params['content_zip_code'];
+        
+        }
+        if(isset($params['content_address'])){
+        	$data['content_address'] = $params['content_address'];
+        
+        }
+        
+        
+        
+        
+        if(is_numeric($params['operations_type_id'])){
+        	$data['operations_type_id'] = $params['operations_type_id'];
+        
+        }
+        if(isset($params['remark'])){
+        	$data['remark'] = $params['remark'];
+        	
+        }
+        if(isset($params['order_name'])){
+        	$data['order_name'] = $params['order_name'];
+        	 
+        }
+        if(isset($params['buy_order_time'])){
+        	$data['buy_order_time'] = $params['buy_order_time'];
+        
+        }
+      
+        if(is_numeric($params['locked'])){
+        	$data['locked'] = $params['locked'];
+        
+        }
+        if(is_numeric($params['is_approve'])){
+        	$data['is_approve'] = $params['is_approve'];
+        
+        }
+        if(is_numeric($params['status'])){
+            $data['status'] = $params['status'];
+
+        }
+        if(is_numeric($params['order_status'])){
+        	$data['order_status'] = $params['order_status'];
+        
+        }
+        if($params['company_order_status']==3){
+        	$data['company_order_status'] = $params['company_order_status'];
+        	
+        }else if( $params['company_order_status'] == 1 || $params['company_order_status'] == 2){
+        	$data['company_order_status'] = $params['company_order_status'];
+        	      	
+        	
+        }else{
+        	$data['company_order_status'] = 1;
+        }
+        //persions_count  人数非必填
+        if (is_numeric($params['persions_count'])) $data['persions_count'] = $params['persions_count'];
+
+        $data['update_user_id'] = $params['now_user_id'];
+
+        $data['update_time'] = $t;
+
+		
+		
+	
+        $this->startTrans();
+        try{
+            $result =$this->name('company_order')->where("company_order_number = '".$params['company_order_number']."'")->update($data);
+            //当状态变更为0 则        
+            $data_status = [
+            		'status'=>0
+            ];
+            $data_where = [
+            	'company_order_number'=>$params['company_order_number']
+            ];
+            
+            //已取消
+            if( is_numeric($params['company_order_status']) && $params['company_order_status'] ==0 ){
+//             	$this->table('company_order_accommodation')->where($data_where)->update($data_status);
+//             	$this->table('company_order_customer')->where($data_where)->update($data_status);
+//             	$this->table('company_order_customer_lineup')->where($data_where)->update($data_status);
+//             	$this->table('company_order_flight')->where($data_where)->update($data_status);
+//             	$this->table('company_order_product')->where($data_where)->update($data_status);
+//             	$this->table('company_order_product_diy')->where($data_where)->update($data_status);
+//             	$this->table('company_order_product_source')->where($data_where)->update($data_status);
+//             	$this->table('company_order_product_team')->where($data_where)->update($data_status);
+//             	$this->table('company_order_relation')->where($data_where)->update($data_status);
+
+//            	$this->table('company_order_customer_lineup')->where("company_order_number = '".$params['company_order_number']."'")->update($data_status);
+            }
+
+
+            
+            // 提交事务
+            $this->commit();
+
+        } catch (\Exception $e) {
+            $result = $e->getMessage();
+            // 回滚事务
+            $this->rollback();
+
+        }
+
+        return $result;
+    }
+
+    /**
+     * Created by PhpStorm.
+     * User: Administrator
+     * Date: 2019/4/22
+     * Time: 16:41
+     * @param  $company_order_number string 订单编号
+     * @return array|mixed
+     */
+    public function getCompanyOrderByOrderNumber($company_order_number)
+    {
+        return $this->table("company_order")->where(['company_order_number' => $company_order_number])->find();
+    }
+
+
+
+    /**
+     * 添加网站订单
+     * Created by PhpStorm.
+     * User: Administrator
+     * Date: 2019/7/16
+     * Time: 14:52
+     * @param $post_data array 网站提交的订单信息数组
+     * @return mixed 返回数据
+     * @throws \think\exception\PDOException
+     */
+/*    public function addWebOrder($post_data)
+    {
+        $time = time();
+        $order = [];
+        //订单主信息
+        $order['company_order_number'] = Help::getNumber(4,1);
+        $order['ota_members_uuid'] = $post_data['ota_members_uuid'];      //关联的网站用户uuid
+        $order['ota_product_uuid'] = $post_data['ota_product_uuid']; //产品的uuid
+        $order['ota_product_spec_uuid'] = $post_data['ota_product_spec_uuid'];//产品的uuid
+        $order['ota_product_team_product_uuid'] = $post_data['ota_product_team_product_uuid'];//产品的uuid
+        $order['website_uuid'] = $post_data['website_uuid'];//网站的uuid
+        $order['channel_type'] = 2; //网站订单是直客
+        $order['contect_name'] = $post_data['contect_name'];//联系人名称
+        $order['tel'] = $post_data['tel'];//联系人电话
+        $order['email'] = $post_data['email'];//联系人邮件
+        $order['persions_count'] = $post_data['persions_count'];//订单人数
+        $order['status'] = 1;           //启用
+        $order['order_status'] = 1;     //默认为待支付状态
+
+        $room = $post_data['room'];     //房间数组
+        $flight = $post_data['flight']; //航班数组
+
+
+        $this->startTrans();
+
+        try {
+            //订单主表
+            if ($this->insert($order) === false) return false;
+            //时间表
+            if (Db::table('ota_order_time')->insert(['company_order_number' => $order['company_order_number'], 'create_time' => $time]) === false) return false;
+
+            //添加房间信息
+            $customer_model = new Customer();
+            foreach ($room as $room_v)
+            {
+                $room_arr = [];
+                $room_arr['uuid'] = Help::getUuid();
+                //房间内游客
+                foreach ($room_v['peopleList'] as $people_v)
+                {
+                    $customer = [];
+                    $customer['customer_last_name'] = $people_v['lastName'];        //游客 姓
+                    $customer['customer_first_name'] = $people_v['firstName'];       //游客 名
+                    $customer['gender'] = $people_v['gender'];                      //游客 性别 1女2男
+                    $customer['term_of_validity'] = $people_v['term_of_validity']; //有效期
+                    $customer_info = $customer_model->where(['passport_number' => $people_v['passport_number']])->find();
+                    if ($customer_info)
+                    {
+                        if ($customer_model->update($customer, ['passport_number' => $people_v['passport_number']]) === false) return false;
+                        $customer_id = $customer_info['customer_id'];
+                    }
+                    else
+                    {
+                        $customer['card_number'] = $people_v['cardNumber'];                    //游客护照号
+                        $customer['card_type'] = 1;                                         //证件类型 默认为 1护照
+                        $customer_id = $customer_model->insertGetId($customer);
+                        if ($customer_id === false) return false;
+                    }
+                    $company_order_customer = new CompanyOrderCustomer();
+                    $company_order_customer_data = [];
+                    $company_order_customer_data['customer_id'] =  $customer_id;
+                    $company_order_customer_data['company_order_number'] = $order['company_order_number'];
+                    $company_order_customer_id = $company_order_customer->insertGetId($company_order_customer_data);
+                    if ($company_order_customer_id === false) return false;
+                    //添加每个顾客的航班信息
+                    if(count($flight)>0){
+                        $customer_flight = new CompanyOrderFlight();
+                        $flight_arr = [];
+                        foreach ($flight as $flight_v)
+                        {
+                            $flight_v['customer_id'] = $customer_id;
+                            $flight_v['company_order_number'] = $order['company_order_number'];
+                            $flight_v['company_order_customer_id'] = $company_order_customer_id;
+                            $flight_v['create_time'] = $time;
+                            array_push($flight_arr, $flight_v);
+                        }
+                        if ($customer_flight->insertAll($flight_arr) === false) return false;
+                    }
+
+
+                    //添加房间信息
+                    $customer_accommodation = new CompanyOrderAccommodation();
+
+                    $customer_accommodationdata['company_order_number'] = $order['company_order_number'];   //分公司订单编号
+                    $customer_accommodationdata['company_order_customer_id'] = $company_order_customer_id;  //公司订单顾客ID
+                    $customer_accommodationdata['customer_id'] = $customer_id;              //客户编号
+                    $customer_accommodationdata['room_type'] = $room_v['room_type'];      //房间类型
+                    $customer_accommodationdata['room_code'] = $room_v['room_code'];      //房号 第几间房
+                    $customer_accommodationdata['check_in'] = $room_v['check_in'];      //入住+1延后-1提前0正常
+                    $customer_accommodationdata['check_on'] = $room_v['check_on'];      //离开+1延后-1提前0正常
+                    $customer_accommodationdata['remark'] = $room_v['remark'];      //备注
+                    $customer_accommodationdata['create_time'] = $time;
+                    $customer_accommodationdata['status'] = 1;
+
+                    if ($customer_accommodation->insert($customer_accommodationdata) === false) return false;
+                }
+            }
+
+            //添加订单产品
+
+
+
+            $this->commit();
+            return true;
+
+        } catch (Exception $e)
+        {
+            $this->rollback();
+            error_log(print_r($e->getMessage(),1));
+            return false;
+        }
+
+    }*/
+
+}

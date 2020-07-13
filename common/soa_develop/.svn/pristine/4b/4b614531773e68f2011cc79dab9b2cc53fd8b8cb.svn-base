@@ -1,0 +1,98 @@
+CREATE TABLE `operations` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `company_id` int(11) NOT NULL DEFAULT '13' COMMENT '分公司ID',
+  `name` varchar(145) NOT NULL,
+  `ordering` int(11) NOT NULL,
+  `has_template` int(1) NOT NULL DEFAULT '0',
+  `email_template_id` int(11) DEFAULT NULL,
+  `remind_policy` int(1) NOT NULL DEFAULT '1',
+  `remind_day` int(11) NOT NULL DEFAULT '3',
+  `status` tinyint(2) NOT NULL DEFAULT '1' COMMENT '状态 1.启用 2.禁止',
+  `created_at` datetime NOT NULL,
+  `updated_at` datetime NOT NULL,
+  `operations_type_id` int(11) NOT NULL COMMENT '待办类型',
+  PRIMARY KEY (`id`,`operations_type_id`),
+  KEY `odering_idx` (`ordering`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='待办模板';
+
+
+CREATE TABLE `operations_email_templates` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `company_id` int(11) NOT NULL COMMENT '分公司ID',
+  `name` varchar(45) NOT NULL,
+  `subject` varchar(255) DEFAULT NULL,
+  `content` text,
+  `operation_id` int(11) DEFAULT NULL,
+  `created_at` datetime NOT NULL,
+  `updated_at` datetime NOT NULL,
+  `status` tinyint(1) NOT NULL DEFAULT '1' COMMENT '1.正常 2.删除',
+  PRIMARY KEY (`id`),
+  KEY `fk_operations_email_templates_1_idx` (`operation_id`),
+  CONSTRAINT `fk_operations_email_templates_1` FOREIGN KEY (`operation_id`) REFERENCES `operations` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='待办模板邮件模板';
+
+
+CREATE TABLE `operations_type` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `company_id` int(11) DEFAULT NULL COMMENT '分公司',
+  `name` varchar(150) DEFAULT NULL COMMENT '待办类型',
+  `status` tinyint(1) DEFAULT NULL COMMENT '状态 1.开启 2.关闭',
+  `created_at` datetime DEFAULT NULL,
+  `updated_at` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `company_order_operations` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `company_order_id` int(11) NOT NULL COMMENT '订单ID',
+  `operation_id` int(11) NOT NULL COMMENT '操作模板ID',
+  `operation_name` varchar(255) DEFAULT NULL COMMENT '待办名称',
+  `status` tinyint(1) DEFAULT '1' COMMENT '状态 1.未完成 2.完成',
+  `remark` varchar(255) DEFAULT NULL COMMENT '备注',
+  `email_template_id` int(11) DEFAULT NULL COMMENT '待办邮件模板ID',
+  `is_email_sent` tinyint(1) DEFAULT '2' COMMENT '电子邮件发送了吗 1.发送 2.未发送',
+  `remind_at` date DEFAULT NULL COMMENT '提醒日期',
+  `remind_to` int(11) DEFAULT NULL COMMENT '提醒谁',
+  `is_visible` tinyint(1) DEFAULT '1' COMMENT '是否可见 1.可见 2.不可见',
+  `created_at` datetime DEFAULT NULL,
+  `updated_at` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='订单待办模板';
+
+CREATE TABLE `company_order_operations_attachments` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '订单待办模板id',
+  `company_order_operations_id` int(11) NOT NULL,
+  `company_order_id` int(11) NOT NULL,
+  `name` varchar(255) DEFAULT NULL,
+  `savename` varchar(255) DEFAULT NULL,
+  `savepath` varchar(255) DEFAULT NULL,
+  `uploaded_by` int(11) DEFAULT NULL,
+  `created_at` datetime DEFAULT NULL,
+  `updated_at` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='订单待办模板附件';
+
+
+ALTER TABLE `company_order`
+ADD COLUMN `operations_type_id`  int(11) NULL DEFAULT 0 COMMENT '待办类型' AFTER `company_id`;
+
+ALTER TABLE `company_order_operations_attachments`
+ADD COLUMN `status`  tinyint(1) NULL DEFAULT 0 COMMENT '状态 1。开启 2.删除' AFTER `updated_at`;
+
+ALTER TABLE `company_order_operations`
+ADD COLUMN `company_order_number`  varchar(30) NULL COMMENT '公司订单 编号' AFTER `company_order_id`;
+
+ALTER TABLE `company_order_operations_attachments`
+ADD COLUMN `company_order_number`  varchar(30) NULL COMMENT '公司订单编号' AFTER `company_order_id`;
+
+ALTER TABLE `operations_type`
+CHANGE COLUMN `created_at` `create_time`  time(10) NULL DEFAULT NULL AFTER `name`,
+CHANGE COLUMN `updated_at` `update_time`  time(10) NULL DEFAULT NULL AFTER `create_time`,
+ADD COLUMN `create_user_id`  int(10) NULL AFTER `update_time`,
+ADD COLUMN `update_user_id`  int(10) NULL AFTER `create_user_id`;
+
+
+
+
+
+

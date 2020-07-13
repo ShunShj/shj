@@ -1,0 +1,5 @@
+ALTER TABLE `route_template`
+ADD COLUMN `use_company_id`  varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT '可见分工司' AFTER `route_user_id`,
+ADD COLUMN `settlement_type`  int(10) UNSIGNED NULL DEFAULT 1 COMMENT '结算方式1 1口价 2真实结算' AFTER `use_company_id`,
+ADD COLUMN `before_days`  int(11) UNSIGNED NULL  COMMENT '出团前几天截至收客' AFTER `settlement_type`,
+ADD COLUMN `plan_custom_number`  int(11) UNSIGNED NULL DEFAULT NULL COMMENT '计划收客人数' AFTER `before_days`;

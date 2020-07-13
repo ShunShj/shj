@@ -1,0 +1,9 @@
+ALTER TABLE `cruise` 
+MODIFY COLUMN `deck` varchar(256) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT '' COMMENT '所在甲板' AFTER `room_area`;
+
+ALTER TABLE `flight` 
+ADD COLUMN `type` tinyint(3) UNSIGNED DEFAULT 1 COMMENT '1单程2往返' AFTER `shipping_space`;
+
+ALTER TABLE `hotel` 
+ADD COLUMN `address` varchar(255) COMMENT '地址' AFTER `room_type`,
+ADD COLUMN `phone` varchar(255) COMMENT '电话' AFTER `address`;

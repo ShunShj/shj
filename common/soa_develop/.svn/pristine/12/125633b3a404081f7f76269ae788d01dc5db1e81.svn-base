@@ -1,0 +1,4 @@
+ALTER TABLE `company` 
+ADD COLUMN `is_supplier` tinyint(4) UNSIGNED NULL DEFAULT 0 COMMENT '是否为地接分公司1是0不是' AFTER `phone`;
+ALTER TABLE `supplier` 
+ADD COLUMN `is_company` tinyint(2) UNSIGNED NULL DEFAULT 0 COMMENT '是否地接分公司1是0否' AFTER `company_id`;

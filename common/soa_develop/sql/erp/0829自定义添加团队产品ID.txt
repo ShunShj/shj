@@ -1,0 +1,6 @@
+ALTER TABLE `company_order_product_diy`
+ADD COLUMN `team_product_id`  int(10) NULL DEFAULT NULL COMMENT '团队产品ID' AFTER `diy_name`;
+
+ALTER TABLE `company_order_product_diy`
+ADD COLUMN `is_type`  int(10) NULL DEFAULT 1 COMMENT '1分公司2团队产品' AFTER `team_product_id`;
+

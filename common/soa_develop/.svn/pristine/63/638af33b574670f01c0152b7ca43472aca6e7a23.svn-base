@@ -1,0 +1,6 @@
+ALTER TABLE `branch_product`
+ADD COLUMN `locked`  int(10) NULL DEFAULT 0 COMMENT '1锁定0未锁定' AFTER `update_user_id`;
+
+
+
+

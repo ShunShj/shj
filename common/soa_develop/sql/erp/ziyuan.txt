@@ -1,0 +1,8 @@
+ALTER TABLE `supplier`
+ADD COLUMN `supplier_style`  tinyint(4) NULL DEFAULT 1 COMMENT '1旅行社2地接' AFTER `supplier_type_id`;
+
+ALTER TABLE `hotel` 
+MODIFY COLUMN `guest_number` int(11) UNSIGNED DEFAULT 0 COMMENT '最多入住人数' AFTER `free_wifi`;
+
+ALTER TABLE `vehicle` 
+MODIFY COLUMN `load` int(10) UNSIGNED DEFAULT 0 COMMENT '核载' AFTER `vehicle_name`;

@@ -1,0 +1,132 @@
+<?php
+namespace app\index\model\product;
+use think\Model;
+use app\common\help\Help;
+use think\config;
+use think\Db;
+class TeamProductOtherCope extends Model{
+    //protected $connection = ['database' => 'erp'];
+    protected $table = 'team_product_other_cope';
+    private $_languageList;
+    public function initialize()
+    {
+    	$this->_languageList = config('systom_setting')['language_list'];
+    	parent::initialize();
+    
+    }
+
+    /**
+     * 添加团队产品其他应付
+     * 韩
+     */
+    public function addTeamProductOtherCope($params){
+    	//首先根据团队产品账号查询出地接账号编号 否则就添加
+    	$team_product_number = $params['team_product_number'];
+    	$user_id = $params['now_user_id'];
+    	$t = time();
+    	$company_id = $params['user_company_id'];
+
+    	$team_product_other_info = $params['team_product_other_info'];
+  
+    	//开始应付 //先把团队其他变成0
+    	$cope_data['status'] = 0;
+    	$this->table('cope')->where("resource_type = 4 and team_product_number = '".$team_product_number."'")->update($cope_data);
+    	
+    	$this->startTrans();
+    	try{
+    		//开始把地接报账以及应付里关于地接报账的数据状态改为0
+    		//$this->where("team_product_number = '".$team_product_number."'")->update($cope_data);
+    		for($i=0;$i<count($team_product_other_info);$i++){
+    	
+    			if(is_numeric($team_product_other_info[$i]['source_type_id'])){
+    				$source_type_id = $team_product_other_info[$i]['source_type_id'];
+    			}else{
+    				$source_type_id = 0;
+    			}
+    			
+    			$supplier_id = $team_product_other_info[$i]['supplier_id'];
+    			
+    			$product_name = $team_product_other_info[$i]['product_name'];
+    			$product_type = $team_product_other_info[$i]['product_type'];
+    			$cope_currency_id = $team_product_other_info[$i]['cope_currency_id'];
+    			$cope_number = $team_product_other_info[$i]['cope_number'];
+    			$price = $team_product_other_info[$i]['price'];
+    			$unit = $team_product_other_info[$i]['unit'];
+    			$cope_money = $team_product_other_info[$i]['cope_money'];
+
+    			if(!empty($cope_number)){//如果有数据 那走修改
+    				$data['source_type_id'] = $source_type_id;
+    				$data['supplier_id'] = $supplier_id;
+    				$data['product_name'] = $product_name;
+    				$data['cope_currency_id'] = $cope_currency_id;
+    				$data['product_type'] = $product_type;
+    				$data['price'] = $price;
+    				$data['unit'] = $unit;
+    				$data['cope_money'] = $cope_money;
+    				$data['update_time'] = $t;
+    				$data['update_user_id'] = $user_id;
+    				$data['status'] = 1;
+    				$this->table("cope")->where("cope_number = '".$cope_number."'")->update($data);
+    				
+    				
+    				
+    				
+    			}else{//新增
+    				$data['cope_number'] = Help::getNumber(6);
+    				$data['team_product_number'] = $team_product_number;
+    				$data['source_type_id'] = $source_type_id;
+    				$data['supplier_id'] = $supplier_id;
+    				$data['product_name'] = $product_name;
+    				$data['cope_currency_id'] = $cope_currency_id;
+    				$data['product_type'] = $product_type;
+    		
+    				$data['resource_type'] = 4;
+    				$data['price'] = $price;
+    				$data['company_id'] = $company_id;
+    				$data['unit'] = $unit;
+    				$data['travel_agency_reimbursement_number'] = $travel_agency_reimbursement_number;
+    				$data['cope_money'] = $cope_money;
+    				$data['create_time'] = $t;
+    				$data['create_user_id'] = $user_id;
+    				$data['update_time'] = $t;
+    				$data['update_user_id'] = $user_id;
+    				$data['status'] = 1;
+    				$this->table("cope")->insert($data);
+    		
+    				
+    			}
+    			$team_product_other_cope_data['team_product_number'] = $team_product_number;
+    			$team_product_other_cope_data['source_type_id'] = $source_type_id;
+    			$team_product_other_cope_data['supplier_id'] = $supplier_id;
+    			$team_product_other_cope_data['company_id'] = $company_id;
+    			$team_product_other_cope_data['product_name'] = $product_name;
+    			$team_product_other_cope_data['currency_id'] = $cope_currency_id;
+    			$team_product_other_cope_data['price'] = $price;
+    			$team_product_other_cope_data['unit'] = $unit;
+    			$team_product_other_cope_data['total_price'] = $cope_money;
+    			$team_product_other_cope_data['create_time'] = $t;
+    			$team_product_other_cope_data['create_user_id'] = $user_id;
+    			$team_product_other_cope_data['update_time'] = $t;
+    			$team_product_other_cope_data['update_user_id'] = $user_id;
+    			$team_product_other_cope_data['status'] = 1;
+    			$this->insert($team_product_other_cope_data);
+    	
+    		}
+    		 
+    		// 提交事务
+    		$this->commit();
+    		$result = 1;
+    		 
+    	} catch (\Exception $e) {
+    		$result = $e->getMessage();
+    		// 回滚事务
+    		$this->rollback();
+    		 
+    	}
+    	 
+    	return $result;
+    }
+
+
+
+}

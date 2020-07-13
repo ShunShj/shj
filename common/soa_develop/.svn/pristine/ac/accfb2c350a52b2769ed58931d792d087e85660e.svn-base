@@ -1,0 +1,168 @@
+<?php
+namespace app\index\model\system;
+use think\Model;
+use app\common\help\Help;
+use think\config;
+use think\Db;
+class RouteType extends Model{
+    //protected $connection = ['database' => 'erp'];
+    protected $table = 'route_type';
+    private $_languageList;
+    public function initialize()
+    {
+    	$this->_languageList = config('systom_setting')['language_list'];
+    	parent::initialize();
+    
+    }
+
+    /**
+     * 添加路线类型
+     * 胡
+     */
+    public function addRouteType($params){
+    	$t = time();
+
+
+    	$data['route_type_name'] = $params['route_type_name'];
+        $data['company_id'] = $params['user_company_id'];
+    	$data['type'] = $params['type'];
+    	$data['route_type_user_id'] = $params['route_type_user_id'];
+    	$data['create_time'] = $t;  	
+    	$data['create_user_id'] = $params['now_user_id'];
+    	$data['update_time'] = $t;
+    	$data['update_user_id'] = $params['now_user_id'];
+    	$data['status'] = $params['status'];
+
+    	
+    	Db::startTrans();
+    	try{
+    		$pk_id = Db::name('route_type')->insertGetId($data);
+		
+    		$result = 1;
+    		// 提交事务
+    		Db::commit();
+    
+    	} catch (\Exception $e) {
+    		$result = $e->getMessage();
+    		// 回滚事务
+    		Db::rollback();
+    		//\think\Response::create(['code' => '400', 'msg' =>$result], 'json')->send();
+    		//exit();
+    
+    	}
+    
+    	return $result;
+    }
+    
+    /**
+     * 获取路线类型
+     * 胡
+     */
+    public function getRouteType($params,$is_count=false,$is_page=false,$page=null,$page_size=20){
+
+
+        $data = "1=1";
+        if(isset($params['route_type_name'])){
+            $data.= " and route_type.route_type_name like '%".$params['route_type_name']."%'";
+        }
+        if(isset($params['route_type_id'])){
+            $data.= " and route_type.route_type_id = '".$params['route_type_id']."'";
+        }
+        if(isset($params['type'])){
+            $data.= " and route_type.type = '".$params['type']."'";
+        }
+        if(isset($params['route_type_user_id'])){
+            $data.= " and route_type_user_id ='".$params['route_type_id']."'";
+        }
+        if(is_numeric($params['status'])){
+            $data.= " and route_type.status = ".$params['status'];
+        }
+
+        if(is_numeric($params['company_id'])){
+            $data.= " and route_type.company_id = '".$params['company_id']."'";
+        }
+        if($is_count==true){
+            $result = $this->table("route_type")->alias("route_type")->where($data)->count();
+        }else {
+            if ($is_page == true) {
+                $result = $this->table("route_type")->alias('route_type')->
+                join('company', 'company.company_id = route_type.company_id')->
+                where($data)->limit($page, $page_size)->order("create_time desc")->
+
+                field(['route_type.route_type_id', 'route_type.route_type_name', 'route_type.type', 'route_type.create_time', 'route_type.update_time',
+                    'route_type.company_id', 'company.company_name', 'route_type_user_id',
+                    "(select nickname  from user where user.user_id = route_type.create_user_id)" => 'create_user_name',
+                    "(select nickname  from user where user.user_id = route_type.update_user_id)" => 'update_user_name',
+                    'route_type.status',
+                ])->select();
+
+                return $result;
+            }else{
+                $result = $this->table("route_type")->alias('route_type')->
+                join('company', 'company.company_id = route_type.company_id')->
+                where($data)->order("create_time desc")->
+
+                field(['route_type.route_type_id', 'route_type.route_type_name', 'route_type.type', 'route_type.create_time', 'route_type.update_time',
+                    'route_type.company_id', 'company.company_name', 'route_type_user_id',
+                    "(select nickname  from user where user.user_id = route_type.create_user_id)" => 'create_user_name',
+                    "(select nickname  from user where user.user_id = route_type.update_user_id)" => 'update_user_name',
+                    'route_type.status',
+                ])->select();
+            }
+        }
+        return $result;
+    }
+
+    
+    /**
+     * 修改路线类型
+     */
+    public function updateRouteTypeByRouteTypeId($params){
+    
+    	$t = time();
+    	
+    	if(!empty($params['route_type_name'])){
+    		$data['route_type_name'] = $params['route_type_name'];
+    	
+    	}
+
+    	if(!empty($params['status'])){
+    		$data['status'] = $params['status'];
+    		 
+    	}
+    	if(!empty($params['type'])){
+    		$data['type'] = $params['type'];
+    		 
+    	}
+
+        if(!empty($params['route_type_user_id'])){
+            $data['route_type_user_id'] = $params['route_type_user_id'];
+
+        }
+
+        if(!empty($params['company_id'])){
+            $data['company_id'] = $params['company_id'];
+        }
+
+    	$data['update_user_id'] = $params['user_id'];   
+    	$data['update_time'] = $t;
+
+    
+    
+    	$source_price=[];
+    	Db::startTrans();
+    	try{
+    		Db::name('route_type')->where("route_type_id = ".$params['route_type_id'])->update($data);
+    		$result = 1;
+    		// 提交事务
+    		Db::commit();
+    
+    	} catch (\Exception $e) {
+    		$result = $e->getMessage();
+    		// 回滚事务
+    		Db::rollback();
+    
+    	}
+    	return $result;
+    }
+}

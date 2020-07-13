@@ -1,0 +1,128 @@
+<?php
+namespace app\index\model\product;
+use think\Model;
+use app\common\help\Help;
+use think\config;
+use think\Db;
+class RouteSourceDining extends Model{
+    //protected $connection = ['database' => 'erp'];
+    protected $table = 'route_source_dining';
+    private $_languageList;
+    public function initialize()
+    {
+    	$this->_languageList = config('systom_setting')['language_list'];
+    	parent::initialize();
+     
+    }
+
+    /**
+     * 添加用餐路线资源
+     * 胡
+     */
+    public function addRouteSourceDining($params){
+    	$t = time();
+
+    	$data['route_template_id'] = $params['route_template_id'];
+
+    	$data['dining_id'] = $params['dining_id'];
+    	$data['source_price'] = $params['source_price'];
+    	$data['source_count'] = $params['source_count'];
+
+    	$data['create_time'] = $t;  	
+    	$data['create_user_id'] = $params['user_id'];
+    	$data['update_time'] = $t;
+    	$data['update_user_id'] = $params['user_id'];
+    	$data['status'] = $params['status'];
+
+    	$this->startTrans();
+    	try{
+    		$pk_id = $this->insertGetId($data);
+		
+    		$result = $pk_id;
+    		// 提交事务
+            $this->commit();
+    
+    	} catch (\Exception $e) {
+    		$result = $e->getMessage();
+    		// 回滚事务
+            $this->rollback();
+    		//\think\Response::create(['code' => '400', 'msg' =>$result], 'json')->send();
+    		//exit();
+    
+    	}
+    
+    	return $result;
+    }
+    
+    /**
+     * 获取回执单
+     * 胡
+     */
+    public function getReturnReceipt($params){
+    
+
+    	$data = [];
+    	if(isset($params['return_receipt_name'])){
+    		$data['return_receipt_name']= $params['return_receipt_name'];
+    	}
+    	if(isset($params['return_receipt_id'])){
+    		$data['return_receipt_id']= $params['return_receipt_id'];
+    	}
+    	if(isset($params['status'])){
+    		$data['status']= $params['status'];
+    	}
+    	 
+        $result = $this->table("return_receipt")->alias('return_receipt')->where($data)->
+            
+            field(['*',
+            		"(select nickname  from user where user.user_id = return_receipt.create_user_id)"=>'create_user_name',
+            		"(select nickname  from user where user.user_id = return_receipt.update_user_id)"=>'update_user_name',
+            		
+            ])->select();
+
+        return $result;
+    
+    }
+
+    
+    /**
+     * 修改回执单
+     */
+    public function updateReturnReceiptByReturnReceiptId($params){
+    
+    	$t = time();
+    	
+    	if(!empty($params['return_receipt_name'])){
+    		$data['return_receipt_name'] = $params['return_receipt_name'];
+    	
+    	}
+
+    	if(!empty($params['status'])){
+    		$data['status'] = $params['status'];
+    		 
+    	}
+
+
+
+    	$data['update_user_id'] = $params['user_id'];   
+    	$data['update_time'] = $t;
+
+    
+    
+    	$source_price=[];
+    	Db::startTrans();
+    	try{
+    		Db::name('return_receipt')->where("return_receipt_id = ".$params['return_receipt_id'])->update($data);
+    		$result = 1;
+    		// 提交事务
+    		Db::commit();
+    
+    	} catch (\Exception $e) {
+    		$result = $e->getMessage();
+    		// 回滚事务
+    		Db::rollback();
+    
+    	}
+    	return $result;
+    }
+}

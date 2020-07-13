@@ -1,0 +1,15 @@
+update finance_approve set team_product_id = (select team_product_id from receivable
+ where receivable.receivable_number=finance_approve.finance_number)
+where finance_type =1; 
+update finance_approve set team_product_id = (select team_product_id from cope
+ where cope.cope_number=finance_approve.finance_number)
+where finance_type =2; 
+
+update finance_approve set supplier_id = (select payment_object_id from receivable
+ where receivable.receivable_number=finance_approve.finance_number and receivable.payment_object_type=2)
+where finance_type =1; 
+
+
+update finance_approve set supplier_id = (select receivable_object_id from cope
+ where cope.cope_number=finance_approve.finance_number and cope.receivable_object_type=2)
+where finance_type =2; 

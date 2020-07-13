@@ -1,0 +1,14 @@
+ALTER TABLE `ota_advert` 
+ADD COLUMN `href_type` tinyint(4) UNSIGNED DEFAULT 0 COMMENT '1内部连接2外部连接' AFTER `url`,
+ADD COLUMN `without_href` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT '' COMMENT '外部跳转URL' AFTER `href_type`,
+ADD COLUMN `interior_type` tinyint(4) UNSIGNED DEFAULT 0 COMMENT '内部跳转类型1旅游产品分类2旅游产品' AFTER `without_href`,
+ADD COLUMN `interior_uuid` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT '' COMMENT '内部跳转的UUID' AFTER `interior_type`;
+
+
+
+
+ALTER TABLE `ota_slide` 
+ADD COLUMN `href_type` tinyint(4) UNSIGNED DEFAULT 0 COMMENT '1内部连接2外部连接' AFTER `title`,
+ADD COLUMN `without_href` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT '' COMMENT '外部跳转URL' AFTER `href_type`,
+ADD COLUMN `interior_type` tinyint(4) COMMENT '内部跳转类型1旅游产品分类2旅游产品' AFTER `without_href`,
+ADD COLUMN `interior_uuid` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT '' COMMENT '内部跳转的UUID' AFTER `interior_type`;

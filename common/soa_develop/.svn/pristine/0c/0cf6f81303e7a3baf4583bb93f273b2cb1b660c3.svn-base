@@ -1,0 +1,167 @@
+<?php
+
+namespace app\index\model\branchcompany;
+use think\Model;
+use app\common\help\Help;
+use think\config;
+use think\Db;
+class BranchProductType extends Model{
+    //protected $connection = ['database' => 'erp'];
+    protected $table = 'branch_product_type';
+    private $_languageList;
+    public function initialize()
+    {
+        $this->_languageList = config('systom_setting')['language_list'];
+        parent::initialize();
+
+    }
+
+    /**
+     * 添加分公司产品类型
+     * 胡
+     */
+    public function addBranchProductType($params){
+
+        $t = time();
+       
+        $data['branch_product_type_name'] = $params['branch_product_type_name'];
+   
+        $data['company_id'] = $params['user_company_id'];
+        $data['create_time'] = $t;
+        $data['create_user_id'] = $params['now_user_id'];
+        $data['update_time'] = $t;
+        $data['update_user_id'] = $params['now_user_id'];
+ 
+        $data['status'] = 1;
+
+        $this->startTrans();
+        try{
+            $result = $this->insertGetId($data);
+ 
+
+            // 提交事务
+            $this->commit();
+   
+
+        } catch (\Exception $e) {
+            $result = $e->getMessage();
+            // 回滚事务
+            $this->rollback();
+
+        }
+		
+        return $result;
+    }
+
+    /**
+     * 获取分公司产品类型
+     * 胡
+     */
+    public function getBranchProductType($params,$is_count=false){
+
+ 
+    	$data = "1=1";
+    	
+//     	if(is_numeric($params['is_like_search'])){ //是否开启模糊查询
+    		
+//     	}
+    	if(!empty($params['branch_product_type_id'])){
+    		$data.= " and branch_product_type.branch_product_type_id = ".$params['branch_product_type_id'];
+    	}
+        if(!empty($params['branch_product_type_name'])){
+            $data.= " and branch_product_type.branch_product_type_name like '%".$params['branch_product_type_name']."%'";
+        }
+    	if(is_numeric($params['status'])){
+    		$data.= " and branch_product_type.status = ".$params['status'];
+    	}
+    	if(isset($params['create_user_name'])){
+    			$data.= " and user.nickname like '%".$params['create_user_name']."%'";
+    	}
+        if(is_numeric($params['can_watch_company_id'])){
+            $data.= " and branch_product_type.company_id = '".$params['can_watch_company_id']."'";
+        }
+
+        if($is_count==true){
+            $result = $this->table("branch_product_type")->where($data)->count();
+        }else {
+            if ($is_page == true) {
+                $result = $this->table("branch_product_type")->
+                join("company", 'company.company_id = branch_product_type.company_id', 'left')->
+                join('user', 'user.user_id = branch_product_type.create_user_id', 'left')->
+                where($data)->limit($page, $page_size)->order('branch_product_type.create_time desc')->
+                field(['branch_product_type.branch_product_type_id', 'branch_product_type.company_id', 'company.company_name',
+                    'branch_product_type.branch_product_type_name', 'user.nickname',
+                    "(select nickname  from user where user.user_id = branch_product_type.create_user_id)" => 'create_user_name',
+                    //	"(select nickname  from user where user.user_id = bpt.update_user_id)"=>'update_user_name',
+                    'branch_product_type.create_user_id', 'branch_product_type.create_time', 'branch_product_type.update_user_id',
+                    'branch_product_type.update_time', 'branch_product_type.status'])->
+
+                select();
+            }else{
+                $result = $this->table("branch_product_type")->
+                join("company", 'company.company_id = branch_product_type.company_id', 'left')->
+                join('user', 'user.user_id = branch_product_type.create_user_id', 'left')->
+                where($data)->order('branch_product_type.create_time desc')->
+                field(['branch_product_type.branch_product_type_id', 'branch_product_type.company_id', 'company.company_name',
+                    'branch_product_type.branch_product_type_name', 'user.nickname',
+                    "(select nickname  from user where user.user_id = branch_product_type.create_user_id)" => 'create_user_name',
+                    //	"(select nickname  from user where user.user_id = bpt.update_user_id)"=>'update_user_name',
+                    'branch_product_type.create_user_id', 'branch_product_type.create_time', 'branch_product_type.update_user_id',
+                    'branch_product_type.update_time', 'branch_product_type.status'])->
+                select();
+            }
+        }
+
+
+        return $result;
+
+    }
+
+
+    /**
+     * 修改分公司产品类型
+     */
+    public function updateBranchProductType($params){
+
+        $t = time();
+        if(!empty($params['branch_product_type_name'])){
+        	$data['branch_product_type_name'] = $params['branch_product_type_name'];
+
+        }
+
+        if(is_numeric($params['status'])){
+            $data['status'] = $params['status'];
+
+        }
+
+
+        $data['update_user_id'] = $params['user_id'];
+
+        $data['update_time'] = $t;
+
+
+
+
+        $this->startTrans();
+        try{
+            $this->where(" branch_product_type_id = '".$params['branch_product_type_id']."'")->update($data);
+
+            $result = 1;
+            // 提交事务
+            $this->commit();
+
+        } catch (\Exception $e) {
+            $result = $e->getMessage();
+            // 回滚事务
+            $this->rollback();
+
+        }
+        return $result;
+    }
+
+
+    public function getOneBranchProductType($branch_product_type_id){
+        $result = $this->table("branch_product_type")->where(['branch_product_type_id' => $branch_product_type_id])->find();
+        return $result;
+    }
+}

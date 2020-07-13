@@ -1,0 +1,29 @@
+ALTER TABLE `company_order`
+ADD COLUMN `contect_language_id`  int NULL COMMENT '直客语言ID' AFTER `email`,
+ADD COLUMN `contect_country_id`  int NULL COMMENT '直客城市ID' AFTER `contect_language_id`,
+ADD COLUMN `content_zip_code`  varchar(100) NULL COMMENT '直客邮编' AFTER `contect_country_id`,
+ADD COLUMN `content_address`  varchar(500) NULL COMMENT '直客地址' AFTER `content_zip_code`;
+
+ALTER TABLE `company_order_product_template`
+ADD COLUMN `is_type`  tinyint NULL DEFAULT 1 COMMENT '1分公司产品2团队产品' AFTER `company_order_product_id`;
+
+ALTER TABLE `route_template`
+MODIFY COLUMN `route_name`  varchar(150) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '路线模板名称' AFTER `company_id`;
+
+
+ALTER TABLE `company_order_product_team`
+ADD COLUMN `is_type`  int NULL DEFAULT 1 COMMENT '类型1分公司带来的2直接订购的' AFTER `settlement_type`;
+
+ALTER TABLE `company_order_product_source`
+ADD COLUMN `is_type`  int NULL DEFAULT 1 COMMENT '来源 1分公司 2团队产品' AFTER `remark`;
+
+ALTER TABLE `receivable_info`
+ADD COLUMN `invoice_number`  varchar(100) NULL COMMENT '发票编号' AFTER `sn_number`;
+
+ALTER TABLE `company_order_product_team`
+ADD COLUMN `remark`  varchar(300) NULL COMMENT '备注' AFTER `team_product_receivable_type`;
+
+
+
+
+

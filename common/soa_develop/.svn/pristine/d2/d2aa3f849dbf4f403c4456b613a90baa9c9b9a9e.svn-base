@@ -1,0 +1,255 @@
+<?php
+
+namespace app\index\model\branchcompany;
+use think\Model;
+use app\common\help\Help;
+use app\index\service\PublicService;
+use think\config;
+use think\Db;
+class CompanyOrderProductDiy extends Model{
+    //protected $connection = ['database' => 'erp'];
+    protected $table = 'company_order_product_diy';
+    private $_languageList;
+    private $_public_service;
+    public function initialize()
+    {
+        $this->_languageList = config('systom_setting')['language_list'];
+        $this->_public_service = new PublicService();
+        parent::initialize();
+
+    }
+
+    /**
+     * 添加公司订单产品-自定义
+     * 胡
+     */
+    public function addCompanyOrderProductDiy($params){
+
+        $t = time();
+		$data['company_order_number'] = $params['company_order_number'];
+		$data['company_order_product_diy_number'] = $params['company_order_product_diy_number'];
+		$data['diy_name'] = $params['diy_name'];
+		$data['diy_cost'] = $params['diy_cost'];
+		$data['diy_price'] = $params['diy_price'];
+		if(!empty($params['diy_cost_univalence'])){
+			$data['diy_cost_univalence'] = $params['diy_cost_univalence'];
+		}
+		if(!empty($params['price_before_tax'])){
+			$data['price_before_tax'] = $params['price_before_tax'];
+		}
+		
+		
+		$data['cost_currency_id']=$params['cost_currency_id'];
+		$data['price_currency_id']=$params['cost_currency_id'];
+		$data['supplier_id']=$params['supplier_id'];
+		$data['create_time'] = $t;
+		$data['update_time'] = $t;
+		$data['create_user_id'] = $params['now_user_id'];
+		$data['update_user_id'] = $params['now_user_id'];
+		$data['status'] = 1;
+		
+        $this->startTrans();
+        try{
+			
+        	$result = $this->insertGetId($data);
+        	$this->_public_service->setNumber('company_order_product_diy', 'company_order_product_diy_id', $result, 'company_order_product_diy_number', Help::getNumber(8), $result);
+        	
+        	$result = $params['company_order_product_diy_number'];
+        	
+            // 提交事务
+            $this->commit();
+
+        } catch (\Exception $e) {
+            $result = $e->getMessage();
+            // 回滚事务
+            $this->rollback();
+
+        }
+   
+        return $result;
+    }
+
+    /**
+     * 获取公司订单 自定义
+     * 胡
+     */
+    public function getCompanyOrderProductDiy($params){
+
+ 
+    	$data = "1=1";
+    	if(!empty($params['company_order_number'])){
+    		$data.= " and company_order_product_diy.company_order_number = '".$params['company_order_number']."'";
+    	}
+    	if(!empty($params['company_order_diy_number'])){
+    		$data.= " and company_order_product_diy.company_order_diy_number = '".$params['company_order_diy_number']."'";
+    	}
+    	if(!empty($params['company_order_product_diy_id'])){
+    		$data.= " and company_order_product_diy.company_order_product_diy_id = ".$params['company_order_product_diy_id'];
+    	}
+    	if(!empty($params['receivable_number'])){
+    		$data.= " and company_order_product_diy.receivable_number =  '".$params['receivable_number']."'";
+    	}
+    	if(is_numeric($params['status'])){
+    		$data.= " and company_order_product_diy.status = ".$params['status'];
+    	}
+
+    
+            $result= $this->table("company_order_product_diy")->alias("company_order_product_diy")->
+            join("tax",'tax.tax_id = company_order_product_diy.tax_id','left')->
+            where($data)->
+            field(['company_order_product_diy.company_order_product_diy_id','company_order_product_diy.company_order_number','company_order_product_diy.company_order_product_diy_number',
+            		'company_order_product_diy.diy_name','company_order_product_diy.diy_price','company_order_product_diy.diy_cost','company_order_product_diy.diy_cost_univalence',
+            		'company_order_product_diy.invoice_number','company_order_product_diy.cost_currency_id','company_order_product_diy.price_currency_id',
+            		'company_order_product_diy.invoice_time','company_order_product_diy.supplier_id',
+
+                'company_order_product_diy.netamt','company_order_product_diy.gst','company_order_product_diy.pst',
+                'company_order_product_diy.hst','company_order_product_diy.p_otx','company_order_product_diy.invamt',
+                'company_order_product_diy.estcost','company_order_product_diy.paidamt','company_order_product_diy.balance',
+
+            		'company_order_product_diy.cope_number','company_order_product_diy.receivable_number',
+            		'company_order_product_diy.tax_id','company_order_product_diy.tax_cd','company_order_product_diy.remark','company_order_product_diy.price_before_tax',
+            		'tax.txcd','tax.gstrate','tax.pstrate','tax.hstrate','tax.otx','tax.note',
+            		"(select currency_name from currency where company_order_product_diy.price_currency_id = currency.currency_id) as price_currency_name",
+            		"(select currency_name from currency where company_order_product_diy.cost_currency_id = currency.currency_id) as cost_currency_name",
+            		"(select supplier_name from supplier where company_order_product_diy.supplier_id = supplier.supplier_id) as supplier_name",
+            		
+            		"(select nickname  from user where user.user_id = company_order_product_diy.create_user_id)"=>'create_user_name',
+            		"(select nickname  from user where user.user_id = company_order_product_diy.update_user_id)"=>'update_user_name',
+            		'company_order_product_diy.create_user_id','company_order_product_diy.update_user_id','company_order_product_diy.create_time',
+            		'company_order_product_diy.update_time','company_order_product_diy.status'])->
+            
+            select();
+
+       
+
+
+        return $result;
+
+    }
+
+
+    /**
+     * 修改公司订单产品自定义根据自定义编号
+     */
+    public function updateCompanyOrderProductDiyByDiyNumber($params){
+
+        $t = time();
+
+
+        if(!empty($params['invoice_number'])){
+        	$data['invoice_number'] = $params['invoice_number'];
+        
+        }
+        if(!empty($params['invoice_time'])){
+        	$data['invoice_time'] = $params['invoice_time'];
+        
+        }
+        if(!empty($params['price_currency_id'])){
+        	$data['price_currency_id'] = $params['price_currency_id'];
+        
+        }
+        if(!empty($params['supplier_id'])){
+        	$data['supplier_id'] = $params['supplier_id'];
+        
+        }
+        if(!empty($params['diy_price'])){
+        	$data['diy_price'] = $params['diy_price'];
+        
+        }       
+        if(!empty($params['diy_cost'])){
+        	$data['diy_cost'] = $params['diy_cost'];
+        
+        }
+        if(!empty($params['cost_currency_id'])){
+        	$data['cost_currency_id'] = $params['cost_currency_id'];
+        
+        }
+        if(is_numeric($params['status'])){
+            $data['status'] = $params['status'];
+
+        }
+
+        isset($params['tax_id']) && $data['tax_id'] = $params['tax_id'];
+
+        if(!empty($params['price_before_tax'])){
+        	$data['price_before_tax'] = $params['price_before_tax'];
+        
+        }
+        if(!empty($params['remark'])){
+        	$data['remark'] = $params['remark'];
+        
+        }
+        if(!empty($params['cope_number'])){
+        	$data['cope_number'] = $params['cope_number'];
+        
+        }
+        if(!empty($params['receivable_number'])){
+        	$data['receivable_number'] = $params['receivable_number'];
+        
+        }
+
+
+        if(!empty($params['netamt'])){
+            $data['netamt'] = $params['netamt'];
+        }
+
+        if(!empty($params['gst'])){
+            $data['gst'] = $params['gst'];
+        }
+
+        if(!empty($params['pst'])){
+            $data['pst'] = $params['pst'];
+        }
+
+        if(!empty($params['hst'])){
+            $data['hst'] = $params['hst'];
+        }
+
+        if(!empty($params['p_otx'])){
+            $data['p_otx'] = $params['p_otx'];
+        }
+
+        if(!empty($params['invamt'])){
+            $data['invamt'] = $params['invamt'];
+        }
+
+        if(!empty($params['estcost'])){
+            $data['estcost'] = $params['estcost'];
+        }
+
+        if(!empty($params['paidamt'])){
+            $data['paidamt'] = $params['paidamt'];
+        }
+
+        if(!empty($params['balance'])){
+            $data['balance'] = $params['balance'];
+        }
+
+        isset($params['tax_cd']) && $data['tax_cd'] = $params['tax_cd'];
+
+        $data['update_user_id'] = $params['now_user_id'];
+
+        $data['update_time'] = $t;
+
+
+
+        $this->startTrans();
+        try{
+            $this->where("company_order_product_diy_number = '".$params['company_order_product_diy_number']."'")->update($data);
+	
+            $result = 1;
+            // 提交事务
+            $this->commit();
+
+        } catch (\Exception $e) {
+            $result = $e->getMessage();
+            // 回滚事务
+            $this->rollback();
+
+        }
+        return $result;
+    }
+	
+    
+
+}

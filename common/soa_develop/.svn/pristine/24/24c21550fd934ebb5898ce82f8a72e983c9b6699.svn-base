@@ -1,0 +1,2 @@
+ALTER TABLE `erp`.`b2b_tour` 
+ADD COLUMN `account_code` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci AFTER `tour_tab`;

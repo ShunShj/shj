@@ -1,0 +1,272 @@
+<?php
+namespace app\index\controller;
+
+use app\common\help\Help;
+use app\index\controller\Base;
+use app\index\model\ota_article\OtaArticleType;
+use \app\index\model\ota_article\OtaArticle as Article;
+use app\common\help\Contents;
+use think\Model;
+use think\Controller;
+
+class OtaArticle extends Base
+{
+	private $_language;
+    //_lang Base里的属性，
+    public function __construct()
+    {
+    	$this->_language = config("systom_setting")['language_default'];
+        parent::__construct();
+    }
+
+    /**
+     * addOtaArticle
+     *
+     * 添加文章
+     * @author shj
+     * @return void
+     * Date: 2019/5/15
+     * Time: 17:05
+     */
+    public function addOtaArticle(){
+        $params = $this->input();
+
+        $model = new Article();
+
+        $data = [
+            'title'=>$params['title'],
+            'website_uuid'=>$params['website_uuid']
+        ];
+        $this->checkNameIsRepetition('ota_article',$data);
+
+
+        $paramRule = [
+            'website_uuid' => 'string',
+            'title'=>'string',
+            'content'=>'string',
+        ];
+        $this->paramCheckRule($paramRule,$params);
+
+
+        $result = $model->addOtaArticle($params);
+
+        $this->outPut($result);
+    }
+
+    /**
+     * getOtaArticle
+     *
+     * 获取文章详情
+     * @author shj
+     * @return void
+     * Date: 2019/5/15
+     * Time: 17:05
+     */
+    public function getOtaArticle(){
+        $params = $this->input();
+
+        $model = new Article();
+
+        $result = $model->getOneArticle($params);
+
+        $this->outPut($result);
+    }
+
+    /**
+     * getArticleList
+     *
+     * 获取文章列表
+     * @author shj
+     * @return void
+     * Date: 2019/5/15
+     * Time: 17:05
+     */
+    public function getArticleList(){
+        $params = $this->input();
+
+        $model = new Article();
+
+        if(isset($params['page'])){
+            $page_size =  isset($params['page_size'])?$params['page_size']:Contents::PAGE_SIZE;
+            $page = ($params['page']-1)*$page_size;
+            $count = $model->getArticleList($params, true);
+            $result = $model->getArticleList($params,false,'true',$page,$page_size);
+            $data = [
+                'count'=>$count,
+                'list'=>$result,
+                'page_count'=>ceil($count/$page_size)
+            ];
+
+            return $this->output($data);
+        }
+
+        $result = $model->getArticleList($params);
+
+        $this->outPut($result);
+    }
+
+    /**
+     * updateOtaArticle
+     *
+     * 修改文章
+     * @author shj
+     * @return void
+     * Date: 2019/5/15
+     * Time: 17:06
+     */
+    public function updateOtaArticle(){
+        $params = $this->input();
+
+        $model = new Article();
+
+        $where['ota_article_id'] = $params['ota_article_id'];
+        $articleInfo = $model->getOneArticle($where);
+        //重复性验证
+        if($articleInfo['title'] == $params['title']){
+        }else{
+            //开始判断名字是否重复
+            $data = [
+                'title'=>$params['title'],
+                'website_uuid'=>$articleInfo['website_uuid']
+            ];
+            $this->checkNameIsRepetition('ota_article',$data);
+            //结束判断名字重复
+        }
+        $paramRule = [
+            'title'=>'string',
+            'content'=>'string',
+        ];
+        $this->paramCheckRule($paramRule,$params);
+        $result = $model->updateArticleById($params);
+
+        $this->outPut($result);
+    }
+
+    /**
+     * addOtaArticleType
+     *
+     * 添加文章那个分类
+     * @author shj
+     * @return void
+     * Date: 2019/5/15
+     * Time: 17:06
+     */
+    public function addOtaArticleType(){
+        $params = $this->input();
+
+        $model = new OtaArticleType();
+
+
+        $data = [
+            'article_type_name'=>$params['article_type_name'],
+            'website_uuid'=>$params['website_uuid']
+        ];
+        $this->checkNameIsRepetition('ota_article_type',$data);
+
+
+        $paramRule = [
+            'website_uuid' => 'string',
+            'article_type_name'=>'string',
+        ];
+        $this->paramCheckRule($paramRule,$params);
+
+
+        $result = $model->addOtaArticleType($params);
+
+        $this->outPut($result);
+    }
+
+    /**
+     * getOtaArticleType
+     *
+     * 获取文章分类详情
+     * @author shj
+     * @return void
+     * Date: 2019/5/15
+     * Time: 17:06
+     */
+    public function getOtaArticleType(){
+
+        $params = $this->input();
+
+        $model = new OtaArticleType();
+
+        $result = $model->getOneArticleType($params);
+
+        $this->outPut($result);
+    }
+
+    /**
+     * getArticleTypeList
+     *
+     * 获取文章分类列表
+     * @author shj
+     * @return void
+     * Date: 2019/5/15
+     * Time: 17:06
+     */
+    public function getArticleTypeList(){
+        $params = $this->input();
+
+        $model = new OtaArticleType();
+
+        if(isset($params['page'])){
+            $page_size =  isset($params['page_size'])?$params['page_size']:Contents::PAGE_SIZE;
+            $page = ($params['page']-1)*$page_size;
+            $count = $model->getArticleTypeList($params, true);
+            $result = $model->getArticleTypeList($params,false,'true',$page,$page_size);
+            $data = [
+                'count'=>$count,
+                'list'=>$result,
+                'page_count'=>ceil($count/$page_size)
+            ];
+
+            return $this->output($data);
+        }
+
+        $result = $model->getArticleTypeList($params);
+
+        return $this->outPut($result);
+    }
+
+    /**
+     * updateOtaArticleType
+     *
+     * 修改文章分类
+     * @author shj
+     * @return void
+     * Date: 2019/5/15
+     * Time: 17:07
+     */
+    public function updateOtaArticleType(){
+        $params = $this->input();
+
+        $model = new OtaArticleType();
+
+        $where['ota_article_type_id'] = $params['ota_article_type_id'];
+        $Info = $model->getOneArticleType($where);
+        //重复性验证
+        if($Info['article_type_name'] == $params['article_type_name']){
+        }else{
+            //开始判断名字是否重复
+            $data = [
+                'article_type_name'=>$params['article_type_name'],
+                'website_uuid'=>$Info['website_uuid']
+            ];
+            $this->checkNameIsRepetition('ota_article_type',$data);
+            //结束判断名字重复
+        }
+
+
+        $paramRule = [
+            'article_type_name'=>'string',
+        ];
+        $this->paramCheckRule($paramRule,$params);
+
+
+        $result = $model->updateArticleTypeById($params);
+
+        $this->outPut($result);
+    }
+
+}

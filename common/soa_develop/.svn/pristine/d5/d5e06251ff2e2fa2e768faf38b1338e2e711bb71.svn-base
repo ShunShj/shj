@@ -1,0 +1,4 @@
+地接报账添加团队产品ID字段
+ALTER TABLE `travel_agency_reimbursement`
+ADD COLUMN `team_product_id`  int NULL COMMENT '团队产品编号' AFTER `team_product_number`;
+

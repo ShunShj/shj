@@ -1,0 +1,18 @@
+﻿ALTER TABLE `company_order_product_team`
+MODIFY COLUMN `is_type`  int(11) NULL DEFAULT 1 COMMENT '类型1分公司带来的2直接订购的3团队产品应收自己，不需要再订单显示' AFTER `settlement_type`;
+
+ALTER TABLE `company_order_product_source`
+MODIFY COLUMN `is_type`  int(11) NULL DEFAULT 1 COMMENT '类型1分公司带来的2直接订购的3团队产品应收自己，不需要再订单显示' AFTER `remark`;
+
+ALTER TABLE `company_order_product_source`
+ADD COLUMN `is_own_source_by_branch_product`  tinyint(1) NULL COMMENT '分公司自己的资源1是' AFTER `team_product_receivable_type`;
+
+
+ALTER TABLE `company_order`
+ADD COLUMN `order_type`  tinyint(4) NULL DEFAULT 1 COMMENT '订单类型  1erp订单 2网站订单 3b2b订单' AFTER `ota_product_team_uuid`,
+ADD COLUMN `is_tipping_paid`  tinyint(4) NULL COMMENT 'b2b订单时 是否勾选了小费' AFTER `order_type`;
+
+
+
+
+

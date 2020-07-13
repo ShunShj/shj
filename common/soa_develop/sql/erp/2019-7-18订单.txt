@@ -1,0 +1,9 @@
+ALTER TABLE `company_order_product_source`
+ADD COLUMN `is_settle`  tinyint(4) NULL DEFAULT 2 COMMENT '是否是结算单来的数据1是2不是' AFTER `is_type`;
+
+ALTER TABLE `company_order_product_source`
+ADD COLUMN `company_order_product_team_id`  int(10) NULL COMMENT '公司订单产品团队产品ID' AFTER `team_product_allocation_id`;
+
+ALTER TABLE `company_order_product_source`
+MODIFY COLUMN `is_type`  int(11) NULL DEFAULT 1 COMMENT '类型1分公司带来的2直接订购的3团队产品生成的团费' AFTER `remark`;
+

@@ -1,0 +1,1 @@
+update `customer` set customer_number=CONCAT('CUS-',customer_id)

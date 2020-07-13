@@ -1,0 +1,3 @@
+ALTER TABLE `finance_approve`
+ADD COLUMN `team_product_id`  int NULL COMMENT '10' AFTER `company_order_number`;
+

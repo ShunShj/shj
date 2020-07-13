@@ -1,0 +1,94 @@
+<?php
+/**
+ * Created by PhpStorm.
+ * User: Administrator
+ * Date: 2018/9/6
+ * Time: 10:13
+ */
+
+namespace app\index\model\product;
+use think\Model;
+use app\common\help\Help;
+use think\config;
+use think\Db;
+
+class TeamProductOncePrice extends Model
+{
+    //protected $connection = ['database' => 'erp'];
+    protected $table = 'team_product_once_price';
+    private $_languageList;
+    public function initialize()
+    {
+        $this->_languageList = config('systom_setting')['language_list'];
+        parent::initialize();
+
+    }
+
+    /**
+     * 获取团队产品(一口价)
+     * 韩
+     */
+    public function getTeamProductOncePrice($params){
+        $data = "1=1 ";
+
+        //团队产品ID
+        if(isset($params['team_product_id'])){
+            $data.= " and team_product_once_price.team_product_id ='".$params['team_product_id']."'";
+        }
+        if(isset($params['company_id'])){
+        	$data.= " and team_product_once_price.company_id ='".$params['company_id']."'";
+        }
+
+        $result =  $this->table("team_product_once_price")->alias('team_product_once_price')->where($data)->
+        field(['*',
+            "(select nickname  from user where user.user_id = team_product_once_price.create_user_id)"=>'create_user_name',
+            "(select nickname  from user where user.user_id = team_product_once_price.update_user_id)"=>'update_user_name',
+
+        ])->select();
+
+        return $result;
+    }
+
+    /**
+     * 修改团队产品(一口价)
+     * 韩
+     */
+    public function updateTeamProductOncePriceByTeamProductOncePriceId($params){
+
+        $t = time();
+
+        if(!empty($params['company_id'])){
+            $data['company_id'] = $params['company_id'];
+
+        }
+
+        if(!empty($params['total_price'])){
+            $data['total_price'] = $params['total_price'];
+
+        }
+
+        if(!empty($params['status'])){
+            $data['status'] = $params['status'];
+
+        }
+
+        $data['update_user_id'] = $params['user_id'];
+        $data['update_time'] = $t;
+
+        Db::startTrans();
+        try{
+            Db::name('team_product_once_price')->where("team_product_once_price_id = ".$params['team_product_once_price_id'])->update($data);
+            $result = 1;
+            // 提交事务
+            Db::commit();
+
+        } catch (\Exception $e) {
+            $result = $e->getMessage();
+            // 回滚事务
+            Db::rollback();
+
+        }
+        return $result;
+
+    }
+}

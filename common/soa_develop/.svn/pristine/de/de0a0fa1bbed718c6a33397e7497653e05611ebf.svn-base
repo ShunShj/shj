@@ -1,0 +1,13 @@
+<?php
+namespace app\index\controller;
+use app\common\help\Help;
+use app\index\model\Member;
+class Index
+{
+    public function index()
+    {
+		echo 2;exit();
+        $test = new Member();
+        echo $test->addLog();
+    }
+}

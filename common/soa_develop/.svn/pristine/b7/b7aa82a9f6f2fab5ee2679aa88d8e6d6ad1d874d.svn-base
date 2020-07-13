@@ -1,0 +1,76 @@
+DROP TABLE ota_theme;
+CREATE TABLE `ota_theme` (
+  `ota_theme_id` int(11) NOT NULL AUTO_INCREMENT,
+  `list_diagram` varchar(255) DEFAULT NULL COMMENT '列表图',
+  `title` varchar(255) NOT NULL COMMENT '标题',
+  `describe` varchar(9999) DEFAULT NULL COMMENT '描述',
+  `file_name` varchar(255) NOT NULL COMMENT '文件名（路径）',
+  `include_module` varchar(9999) DEFAULT NULL COMMENT '包含模块',
+  `create_time` int(11) DEFAULT NULL,
+  `create_user_id` int(11) DEFAULT NULL,
+  `update_time` int(11) DEFAULT NULL,
+  `update_user_id` int(11) DEFAULT NULL,
+  `status` tinyint(2) NOT NULL DEFAULT '1' COMMENT '1.显示 0 不显示',
+  PRIMARY KEY (`ota_theme_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COMMENT='主题';
+
+DROP TABLE ota_module_type;
+CREATE TABLE `ota_module_type` (
+  `ota_module_type_id` int(11) NOT NULL AUTO_INCREMENT,
+  `title` varchar(255) NOT NULL COMMENT '标题',
+  `html_file_name` varchar(255) NOT NULL COMMENT 'HTML的文件名',
+  PRIMARY KEY (`ota_module_type_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='模块类型';
+
+DROP TABLE ota_theme_module;
+CREATE TABLE `ota_theme_module` (
+  `ota_theme_module_id` int(11) NOT NULL AUTO_INCREMENT COMMENT '主题模块',
+  `ota_theme_id` int(11) NOT NULL COMMENT '主题ID',
+  `ota_module_type_id` int(11) NOT NULL COMMENT '模块类型ID',
+  `title` varchar(255) DEFAULT NULL COMMENT '标题',
+  `describe` varchar(9999) DEFAULT NULL COMMENT '描述',
+  `number_of_primary_keys` int(11) NOT NULL DEFAULT '1' COMMENT '组件的数量',
+  `status` tinyint(2) NOT NULL COMMENT '1.显示 2.不显示',
+  `layout_chart` varchar(255) DEFAULT NULL COMMENT '布局图',
+  PRIMARY KEY (`ota_theme_module_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='主题模块(所有主题通模块名需一致)';
+
+DROP TABLE ota_site_themes;
+CREATE TABLE `ota_site_themes` (
+  `ota_site_theme_id` int(11) NOT NULL AUTO_INCREMENT COMMENT '主题ID',
+  `ota_theme_id` int(11) NOT NULL COMMENT '主题ID',
+  `website_uuid` varchar(60) NOT NULL COMMENT '网站设置ID',
+  PRIMARY KEY (`ota_site_theme_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='网站主题';
+
+DROP TABLE ota_page;
+CREATE TABLE `ota_page` (
+  `ota_page_id` int(11) NOT NULL AUTO_INCREMENT,
+  `ota_theme_module_id` int(11) NOT NULL COMMENT '主题模块',
+  `title` varchar(255) NOT NULL COMMENT '标题',
+  `pv` int(11) NOT NULL DEFAULT '1' COMMENT '页面浏览量',
+  `sort` int(11) NOT NULL DEFAULT '999' COMMENT '排序（小到大）',
+  `status` tinyint(2) NOT NULL DEFAULT '1' COMMENT '状态 1.显示 2.不显示',
+  `ota_theme_id` int(11) NOT NULL COMMENT '主题ID',
+  `website_uuid` varchar(60) NOT NULL COMMENT '网站设置UUID',
+  `create_user_id` int(11) NOT NULL,
+  `update_user_id` int(11) NOT NULL,
+  `create_time` int(11) NOT NULL,
+  `update_time` int(11) NOT NULL,
+  PRIMARY KEY (`ota_page_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='页面列表';
+
+DROP TABLE ota_components_under_the_page;
+CREATE TABLE `ota_components_under_the_page` (
+  `ota_components_under_the_page_id` int(11) NOT NULL AUTO_INCREMENT,
+  `ota_page_id` int(11) NOT NULL COMMENT '页面列表主键ID',
+  `subassembly_id` int(11) NOT NULL COMMENT '程序中定义死 1=>''旅游产品'',2=>''旅游产品分类'',3=>''幻灯片'',4=>''文章'',5=>''文章分类'',6=>''广告位'',7=>''自定义代码'',8=>''菜单''',
+  `shuju` varchar(255) DEFAULT NULL COMMENT '数据 对应的主键 或 UUID',
+  `shujutext` text COMMENT '文本数据 ',
+  `status` tinyint(2) NOT NULL DEFAULT '1' COMMENT '1.可以 2.不可用',
+  `position_n` int(11) NOT NULL COMMENT '页面中的位置 从1开始',
+  PRIMARY KEY (`ota_components_under_the_page_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='页面列表数据';
+
+
+

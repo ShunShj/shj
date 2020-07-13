@@ -1,0 +1,118 @@
+<?php
+
+namespace app\index\model\finance;
+use think\Model;
+use app\common\help\Help;
+use think\config;
+use think\Db;
+class CopeInfo extends Model{
+    //protected $connection = ['database' => 'erp'];
+    protected $table = 'cope_info';
+    private $_languageList;
+    public function initialize()
+    {
+        $this->_languageList = config('systom_setting')['language_list'];
+        parent::initialize();
+
+    }
+
+    /**
+     *添加批量应付
+     * 王
+     */
+    public function addCopeInfo($params){
+        $t = time();
+		
+		$cope_voucher = $params['cope_voucher'];
+		$voucher_time = $params['voucher_time'];
+		
+		$payment_currency_id = $params['payment_currency_id'];
+		$payment_type = $params['payment_type'];
+		$payment_number = $params['payment_number'];
+		$user_id = $params['now_user_id'];
+
+  
+        
+
+
+        $this->startTrans();
+        try{
+        $sql_values="insert into cope_info (fee_type_code,fee_type_type,cope_number,cope_voucher,voucher_time,receivable_money,receivable_currency_id,receivable_type,receivable_number,create_time,update_time,create_user_id,update_user_id,status) values";
+        
+       
+        	for($i=0;$i<count($params['cope_info']);$i++){
+        		$cope_number = $params['cope_info'][$i]['cope_number'];
+        		$payment_money = $params['cope_info'][$i]['payment_money'];
+        		$status = 1;
+        		$cope_result = $this->table('cope')->where("cope_number='$cope_number'")->find();
+        			
+        		//if($cope_result['fee_type_code'] ==64){
+        			//$fee_type_id=255;
+        		//}else{
+        			$fee_type_code=999;
+        			$fee_type_type=999;
+        		//}
+
+        		$sql_values.="($fee_type_code,$fee_type_type,'$cope_number','$cope_voucher',$voucher_time,$payment_money,$payment_currency_id,$payment_type,'$payment_number',$t,$t,$user_id,$user_id,$status),";
+        
+        	}
+        	$sql_values = trim($sql_values,',');
+  			error_log(print_r($sql_values,1));
+        	$this->execute($sql_values);
+            // 提交事务
+            $this->commit();
+            $result = 1;
+
+        } catch (\Exception $e) {
+            $result = $e->getMessage();
+            // 回滚事务
+            $this->rollback();
+
+        }
+
+        return $result;
+    }
+    /**
+     * 修改批量应付根据cope_number
+     */
+    public function updateCopeInfoByCopeNumber($params){
+
+        $t = time();
+        if(!empty($params['receivable_voucher'])){
+            $data['receivable_voucher'] = $params['receivable_voucher'];
+
+        }
+        if(!empty($params['voucher_time'])){
+            $data['voucher_time'] = $params['voucher_time'];
+
+        }
+        if(!empty($params['receivable_type'])) {
+            $data['receivable_type'] = $params['receivable_type'];
+
+        }
+        if(is_numeric($params['status'])){
+            $data['status'] = $params['status'];
+
+        }
+        $data['update_user_id'] = $params['user_id'];
+        $data['update_time'] = $t;
+
+        $data_where['cope_number'] = $params['cope_number'];
+        $this->startTrans();
+        try{
+            Db::table('cope_info')->where($data_where)->update($data);
+            $result = 1;
+            // 提交事务
+            $this->commit();
+
+        } catch (\Exception $e) {
+            $result = $e->getMessage();
+            // 回滚事务
+            $this->rollback();
+
+        }
+        return $result;
+    }
+
+
+}

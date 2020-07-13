@@ -1,0 +1,2 @@
+ALTER TABLE `erp`.`own_expense` 
+ADD COLUMN `type` tinyint(4) UNSIGNED DEFAULT 1 COMMENT '1ÆäËû2Twin-share3Depart City' AFTER `remark`;

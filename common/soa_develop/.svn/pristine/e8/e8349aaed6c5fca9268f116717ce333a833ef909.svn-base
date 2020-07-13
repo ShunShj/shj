@@ -1,0 +1,9 @@
+﻿ALTER TABLE `erp`.`ota_article` 
+ADD COLUMN `image` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_estonian_ci COMMENT 'ͼƬ' AFTER `ota_article_type_uuid`;
+
+
+
+ALTER TABLE `erp`.`ota_article` 
+ADD COLUMN `author` varchar(255) COMMENT '用于header头显示' AFTER `end_time`,
+MODIFY COLUMN `keywords` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '用于header头显示' AFTER `author`,
+MODIFY COLUMN `description` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '用于header头显示' AFTER `keywords`;

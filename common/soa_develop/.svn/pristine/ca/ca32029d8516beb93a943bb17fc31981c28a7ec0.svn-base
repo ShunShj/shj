@@ -1,0 +1,28 @@
+<?php
+namespace app\index\service;
+
+use app\index\model\finance\Receivable;
+use app\index\model\finance\Cope;
+use think\Model;
+
+class ReceivableService{
+	private $_receivable;
+	private $_cope;
+	public function __construct(){
+		$this->_receivable = new Receivable();
+		$this->_cope = new Cope();
+	}
+	/**
+	 * 添加应收 //添加应收 如果 是分公司 必定会有一条添加应付
+	 * @param unknown $params
+	 */
+	public function addReceivable($params){
+		
+		$this->_receivable->addReceivable($params);
+		
+		return $company_order_customer_result;
+	}
+	
+	
+	
+}

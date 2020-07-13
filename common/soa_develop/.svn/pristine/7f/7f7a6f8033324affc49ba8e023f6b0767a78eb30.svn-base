@@ -1,0 +1,78 @@
+<?php
+
+namespace app\index\model\branchcompany;
+use think\Model;
+use app\index\service\PublicService;
+class CompanyOrderComment extends Model{
+
+    protected $table = 'company_order_comment';
+    private $_languageList;
+    private $_public_service;
+    public function initialize()
+    {
+        $this->_languageList = config('systom_setting')['language_list'];
+        $this->_public_service = new PublicService();
+        parent::initialize();
+
+    }
+
+    /**
+     * 添加 订单留言板
+     *
+     */
+    public function addCompanyOrderComment($params){
+
+        $data['company_order_number'] = $params['company_order_number'];
+        $data['comment'] = $params['comment'];
+        $data['create_user_id'] = $params['create_user_id'];
+        $data['create_time'] = time();
+        $data['status'] = 1;
+
+        $this->startTrans();
+        try{
+            $result = $this->insertGetId($data);
+			$this->commit();
+        } catch (\Exception $e) {
+            $result = $e->getMessage();
+
+            \think\Response::create(['code' => '400', 'msg' =>$result], 'json')->send();
+            exit();
+        }
+
+        return $result;
+    }
+
+
+    public function getCompanyOrderComment($params)
+    {
+        $data = " 1=1 ";
+        if(!empty($params['company_order_number'])){
+            $data.= " and company_order_comment.company_order_number = '".$params['company_order_number']."'";
+        }
+
+        if(isset($params['create_user_id'])){
+            $data.= " and company_order_comment.create_user_id = ".$params['create_user_id'];
+        }
+
+        if(isset($params['status'])){
+            $data.= " and company_order_comment.status = ".$params['status'];
+        }
+
+
+        try{
+            $result = $this->field(['company_order_comment.*', 'user.username'])
+                ->join('user','user.user_id = company_order_comment.create_user_id','left')->where($data)->select();
+
+        } catch (\Exception $e) {
+            $result = $e->getMessage();
+
+            \think\Response::create(['code' => '400', 'msg' =>$result], 'json')->send();
+            exit();
+
+        }
+
+        return $result;
+    }
+
+
+}

@@ -1,0 +1,3 @@
+ALTER TABLE `time_zone`
+ADD COLUMN `date_time_string`  varchar(100) NULL COMMENT '时区编码' AFTER `name`;
+

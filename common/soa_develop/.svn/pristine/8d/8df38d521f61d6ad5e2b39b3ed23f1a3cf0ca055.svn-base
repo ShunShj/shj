@@ -1,0 +1,347 @@
+<?php
+
+namespace app\index\model\b2b_tour;
+use think\Exception;
+use think\Model;
+use think\Db;
+class B2bTour extends Model{
+    //protected $connection = ['database' => 'erp'];
+    protected $table = 'b2b_tour';
+    private $_languageList;
+    private $_public_service;
+    public function initialize()
+    {
+    	$this->_languageList = config('systom_setting')['language_list'];
+    	parent::initialize();
+    
+    }
+
+    /**
+     * 添加供应商
+     * 胡
+     */
+    public function addB2bTour($params){
+
+        $data['supplier_tour'] = $params['hotel_name_cn'];
+
+        if ($params['is_inbound'])
+        {
+            $data['is_inbound'] = $params['is_inbound'];
+        }
+
+        if ($params['tour_type'])
+        {
+            $data['tour_type'] = $params['tour_type'];
+        }
+
+        if ($params['local_category'])
+        {
+            $data['local_category'] = $params['local_category'];
+        }
+
+        if ($params['tour_code'])
+        {
+            $data['tour_code'] = $params['tour_code'];
+        }
+
+        if ($params['tour_name'])
+        {
+            $data['tour_name'] = $params['tour_name'];
+        }
+
+        if ($params['tour_name_ch'])
+        {
+            $data['tour_name_ch'] = $params['tour_name_ch'];
+        }
+
+        if ($params['length_days'])
+        {
+            $data['length_days'] = $params['length_days'];
+        }
+
+        if ($params['length_nights'])
+        {
+            $data['length_nights'] = $params['length_nights'];
+        }
+
+        if ($params['frequency'])
+        {
+            $data['frequency'] = $params['frequency'];
+        }
+
+        if ($params['start_city'])
+        {
+            $data['start_city'] = $params['start_city'];
+        }
+
+        if ($params['end_city'])
+        {
+            $data['end_city'] = $params['end_city'];
+        }
+
+        if ($params['departure_airport'])
+        {
+            $data['departure_airport'] = $params['departure_airport'];
+        }
+
+        if ($params['arrival_airport'])
+        {
+            $data['arrival_airport'] = $params['arrival_airport'];
+        }
+
+        if ($params['country'])
+        {
+            $data['country'] = $params['country'];
+        }
+
+        if ($params['land_only'])
+        {
+            $data['land_only'] = $params['land_only'];
+        }
+
+        if ($params['minimum_passenger'])
+        {
+            $data['minimum_passenger'] = $params['minimum_passenger'];
+        }
+
+        if ($params['pdf_flyer'])
+        {
+            $data['pdf_flyer'] = $params['pdf_flyer'];
+        }
+
+        if ($params['en_pdf_flyer'])
+        {
+            $data['en_pdf_flyer'] = $params['en_pdf_flyer'];
+        }
+
+        if ($params['terms'])
+        {
+            $data['terms'] = $params['terms'];
+        }
+
+        if ($params['voucher_notice'])
+        {
+            $data['voucher_notice'] = $params['voucher_notice'];
+        }
+
+        if ($params['booking_notice'])
+        {
+            $data['booking_notice'] = $params['booking_notice'];
+        }
+
+        if ($params['tour_languages'])
+        {
+            $data['tour_languages'] = $params['tour_languages'];
+        }
+
+        if ($params['infant'])
+        {
+            $data['infant'] = $params['infant'];
+        }
+
+        if ($params['child'])
+        {
+            $data['child'] = $params['child'];
+        }
+
+        if ($params['child_without_bed'])
+        {
+            $data['child_without_bed'] = $params['child_without_bed'];
+        }
+
+        if ($params['service_charge_age'])
+        {
+            $data['service_charge_age'] = $params['service_charge_age'];
+        }
+
+
+    	$data['created_at'] = time();
+    	$data['create_user_id'] = $params['now_user_id'];
+    	$data['status'] = $params['status'];
+
+    	Db::startTrans();
+    	try{
+    		$btb_tour_id = Db::name('b2b_tour')->insertGetId($data);
+
+            $b2b_tour_date_model = new B2bTourDate();
+            foreach ($params['date'] as $date_v)
+            {
+                $date_v['btb_tour_id'] = $btb_tour_id;
+                $b2b_tour_date_model->addB2bTourDate($date_v);
+            }
+
+            $b2b_tour_itinerary_model = new B2bTourItinerary();
+            foreach ($params['itinerary'] as $itinerary_v)
+            {
+                $itinerary_v['btb_tour_id'] = $btb_tour_id;
+                $b2b_tour_itinerary_model->addB2bTourItinerary($itinerary_v);
+            }
+
+            $b2b_tour_room_model = new B2bTourRoom();
+            foreach ($params['room'] as $room_v)
+            {
+                $room_v['btb_tour_id'] = $btb_tour_id;
+                $b2b_tour_room_model->addB2bTourRoom($room_v);
+            }
+
+            $b2b_tour_transfer_model = new B2bTourTransfer();
+            foreach ($params['transfer'] as $transfer_v)
+            {
+                $transfer_v['btb_tour_id'] = $btb_tour_id;
+                $b2b_tour_transfer_model->addB2bTourTransfer($transfer_v);
+            }
+
+            $b2b_tour_commission_model = new B2bTourCommission();
+            $params['commission']['btb_tour_id'] = $btb_tour_id;
+            $b2b_tour_commission_model->addB2bTourCommission($params['commission']);
+
+            $b2b_tour_options_model = new B2bTourOptions();
+            foreach ($params['options'] as $options_v)
+            {
+                $options_v['btb_tour_id'] = $btb_tour_id;
+                $b2b_tour_options_model->addB2bTourOptions($options_v);
+            }
+
+            $b2b_tour_setting_model = new B2bTourSetting();
+            $params['setting']['btb_tour_id'] = $btb_tour_id;
+            $b2b_tour_setting_model->addB2bTourSetting($params['setting']);
+            $result = 1;
+    		// 提交事务
+    		Db::commit();
+    
+    	} catch (\Exception $e) {
+    		$result = $e->getMessage();
+    		// 回滚事务
+    		Db::rollback();
+    		\think\Response::create(['code' => '400', 'msg' =>$result], 'json')->send();
+    		exit();
+    	}
+    	
+    	return $result;
+    }
+    
+    /**
+     * 获取供应商
+     * 胡
+     */
+    public function getB2bHotel($params,$is_count=false,$is_page=false,$page=null,$page_size=20){
+    
+    
+    	$data = "1=1 ";
+
+    	if(!empty($params['b2b_hotel_id'])){
+    		$data.= " and b2b_hotel.b2b_hotel_id= ".$params['b2b_hotel_id'];
+    	}
+
+    	if(isset($params['status'])){
+    		$data.= " and b2b_hotel.status = ".$params['status'];
+    	}
+
+        if(!empty($params['hotel_name_cn'])){
+            $data.= " and b2b_hotel.hotel_name_cn like '%".$params['hotel_name_cn']."%'";
+        }
+
+        if(!empty($params['hotel_name_en'])){
+            $data.= " and b2b_hotel.hotel_name_en like '%".$params['hotel_name_en']."%'";
+        }
+        if(!empty($params['address_cn'])){
+            $data.= " and b2b_hotel.address_cn like '%".$params['address_cn']."%'";
+        }
+        if(!empty($params['address_en'])){
+            $data.= " and b2b_hotel.address_en like '%".$params['address_en']."%'";
+        }
+
+        if(!empty($params['country_id'])){
+            $data.= " and b2b_hotel.country_id = ".$params['country_id'];
+        }
+
+        try
+        {
+            if($is_count==true){
+                $result = $this->table("b2b_hotel")->alias("b2b_hotel")->where($data)->count();
+            }else {
+                if ($is_page == true) {
+                    $result = $this->table("b2b_hotel")->alias('b2b_hotel')->
+                    join("country", "b2b_hotel.country_id= country.country_id", 'left')->
+                    join("country a", "a.country_id= country.pid", 'left')->
+                    join("country b", "b.country_id= a.pid", 'left')->
+                    where($data)->limit($page, $page_size)->order('create_time desc')->
+                    field(['b2b_hotel.*', 'country.country_id as city_id','country.country_name as city_name','country.level as city_level','country.pid as city_pid',
+                        'a.country_id as province_id','a.country_name as province_name','a.pid as province_pid',
+                        'b.country_id as country_id','b.country_name as country_name'])->select();
+                }else{
+                    $result = $this->table("b2b_hotel")->alias('b2b_hotel')->
+                    join("country", "b2b_hotel.country_id= country.country_id", 'left')->
+                    join("country a", "a.country_id= country.pid", 'left')->
+                    join("country b", "b.country_id= a.pid", 'left')->
+                    where($data)->order('create_time desc')->
+                    field(['b2b_hotel.*', 'country.country_id as city_id','country.country_name as city_name','country.level as city_level','country.pid as city_pid',
+                        'a.country_id as province_id','a.country_name as province_name','a.pid as province_pid',
+                        'b.country_id as country_id','b.country_name as country_name'])->select();
+                }
+            }
+        }
+        catch (Exception $e)
+        {
+            $result = $e->getMessage();
+            \think\Response::create(['code' => '400', 'msg' =>$result], 'json')->send();
+            exit();
+        }
+
+    	return $result;
+    
+    }
+
+    /**
+     * 修改供应商 根据supplier_id
+     */
+    public function updateB2bHotel($params){
+
+    	$data['update_user_id'] = $params['user_id'];
+    	$data['update_time'] = time();
+
+        if(isset($params['address_cn'])){
+            $data['address_cn'] = $params['address_cn'];
+        }
+
+        if(isset($params['address_en'])){
+            $data['address_en'] = $params['address_en'];
+        }
+
+        if(isset($params['hotel_name_cn'])){
+            $data['hotel_name_cn'] = $params['hotel_name_cn'];
+        }
+
+        if(isset($params['hotel_name_en'])){
+            $data['hotel_name_en'] = $params['hotel_name_en'];
+        }
+
+        if(isset($params['country_id'])){
+            $data['country_id'] = $params['country_id'];
+        }
+
+        if(isset($params['status'])){
+            $data['status'] = $params['status'];
+        }
+
+        $where = " b2b_hotel_id = ". $params['b2b_hotel_id'];
+
+    	Db::startTrans();
+    	try{
+    		Db::name('b2b_hotel')->where($where)->update($data);
+
+    		$result = 1;
+    		// 提交事务
+    		Db::commit();
+    
+    	} catch (\Exception $e) {
+    		$result = $e->getMessage();
+    		// 回滚事务
+    		Db::rollback();
+    
+    	}
+    	return $result;
+    }
+
+
+}

@@ -1,0 +1,4 @@
+ALTER TABLE `ota_website`
+MODIFY COLUMN `about_us`  text CHARACTER SET utf8 COLLATE utf8_general_ci NULL COMMENT '关于我们' AFTER `company_address`,
+MODIFY COLUMN `contact_us`  text CHARACTER SET utf8 COLLATE utf8_general_ci NULL COMMENT '联系我们' AFTER `about_us`;
+

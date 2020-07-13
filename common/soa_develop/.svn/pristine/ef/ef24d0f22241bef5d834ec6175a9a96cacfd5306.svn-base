@@ -1,0 +1,236 @@
+<?php
+
+namespace app\index\model\Btob;
+use think\Model;
+use app\common\help\Help;
+use think\config;
+use think\Db;
+class Distributor extends Model{
+    //protected $connection = ['database' => 'erp'];
+    protected $table = 'distributor';
+    private $_languageList;
+    public function initialize()
+    {
+        $this->_languageList = config('systom_setting')['language_list'];
+        parent::initialize();
+
+    }
+
+    /**
+     * 添加经销商
+     * 胡
+     */
+    public function addDistributor($params){
+
+        $t = time();
+       
+        $data['company_id'] = $params['company_id'];
+        $data['distributor_name'] = $params['distributor_name'];
+        $data['associate_type'] = $params['associate_type'];
+        if(isset($params['tel'])){
+            $data['tel'] = $params['tel'];
+        }
+        if(isset($params['contect'])){
+            $data['contect'] = $params['contect'];
+        }
+        if(isset($params['language_id'])){
+            $data['language_id'] = $params['language_id'];
+        }
+        if(isset($params['address'])){
+            $data['address'] = $params['address'];
+        }
+        if(isset($params['zip_code'])){
+            $data['zip_code'] = $params['zip_code'];
+        }
+        if(isset($params['city_id'])){
+            $data['city_id'] = $params['city_id'];
+        }
+        if(isset($params['email'])){
+            $data['email'] = $params['email'];
+        }
+        
+        $data['create_time'] = $t;
+        $data['create_user_id'] = $params['user_id'];
+        $data['update_time'] = $t;
+        $data['update_user_id'] = $params['user_id'];
+        $data['status'] = $params['status'];
+
+
+
+
+        Db::startTrans();
+        try{
+            $result = Db::name('distributor')->insertGetId($data);
+  
+       
+            // 提交事务
+            Db::commit();
+
+        } catch (\Exception $e) {
+            $result = $e->getMessage();
+            // 回滚事务
+            Db::rollback();
+
+        }
+
+        return $result;
+    }
+
+    /**
+     * 获取经销商数据
+     * 胡
+     */
+    public function getDistributor($params,$is_count=false,$is_page=false,$page=null,$page_size=20){
+
+ 
+    	$data = "1=1";
+    	if(!empty($params['distributor_id'])){
+    		$data.= " and distributor.distributor_id = ".$params['distributor_id'];
+    	}
+    	if(is_numeric($params['status'])){
+    		$data.= " and distributor.status = ".$params['status'];
+    	}
+    	if(!empty($params['distributor_name'])){
+    		$data.= " and distributor.distributor_name like'%".$params['distributor_name']."%'";
+    	}
+        if(!empty($params['company_id'])){
+            $data.= " and distributor.company_id = '".$params['company_id']."'";
+        }
+        
+
+        if($is_count==true){
+            $result = $this->table("distributor")->alias("distributor")->where($data)->count();
+        }else {
+            if ($is_page == true) {
+                $result = $this->table("distributor")->alias("distributor")->
+                join("country country", "distributor.city_id = country.country_id", 'left')->
+                join("company company", "company.company_id = distributor.company_id", 'left')->
+                join("language language", "distributor.language_id = language.language_id", 'left')->
+                where($data)->limit($page, $page_size)->order('create_time desc')->
+                field(['distributor.distributor_id', 'distributor.distributor_name',
+                    'distributor.tel', 'distributor.contect', 'distributor.associate_type',
+                    'distributor.company_id', 'company.company_name',
+
+                    'distributor.language_id', 'language.language_name', 'distributor.zip_code', 'distributor.address',
+                    'distributor.email', 'country.country_id as city_id', 'country.country_name as city_name', 'country.pid as city_pid',
+                    "(select country_name  from country as country_province where country_province.country_id= city_pid)" => 'province_name',
+                    "(select country_id  from country as country_province where country_province.country_id= city_pid)"   => 'province_id',
+                    "(select pid  from country as country_province where country_province.country_id= city_pid)"          => 'province_pid',
+                    "(select country_name  from country as country3 where country3.country_id= province_pid)"             => 'country_name',
+                    "(select country_id  from country as country3 where country3.country_id= province_pid)"               => 'country_id',
+                    "(select nickname  from user where user.user_id = distributor.create_user_id)"                        => 'create_user_name',
+                    "(select nickname  from user where user.user_id = distributor.update_user_id)"                        => 'update_user_name',
+                    'distributor.create_user_id', 'distributor.create_time', 'distributor.update_user_id',
+                    'distributor.update_time', 'distributor.status'])->
+
+                select();
+            }else{
+                $result = $this->table("distributor")->alias("distributor")->
+                join("country country", "distributor.city_id = country.country_id", 'left')->
+                join("company company", "company.company_id = distributor.company_id", 'left')->
+                join("language language", "distributor.language_id = language.language_id", 'left')->
+                where($data)->order('create_time desc')->
+                field(['distributor.distributor_id', 'distributor.distributor_name',
+                    'distributor.tel', 'distributor.contect', 'distributor.associate_type',
+                    'distributor.company_id', 'company.company_name',
+
+                    'distributor.language_id', 'language.language_name', 'distributor.zip_code', 'distributor.address',
+                    'distributor.email', 'country.country_id as city_id', 'country.country_name as city_name', 'country.pid as city_pid',
+                    "(select country_name  from country as country_province where country_province.country_id= city_pid)" => 'province_name',
+                    "(select country_id  from country as country_province where country_province.country_id= city_pid)"   => 'province_id',
+                    "(select pid  from country as country_province where country_province.country_id= city_pid)"          => 'province_pid',
+                    "(select country_name  from country as country3 where country3.country_id= province_pid)"             => 'country_name',
+                    "(select country_id  from country as country3 where country3.country_id= province_pid)"               => 'country_id',
+                    "(select nickname  from user where user.user_id = distributor.create_user_id)"                        => 'create_user_name',
+                    "(select nickname  from user where user.user_id = distributor.update_user_id)"                        => 'update_user_name',
+                    'distributor.create_user_id', 'distributor.create_time', 'distributor.update_user_id',
+                    'distributor.update_time', 'distributor.status'])->
+
+                select();
+            }
+        }
+
+       
+
+
+        return $result;
+
+    }
+
+
+    /**
+     * 修改经销商 根据distributor_id
+     */
+    public function updateDistributorByDistributorId($params){
+
+        $t = time();
+        
+        if(!empty($params['company_id'])){
+        	$data['company_id'] = $params['company_id'];
+
+        }
+        if(!empty($params['distributor_name'])){
+        	$data['distributor_name'] = $params['distributor_name'];
+        
+        }
+        if(!empty($params['associate_type'])){
+        	$data['associate_type'] = $params['associate_type'];
+        	
+        }
+        if(isset($params['tel'])){
+            $data['tel'] = $params['tel'];
+        }
+        if(isset($params['contect'])){
+            $data['contect'] = $params['contect'];
+        }
+        if(isset($params['language_id'])){
+            $data['language_id'] = $params['language_id'];
+        }
+        if(isset($params['address'])){
+            $data['address'] = $params['address'];
+        }
+        if(isset($params['zip_code'])){
+            $data['zip_code'] = $params['zip_code'];
+        }
+        if(isset($params['city_id'])){
+            $data['city_id'] = $params['city_id'];
+        }
+        if(isset($params['email'])){
+            $data['email'] = $params['email'];
+        }
+        if(isset($params['status'])){
+            $data['status'] = $params['status'];
+
+        }
+
+
+        $data['update_user_id'] = $params['user_id'];
+
+        $data['update_time'] = $t;
+
+
+
+
+        Db::startTrans();
+        try{
+            Db::name('distributor')->where("distributor_id = ".$params['distributor_id'])->update($data);
+
+            $result = 1;
+            // 提交事务
+            Db::commit();
+
+        } catch (\Exception $e) {
+            $result = $e->getMessage();
+            // 回滚事务
+            Db::rollback();
+
+        }
+        return $result;
+    }
+
+    public function getDistributorByDistributorId($distributor_id)
+    {
+        return $this->table("distributor")->alias("distributor")->where(['distributor_id' => $distributor_id])->find();
+    }
+
+}

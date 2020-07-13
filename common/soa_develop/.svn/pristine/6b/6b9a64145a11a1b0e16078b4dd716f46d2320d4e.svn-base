@@ -1,0 +1,20 @@
+ALTER TABLE `finance_approve`
+ADD COLUMN `attachment`  varchar(300) NULL COMMENT '附件URL' AFTER `account_opinion`;
+
+
+ALTER TABLE `receivable_info`
+ADD COLUMN `attachment`  varchar(300) NULL COMMENT '附件URL' AFTER `approval_status`;
+
+
+ALTER TABLE `cope_info`
+ADD COLUMN `attachment`  varchar(300) NULL COMMENT '附件URL' AFTER `update_user_id`;
+
+ALTER TABLE `cope_info`
+ADD COLUMN `remark`  varchar(300) NULL COMMENT '备注' AFTER `update_user_id`;
+
+
+
+
+
+
+

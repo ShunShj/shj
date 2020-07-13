@@ -1,0 +1,45 @@
+ALTER TABLE `finance_approve`
+ADD COLUMN `receipts_pay_id`  int(10) NULL COMMENT '记账ID' AFTER `attachment`;
+
+
+ALTER TABLE `receivable_info`
+ADD COLUMN `receipts_pay_id`  int NULL COMMENT '记账ID' AFTER `exg_rate_gain`;
+ALTER TABLE `cope_info`
+ADD COLUMN `receipts_pay_id`  int NULL COMMENT '记账ID' AFTER `remark`;
+
+ALTER TABLE `receivable_info`
+ADD COLUMN `base_money`  decimal(10,2) NULL COMMENT '原始币种' AFTER `receipts_pay_id`;
+
+ALTER TABLE `cope_info`
+ADD COLUMN `base_money`  decimal(10,2) NULL COMMENT '原始币种' AFTER `receipts_pay_id`;
+
+ALTER TABLE `finance_approve`
+ADD COLUMN `base_money`  decimal(10,2) NULL COMMENT '原始币种' AFTER `receipts_pay_id`;
+
+
+
+ALTER TABLE `finance_approve`
+ADD COLUMN `revocation_time`  int(10) NULL COMMENT '撤销时间' AFTER `attachment`;
+
+ALTER TABLE `receivable_info`
+ADD COLUMN `finance_approve_id`  int NULL AFTER `receipts_pay_id`;
+
+ALTER TABLE `cope_info`
+ADD COLUMN `finance_approve_id`  int(10) NULL AFTER `remark`;
+
+
+
+ALTER TABLE `company_order`
+ADD COLUMN `order_type`  tinyint(4) NULL DEFAULT 1 COMMENT '订单类型  1erp订单 2网站订单 3b2b订单' AFTER `ota_product_team_uuid`,
+ADD COLUMN `is_tipping_paid`  tinyint(4) NULL COMMENT 'b2b订单时 是否勾选了小费' AFTER `order_type`;
+
+
+
+ALTER TABLE `supplier`
+ADD COLUMN `account_name`  varchar(900) NULL COMMENT '开户名称' AFTER `pay_message`,
+ADD COLUMN `bank_code`  varchar(900) NULL COMMENT '银行行号' AFTER `account_name`,
+ADD COLUMN `bank_name`  varchar(900) NULL COMMENT '银行名称' AFTER `bank_code`,
+ADD COLUMN `bank_number`  varchar(900) NULL COMMENT '银行账号' AFTER `bank_name`
+
+
+

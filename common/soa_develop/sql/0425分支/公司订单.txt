@@ -1,0 +1,49 @@
+#添加字段编号
+ALTER TABLE `company_order_product_source`
+ADD COLUMN `source_number`  varchar(30) NULL COMMENT '资源编号' AFTER `source_id`;
+
+#公司订单团队产品添加团队ID
+ALTER TABLE `company_order_product_team`
+ADD COLUMN `team_product_id`  int(10) NULL COMMENT '团队产品ID' AFTER `team_product_number`;
+
+#公司订单团队资源ID
+ALTER TABLE `company_order_product_source`
+ADD COLUMN `team_product_id`  int(10) NULL COMMENT '团队产品ID' AFTER `team_product_number`;
+
+#公司订单添加锁定
+
+ALTER TABLE `company_order`
+ADD COLUMN `locked`  tinyint(4) NULL DEFAULT 0 COMMENT '1锁定0没锁定' AFTER `update_user_id`;
+
+#公司订单-资源 添加  团队配置资源ID
+ALTER TABLE `company_order_product_source`
+ADD COLUMN `team_product_allocation_id`  int(10) NULL COMMENT '团队产品资源配置ID' AFTER `team_product_id`;
+#公司订单模板添加分公司编号
+ALTER TABLE `company_order_product_template`
+ADD COLUMN `branch_product_number`  varchar(30) NULL COMMENT '分公司产品编号' AFTER `company_order_number`;
+#公司订单增加公司订单名称字段 
+ALTER TABLE `company_order`
+ADD COLUMN `order_name`  varchar(500) NULL COMMENT '公司订单名称' AFTER `company_order_number`;
+
+#公司订单团队产品字段添加价格
+ALTER TABLE `company_order_product_team`
+ADD COLUMN `tax_id`  int(10) NULL COMMENT '税ID' AFTER `invoice_time`,
+ADD COLUMN `price_before_tax`  decimal(10,2) NULL COMMENT '税前价格' AFTER `tax_id`;
+
+#公司订单加人数字段
+ALTER TABLE `company_order`
+ADD COLUMN `persions_count`  varchar(10) NULL DEFAULT '0' COMMENT '人数' AFTER `email`;
+
+
+
+
+
+
+
+
+
+
+
+
+
+

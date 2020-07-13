@@ -1,0 +1,10 @@
+
+ALTER TABLE `finance_approve`
+ADD COLUMN `account_status`  tinyint NULL DEFAULT 0 COMMENT '1确认' AFTER `company_id`,
+ADD COLUMN `account_guess_time`  int(10) NULL COMMENT '财务确认时间' AFTER `account_status`,
+ADD COLUMN `account_user_id`  int(10) NULL COMMENT '财务确认ID' AFTER `account_guess_time`;
+
+ALTER TABLE `finance_approve`
+ADD COLUMN `account_opinion`  varchar(300) NULL COMMENT '财务审批意见' AFTER `account_user_id`;
+
+

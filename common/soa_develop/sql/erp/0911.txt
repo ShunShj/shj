@@ -1,0 +1,26 @@
+ALTER TABLE `company_order_product`
+ADD COLUMN `substribe_time`  int(10) NULL COMMENT '订阅时间' AFTER `remark`;
+
+ALTER TABLE `company_order_product_team`
+ADD COLUMN `substribe_time`  int(10) NULL COMMENT '订阅时间' AFTER `remark`;
+
+ALTER TABLE `company_order_product_source`
+ADD COLUMN `substribe_time`  int(10) NULL COMMENT '订阅时间' AFTER `remark`;
+
+ALTER TABLE `company_order_product_diy`
+ADD COLUMN `substribe_time`  int(10) NULL COMMENT '订阅时间' AFTER `remark`;
+
+ALTER TABLE `company_order_product`
+ADD COLUMN `utc_substribe_time`  int(10) NULL COMMENT '时区之后的时间' AFTER `substribe_time`;
+
+ALTER TABLE `company_order_product_team`
+ADD COLUMN `utc_substribe_time`  int(10) NULL COMMENT '订阅时间' AFTER `substribe_time`;
+
+ALTER TABLE `company_order_product_source`
+ADD COLUMN `utc_substribe_time`  int(10) NULL COMMENT '订阅时间' AFTER `substribe_time`;
+
+ALTER TABLE `company_order_product_diy`
+ADD COLUMN `utc_substribe_time`  int(10) NULL COMMENT '订阅时间' AFTER `substribe_time`;
+
+
+

@@ -1,0 +1,27 @@
+<?php
+
+namespace app\index\model\publicmodel;
+use think\Model;
+use app\common\help\Help;
+class Check extends Model{
+   // protected $connection = ['database' => 'erp'];
+    protected $table = 'member';
+
+
+    //初始化方法
+    protected function initialize()
+    {
+    	$log_name = config('log_database');
+    	$this->connection = ['database'=>$log_name];
+        parent::initialize();
+
+    }
+    //重复性验证
+    public function checkNameIsRepetition($table_name,$data){
+
+        $result = $this->table($table_name)->where($data)->find();
+
+
+        return $result;
+    }
+}

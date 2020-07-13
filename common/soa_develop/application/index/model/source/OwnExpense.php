@@ -1,0 +1,365 @@
+<?php
+
+namespace app\index\model\source;
+use think\Model;
+use app\common\help\Help;
+use app\index\service\PublicService;
+use think\config;
+use think\Db;
+class OwnExpense extends Model{
+    //protected $connection = ['database' => 'erp'];
+    protected $table = 'own_expense';
+    private $_languageList;
+    private $_public_service;
+    public function initialize()
+    {
+    	$this->_languageList = config('systom_setting')['language_list'];
+    	$this->_public_service = new PublicService();
+    	parent::initialize();
+    
+    }
+
+    /**
+     * 添加自费项目
+     * 王
+     */
+    public function addOwnExpense($params){
+    	$t = time();
+
+    	$data['source_number'] = $params['source_number'];
+    	$data['supplier_id'] = $params['supplier_id'];
+		$data['belong_supplier_id'] = $params['supplier_id'];				
+    	$data['supplier_type'] = 1;
+    	$data['company_id'] = $params['choose_company_id'];
+        $data['own_expense_name'] = $params['own_expense_name'];
+    	if(isset($params['remark'])){
+    		$data['remark'] = $params['remark'];
+    	}
+    	$data['default_language_id'] = $params['lang_id'];
+    	$data['create_time'] = $t;  	
+    	$data['create_user_id'] = $params['user_id'];
+    	$data['update_time'] = $t;
+    	$data['update_user_id'] = $params['user_id'];
+    	$data['status'] = $params['status'];
+        $data['type'] = $params['type'];
+    	Db::startTrans();
+    	try{
+    		$pk_id = Db::name('own_expense')->insertGetId($data);
+    		$this->_public_service->setNumber('own_expense', 'own_expense_id', $pk_id, 'source_number', $data['source_number'], $pk_id);
+    		
+    		$language_data['source_number'] = $params['source_number'];
+    		$language_data['own_expense_name'] = $params['own_expense_name'];
+    		$language_data['language_id']=$params['lang_id'];
+    		$language_data['create_time'] = $t;
+    		$language_data['create_user_id'] = $params['user_id'];
+    		$language_data['update_time'] = $t;
+    		$language_data['update_user_id'] = $params['user_id'];
+    		$language_data['status'] = 1;
+    		Db::name('own_expense_language')->insertGetId($language_data);
+    		
+    		//统价
+  			$source_price['normal_price']=$params['normal_price'];
+  			$source_price['normal_settlement_price']=$params['normal_settlement_price'];
+            $source_price['payment_currency_type']=$params['payment_currency_type'];
+
+
+  			$source_price['supplier_type_id'] = 11;
+  			$source_price['pk_id'] = $pk_id;
+  			Db::name('source_price')->insert($source_price);
+
+  			//判断是否有代理商
+  			if(!empty($params['agent_id'])){
+  				$data['source_number'] = help::getNumber(61);
+  				$data['supplier_id'] =	$params['agent_id'];
+  				$data['belong_supplier_id'] =	$params['supplier_id'];
+  				$data['supplier_type'] = 2;
+  				$pk_id = Db::name('own_expense')->insertGetId($data);
+  				$source_price['pk_id'] = $pk_id;
+  				Db::name('source_price')->insert($source_price);
+  				
+  				$language_data['source_number'] = $data['source_number'];
+  				$language_data['status'] = 1;
+  				Db::name('own_expense_language')->insert($language_data);
+  			} 			
+    		$result = 1;
+    		// 提交事务
+    		Db::commit();
+    
+    	} catch (\Exception $e) {
+    		$result = $e->getMessage();
+    		// 回滚事务
+    		Db::rollback();
+    		//\think\Response::create(['code' => '400', 'msg' =>$result], 'json')->send();
+    		//exit();
+    
+    	}
+    
+    	return $result;
+    }
+    
+    /**
+     * 获取自费项目
+     * 王
+     */
+    public function getOwnExpense($params,$is_count=false,$is_page=false,$page=null,$page_size=20){
+    	$data = "1=1 ";
+    	if($params['is_branch_product'] == 1){
+    	    if(!empty($params['source_name'])){
+    			$data.= " and own_expense.own_expense_name like '%".$params['source_name']."%'";
+    		}
+    		if(!empty($params['source_number'])){
+    			$data.= " and own_expense.source_number like '%".$params['source_number']."%'";
+    		}  
+    		if(!empty($params['supplier_name'])){
+    			$data.= " and supplier_name like '%".$params['supplier_name']."%'";
+    		}
+    	}else{
+    	    if(!empty($params['own_expense_name'])){
+    			$data.= " and own_expense.own_expense_name like '%".$params['own_expense_name']."%'";
+    		}
+    		if(!empty($params['source_number'])){
+    			$data.= " and own_expense.source_number = '".$params['source_number']."'";
+    		}  
+    	}    	
+  	
+    	if(is_numeric($params['status'])){
+    		$data.= " and own_expense.status = ".$params['status'];
+    	}
+    	if(!empty($params['own_expense_id'])){
+    		$data.= " and own_expense.own_expense_id = '".$params['own_expense_id']."'";
+    	}
+
+    	if(!empty($params['supplier_id'])){
+    		$data.= " and own_expense.supplier_id = '".$params['supplier_id']."'";
+    	}
+        if(!empty($params['supplier_type'])){
+    		$data.= " and own_expense.supplier_type = '".$params['supplier_type']."'";
+    	}
+    	if(!empty($params['belong_supplier_id'])){
+    		$data.= " and own_expense.belong_supplier_id = '".$params['belong_supplier_id']."'";
+    	}    
+    	if(is_numeric($params['company_id'])){
+    		$data.= " and own_expense.company_id = '".$params['company_id']."'";
+    	}
+    	
+        if($is_count==true){
+            $result = $this->table("own_expense")->where($data)->count();
+        }else {
+            if ($is_page == true) {
+                $result = $this->table("own_expense")->
+                join("source_price", 'source_price.pk_id = own_expense.own_expense_id and source_price.supplier_type_id=11', 'left')->
+                join('currency', 'currency.currency_id = source_price.payment_currency_type')->
+                join('supplier', 'supplier.supplier_id = own_expense.supplier_id')->
+                join('company', 'company.company_id= own_expense.company_id')->
+                where($data)->limit($page, $page_size)->order('create_time desc')->
+                field(['own_expense.own_expense_id', "own_expense.own_expense_name", 'own_expense.source_number',
+                    'own_expense.default_language_id',
+                    'own_expense.remark','own_expense.type',
+                    'own_expense.supplier_id', 'supplier.supplier_name',
+                    'own_expense.supplier_type', 'own_expense.belong_supplier_id',
+                    "own_expense.company_id", 'company.company_name', 'currency.currency_name','currency.unit',
+                    'own_expense.create_time', 'source_price.payment_currency_type',
+                    'source_price.normal_price', 'source_price.normal_settlement_price',
+                    "(select nickname  from user where user.user_id = own_expense.create_user_id)"=> 'create_user_name',
+                    "(select nickname  from user where user.user_id = own_expense.update_user_id)"=> 'update_user_name',
+                    'own_expense.update_time', 'own_expense.create_time', "own_expense.status",
+                ])->select();
+            }else{
+                $result = $this->table("own_expense")->alias('own_expense')->
+                join("source_price",'source_price.pk_id = own_expense.own_expense_id and source_price.supplier_type_id=11','left')->
+                join('currency','currency.currency_id = source_price.payment_currency_type')->
+                join('supplier','supplier.supplier_id = own_expense.supplier_id')->
+                join('company','company.company_id= own_expense.company_id')->
+                where($data)->order('create_time desc')->
+                field(['own_expense.own_expense_id',"own_expense.own_expense_name",'own_expense.source_number',
+                    'own_expense.default_language_id',
+                    'own_expense.remark','own_expense.type',
+                    'own_expense.supplier_id','supplier.supplier_name',
+                    'own_expense.supplier_type','own_expense.belong_supplier_id',
+                    "own_expense.company_id",'company.company_name','currency.currency_name','currency.unit',
+                    'own_expense.create_time','source_price.payment_currency_type',
+                    'source_price.normal_price','source_price.normal_settlement_price',
+                    "(select nickname  from user where user.user_id = own_expense.create_user_id)"=>'create_user_name',
+                    "(select nickname  from user where user.user_id = own_expense.update_user_id)"=>'update_user_name',
+                    'own_expense.update_time','own_expense.create_time',"own_expense.status",
+                ])->select();
+            }
+        }
+
+	
+        return $result;
+    
+    }
+    /**
+     * 获取自费项目数据根据自费项目_ID与lang_id
+     */
+    public function getOwnExpenseByOwnExpenseIdLangId($params){
+    
+    	$lang_id = $params['lang_id'];
+    	$data['language_id'] = $lang_id;
+    	$data['source_number'] = $params['source_number'];
+    	$result = $this->table('own_expense_language')->
+    	where($data)->find();
+    
+    	return $result;
+    }
+    
+    /**
+     * 修改自费项目多语言数据根据自费项目多语言ID
+     */
+    public function updateOwnExpenseLanguageByOwnExpenseLanguageId($params){
+    
+    	$t = time();
+    	$user_id = $params['user_id'];
+    
+    	$original_number = $params['data'][0]['source_number'];
+    
+    	$original_data['source_number'] = $original_number;
+    
+    
+    	$params = $params['data'];
+    
+    	//原始数据主键
+    	$original_result = $this->getOwnExpense($original_data);
+    
+    	$default_language_id = $original_result[0]['default_language_id'];
+    
+    	$this->startTrans();
+    	try{
+    		for($i=0;$i<count($params);$i++){
+    
+    			$data = [];
+    			if(!trim($params[$i]['own_expense_name'])==''){
+    					
+    				$data['own_expense_name'] = $params[$i]['own_expense_name'];
+    				$data['update_time'] = $t;
+    				$data['update_user_id'] = $user_id;
+    
+    				if(is_numeric($params[$i]['own_expense_language_id'])){
+    
+    					$this->table('own_expense_language')->where("own_expense_language_id = ".$params[$i]['own_expense_language_id'])->update($data);
+    
+    					//再查询是否是原始数据  如果是原始数据那么原始 数据也要更改
+    					if($default_language_id == $params[$i]['lang_id']){
+    							
+    						$this->where("source_number = '$original_number'")->update($data);
+    
+    					}
+    				}else{
+    
+    					$data['create_time'] = $t;
+    					$data['create_user_id'] = $user_id;
+    					$data['status'] = 1;
+    					$data['source_number'] = $original_number;
+    					$data['language_id'] = $params[$i]['lang_id'];
+    					$this->table("own_expense_language")->insert($data);
+    
+    				}
+    			}
+    		}
+    
+    		$result = 1;
+    		// 提交事务
+    		$this->commit();
+    		 
+    	} catch (\Exception $e) {
+    		$result = $e->getMessage();
+    		// 回滚事务
+    		$this->rollback();
+    		 
+    	}
+    
+    	return $result;
+    
+    }
+         
+    /**
+     * 修改自费项目
+     */
+    public function updateOwnExpenseByOwnExpenseId($params){
+
+        $t = time();
+
+        if(!empty($params['own_expense_name'])){
+            $data['own_expense_name'] = $params['own_expense_name'];
+
+        }
+        if(!empty($params['supplier_id'])){
+            $data['belong_supplier_id'] = $params['supplier_id'];
+
+        }
+        if(!empty($params['agent_id'])){
+            $data['supplier_id'] = $params['agent_id'];
+
+        }
+
+        if(!empty($params['choose_company_id'])){
+            $data['company_id'] = $params['choose_company_id'];
+
+        }
+        if(!empty($params['remark'])){
+            $data['remark'] = $params['remark'];
+
+        }
+        if(!empty($params['status'])){
+            $data['status'] = $params['status'];
+
+        }
+
+
+        $data['type'] = $params['type'];
+        $data['update_user_id'] = $params['user_id'];
+        $data['update_time'] = $t;
+
+
+        $source_price=[];
+        Db::startTrans();
+        try{
+            Db::name('own_expense')->where("own_expense_id = ".$params['own_expense_id'])->update($data);
+            //统价
+            if(!empty($params['normal_price']) ){
+                $source_price['normal_price']=$params['normal_price'];
+
+            }
+            if(!empty($params['normal_settlement_price'])){
+
+                $source_price['normal_settlement_price']=$params['normal_settlement_price'];
+
+            }
+            if(!empty($params['payment_currency_type'])){
+
+                $source_price['payment_currency_type']=$params['payment_currency_type'];
+
+            }
+
+            Db::name('source_price')->where("supplier_type_id = 11 and pk_id = ".$params['own_expense_id'])->update($source_price);
+            $result = 1;
+            // 提交事务
+            Db::commit();
+
+        } catch (\Exception $e) {
+            $result = $e->getMessage();
+            // 回滚事务
+            Db::rollback();
+
+        }
+        return $result;
+    }
+
+    /**
+     * getOneOwnExpense
+     *
+     * 获取一条自费项目信息
+     * @author shj
+     *
+     * @param $own_expense_id
+     *
+     * @return void
+     * Date: 2019/2/27
+     * Time: 17:29
+     */
+    public function getOneOwnExpense($own_expense_id){
+        $result = $this->table("own_expense")->where(['own_expense_id' => $own_expense_id])->find();
+        return $result;
+    }
+}

@@ -1,0 +1,29 @@
+drop table IF EXISTS ota_enquiry; 
+CREATE TABLE `ota_enquiry` (
+  `enquiry_id` int(11) NOT NULL AUTO_INCREMENT,
+  `uuid` varchar(46) DEFAULT NULL,
+  `company_id` int(11) NOT NULL COMMENT '分公司ID',
+  `travel_destinations` varchar(255) NOT NULL COMMENT '出游目的地',
+  `departure_date` int(11) NOT NULL COMMENT '出发日期',
+  `estimated_number_adults` int(11) DEFAULT NULL COMMENT '成人',
+  `estimated_number_children` int(11) DEFAULT NULL COMMENT '儿童',
+  `estimated_number_the_elderly` int(11) DEFAULT NULL COMMENT '老人',
+  `estimated_number_bed_free_children` int(11) DEFAULT NULL COMMENT '儿童不占床',
+  `travel_days` int(11) NOT NULL COMMENT '行程天数',
+  `accommodation_standard` int(11) DEFAULT NULL COMMENT '住宿標准',
+  `contect_name` varchar(80) NOT NULL COMMENT '联系人姓名',
+  `tel` varchar(80) NOT NULL COMMENT '联系电话',
+  `email` varchar(150) DEFAULT NULL COMMENT '邮箱',
+  `language_id` int(11) NOT NULL COMMENT '语言',
+  `remark` varchar(9999) DEFAULT NULL COMMENT '其他需求',
+  `create_time` int(11) DEFAULT NULL,
+  `update_time` int(11) DEFAULT NULL,
+  `create_user_id` int(11) DEFAULT NULL,
+  `update_user_id` int(11) DEFAULT NULL,
+  `person_in_charge` int(11) NOT NULL COMMENT '负责人',
+  `status` tinyint(1) NOT NULL DEFAULT '1' COMMENT '1.开启 2.删除或关闭 ',
+  `website_uuid` varchar(60) DEFAULT NULL,
+  PRIMARY KEY (`enquiry_id`),
+  UNIQUE KEY `uuid_only` (`uuid`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='需求定制';
+

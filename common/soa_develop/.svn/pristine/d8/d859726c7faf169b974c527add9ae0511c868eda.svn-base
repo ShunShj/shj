@@ -1,0 +1,342 @@
+<?php
+
+namespace app\index\model\branchcompany;
+use think\Model;
+use app\common\help\Help;
+use think\config;
+use think\Db;
+class CompanyOrderProductSource extends Model{
+    //protected $connection = ['database' => 'erp'];
+    protected $table = 'company_order_product_source';
+    private $_languageList;
+    public function initialize()
+    {
+        $this->_languageList = config('systom_setting')['language_list'];
+        parent::initialize();
+
+    }
+
+    /**
+     * 添加公司订单-资源
+     * 胡
+     */
+    public function addCompanyOrderProductSource($params){
+
+        $t = time();
+		$data['company_order_number'] = $params['company_order_number'];
+
+		$data['branch_product_number'] = $params['branch_product_number'];
+		$data['supplier_type_id'] = $params['supplier_type_id'];
+		$data['source_id'] = $params['source_id'];
+		$data['source_name'] = $params['source_name'];
+	
+		//$data['price_currency_id']
+		if(!empty($params['team_product_number'])){
+			$data['team_product_number']= $params['team_product_number'];
+		}
+		if(!empty($params['is_receivable_company'])){
+			$data['is_receivable_company']= $params['is_receivable_company'];
+		}
+		if(is_numeric($params['price_before_tax'])){
+			$data['price_before_tax']= $params['price_before_tax'];
+		}
+		if(!empty($params['source_cost_univalence'])){
+			$data['source_cost_univalence']= $params['source_cost_univalence'];
+		}
+		if(!empty($params['cope_number'])){
+			$data['cope_number']= $params['cope_number'];
+		}
+		$data['source_cost']=$params['source_cost'];
+		$data['source_price']=$params['source_price'];
+        $data['cost_currency_id']=$params['cost_currency_id'];
+        $data['price_currency_id']=$params['price_currency_id'];
+        $data['supplier_name']=$params['supplier_name'];
+		$data['create_time'] = $t;
+		$data['update_time'] = $t;
+		$data['create_user_id'] = $params['now_user_id'];
+		$data['update_user_id'] = $params['now_user_id'];
+		$data['status'] = 1;
+		if(!empty($params['team_product_number'])){
+			$data['team_product_number'] = $params['team_product_number'];
+		}
+        $this->startTrans();
+        try{
+			
+        	$result = $this->insertGetId($data);
+        	
+        	
+            // 提交事务
+            $this->commit();
+
+        } catch (\Exception $e) {
+            $result = $e->getMessage();
+            // 回滚事务
+            $this->rollback();
+
+        }
+
+        return $result;
+    }
+
+    /**
+     * 获取分公司订单资源
+     * 胡
+     */
+    public function getCompanyOrderProductSource($params){
+
+    	
+    	$data = "1=1";
+    	if(!empty($params['company_order_number'])){
+    		$data.= " and company_order_product_source.company_order_number = '".$params['company_order_number']."'";
+    	}
+    	if(!empty($params['team_product_number'])){
+    		$data.= " and company_order_product_source.team_product_number = '".$params['team_product_number']."'";
+    	}
+    	if(!empty($params['company_order_product_source_id'])){
+    		$data.= " and company_order_product_source.company_order_product_source_id = ".$params['company_order_product_source_id'];
+    	}
+		if(!empty($params['supplier_type_id'])){
+			$data.= " and company_order_product_source.supplier_type_id = '".$params['supplier_type_id']."'";
+		}
+		if(!empty($params['source_id'])){
+			$data.= " and company_order_product_source.source_id = '".$params['source_id']."'";
+		}
+		if(!empty($params['branch_product_number'])){
+			$data.= " and company_order_product_source.branch_product_number = '".$params['branch_product_number']."'";
+		}
+    	if(is_numeric($params['status'])){
+    		$data.= " and company_order_product_source.status = ".$params['status'];
+    	}
+
+
+       $result= $this->table("company_order_product_source")->alias("company_order_product_source")->
+            join("tax",'tax.tax_id = company_order_product_source.tax_id','left')->
+    
+
+            where($data)->
+            field([ 'company_order_product_source_id','company_order_number','branch_product_number','supplier_type_id','source_id',
+            		'source_name','source_cost','company_order_product_source.source_cost_univalence','source_price','cost_currency_id','price_currency_id','invoice_number','invoice_time',
+
+            		'supplier_name',
+					'company_order_product_source.team_product_receivable_type','company_order_product_source.is_receivable_company',
+            		'team_product_number',
+            		'company_order_product_source.cope_number','company_order_product_source.receivable_number',
+            		'company_order_product_source.tax_id','company_order_product_source.price_before_tax','company_order_product_source.remark',
+            		'tax.txcd','tax.gstrate','tax.pstrate','tax.hstrate','tax.otx','tax.note',
+            		"(select currency_name from currency where company_order_product_source.price_currency_id = currency.currency_id) as price_currency_name",
+            		"(select currency_name from currency where company_order_product_source.cost_currency_id = currency.currency_id) as cost_currency_name",
+            		"(select nickname  from user where user.user_id = company_order_product_source.create_user_id)"=>'create_user_name',
+            		"(select nickname  from user where user.user_id = company_order_product_source.update_user_id)"=>'update_user_name',
+            		'company_order_product_source.create_user_id','company_order_product_source.update_user_id','company_order_product_source.create_time',
+            		'company_order_product_source.update_time','company_order_product_source.status'])->
+            
+            select();
+
+       
+	
+		
+        return $result;
+
+    }
+
+
+    /**
+     * 修改公司订单资源
+     */
+    public function updateCompanyOrderSource($params){
+
+
+        $t = time();
+        
+        if(!empty($params['invoice_number'])){
+        	$data['invoice_number'] = $params['invoice_number'];
+        
+        }
+        if(!empty($params['invoice_time'])){
+        	$data['invoice_time'] = $params['invoice_time'];
+        
+        }
+        if(!empty($params['price_currency_id'])){
+        	$data['price_currency_id'] = $params['price_currency_id'];
+        
+        }
+        if(!empty($params['source_price'])){
+        	$data['source_price'] = $params['source_price'];
+        
+        }
+        
+        if(!empty($params['source_cost'])){
+        	$data['source_cost'] = $params['source_cost'];
+        
+        }
+        if(!empty($params['cost_currency_id'])){
+        	$data['cost_currency_id'] = $params['cost_currency_id'];
+        
+        }
+        if(!empty($params['tax_id'])){
+        	$data['tax_id'] = $params['tax_id'];
+        
+        }
+        if(!empty($params['price_before_tax'])){
+        	$data['price_before_tax'] = $params['price_before_tax'];
+        
+        }
+        if(!empty($params['remark'])){
+        	$data['remark'] = $params['remark'];
+        
+        }
+        
+        if(!empty($params['cope_number'])){
+        	$data['cope_number'] = $params['cope_number'];
+        
+        }
+        if(is_numeric($params['status'])){
+            $data['status'] = $params['status'];
+
+        }
+		
+
+        $data['update_user_id'] = $params['now_user_id'];
+
+        $data['update_time'] = $t;
+
+
+
+		
+        $this->startTrans();
+        try{
+            $this->where("company_order_product_source_id = ".$params['company_order_product_source_id'])->update($data);
+
+            $result = 1;
+            // 提交事务
+            $this->commit();
+
+        } catch (\Exception $e) {
+            $result = $e->getMessage();
+            // 回滚事务
+            $this->rollback();
+
+        }
+        return $result;
+    }
+	
+    /**
+     * 更改状态
+     */
+    public function updateCompanyOrderSourceStatus($params){
+
+    	if(!empty($params['company_order_number'])){
+    		$where['company_order_number'] = $params['company_order_number'];
+    	
+    	}
+    	if(!empty($params['team_product_number'])){
+    		$where['team_product_number'] = $params['team_product_number'];
+    		 
+    	}
+    	if(is_numeric($params['status'])){
+    		$data['status'] = $params['status'];
+    	
+    	}
+
+    	$this->startTrans();
+    	try{
+    		$this->where($where)->update($data);
+    	
+    		$result = 1;
+    		// 提交事务
+    		$this->commit();
+    	
+    	} catch (\Exception $e) {
+    		$result = $e->getMessage();
+    		// 回滚事务
+    		$this->rollback();
+    	
+    	}
+    	return $result;
+    }
+    /**
+     * 修改公司订单资源根据应付编号
+     */
+    public function updateCompanyOrderSourceByCopeNumber($params){
+    
+    
+    	$t = time();
+    
+    	if(!empty($params['invoice_number'])){
+    		$data['invoice_number'] = $params['invoice_number'];
+    
+    	}
+    	if(!empty($params['invoice_time'])){
+    		$data['invoice_time'] = $params['invoice_time'];
+    
+    	}
+    	if(!empty($params['price_currency_id'])){
+    		$data['price_currency_id'] = $params['price_currency_id'];
+    
+    	}
+    	if(!empty($params['source_price'])){
+    		$data['source_price'] = $params['source_price'];
+    
+    	}
+    
+    	if(!empty($params['source_cost'])){
+    		$data['source_cost'] = $params['source_cost'];
+    
+    	}
+    	if(!empty($params['cost_currency_id'])){
+    		$data['cost_currency_id'] = $params['cost_currency_id'];
+    
+    	}
+    	if(!empty($params['source_name'])){
+    		$data['source_name'] = $params['source_name'];
+    	
+    	}
+    	
+    	if(!empty($params['supplier_type_id'])){
+    		$data['supplier_type_id'] = $params['supplier_type_id'];
+    		 
+    	}
+    	if(!empty($params['source_id'])){
+    		$data['source_id'] = $params['source_id'];
+    		 
+    	}
+    	if(!empty($params['remark'])){
+    		$data['remark'] = $params['remark'];
+    
+    	}
+    
+    	if(!empty($params['cope_number'])){
+    		$where['cope_number'] = $params['cope_number'];
+    
+    	}
+    	if(is_numeric($params['status'])){
+    		$data['status'] = $params['status'];
+    
+    	}
+    
+    
+    
+    
+    	$data['update_time'] = $t;
+    
+    
+    
+    
+    	$this->startTrans();
+    	try{
+    		$result = $this->where($where)->update($data);
+    
+    		
+    		// 提交事务
+    		$this->commit();
+    
+    	} catch (\Exception $e) {
+    		$result = $e->getMessage();
+    		// 回滚事务
+    		$this->rollback();
+    
+    	}
+    	return $result;
+    }
+    
+}

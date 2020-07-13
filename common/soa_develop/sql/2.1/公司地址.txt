@@ -1,0 +1,3 @@
+ALTER TABLE `company`
+ADD COLUMN `address`  varchar(500) NULL COMMENT '公司地址' AFTER `timezone`;
+

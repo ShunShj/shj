@@ -1,0 +1,41 @@
+---------------------------------------------------------------
+[ 2018-10-07T23:36:28+08:00 ] 127.0.0.1 POST /user/login
+[ info ] 127.0.0.1:7002/user/login [运行时间：1.879290s][吞吐率：0.53req/s] [内存消耗：2,953.13kb] [文件加载：55]
+[ info ] [ LANG ] E:\xampp\htdocs\soaerp\thinkphp\lang\zh-cn.php
+[ info ] [ BIND ] 'index'
+[ info ] [ ROUTE ] array (
+  'type' => 'module',
+  'module' => 
+  array (
+    0 => 'index',
+    1 => 'user',
+    2 => 'login',
+  ),
+)
+[ info ] [ HEADER ] array (
+  'host' => '127.0.0.1:7002',
+  'accept' => 'application/json',
+  'content-length' => '95',
+  'content-type' => 'application/x-www-form-urlencoded',
+)
+[ info ] [ PARAM ] array (
+  '{"username":"root","password":"111111","ip":"127_0_0_1","appKey":"nexus","appSecret":"nexusIt"}' => '',
+)
+[ info ] [ LANG ] E:\xampp\htdocs\soaerp\public/../application/index\lang\zh-cn.php
+[ info ] [ DB ] INIT mysql
+[ info ] [ RUN ] app\index\controller\User->login[ E:\xampp\htdocs\soaerp\application\index\controller\User.php ]
+[ info ] [ DB ] INIT mysql
+[ info ] [ LOG ] INIT File
+[ sql ] [ DB ] CONNECT:[ UseTime:0.001056s ] mysql:host=127.0.0.1;port=3306;dbname=log;charset=utf8
+[ sql ] [ SQL ] CREATE TABLE IF NOT EXISTS soaerp_log_20181007 LIKE soaerp_log [ RunTime:0.495582s ]
+[ sql ] [ SQL ] CREATE TABLE IF NOT EXISTS soaerp_log_20181007 LIKE soaerp_log [ RunTime:0.000400s ]
+[ sql ] [ DB ] CONNECT:[ UseTime:0.002624s ] mysql:host=127.0.0.1;port=3306;dbname=erp;charset=utf8
+[ sql ] [ SQL ] SHOW COLUMNS FROM `user` [ RunTime:0.043087s ]
+[ sql ] [ SQL ] SELECT `user`.`user_id`,`user`.`username`,`user`.`password`,`user`.`job_id`,`job`.`job_name`,`department`.`department_name`,`department`.`department_id`,`company`.`company_name`,`company`.`company_id`,`user`.`nickname`,`user`.`phone`,`user`.`language_id`,`language`.`language_name`,`user`.`email`,`user`.`update_time`,`user`.`update_user_id`,`user`.`create_time`,`user`.`create_user_id`,`user`.`status` FROM `user` `user` LEFT JOIN `job` ON `user`.`job_id`=`job`.`job_id` LEFT JOIN `department` ON `job`.`department_id`=`department`.`department_id` LEFT JOIN `company` ON `department`.`company_id`=`company`.`company_id` LEFT JOIN `language` ON `user`.`language_id`=`language`.`language_id` WHERE  (  1=1 and user.username = 'root' ) [ RunTime:0.087429s ]
+[ sql ] [ SQL ] CREATE TABLE IF NOT EXISTS soaerp_login_log_20181007 LIKE soaerp_login_log [ RunTime:0.307032s ]
+[ sql ] [ SQL ] SHOW COLUMNS FROM `soaerp_login_log_20181007` [ RunTime:0.006262s ]
+[ sql ] [ SQL ] INSERT INTO `soaerp_login_log_20181007` (`username` , `ip` , `create_time`) VALUES ('root' , '127.0.0.1' , 1538926588) [ RunTime:0.064024s ]
+[ sql ] [ SQL ] CREATE TABLE IF NOT EXISTS soaerp_log_20181007 LIKE soaerp_log [ RunTime:0.000498s ]
+[ sql ] [ SQL ] CREATE TABLE IF NOT EXISTS soaerp_log_20181007 LIKE soaerp_log [ RunTime:0.000278s ]
+[ sql ] [ SQL ] SHOW COLUMNS FROM `soaerp_log_20181007` [ RunTime:0.007379s ]
+[ sql ] [ SQL ] INSERT INTO `soaerp_log_20181007` (`params` , `time` , `type` , `result` , `url`) VALUES ('{\"username\":\"root\",\"password\":\"111111\",\"ip\":\"127.0.0.1\",\"appKey\":\"nexus\",\"appSecret\":\"nexusIt\"}' , 1538926588 , 1 , '[{\"user_id\":1,\"username\":\"root\",\"password\":\"96e79218965eb72c92a549dd5a330112\",\"job_id\":2,\"job_name\":\"\\u4ea7\\u54c1\\u7ecf\\u7406\",\"department_name\":\"\\u9500\\u552e\\u90e8\",\"department_id\":1,\"company_name\":\"\\u8054\\u8c0a\\u5047\\u671f-\\u52a0\\u62ff\\u5927\\u5206\\u516c\\u53f8\",\"company_id\":1,\"nickname\":\"admin\",\"phone\":\"+1526412543\",\"language_id\":1,\"language_name\":\"\\u6c49\\u8bed\",\"email\":\"admin@nexusholidays.com\",\"update_time\":1535708580,\"update_user_id\":1,\"create_time\":1532599182,\"create_user_id\":4,\"status\":1}]' , '127.0.0.1:7002/user/login') [ RunTime:0.062807s ]

@@ -1,0 +1,6 @@
+ALTER TABLE `route_journey`
+MODIFY COLUMN `route_journey_scenic_sport`  varchar(4000) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '景点' AFTER `route_journey_dinner`;
+
+ALTER TABLE `team_product_journey`
+MODIFY COLUMN `route_journey_scenic_sport`  varchar(4000) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '景点' AFTER `route_journey_dinner`;
+

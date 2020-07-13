@@ -1,0 +1,25 @@
+<?php
+namespace app\index\controller;
+use app\index\model\b2b_tour\B2bTour as B2bTourModel;
+
+class B2bTour extends Base
+{
+    public function __construct()
+    {
+
+        parent::__construct();
+    }
+
+
+    /**
+     * 添加、编辑资产负债表
+     */
+    public function addB2bTour(){
+        $params = $this->input();
+
+        $model = new B2bTourModel();
+        $result = $model->addB2bTour($params);
+        $this->outPut($result);
+    }
+
+}

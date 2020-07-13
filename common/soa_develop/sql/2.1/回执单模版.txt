@@ -1,0 +1,2 @@
+ALTER TABLE `erp`.`return_receipt` 
+ADD COLUMN `type` tinyint(4) UNSIGNED DEFAULT 1 COMMENT '1 plan 2 voucher 3 term 4 booking notice' AFTER `return_receipt_name`;

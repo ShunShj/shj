@@ -1,0 +1,9 @@
+ALTER TABLE `erp`.`ota_article_type` 
+ADD COLUMN `image` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci COMMENT '图片' AFTER `pid`,
+ADD COLUMN `content` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci COMMENT '内容' AFTER `image`;
+
+
+ALTER TABLE `erp`.`ota_article_type` 
+ADD COLUMN `author` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci COMMENT '用于header头显示' AFTER `content`,
+ADD COLUMN `description` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci COMMENT '用于header头显示' AFTER `author`,
+ADD COLUMN `keywords` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci COMMENT '用于header头显示' AFTER `description`;

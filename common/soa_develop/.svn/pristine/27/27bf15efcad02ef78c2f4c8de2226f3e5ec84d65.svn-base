@@ -1,0 +1,4 @@
+#团队产品添加团队状态字段
+ALTER TABLE `team_product`
+ADD COLUMN `plur_status`  tinyint(4) NULL DEFAULT 0 COMMENT '0未成团1成团2结算3结团' AFTER `update_user_id`;
+

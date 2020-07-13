@@ -1,0 +1,1 @@
+0 0 1 * * /usr/bin/curl 47.244.53.248:8002/queue/updateMonthCurrencyProportion?appKey=nexus&appSecret=nexusIt

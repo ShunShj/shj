@@ -1,0 +1,4 @@
+ALTER TABLE `in_station_letter`
+MODIFY COLUMN `content`  varchar(2500) CHARACTER SET utf8 COLLATE utf8_general_ci NULL COMMENT 'ÄÚÈÝ' AFTER `user_id`,
+MODIFY COLUMN `url`  varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL AFTER `content`;
+

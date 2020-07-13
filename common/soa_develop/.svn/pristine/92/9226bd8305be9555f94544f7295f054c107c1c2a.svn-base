@@ -1,0 +1,300 @@
+<?php
+
+namespace app\index\model\system;
+use think\Model;
+use app\common\help\Help;
+
+use think\config;
+use think\Db;
+use app\common\help\Contents;
+class User extends Model{
+    //protected $connection = ['database' => 'erp'];
+    protected $table = 'user';
+    private $_languageList;
+
+    public function initialize()
+    {
+    	$this->_languageList = config('systom_setting')['language_list'];
+    	
+    	parent::initialize();
+    
+    }
+
+    /**
+     * 添加用户
+     * 胡
+     */
+    public function addUser($params){
+    	$t = time();
+
+        $data['username'] = $params['username'];
+        $data['nickname'] = $params['nickname'];
+        $data['password'] = MD5($params['password']);
+        if(!empty($params['job_name'])){
+            $data['job_name'] = $params['job_name'];
+        }
+        if(!empty($params['phone'])){
+            $data['phone'] = $params['phone'];
+        }
+        if(!empty($params['language_id'])){
+            $data['language_id'] = $params['language_id'];
+        }
+        if(!empty($params['email'])){
+            $data['email'] = $params['email'];
+        }
+        $data['company_id'] = $params['choose_company_id'];
+        $data['department_id'] = $params['department_id'];
+    	$data['role_id'] = $params['role_id'];
+    	$data['create_time'] = $t;
+    	$data['create_user_id'] = $params['user_id'];
+    	$data['update_time'] = $t;
+    	$data['update_user_id'] = $params['user_id'];
+    	$data['base_password'] = 1;
+    	$data['status'] = 1;
+    
+    	
+
+    
+    
+    	$this->startTrans();
+    	try{
+//     		Db::name('user_zh-cn')->insert($data_zh_cn);
+//     		Db::name("user_en-us")->insert($data_en_us);
+    		$result = $this->insertGetId($data);
+    
+    		// 提交事务
+    		Db::commit();
+    
+    	} catch (\Exception $e) {
+    		$result = $e->getMessage();
+    		// 回滚事务
+    		Db::rollback();
+    		//\think\Response::create(['code' => '400', 'msg' =>$result], 'json')->send();
+    		//exit();
+    
+    	}
+    
+    	return $result;
+    }
+    
+    /**
+     * 获取用户
+     * 胡
+     */
+    public function getUser($params,$is_count=false,$is_page=false,$page=null,$page_size=20){//第一个为参数，第二个为是否要获取 总数
+    	
+    	$language_list = $this->_languageList;
+    	$data = "1=1";
+    	if(!empty($params['user_id'])){
+    		$data.= " and user.user_id= ".$params['user_id'];
+    	}
+    	if(is_numeric($params['status'])){
+    		$data.= " and user.status = ".$params['status'];
+    	}
+    	if(!empty($params['department_id'])){
+    		$data.= " and user.department_id = '".$params['department_id']."'";
+    	}
+    	if(!empty($params['username'])){
+    		$data.= " and user.username = '".$params['username']."'";
+    	}
+    	if(!empty($params['nickname'])){
+    		$data.= " and user.nickname like '%".$params['nickname']."%'";
+    	}
+    	if(!empty($params['department_id'])){
+    		$data.= " and user.department_id = ".$params['department_id'];
+    	}
+        if(is_numeric($params['company_id'])){
+            $data.= " and user.company_id = '".$params['company_id']."'";
+        }
+     
+    	if($is_count==true){
+    		$result = $this->where($data)->count();
+    		 
+    	}else{
+    		if($is_page == true){
+	            $result = $this->table("user")->alias('user')->
+	      
+				join("department department",'user.department_id = department.department_id','left')->
+				join("company company",'user.company_id = company.company_id','left')->
+				join("language language",'user.language_id= language.language_id','left')->
+				join("currency currency",'company.currency_id = currency.currency_id','left')->
+				join("role role",'role.role_id= user.role_id','left')->
+	            where($data)->limit($page,$page_size)->
+	            
+	            field(['user.user_id',"user.username","user.password",'user.job_id','user.job_name','department.department_name','department.department_id',
+	            		'company.company_name','company.company_id','company.is_supplier','user.nickname','user.phone','user.language_id','language.language_name',
+	            		'user.email','user.role_id','user.base_password',
+	            		'user.default_bill_template_id',
+	            		"currency.currency_id as company_currency_id","currency.currency_name as company_currency_name",
+	            		'currency.symbol','currency.unit',
+	            		'user.default_bill_template_id','role.role_name',
+	            		'user.update_time','user.update_user_id','user.create_time','user.create_user_id',
+	            		"(select nickname  from user as user2 where user2.user_id = user.create_user_id)"=>'create_user_name',
+	            		"(select nickname  from user as user2 where user2.user_id = user.update_user_id)"=>'update_user_name',
+	            		"user.status"])->order("user.create_time desc")->select();
+
+    		}else{
+	            $result = $this->table("user")->alias('user')->
+	    
+				join("department department",'user.department_id = department.department_id','left')->
+				join("company company",'user.company_id = company.company_id','left')->
+				join("language language",'user.language_id= language.language_id','left')->
+				join("currency currency",'company.currency_id = currency.currency_id','left')->
+				join("role role",'role.role_id= user.role_id','left')->
+	            where($data)->
+	            
+	            field(['user.user_id',"user.username","user.password",'user.job_id','user.job_name','department.department_name','department.department_id',
+	            		'company.company_name','company.company_id','company.is_supplier','user.nickname','user.phone','user.language_id','language.language_name',
+	            		'user.email','user.role_id','user.base_password',
+	            		'user.default_bill_template_id',
+	            		"currency.currency_id as company_currency_id","currency.currency_name as company_currency_name",
+	            		'currency.symbol','currency.unit',
+	            		'user.default_bill_template_id','role.role_name',
+	            		'user.update_time','user.update_user_id','user.create_time','user.create_user_id',
+	            		"(select nickname  from user as user2 where user2.user_id = user.create_user_id)"=>'create_user_name',
+	            		"(select nickname  from user as user2 where user2.user_id = user.update_user_id)"=>'update_user_name',
+	            		"user.status"])->order("user.create_time desc")->select();
+
+    		}
+    		 
+    	}
+
+        return $result;
+    
+    }
+
+    
+    /**
+     * 修改用户  根据user_id
+     */
+    public function updateUserByUserId($params){
+    
+    	$t = time();
+
+
+
+        if(!empty($params['username'])){
+            $data['username'] = $params['username'];
+        }
+        if(!empty($params['password'])){
+            $data['password'] = md5($params['password']);
+        }
+        if(!empty($params['job_name'])){
+            $data['job_name'] = $params['job_name'];
+        }
+        if(!empty($params['department_id'])){
+        	$data['department_id'] = $params['department_id'];
+        }
+        if(!empty($params['nickname'])){
+            $data['nickname'] = $params['nickname'];
+        }
+        if(!empty($params['phone'])){
+            $data['phone'] = $params['phone'];
+        }
+        if(!empty($params['language_id'])){
+            $data['language_id'] = $params['language_id'];
+        }
+        if(!empty($params['email'])){
+            $data['email'] = $params['email'];
+        }
+    	if(!empty($params['show_language'])){
+    		$data['show_language'] = $params['show_language'];
+    	
+    	}
+
+//        if(!empty($params['username'])){
+//            $data['username'] = $params['username'];
+//
+//        }
+//    	if(!empty($params['email'])){
+//    		$data['email'] = $params['email'];
+//
+//    	}
+        if(!empty($params['choose_company_id'])){
+            $data['company_id'] = $params['choose_company_id'];
+
+        }
+    	if(!empty($params['role_id'])){
+    		$data['role_id'] = $params['role_id'];
+    		 
+    	}
+    	if(is_numeric($params['status'])){
+    		$data['status'] = $params['status'];
+    		 
+    	}
+    	if(!empty($params['default_bill_template_id'])){
+    		$data['default_bill_template_id']=$params['default_bill_template_id'];
+    	}
+    	
+    	$data['update_user_id'] = $params['now_user_id'];
+    	$data['update_time'] = $t;
+    	$data['base_password'] = 0;
+
+    
+    
+  
+    	$this->startTrans();
+    	try{
+    		$this->where("user_id = ".$params['user_id'])->update($data);
+  			
+    		$result = 1;
+    		// 提交事务
+    		$this->commit();
+    
+    	} catch (\Exception $e) {
+    		$result = $e->getMessage();
+    		// 回滚事务
+    		$this->rollback();
+    
+    	}
+
+    	return $result;
+    }
+    /**
+     * 通过用户ID获取权限
+     */
+    public function getPermissionByUserId($params){
+    	$user_id = $params['user_id'];
+    	$result = $this->table("user")->alias("user")->join("job_access","job_access.job_id = user.job_id",'left')
+    		 ->join("access",'access.access_id = job_access.access_id','left')
+    		 ->where("user.user_id = $user_id")->select();
+    	return $this->getlastsql();
+    }
+
+    /**
+     * getOneUser
+     *
+     * 获取一条用户信息
+     * @author shj
+     *
+     * @param $user_id
+     *
+     * @return void
+     * Date: 2019/2/28
+     * Time: 15:00
+     */
+    public function getOneUser($user_id){
+        $result = $this->table("user")->where(['user_id' => $user_id])->find();
+        return $result;
+    }
+    /**
+     * 通过名称获取数据
+     */
+    public function getUserByNickname($params){
+    	$where['nickname'] = $params['nickname'];
+    	$result = $this->where($where)->find();
+    	
+    	return $result;
+    }
+    
+    /**
+     * 重置用户状态
+     */
+    public function reloadUserStatus(){
+    	$params = [
+    		'status'=>1	
+    	];
+    	$this->where("status = 3")->update($params);
+    }
+    
+}

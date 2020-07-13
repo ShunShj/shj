@@ -1,0 +1,3 @@
+ALTER TABLE `company_order_customer`
+ADD COLUMN `special_claim`  varchar(300) NULL COMMENT '特殊要求' AFTER `customer_id`;
+

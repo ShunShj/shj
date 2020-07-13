@@ -1,0 +1,4 @@
+ALTER TABLE `ota_menu_list` 
+ADD COLUMN `author` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci COMMENT '用于header头显示' AFTER `style`,
+ADD COLUMN `description` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci COMMENT '用于header头显示' AFTER `author`,
+ADD COLUMN `keywords` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci COMMENT '用于header头显示' AFTER `description`;

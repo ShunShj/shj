@@ -1,0 +1,3 @@
+域名/queue/autoPostCompanyOrderSubstribe?appKey=nexus&appSecret=nexusIt
+// 变更状态
+0 0 * * * /usr/bin/curl 47.244.53.248:8002/queue/reloadUserStatus?appKey=nexus&appSecret=nexusIt

@@ -1,0 +1,688 @@
+<?php
+
+namespace app\index\model\finance;
+use think\Model;
+use app\common\help\Help;
+use think\config;
+use think\Db;
+
+use app\index\model\branchcompany\CompanyOrderCustomer;
+use app\index\model\branchcompany\CompanyOrder;
+use app\index\model\product\TeamProduct;
+use app\index\model\finance\ReceivableCustomer;
+use app\index\model\finance\Receivable;
+use app\index\model\finance\Cope;
+use app\index\model\finance\TravelAgencyReimbursementCope;
+class TravelAgencyReimbursement extends Model{
+    //protected $connection = ['database' => 'erp'];
+    protected $table = 'travel_agency_reimbursement';
+    private $_languageList;
+    private $_cope;
+    private $_travel_agency_reimbursement_cope;
+    public function initialize()
+    {
+        $this->_languageList = config('systom_setting')['language_list'];
+        $this->_cope = new Cope();
+        $this->_travel_agency_reimbursement_cope = new TravelAgencyReimbursementCope();
+        parent::initialize();
+
+    }
+
+    /**
+     * 添加地接报账
+     * 胡
+     */
+    public function addTravelAgencyReimbursement($params){
+    
+		$receivable = $params['receivable'];
+		$cope = $params['cope'];
+        $t = time();
+       	$team_product_number = $params['team_product_number'];
+		$user_id = $params['now_user_id'];
+		$company_id = $params['user_company_id'];
+		$travel_number = $params['travel_number'];
+	
+		$receivable_model = new Receivable();
+		$company_order = new CompanyOrder();
+		$team_product = new  TeamProduct();
+		$this->startTrans();
+        try{
+        	
+        	//首先查询此团是否报过地接报账
+        	$travel_agency_reimbursement_params = [
+        		'status'=>1,
+        		'team_product_number'=>$params['team_product_number']
+        			
+        	];
+        	$travel_agency_reimbursement_result = $this->getTravelAgencyReimbursement($travel_agency_reimbursement_params);
+        	
+        	if(count($travel_agency_reimbursement_result)>0){
+        		$travel_number =$travel_agency_reimbursement_result[0]['travel_agency_reimbursement_number'];
+        	}else{
+        		//首先添加地接报账主信息
+        		$travel_data = [
+        				'travel_agency_reimbursement_number'=>	$travel_number,
+        				'company_id'=>$params['user_company_id'],
+        				'team_product_number'=>$params['team_product_number'],
+        				'create_user_id'=>$user_id,
+        				'update_user_id'=>$user_id,
+        				'create_time'=>$t,
+        				'update_time'=>$t,
+        				'status'=>1
+        		];
+        		
+        		$this->insert($travel_data);
+        	}
+        	
+        	
+
+      
+// 			if(count($receivable)>0){
+				
+				
+				
+// 				for($i=0;$i<count($receivable);$i++){
+// 					$sql_receivable = "insert into travel_agency_reimbursement_receivable (travel_agency_reimbursement_number,company_order_number,source_type_id,source_name,currency_id,reimbursement_money,create_user_id,update_user_id,create_time,update_time,status) values";
+// 					$sql_customer="insert into travel_agency_reimbursement_receivable_customer (travel_agency_reimbursement_number,travel_agency_reimbursement_receivable_id,company_order_customer_id,customer_id,create_time,update_time,create_user_id,update_user_id,status) values";
+// 					$sql_receivable_customer="insert into receivable_customer (receivable_number,company_order_customer_id,customer_id,create_time,update_time,create_user_id,update_user_id,status) values";
+// 					$sql_customer_count = 0;
+// 					$company_order_number = $receivable[$i]['company_order_number'];
+// 					$source_type_id= $receivable[$i]['source_type_id'];
+// 					$source_name= $receivable[$i]['source_name'];
+					
+// 					$company_order_customer_id =$receivable[$i]['company_order_customer_id'];
+// 					$currency_id = $receivable[$i]['currency_id'];
+// 					$reimbursement_money = $receivable[$i]['reimbursement_money'];
+// 					//获取地接报账编号
+					
+// 					$sql_receivable.="('$travel_number','$company_order_number',$source_type_id,'$source_name',$currency_id,$reimbursement_money,$user_id,$user_id,$t,$t,1),";
+// 					$sql_receivable = trim($sql_receivable,',');
+					
+// 					//添加应收开始
+// 					$receivable_model_params = [
+// 						'order_number'=>$company_order_number,
+// 						'product_name'=>$source_name,
+						
+// 						'receivable_money'=>$reimbursement_money,
+// 						'currency_id'=>$currency_id,
+// 						'create_time'=>$t,
+// 						'update_time'=>$t,
+// 						'create_user_id'=>$user_id,
+// 						'update_user_id'=>$user_id,
+// 						'status'=>1,
+// 						'company_id'=>$company_id,
+// 						'travel_agency_reimbursement_number'=>$travel_number,
+// 						'resource_type'=>3	
+							
+// 					];
+					
+
+					
+					
+					
+					
+// 					//通过团队产品获取公司ID
+// 					$team_product_result = $team_product->getTeamProductBase(['team_product_number'=>$team_product_number]);
+					
+// 					$receivable_model_params['payment_company_id'] = $team_product_result[0]['company_id'];
+// 					//'company_order_customer_id'=>$company_order_customer_id,
+// 					$receivable_number = Help::getNumber(5);
+// 					if($source_type_id>1){
+// 						$receivable_model_params['product_source_type_id'] = $source_type_id;
+// 					}
+					
+// 					if($source_type_id==1){
+// 						$receivable_model_params['product_type']= 1;
+// 					}else{
+// 						$receivable_model_params['product_type']= 2;
+// 					}
+// 					$receivable_model_params['receivable_number'] = $receivable_number;
+			
+// 					$receivable_id = $this->table("receivable")->insertGetId($receivable_model_params);
+			
+				
+				
+// 					//添加应收结束
+					
+// 					//添加应付开始
+// 					$company_order_result = $company_order->getCompanyOrder(['company_order_number'=>$company_order_number]);
+					
+// 					$cope_model_params['payment_company_id'] = $company_order_result[0]['company_id'];
+// 					$cope_model_params = [
+// 						'cope_number'=>Help::getNumber(6),
+// 						'product_name'=>$source_name,
+// 						'cope_currency_id'=>$currency_id,
+// 						'company_id'=>$company_id,
+// 						'cope_money'=>$reimbursement_money,
+// 						'resource_type'=>3,
+// 						'travel_agency_reimbursement_number'=>$travel_number,
+// 						'create_time'=>$t,
+// 						'update_time'=>$t,
+// 						'create_user_id'=>$user_id,
+// 						'update_user_id'=>$user_id,
+// 						'status'=>1,
+								
+// 					];
+// 					$this->table("cope")->insert($cope_model_params);
+				
+// 					//source_type_id
+// 					//添加应付开始
+
+					
+// 					$this->execute($sql_receivable);
+				
+// 					$pk_id = $this->getLastInsID();
+// 					//开始添加顾客
+// 					//转换成数组
+// 					$company_order_customer_id = explode(',', $company_order_customer_id);
+// 					if($company_order_customer_id[0]==''){
+// 						$company_order_customer_id = [];
+// 					}
+					
+// 					$company_order_customer = new CompanyOrderCustomer();
+// 					if(count($company_order_customer_id)>0){
+						
+// 						for($j=0;$j<count($company_order_customer_id);$j++){
+// 							//地接报账的应收客户
+// 							$params_customer['company_order_customer_id'] = $company_order_customer_id[$j];
+						
+// 							//通过companh_order_customer_id查询数据
+// 							$r = $company_order_customer->getCompanyOrderCustomer($params_customer);
+								
+// 							$customer_id = $r[0]['customer_id'];
+// 							$coc_id = $r[0]['company_order_customer_id'];
+// 							$sql_customer.="('$travel_number',$pk_id,$coc_id,$customer_id,$t,$t,$user_id,$user_id,1),";
+// 							$sql_customer_count++;
+// 							//地接报账的应收客户
+
+// 							$sql_receivable_customer.="('$receivable_number',$coc_id,$customer_id,$t,$t,$user_id,$user_id,1),";
+// 						}						
+// 					}
+// 					if($sql_customer_count>0){
+						
+// 						$sql_customer = trim($sql_customer,',');
+// 						$sql_receivable_customer = trim($sql_receivable_customer,',');
+// 						$this->execute($sql_customer);
+// 						$this->execute($sql_receivable_customer);
+						
+// 					}
+
+// 				}
+			
+				
+			
+
+				
+			
+			
+				
+// 			}
+		
+			if(count($cope)>0){
+				
+		
+				$travel_agency_reimbursement_number = $travel_number;
+				
+				
+				for($j=0;$j<count($cope);$j++){
+					$sql_code = "insert into travel_agency_reimbursement_cope (travel_agency_reimbursement_number,supplier_id,source_type_id,product_name,currency_id,price,unit,reimbursement_money,create_user_id,update_user_id,create_time,update_time,status) values";
+						
+					$supplier_id = $cope[$j]['supplier_id'];
+					$source_type_id = $cope[$j]['source_type_id'];
+					$product_name = $cope[$j]['product_name'];
+					$currency_id = $cope[$j]['cope_currency_id'];
+					$price = $cope[$j]['price'];
+					$unit = $cope[$j]['unit'];
+					$reimbursement_money= $cope[$j]['cope_money'];
+					
+					$sql_code.="('$travel_number','$supplier_id','$source_type_id','$product_name','$currency_id','$price','$unit','$reimbursement_money',$user_id,$user_id,$t,$t,1),";
+					
+						if($source_type_id==2){
+							$fee_type=12;
+						}else if($source_type_id==3){
+							$fee_type=13;
+						}else if($source_type_id==4){
+							$fee_type=14;
+						}else if($source_type_id==5){
+							$fee_type=15;
+						}else if($source_type_id==6){
+							$fee_type=16;
+						}else if($source_type_id==7){
+							$fee_type=17;
+						}else if($source_type_id==8){
+							$fee_type=18;
+						}else if($source_type_id==9){
+							$fee_type=19;
+						}else if($source_type_id==10){
+							$fee_type=20;
+						}else if($source_type_id==11){
+							$fee_type=21;
+						}else if($source_type_id==12){
+							$fee_type=22;
+						}
+							
+
+
+					
+					
+					//source_type_id
+					//添加应付开始
+					$sql_code = trim($sql_code,',');
+					
+					$this->execute($sql_code);
+					$pk_id = $this->getLastInsID();
+					$cope_model_params = [
+						'source_type_id'=>$source_type_id,
+						'team_product_number'=>$team_product_number,
+						'product_name'=>$product_name,
+							
+						'receivable_object_type'=>2,
+						'receivable_object_id'=>$supplier_id,
+						'cope_currency_id'=>$currency_id,
+						'cope_money'=>$reimbursement_money,
+							
+						'company_id'=>$company_id,
+						'travel_agency_reimbursement_number'=>$travel_number,
+						'travel_agency_reimbursement_cope_id'=>$pk_id,	
+						'price'=>$price,
+						'unit'=>$unit,
+						'is_auto'=>2,
+						'now_user_id'=>$user_id,
+						'fee_type_code'=>$fee_type,
+						'fee_type_type'=>102,
+					
+					
+					];
+					$this->_cope->addCope($cope_model_params);
+				}
+
+			}
+			
+            // 提交事务
+            $this->commit();
+            $result = 1;
+
+        } catch (\Exception $e) {
+            $result = $e->getMessage();
+            // 回滚事务
+            $this->rollback();
+
+        }
+        
+        return $result;
+    }
+
+    /**
+     * 获取地接报账
+     * 王
+     */
+    public function getTravelAgencyReimbursement($params,$is_count=false,$is_page=false,$page=null,$page_size=20){
+
+        $data = "1=1";
+    	if(isset($params['team_product_number'])){
+    		$data.= " and tar.team_product_number = '".$params['team_product_number']."'";
+    	}
+        if(isset($params['company_id'])){
+            $data.= " and tar.company_id= '".$params['company_id']."'";
+        }
+        if(isset($params['travel_agency_reimbursement_number'])){
+        	$data.= " and tar.travel_agency_reimbursement_number= '".$params['travel_agency_reimbursement_number']."'";
+        }
+    	if(is_numeric($params['status'])){
+    		$data.= " and tar.status = ".$params['status'];
+    	}
+
+        if($is_count==true){
+            $result = $this->table("travel_agency_reimbursement")->alias("tar")->where($data)->count();
+        }else {
+            if ($is_page == true) {
+                $result = $this->table("travel_agency_reimbursement")->alias("tar")->
+                join("team_product", "team_product.team_product_number= tar.team_product_number", 'left')->
+                where($data)->limit($page, $page_size)->
+                field([
+                    'tar.travel_agency_reimbursement_number', 'tar.team_product_number', 'team_product.team_product_name', 'team_product.route_type_id',
+                    'team_product.begin_time', 'team_product.team_product_id',
+                    "(select count(*) from team_product_journey where team_product_journey.team_product_id = team_product.team_product_id and status=1) as the_days",
+                    "(select nickname  from user where user.user_id = tar.create_user_id)" => 'create_user_name',
+                    "(select nickname  from user where user.user_id = tar.update_user_id)" => 'update_user_name',
+                    'tar.create_time', "tar.update_time", "tar.status"])->select();
+            }else{
+                $result = $this->table("travel_agency_reimbursement")->alias("tar")->
+                join("team_product", "team_product.team_product_number= tar.team_product_number", 'left')->
+                where($data)->
+                field([
+                    'tar.travel_agency_reimbursement_number', 'tar.team_product_number', 'team_product.team_product_name', 'team_product.route_type_id',
+                    'team_product.begin_time', 'team_product.team_product_id',
+                    "(select count(*) from team_product_journey where team_product_journey.team_product_id = team_product.team_product_id and status=1) as the_days",
+                    "(select nickname  from user where user.user_id = tar.create_user_id)" => 'create_user_name',
+                    "(select nickname  from user where user.user_id = tar.update_user_id)" => 'update_user_name',
+                    'tar.create_time', "tar.update_time", "tar.status"])->select();
+            }
+        }
+
+        return $result;
+
+    }
+
+	
+    /**
+     * 修改地接报账
+     */
+ public function updateTravelAgencyReimbursement($params){
+    
+ 	
+		$receivable = $params['receivable'];
+		$cope = $params['cope'];
+        $t = time();
+       	$team_product_number = $params['team_product_number'];
+		$user_id = $params['now_user_id'];
+		$company_id = $params['user_company_id'];
+		$travel_number = $params['travel_number'];
+	
+		$receivable_model = new Receivable();
+		$company_order = new CompanyOrder();
+		$team_product = new  TeamProduct();
+		$this->startTrans();
+        try{
+        	//首先把地接报账支出功能 的状态变更为0
+        	 $travel_data= [
+        		'travel_agency_reimbursement_number'=>	$travel_number,
+
+        	];
+        
+        	$this->_travel_agency_reimbursement_cope->updateTravelAgencyReimbursementCopeStatus($travel_data);
+      		//把应付状态变为0
+      		$cope_updates_params = [
+      			'travel_agency_reimbursement_number'=>$travel_number	
+      		];
+      	
+      		$this->_cope->updateStatusByData($cope_updates_params);
+        	
+// 			if(count($receivable)>0){
+				
+				
+				
+// 				for($i=0;$i<count($receivable);$i++){
+// 					$sql_receivable = "insert into travel_agency_reimbursement_receivable (travel_agency_reimbursement_number,company_order_number,source_type_id,source_name,currency_id,reimbursement_money,create_user_id,update_user_id,create_time,update_time,status) values";
+// 					$sql_customer="insert into travel_agency_reimbursement_receivable_customer (travel_agency_reimbursement_number,travel_agency_reimbursement_receivable_id,company_order_customer_id,customer_id,create_time,update_time,create_user_id,update_user_id,status) values";
+// 					$sql_receivable_customer="insert into receivable_customer (receivable_number,company_order_customer_id,customer_id,create_time,update_time,create_user_id,update_user_id,status) values";
+// 					$sql_customer_count = 0;
+// 					$company_order_number = $receivable[$i]['company_order_number'];
+// 					$source_type_id= $receivable[$i]['source_type_id'];
+// 					$source_name= $receivable[$i]['source_name'];
+					
+// 					$company_order_customer_id =$receivable[$i]['company_order_customer_id'];
+// 					$currency_id = $receivable[$i]['currency_id'];
+// 					$reimbursement_money = $receivable[$i]['reimbursement_money'];
+// 					//获取地接报账编号
+					
+// 					$sql_receivable.="('$travel_number','$company_order_number',$source_type_id,'$source_name',$currency_id,$reimbursement_money,$user_id,$user_id,$t,$t,1),";
+// 					$sql_receivable = trim($sql_receivable,',');
+					
+// 					//添加应收开始
+// 					$receivable_model_params = [
+// 						'order_number'=>$company_order_number,
+// 						'product_name'=>$source_name,
+						
+// 						'receivable_money'=>$reimbursement_money,
+// 						'currency_id'=>$currency_id,
+// 						'create_time'=>$t,
+// 						'update_time'=>$t,
+// 						'create_user_id'=>$user_id,
+// 						'update_user_id'=>$user_id,
+// 						'status'=>1,
+// 						'company_id'=>$company_id,
+// 						'travel_agency_reimbursement_number'=>$travel_number,
+// 						'resource_type'=>3	
+							
+// 					];
+					
+
+					
+					
+					
+					
+// 					//通过团队产品获取公司ID
+// 					$team_product_result = $team_product->getTeamProductBase(['team_product_number'=>$team_product_number]);
+					
+// 					$receivable_model_params['payment_company_id'] = $team_product_result[0]['company_id'];
+// 					//'company_order_customer_id'=>$company_order_customer_id,
+// 					$receivable_number = Help::getNumber(5);
+// 					if($source_type_id>1){
+// 						$receivable_model_params['product_source_type_id'] = $source_type_id;
+// 					}
+					
+// 					if($source_type_id==1){
+// 						$receivable_model_params['product_type']= 1;
+// 					}else{
+// 						$receivable_model_params['product_type']= 2;
+// 					}
+// 					$receivable_model_params['receivable_number'] = $receivable_number;
+			
+// 					$receivable_id = $this->table("receivable")->insertGetId($receivable_model_params);
+			
+				
+				
+// 					//添加应收结束
+					
+// 					//添加应付开始
+// 					$company_order_result = $company_order->getCompanyOrder(['company_order_number'=>$company_order_number]);
+					
+// 					$cope_model_params['payment_company_id'] = $company_order_result[0]['company_id'];
+// 					$cope_model_params = [
+// 						'cope_number'=>Help::getNumber(6),
+// 						'product_name'=>$source_name,
+// 						'cope_currency_id'=>$currency_id,
+// 						'company_id'=>$company_id,
+// 						'cope_money'=>$reimbursement_money,
+// 						'resource_type'=>3,
+// 						'travel_agency_reimbursement_number'=>$travel_number,
+// 						'create_time'=>$t,
+// 						'update_time'=>$t,
+// 						'create_user_id'=>$user_id,
+// 						'update_user_id'=>$user_id,
+// 						'status'=>1,
+								
+// 					];
+// 					$this->table("cope")->insert($cope_model_params);
+				
+// 					//source_type_id
+// 					//添加应付开始
+
+					
+// 					$this->execute($sql_receivable);
+				
+// 					$pk_id = $this->getLastInsID();
+// 					//开始添加顾客
+// 					//转换成数组
+// 					$company_order_customer_id = explode(',', $company_order_customer_id);
+// 					if($company_order_customer_id[0]==''){
+// 						$company_order_customer_id = [];
+// 					}
+					
+// 					$company_order_customer = new CompanyOrderCustomer();
+// 					if(count($company_order_customer_id)>0){
+						
+// 						for($j=0;$j<count($company_order_customer_id);$j++){
+// 							//地接报账的应收客户
+// 							$params_customer['company_order_customer_id'] = $company_order_customer_id[$j];
+						
+// 							//通过companh_order_customer_id查询数据
+// 							$r = $company_order_customer->getCompanyOrderCustomer($params_customer);
+								
+// 							$customer_id = $r[0]['customer_id'];
+// 							$coc_id = $r[0]['company_order_customer_id'];
+// 							$sql_customer.="('$travel_number',$pk_id,$coc_id,$customer_id,$t,$t,$user_id,$user_id,1),";
+// 							$sql_customer_count++;
+// 							//地接报账的应收客户
+
+// 							$sql_receivable_customer.="('$receivable_number',$coc_id,$customer_id,$t,$t,$user_id,$user_id,1),";
+// 						}						
+// 					}
+// 					if($sql_customer_count>0){
+						
+// 						$sql_customer = trim($sql_customer,',');
+// 						$sql_receivable_customer = trim($sql_receivable_customer,',');
+// 						$this->execute($sql_customer);
+// 						$this->execute($sql_receivable_customer);
+						
+// 					}
+
+// 				}
+			
+				
+			
+
+				
+			
+			
+				
+// 			}
+        
+			if(count($cope)>0){
+				
+		
+				$travel_agency_reimbursement_number = $travel_number;
+				
+				
+				for($j=0;$j<count($cope);$j++){
+					
+					//这里需要查看是否需要修改
+					if(!empty($cope[$j]['travel_agency_reimbursement_cope_id'])){//走修改
+						$cope_edit = [];
+						$cope_edit_params = [
+							'source_type_id'=>$cope[$j]['source_type_id'],
+							'supplier_id'=>$cope[$j]['supplier_id'],
+							'product_name'=>$cope[$j]['product_name'],
+							'currency_id'=>$cope[$j]['cope_currency_id'],
+							'price'=>$cope[$j]['price'],
+							'unit'=>$cope[$j]['unit'],
+							'cope_money'=>$cope[$j]['cope_money'],	
+							'travel_agency_reimbursement_cope_id'=>$cope[$j]['travel_agency_reimbursement_cope_id'],
+							'now_user_id'=>$params['now_user_id'],
+							'cope_number'=>$cope[$j]['cope_number'],
+							'status'=>1	
+						];
+						
+						$this->_travel_agency_reimbursement_cope->updateTravelAgencyReimbursementCope($cope_edit_params);
+						
+						//以上修改了地接报账的支出
+						
+						//再修改应付
+						if($cope[$j]['source_type_id']==2){
+							$cope_edit_params['fee_type_code']=12;
+						}else if($cope[$j]['source_type_id']==3){
+							$cope_edit_params['fee_type_code']=13;
+						}else if($cope[$j]['source_type_id']==4){
+							$cope_edit_params['fee_type_code']=14;
+						}else if($cope[$j]['source_type_id']==5){
+							$cope_edit_params['fee_type_code']=15;
+						}else if($cope[$j]['source_type_id']==6){
+							$cope_edit_params['fee_type_code']=16;
+						}else if($cope[$j]['source_type_id']==7){
+							$cope_edit_params['fee_type_code']=17;
+						}else if($cope[$j]['source_type_id']==8){
+							$cope_edit_params['fee_type_code']=18;
+						}else if($cope[$j]['source_type_id']==9){
+							$cope_edit_params['fee_type_code']=19;
+						}else if($cope[$j]['source_type_id']==10){
+							$cope_edit_params['fee_type_code']=20;
+						}else if($cope[$j]['source_type_id']==11){
+							$cope_edit_params['fee_type_code']=21;
+						}else if($cope[$j]['source_type_id']==12){
+							$cope_edit_params['fee_type_code']=22;
+						}
+						$this->_cope->updateCopeByCopeNumber($cope_edit_params);
+						
+					}else{
+					
+						$sql_code = "insert into travel_agency_reimbursement_cope (travel_agency_reimbursement_number,supplier_id,source_type_id,product_name,currency_id,price,unit,reimbursement_money,create_user_id,update_user_id,create_time,update_time,status) values";
+						
+						$supplier_id = $cope[$j]['supplier_id'];
+						$source_type_id = $cope[$j]['source_type_id'];
+						$product_name = $cope[$j]['product_name'];
+						$currency_id = $cope[$j]['cope_currency_id'];
+						$price = $cope[$j]['price'];
+						$unit = $cope[$j]['unit'];
+						$reimbursement_money= $cope[$j]['cope_money'];
+							
+						$sql_code.="('$travel_number','$supplier_id','$source_type_id','$product_name','$currency_id','$price','$unit','$reimbursement_money',$user_id,$user_id,$t,$t,1),";
+							
+						if($source_type_id==2){
+							$fee_type=12;
+						}else if($source_type_id==3){
+							$fee_type=13;
+						}else if($source_type_id==4){
+							$fee_type=14;
+						}else if($source_type_id==5){
+							$fee_type=15;
+						}else if($source_type_id==6){
+							$fee_type=16;
+						}else if($source_type_id==7){
+							$fee_type=17;
+						}else if($source_type_id==8){
+							$fee_type=18;
+						}else if($source_type_id==9){
+							$fee_type=19;
+						}else if($source_type_id==10){
+							$fee_type=20;
+						}else if($source_type_id==11){
+							$fee_type=21;
+						}else if($source_type_id==12){
+							$fee_type=22;
+						}
+							
+						
+						
+							
+							
+						//source_type_id
+						//添加应付开始
+						$sql_code = trim($sql_code,',');
+							
+						$this->execute($sql_code);
+							$pk_id = $this->getLastInsID();
+						$cope_model_params = [
+								'source_type_id'=>$source_type_id,
+								'team_product_number'=>$team_product_number,
+								'product_name'=>$product_name,
+									
+								'receivable_object_type'=>2,
+								'receivable_object_id'=>$supplier_id,
+								'cope_currency_id'=>$currency_id,
+								'cope_money'=>$reimbursement_money,
+									
+								'company_id'=>$company_id,
+								'travel_agency_reimbursement_number'=>$travel_number,
+								'travel_agency_reimbursement_cope_id'=>$pk_id,
+								'price'=>$price,
+								'unit'=>$unit,
+								'is_auto'=>2,
+								'now_user_id'=>$user_id,
+								'fee_type_code'=>$fee_type,
+								'fee_type_type'=>102,
+									
+									
+						];
+						$this->_cope->addCope($cope_model_params);
+						
+					}
+
+				}
+
+			}
+			
+            // 提交事务
+            $this->commit();
+            $result = 1;
+
+        } catch (\Exception $e) {
+            $result = $e->getMessage();
+            // 回滚事务
+            $this->rollback();
+
+        }
+       
+        return $result;
+    }
+}
