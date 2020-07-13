@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {include file='public/head' /}
+    <title>{$language_tag.index_product_visitor_checkIn}-{$language_tag.index_finance_showReceivableManage_hotel}</title>
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+
+    <div class="layui-header">
+        {include file='public/header' /}
+    </div>
+
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll">
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            {include file='public/left_menu' /}
+        </div>
+    </div>
+
+    <div class="layui-body">
+
+        <!-- 内容主体区域 -->
+        <div style="padding: 15px;" class="body-top">
+            <div class='layui-form-item'>
+		   		<span class="layui-breadcrumb" lay-separator="-">
+                    <a>{$language_tag.index_public_homepage}</a>
+                    <a>{$language_tag.index_public_product}</a>
+					<a>{$language_tag.index_product_ShowPlanTour_resources_teamProduct}</a>
+                    <a>{$_GET['plan_id'] ? $language_tag.index_public_update  : $language_tag.index_public_add}{$language_tag.index_product_ShowPlanTour_resources_teamProduct}</a>
+                    <a><cite>{$language_tag.index_product_showRouteTemplateManage_resource_resourcesHotel}</cite></a>
+				</span>
+            </div>
+            <div style="font-weight:bold;font-size: 20px;">{$language_tag.index_product_visitor_checkIn}-{$language_tag.index_finance_showReceivableManage_hotel}</div>
+
+            <br/>
+            <br/>
+            <br/>
+            <form class="layui-form" id="form1" onSubmit="return add()">
+                <div class="table-nont">
+                    <table  class="layui-table" id="t-hotel">
+                        <thead>
+                        <tr>
+                            <th>{$language_tag.index_product_showRouteTemplateManage_resource_resourceSupplier}</th>
+                            <!--<th>地接社</th>-->
+                            <th>{$language_tag.index_product_showRouteTemplateManage_resource_roomNmae}</th>
+                            <th>{$language_tag.index_product_visitor_roomType}</th>
+                            <th>{$language_tag.index_product_showRouteTemplateManage_resource_number}</th>
+                            <th>{$language_tag.index_public_type_price}</th>
+                            <th>{$language_tag.index_product_showRouteTemplateManage_resources_currency}</th>
+                            <th>{$language_tag.index_public_price}</th>
+                            <th>{$language_tag.index_product_PlanSuppliersPayable_total}</th>
+                            <th class="template-edit">{$language_tag.index_source_operation}</th>
+                        </tr>
+                        </thead>
+
+
+                    </table>
+                </div>
+
+
+                <br><br><br>
+                <div class="layui-form-item">
+                    <div class="">
+                        <a class="layui-btn nav-add" id="add-hotel">{$language_tag.index_public_add}</a>
+                        <button class="layui-btn nav-submit" lay-submit="" lay-filter="formDemo" id="language_add_button">{$language_tag.index_public_submit}</button>
+                        <a href="javascript:location.reload()" class="layui-btn layui-btn-primary">{$language_tag.index_product_showRouteTemplateManage_reload}</a>
+                        <a href="javascript:window.close()"><button type="button" class="layui-btn layui-btn-primary">{$language_tag.index_public_back}</button></a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    //酒店配置模板
+    <table class="layui-table" style="display: none" id="add_div">
+        <tr>
+            <th>
+                <select name="supplier_id[ii]" lay-filter="supplier_id" class="supplier_id" required lay-verify="required" lay-search >
+                    <option></option>
+                    {foreach $SupplierList as $vl}
+                    <option value="{$vl.supplier_id}">{$vl.supplier_name}</option>
+                    {/foreach}
+                </select>
+            </th>
+            <!--<th>-->
+                <!--<select name="agent_id[ii]" class="agent_id" lay-filter="agent_id" lay-search>-->
+                    <!--<option></option>-->
+                <!--</select>-->
+            <!--</th>-->
+            <th>
+                <select name="room_name[ii]" class="room_name" lay-filter="room_name" required lay-verify="required" lay-search>
+                    <option></option>
+                </select>
+                <input type="hidden" name="hotel_id[ii]" class="hotel_id" />
+            </th>
+            <th>
+                <select disabled class="room_type" >
+                    <option></option>
+                    {foreach $room_type as $k=>$v}
+                    <option value="{$k}">{$v}</option>
+                    {/foreach}
+                </select>
+            </th>
+            <input  class="room_type" name="room_type[ii]" value="" type="hidden" />
+            <th>
+                <input class="layui-input quantity"  name="quantity[ii]" required lay-verify="required|number" >
+            </th>
+            <th>
+                <select name="unit_value_type[ii]" class="unit_value_type">
+                    <option value="1">{$language_tag.index_public_adult}</option>
+                </select>
+            </th>
+            <th>
+                <select name="currency[ii]" class="currency">
+                    <option value="0"></option>
+                    {foreach $CurrencyList as $v }
+                    <option value="{$v.currency_id}">{$v.currency_name}</option>
+                    {/foreach}
+                </select>
+            </th>
+            <th><input class="layui-input unit_price"  name="unit_price[ii]" required lay-verify="required|number"></th>
+            <th><input class="layui-input total"  name="total[ii]" required lay-verify="required|number"></th>
+            <th><a class="layui-btn r-hotel layui-btn-sm hover-edit layui-btn-primary" >{$language_tag.index_public_del}</a></th>
+        </tr>
+    </table>
+
+    <div class="layui-footer">
+        <!-- 底部固定区域 -->
+        © layui.com - 底部固定区域
+    </div>
+</div>
+{include file='public/foot_js' /}
+
+
+<script>
+    !function() {
+        var layer = layui.layer;
+        var form = layui.form;
+        var laydate = layui.laydate;
+        var num = 0;
+        //添加资源
+        $('#add-hotel').on('click',function(){
+            tableNone()
+            var html = $('#add_div').html();
+            for(var ij=1;ij<20;ij++){
+                html = html.replace('ii',num);
+            }
+            $('#t-hotel').append(html);
+            num++;
+            form.render();
+        });
+        //删除资源
+        $('#t-hotel').delegate('.r-hotel','click',function(){
+            $(this).parent().parent().remove();
+            table()
+        });
+
+        var tr;
+        //供应商获取酒店信息
+        form.on('select(supplier_id)', function(data){
+            console.log(data.elem); //得到select原始DOM对象
+            console.log(data.value); //得到被选中的值
+            console.log(data.othis); //得到美化后的DOM对象
+            tr = $(this).parent().parent().parent().parent();
+//            alert(tr);
+            if(data.value){
+                layer.load(2);
+                $.post('/product/getHotelAjax',{supplier_id:data.value},function(a){
+                    if(a.code==200){
+                        //地接社
+                        tr.find('.agent_id').html('');
+                        var html = '<option></option>';
+                        if(a.LocalTravelAgencyAr){
+                            for(var x in a['LocalTravelAgencyAr'])
+                            html += '<option value="'+a['LocalTravelAgencyAr'][x]['supplier_id']+'">'+a['LocalTravelAgencyAr'][x]['supplier_name']+'</option>';
+                        }
+                        tr.find('.agent_id').html(html);
+                        //房型
+                        tr.find('.room_name').html('');
+                        var html2 = '<option></option>';
+                        if(a.hotelData){
+                            for(var x in a['hotelData']){
+                                html2 += '<option value="'+a['hotelData'][x]['hotel_id']+'">'+a['hotelData'][x]['room_name']+'</option>';
+                            }
+                        }
+                        tr.find('.room_name').html(html2);
+                    }else{
+                        tr.find('.agent_id').html('');
+                        tr.find('.room_name').html('');
+                    }
+                    form.render();
+                    layer.closeAll('loading'); //关闭loading
+                },'json');
+            }else{
+                tr.find('.agent_id').html('');
+                tr.find('.room_name').html('');
+                form.render();
+            }
+        });
+        //代理获取酒店信息
+        form.on('select(agent_id)', function(data){
+            tr = $(this).parent().parent().parent().parent();
+            var supplier_id = tr.find('.supplier_id').val();
+            if(data.value){
+                layer.load(2);
+                $.post('/product/getHotelAgentAjax',{agent_id:data.value,supplier_id:supplier_id},function(a){
+                    tr.find('.room_name').html('');
+                    if(a.code==200){
+                        var html = '<option></option>';
+                        if(a.hotelData){
+                            for(var x in a['hotelData']){
+                                html += '<option value="'+a['hotelData'][x]['hotel_id']+'">'+a['hotelData'][x]['room_name']+'</option>';
+                            }
+                        }
+                        tr.find('.room_name').html(html);
+                        form.render();
+                    }
+                    layer.closeAll('loading'); //关闭loading
+                },'json');
+            }else{
+                tr.find('.room_name').html('');
+                layer.load(2);
+                $.post('/product/getHotelAjax',{supplier_id:supplier_id},function(a){
+                    if(a.code==200){
+                        //房型
+                        tr.find('.room_name').html('');
+                        var html2 = '<option></option>';
+                        if(a.hotelData){
+                            for(var x in a['hotelData']){
+                                html2 += '<option value="'+a['hotelData'][x]['hotel_id']+'">'+a['hotelData'][x]['room_name']+'</option>';
+                            }
+                        }
+                        tr.find('.room_name').html(html2);
+                    }else{
+                        tr.find('.agent_id').html('');
+                        tr.find('.room_name').html('');
+                    }
+                    form.render();
+                    layer.closeAll('loading'); //关闭loading
+                },'json');
+            }
+        });
+
+        //获取价格
+        form.on('select(room_name)', function(data){
+            tr = $(this).parent().parent().parent().parent();
+            if(data.value){
+                layer.load(2);
+                $.post('/product/getHotelInfoAjax',{hotel_id:data.value},function(a){
+                    tr.find('.quantity').val(0);
+                    tr.find('.unit_price').val(0);
+                    tr.find('.total').val(0);
+                    tr.find('.hotel_id').val(0);
+                    tr.find('.currency').val(0);
+                    if(a.code==200){
+                        tr.find('.quantity').val(1);
+                        tr.find('.unit_price').val(a.hotelData.normal_settlement_price);
+                        tr.find('.total').val(a.hotelData.normal_settlement_price);
+                        tr.find('.hotel_id').val(a.hotelData.hotel_id);
+                        tr.find('.currency').val(a.hotelData.payment_currency_type);
+                        tr.find('.room_type').val(a.hotelData.room_type);
+                    }
+                    form.render();
+                    layer.closeAll('loading'); //关闭loading
+                },'json');
+            }
+        });
+
+        //数量计算总价
+        $('#t-hotel').delegate('.quantity','blur',function(){
+            tr = $(this).parent().parent();
+            var quantity =   tr.find('.quantity').val()?tr.find('.quantity').val():0;
+            var unit_price = tr.find('.unit_price').val()?tr.find('.unit_price').val():0;
+            var t = quantity*unit_price;
+            tr.find('.total').val(t);
+        });
+
+        //单价计算总价
+        $('#t-hotel').delegate('.unit_price','blur',function(){
+            tr = $(this).parent().parent();
+            var quantity =   tr.find('.quantity').val()?tr.find('.quantity').val():0;
+            var unit_price = tr.find('.unit_price').val()?tr.find('.unit_price').val():0;
+            var t = quantity*unit_price;
+            tr.find('.total').val(t);
+        });
+
+    }();
+
+
+    function add() {
+
+        $.ajax({
+            type: "POST",
+            url: '/product/sessionHotelAjax',
+            data: $('#form1').serializeArray(),
+            success: function (data) {
+                if(data.code!=200){
+                    layer.msg(data.msg)
+                    return false;
+                }else if(data.code==200){
+                    layer.msg('success',{time:1,end : function(layero, index){
+                        opener.addHotel();
+                        window.close();
+                    }
+                    });
+                }
+            },
+            error:function(XMLHttpRequest, textStatus, errorThrown){
+                //console.log(errorThrown)
+                layer.msg('{$language_tag.index_public_verificationFailure}')
+
+            }
+        });
+        return false;
+    }
+</script>
+
+
+<script>
+    // opener.addHotel();
+</script>
+
+</body>
+</html>
+

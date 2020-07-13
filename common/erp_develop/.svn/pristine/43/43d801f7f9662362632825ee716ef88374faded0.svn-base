@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {include file='public/head' /}
+    <title>language-manage</title>
+
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+    <div class="layui-header">
+        {include file='public/header' /}
+    </div>
+
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll">
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            {include file='public/left_menu' /}
+        </div>
+    </div>
+
+    <div class="layui-body">
+
+        <!-- 内容主体区域 -->
+        <div style="padding: 15px;">
+            <div class='layui-form-item'>
+			<span class="layui-breadcrumb">
+				<a href="#">产品管理</a>
+				<a href="#"><cite>团队产品</cite></a>
+			</span>
+            </div>
+            <br/>
+            <div class='layui-form-item'>
+                <a href='/product/showTeamProductAdd'><button class="layui-btn">创建团队产品</button></a>&nbsp;&nbsp;
+                <a href='/product/showTeamProductAdd'><button class="layui-btn">拼团</button></a>
+            </div>
+            <br/>
+            <form method='get' action='/product/showRouteTypeManage'>
+                <div class='layui-input-inline'>
+                    <div class="layui-form">
+                        <select id="" name="status">
+                            <option value="" selected="">线路类型</option>
+                            <option value="1">华人团</option>
+                            <option value="2">老外团</option>
+                        </select>
+                    </div>
+                </div>
+                <div class='layui-input-inline'>
+                    <div class="layui-form">
+                        <select id="" name="status">
+                            <option value="0" selected="">全部状态</option>
+                            <option value="1">启用</option>
+                            <option value="2">停用</option>
+                            <option value="3">审批中</option>
+                            <option value="4">审批不通过</option>
+                        </select>
+                    </div>
+                </div>
+                <div class='layui-input-inline'>
+                    <input type="text" id="" name="route_type_name"  placeholder="产品编号" class="layui-input">
+                </div>
+                <div class='layui-input-inline'>
+                    <input type="text" id="" name="route_type_name"  placeholder="团队名称" class="layui-input">
+                </div>
+                <div class='layui-input-inline'>
+                    <input type="hidden" name="supplier_type_id" value="4">
+                    <button class="layui-btn" >搜索</button>
+                </div>
+            </form>
+        </div>
+        <table class="layui-table" id="language-table">
+            <thead>
+            <tr>
+                <th></th>
+                <th>状态</th>
+                <th>package_number</th>
+                <th>产品编号</th>
+                <th>团队名称</th>
+                <th>天数</th>
+                <th>线路类型</th>
+                <th>出发日期</th>
+                <th>资源配置</th>
+                <th>负责人</th>
+                <th>计划收客</th>
+                <th>已收客</th>
+                <th>最后操作时间</th>
+                <th>操作人</th>
+                <th>结算单</th>
+                <th>订单</th>
+                <th>操作</th>
+            </tr>
+            </thead>
+
+            <tbody>
+            <!--{foreach name="data" item="vo" }-->
+            <!--<tr>-->
+                <!--<th>{$vo.route_type_id}</th>-->
+                <!--<th>{$vo.route_type_name}</th>-->
+                <!--<th>{if condition="$vo.type eq 1"}华人团{else/}老外团{/if}</th>-->
+                <!--<th>{if condition="$vo.status eq 1"}启用{else/}禁用{/if}</th>-->
+                <!--<th><a href='/product/showRouteTypeEdit?route_type_id={$vo.route_type_id}'><button class="layui-btn layui-btn-sm">&nbsp;编&nbsp;辑&nbsp;</button></a> <a href='/product/showRouteTypeInfo?route_type_id={$vo.route_type_id}'><button class="layui-btn layui-btn-sm">&nbsp;详&nbsp;情&nbsp;</button></a></th>-->
+            <!--</tr>-->
+            <!--{/foreach}-->
+                <tr>
+                    <th><input type="checkbox"></th>
+                    <th><span style="color:red;">成团</span></th>
+                    <th><a href="#">package_number</a></th>
+                    <th>NHC19-TW6D0202</th>
+                    <th>19年台湾岛6日游</th>
+                    <th>6</th>
+                    <th>华人团</th>
+                    <th>2018-7-20</th>
+                    <th><span class="set_border">酒店</span> <span class="set_border">用餐</span> <span class="set_border">航班</span> <span class="set_border">邮轮</span> <span class="set_border">景点</span> <span class="set_border">签证</span> <span class="set_border">车辆</span> <span class="set_border">导游</span> <span class="set_border2">单项资源</span></th>
+                    <th>baimin</th>
+                    <th>6</th>
+                    <th>6</th>
+                    <th>2018-7-20 13:16:00</th>
+                    <th>baimin</th>
+                    <th><a href='/product/showRouteTypeEdit?route_type_id={$vo.route_type_id}'><button class="layui-btn layui-btn-sm">&nbsp;查&nbsp;看&nbsp;</button></a></th>
+                    <th><a href='/product/showRouteTypeEdit?route_type_id={$vo.route_type_id}'><button class="layui-btn layui-btn-sm">&nbsp;查&nbsp;看&nbsp;</button></a></th>
+                    <th><a href='/product/showRouteTypeEdit?route_type_id={$vo.route_type_id}'><button class="layui-btn layui-btn-sm">&nbsp;编&nbsp;辑&nbsp;</button></a><br/><a href='/product/showRouteTypeInfo?route_type_id={$vo.route_type_id}'><button class="layui-btn layui-btn-sm" style="margin-top:5px;">&nbsp;详&nbsp;情&nbsp;</button></a><br/><a href='/product/showRouteTypeInfo?route_type_id={$vo.route_type_id}'><button class="layui-btn layui-btn-sm" style="margin-top:5px;">&nbsp;取&nbsp;消&nbsp;成&nbsp;团&nbsp;</button></a></th>
+                </tr>
+                <tr>
+                    <th><input type="checkbox"></th>
+                    <th>启用</th>
+                    <th><a href="#">package_number</a></th>
+                    <th>NHC19-TW6D0202</th>
+                    <th>19年台湾岛6日游</th>
+                    <th>6</th>
+                    <th>华人团</th>
+                    <th>2018-7-20</th>
+                    <th><span class="set_border">酒店</span> <span class="set_border">用餐</span> <span class="set_border">航班</span> <span class="set_border">邮轮</span> <span class="set_border">景点</span> <span class="set_border">签证</span> <span class="set_border">车辆</span> <span class="set_border">导游</span> <span class="set_border2">单项资源</span></th>
+                    <th>baimin</th>
+                    <th>6</th>
+                    <th>6</th>
+                    <th>2018-7-20 13:16:00</th>
+                    <th>baimin</th>
+                    <th><a href='/product/showRouteTypeEdit?route_type_id={$vo.route_type_id}'><button class="layui-btn layui-btn-sm">&nbsp;查&nbsp;看&nbsp;</button></a></th>
+                    <th><a href='/product/showRouteTypeEdit?route_type_id={$vo.route_type_id}'><button class="layui-btn layui-btn-sm">&nbsp;查&nbsp;看&nbsp;</button></a></th>
+                    <th><a href='/product/showRouteTypeEdit?route_type_id={$vo.route_type_id}'><button class="layui-btn layui-btn-sm">&nbsp;编&nbsp;辑&nbsp;</button></a><br/><a href='/product/showRouteTypeInfo?route_type_id={$vo.route_type_id}'><button class="layui-btn layui-btn-sm" style="margin-top:5px;">&nbsp;详&nbsp;情&nbsp;</button></a><br/><a href='/product/showRouteTypeInfo?route_type_id={$vo.route_type_id}'><button class="layui-btn layui-btn-sm" style="margin-top:5px;">&nbsp;取&nbsp;消&nbsp;成&nbsp;团&nbsp;</button></a></th>
+                </tr>
+                <tr>
+                    <th><input type="checkbox"></th>
+                    <th>启用</th>
+                    <th><a href="#">package_number</a></th>
+                    <th>NHC19-TW6D0202</th>
+                    <th>19年台湾岛6日游</th>
+                    <th>6</th>
+                    <th>华人团</th>
+                    <th>2018-7-20</th>
+                    <th><span class="set_border">酒店</span> <span class="set_border">用餐</span> <span class="set_border">航班</span> <span class="set_border">邮轮</span> <span class="set_border">景点</span> <span class="set_border">签证</span> <span class="set_border">车辆</span> <span class="set_border">导游</span> <span class="set_border2">单项资源</span></th>
+                    <th>baimin</th>
+                    <th>6</th>
+                    <th>6</th>
+                    <th>2018-7-20 13:16:00</th>
+                    <th>baimin</th>
+                    <th><a href='/product/showRouteTypeEdit?route_type_id={$vo.route_type_id}'><button class="layui-btn layui-btn-sm">&nbsp;查&nbsp;看&nbsp;</button></a></th>
+                    <th><a href='/product/showRouteTypeEdit?route_type_id={$vo.route_type_id}'><button class="layui-btn layui-btn-sm">&nbsp;查&nbsp;看&nbsp;</button></a></th>
+                    <th><a href='/product/showRouteTypeEdit?route_type_id={$vo.route_type_id}'><button class="layui-btn layui-btn-sm">&nbsp;编&nbsp;辑&nbsp;</button></a><br/><a href='/product/showRouteTypeInfo?route_type_id={$vo.route_type_id}'><button class="layui-btn layui-btn-sm" style="margin-top:5px;">&nbsp;详&nbsp;情&nbsp;</button></a><br/><a href='/product/showRouteTypeInfo?route_type_id={$vo.route_type_id}'><button class="layui-btn layui-btn-sm" style="margin-top:5px;">&nbsp;取&nbsp;消&nbsp;成&nbsp;团&nbsp;</button></a></th>
+                </tr>
+            </tbody>
+
+        </table>
+    </div>
+</div>
+
+<div class="layui-footer">
+    <!-- 底部固定区域 -->
+    © layui.com - 底部固定区域
+</div>
+</div>
+{include file='public/foot_js' /}
+<script src='__STATIC__/javascript/system/product.js'></script>
+
+</body>
+</html>

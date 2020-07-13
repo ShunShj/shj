@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {include file='public/head' /}
+    <title>language-manage</title>
+
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+    <div class="layui-header">
+        {include file='public/header' /}
+    </div>
+
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll">
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            {include file='public/left_menu' /}
+        </div>
+    </div>
+
+    <div class="layui-body layui-body-bg">
+
+        <!-- 内容主体区域 -->
+        <div style="padding: 15px 15px 0px;">
+            <div class="body-top">
+                <div class='layui-form-item'>
+                    <span class="layui-breadcrumb" lay-separator="-">
+                        <a>{$language_tag.index_public_homepage}</a>
+                        <a>财务管理</a>
+                        <a>记账管理</a>
+                        <a><cite>记账管理明细</cite></a>
+                    </span>
+                </div>
+                <div class='layui-block all-search-bg'>
+                    <form class="layui-form" method='get' action='/finance/receipts'>
+
+                    </form>
+                    <!--<div class='layui-button-inline'>
+
+                        <a href='/source/showDiningAdd'><button class="layui-btn nav-add">{$language_tag.index_source_showDiningManage_add_source_}</button></a>
+                        &lt;!&ndash;<a href='/source/showDiningSource'><button class="layui-btn nav-look">查看全部用餐资源</button></a>&ndash;&gt;
+                        &lt;!&ndash;<a href='/source/showSupplierAdd?supplier_type_id=3'><button class="layui-btn nav-add">添加用餐供应商</button></a>&ndash;&gt;
+                        <a href='/source/showDiningSource'><button class="layui-btn nav-look">{$language_tag.index_source_showDiningManage_look_all_source_dining}</button></a>
+
+                    </div>-->
+                </div>
+            </div>
+            <div class="content-bg">
+              
+                <hr>
+                <div class="table-nont user-manage company-pageHeight">
+                <table class="layui-table" >
+                    <thead>
+                    <tr>
+                    	<th>{$language_tag.index_examineAndApprove_financeApproveByMe_id}</th>
+                    	<th>{$language_tag.index_finance_codeDetail_group_number}</th>
+                        <th>{$language_tag.index_examineAndApprove_financeApproveByMe_order_number}</th>
+                        <th>{$language_tag.index_examineAndApprove_financeApproveByMe_project}</th>
+                        <th>{$language_tag.index_public_type}</th>
+                        <th>{$language_tag.index_examineAndApprove_financeApproveByMe_number}</th>
+                        <th>{$language_tag.index_examineAndApprove_financeApproveByMe_money}</th>
+                        <th>凭证编号</th>
+                        <th>{$language_tag.index_finance_showMustpayAllManage_voucher_time}</th>
+                    	 <th>{$language_tag.index_finance_payment_information}</th>
+                    	<th>{$language_tag.index_public_mark}</th>
+                        <th>{$language_tag.index_product_showRouteTemplateManage_resources_enclosure}</th>
+                        <th>{$language_tag.index_examineAndApprove_iChecked_proposer}</th>
+                        <th>状态</th>
+                        <th>{$language_tag.index_source_operation}</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {foreach name='data' item='v'}
+                    <tr>
+                    	<td>{$v.finance_approve_id}</td>
+                    	<td>
+                    		{if condition="$Think.session.user.company_id eq $v.team_product_company_id"}
+                    	<a href="/product/profitStatement?plan_id={$v.team_product_id}&number={$v.team_product_number}" style='color:blue'>{$v.team_product_number}</a>
+                    		{else/}
+                    		{$v.team_product_number}
+                    		{/if}
+                    	</td>
+                        <td><a href='/branchcompany/companyOrderManage?company_order_number={$v.company_order_number}' style='color:blue'>{$v.company_order_number}</a></td>
+                       
+                        <td>
+							{$v.product_name}-{$v.fee_type_name}
+                        </td>
+                        <td>
+                        	{if condition='$v.finance_type eq 1'}
+                        	收
+                        	{elseif condition="$v.finance_type eq 2"}
+                        	付
+                        	{else/}
+                        	撤销
+                        	{/if}
+                        	
+                        </td>
+                        <td>{$v.finance_number}</td>
+                        <td>{$v.base_money}{$v.currency_unit}</td>
+                        <td>{$v.voucher_number}</td>
+                        <td>
+                         	{if condition="$v.voucher_time neq '' "}
+                         		{$v.voucher_time|date='Y-m-d',###}
+                         	{/if}
+                         
+                         </td>
+                         <td>{$v.pay_message}</td>
+                         <td>{$v.remark}</td>
+                         <td>
+                         	{if condition="$v.attachment neq ''"}
+                         		<a href='{$v.attachment}' style='text-decoration:underline' >{$language_tag.index_product_showRouteTemplateManage_resources_enclosure}</a>
+                         	{/if}
+                         </td>
+                      	<td>{$v.create_user_name}</td>
+                      	<td>
+                      	{if condition="$v.status eq 1"}
+                      		{if condition="$v.finance_type eq 3"}
+                      			撤销中
+                      		{else/}
+                      			审批中
+                      		{/if}
+                      		
+                      	{else/}
+                      		{if condition="$v.finance_type eq 3"}
+                      			已撤销
+                      		{else/}
+                      			审批结束-
+	                      		{if condition="$v.approve_result eq  1"}
+	                      		通过
+	                      		{else/}
+	                      		不通过
+	                      		{/if}
+                      		{/if}
+                      	
+
+                      		
+                      	{/if}	
+                      	
+                      	</td>
+                        <td>
+                       	{if condition="$v.status eq 1 and $v.finance_type neq 3"}
+                        	<span style=""><a class="layui-btn layui-btn-sm layui-btn-primary chexiao" data-info="{$v.finance_approve_id}" >撤销</a></span>
+
+						{else/}
+							{if condition="$v.status eq 2 and $v.finance_type neq 3"}
+							<span style=""><a class="layui-btn layui-btn-sm layui-btn-primary chexiao" data-info="{$v.finance_approve_id}" >撤销</a></span>
+								
+							{/if}	
+						
+                      	{/if}	
+                      	
+                        	
+           
+                        </td>
+                    </tr>
+                    {/foreach}
+                    </tbody>
+
+                </table>
+                </div>
+                <div class="listButtom">
+                    {include file='public/page' /}
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="layui-footer">
+        <!-- 底部固定区域 -->
+        © layui.com - 底部固定区域
+    </div>
+</div>
+{include file='public/foot_js' /}
+    <script id="T-shengpi" type="text/html">
+        <form id="F-shengpi" >
+
+            <div style="text-align: center;margin-top: 50px">
+                <a class="layui-btn nav-submit confirm">{$language_tag.index_public_ok}</a>&nbsp;&nbsp;&nbsp;  <a class="layui-btn layui-btn-primary cancel">{$language_tag.index_public_cancel}</a>
+            </div>
+        </form>
+    </script>
+<script>
+$('.chexiao').on('click',function(){
+	finance_approve_id = $(this).data('info');
+    $('.approval_opinion').val('');
+    var h = $('#T-shengpi').html();
+    layer.open({
+        title: "撤销"
+        ,type: 1
+        ,content: h
+        ,area:['30%','250px']
+    });
+
+    //取消
+    $('.cancel').on('click',function(){
+        layer.closeAll();
+    });
+
+    //确认
+    $('.confirm').on('click',function(){
+        layer.load(2);
+		$.ajax({
+			  type: "POST",
+			  url: "/finance/postRevocationApplyAjax",
+			  data: {
+				  finance_approve_id:finance_approve_id,
+
+
+
+			  },
+			  success: function(data){
+                if(data.code==400){
+                    layer.msg('{$language_tag.index_public_verificationFailure}');
+                }else{
+                    layer.msg('{$language_tag.index_public_success}',{time:1});
+                    layer.closeAll();
+                    location.reload();
+                }
+			  },
+			  error:function(XMLHttpRequest, textStatus, errorThrown){
+			      layer.msg('{$language_tag.index_public_verificationFailure}')
+			  }
+			});
+    });
+
+});
+
+</script>
+</body>
+</html>

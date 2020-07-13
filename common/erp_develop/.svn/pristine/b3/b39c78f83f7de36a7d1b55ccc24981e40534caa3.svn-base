@@ -1,0 +1,815 @@
+<link rel="stylesheet" href="/static/css/formSelects-v4.css">
+<link rel="stylesheet" href="/static/layui/css/layui.css">
+<!--公共CSS样式-->
+<link rel="stylesheet" href="/static/css/public_style.css">
+<script src='/static/javascript/public/jquery-2.1.1.min.js'></script>
+<link href="/static/css/product.css" rel="stylesheet">
+<link href="/static/css/public.css" rel="stylesheet">
+
+<body style="margin: 0 5%">
+<!--添加游客start-->
+<div class="lay-visitor-add" style="width: 90%;height: 500px" >
+    <fieldset class="layui-elem-field layui-field-title">
+        <legend>{$language_tag.index_product_PlanBookingPassenger_baseInformation}</legend>
+    </fieldset>
+    <form class="layui-form" id="form1" onSubmit="return save()">
+        <div id="visitor-message-other" class="visitor-message-other">
+            <div class="layui-row">
+                <div class="layui-col-md4">
+                    <div class="layui-form-item">
+                        <label class="layui-form-label"><i style="padding-right: 8px;color: red;font-size: 16px;vertical-align: middle;font-weight: bold;font-style: normal;">*</i>{$language_tag.index_public_status}:</label>
+                        <div class="layui-input-block">
+                            <select name="status" required >
+                                {foreach $orderState as $kv=>$vl}
+                                <option value="{$kv}" {$kv==$v.status?'selected':''}>{$vl}</option>
+                                {/foreach}
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="layui-row">
+                <div class="layui-col-md4">
+                    <div class="layui-form-item">
+                        <label class="layui-form-label"><i style="padding-right: 8px;color: red;font-size: 16px;vertical-align: middle;font-weight: bold;font-style: normal;">*</i>{$language_tag.index_branchcompany_showBranchProductManage_passport}:</label>
+                        <div class="layui-input-block">
+                            <input type="text" class="layui-input"  name="passport_number" value="{$v.passport_number}" lay-verify="required" />
+                        </div>
+                    </div>
+                </div>
+
+                <!--<div class="layui-col-md4">-->
+                    <!--<div class="layui-form-item">-->
+                        <!--<label class="layui-form-label">证件类型:</label>-->
+                        <!--<div class="layui-input-block">-->
+                            <!--<select name="card_type">-->
+                                <!--<option value="0">{$language_tag.index_public_select}</option>-->
+                                <!--<option value="2" {$v.card_type==2?'selected':''}>{$language_tag.index_branchcompany_showBranchProductManage_idCard}</option>-->
+                            <!--</select>-->
+                        <!--</div>-->
+                    <!--</div>-->
+                <!--</div>-->
+
+                <!--<div class="layui-col-md4">-->
+                    <!--<div class="layui-form-item">-->
+                        <!--<label class="layui-form-label">{$language_tag.index_branchcompany_showBranchProductManage_certificateNumber}:</label>-->
+                        <!--<div class="layui-input-block">-->
+                            <!--<input type="text" class="layui-input"  name="card_number" value="{$v.card_number}" />-->
+                        <!--</div>-->
+                    <!--</div>-->
+                <!--</div>-->
+
+            </div>
+
+            <div class="layui-row">
+                <div class="layui-col-md4">
+                    <div class="layui-form-item">
+                        <label class="layui-form-label"><i style="padding-right: 8px;color: red;font-size: 16px;vertical-align: middle;font-weight: bold;font-style: normal;">*</i>{$language_tag.index_branchcompany_showBranchProductManage_name}:</label>
+                        <div class="layui-input-block">
+                            <input type="text" class="layui-input"  name="customer_last_name" value="{$v.customer_last_name}" lay-verify="required" />
+                        </div>
+                    </div>
+                </div>
+
+                <div class="layui-col-md4">
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">{$language_tag.index_branchcompany_showCompanyOrderManage_middleName}:</label>
+                        <div class="layui-input-block">
+                            <input type="text" class="layui-input"  name="middle_name" value="{$v.middle_name}" />
+                        </div>
+                    </div>
+                </div>
+
+                <div class="layui-col-md4">
+                    <div class="layui-form-item">
+                        <label class="layui-form-label"><i style="padding-right: 8px;color: red;font-size: 16px;vertical-align: middle;font-weight: bold;font-style: normal;">*</i>{$language_tag.index_branchcompany_showBranchProductManage_surname}:</label>
+                        <div class="layui-input-block">
+                            <input type="text" class="layui-input"  name="customer_first_name" value="{$v.customer_first_name}" lay-verify="required" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="layui-row">
+                <div class="layui-col-md4">
+                    <div class="layui-form-item">
+                        <label class="layui-form-label"><i style="padding-right: 8px;color: red;font-size: 16px;vertical-align: middle;font-weight: bold;font-style: normal;">*</i>{$language_tag.index_branchcompany_showBranchProductManage_sex}:</label>
+                        <div class="layui-input-block">
+                             <select name="gender" lay-verify="required" >
+                                 <option value="0">{$language_tag.index_public_select}</option>
+                                 <option value="1" {$v.gender==1?'selected':''}>{$language_tag.index_branchcompany_showBranchProductManage_boy}</option>
+                                 <option value="2" {$v.gender==2?'selected':''}>{$language_tag.index_branchcompany_showBranchProductManage_girl}</option>
+                             </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="layui-col-md4">
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">{$language_tag.index_branchcompany_showBranchProductManage_nationality}:</label>
+                        <div class="layui-input-block">
+                            <select name="country_id"   lay-search  >
+                                <option value=""></option>
+                                {foreach $Country as $vc}
+                                <option value="{$vc.country_id}" {$vc.country_id==$v.country_id?'selected':''} >{$vc.country_name}</option>
+                                {/foreach}
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="layui-col-md4">
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">{$language_tag.index_branchcompany_showCompanyOrderManage_birthday}:</label>
+                        <div class="layui-input-block">
+                            <input class="layui-input messageDate" name="birthday" value="{if $v.birthday}{$v.birthday|date='Y-m-d',###}{/if}"  />
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="layui-row">
+                <div class="layui-col-md4">
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">{$language_tag.index_branchcompany_showBranchProductManage_language}:</label>
+                        <div class="layui-input-block">
+                            <select name="language_id"   lay-search  >
+                                <option value=""></option>
+                                {foreach $Language as $vl}
+                                <option value="{$vl.language_id}" {$v.language_id==$vl.language_id?'selected':''} >{$vl.language_name}</option>
+                                {/foreach}
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!--<div class="layui-col-md4">-->
+                    <!--<div class="layui-form-item">-->
+                        <!--<label class="layui-form-label"><i style="padding-right: 8px;color: red;font-size: 16px;vertical-align: middle;font-weight: bold;font-style: normal;">*</i>{$language_tag.index_public_type}:</label>-->
+                        <!--<div class="layui-input-block">-->
+                            <!--<select name="customer_type" lay-verify="required" required >-->
+                                <!--<option value="0"></option>-->
+                                <!--{foreach $customer_type as $ky=>$vy}-->
+                                  <!--<option value="{$ky}" {$v.customer_type==$ky?"selected":""} >{$vy}</option>-->
+                                <!--{/foreach}-->
+                            <!--</select>-->
+                        <!--</div>-->
+                    <!--</div>-->
+                <!--</div>-->
+
+                <div class="layui-col-md4">
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">{$language_tag.index_branchcompany_showBranchProductManage_phone}:</label>
+                        <div class="layui-input-block">
+                            <input class="layui-input" name="phone" value="{$v.phone}" />
+                        </div>
+                    </div>
+                </div>
+
+                <div class="layui-col-md4">
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">{$language_tag.index_branchcompany_showCompanyOrderManage_issueData
+                            }:</label>
+                        <div class="layui-input-block">
+                            <input class="layui-input messageDate" name="issuing_date" value="{if $v.issuing_date}{$v.issuing_date|date='Y-m-d',###}{/if}" />
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="layui-row">
+
+                <div class="layui-col-md4">
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">{$language_tag.index_branchcompany_showBranchProductManage_effectiveDate}:</label>
+                        <div class="layui-input-block">
+                            <input class="layui-input messageDate" name="term_of_validity" value="{if $v.term_of_validity}{$v.term_of_validity|date='Y-m-d',###}{/if}" />
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-col-md4">
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">{$language_tag.index_branchcompany_showBranchProductManage_email}:</label>
+                        <div class="layui-input-block">
+                            <input class="layui-input" name="email" value="{$v.email}" />
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-col-md4">
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">{$language_tag.index_branchcompany_showCompanyOrderManage_emergencyContact}:</label>
+                        <div class="layui-input-block">
+                            <input class="layui-input" name="emergency_contact" value="{$v.emergency_contact}" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="layui-row">
+
+                <div class="layui-col-md4">
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">{$language_tag.index_branchcompany_showCompanyOrderManage_emergencyContact_phone}:</label>
+                        <div class="layui-input-block">
+                            <input class="layui-input" name="emergency_call" value="{$v.emergency_call}" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="layui-row">
+                <div class="layui-col-md12">
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">{$language_tag.index_branchcompany_showDistributorManage_address}:</label>
+                        <div class="layui-input-block">
+                            <textarea class="layui-textarea" name="address">{$v.address}</textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="layui-row">
+                <div class="layui-col-md12">
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">{$language_tag.index_product_visitor_special_require}:</label>
+                        <div class="layui-input-block">
+                            <textarea class="layui-textarea" name="special_claim">{$v.special_claim}</textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flightMessage" style="padding-bottom:30px;">
+                <fieldset class="layui-elem-field layui-field-title">
+                    <legend>{$language_tag.index_public_flightInformation}</legend>
+                </fieldset>
+                <div id="flightList">
+                    {foreach $v.flight_info as $kf=>$vf}
+                    <div class="flightList" style="position: relative">
+                        <hr>
+                        <div class="layui-row layui-form" style="padding-top: 30px">
+                            <div class="layui-col-md4">
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">{$language_tag.index_public_flightNumber}:</label>
+                                    <div class="layui-input-block">
+                                        <input type="text" name="flight_code[{$kf}]" placeholder="{$language_tag.index_public_placeHolder}" class="layui-input" value="{$vf.flight_code}" >
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="layui-col-md4">
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">{$language_tag.index_public_startPlace}:</label>
+                                    <div class="layui-input-block">
+                                        <input type="text" name="start_place[{$kf}]" placeholder="{$language_tag.index_public_placeHolder}" class="layui-input" value="{$vf.start_place}" >
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="layui-col-md4">
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">{$language_tag.index_public_endPlace}:</label>
+                                    <div class="layui-input-block">
+                                        <input type="text" name="end_place[{$kf}]" placeholder="{$language_tag.index_public_placeHolder}" class="layui-input" value="{$vf.end_place}" >
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="layui-row  layui-form">
+                            <div class="layui-col-md4">
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">{$language_tag.index_product_PlanBookingPassenger_takeTime}:</label>
+                                    <div class="layui-input-block">
+                                        <input type="text" name="flight_begin_time[{$kf}]" placeholder="{$language_tag.index_product_ShowPlanTour_pleaseSelectTheDate}" class="layui-input flight_begin_time_{$kf}" value="{if $vf.flight_begin_time}{$vf.flight_begin_time|date='Y-m-d H:i:s',###}{/if}" >
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-col-md4">
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">{$language_tag.index_product_PlanBookingPassenger_landingTime}:</label>
+                                    <div class="layui-input-block">
+                                        <input type="text" name="flight_end_time[{$kf}]" placeholder="{$language_tag.index_product_ShowPlanTour_pleaseSelectTheDate}"  class="layui-input flight_end_time_{$kf}" value="{if $vf.flight_end_time}{$vf.flight_end_time|date='Y-m-d H:i:s',###}{/if}" >
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="layui-col-md4">
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">{$language_tag.index_public_transportMachine}:</label>
+                                    <div class="layui-input-block" style="height: 36px">
+                                        <input type="checkbox" name="flight_type[{$kf}]" value="1" title="{$language_tag.index_public_meetAirport}" lay-filter="jiesong" lay-skin="primary" {$vf.flight_type==1?'checked':''} />
+                                        <input type="checkbox" name="flight_type[{$kf}]" value="2" title="{$language_tag.index_public_giveAirport}" lay-filter="jiesong" lay-skin="primary" {$vf.flight_type==2?'checked':''} />
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="layui-row  layui-form">
+                             <div class="layui-col-md6">
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">{$language_tag.index_public_mark}:</label>
+                                    <div class="layui-input-block">
+                                       <textarea class="layui-textarea" name="remark[{$kf}]">{$vf.remark}</textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <i class="layui-icon layui-icon-close flight-list-close" onclick="flightListClose(this)"></i>
+                    </div>
+
+                    {/foreach}
+
+
+                </div>
+                <div class=" layui-flight-add">
+                    <div class="layui-btn layui-btn-sm nav-add" onclick="flightAdd()">{$language_tag.index_product_PlanBookingPassenger_add_flight}</div>
+                </div>
+            </div>
+            <!--住宿信息-->
+            <div  class="layui-row">
+                <fieldset class="layui-elem-field layui-field-title">
+                    <legend>{$language_tag.index_product_visitor_accommodationInformation}</legend>
+                </fieldset>
+                <div class="layui-row">
+                    <div class="layui-col-md4">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label"><i style="padding-right: 8px;color: red;font-size: 16px;vertical-align: middle;font-weight: bold;font-style: normal;">*</i>{$language_tag.index_product_visitor_roomNumber}:</label>
+                            <div class="layui-input-block">
+                                <select name="room_code" lay-verify="required" lay-search>
+                                    <option></option>
+                                    <?php for ($i=1;$i<=100;$i++){?>
+                                    <option value="{$i}" {$v['room_code']==$i?'selected':''} }>{$i}</option>
+                                    <?php }?>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-col-md4">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label"><i style="padding-right: 8px;color: red;font-size: 16px;vertical-align: middle;font-weight: bold;font-style: normal;">*</i>{$language_tag.index_product_visitor_roomType}:</label>
+                            <div class="layui-input-block">
+                                <select name="room_type" lay-verify="required">
+                                    <option></option>
+                                    {foreach $room_type as $ky=>$vy}
+                                    <option value="{$ky}" {$v['room_type']==$ky?'selected':''} >{$vy}</option>
+                                    {/foreach}
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-row">
+                    <div class="layui-col-md4">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">{$language_tag.index_product_visitor_checkIn}:</label>
+                            <div class="layui-input-block">
+                                <!--<input type="number" id="check_in" name="check_in" placeholder="请输入数字"  class="layui-input" value="{$v['check_in']}">-->
+                                <select id="check_in" name="check_in" lay-filter="check_in">
+                                    <option value="-1" {$v['check_in']==-1?'selected':''}>{$language_tag.index_product_showCompanyOrderCustomerEdit_moveUp_one}</option>
+                                    <option value="-2" {$v['check_in']==-2?'selected':''}>{$language_tag.index_product_showCompanyOrderCustomerEdit_moveUp_two}</option>
+                                    <option value="-3" {$v['check_in']==-3?'selected':''}>{$language_tag.index_product_showCompanyOrderCustomerEdit_moveUp_three}</option>
+                                    <option value="-4" {$v['check_in']==-4?'selected':''}>{$language_tag.index_product_showCompanyOrderCustomerEdit_moveUp_four}</option>
+                                    <option value="-5" {$v['check_in']==-5?'selected':''}>{$language_tag.index_product_showCompanyOrderCustomerEdit_moveUp_five}</option>
+                                    <option value="0" {$v['check_in']==0?'selected':''}>{$language_tag.index_product_visitor_specialRequirements}</option>
+                                    <option value="1" {$v['check_in']==1?'selected':''}>{$language_tag.index_product_showCompanyOrderCustomerEdit_postpone_one}</option>
+                                    <option value="2" {$v['check_in']==2?'selected':''}>{$language_tag.index_product_showCompanyOrderCustomerEdit_postpone_two}</option>
+                                    <option value="3" {$v['check_in']==3?'selected':''}>{$language_tag.index_product_showCompanyOrderCustomerEdit_postpone_three}</option>
+                                    <option value="4" {$v['check_in']==4?'selected':''}>{$language_tag.index_product_showCompanyOrderCustomerEdit_postpone_four}</option>
+                                    <option value="5" {$v['check_in']==5?'selected':''}>{$language_tag.index_product_showCompanyOrderCustomerEdit_postpone_five}</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-col-md4">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">{$language_tag.index_product_visitor_checkOut}:</label>
+                            <div class="layui-input-block">
+                                <!--<input type="number" id="check_on" name="check_on" placeholder="请输入数字" class="layui-input" value="{$v['check_on']}">-->
+                                <select  id="check_on" name="check_on" lay-filter="check_on">
+                                    <option value="-1" {$v['check_on']==-1?'selected':''}>{$language_tag.index_product_showCompanyOrderCustomerEdit_moveUp_one}</option>
+                                    <option value="-2" {$v['check_on']==-2?'selected':''}>{$language_tag.index_product_showCompanyOrderCustomerEdit_moveUp_two}</option>
+                                    <option value="-3" {$v['check_on']==-3?'selected':''}>{$language_tag.index_product_showCompanyOrderCustomerEdit_moveUp_three}</option>
+                                    <option value="-4" {$v['check_on']==-4?'selected':''}>{$language_tag.index_product_showCompanyOrderCustomerEdit_moveUp_four}</option>
+                                    <option value="-5" {$v['check_on']==-5?'selected':''}>{$language_tag.index_product_showCompanyOrderCustomerEdit_moveUp_five}</option>
+                                    <option value="0" {$v['check_on']==0?'selected':''}>{$language_tag.index_product_visitor_specialRequirements}</option>
+                                    <option value="1" {$v['check_on']==1?'selected':''}>{$language_tag.index_product_showCompanyOrderCustomerEdit_postpone_one}</option>
+                                    <option value="2" {$v['check_on']==2?'selected':''}>{$language_tag.index_product_showCompanyOrderCustomerEdit_postpone_two}</option>
+                                    <option value="3" {$v['check_on']==3?'selected':''}>{$language_tag.index_product_showCompanyOrderCustomerEdit_postpone_three}</option>
+                                    <option value="4" {$v['check_on']==4?'selected':''}>{$language_tag.index_product_showCompanyOrderCustomerEdit_postpone_four}</option>
+                                    <option value="5" {$v['check_on']==5?'selected':''}>{$language_tag.index_product_showCompanyOrderCustomerEdit_postpone_five}</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <?php $check_in = explode(',',$v['check_in_hotel_id']);?>
+                <?php $check_on = explode(',',$v['check_on_hotel_id']);?>
+                <div class="layui-row">
+                    <div class="layui-col-md4">
+                        <div class="layui-form-item" id="edit_hn11" {if 0>$v['check_in'] && $v['check_in']<=-1}style=""{else/}style="display:none;"{/if}>
+                            <label class="layui-form-label">{$language_tag.index_product_PlanBookingPassenger_check_moveUp_one}:</label>
+                            <div class="layui-input-block">
+                                <!--<input type="text" id="edit_check_in_hotel_name1" name="check_in_edit[1]" value="{$check_in[0]}" placeholder="{$language_tag.index_public_placeHolder}" autocomplete="off" lay-verify="" class="layui-input">-->
+                            <select id="edit_check_in_hotel_name1" name="check_in_edit[1]" lay-search>
+                                <option></option>
+                                {foreach $getHotel as $vll}
+                                <option {$check_in[0]==$vll.hotel_id?'selected':''} value="{$vll.hotel_id}">{$vll.room_name}-{$room_type[$vll.room_type]}</option>
+                                {/foreach}
+                            </select>
+                            </div>
+                        </div>
+                        <div class="layui-form-item" id="tt1" style=""></div>
+                    </div>
+                    <div class="layui-col-md4">
+                        <div class="layui-form-item" id="edit_hn21" {if $v['check_on']!=0 && $v['check_on']>=1}style=''{else/}style="display:none;"{/if}>
+                        <label class="layui-form-label">{$language_tag.index_product_PlanBookingPassenger_check_postpone_one}:</label>
+                        <div class="layui-input-block">
+                            <!--<input type="text" id="edit_check_on_hotel_name1" name="check_on_edit[1]" value="{$check_on[0]}" placeholder="{$language_tag.index_public_placeHolder}" autocomplete="off" lay-verify="" class="layui-input">-->
+                            <select id="edit_check_on_hotel_name1" name="check_on_edit[1]" lay-search>
+                                <option></option>
+                                {foreach $getHotel as $vll}
+                                <option {$check_on[0]==$vll.hotel_id?'selected':''} value="{$vll.hotel_id}">{$vll.room_name}-{$room_type[$vll.room_type]}</option>
+                                {/foreach}
+                            </select>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="layui-row">
+                <div class="layui-col-md4">
+                    <div class="layui-form-item" id="edit_hn12" {if 0>$v['check_in'] && $v['check_in']<=-2}style=""{else/}style="display:none;"{/if}>
+                        <label class="layui-form-label">{$language_tag.index_product_PlanBookingPassenger_check_moveUp_two}:</label>
+                        <div class="layui-input-block">
+                            <!--<input type="text" id="edit_check_in_hotel_name2" name="check_in_edit[2]" value="{$check_in[1]}" placeholder="{$language_tag.index_public_placeHolder}" autocomplete="off" lay-verify="" class="layui-input">-->
+                            <select id="edit_check_in_hotel_name2" name="check_in_edit[2]" lay-search>
+                                <option></option>
+                                {foreach $getHotel as $vll}
+                                <option {$check_in[1]==$vll.hotel_id?'selected':''} value="{$vll.hotel_id}">{$vll.room_name}-{$room_type[$vll.room_type]}</option>
+                                {/foreach}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="layui-form-item" id="tt2" style=""></div>
+                </div>
+                <div class="layui-col-md4">
+                    <div class="layui-form-item" id="edit_hn22" {if $v['check_on']!=0 && $v['check_on']>=2}style=''{else/}style="display:none;"{/if}>
+                    <label class="layui-form-label">{$language_tag.index_product_PlanBookingPassenger_check_postpone_two}:</label>
+                    <div class="layui-input-block">
+                        <!--<input type="text" id="edit_check_on_hotel_name2" name="check_on_edit[2]" value="{$check_on[1]}" placeholder="{$language_tag.index_public_placeHolder}" autocomplete="off" lay-verify="" class="layui-input">-->
+                        <select id="edit_check_on_hotel_name2" name="check_on_edit[2]" lay-search>
+                            <option></option>
+                            {foreach $getHotel as $vll}
+                            <option {$check_on[1]==$vll.hotel_id?'selected':''} value="{$vll.hotel_id}">{$vll.room_name}-{$room_type[$vll.room_type]}</option>
+                            {/foreach}
+                        </select>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-row">
+            <div class="layui-col-md4">
+                <div class="layui-form-item" id="edit_hn13" {if 0>$v['check_in'] && $v['check_in']<=-3}style=""{else/}style="display:none;"{/if}>
+                    <label class="layui-form-label">{$language_tag.index_product_PlanBookingPassenger_check_moveUp_three}:</label>
+                    <div class="layui-input-block">
+                        <!--<input type="text" id="edit_check_in_hotel_name3" name="check_in_edit[3]" value="{$check_in[2]}" placeholder="{$language_tag.index_public_placeHolder}" autocomplete="off" lay-verify="" class="layui-input">-->
+                        <select id="edit_check_in_hotel_name3" name="check_in_edit[3]" lay-search>
+                            <option></option>
+                            {foreach $getHotel as $vll}
+                            <option {$check_in[2]==$vll.hotel_id?'selected':''} value="{$vll.hotel_id}">{$vll.room_name}-{$room_type[$vll.room_type]}</option>
+                            {/foreach}
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-form-item" id="tt3" style=""></div>
+            </div>
+            <div class="layui-col-md4">
+                <div class="layui-form-item" id="edit_hn23" {if $v['check_on']!=0 && $v['check_on']>=3}style=''{else/}style="display:none;"{/if}>
+                <label class="layui-form-label">{$language_tag.index_product_PlanBookingPassenger_check_postpone_three}:</label>
+                <div class="layui-input-block">
+                    <!--<input type="text" id="edit_check_on_hotel_name3" name="check_on_edit[3]" value="{$check_on[2]}" placeholder="{$language_tag.index_public_placeHolder}" autocomplete="off" lay-verify="" class="layui-input">-->
+                    <select id="edit_check_on_hotel_name3" name="check_on_edit[3]" lay-search>
+                        <option></option>
+                        {foreach $getHotel as $vll}
+                        <option {$check_on[2]==$vll.hotel_id?'selected':''} value="{$vll.hotel_id}">{$vll.room_name}-{$room_type[$vll.room_type]}</option>
+                        {/foreach}
+                    </select>
+                </div>
+            </div>
+        </div>
+</div>
+
+<div class="layui-row">
+    <div class="layui-col-md4">
+        <div class="layui-form-item" id="edit_hn14" {if 0>$v['check_in'] && $v['check_in']<=-4}style=""{else/}style="display:none;"{/if}>
+            <label class="layui-form-label">{$language_tag.index_product_PlanBookingPassenger_check_moveUp_four}:</label>
+            <div class="layui-input-block">
+                <!--<input type="text" id="edit_check_in_hotel_name4" name="check_in_edit[4]" value="{$check_in[3]}" placeholder="{$language_tag.index_public_placeHolder}" autocomplete="off" lay-verify="" class="layui-input">-->
+                <select id="edit_check_in_hotel_name4" name="check_in_edit[4]" lay-search>
+                    <option></option>
+                    {foreach $getHotel as $vll}
+                    <option {$check_in[3]==$vll.hotel_id?'selected':''} value="{$vll.hotel_id}">{$vll.room_name}-{$room_type[$vll.room_type]}</option>
+                    {/foreach}
+                </select>
+
+            </div>
+        </div>
+        <div class="layui-form-item" id="tt4" style=""></div>
+    </div>
+    <div class="layui-col-md4">
+        <div class="layui-form-item" id="edit_hn24" {if $v['check_on']!=0 && $v['check_on']>=4}style=''{else/}style="display:none;"{/if}>
+        <label class="layui-form-label">{$language_tag.index_product_PlanBookingPassenger_check_postpone_four}:</label>
+        <div class="layui-input-block">
+            <!--<input type="text" id="edit_check_on_hotel_name4" name="check_on_edit[4]" value="{$check_on[3]}" placeholder="{$language_tag.index_public_placeHolder}" autocomplete="off" lay-verify="" class="layui-input">-->
+            <select id="edit_check_on_hotel_name4" name="check_on_edit[4]" lay-search>
+                <option></option>
+                {foreach $getHotel as $vll}
+                <option {$check_on[3]==$vll.hotel_id?'selected':''} value="{$vll.hotel_id}">{$vll.room_name}-{$room_type[$vll.room_type]}</option>
+                {/foreach}
+            </select>
+        </div>
+    </div>
+</div>
+</div>
+
+<div class="layui-row">
+    <div class="layui-col-md4">
+        <div class="layui-form-item" id="edit_hn15" {if 0>$v['check_in'] && $v['check_in']<=-5}style=""{else/}style="display:none;"{/if}>
+            <label class="layui-form-label">{$language_tag.index_product_PlanBookingPassenger_check_moveUp_five}:</label>
+            <div class="layui-input-block">
+                <!--<input type="text" id="edit_check_in_hotel_name5" name="check_in_edit[5]" value="{$check_in[4]}" placeholder="{$language_tag.index_public_placeHolder}" autocomplete="off" lay-verify="" class="layui-input">-->
+                <select id="edit_check_in_hotel_name5" name="check_in_edit[5]" lay-search>
+                    <option></option>
+                    {foreach $getHotel as $vll}
+                    <option {$check_in[4]==$vll.hotel_id?'selected':''} value="{$vll.hotel_id}">{$vll.room_name}-{$room_type[$vll.room_type]}</option>
+                    {/foreach}
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item" id="tt5" style=""></div>
+    </div>
+    <div class="layui-col-md4">
+        <div class="layui-form-item" id="edit_hn25" {if $v['check_on']!=0 && $v['check_on']>=5}style=''{else/}style="display:none;"{/if}>
+        <label class="layui-form-label">{$language_tag.index_product_PlanBookingPassenger_check_postpone_five}:</label>
+        <div class="layui-input-block">
+            <!--<input type="text" id="edit_check_on_hotel_name5" name="check_on_edit[5]" value="{$check_on[4]}" placeholder="{$language_tag.index_public_placeHolder}" autocomplete="off" lay-verify="" class="layui-input">-->
+            <select id="edit_check_on_hotel_name5" name="check_on_edit[5]" lay-search>
+                <option></option>
+                {foreach $getHotel as $vll}
+                <option {$check_on[4]==$vll.hotel_id?'selected':''} value="{$vll.hotel_id}">{$vll.room_name}-{$room_type[$vll.room_type]}</option>
+                {/foreach}
+            </select>
+        </div>
+    </div>
+</div>
+</div>
+
+
+</div></div>
+<br>
+<div class="layui-row" style="padding-bottom: 50px">
+    <div class="layui-form-button" style="text-align: center">
+        <button class="layui-btn nav-submit" lay-submit >{$language_tag.index_public_save}</button>
+        <button type="button" class="layui-btn layui-btn-primary" onclick="visitorMessBack()">{$language_tag.index_public_back}</button>
+    </div>
+</div>
+</form>
+</div>
+<!--添加游客end-->
+</body>
+
+<div style="display: none" id="T-flight">
+
+    <div class="flightList" style="position: relative;">
+        <hr>
+        <div class="layui-row layui-form" style="padding-top: 30px">
+            <div class="layui-col-md4">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">{$language_tag.index_public_flightNumber}:</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="flight_code[ii]" placeholder="{$language_tag.index_public_placeHolder}" class="layui-input" value="" >
+                    </div>
+                </div>
+            </div>
+
+            <div class="layui-col-md4">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">{$language_tag.index_public_startPlace}:</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="start_place[ii]" placeholder="{$language_tag.index_public_placeHolder}" class="layui-input" value="" >
+                    </div>
+                </div>
+            </div>
+
+            <div class="layui-col-md4">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">{$language_tag.index_public_endPlace}:</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="end_place[ii]" placeholder="{$language_tag.index_public_placeHolder}" class="layui-input" value="" >
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="layui-row  layui-form">
+            <div class="layui-col-md4">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">{$language_tag.index_product_PlanBookingPassenger_takeTime}:</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="flight_begin_time[ii]" placeholder="{$language_tag.index_product_ShowPlanTour_pleaseSelectTheDate}" class="layui-input flight_begin_time_ii" value="" >
+                    </div>
+                </div>
+            </div>
+            <div class="layui-col-md4">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">{$language_tag.index_product_PlanBookingPassenger_landingTime}:</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="flight_end_time[ii]" placeholder="{$language_tag.index_product_ShowPlanTour_pleaseSelectTheDate}"  class="layui-input flight_end_time_ii" value="" >
+                    </div>
+                </div>
+            </div>
+
+            <div class="layui-col-md4">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">{$language_tag.index_public_transportMachine}:</label>
+                    <div class="layui-input-block" style="height: 36px">
+                        <input type="checkbox" name="flight_type[ii]" value="1" title="{$language_tag.index_public_meetAirport}" lay-filter="jiesong" lay-skin="primary" />
+                        <input type="checkbox" name="flight_type[ii]" value="2" title="{$language_tag.index_public_giveAirport}" lay-filter="jiesong" lay-skin="primary"/>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="layui-row  layui-form">
+            <div class="layui-col-md6">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">{$language_tag.index_public_mark}:</label>
+                    <div class="layui-input-block">
+                        <textarea class="layui-textarea" name="remark[ii]"></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <i class="layui-icon layui-icon-close flight-list-close" onclick="flightListClose(this)"></i>
+    </div>
+</div>
+
+
+<script src="/static/layui/layui.all.js"></script>
+
+
+<script>
+    var transfer_time_sum = <?=count($v['flight_info'])>0?count($v['flight_info']):0;?>;
+    var layer = layui.layer;
+    var form = layui.form;
+    var laydate = layui.laydate;
+    var upload = layui.upload;
+    var element = layui.element;
+    var formSelects = layui.formSelects;
+    !function() {
+
+        form.on('checkbox(jiesong)',function (data) {
+            $(data.elem).siblings("input[type='checkbox']").each(function (index,item) {
+                if($(item).val()!=data.value){
+                    item.checked=false;
+                    form.render();
+                }
+            })
+        });
+
+
+
+        $('.messageDate').each(function(){
+            laydate.render({
+                elem: this
+                ,trigger: 'click'
+                ,type:'date'
+//              ,lang: 'en'
+            });
+        });
+
+
+
+        for(var ij=0;ij<transfer_time_sum;ij++){
+            $('.flight_begin_time_'+ij).each(function(){
+                laydate.render({
+                    elem: this
+                    ,trigger: 'click'
+                    ,type:'datetime'
+//              ,lang: 'en'
+                });
+            });
+            $('.flight_end_time_'+ij).each(function(){
+                laydate.render({
+                    elem: this
+                    ,trigger: 'click'
+                    ,type:'datetime'
+//              ,lang: 'en'
+                });
+            });
+        }
+
+        form.on('select(check_in)', function(data){
+//            alert(data.value);
+            for(var i=1;i<=5;i++){
+                $('#edit_hn1'+i).attr('style','display: none;');
+                $('#edit_check_in_hotel_name'+i).val('');
+            }
+
+            var inu = data.value*-1;
+            for(var i=1;i<=inu;i++)
+                $('#edit_hn1'+i).attr('style','');
+        });
+
+        form.on('select(check_on)', function(data){
+//            alert(data.value);
+            for(var i=1;i<=5;i++){
+                $('#edit_hn2'+i).attr('style','display: none;');
+                $('#edit_check_on_hotel_name'+i).val('');
+            }
+
+            var inu = data.value;
+            for(var i=1;i<=inu;i++)
+                $('#edit_hn2'+i).attr('style','');
+        });
+
+    }();
+
+    function flightAdd(){
+        var h = $('#T-flight').html();
+        for(var ij=1;ij<25;ij++){
+            h = h.replace('ii',transfer_time_sum);
+        }
+        $('#flightList').append(h);
+
+        $('.flight_begin_time_'+transfer_time_sum).each(function(){
+            laydate.render({
+                elem: this
+                ,trigger: 'click'
+                ,type:'datetime'
+//              ,lang: 'en'
+            });
+        });
+        $('.flight_end_time_'+transfer_time_sum).each(function(){
+            laydate.render({
+                elem: this
+                ,trigger: 'click'
+                ,type:'datetime'
+//              ,lang: 'en'
+            });
+        });
+        form.render();
+        transfer_time_sum++;
+    }
+
+    function visitorMessBack(){
+        parent.openClose();
+    }
+
+    function flightListClose(obj) {
+        $(obj).parent(".flightList").remove();
+    }
+
+
+
+    function save(){
+        layer.load(2);
+        $.ajax({
+            type: "POST",
+            url: '/product/nSavePlanBookingPassengerAjax?passengers_id={$_GET["passengers_id"]}&bookingId={$_GET["bookingId"]}',
+            data: $('#form1').serializeArray(),
+            success: function (data) {
+                layer.closeAll();
+                if(data.code!=200){
+                    layer.msg(data.msg);
+                    return false;
+                }else if(data.code==200){
+                    layer.msg('success',{time:1,end : function(layero, index){
+                        parent.openClose();parent.location.reload();
+                    }
+                    });
+                }
+            },
+            error:function(XMLHttpRequest, textStatus, errorThrown){
+                //console.log(errorThrown)
+                layer.closeAll();
+                layer.msg('{$language_tag.index_public_verificationFailure}')
+
+            }
+        });
+        return false;
+    }
+
+
+</script>

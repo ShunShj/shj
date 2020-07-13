@@ -1,0 +1,1380 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns="http://www.w3.org/1999/html">
+<head>
+    {include file='public/head' /}
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>无标题文档</title>
+    <link href="__STATIC__/css/product.css" rel="stylesheet">
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+    <div class="layui-header">
+        {include file='public/header' /}
+    </div>
+
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll">
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            {include file='public/left_menu' /}
+        </div>
+    </div>
+
+    <div class="layui-body layui-body-bg">
+        <div style="padding: 15px 15px 0px;">
+            <div class="body-top">
+                <div class='layui-form-item top-bg'>
+                    <span class="layui-breadcrumb" lay-separator="-">
+                        <a>{$Think.lang.index_public_homepage}</a>
+                        <a>{$Think.lang.index_branchcompany_showBranchProductManage_branchManagement}</a>
+                        <a>{$Think.lang.index_branchcompany_showCompanyOrderManage_orderManagement}</a>
+                        <a><cite>添加订单</cite></a>
+                    </span>
+                </div>
+                <div class="content-bg clear topSubmit" style="margin:15px 0px!important;">
+                    <div class="fr">
+                        <a href="/branchcompany/showCompanyOrderManage" class="layui-btn nav-cancel">{$Think.lang.index_public_cancel}</a>
+                        <!--<button class="layui-btn nav-cancel allZan">暂存</button>-->
+                        <a href="/branchcompany/showCompanyOrderManage" lay-submit="" class="layui-btn nav-submit allSubmit">{$Think.lang.index_branchcompany_showCompanyOrderManage_addEdit_submit}</a>
+                    </div>
+                </div>
+                <form class="layui-form" action="">
+                    <div class='layui-block all-search-bg'>
+                        <br>
+                        <div class="layui-row layui-col-space20">
+                            <div class="layui-col-md8">
+                                <div class="layui-row">
+                                    <div class="layui-col-md4">
+                                        <div class="layui-form-item">
+                                            <label class="layui-form-label input-required">{$Think.lang.index_branchcompany_showCompanyOrderManage_retail}/{$Think.lang.index_branchcompany_showCompanyOrderManage_wholeSale}:</label>
+                                            <div class="layui-input-block">
+                                                <select name="company" lay-verify="required" id="wr">
+                                                    <option value=""></option>
+                                                    <option value="1">retail</option>
+                                                    <option value="2">wholesale</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="layui-col-md4">
+                                        <div class="layui-form-item">
+                                            <label class="layui-form-label input-required">{$Think.lang.index_branchcompany_showBranchProductManage_startDate}:</label><!--出发日期-->
+                                            <div class="layui-input-block">
+                                                <input type="text" id="begin_time" name="begin_time" lay-verify="required" class="layui-input sales-date" value="{$base_edit_result.begin_time}" placeholder="{$Think.lang.index_branchcompany_showBranchProductManage_startDate}" autocomplete="off">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="layui-col-md4">
+                                        <div class="layui-form-item">
+                                            <label class="layui-form-label input-required">{$Think.lang.index_branchcompany_showBranchProductManage_endDate}:</label>
+                                            <div class="layui-input-block">
+                                                <input type="text" id="end_time" name="end_time" lay-verify="required" class="layui-input sales-date" value="{$base_edit_result.end_time}" placeholder="{$Think.lang.index_branchcompany_showBranchProductManage_endDate}" autocomplete="off">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="layui-row">
+                                    <div class="layui-col-md4">
+                                        <div class="layui-form-item">
+                                            <label class="layui-form-label input-required">{$Think.lang.index_branchcompany_showCompanyOrderManage_addEdit_customerSource}:</label>
+                                            <div class="layui-input-block">
+                                                <select name="company" lay-verify="required" id="clientsource">
+                                                    <option value=""></option>
+                                                    <option value="1">toronto star</option>
+                                                    <option value="2">fairchild radio</option>
+                                                    <option value="3">repeat client</option>
+                                                    <option value="4">nexus web</option>
+                                                    <option value="5">singtao newspaper</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="layui-col-md8">
+                                        <div class="layui-form-item">
+                                            <label class="layui-form-label">{$Think.lang.index_branchcompany_showCompanyOrderManage_channelOf_distribution}:</label>
+                                            <div class="layui-input-block orderFroups">
+                                                <input type="radio" id='' name="orderGroup" value="1" lay-filter="branch" title="{$Think.lang.index_branchcompany_showCompanyOrderManage_agent}" checked>
+                                                <input type="radio" id='' name="orderGroup" value="2" lay-filter="branch" title="{$Think.lang.index_branchcompany_showCompanyOrderManage_addEdit_straightGuest}">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="layui-row">
+                                    <div class="layui-col-md8">
+                                        <div class="layui-form-item layui-form-text">
+                                            <label class="layui-form-label">{$Think.lang.index_public_mark}:</label>
+                                            <div class="layui-input-block">
+                                                <textarea name="orderRemark" id="description" placeholder="{$Think.lang.index_public_mark}" class="layui-textarea"></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <hr>
+                                <div id="foot_tab">
+
+                                </div>
+                            </div>
+                            <div class="layui-col-md4">
+                                <div class="layui-row" style="border-left:1px solid #e6e6e6;padding-left:20px">
+                                    <table class="layui-table top-right-table">
+                                        <colgroup>
+                                            <col width="50%">
+                                            <col width="50%">
+                                        </colgroup>
+                                        <tbody>
+                                            <tr>
+                                                <td>{$Think.lang.index_branchcompany_showCompanyOrderManage_creater}</td>
+                                                <td id="create_user_nameT">0</td>
+                                            </tr>
+                                            <tr>
+                                                <td>{$Think.lang.index_branchcompany_showCompanyOrderManage_addEdit_quotedPrice}</td>
+                                                <td id="price">0</td>
+                                            </tr>
+                                            <tr>
+                                                <td>{$Think.lang.index_branchcompany_showCompanyOrderManage_tax}</td>
+                                                <td id="tax">0</td>
+                                            </tr>
+                                            <tr>
+                                                <td>{$Think.lang.index_finance_showReceivableManage_receivable_money}</td>
+                                                <td id="total">0</td>
+                                            </tr>
+                                            <tr>
+                                                <td>{$Think.lang.index_branchcompany_showCompanyOrderManage_sales_received}</td>
+                                                <td id="sale_receivable">0</td>
+                                            </tr>
+                                            <tr>
+                                                <td>{$Think.lang.index_branchcompany_showCompanyOrderManage_financialReceived}</td>
+                                                <td id="finance_receivable">0</td>
+                                            </tr>
+                                            <tr>
+                                                <td>{$Think.lang.index_branchcompany_showCompanyOrderManage_sales_outstanding}</td>
+                                                <td id="miss_sale_receivable">0</td>
+                                            </tr>
+                                            <tr>
+                                                <td>{$Think.lang.index_branchcompany_showCompanyOrderManage_financial_uncollected}</td>
+                                                <td id="miss_finance_receivable">0</td>
+                                            </tr>
+                                            <tr>
+                                                <td>{$Think.lang.index_branchcompany_showCompanyOrderManage_addEdit_primeCost}</td>
+                                                <td id="cost">0</td>
+                                            </tr>
+                                            <tr>
+                                                <td>{$Think.lang.index_branchcompany_showCompanyOrderManage_exchange}</td>
+                                                <td id="huiduisunyi">0</td>
+                                            </tr>
+                                            <tr>
+                                                <td>{$Think.lang.index_branchcompany_showCompanyOrderManage_gross_profit}</td>
+                                                <td id="maoli">0</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-block" style="margin-top:25px!important;">
+                            <div class="all-button-center">
+                                <a  lay-submit="" class="layui-btn nav-submit" id="orderSubmit">{$Think.lang.index_branchcompany_showCompanyOrderManage_addEdit_submit}</a>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="content-bg content_tabs tabsList">
+                <div class="layui-tab layui-tab-brief" lay-filter="filtertab">
+                    <ul class="layui-tab-title status">
+                        <li class="layui-this">{$Think.lang.index_branchcompany_showCompanyOrderManage_addEdit_touristInformation}</li>
+                        <li>{$Think.lang.index_branchcompany_showCompanyOrderManage_addEdit_product}</li>
+                        <li>{$Think.lang.index_branchcompany_showCompanyOrderManage_addEdit_primeCost}</li>
+                        <li>{$Think.lang.index_branchcompany_showCompanyOrderManage_addEdit_quotedPrice}</li>
+                        <li>{$Think.lang.index_branchcompany_showCompanyOrderManage_addEdit_salesReceipts}</li>
+                    </ul>
+                    <div class="layui-tab-content">
+                        <!--游客信息--start-->
+                        <div class="layui-tab-item layui-show">
+                            <br>
+                            <div class='layui-form-item'>
+                                <a><button class="layui-btn nav-add layui-btn-sm">{$Think.lang.index_branchcompany_showCompanyOrderManage_bulkImport}</button></a><!--批量导入-->
+                                <a><button class="layui-btn nav-add layui-btn-sm" onclick="visitor('add')">{$Think.lang.index_branchcompany_showCompanyOrderManage_addEdit_addVisitor}</button></a>
+                                <span style='color:red'>*{$Think.lang.index_branchcompany_showCompanyOrderManage_addEdit_placeChange}</span>
+                            </div>
+                            <div class="table-nont user-manage">
+                                <table class="layui-table" style="table-layout:fixed">
+                                    <colgroup>
+                                        <col width="80">
+                                        <col width="80">
+                                        <col width="150">
+                                        <col width="150">
+                                        <col width="100">
+                                        <col width="120">
+                                        <col width="150">
+                                        <col width="170">
+                                        <col width="150">
+                                        <col width="150">
+                                        <col width="200">
+                                        <col width="200">
+                                        <col width="150">
+                                        <col width="100">
+                                        <col width="100">
+                                        <col width="170">
+                                    </colgroup>
+                                    <thead>
+                                    <tr>
+                                        <th>{$Think.lang.index_branchcompany_showCompanyOrderManage_orderNumber}</th>
+                                        <th>{$Think.lang.index_public_status}</th>
+                                        <th>{$Think.lang.index_branchcompany_showBranchProductManage_surname}</th>
+                                        <th>{$Think.lang.index_branchcompany_showBranchProductManage_name}</th>
+                                        <th>{$Think.lang.index_public_type}</th>
+                                        <th>{$Think.lang.index_branchcompany_showBranchProductManage_sex}</th>
+                                        <th>{$Think.lang.index_branchcompany_showBranchProductManage_nationality}</th>
+                                        <th>{$Think.lang.index_branchcompany_showBranchProductManage_passport}</th>
+                                        <th>{$Think.lang.index_branchcompany_showCompanyOrderManage_issueData}</th>
+                                        <th>{$Think.lang.index_branchcompany_showCompanyOrderManage_effectiveData}</th>
+                                        <th>{$Think.lang.index_branchcompany_showBranchProductManage_phone}</th>
+                                        <th>{$Think.lang.index_branchcompany_showBranchProductManage_email}</th>
+                                        <th>{$Think.lang.index_branchcompany_showBranchProductManage_language}</th>
+                                        <th>{$Think.lang.index_product_visitor_accommodationInformation}</th>
+                                        <th>{$Think.lang.index_public_flightInformation}</th>
+                                        <th>{$Think.lang.index_source_operation}</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody id="vTable">
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div><!--游客信息--end-->
+                        <!--产品--start-->
+                        <div class="layui-tab-item">
+                            <br>
+                            <div class='layui-form-item'>
+                                <a><button class="layui-btn nav-add layui-btn-sm" onclick="addProduct()">{$Think.lang.index_branchcompany_showCompanyOrderManage_addEdit_addProduct}</button></a>
+                                <a><button class="layui-btn nav-add layui-btn-sm" onclick="addOther()">{$Think.lang.index_branchcompany_showCompanyOrderManage_addOther}</button></a>
+                            </div>
+                            <div class="table-nont">
+                                <fieldset class="layui-elem-field layui-field-title">
+                                    <legend>{$Think.lang.index_branchcompany_showCompanyOrderManage_addEdit_product}</legend>
+                                </fieldset>
+                                <table class="layui-table" style="table-layout:fixed">
+                                    <thead>
+                                        <tr>
+                                            <th>{$Think.lang.index_branchcompany_showBranchProductManage_productNumber}</th>
+                                            <th>{$Think.lang.index_branchcompany_showBranchProductManage_productName}</th>
+                                            <th>{$Think.lang.index_branchcompany_showBranchProductManage_productType}</th>
+                                            <th>{$Think.lang.index_product_visitor_order_visitor}</th>
+                                            <th>{$Think.lang.index_source_operation}</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="productList">
+
+                                    </tbody>
+                                </table>
+                                <br>
+                                <fieldset class="layui-elem-field layui-field-title">
+                                    <legend>{$Think.lang.index_branchcompany_showCompanyOrderManage_other}</legend>
+                                </fieldset>
+                                <div id="other">
+
+                                </div>
+                            </div>
+                        </div><!--产品--end-->
+                        <!--成本--start-->
+                        <div class="layui-tab-item">
+                            <fieldset class="layui-elem-field layui-field-title">
+                                <legend>{$Think.lang.index_branchcompany_showCompanyOrderManage_addEdit_primeCost}</legend>
+                            </fieldset>
+                            <div class="table-nont">
+                                <table class="layui-table layui-form">
+                                    <thead>
+                                        <tr>
+                                            <th>{$Think.lang.index_branchcompany_showCompanyOrderManage_payableNumber}</th>
+                                            <th>{$Think.lang.index_branchcompany_showBranchProductManage_productName}</th>
+                                            <th>{$Think.lang.index_public_type}</th>
+                                            <th>{$Think.lang.index_product_PlanBooking_number}</th>
+                                            <th>{$Think.lang.index_public_supplier}</th>
+                                            <th>{$Think.lang.index_branchcompany_showDistributorManage_editCustomer}</th>
+                                            <th>{$Think.lang.index_finance_showMustPayManage_receivable_invoice_number}</th>
+                                            <th>{$Think.lang.index_finance_showMustPayManage_receivable_invoice_time}</th>
+                                            <th>{$Think.lang.index_branchcompany_showCompanyOrderManage_curreny}</th>
+                                            <th>{$Think.lang.index_branchcompany_showCompanyOrderManage_addEdit_primeCost}</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="costTable">
+
+                                    </tbody>
+                                </table>
+                            </div>
+                            <br><br>
+                            <div class="all-button-center">
+                                <button type="button" class="layui-btn nav-submit" onclick="costSubmit('cost')">{$Think.lang.index_branchcompany_showCompanyOrderManage_addEdit_preserve}</button>
+                            </div>
+                        </div><!--成本--end-->
+                        <!--报价--start-->
+                        <div class="layui-tab-item">
+                            <fieldset class="layui-elem-field layui-field-title">
+                                <legend>{$Think.lang.index_branchcompany_showCompanyOrderManage_addEdit_quotedPrice}</legend>
+                            </fieldset>
+                            <form class=" layui-form">
+                                <div class="table-nont">
+                                    <table class="layui-table">
+                                        <colgroup>
+                                            <col width="150">
+                                            <col width="150">
+                                            <col width="150">
+                                            <col width="100">
+                                            <col width="170">
+                                            <col width="150">
+                                            <col width="170">
+                                            <col width="100">
+                                            <col width="100">
+                                            <col width="100">
+                                            <col width="100">
+                                            <col width="120">
+                                            <col width="150">
+                                        </colgroup>
+                                        <thead>
+                                        <tr>
+                                            <th>{$Think.lang.index_finance_showReceivableManage_receivable_number}</th>
+                                            <th>{$Think.lang.index_public_type}</th>
+                                            <th>{$Think.lang.index_branchcompany_showBranchProductManage_productName}</th>
+                                            <th>{$Think.lang.index_product_PlanBooking_number}</th>
+                                            <th>{$Think.lang.index_branchcompany_showCompanyOrderManage_curreny}</th>
+                                            <th>{$Think.lang.index_finance_showReceivableManage_receivable_money}</th>
+                                            <th>{$Think.lang.index_branchcompany_showCompanyOrderManage_taxes}</th>
+                                            <th>GSTRate</th>
+                                            <th>PSTRate</th>
+                                            <th>HSTRate</th>
+                                            <th>OTX</th>
+                                            <th>{$Think.lang.index_branchcompany_showCompanyOrderManage_taxQuotation}</th>
+                                            <th>{$Think.lang.index_public_mark}</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody id="priceTable">
+
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <br><br>
+                                <div class="all-button-center">
+                                    <button type="button" lay-submit="" class="layui-btn nav-submit" onclick="costSubmit('price')">{$Think.lang.index_branchcompany_showCompanyOrderManage_addEdit_preserve}</button>
+                                </div>
+                            </form>
+                        </div><!--报价--end-->
+                        <!--销售收款--start-->
+                        <div class="layui-tab-item">
+                            <fieldset class="layui-elem-field layui-field-title">
+                                <legend>{$Think.lang.index_branchcompany_showCompanyOrderManage_addEdit_salesReceipts}</legend>
+                            </fieldset>
+                            <div class='layui-form-item'>
+                                <a><button class="layui-btn nav-add layui-btn-sm" data-disabled="false" id="buttonPut" onclick="put(this)">{$Think.lang.index_public_put}</button></a>
+                                <a><button class="layui-btn nav-add layui-btn-sm" id="buttonAdd" onclick="addSale(this)">{$Think.lang.index_public_add}</button></a>
+                            </div>
+                            <div class="table-nont">
+                                <table class="layui-table table-product layui-form" id="putTable">
+                                    <colgroup>
+                                        <col width="50">
+                                        <col width="130">
+                                        <col width="150">
+                                        <col width="170">
+                                        <col width="180">
+                                        <col width="240">
+                                        <col width="150">
+                                        <col width="150">
+                                        <col width="150">
+                                        <col width="150">
+                                        <col width="150">
+                                        <col width="80">
+                                    </colgroup>
+                                    <thead>
+                                    <tr>
+                                        <th><input type="checkbox" name="checkboxAll" lay-skin="primary" lay-filter="checkboxAllSale" ></th>
+                                        <th>{$Think.lang.index_branchcompany_showCompanyOrderManage_approvalStatu}</th>
+                                        <th>{$Think.lang.index_finance_showMustpayAllManage_payment_type_number}</th>
+                                        <th>{$Think.lang.index_branchcompany_showCompanyOrderManage_addEdit_timeOfPayment}</th>
+                                        <th>{$Think.lang.index_branchcompany_showCompanyOrderManage_paymentType}</th>
+                                        <th>{$Think.lang.index_branchcompany_showCompanyOrderManage_addEdit_payment}</th>
+                                        <th>{$Think.lang.index_product_showRouteTemplateManage_resources_currency}</th>
+                                        <th>{$Think.lang.index_branchcompany_showCompanyOrderManage_corresponding_receivableNumber}</th>
+                                        <th>{$Think.lang.index_branchcompany_showCompanyOrderManage_addEdit_salesReceiptsT}</th>
+                                        <th>{$Think.lang.index_branchcompany_showCompanyOrderManage_creater}</th>
+                                        <th>{$Think.lang.index_public_mark}</th>
+                                        <th>{$Think.lang.index_source_operation}</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody id="salesTable">
+
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div id="receipt_box"></div>
+                        </div><!--销售收款--end-->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="layui-footer">
+        <!-- 底部固定区域 -->
+        © layui.com - 底部固定区域
+    </div>
+</div>
+<!--选择渠道商时-->
+<script id="qudao" type="text/html">
+    <div class="layui-row">
+        <div class="layui-col-md4">
+            <div class="layui-form-item layui-form-text">
+                <label class="layui-form-label input-required">{$Think.lang.index_branchcompany_showCompanyOrderManage_channel}:</label>
+                <div class="layui-input-block">
+                    <select name="company" lay-verify="required" id="agent" lay-search="" lay-filter="agent">
+                        <option value=""></option>
+
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="layui-col-md4">
+            <div class="layui-form-item layui-form-text">
+                <label class="layui-form-label">{$Think.lang.index_branchcompany_showDistributorManage_associateType}:</label>
+                <div class="layui-input-block">
+                    <select name="company" disabled id="agentType">
+                        <option value=""></option>
+                        <option value="1">assembled</option>
+                        <option value="2">not assembled</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="layui-col-md4">
+            <div class="layui-form-item layui-form-text">
+                <label class="layui-form-label">{$Think.lang.index_branchcompany_showBranchProductManage_language}:</label>
+                <div class="layui-input-block">
+                    <input type="text" class="layui-input" data-value="" value="" disabled id="language" />
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="layui-row">
+        <div class="layui-col-md4">
+            <div class="layui-form-item layui-form-text">
+                <label class="layui-form-label">{$Think.lang.index_branchcompany_showCompanyOrderManage_addEdit_country}:</label>
+                <div class="layui-input-block">
+                    <input type="text" class="layui-input" data-value="" value="" disabled id="country" />
+                </div>
+            </div>
+        </div>
+        <div class="layui-col-md4">
+            <div class="layui-form-item layui-form-text">
+                <label class="layui-form-label">{$Think.lang.index_branchcompany_showCompanyOrderManage_addEdit_provincialState}:</label>
+                <div class="layui-input-block">
+                    <input type="text" class="layui-input" data-value="" value="" disabled id="stateProvince" />
+                </div>
+            </div>
+        </div>
+        <div class="layui-col-md4">
+            <div class="layui-form-item layui-form-text">
+                <label class="layui-form-label">{$Think.lang.index_branchcompany_showDistributorManage_city}:</label>
+                <div class="layui-input-block">
+                    <input type="text" class="layui-input" data-value="" value="" disabled id="city" />
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="layui-row">
+        <div class="layui-col-md4">
+            <div class="layui-form-item layui-form-text">
+                <label class="layui-form-label">{$Think.lang.index_branchcompany_showDistributorManage_contacts}:</label>
+                <div class="layui-input-block">
+                    <input type="text" class="layui-input" data-value="" value="" disabled id="contect" />
+                </div>
+            </div>
+        </div>
+        <div class="layui-col-md4">
+            <div class="layui-form-item layui-form-text">
+                <label class="layui-form-label">{$Think.lang.index_branchcompany_showCompanyOrderManage_addEdit_tel}:</label>
+                <div class="layui-input-block">
+                    <input type="text" class="layui-input" data-value="" value="" disabled id="phone" />
+                </div>
+            </div>
+        </div>
+        <div class="layui-col-md4">
+            <div class="layui-form-item layui-form-text">
+                <label class="layui-form-label">{$Think.lang.index_branchcompany_showBranchProductManage_email}:</label>
+                <div class="layui-input-block">
+                    <input type="text" class="layui-input" data-value="" value="" disabled id="email" />
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="layui-row">
+        <div class="layui-col-md4">
+            <div class="layui-form-item layui-form-text">
+                <label class="layui-form-label">{$Think.lang.index_branchcompany_showDistributorManage_zipCode}:</label>
+                <div class="layui-input-block">
+                    <input type="text" class="layui-input" data-value="" value="" disabled id="zipCode" />
+                </div>
+            </div>
+        </div>
+        <div class="layui-col-md8">
+            <div class="layui-form-item layui-form-text">
+                <label class="layui-form-label">{$Think.lang.index_branchcompany_showDistributorManage_address}:</label>
+                <div class="layui-input-block">
+                    <textarea class="layui-textarea" data-value="" disabled id="address" style="min-height:72px!important;"></textarea>
+                </div>
+            </div>
+        </div>
+    </div>
+</script>
+<script id="zhike" type="text/html">
+    <div class="layui-row">
+        <div class="layui-col-md4">
+            <div class="layui-form-item layui-form-text">
+                <label class="layui-form-label">{$Think.lang.index_branchcompany_showDistributorManage_contacts}:</label>
+                <div class="layui-input-block">
+                    <input type="text" class="layui-input" data-value="" value="" id="twoContect" />
+                </div>
+            </div>
+        </div>
+        <div class="layui-col-md4">
+            <div class="layui-form-item layui-form-text">
+                <label class="layui-form-label">{$Think.lang.index_branchcompany_showCompanyOrderManage_addEdit_tel}:</label>
+                <div class="layui-input-block">
+                    <input type="text" class="layui-input" data-value="" value="" id="twoTel" />
+                </div>
+            </div>
+        </div>
+        <div class="layui-col-md4">
+            <div class="layui-form-item layui-form-text">
+                <label class="layui-form-label">{$Think.lang.index_branchcompany_showBranchProductManage_email}:</label>
+                <div class="layui-input-block">
+                    <input type="text" class="layui-input" data-value="" value="" id="twoEmail" />
+                </div>
+            </div>
+        </div>
+    </div>
+</script>
+<script id="visitorTable" type="text/html">
+    {{#  layui.each(d, function(index, item){ }}
+    <tr data-value="{{index}}">
+        <td class="tdOrder">{{item.company_order_customer_id?item.company_order_customer_id:''}}</td>
+        <td>
+            {{#  if(item.flight_info&&item.flight_info.length>0){ }}
+            {$Think.lang.index_branchcompany_showCompanyOrderManage_addEdit_unconfirmed}
+            {{#  } else { }}
+            {$Think.lang.index_branchcompany_showCompanyOrderManage_addEdit_zhanwei}
+            {{#  } }}
+        </td>
+        <td>{{item.customer_first_name?item.customer_first_name:''}}</td>
+        <td>{{item.customer_last_name?item.customer_last_name:''}}</td>
+        <td>{{item.customer_type?types(item.customer_type):''}}</td>
+        <td>{{item.gender?genders(item.gender):''}}</td>
+        <td>{{item.country_name?item.country_name:''}}</td>
+        <td class="passport">{{item.passport_number?item.passport_number:''}}</td>
+        <td>{{item.issuing_date?date('Y-m-d',item.issuing_date):''}}</td>
+        <td>{{item.term_of_validity?date('Y-m-d',item.term_of_validity):''}}</td>
+        <td>{{item.phone?item.phone:''}}</td>
+        <td>{{item.email?item.email:''}}</td>
+        <td>{{item.language_name?item.language_name:''}}</td>
+        <td><button class="layui-btn layui-btn-sm hover-look layui-btn-primary" onclick="hotelLook(this)">{$Think.lang.index_branchcompany_showBranchProductManage_look}</button></td>
+        <td><button class="layui-btn layui-btn-sm hover-look layui-btn-primary" onclick="flightLook(this)">{$Think.lang.index_branchcompany_showBranchProductManage_look}</button></a></td>
+        <td>
+            {{#  if(item.flight_info&&item.flight_info.length>0){ }}
+            <button class="layui-btn layui-btn-sm hover-edit layui-btn-primary" onclick="visitor('edit',this)" company_order_customer="{$vo.company_order_customer_id}">{$Think.lang.index_public_update}</button>
+            {{#  } }}
+            <button class="layui-btn layui-btn-sm nav-del layui-btn-primary" onclick="delete_customer(this);">{$Think.lang.index_public_del}</button>
+        </td>
+    </tr>
+    {{#  }); }}
+</script>
+<!--住宿信息-->
+<script id="hotelLook" type="text/html">
+    <div class="table-nont" style="max-height:150px;overflow-y: auto">
+        <table class="layui-table">
+            <thead>
+            <tr>
+                <th>{$Think.lang.index_product_visitor_roomNumber}</th><th>{$Think.lang.index_source_showHotelSource_room_type}</th><th>{$Think.lang.index_product_visitor_checkIn}</th><th>{$Think.lang.index_product_visitor_checkOut}</th>
+            </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>{{d.room_code?d.room_code:'-'}}</td>
+                    <td>{{d.room_type?roomType(d.room_type):'-'}}</td>
+                    <td>{{d.check_in?roomIn(d.check_in):'-'}}</td>
+                    <td>{{d.check_on?roomOn(d.check_on):'-'}}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</script>
+<!--航班信息-->
+<script id="flightLook" type="text/html">
+    <div class="table-nont" style="max-height:150px;overflow-y: auto">
+        <table class="layui-table">
+            <thead>
+            <tr>
+                <th>{$Think.lang.index_finance_showReceivableManage_flight}</th><th>{$Think.lang.index_branchcompany_showCompanyOrderManage_addEdit_flightStartTime}</th><th>{$Think.lang.index_branchcompany_showCompanyOrderManage_addEdit_flightEndTime}</th><th>{$Think.lang.index_public_transportMachine}</th><th>{$Think.lang.index_public_startPlace}</th><th>{$Think.lang.index_public_endPlace}</th>
+            </tr>
+            </thead>
+            <tbody>
+            {{#  if(d.length>0){ }}
+                {{#  layui.each(d, function(index, item){ }}
+                <tr>
+                    <td>{{item.flight_code?item.flight_code:'-'}}</td>
+                    <td>{{item.flight_begin_time?date('H:i',item.flight_begin_time):'-'}}</td>
+                    <td>{{item.flight_end_time?date('H:i',item.flight_end_time):'-'}}</td>
+                    <td>{{item.flight_type?flightType(item.flight_type):'-'}}</td>
+                    <td>{{item.start_place?item.start_place:'-'}}</td>
+                    <td>{{item.end_place?item.end_place:'-'}}</td>
+                </tr>
+                {{#  }); }}
+            {{#  } else { }}
+                <tr>
+                    <td>-</td>
+                    <td>-</td>
+                    <td>-</td>
+                    <td>-</td>
+                    <td>-</td>
+                    <td>-</td>
+                </tr>
+            {{#  } }}
+            </tbody>
+        </table>
+    </div>
+</script>
+<!--添加其他-->
+<script id="addOther" type="text/html">
+    <br>
+    <form class="layui-form saleForm">
+        <div class="layui-form-item">
+            <label class="layui-form-label">{$Think.lang.index_branchcompany_showBranchProductManage_productType}：</label>
+            <div class="layui-input-block product-other">
+                {$Think.lang.index_branchcompany_showCompanyOrderManage_other}
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label input-required">{$Think.lang.index_public_supplier}：</label>
+            <div class="layui-input-block product-other" data-values="12">
+                <select id="supplierId" lay-verify="required">
+                    <option value=""></option>
+
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label input-required">{$Think.lang.index_branchcompany_showBranchProductManage_productName}：</label>
+            <div class="layui-input-block">
+                <input type="text" id="diyName" name="productName" lay-verify="required" placeholder="{$Think.lang.index_branchcompany_showBranchProductManage_productName}" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label input-required">{$Think.lang.index_product_showRouteTemplateManage_resources_currency}：</label>
+            <div class="layui-input-block">
+                <select id="costCurrencyId" name="productCurrency" lay-verify="required" class="priceCurrey">
+                    <option value="">{$Think.lang.index_public_select}</option>
+
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label input-required">{$Think.lang.index_branchcompany_showCompanyOrderManage_addEdit_primeCost}：</label>
+            <div class="layui-input-block">
+                <input type="text" id="diyCost" name="productProme" lay-verify="required" placeholder="{$Think.lang.index_branchcompany_showCompanyOrderManage_addEdit_primeCost}" class="layui-input">
+            </div>
+        </div>
+        <br>
+        <div class="all-button-center">
+            <a class="layui-btn nav-submit" lay-submit="" onclick="otherSubmit()">{$Think.lang.index_branchcompany_showCompanyOrderManage_addEdit_submit}</a>
+            <button type="button" class="layui-btn layui-btn-primary" onclick="popBack()">{$Think.lang.index_public_back}</button>
+        </div>
+    </form>
+</script>
+
+<!--添加分公司弹出窗-->
+<script id="branchPop" type="text/html">
+    <form class="layui-form">
+        <div class='layui-input-inline'>
+            <select name="chooseCompany" id="branch_product_type_id" lay-search>
+
+            </select>
+        </div>
+        <div class='layui-input-inline'>
+            <input type="text" id="branch_product_number" name="source_number_search"  placeholder="{$Think.lang.index_branchcompany_showBranchProductManage_branchProduct_number}" class="layui-input">
+        </div>
+        <div class='layui-input-inline'>
+            <input type="text" id="branch_product_name" name="source_name_search"  placeholder="{$Think.lang.index_branchcompany_showBranchProductManage_branchProduct_name}" class="layui-input">
+        </div>
+        <div class='layui-input-inline'>
+            <input type="text" id="create_user_name" name="source_name_search"  placeholder="{$Think.lang.index_branchcompany_showBranchProductManage_userName}" class="layui-input">
+        </div>
+        <div class='layui-input-inline'>
+            <a href="javascript:void(0);" class="layui-btn nav-submit" onclick="team()">{$Think.lang.index_public_search}</a>
+        </div>
+    </form>
+    <br>
+    <div class="lay-tab-box">
+        <div class="table-nont">
+            <table class="layui-table layui-form" id="teamTable">
+                <colgroup>
+                    <col width="50">
+                    <col width="180">
+                    <col width="180">
+                    <col width="160">
+                    <col width="120">
+                    <col width="120">
+                    <col width="120">
+                </colgroup>
+                <thead>
+                <tr>
+                    <th><input type="checkbox" name="branchcompanyCheckboxTable" lay-skin="primary" lay-filter="poperCheckboxAll"></th>
+                    <th>{$Think.lang.index_branchcompany_showBranchProductManage_branchProduct_number}</th>
+                    <th>{$Think.lang.index_branchcompany_showBranchProductManage_branchProduct_name}</th>
+                    <th>{$Think.lang.index_branchcompany_showBranchProductTypeManage_branchCompanyProductType}</th>
+                    <th>{$Think.lang.index_branchcompany_showBranchProductManage_startDate}</th>
+                    <th>{$Think.lang.index_branchcompany_showBranchProductManage_endDate}</th>
+                    <th>{$Think.lang.index_public_price}</th>
+                </tr>
+                </thead>
+                <tbody id="team_table">
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+</script>
+<script id="team_table_pop" type="text/html">
+    {{#  layui.each(d, function(index, item){ }}
+    <tr>
+        {{#  if(item.team_product_array.length>0){ }}
+        <td rowspan="{{item.zum+1}}"><input type="checkbox" name="productCheckboxTable" lay-skin="primary"></td>
+        {{#  } else { }}
+        <td><a><input type="checkbox" name="productCheckboxTable" lay-skin="primary"></a></td>
+        {{#  } }}
+        <td class="number sameNumber">{{item.branch_product_number}}</td>
+        <td class="name">{{item.branch_product_name}}</td>
+        <td class="types">{{item.branch_product_type_name}}</td>
+        <td>{{date('Y-m-d',item.branch_product_begin_time)}}</td>
+        <td>{{date('Y-m-d',item.branch_product_end_time)}}</td>
+        <td>{{item.price_currency_name}} {{d.qudao==1?item.distributor_price:d.qudao==2?item.customer_price:''}}</td>
+    </tr>
+    {{#  if(item.team_product_array.length>0){ }}
+        {{#  layui.each(item.team_product_array, function(indexs, items){ }}
+            {{#  layui.each(items.own_expens_source_array, function(indexss, itemss){ }}
+            <tr>
+                <td class="number"><a>{{itemss.source_number}}</a></td>
+                <td class="name">{{itemss.source_name}}</td>
+                <td>-</td>
+                <td>-</td>
+                <td>-</td>
+                <td>{{itemss.price_currency_name}} {{d.qudao==1?itemss.source_distributor_price:d.qudao==2?itemss.source_customer_price:''}}</td>
+            </tr>
+            {{#  }); }}
+        {{#  }); }}
+    {{#  } }}
+    {{#  if(item.source_array.length>0){ }}
+        {{#  layui.each(item.source_array, function(indexs, items){ }}
+            {{#  if(items.supplier_type_id==11){ }}
+                <tr>
+                    <td class="number"><a>{{items.source_number}}</a></td>
+                    <td class="name">{{items.source_name}}</td>
+                    <td>-</td>
+                    <td>-</td>
+                    <td>-</td>
+                    <td>{{items.price_currency_name}} {{d.qudao==1?items.source_distributor_price:d.qudao==2?items.source_customer_price:''}}</td>
+                </tr>
+            {{#  } }}
+        {{#  }); }}
+    {{#  } }}
+    {{#  }); }}
+</script>
+<!--产品列表tr-->
+<script id="productTr" type="text/html">
+    {{#  layui.each(d, function(index, item){ }}
+    <tr data-parent="parent">
+        <td>{{item.branch_product_number}}</td>
+        <td>{{item.branch_product_name}}</td>
+        <td></td>
+        <td><button class="layui-btn layui-btn-sm visitorList3 hover-edit layui-btn-primary" onclick="productLook(this,'product')">查看</button></td>
+        <td rowspan="{{item.children.length+1}}" data-ordernumber="{{item.company_order_number}}" data-productnumber="{{item.branch_product_number}}"><button class="layui-btn layui-btn-sm visitorList3 hover-edit layui-btn-primary" onclick="otherDel(this,'product')">{$Think.lang.index_public_del}</button></td>
+    </tr>
+    {{#  if(item.children&&item.children.length>0){ }}
+        {{#  layui.each(item.children, function(indexs, items){ }}
+        <tr data-parent="parent">
+            <td>{{items.source_number}}</td>
+            <td>{{items.source_name}}</td>
+            <td></td>
+            <td data-values="{{index}}" data-childindex="{{indexs}}" data-productid="{{items.company_order_product_source_id}}"><button class="layui-btn layui-btn-sm visitorList3 hover-edit layui-btn-primary" onclick="productLook(this,'children')">{$Think.lang.index_branchcompany_showBranchProductManage_look}</button></td>
+        </tr>
+        {{#  }); }}
+    {{#  } }}
+    {{#  }); }}
+</script>
+<!--产品其他tr-->
+<script id="productOther" type="text/html">
+    <table class="layui-table">
+        <thead>
+            <tr>
+                <th>{$Think.lang.index_public_supplier}</th>
+                <th>{$Think.lang.index_branchcompany_showBranchProductManage_productName}</th>
+                <th>{$Think.lang.index_branchcompany_showCompanyOrderManage_addEdit_primeCost}</th>
+                <th>{$Think.lang.index_product_visitor_order_visitor}</th>
+                <th>{$Think.lang.index_source_operation}</th>
+            </tr>
+        </thead>
+        <tbody>
+        {{#  layui.each(d, function(index, item){ }}
+            <tr>
+                <td>{{item.supplier_name}}</td>
+                <td>{{item.diy_name}}</td>
+                <td>{{item.cost_currency_name}}{{item.diy_cost}}</td>
+                <td data-values="{{index}}" data-childindex="{{index}}" data-productid="{{item.company_order_product_diy_id}}"><button class="layui-btn layui-btn-sm visitorList3 hover-edit layui-btn-primary" onclick="productLook(this,'other')">{$Think.lang.index_branchcompany_showBranchProductManage_look}</button></td>
+                <td data-diynumber="{{item.company_order_product_diy_number}}"><button class="layui-btn layui-btn-sm visitorList3 hover-edit layui-btn-primary" onclick="otherDel(this,'other')">{$Think.lang.index_public_del}</button></td>
+            </tr>
+        {{#  }); }}
+        </tbody>
+    </table>
+</script>
+<!--查看游客-->
+<script id="visitorListTips" type="text/html">
+    <form class="layui-form visitorListTips">
+        {{#  if(d.lei=='children'||d.lei=='other'){ }}
+        <div><input type="checkbox" name="productCheckboxAll" title="{$Think.lang.index_finance_showReceivableManage_choose_all}" lay-skin="primary" lay-filter="checkboxAll"></div>
+        {{#  } }}
+        <br>
+        <div class="checkboxList">
+            {{#  layui.each(d, function(index, item){ }}
+                {{#  if(d.lei=='children'||d.lei=='other'){ }}
+                    <input type="checkbox" name="productCheckbox" data-selected="{{item.company_order_customer_id}}" title="{{item.customer_name}}" data-name="{{item.company_order_customer_id}}" lay-skin="primary" class="productCheckbox">
+                {{#  } else { }}
+                    <span class="listWidth">{{item.customer_name}}</span>
+                {{#  } }}
+            {{#  }); }}
+        </div>
+        {{#  if(d.lei=='children'||d.lei=='other'){ }}
+            <div class="all-button-center visitorBottom">
+                <a data-stat="{{d.lei}}" data-vid="{{d.productId}}" data-oid="{{d.productId}}" class="layui-btn nav-submit" lay-submit="" onclick="visitorSubmit(this)">{$Think.lang.index_public_ok}</a>
+                <button type="button" class="layui-btn layui-btn-primary" onclick="popBack()">{$Think.lang.index_public_back}</button>
+            </div>
+        {{#  } }}
+    </form>
+</script>
+<!--成本table-->
+<script id="costTbody" type="text/html">
+    {{#  layui.each(d.company_order_product_team, function(index, item){ }}
+    <tr data-number="1" data-id="{{item.company_order_product_team_id}}" data-values="{{index}}">
+        <td>{{item.cope_number==null?'':item.cope_number}}</td>
+        <td>{{item.team_product_name}}</td>
+        <td>{$Think.lang.index_product_ShowPlanTour_resources_teamProduct}</td>
+        <td>{{item.customer_info.length}}</td>
+        <td>{{item.supplier_name}}</td>
+        <td>{{item.team_product_company_name}}</td>
+        <td class="invoice_number"><input type="text" class="layui-input costNumber" value="{{item.invoice_number!=null?item.invoice_number:''}}" /></td>
+        <td class="invoice_time"><input type="text" class="layui-input sales-date" value="{{item.invoice_time==null?'':date('Y-m-d',item.invoice_time)}}" /></td>
+        {{#  if(item.is_own_company==2){ }}
+        <td currencyid="{{item.cost_currency_id}}">{{item.cost_currency_name}}</td>
+        <td class="team_product_price">{{item.team_product_cost}}</td>
+        {{#  } else { }}
+        <td>
+            <select class="priceCurrey">
+                <option value=""></option>
+            </select>
+        </td>
+        <td class="source_cost"><input type="text" value="{{item.team_product_cost}}" class="layui-input" /></td>
+        {{#  } }}
+
+    </tr>
+    {{#  }); }}
+
+    {{#  layui.each(d.company_order_product_source, function(index, item){ }}
+    <tr data-number="2" data-id="{{item.company_order_product_source_id}}" data-values="{{index}}">
+        <td>{{item.cope_number==null?'':item.cope_number}}</td>
+        <td>{{item.source_name}}</td>
+        <td>{{supplier(item.supplier_type_id)}}</td>
+        <td>{{item.customer_info.length}}</td>
+        <td>{{item.supplier_name}}</td>
+        <td>{{item.source_company_name==null?'':item.source_company_name}}</td>
+        <td class="invoice_number"><input type="text" class="layui-input costNumber" value="{{item.invoice_number!=null?item.invoice_number:''}}" /></td>
+        <td class="invoice_time"><input type="text" class="layui-input sales-date" value="{{item.invoice_time==null?'':date('Y-m-d',item.invoice_time)}}" /></td>
+        {{#  if(item.is_own_company==2){ }}
+            <td currencyid="{{item.cost_currency_id}}">{{item.cost_currency_name}}</td>
+            <td class="source_price">{{item.source_cost}}</td>
+        {{#  } else { }}
+            <td>
+                <select class="priceCurrey">
+                    <option value=""></option>
+                </select>
+            </td>
+            <td class="source_cost"><input type="text" value="{{item.source_cost}}" class="layui-input" /></td>
+        {{#  } }}
+    </tr>
+    {{#  }); }}
+    {{#  layui.each(d.company_order_product_diy, function(index, item){ }}
+    <tr data-number="3" data-id="{{item.company_order_product_diy_number}}" data-values="{{index}}">
+        <td>{{item.cope_number==null?'':item.cope_number}}</td>
+        <td>{{item.diy_name}}</td>
+        <td>{$Think.lang.index_branchcompany_showCompanyOrderManage_other}</td>
+        <td>{{item.customer_info.length}}</td>
+        <td>{{item.supplier_name==null?'':item.supplier_name}}</td>
+        <td>{{item.diy_company_name==null?'':item.diy_company_name}}</td>
+        <td class="invoice_number"><input type="text" class="layui-input costNumber" value="{{item.invoice_number!=null?item.invoice_number:''}}" /></td>
+        <td class="invoice_time"><input type="text" class="layui-input sales-date" value="{{item.invoice_time==null?'':date('Y-m-d',item.invoice_time)}}" /></td>
+        <td>
+            <select class="priceCurrey">
+                <option value=""></option>
+            </select>
+        </td>
+        <td class="diy_cost"><input type="text" value="{{item.diy_cost}}" class="layui-input" /></td>
+    </tr>
+    {{#  }); }}
+</script>
+<!--报价-->
+<script id="priceTr" type="text/html">
+    {{#  layui.each(d, function(index, item){ }}
+    <tr data-id="{{item.company_order_product_id}}" data-num="{{index}}">
+        <td>{{item.receivable_number==null?'':item.receivable_number}}</td>
+        <td>{$Think.lang.index_branchcompany_showBranchProductManage_branchProduct}</td>
+        <td>{{item.branch_product_name}}</td>
+        <td>{{item.customer_info.length}}</td>
+        <td>
+            <select class="priceCurrey" lay-verify="required">
+                <option value=""></option>
+            </select>
+        </td>
+        <td class="sourcePrice" price="{{item.branch_product_price}}"><input type="text" lay-verify="required" class="layui-input" value="{{item.branch_product_price==null?'0.00':item.branch_product_price}}" onchange="changes(this)" /></td>
+        <td>
+            <select class="priceTax" lay-filter="price">
+                <option value=""></option>
+            </select>
+        </td>
+        <td class="gstrate"><span>{{item.gstrate==null?'0':item.gstrate}}</span>%</td>
+        <td class="pstrate"><span>{{item.pstrate==null?'0':item.pstrate}}</span>%</td>
+        <td class="hstrate"><span>{{item.hstrate==null?'0':item.hstrate}}</span>%</td>
+        <td class="otx"><span>{{item.otx==null?'0':item.otx}}</span>%</td>
+        <td class="priceBeforeTax">{{item.price_before_tax==null?'0.00':item.price_before_tax}}</td>
+        <td><textarea class="layui-textarea remark">{{item.remark==null?'':item.remark}}</textarea></td>
+    </tr>
+    {{#  if(item.children.length>0){ }}
+        {{#  layui.each(item.children, function(indexs, items){ }}
+            {{#  if(items.is_receivable_company==2){ }}
+                <tr data-id="{{items.company_order_product_source_id}}" data-children="{{indexs}}">
+                    <td>{{items.cope_number==null?'':items.cope_number}}</td>
+                    <td>{$Think.lang.index_finance_showReceivableManage_ownexpense}</td>
+                    <td>{{items.source_name}}</td>
+                    <td>{{items.customer_info.length}}</td>
+                    <td>
+                        <select class="priceCurrey" lay-verify="required">
+                            <option value=""></option>
+                        </select>
+                    </td>
+                    <td class="sourcePrice" price="{{items.source_price}}"><input type="text" lay-verify="required" class="layui-input" value="{{items.source_price==null?'0.00':items.source_price}}" onchange="changes(this)" /></td>
+                    <td>
+                        <select class="priceTax" lay-filter="price">
+                            <option value=""></option>
+                        </select>
+                    </td>
+                    <td class="gstrate"><span>{{items.gstrate==null?'0':items.gstrate}}</span>%</td>
+                    <td class="pstrate"><span>{{items.pstrate==null?'0':items.pstrate}}</span>%</td>
+                    <td class="hstrate"><span>{{items.hstrate==null?'0':items.hstrate}}</span>%</td>
+                    <td class="otx"><span>{{items.otx==null?'0':items.otx}}</span>%</td>
+                    <td class="priceBeforeTax">{{items.price_before_tax==null?'0.00':items.price_before_tax}}</td>
+                    <td><textarea class="layui-textarea">{{items.remark==null?'':items.remark}}</textarea></td>
+                </tr>
+            {{#  } }}
+        {{#  }); }}
+    {{#  } }}
+    {{#  }); }}
+</script>
+<!--添加销售收款-->
+<script id="addSales" type="text/html">
+    <form class="layui-form">
+        <br>
+        <div class="layui-row">
+            <div class="layui-col-md9 layui-col-md-offset1">
+                <div class="layui-form-item">
+                    <label class="layui-form-label input-required">{$Think.lang.index_branchcompany_showCompanyOrderManage_corresponding_receivableNumber}：</label>
+                    <div class="layui-input-block">
+                        <textarea id="saleNumber" name="saleNumber" lay-verify="required" placeholder="" class="layui-input"></textarea>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">{$Think.lang.index_branchcompany_showCompanyOrderManage_addEdit_timeOfPayment}：</label>
+                    <div class="layui-input-block">
+                        <input type="text" id="saleDate" name="saleTime" placeholder="Y-m-d" class="layui-input sales-date">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label input-required">{$Think.lang.index_branchcompany_showCompanyOrderManage_paymentType}：</label>
+                    <div class="layui-input-block">
+                        <select name="saleStage" id="saleStage" lay-verify="required">
+                            <option value="">{$Think.lang.index_public_select}</option>
+                            <option value="1">Balance</option>
+                            <option value="2">Deposit</option>
+                            <option value="3">Fullpmt</option>
+                            <option value="4">Gratuities</option>
+                            <option value="5">Insurance</option>
+                            <option value="6">Partpmt</option>
+                            <option value="7">Rebate</option>
+                            <option value="8">Tkt</option>
+                            <option value="9">Visa</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label input-required">{$Think.lang.index_branchcompany_showCompanyOrderManage_addEdit_payment}：</label>
+                    <div class="layui-input-block">
+                        <select name="saleMode" id="saleMode" lay-verify="required">
+                            <option value="">{$Think.lang.index_public_select}</option>
+                            <option value="1">cash</option>
+                            <option value="2">check</option>
+                            <option value="3">debit card</option>
+                            <option value="4">credit card(mc)</option>
+                            <option value="5">credit card(vs)</option>
+                            <option value="6">credit card(ax)</option>
+                            <option value="7">direct depsit</option>
+                            <option value="8">others</option>
+                        </select>
+                    </div>
+                </div>
+                <input type="hidden" id="salesRMB" /><!--币种-->
+                <input type="hidden" id="zum" /><!--选择应收编号的总价-->
+                <div class="layui-form-item">
+                    <label class="layui-form-label input-required">{$Think.lang.index_branchcompany_showCompanyOrderManage_salesReceived_amount}：</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="salesPMT" class="layui-input" lay-verify="required" id="salePMT" />
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">{$Think.lang.index_public_mark}：</label>
+                    <div class="layui-input-block">
+                        <textarea name="remark" class="layui-textarea" id="saleRemark"></textarea>
+                    </div>
+                </div>
+                <br>
+                <div class="all-button-center">
+                    <a class="layui-btn nav-submit" lay-submit="" onclick="addSales()">{$Think.lang.index_public_ok}</a>
+                    <button type="button" class="layui-btn layui-btn-primary" onclick="popBack()">{$Think.lang.index_public_back}</button>
+                </div>
+            </div>
+        </div>
+    </form>
+</script>
+<!--打印弹出-->
+<script id="put" type="text/html">
+    <form class="layui-form">
+        <div class="layui-row">
+            <div class="layui-col-md10">
+                <label class="layui-form-label">{$Think.lang.index_branchcompany_showCompanyOrderManage_invoiceTitle}:</label>
+                <div class="layui-input-block">
+                    <select name="put" id="bill_template_id">
+                        <option value="">-{$Think.lang.index_public_select}-</option>
+
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="layui-row">
+            <div class="layui-col-md10 all-button-right" id="putCheckbox">
+                <input type="checkbox" name="putCheckbox" value="1" title="{$Think.lang.index_branchcompany_showCompanyOrderManage_default_header}" lay-skin="primary" checked id="default_bill_template_id" />
+            </div>
+        </div>
+    </form>
+</script>
+<!--发票-->
+<script id="receipt" type="text/html">
+    <div id="bill_template_title_pic">
+        {{#  if(d.bill_template_title_pic !=null){ }}
+        <img src="{{d.bill_template_title_pic}}" width="100%" height="110px" />
+        {{#  } }}
+    </div>
+    <div class="receipt_message clear">
+        <div class="fl">
+            <div>To:</div>
+            <div>{{fn(d.content_name)}}</div>
+            <div>{{fn(d.city_name)}}</div>
+            <div>{{fn(d.country_name)}}</div>
+            <div>{{fn(d.tel)}}</div>
+            <div>{{fn(d.email)}}</div>
+        </div>
+        <div class="fl">
+            <div>Invoice</div>
+            <div>No:{{fn(d.receivable_voucher)}}</div>
+            <div>Booking Date:{{fn(d.create_time)}}</div>
+            <div>Product Code:{{fn(d.branch_product_name)}}</div>
+            <div>Tour Code:{{fn(d.branch_product_number)}}</div>
+            <div>Depart Date:{{fn(d.begin_time)}}</div>
+            <div>Sales agent:{{fn(d.create_user_name)}}</div>
+            <div>Description:{{fn(d.description)}}</div>
+        </div>
+    </div>
+    <!--游客信息-->
+    <div class="tourist_information">
+        <div class="bill_tourist_title">
+            <span>Clients Name List:</span>
+            <span>Person(s):{{fn(d.customer_count)}}</span>
+        </div>
+        <table class="layui-table">
+            <thead>
+            <tr>
+                <th>SN</th>
+                <th>Gender</th>
+                <th>FirstName</th>
+                <th>LastName</th>
+                <th>RoomType</th>
+            </tr>
+            </thead>
+            <tbody>
+            {{#  layui.each(d.customer_info, function(index, item){ }}
+            <tr>
+                <td>{{fn(item.company_order_lineup_number)}}</td>
+                <td>{{item.gender==1?$Think.lang.index_branchcompany_showBranchProductManage_boy:item.gender==2?$Think.lang.index_branchcompany_showBranchProductManage_girl:'--'}}</td>
+                <td>{{fn(item.customer_first_name)}}</td>
+                <td>{{fn(item.customer_last_name)}}</td>
+                <td>{{item.room_type==1?$Think.lang.index_source_showHotelSource_doubble_room_name:item.room_type==2?$Think.lang.index_source_showHotelSource_big_room_name:item.room_type==3?$Think.lang.index_source_showHotelSource_single_room_name:item.room_type==4?$Think.lang.index_source_showHotelSource_extra:'--'}}</td>
+            </tr>
+            {{#  }); }}
+            </tbody>
+        </table>
+    </div>
+    <!--报价信息-->
+    <div class="tourist_Quotation">
+        <div>Pricing List:</div>
+        <table class="layui-table">
+            <thead>
+            <tr>
+                <th>Item</th>
+                <th>Currency</th>
+                <th>Price</th>
+                <th>Total</th>
+                <th>Note</th>
+            </tr>
+            </thead>
+            <tbody>
+            {{#  layui.each(d.company_order_price, function(index, item){ }}
+            <tr>
+                <td>{{fn(item.product_name)}}</td>
+                <td>{{fn(item.currency_name)}}</td>
+                <td>{{fn(item.price)}}</td>
+                <td>{{fn(item.total)}}</td>
+                <td>{{fn(item.remark)}}</td>
+            </tr>
+            {{#  }); }}
+            </tbody>
+        </table>
+    </div>
+    <div class="tourist_sales">
+        <div>Payment Record:</div>
+        <table class="layui-table">
+            <thead>
+            <tr>
+                <th>PmtDate</th>
+                <th>Currency</th>
+                <th>Amount</th>
+                <th>PmtMode</th>
+                <th>PmtNum</th>
+                <th>Agent</th>
+                <th>Note</th>
+            </tr>
+            </thead>
+            <tbody>
+            {{#  layui.each(d.sale_info, function(index, item){ }}
+            <tr>
+                <td>{{fn(item.payment_time)}}</td>
+                <td>{{fn(item.currency_name)}}</td>
+                <td>{{fn(item.amount)}}</td>
+                <td>{{fnPayment(item.payment_type)}}</td>
+                <td>{{fn(item.payment_number)}}</td>
+                <td>{{fn(item.receivable_user_name)}}</td>
+                <td>{{fn(item.remark)}}</td>
+            </tr>
+            {{#  }); }}
+            </tbody>
+        </table>
+    </div>
+    <div class="clear">
+        <div id="bill_template_foot_pic" class="fl" style="width:80%">
+            {{#  if(d.bill_template_foot_pic !=null){ }}
+            <img src="{{d.bill_template_foot_pic}}" width="100%" height="110px" />
+            {{#  } }}
+        </div>
+        <div class="fr" style="width: 20%">
+            <div>Price:{{fn(d.price)}}</div>
+            <div>Tax:{{fn(d.tax)}}</div>
+            <div>Total:{{fn(d.total)}}</div>
+            <div>Paid:{{fn(d.paid)}}</div>
+            {{#  layui.each(d.balance, function(index, item){ }}
+            <div>Balance({{fn(item.unit)}}):{{fn(item.balance_money)}}</div>
+            {{#  }); }}
+        </div>
+    </div>
+</script>
+<!--销售收款table-->
+<script id="salesTr" type="text/html">
+    <!--<tr>
+        <td><input lay-filter="filter" type="checkbox" value='{$ri.receivable_info_id}' name="checkbox"  class='checkbox' lay-skin="primary" ></td>
+        <td>{$Think.lang.index_branchcompany_showCompanyOrderManage_notAdopted}</td>
+        <td></td>
+        <td><input type="salesPMT" class="layui-input layui-input-date" id="SalesPMT" value=""></td>
+        <td>
+            <select name="salesPmtStage" id="salesPmtStage">
+                <option value="">{$Think.lang.index_public_select}</option>
+                <option value="1">Balance</option>
+                <option value="2">Deposit</option>
+                <option value="3">Fullpmt</option>
+                <option value="4">Gratuities</option>
+                <option value="5">Insurance</option>
+                <option value="6">Partpmt</option>
+                <option value="7">Rebate</option>
+                <option value="8">Tkt</option>
+                <option value="9">Visa</option>
+            </select>
+        </td>
+        <td>
+            <select name="salesPayment" id="salesPayment">
+                <option value="">{$Think.lang.index_public_select}</option>
+                <option value="1">cash</option>
+                <option value="2">check</option>
+                <option value="3">debit card</option>
+                <option value="4">credit card(mc)</option>
+                <option value="5">credit card(vs)</option>
+                <option value="6">credit card(ax)</option>
+                <option value="7">direct depsit</option>
+                <option value="8">others</option>
+            </select>
+        </td>
+        <td>
+            <select name="salesRMB" id="salesRMB">
+                <option value="" selected></option>
+            </select>
+        </td>
+        <td></td>
+        <td>
+            <input type="text" name="salesReceipts" value="" class="layui-input">
+        </td>
+        <td></td>
+        <td></td>
+        <td>
+            <button class="layui-btn layui-btn-sm nav-del layui-btn-primary" onclick="slaves_delete(this)">{$Think.lang.index_public_del}</button>
+        </td>
+    </tr>-->
+    {{#  layui.each(d, function(index, item){ }}
+    <tr>
+        <td class="receivable" data-value="{{item.receivable_info_id}}"><input lay-filter="filter" type="checkbox" value='{$ri.receivable_info_id}' name="checkbox"  class='checkbox' lay-skin="primary" ></td>
+        <td>{$Think.lang.index_branchcompany_showCompanyOrderManage_adopt}</td>
+        <td>{{item.payment_number}}</td>
+        {{#  if(item.payment_time==''){ }}
+        <td><input type="salesPMT" autocomplete="off" class="layui-input sales-date" id="SalesPMT{{index}}" value=""></td>
+        {{#  } else { }}
+        <td>{{date('Y-m-d',item.payment_time)}}</td>
+        {{#  } }}
+        {{#  if(item.payment_stage==''){ }}
+        <td>
+            <select name="salesPmtStage{{index}}" id="salesPmtStage{{index}}">
+                <option value="">{$Think.lang.index_public_select}</option>
+                <option value="1">Balance</option>
+                <option value="2">Deposit</option>
+                <option value="3">Fullpmt</option>
+                <option value="4">Gratuities</option>
+                <option value="5">Insurance</option>
+                <option value="6">Partpmt</option>
+                <option value="7">Rebate</option>
+                <option value="8">Tkt</option>
+                <option value="9">Visa</option>
+            </select>
+        </td>
+        {{#  } else { }}
+        <td>{{stage(item.payment_stage)}}</td>
+        {{#  } }}
+        {{#  if(item.payment_type==''){ }}
+        <td>
+            <select name="salesPayment{{index}}" id="paymentType{{index}}">
+                <option value="">{$Think.lang.index_public_select}</option>
+                <option value="1">cash</option>
+                <option value="2">check</option>
+                <option value="3">debit card</option>
+                <option value="4">credit card(mc)</option>
+                <option value="5">credit card(vs)</option>
+                <option value="6">credit card(ax)</option>
+                <option value="7">direct depsit</option>
+                <option value="8">others</option>
+            </select>
+        </td>
+        {{#  } else { }}
+        <td>{{fnPayment(item.payment_type)}}</td>
+        {{#  } }}
+        {{#  if(item.payment_currency_name==''){ }}
+        <td>
+            <select name="salesRMB{{index}}" id="salesRMB{{index}}">
+                <option value="" selected></option>
+
+            </select>
+        </td>
+        {{#  } else { }}
+            <td>{{item.payment_currency_name}}</td>
+        {{#  } }}
+        <td>{{item.receivable_number}}</td>
+        {{#  if(item.payment_money==''){ }}
+        <td>
+            <input type="text" name="salesReceipts{{index}}" autocomplete="off" value="" class="layui-input">
+        </td>
+        {{#  } else { }}
+        <td>{{item.payment_money}}</td>
+        {{#  } }}
+        <td>{{item.create_user_name}}</td>
+        <td></td>
+        <td>
+            -<!--<button class="layui-btn layui-btn-sm nav-del layui-btn-primary" onclick="slaves_edit(this,'0')">{$Think.lang.index_public_del}</button>-->
+        </td>
+    </tr>
+    {{#  }); }}
+</script>
+<!--选择对应应收弹窗-->
+<script id="popSaleNumber" type="text/html">
+    <div class="layui-row" style="margin:20px;height: 410px;overflow-y: auto">
+        <table class="layui-table layui-form">
+            <thead>
+            <th><input lay-filter="filterSale" type="checkbox" value='' name="checkbox" id="allNumber"  class='layui-checkbox' lay-skin="primary" ></th>
+            <th>{$Think.lang.index_finance_showReceivableManage_receivable_number}</th>
+            <th>{$Think.lang.index_branchcompany_showBranchProductManage_productName}</th>
+            <th>{$Think.lang.index_branchcompany_showBranchProductManage_visitorNumber}</th>
+            <th>{$Think.lang.index_finance_showReceivableManage_receivable_money}</th>
+            </thead>
+            <tbody id="popSaleTr">
+            {{#  layui.each(d, function(index, item){ }}
+            <tr>
+                <td data-number="{{item.receivable_number}}" data-currency="{{item.currency_name}}"><input type="checkbox" lay-filter="saleList" value='' name="checkbox"  lay-skin="primary" ></td>
+                <td class="receivable_number">{{item.receivable_number}}</td>
+                <td>{{item.product_name}}</td>
+                <td>{{user(item.customer_info)}}</td>
+                <td class="money" sales="{{curey(item.currency_name)}}" money="{{item.receivable_money}}">{{item.currency_name}}{{item.receivable_money}}</td>
+            </tr>
+            {{#  }); }}
+            </tbody>
+        </table>
+    </div>
+    <br>
+    <div class="all-button-center visitorBottom">
+        <a class="layui-btn nav-submit" lay-submit="" onclick="numberOk()">{$Think.lang.index_public_ok}</a>
+        <button type="button" class="layui-btn layui-btn-primary" onclick="popBack()">{$Think.lang.index_public_back}</button>
+    </div>
+</script>
+{include file='public/foot_js' /}
+<script type="text/javascript" src="__STATIC__/javascript/data.js"></script>
+<script src='__STATIC__/javascript/branchcompany/Print.js'></script>
+<script type="text/javascript" src="__STATIC__/javascript/branchcompany/company_order_manage.js"></script>
+<script>
+    layui.use(['laydate','element','form'], function(){
+        var laydate = layui.laydate;
+        var element = layui.element;
+
+        lay('.sales-date').each(function(){
+            laydate.render({
+                elem: this
+                ,trigger: 'click'
+                ,done: function(value, date){
+                    console.log(date)
+                }
+            });
+        });
+
+    });
+
+</script>
+
+</body>
+</html>

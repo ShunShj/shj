@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {include file='public/head' /}
+    <title></title>
+    <link href="__STATIC__/css/product.css" rel="stylesheet">
+    <link href="__STATIC__/css/animate.min.css" rel="stylesheet">
+    <link href="__STATIC__/css/soulTable.css" rel="stylesheet">
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+    <div class="layui-header">
+        {include file='public/header' /}
+    </div>
+
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll">
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            {include file='public/left_menu' /}
+        </div>
+    </div>
+
+    <div class="layui-body layui-body-bg">
+
+        <!-- 内容主体区域 -->
+        <div style="padding: 15px 15px 0px;">
+            <div class="body-top">
+                <div class='layui-form-item'>
+                    <span class="layui-breadcrumb" lay-separator="-">
+                        <a>{$language_tag.index_public_homepage}</a>
+                        <a>{$language_tag.index_branchcompany_showBranchProductManage_branchManagement}</a>
+                        <a><cite>{$language_tag.index_branchcompany_showCompanyOrderManage_orderManagement}</cite></a>
+                    </span>
+                </div>
+            </div>
+            <div class="content-bg" style="padding-bottom: 5px!important;">
+                <div class="company-pageHeight">
+                    <table id="orderTable" lay-filter="orderTable"></table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="layui-footer">
+        <!-- 底部固定区域 -->
+        © layui.com - 底部固定区域
+    </div>
+</div>
+{include file='public/foot_js' /}
+
+
+<script type="text/javascript">
+    layui.config({
+        base: '__STATIC__/javascript/layui_exts/',
+    }).extend({
+        soulTable: 'soulTable'
+    });
+</script>
+<script type="text/javascript">
+    layui.use(['table','jquery','laydate','soulTable'], function(){
+        var table = layui.table;
+        var $ = layui.jquery;
+        var laydate = layui.laydate;
+        var soulTable=layui.soulTable;
+
+        lay('.sales-date').each(function(){
+            laydate.render({
+                elem: this
+                ,trigger: 'click'
+                ,done: function(value, date){
+                    console.log(date)
+                }
+            });
+        });
+
+        var bodyTopH=$(".body-top").height();
+        var bodyH=$(".layui-body").height();
+        var height=bodyH-bodyTopH-15-75;
+
+        var myTable = table.render({
+            elem: '#orderTable'
+            ,height: height+'px'
+            ,limits: [10,20,30,40,50,60,70,80,90]
+            ,limit: 10 //每页默认显示的数量
+            ,page: true
+            ,cols: [[ //表头
+                {field: 'order_number', title: '{$language_tag.index_finance_showReceivableManage_order_number}', width:170, sort: true,filter: true, fixed: 'left'}
+                ,{field: 'receivable_number', title: '{$language_tag.index_branchcompany_showCompanyOrderManage_corresponding_receivableNumber}',filter:true, sort: true, width:170}
+                ,{field: 'payment_stage', title: '{$language_tag.index_branchcompany_showCompanyOrderManage_paymentType}', sort: true, width:150,filter: true}
+                ,{field: 'payment_currency', title: '{$language_tag.index_finance_showReceivableManage_currency_name}', sort: true, width:100,filter:true}
+                ,{field: 'payment_money', title: '{$language_tag.index_branchcompany_showCompanyOrderManage_addEdit_salesReceiptsT}', sort: true, width:140,filter:true}
+                ,{field: 'payment_time', title: '{$language_tag.index_branchcompany_showCompanyOrderManage_addEdit_timeOfPayment}', sort: true, width:150,filter:true}
+                ,{field: 'payment_type', title: '{$language_tag.index_branchcompany_showCompanyOrderManage_addEdit_payment}', sort: true, width:120,filter:true}
+                ,{field: 'payment_number', title: '{$language_tag.index_finance_showMustpayAllManage_payment_type_number}', sort: true, width:190,filter:true}
+                ,{field: 'supplier_name', title: '{$language_tag.index_public_supplier}', sort: true, width:120,filter: true}
+                ,{field: 'create_user_nickname', title: '{$language_tag.index_system_showCompanyManage_create_user}', sort: true, width:120,filter: true}
+                ,{field: 'is_locked', title:'{$language_tag.index_branchcompany_showCompanyOrderManage_paid}',width:100,templet: '#isLocked'}
+                ,{field: 'remark', title: '{$language_tag.index_public_mark}', sort: true, width:160,filter: true}
+                ,{field: 'product_name', title: '{$language_tag.index_branchcompany_showBranchProductManage_productName}', sort: true, width:160,filter: true}
+                ,{field: 'wr', title: '{$language_tag.index_branchcompany_showCompanyOrderManage_retail}/{$language_tag.index_branchcompany_showCompanyOrderManage_wholeSale}', sort: true, width:160,filter: true}
+                ,{field: 'distributor_name', title: '{$language_tag.index_branchcompany_showCompanyOrderManage_channel}', sort: true, width:160,filter: true}
+                ,{field: 'persions_count', title: '{$language_tag.index_product_PlanBooking_number}', sort: true, width:160,filter: true}
+                ,{field: 'branch_product_numbers', title: '{$language_tag.index_branchcompany_showBranchProductManage_branchProduct_number}', sort: true, width:160,filter: true}
+                ,{field: 'team_product_number', title: '{$language_tag.index_finance_showReceivableManage_team_product_number}', sort: true, width:160,filter: true}
+                ,{field: 'begin_time', title: '{$language_tag.index_finance_showAgentExpenseManage_begin_time}', sort: true, width:160,filter: true}
+            ]],
+            filter: {
+                bottom: false
+            }
+            ,done: function () {
+                soulTable.render(this);
+            }
+        });
+
+        search({is_like:1});
+        function search(data) {
+            var loading = layer.load(2);
+            $.ajax({
+                url: '/CompanyOrder/getClientPaymentListAjax',
+                data: data,
+                dataType: 'json',
+                success: function (res) {
+                    myTable.reload({
+                        data: res.data
+                    })
+                },
+                complete: function () {
+                    layer.close(loading)
+                }
+            })
+        }
+    });
+</script>
+<script type="text/html" id="isLocked">
+    {{#  if(d.is_locked=='锁定'){ }}
+        <input type="checkbox" name="" lay-skin="primary" checked disabled>
+    {{#  } else { }}
+        <input type="checkbox" name="" lay-skin="primary" disabled>
+    {{#  } }}
+
+</script>
+{include file='public/bookingAll' /}
+</body>
+</html>

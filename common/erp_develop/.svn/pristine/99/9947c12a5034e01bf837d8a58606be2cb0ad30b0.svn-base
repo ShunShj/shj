@@ -1,0 +1,261 @@
+$(".layui-input .layui-input-date").each(function(){
+    laydate.render({
+        elem: this,
+        type: 'datetime'
+    });
+});
+
+form.render();
+
+
+/*打印*/
+function put(obj) {
+    var count=[];
+    $("#putTable tbody").find("th input[type='checkbox']").each(function (index,item) {
+        if(item.checked==true){
+            count.push(item.value);
+        }
+    });
+    if(count.length>0){
+        $(obj).attr("data-disabled","true");
+    }else{
+        $(obj).attr("data-disabled","false");
+    }
+
+    if($(obj).attr("data-disabled")=='false'){
+        layer.msg("请选择要打印的内容！")
+    }else{
+        var gettpl=$("#put").html();
+        layer.confirm(gettpl,{
+            skin:'my-skin'
+            ,btn: ['确定','取消'] //按钮
+            ,btnAlign: 'c' //按钮居中
+            ,closeBtn: 0
+            ,title:'打印'
+            ,area: ['550px','350px']
+            ,shadeClose:true,
+            scrollbar: false,
+            success:function () {
+                form.render();
+            }
+        },function () {
+            $("#putCheckbox").find('input[type="checkbox"]').each(function(index, item) {
+                if(item.checked===true){
+                    $("#default_bill_template_id").val("1");
+                }else{
+                    $("#default_bill_template_id").val("0");
+                }
+            })
+
+            var bill_template_id=$("#bill_template_id").val();
+            var company_order_number=$("#company_order_number").val();
+            var receivable_info_id=count.join(",");
+            var default_bill_template_id=$("#default_bill_template_id").val();
+            //点击确定
+            $.ajax({
+                type: "post",
+                url: "/product/getSaleBillAjax",
+                data: {
+                    bill_template_id: bill_template_id,
+                    company_order_number:company_order_number,
+                    receivable_info_id:receivable_info_id,
+                    default_bill_template_id:default_bill_template_id
+                },
+                dataType: "json",
+                success: function (result) {
+                    layer.load();
+                    $("#receipt_box").css("display","block");
+                    var datas=result.data;
+                    var getTpl=$("#receipt").html();
+                    laytpl(getTpl).render(datas,function(html){
+                        $("#receipt_box").html(html);
+                        layer.closeAll('loading');
+                        Print('#receipt_box',{
+                            onStart:function () {
+                                $("#receipt_box").css("display","none");
+                            }
+                        });
+                    });
+                }
+            })
+        });
+    }
+}
+
+function fn(names) {
+    if(names==null || names==''){
+        return '--';
+    }else{
+        return names
+    }
+}
+function fnPayment(type) {
+    switch(type){
+        case 1:
+            return 'cash';
+            break;
+        case 2:
+            return 'check';
+            break;
+        case 3:
+            return 'debit card';
+            break;
+        case 4:
+            return 'credit card(mc)';
+            break;
+        case 5:
+            return 'credit card(vs)';
+            break;
+        case 6:
+            return 'credit card(ax)';
+            break;
+        case 7:
+            return 'direct depsit';
+            break;
+        case 8:
+            return 'others';
+            break;
+    }
+}
+
+/*添加*/
+function salesAdd(obj) {
+    var gettpl = $('#productAddTips').html();
+    var title='';
+    laytpl(gettpl).render('0', function(html){
+        obj=='add'?title='添加':title='修改';
+        layer.confirm(html, {
+            skin:'my-skin',
+            btn: ['确定','取消'] //按钮
+            ,title:title
+            ,btnAlign: 'c' //按钮居中
+            ,area: ['650px','auto']
+            ,shadeClose:true,
+            scrollbar: false,
+            success:function () {
+                $(".layui-input-date").each(function(){
+                    laydate.render({
+                        elem: this,
+                        type: 'datetime'
+                    });
+                });
+            }
+        }, function(){
+
+            //销售收款提交
+            var receivable_number = $("#receivable_number_hidden").val();
+            var payment_time = $("#payment_time").val();
+            var payment_stage = $("#payment_stage").val();
+            var payment_type = $("#payment_type").val();
+            var payment_currency_id = $("#payment_currency_id").val();
+            var payment_money = $("#payment_money").val();
+
+            $.ajax({
+                type: "POST",
+                url: '/product/CompanyOrderSalesAddAjax',
+                data: {
+                    receivable_number:receivable_number,
+                    payment_time:payment_time,
+                    payment_stage:payment_stage,
+                    payment_type:payment_type,
+                    payment_currency_id:payment_currency_id,
+                    payment_money:payment_money
+                },
+                success: function(data){
+                    console.log(data);
+                    if(data.code!=200){
+                        //layer.msg(data.msg);
+                        return false;
+                    }else if(data.code==200) {
+                        layer.msg('操作成功',{time:1,end : function(layero, index){
+                                // layer.msg('添加成功！', {icon: 1});
+                                location.reload();
+                            }
+                        });
+                    }
+                }
+            });
+        });
+    });
+    form.render();
+}
+
+//应收详情修改
+function slaves_edit(obj){
+    var receivable_info_id = $(obj).parents("tr").find("th").eq(9).html();
+    var payment_time = $(obj).parents("tr").find("th").eq(2).find("input").val();
+    var payment_stage = $(obj).parents("tr").find("th").eq(3).find("select").val();
+    var payment_type = $(obj).parents("tr").find("th").eq(4).find("select").val();
+    var payment_currency_id = $(obj).parents("tr").find("th").eq(5).find("select").val();
+    var payment_money = $(obj).parents("tr").find("th").eq(6).find("input").val();
+
+    $.ajax({
+        type: "POST",
+        url: '/product/SalesEdit',
+        data: {
+            receivable_info_id:receivable_info_id,
+            payment_time:payment_time,
+            payment_stage:payment_stage,
+            payment_type:payment_type,
+            payment_currency_id:payment_currency_id,
+            payment_money:payment_money
+        },
+        success: function(data){
+            console.log(data);
+            if(data.code!=200){
+                //layer.msg(data.msg);
+                return false;
+            }else if(data.code==200) {
+                layer.msg('操作成功',{time:1,end : function(layero, index){
+                        location.reload();
+
+                    }
+                });
+            }
+        }
+    });
+}
+
+//应收详情删除
+function slaves_delete(obj){
+    var receivable_info_id = $(obj).parent("th").next("th").html();
+    var payment_time = $(obj).parents("tr").find("th").eq(2).find("select").val();
+    var payment_stage = $(obj).parents("tr").find("#salesPmtStage").val();
+    var payment_type = $(obj).parents("tr").find("th").eq(4).find("select").val();
+    var payment_currency_id = $(obj).parents("tr").find("th").eq(5).find("select").val();
+    var payment_money = $(obj).parents("tr").find("th").eq(6).find("input").val();
+    $.ajax({
+        type: "POST",
+        url: '/product/SalesDelete',
+        data: {
+            receivable_info_id:receivable_info_id,
+            payment_time:payment_time,
+            payment_stage:payment_stage,
+            payment_type:payment_type,
+            payment_currency_id:payment_currency_id,
+            payment_money:payment_money
+        },
+        success: function(data){
+            console.log(data);
+            if(data.code!=200){
+                //layer.msg(data.msg);
+                return false;
+            }else if(data.code==200) {
+                layer.msg('操作成功',{time:1,end : function(layero, index){
+                        location.reload();
+
+                    }
+                });
+            }
+        }
+    });
+}
+
+/*全选*/
+form.on('checkbox(checkboxAll)', function(data){
+    var child = $(data.elem).parents('thead').siblings("tbody").find('th input[type="checkbox"]');
+    child.each(function(index, item){
+        item.checked = data.elem.checked;
+    });
+    form.render('checkbox');
+});

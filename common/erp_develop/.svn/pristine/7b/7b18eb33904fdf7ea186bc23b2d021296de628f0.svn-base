@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {include file='public/head' /}
+    <title>language-manage</title>
+
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+    <div class="layui-header">
+        {include file='public/header' /}
+    </div>
+
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll">
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            {include file='public/left_menu_booknexus' /}
+        </div>
+    </div>
+
+    <div class="layui-body layui-body-bg">
+
+        <!-- 内容主体区域 -->
+        <div style="padding: 15px 15px 0px;">
+            <div class="body-top">
+                <div class='layui-form-item'>
+                    <span class="layui-breadcrumb" lay-separator="-">
+                        <a>{$language_tag.index_public_homepage}</a>
+                        <a>{$language_tag.index_source_showDiningManage_source_administrate}</a>
+                        <a><cite>{$language_tag.index_source_showDiningManage_administrate}</cite></a>
+                    </span>
+                </div>
+                <div class='layui-block all-search-bg'>
+
+                    <!--<div class='layui-button-inline'>
+
+                        <a href='/source/showDiningAdd'><button class="layui-btn nav-add">{$language_tag.index_source_showDiningManage_add_source_}</button></a>
+                        &lt;!&ndash;<a href='/source/showDiningSource'><button class="layui-btn nav-look">查看全部用餐资源</button></a>&ndash;&gt;
+                        &lt;!&ndash;<a href='/source/showSupplierAdd?supplier_type_id=3'><button class="layui-btn nav-add">添加用餐供应商</button></a>&ndash;&gt;
+                        <a href='/source/showDiningSource'><button class="layui-btn nav-look">{$language_tag.index_source_showDiningManage_look_all_source_dining}</button></a>
+
+                    </div>-->
+                </div>
+            </div>
+            <div class="content-bg">
+                <span ><button class="layui-btn nav-add layui-btn-sm" onclick="add_dingjin()">make a deposit</button></span>
+                <hr>
+                <div class="table-nont user-manage company-pageHeight">
+                    <table class="layui-table" id="language-table">
+                        <thead>
+                        <tr>
+                            <th>付款编号</th>
+                            <th>AGENT CODE</th>
+                            <th>agentName</th>
+                            <th>PAYMENT METHOD</th>
+                            <th>PAYMENT DATE</th>
+                           	<th>Created By </th>
+                       
+                           	<th>Amount</th>
+                           	<th>DEPOSIT BALANCE</th>
+                           	<th>NOTE</th>
+
+                           	<th>Action</th>
+                            <!--<th class="layui-table-width">{$language_tag.index_source_operation}</th>-->
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {foreach name="data" item="vo" }
+                        <tr>
+                            <th>{$vo.payment_number}</th>
+                            <th>{$vo.object_code}</th>
+                            <th>
+								{$vo.object_name}
+                            </th>
+                            
+                            <th>
+                            	{if condition='$vo.pay_type eq 1'}
+                            		cash
+                            	{elseif condition="$vo.pay_type eq 2"}
+                            			check
+                            	{elseif condition='$vo.pay_type eq 3'}
+                            		debit card
+                            	{elseif condition='$vo.pay_type eq 4'}
+                            		credit card(mc)
+                            	{elseif condition='$vo.pay_type eq 5'}
+                            		credit card(vs)
+                            	{elseif condition='$vo.pay_type eq 6'}
+                            		credit card(ax)
+                            	{elseif condition='$vo.pay_type eq 7'}
+                            		direct depsit
+                            	{elseif condition='$vo.pay_type eq 8'}
+                            		others
+                            	{elseif condition='$vo.pay_type eq 9'}
+                            		paypal
+                            	{elseif condition='$vo.pay_type eq 10'}
+                            		加拿大信用卡支付                         		                            		
+                            	{/if}	
+                            
+                            </th>
+                            <th>{if condition="$vo.deposit_payment_time neq ''"} {$vo.deposit_payment_time|date='Y-m-d',###}{/if}</th>
+                            <th>{$vo.deposit_user_name}</th>
+                           
+                            <th>{$vo.base_money}{$vo.base_currency_unit}</th>
+                            <th>
+								{$vo.balance_money}{$vo.base_currency_unit}
+                            </th>
+                            <th>
+ 								 {$vo.remark}
+                            </th>
+
+                            <th>
+                            {if condition="$vo.type eq 1"}
+                            	<a href='/accounting/showReceivableBtoBAllManage/receipts_pay_id/{$vo.receipts_pay_id}'>用定金付款</a>
+
+                            {/if}	
+                            	<a href='/accounting/receiptsInfo/receipts_pay_id/{$vo.receipts_pay_id}'>明细</a>
+                            </th>
+                            <!--<th><a href='/source/showSupplierEdit?supplier_id={$vo.supplier_id}'><button class="layui-btn layui-btn-sm hover-edit layui-btn-primary">{$language_tag.index_public_update}</button></a> <a href='/source/showSupplierInfo?supplier_id={$vo.supplier_id}'><button class="layui-btn layui-btn-sm hover-details layui-btn-primary">{$language_tag.index_public_info}</button></a></th>-->
+                        </tr>
+                        {/foreach}
+                        </tbody>
+
+                    </table>
+                </div>
+                <div class="listButtom">
+                    {include file='public/page' /}
+                    
+<div id="add_dingjin" style='position:absolute;left:30%;top:20%;width:550px;height:470px;display:none;background:white'>
+  
+    <form class="layui-form">
+		<div class="layui-layer-title" style="cursor: move;">添加定金</div>
+        <div class="layui-form-item">
+
+            <label class="layui-form-label input-required">agentName：</label>
+            <div class="layui-input-inline product-other"  >
+                <select id="object_id" lay-search="" lay-verify="required">
+					{foreach name='distributor_result' item='v'}
+						<option value='{$v.distributor_id}'>{$v.distributor_name}</option>
+					{/foreach}
+                </select>
+            </div>
+         
+
+        </div>
+        <div class="layui-form-item ">
+            <label class="layui-form-label input-required">PAYMENT METHOD：</label>
+            <div class="layui-input-inline product-other" >
+                <select id="pay_type" lay-search="" lay-verify="required">
+                	<option value='1'>cash</option>
+                	<option value='2'>check</option>
+                	<option value='3'>debit card</option>
+                	<option value='4'>credit card(mc)</option>
+                	<option value='5'>credit card(vs)</option>
+                	<option value='6'>credit card(ax)</option>
+                	<option value='7'>direct deposit</option>
+                	<option value='8'>others</option>
+                	<option value='9'>paypal</option>
+                	<option value='10'>加拿大信用卡支付</option>
+
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label ">PAYMENT TIME：</label>
+            <div class="layui-input-inline product-other" data-values="12">
+				<input type="text" name="deposit_payment_time" id="deposit_payment_time"  value="" placeholder="" autocomplete="off" class="layui-input sales-date" lay-key="1">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label input-required">Amount：</label>
+            <div class="layui-input-inline">
+                <input type="text" id="amount" name="productName" lay-verify="required"  class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label input-required">Created By：</label>
+            <div class="layui-input-inline">
+                <select id="deposit_user_id" name="productCurrency" lay-verify="required" class="priceCurreyPop">
+					{foreach name='user_result' item='v'}
+						<option value='{$v.user_id}'>{$v.nickname}</option>
+					{/foreach}
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label ">Note：</label>
+            <div class="layui-input-block">
+                <input type="text" id="remark" name="productProme" class="layui-input">
+            </div>
+        </div>
+        <br>
+        <div class="all-button-center">
+            <a class="layui-btn nav-submit" lay-submit="" onclick="otherSubmit()">提交</a>
+            <button type="button" class="layui-btn layui-btn-primary" onclick="popBack()">返回</button>
+        </div>
+        <br>
+    </form>
+</div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="layui-footer">
+        <!-- 底部固定区域 -->
+        © layui.com - 底部固定区域
+    </div>
+</div>
+
+{include file='public/foot_js' /}
+<script>
+layui.use(['table','jquery','laydate'], function(){
+    var laydate = layui.laydate;
+    lay('.sales-date').each(function(){
+        laydate.render({
+            elem: this
+            ,trigger: 'click'
+            ,done: function(value, date){
+                console.log(date)
+            }
+        });
+    });
+
+
+})
+
+
+var layer = layui.layer;
+var form = layui.form;
+var upload = layui.upload; //得到 upload 对象
+var laydate = layui.laydate;
+var table=layui.table;
+var laytpl=layui.laytpl;
+
+//常规用法
+
+
+
+function add_dingjin() {
+
+	        form.render();
+
+	        $('#add_dingjin').show()
+
+
+
+}
+function popBack(){
+	 $('#add_dingjin').hide()
+}    
+function otherSubmit(){
+	
+	
+	var object_type = 3;
+	var object_id = $('#object_id').val();
+	var pay_type = $('#pay_type').val();
+	var base_currency_id = 3
+	var base_money = $('#amount').val();
+	var result_currency_id = 3;
+	var remark = $('#remark').val();
+	var proportion = 1
+	
+	var type = 1;
+	var result_money = $('#amount').val();
+	var deposit_user_id = $('#deposit_user_id').val();
+	var deposit_payment_time = $('#deposit_payment_time').val();
+	
+if(base_money==''){
+	return false;
+}
+	
+	//开始提交AJAX
+$.ajax({
+    type: "POST",
+    url: '/finance/receiptsAddAjax',
+    dataType: "json",
+    data: {
+    	deposit_payment_time:deposit_payment_time,
+    	object_type:object_type,
+    	object_id:object_id,
+    	pay_type:pay_type,
+    	base_currency_id:base_currency_id,
+    	base_money:base_money,
+    	deposit_user_id:deposit_user_id,
+    	type:type,
+		status:1,
+		remark:remark,
+		proportion:proportion,
+		result_money:result_money,
+		result_currency_id:result_currency_id,
+		payment_number:1
+		
+    },
+    success: function (data) {
+        layer.msg('添加成功',{time:1000,end : function(layero, index){
+            window.location.href='/accounting/showDepositPaymentManage'; 
+        }
+    });
+	
+    },
+    error: function (XMLHttpRequest, textStatus, errorThrown) {
+        //console.log(errorThrown)
+        layer.msg('验证失败');
+
+    }
+});    	
+	return false;
+	
+}
+</script>
+
+</body>
+</html>

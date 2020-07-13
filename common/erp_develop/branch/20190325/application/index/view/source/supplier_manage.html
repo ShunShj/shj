@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {include file='public/head' /}
+    <title>language-manage</title>
+    <link href="__STATIC__/css/source.css" rel="stylesheet">
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+    <div class="layui-header">
+        {include file='public/header' /}
+    </div>
+
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll">
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            {include file='public/left_menu' /}
+        </div>
+    </div>
+
+    <div class="layui-body layui-body-bg">
+
+        <!-- 内容主体区域 -->
+        <div style="padding: 15px 15px 0px;">
+            <div class="body-top">
+                <div class='layui-form-item'>
+                    <span class="layui-breadcrumb" lay-separator="-">
+                        <a>{$Think.lang.index_public_homepage}</a>
+                        <a>{$Think.lang.index_source_showSupplierManage_supplier_administrate}</a>
+                        <a><cite>{$Think.lang.index_source_showSupplierManage_manage_supplier}</cite></a>
+                    </span>
+                </div>
+                <div class='layui-block all-search-bg'>
+                    <form class="layui-form" method='get' action='/source/showSupplierManage'>
+                        <div class="layui-row">
+                            <div class="layui-col-md4">
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">{$Think.lang.index_source_showSupplierManage_supplier_type}:</label>
+                                    <div class="layui-input-block">
+                                        <select id="" name="supplier_type_id" lay-search>
+                                            <option value="0" selected="">{$Think.lang.index_source_showSupplierManage_supplier_type}</option>
+                                            {foreach name='supplier_data_result'  item='vo'}
+                                            {if condition="$vo.supplier_type_id neq 1"}
+                                            <option value="{$vo.supplier_type_id}" {if condition="$Think.get.supplier_type_id eq $vo.supplier_type_id"}selected='selected' {/if}>{$vo.supplier_type_name}</option>
+                                            {/if}
+                                            {/foreach}
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-col-md4">
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">{$Think.lang.index_source_showCruisesManage_search_status}:</label>
+                                    <div class="layui-input-block">
+                                        <select id="" name="status">
+                                            <option value="0" {if condition="$Think.get.status eq 0"}selected='selected' {/if}>-{$Think.lang.index_public_status}-</option>
+                                            <option value="1" selected=''>{$Think.lang.index_public_show}</option>
+                                            <option value="2" {if condition="$Think.get.status eq 2"}selected='selected' {/if}>{$Think.lang.index_public_disabled}</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-col-md4">
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">{$Think.lang.index_source_showSupplierManage_supplier_name}:</label>
+                                    <div class="layui-input-block">
+                                        <input type="text" id="" name="supplier_name"  value="{$Think.get.supplier_name}"   placeholder="{$Think.lang.index_source_showSupplierManage_supplier_name}" class="layui-input">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {if condition=" $Think.session.user.company_id eq 1"}
+                        <div class="layui-row">
+                            <div class="layui-col-md4">
+                                <div class='layui-form-item company_id'>
+                                    <label class="layui-form-label">{$Think.lang.index_source_showSupplierManage_own_company}:</label>
+                                    <div class="layui-input-block">
+                                        <select id="company_id"  name="choose_company_id">
+                                            <option value="0" selected="">{$Think.lang.index_source_showSupplierManage_own_company}</option>
+                                            {foreach name='company_result'  item='vo'}
+                                            <option value="{$vo.company_id}" {if condition="$Think.get.choose_company_id eq  $vo.company_id"}selected='selected'{/if} >{$vo.company_name}</option>
+                                            {/foreach}
+                                        </select>
+                                        <input type="hidden"  id="add_company_id" name="company_id" value="{$Think.session.user.company_id}" >
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {/if}
+                        <div class="layui-row">
+                            <div class="layui-col-md4 layui-col-md-offset4">
+                                <div class='input-inline all-button-center pages-search-margin'>
+                                    <button class="layui-btn nav-search">{$Think.lang.index_public_search}</button>
+                                </div>
+                            </div>
+                        </div>
+                        <!--{if condition="$Think.session.user.company_id eq 1"}-->
+                        <!--<div class='layui-input-inline'>-->
+                            <!--<div class="layui-form">-->
+                                <!--<select  id="company_id" name="company_id">-->
+                                    <!--<option value="0" selected="">所属分公司</option>-->
+                                    <!--{foreach name='company_result'  item='vo'}-->
+                                    <!--<option value="{$vo.company_id}" {if condition="$Think.get.company_id eq $vo.company_id"}selected='selected' {/if}>{$vo.company_name}</option>-->
+                                    <!--{/foreach}-->
+                                <!--</select>-->
+                            <!--</div>-->
+                        <!--</div>-->
+                        <!--{/if}-->
+                        <!--<div class='layui-input-inline'>
+                            <div class="layui-form">
+                                <select id="" name="">
+                                    <option value="0" selected="">国家</option>
+                                    {foreach name='country_s1_result'  item='vo'}
+                                    <option value="{$vo.country_id}">{$vo.country_name}</option>
+                                    {/foreach}
+                                </select>
+                            </div>
+                        </div>
+                        <div class='layui-input-inline'>
+                            <div class="layui-form">
+                                <select id="" name="">
+                                    <option value="0" selected="">所属城市</option>
+                                    {foreach name='country_s2_result'  item='vo'}
+                                    <option value="{$vo.country_id}">{$vo.country_name}</option>
+                                    {/foreach}
+                                </select>
+                            </div>
+                        </div>
+                        <div class='layui-input-inline'>
+                            <div class="layui-form">
+                                <select id="" name="country_id">
+                                    <option value="0" selected="">所属地区</option>
+                                    {foreach name='country_s3_result'  item='vo'}
+                                    <option value="{$vo.country_id}">{$vo.country_name}</option>
+                                    {/foreach}
+                                </select>
+                            </div>
+                        </div>-->
+
+                        <!--<div class='layui-input-inline'>
+                            <input type="text" id="" name="phone"  placeholder="电话、联系人、操作人" class="layui-input">
+                        </div>-->
+                    </form>
+                </div>
+            </div>
+            <div class="content-bg">
+                <span style="{:action('index/auth/check_auth',['role_id'=>'172'])}"><a href='/source/showSupplierAdd'><button class="layui-btn nav-add layui-btn-sm">{$Think.lang.index_source_showSupplierManage_add_supplier}</button></a></span>
+                <hr>
+                <div class="table-nont user-manage newBg-pageHeight">
+                    <table class="layui-table">
+                        <thead>
+                        <tr>
+                            <th>{$Think.lang.index_source_showSupplierManage_id}</th>
+                            <th>{$Think.lang.index_source_showSupplierManage_supplier_type}</th>
+                            <th>{$Think.lang.index_source_showSupplierManage_supplier_name}</th>
+                            <th>{$Think.lang.index_source_showSupplierManage_own_company}</th>
+                            <th>{$Think.lang.index_source_showSupplierManage_country}</th>
+                            <th>{$Think.lang.index_system_showCountryManage_city}</th>
+                            <th>{$Think.lang.index_source_showSupplierManage_zone}</th>
+                            <th>{$Think.lang.index_public_status}</th>
+                            <th class="layui-table-width">{$Think.lang.index_source_operation}</th>
+                        </tr>
+                        </thead>
+
+                        <tbody>
+                        {foreach name="data" item="vo" }
+                        <tr>
+                            <th>{$vo.supplier_id}</th>
+                            <th>{$vo.supplier_type_name}</th>
+                            <th>{$MultilingualAll['supplier-supplier_name-'.$vo.supplier_id.'-'.$Think.session.user.language_id][0]['translate']|default=$vo.supplier_name}</th>
+                            <th>{$MultilingualAll['company-company_name-'.$vo.company_id.'-'.$Think.session.user.language_id][0]['translate']|default=$vo.company_name}</th>
+                            <th>{$MultilingualAll['country-country_name-'.$vo.country_id.'-'.$Think.session.user.language_id][0]['translate']|default=$vo.country_name}</th>
+                            <th>{$MultilingualAll['country-country_name-'.$vo.province_id.'-'.$Think.session.user.language_id][0]['translate']|default=$vo.province_name}</th>
+                            <th>{$MultilingualAll['country-country_name-'.$vo.city_id.'-'.$Think.session.user.language_id][0]['translate']|default=$vo.city_name}</th>
+                            <th>{if condition="$vo.status eq 1"}{$Think.lang.index_public_show}{else/}{$Think.lang.index_public_disabled}{/if}</th>
+                            <th>
+                                <span style="{:action('index/auth/check_auth',['role_id'=>'173'])}"><a href='/source/showSupplierEdit?supplier_id={$vo.supplier_id}'><button class="layui-btn layui-btn-sm hover-edit layui-btn-primary">{$Think.lang.index_public_update}</button></a></span>
+                                <span style="{:action('index/auth/check_auth',['role_id'=>'174'])}"><a href='/source/showSupplierInfo?supplier_id={$vo.supplier_id}'><button class="layui-btn layui-btn-sm hover-details layui-btn-primary">{$Think.lang.index_public_info}</button></a></span>
+                                <!--<a href='/source/showSupplierEditLanguage?supplier_number={$vo.supplier_number}'><button class="layui-btn layui-btn-sm hover-polylingual layui-btn-primary">{$Think.lang.index_public_language}</button></a>-->
+                            </th>
+                        </tr>
+                        {/foreach}
+                        </tbody>
+
+                    </table>
+                </div>
+                <div class="listButtom">
+                    {include file='public/page' /}
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="layui-footer">
+        <!-- 底部固定区域 -->
+        © layui.com - 底部固定区域
+    </div>
+</div>
+{include file='public/foot_js' /}
+<script src='__STATIC__/javascript/system/source.js'></script>
+<script>
+
+
+
+
+
+</script>
+</body>
+</html>

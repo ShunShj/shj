@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {include file='public/head' /}
+    <title>回执单模板</title>
+    <link href="__STATIC__/css/product.css" rel="stylesheet">
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+    <div class="layui-header">
+        {include file='public/header' /}
+    </div>
+
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll">
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            {include file='public/left_menu' /}
+        </div>
+    </div>
+
+    <div class="layui-body">
+
+        <!-- 内容主体区域 -->
+        <div style="padding: 15px;">
+            <div class='layui-form-item'>
+                <span class="layui-breadcrumb" lay-separator="-">
+                    <a>{$Think.lang.index_public_homepage}</a>
+                    <a>{$Think.lang.index_branchcompany_showBranchProductManage_branchManagement}</a>
+                    <a>{$Think.lang.index_branchcompany_showCompanyOrderManage_orderManagement}</a>
+                    <a><cite>{$Think.lang.index_branchcompany_showCompanyOrderManage_addEdit_product}</cite></a>
+                </span>
+                <div style="display:inline-block;width:88%;"></div>
+                <span><button class="layui-btn nav-submit" onclick="all_array_submit();">{$Think.lang.index_branchcompany_showCompanyOrderManage_addEdit_submit}</button></span>
+                <a href="/branchcompany/showCompanyOrderManage">
+                    <button type="button" class="layui-btn layui-btn-primary">{$Think.lang.index_branchcompany_showCompanyOrderManage_addEdit_temporaryStorage}</button>
+                </a>
+            </div>
+            <div class="layui-tab layui-tab-brief" lay-filter="companyOrder">
+                <ul class="layui-tab-title layui-tab-url">
+                    <li>{$Think.lang.index_product_showRouteTemplateManage_information}</li>
+                    <li>{$Think.lang.index_branchcompany_showCompanyOrderManage_addEdit_touristInformation}</li>
+                    <li class="layui-this">{$Think.lang.index_branchcompany_showCompanyOrderManage_addEdit_product}</li>
+                    <li>{$Think.lang.index_branchcompany_showCompanyOrderManage_addEdit_primeCost}</li>
+                    <li>{$Think.lang.index_branchcompany_showCompanyOrderManage_addEdit_quotedPrice}</li>
+                    <li>{$Think.lang.index_branchcompany_showCompanyOrderManage_addEdit_salesReceipts}</li>
+                </ul>
+                <br>
+                <div class="layui-tab-content">
+                    <div class="layui-tab-item layui-show">
+                        <div class='layui-form-item'>
+                            <a><button class="layui-btn nav-add" onclick="addProduct()">{$Think.lang.index_branchcompany_showCompanyOrderManage_addEdit_addProduct}</button></a>
+                            <!-- <a><button class="layui-btn nav-details" onclick="addOther()">添加其它</button></a> -->
+                            <!--<button class="layui-btn" onclick="addSave()">保存</button>-->
+                        </div>
+                        <div class="table-nont">
+                            <table class="layui-table table-product" id="table-product">
+                                <thead>
+                                <tr>
+                                    <th>{$Think.lang.index_branchcompany_showBranchProductManage_productNumber}</th>
+                                    <th>{$Think.lang.index_branchcompany_showBranchProductManage_productType}</th>
+                                    <th>{$Think.lang.index_branchcompany_showBranchProductManage_productName}</th>
+                                    <!--<th>币种</th>-->
+                                    <!--<th>成本</th>-->
+                                    <th>{$Think.lang.index_public_supplier}</th>
+                                    <th>{$Think.lang.index_product_visitor_order_visitor}</th>
+                                    <th>{$Think.lang.index_source_operation}</th>
+                                </tr>
+                                </thead>
+
+                                <tbody>
+                                {volist name="product_result_data['company_order_product']" id="vo"}
+                                <tr>
+                                    <td>{$vo.branch_product_number}</td>
+                                    <td>{$Think.lang.index_branchcompany_showBranchProductManage_branchProduct}</td>
+                                    <td>{$vo.branch_product_name}</td>
+                                    <!--<td>{$vo.price_currency_name}</td>-->
+                                    <!--<td>{$vo.branch_product_cost}</td>-->
+                                    <td>{$vo.supplier_name}</td>
+                                    <td><button  class="layui-btn layui-btn-sm visitorList3 hover-edit layui-btn-primary" key="1" key_type='1' >{$Think.lang.index_branchcompany_showBranchProductManage_look}</button></td>
+                                    <td><button class="layui-btn layui-btn-sm nav-del layui-btn-primary" onclick="productDel(this)">{$Think.lang.index_public_del}</button></td>
+                                </tr>
+
+                                {volist name="product_result_data['company_order_product_source']" id="voo"}
+                                {if condition="$vo.branch_product_number eq $voo.branch_product_number"}
+                                	{if condition="$voo.supplier_type_id eq 11"}
+	                                <tr>
+	                                    <td><a href="#">{$voo.source_number}</a></td>
+	                                    <td>{$Think.lang.index_finance_showReceivableManage_ownexpense}</td>
+	                                    <td>{$voo.source_name}</td>
+                                        <!--<td>{$voo.price_currency_name}</td>-->
+	                                    <!--<td>{$voo.source_cost}</td>-->
+                                        <td>{$voo.supplier_name}</td>
+	                                    <td><button  class="layui-btn layui-btn-sm visitorList3 hover-edit layui-btn-primary" customer_str="{$voo.customer_str}" key_type='2' key_id='{$voo.company_order_product_source_id}' key="2" >{$Think.lang.index_branchcompany_showBranchProductManage_look}</button></td>
+	                                    <td></td>
+	                                </tr>
+                                	{/if}
+                                {/if}
+                                {/volist}
+
+                                {/volist}
+                                {volist name="product_result_data['company_order_product_diy']" id="vv"}
+                                <tr>
+                                    <td>{$vv.company_order_product_diy_number}</td>
+                                    <td>{$Think.lang.index_finance_showReceivableManage_other}</td>
+                                    <td>{$vv.diy_name}</td>
+                                    <!--<td>{$vv.price_currency_name}</td>-->
+                                    <!--<td>{$vv.diy_cost}</td>-->
+                                    <td>{$vv.supplier_name}</td>
+                                    <td><button  class="layui-btn layui-btn-sm visitorList3 hover-edit layui-btn-primary" key="2" customer_str="{$vv.customer_str}" key_type='3' key_id='{$vv.company_order_product_diy}' div_id="{$vv.company_order_product_diy_id}">{$Think.lang.index_finance_showReceivableManage_look}</button></td>
+                                    <td><button class="layui-btn layui-btn-sm nav-del layui-btn-primary" onclick="productDel(this)">{$Think.lang.index_public_del}</button></td>
+                                </tr>
+                                {/volist}
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </div><!--产品-->
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="layui-footer">
+        <!-- 底部固定区域 -->
+        © layui.com - 底部固定区域
+    </div>
+    <input type="hidden" id="template_do" value="3">
+</div>
+<script id="addOther" type="text/html">
+    <form class="layui-form saleForm">
+        <div class="layui-form-item">
+            <label class="layui-form-label">{$Think.lang.index_branchcompany_showBranchProductManage_productType}：</label>
+            <div class="layui-input-block product-other">
+                {$Think.kang.index_finance_showReceivableManage_other}
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">{$Think.lang.index_public_supplier}：</label>
+            <div class="layui-input-block">
+                <select name="orderSupplier" id="">
+                    <option value="">{$Think.lang.index_public_select}</option>
+                    <option value="1">1111</option>
+                    <option value="2">2222</option>
+                    <option value="3">3333</option>
+                    <option value="4">444</option>
+                    <option value="5">555</option>
+                    <option value="6">666</option>
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">{$Think.lang.index_branchcompany_showBranchProductManage_productName}：</label>
+            <div class="layui-input-block">
+                <input type="text" id="" name="productName" placeholder="{$Think.lang.index_branchcompany_showBranchProductManage_productName}" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">{$Think.lang.index_product_showRouteTemplateManage_resources_currency}：</label>
+            <div class="layui-input-block">
+                <select id="" name="productCurrency">
+                    <option value="">{$Think.lang.index_public_select}</option>
+                    {volist name="currency_result_data" id="vo_cu"}
+                    <option value="{$vo_cu.currency_id}">{$vo_cu.currency_name}</option>
+                    {/volist}
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">{$Think.lang.index_branchcompany_showCompanyOrderManage_addEdit_primeCost}：</label>
+            <div class="layui-input-block">
+                <input type="text" id="" name="productProme" placeholder="{$Think.lang.index_branchcompany_showCompanyOrderManage_addEdit_primeCost}" class="layui-input">
+            </div>
+        </div>
+    </form>
+</script>
+<!-- 韩test -->
+<div  class="layui-layer layui-layer-dialog" id="han_test" type="dialog" times="0" showtime="0" contype="string" style="display:none;z-index: 19891015; width: 450px; height: 380px; top: 169.5px; left: 735px;">
+    <div class="layui-layer-title" style="cursor: move;">{$Think.lang.index_finance_showReceivableManage_choose_customer}</div>
+        <div id="" class="layui-layer-content" style="height: 244px;">
+            <form class="layui-form visitorListTips">
+                <div id="choose_all">
+                    <input type="checkbox" name="productCheckboxAll" title="{$Think.lang.index_finance_showReceivableManage_choose_all}" lay-skin="primary" lay-filter="checkboxAll">
+                    <div class="layui-unselect layui-form-checkbox" lay-skin="primary">
+                        <span>{$Think.lang.index_finance_showReceivableManage_choose_all}</span><i class="layui-icon layui-icon-ok"></i>
+                    </div>
+                </div> <br>
+                <div class="checkboxList" id="'visitorList3">
+                    {foreach name='company_order_customer' item='vo'}
+                    <input type="checkbox" name="productCheckbox1" value="{$vo.company_order_customer_id}" title="{$vo.customer_name}" lay-skin="primary" class="productCheckbox">
+                    {/foreach}
+
+
+                </div>
+            </form>
+        </div>
+	<input type='hidden' id='source_id' value='' />
+	<input type='hidden' id='diy_id' value='' />
+    <div class="layui-layer-btn layui-layer-btn-c">
+        <a class="layui-layer-btn0 nav-submit" id="update_customer" onclick="add_customer_relation(this)">{$Think.lang.index_public_ok}</a>
+        <a class="layui-layer-btn1 layui-btn-primary" id="close_div">{$Think.lang.index_public_cancel}</a>
+    </div>
+    <span class="layui-layer-resize"></span>
+    <!-- 大赖招-->
+       <!-- <input type="hidden" id="div_id" value="" /> -->
+    <!-- -->
+</div>
+<!--游客选择-->
+<script id="visitorListTips" type="text/html">
+    <form class="layui-form visitorListTips">
+        <div><input type="checkbox" name="productCheckboxAll" title="{$Think.lang.index_finance_showReceivableManage_choose_all}" lay-skin="primary" lay-filter="checkboxAll"></div>
+        <br>
+        <div class="checkboxList">
+            <input type="checkbox" name="productCheckbox" title="1" lay-skin="primary" class="productCheckbox">
+            <input type="checkbox" name="productCheckbox1" title="2" lay-skin="primary" class="productCheckbox">
+        </div>
+    </form>
+</script>
+<!--添加产品表格-->
+<script id="addProduct" type="text/html">
+    <form class="layui-form">
+        <!--<div class='layui-input-inline'>-->
+            <!--<select name="productType">-->
+                <!--<option value="">请选择产品类型</option>-->
+                <!--<option value="0">list Item</option>-->
+                <!--<option value="1">list Item</option>-->
+            <!--</select>-->
+        <!--</div>-->
+        <!--<div class='layui-input-inline'>-->
+            <!--<select name="productRouteType">-->
+                <!--<option value="">请选择线路类型</option>-->
+                <!--{foreach $route_type as $kk=>$vv}-->
+                    <!--<option value="{$vv.route_type_id}">{$vv.route_type_name}</option>-->
+                <!--{/foreach}-->
+            <!--</select>-->
+        <!--</div>-->
+        <div class='layui-input-inline'>
+            <input type="text" id="product_branch_product_number" name="branch_product_number"  placeholder="{$Think.lang.index_branchcompany_showBranchProductManage_productNumber}" class="layui-input">
+        </div>
+        <div class='layui-input-inline'>
+            <input type="text" id="product_team_name" name="team_name"  placeholder="{$Think.lang.index_branchcompany_showBranchProductManage_productName}" class="layui-input">
+        </div>
+        <!--<div class='layui-input-inline'>-->
+            <!--<input type="text" id="" name="productPopel"  placeholder="负责人、联系人" class="layui-input">-->
+        <!--</div>-->
+        <div class='layui-input-inline'>
+            <a class="layui-btn nav-search" id="aaa" onclick="company_order_product_search()">{$Think.lang.index_public_search}</a>
+        </div>
+    </form>
+    <br>
+    <div class="lay-tab-box table-nont">
+        <table class="layui-table layui-form table-product-poper" id="poperTable">
+            <colgroup>
+                <col width="50">
+                <col width="280">
+                <col width="280">
+                <col width="260">
+                <col width="300">
+                <!--<col width="120">-->
+                <!--<col width="180">-->
+                <!--<col width="120">-->
+                <!--<col width="100">-->
+                <!--<col width="100">-->
+                <!--<col width="100">-->
+                <col width="120">
+                <col width="120">
+            </colgroup>
+            <thead>
+            <tr>
+                <th><input type="checkbox" name="productCheckboxTable" lay-skin="primary" lay-filter="poperCheckboxAll"></th>
+                <th>{$Think.lang.index_branchcompany_showBranchProductManage_productNumber}</th>
+                <th>{$Think.lang.index_branchcompany_showBranchProductManage_productType}</th>
+                <th>{$Think.lang.index_public_supplier}</th>
+                <th>{$Think.lang.index_branchcompany_showBranchProductManage_productName}</th>
+                <!--<th>天数</th>-->
+                <!--<th>线路类型</th>-->
+                <!--<th>出发日期</th>-->
+                <!--<th>计划收客</th>-->
+                <!--<th>已收客</th>-->
+                <!--<th>占位</th>-->
+                <th>{$Think.lang.index_product_showRouteTemplateManage_resources_currency}</th>
+                <th>{$Think.lang.index_product_showRouteTemplateManage_resources_quotedPrice}</th>
+            </tr>
+            </thead>
+            <tbody id="productPoper">
+                <tr>
+                    <td ></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <!--<td></td>-->
+                    <!--<td></td>-->
+                    <!--<td></td>-->
+                    <!--<td></td>-->
+                    <!--<td></td>-->
+                    <!--<td></td>-->
+                    <td></td>
+                    <td></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</script>
+{include file='public/foot_js' /}
+<script src='__STATIC__/javascript/product/all.js'></script>
+<script src='__STATIC__/javascript/product/product.js'></script>
+</body>
+</html>

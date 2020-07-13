@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+<head>
+	{include file='public/head' /}
+  	<title>layout 后台大布局 - Layui</title>
+
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+
+	<div class="layui-header">
+	{include file='public/header' /}
+	</div>
+
+	 <div class="layui-side layui-bg-black">
+	   <div class="layui-side-scroll">
+	     <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+		{include file='public/left_menu' /}
+	   </div>
+	 </div>
+
+	<div class="layui-body">
+
+		<!-- 内容主体区域 -->
+		<div style="padding: 15px;">
+			<div class='layui-form-item'>
+		   		<span class="layui-breadcrumb" lay-separator="-">
+					<a>首页</a>
+					<a>系统设置</a>
+					<a>用户管理</a>
+					<a><cite>用户详情</cite></a>
+				</span>
+			</div>
+			<br><br>
+			<div class="layui-row">
+				<form class="layui-form all-detail layui-col-md4" >
+					<div class="layui-form-item">
+						<label class="layui-form-label">公司名称：</label>
+						<div class="layui-input-block">
+							{$data.company_name}
+						</div>
+					</div>
+					<div class="layui-form-item">
+						<label class="layui-form-label">部门名称：</label>
+						<div class="layui-input-block">
+							{$data.department_name}
+						</div>
+					</div>
+					<div class="layui-form-item">
+						<label class="layui-form-label">职位名称：</label>
+						<div class="layui-input-block">
+							{$data.job_name}
+						</div>
+						<!--  <div class="layui-form-mid layui-word-aux">辅助文字</div>-->
+					</div>
+					<div class="layui-form-item">
+						<label class="layui-form-label">用户名：</label>
+						<div class="layui-input-block">
+							{$data.username}
+						</div>
+					</div>
+					<div class="layui-form-item">
+						<label class="layui-form-label">姓名：</label>
+						<div class="layui-input-block">
+							{$data.nickname}
+						</div>
+					</div>
+					<div class="layui-form-item">
+						<label class="layui-form-label">联系方式：</label>
+						<div class="layui-input-block">
+							{$data.phone}
+						</div>
+					</div>
+					<div class="layui-form-item">
+						<label class="layui-form-label">语言：</label>
+						<div class="layui-input-block">
+							{$data.language_name}
+						</div>
+					</div>
+					<div class="layui-form-item">
+						<label class="layui-form-label">修改时间：</label>
+						<div class="layui-input-block">
+							{if condition="$data.update_time neq ''"}{$data.update_time|date='Y-m-d H:i:s',###}{else/}无修改时间{/if}
+						</div>
+					</div>
+					<!--<div class="layui-form-item">-->
+						<!--<label class="layui-form-label">修改人：</label>-->
+						<!--<div class="layui-input-block">-->
+							<!--{if condition="$data.update_user_id neq ''"}{$data.update_user_name}{else/}无修改人{/if}-->
+						<!--</div>-->
+					<!--</div>-->
+					<div class="layui-form-item">
+						<label class="layui-form-label">状态：</label>
+						<div class="layui-input-block">
+							{if condition="$data['status'] eq 1"}启用{else/}禁用{/if}
+						</div>
+					</div>
+					<div class="layui-form-item">
+						<div class="layui-input-block">
+							<a href='/system/showUserManage'><button type="button" class="layui-btn layui-btn-primary">返回</button></a>
+						</div>
+					</div>
+				</form>
+			</div>
+
+		</div>
+	</div>
+
+  <div class="layui-footer">
+    <!-- 底部固定区域 -->
+    © layui.com - 底部固定区域
+  </div>
+</div>
+{include file='public/foot_js' /}
+
+<script src='__STATIC__/javascript/system/system.js'></script>
+
+</body>
+</html>

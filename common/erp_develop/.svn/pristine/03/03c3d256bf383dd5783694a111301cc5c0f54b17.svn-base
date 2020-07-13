@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {include file='public/head' /}
+    <title>language-manage</title>
+
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+    <div class="layui-header">
+        {include file='public/header' /}
+    </div>
+
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll">
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            {include file='public/left_menu' /}
+        </div>
+    </div>
+
+    <div class="layui-body">
+
+        <!-- 内容主体区域 -->
+        <div style="padding: 15px;">
+            <div class='layui-form-item'>
+			<span class="layui-breadcrumb" lay-separator="-">
+                    <a>{$language_tag.index_public_homepage}</a>
+                    <a>{$language_tag.index_source_showSingleSourceManage_source_administrate}</a>
+                    <a>{$language_tag.index_source_showSingleSourceManage_single_source_administrate}</a>
+                    <a><cite>{$language_tag.index_source_showSingleSourceSource_all_source}</cite></a>
+			</span>
+            </div>
+            <br/>
+            <br/>
+            <div class="layui-block input-inline">
+                <form method='get' action='/source/showSingleSourceSource'>
+                    <div class='layui-input-inline'>
+                        <div class="layui-form">
+                            <select id="" name="status">
+                                <option value="0">-{$language_tag.index_source_showCruisesManage_search_status}-</option>
+                                <option value="1" selected='selected'>{$language_tag.index_public_show}</option>
+                                <option value="2" {if condition="$Think.get.status eq 2"}selected='selected' {/if}>{$language_tag.index_public_disabled}</option>
+                            </select>
+                        </div>
+                    </div>
+                    <!--<div class='layui-input-inline'>-->
+                        <!--<input type="text" id="" name="single_source_id"  placeholder="ID" class="layui-input">-->
+                    <!--</div>-->
+                    <div class='layui-input-inline'>
+                        <input type="text" id="" name="single_source_name" maxlength="300" value="{$Think.get.single_source_name}" placeholder="{$language_tag.index_source_showSingleSourceSource_single_source_name}" class="layui-input">
+                    </div>
+                    <!--<div class='layui-input-inline'>-->
+                        <!--<input type="text" id="" name=""  placeholder="电话、联系人、操作人" class="layui-input">-->
+                    <!--</div>-->
+                    <div class='layui-button-inline layui-search-inline'>
+                        <input type="hidden" name="supplier_id"  value="{$_GET["id"]}">
+                        <button class="layui-btn nav-search" >{$language_tag.index_public_search}</button>
+                    </div>
+                </form>
+                <div class='layui-button-inline'>
+                    <span style="{:action('index/auth/check_auth',['role_id'=>'217'])}"><a href='/source/showSingleSourceAdd?id={$_GET["id"]}'><button class="layui-btn nav-add">{$language_tag.index_source_showSingleSourceManage_add_source}</button></a></span>
+                    <a href='/source/showSingleSourceManage'><button class="layui-btn nav-add">{$language_tag.index_source_supplier_list}</button></a>
+                </div>
+            </div>
+            <table class="layui-table layui-form" id="language-table">
+                <thead>
+                <tr>
+                    <th>{$language_tag.index_source_showSingleSourceManage_id}</th>
+                    <th>{$language_tag.index_source_showSingleSourceSource_single_source_name}</th>
+                    <th>{$language_tag.index_source_showSingleSourceManage_supplier_name}</th>
+                    <th>{$language_tag.index_public_status}</th>
+                    <th>{$language_tag.index_source_operation}</th>
+                </tr>
+                </thead>
+
+                    <tbody>
+                    {foreach name="data" item="vo" }
+                    <tr>
+                        <th class="single_source_id">{$vo.single_source_id}</th>
+                        <th>{$MultilingualAll['single_source-single_source_name-'.$vo.single_source_id.'-'.$Think.session.user.language_id][0]['translate']|default=$vo.single_source_name}</th>
+                        <th>{$MultilingualAll['supplier-supplier_name-'.$vo.supplier_id.'-'.$Think.session.user.language_id][0]['translate']|default=$vo.supplier_name}</th>
+                        <th>
+                            {if condition="in_array('218',$auth_id) OR $Think.session.user.role_id eq 1"}<input type="checkbox" {if condition="$vo.status eq 1"}checked=""{else/}{/if} name="open" lay-skin="switch" lay-filter="switchTest" lay-text="{$language_tag.index_public_show}|{$language_tag.index_public_disabled}">{else/}{if condition="$vo.status eq 1"}{$language_tag.index_public_show}{else}{$language_tag.index_public_disabled}{/if}{/if}
+                        </th>
+                        <th>
+                            {if condition="$vo.company_id eq $Think.session.user.company_id"}
+                            <span style="{:action('index/auth/check_auth',['role_id'=>'218'])}"><a href='/source/showSingleSourceEdit?single_source_id={$vo.single_source_id}'><button class="layui-btn layui-btn-sm hover-edit layui-btn-primary">{$language_tag.index_public_update}</button></a></span>
+                            {/if}
+                            <span style="{:action('index/auth/check_auth',['role_id'=>'219'])}"><a href='/source/showSingleSourceInfo?single_source_id={$vo.single_source_id}'><button class="layui-btn layui-btn-sm hover-details layui-btn-primary">{$language_tag.index_public_info}</button></a></span>
+                            <!--<a href='/source/showSingleSourceEditLanguage?source_number={$vo.source_number}'><button class="layui-btn layui-btn-sm hover-polylingual layui-btn-primary">{$language_tag.index_public_language}</button></a>-->
+                        </th>
+                    </tr>
+                    {/foreach}
+                    </tbody>
+
+                </table>
+            <div class="listButtom">
+                {include file='public/page' /}
+            </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="layui-footer">
+        <!-- 底部固定区域 -->
+        © layui.com - 底部固定区域
+    </div>
+</div>
+{include file='public/foot_js' /}
+<script src='__STATIC__/javascript/system/source.js'></script>
+<script>
+    var layer = layui.layer;
+
+    var form = layui.form;
+    form.on('switch(switchTest)', function(data){
+        var table_id = $(data.elem).parents("tr").children(".single_source_id").html();
+        var table_id_name = "single_source_id";
+        var table_name = "single_source";
+        if(this.checked == true){
+            var status = 1;
+        }else{
+            var status = 2;
+        }
+
+        $.ajax({
+            type: "POST",
+            url: '/index/changeStatus',
+            data: {
+                table_id:table_id,
+                table_id_name:table_id_name,
+                table_name:table_name,
+                status:status,
+            },
+            success: function(data){
+                //console.log(data);
+                if(data.code!=200){
+                    layer.msg(data.msg);
+                    return false;
+                }else if(data.code==200) {
+                    layer.msg('操作成功',{time:1,end : function(layero, index){
+
+                        }
+                    });
+                }
+            },
+            error:function(XMLHttpRequest, textStatus, errorThrown){
+                layer.msg('验证失败')
+            }
+        });
+    });
+
+
+</script>
+</body>
+</html>
+
+<script>
+    //搜索语言
+    function searchLanguageManage(search_name,search_status){
+        $.ajax({
+            type: "POST",
+            url: '/system/searchLanguageManage',
+            data: {
+                'name' : search_name,
+                'status' : search_status
+            },
+            success: function(data){
+                var info=eval("["+data+"]");
+                // console.log(info);
+                $("#language-table tbody").html("");
+                for(i in info[0]['data']){
+                    if(info[0]['data'][i]['status']==1){
+                        info[0]['data'][i]['status']="可用";
+                    }else{
+                        info[0]['data'][i]['status']="禁用";
+                    }
+                    $("#language-table tbody").append("<tr><td>"+info[0]['data'][i]['language_id']+"</td><td>"+info[0]['data'][i]['language_name']+"</td><td>"+info[0]['data'][i]['status']+"</td><td><a  class='layui-btn layui-btn-sm' onclick='redLanguageManage("+info[0]['data'][i]['language_id']+");'>&nbsp;编&nbsp;辑&nbsp;</a></td></tr>");
+                }
+            }
+        });
+    }
+</script>

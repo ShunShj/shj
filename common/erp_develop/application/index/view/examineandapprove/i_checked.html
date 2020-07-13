@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {include file='public/head' /}
+    <title>{$language_tag.index_nav_approvalManagement}-{$language_tag.index_nav_examineAnd_approve}</title>
+    <style>
+        .aa>tbody>tr>td{
+            border: 1px solid #ddd;
+        }
+        .bb>tbody>tr>td:first-child,.cc>tbody>tr>td:first-child {
+            border-right: 1px solid #ddd;
+        }
+        .cc{
+            border-bottom:1px solid #ddd;
+            width:100%;
+        }
+        .cc:last-child{
+            border:none;
+        }
+        .cc>tbody>tr>td:first-child{
+            width:200px;
+        }
+    </style>
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+
+    <div class="layui-header">
+        {include file='public/header' /}
+    </div>
+
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll">
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            {include file='public/left_menu' /}
+        </div>
+    </div>
+
+    <div class="layui-body">
+
+        <!-- 内容主体区域 -->
+        <div style="padding: 15px;">
+            <div class='layui-form-item'>
+		   		<span class="layui-breadcrumb">
+					<a href="#">{$language_tag.index_public_homepage}</a>
+					<a href="#">{$language_tag.index_nav_approvalManagement}</a>
+                    <a href="#">{$language_tag.index_nav_examineAnd_approve}</a>
+					<a href="#"><cite>{$language_tag.index_index_approved}</cite></a>
+				</span>
+            </div>
+            <br/>
+            <ul class="layui-tab-title">
+                <li ><a href="/examine_and_approve/toBeApprovedByMe">{$language_tag.index_index_pendingMyApproval}({$ExamineAndApprove|count})</a></li>
+                <li ><a href="/examine_and_approve/iLaunched">{$language_tag.index_index_iStartedIt}({$iLaunched|count})</a></li>
+                <li class="layui-this">{$language_tag.index_index_approved}({$iChecked|count})</li>
+            </ul>
+            <br>
+
+            <form class="layui-form" method="get" action="" >
+                <div class="layui-row">
+                    <div class="layui-col-md4">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">{$language_tag.index_examineAndApprove_iChecked_approval_type}</label>
+                            <div class="layui-input-block">
+                                <select name="search_approval_type_id" lay-search>
+                                    <option></option>
+                                    {foreach $obtain_approval_type_list as $v}
+                                    <option value="{$v.approval_type_id}" {$_GET["search_approval_type_id"]==$v.approval_type_id?'selected':''}>{$v.apellation}</option>
+                                    {/foreach}
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="layui-col-md4">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">{$language_tag.index_examineAndApprove_iChecked_proposer}</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="search_user" value="{$_GET['search_user']}" class="layui-input"  />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="layui-col-md4">
+                        <div class="layui-form-item">
+                            <div class="layui-input-block">
+                                <button class="layui-btn nav-search">{$language_tag.index_public_search}</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </form>
+
+            <div class="layui-tab-content">
+                <table class="layui-table" >
+                    <thead>
+                    <tr>
+                        <th>{$language_tag.index_examineAndApprove_iChecked_approval_type}</th>
+                        <th>{$language_tag.index_examineAndApprove_iChecked_approval_content}</th>
+                        <th>{$language_tag.index_examineAndApprove_iChecked_proposer}</th>
+                        <th>{$language_tag.index_examineAndApprove_iChecked_apply_time}</th>
+                        <th>{$language_tag.index_examineAndApprove_iChecked_approval_result}</th>
+                        <th>{$language_tag.index_examineAndApprove_iChecked_approval_opinion}</th>
+                        <th>{$language_tag.index_examineAndApprove_iChecked_approval_time}</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {foreach $iChecked as $v}
+                    <tr>
+                        <td>{$v.apellation}</td>
+                        <td>
+                            {if $v.approval_type_id==12 || $v.approval_type_id==13 }
+                            <a href="/product/showPlanTourAuditingInfo?examine_and_approve_id={$v.examine_and_approve_id}">{$language_tag.index_finance_showReceivableManage_look}</a>
+                            {/if}
+                        </td>
+                        <td>{$v.create_nickname}</td>
+                        <td>{$v.create_time|date='Y-m-d H:i:s',###}</td>
+                        <td>{$approval_status[$v.status]}</td>
+                        <td>{$v.approval_opinion}</td>
+                        <td>{$v.update_time|date='Y-m-d H:i:s',###}</td>
+                    </tr>
+                    {/foreach}
+                    </tbody>
+
+                </table>
+            </div>
+
+
+        </div>
+
+        <div class="layui-footer">
+            <!-- 底部固定区域 -->
+            © layui.com - 底部固定区域
+        </div>
+    </div>
+    {include file='public/foot_js' /}
+    <script src='__STATIC__/javascript/system/language.js'></script>
+
+
+
+
+
+    <script>
+        !function() {
+            var layer = layui.layer;
+            var form = layui.form;
+            var laydate = layui.laydate;
+            var table = layui.table;
+            var laytpl = layui.laytpl;
+
+        }();
+
+
+
+
+
+    </script>
+
+</body>
+</html>

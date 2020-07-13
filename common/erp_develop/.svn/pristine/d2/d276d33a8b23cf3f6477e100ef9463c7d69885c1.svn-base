@@ -1,0 +1,68 @@
+<?php
+/**
+ * Created by PhpStorm.
+ * User: Hugh
+ * Date: 2019/11/04
+ * Time: 13:40
+ */
+
+namespace app\index\controller;
+use \Underscore\Types\Arrays;
+use think\Session;
+use think\Paginator;
+use think\Request;
+use think\Controller;
+use app\common\help\Help;
+
+class AdminBooking extends Base
+{
+    public function index(){
+        return $this->fetch('list');
+    }
+
+    //General
+    public function updateBookingFormGeneral(){
+        return $this->fetch('update_booking_form_general');
+    }
+
+    //Passenger
+    public function updateBookingFormPassenger(){
+        return $this->fetch('update_booking_form_passenger');
+    }
+
+    //Room
+    public function updateBookingFormRoom(){
+        return $this->fetch('update_booking_form_room');
+    }
+
+    //Transfer
+    public function updateBookingFormTransfer(){
+        return $this->fetch('update_booking_form_transfer');
+    }
+
+    //option
+    public function  updateBookingFormOption(){
+        return $this->fetch('update_booking_form_option');
+    }
+
+    //Accommodation
+    public function  updateBookingFormAccommodation(){
+        return $this->fetch('update_booking_form_accommodation');
+    }
+
+    //Hotel
+    public function updateBookingFormHotel(){
+        return $this->fetch('update_booking_form_hotel');
+    }
+
+    //File
+    public function updateBookingFormFile(){
+        return $this->fetch('update_booking_form_file');
+    }
+
+    //Sales
+    public function updateBookingFormSales(){
+        return $this->fetch('update_booking_form_sales');
+    }
+
+}

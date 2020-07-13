@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html>
+<head>
+	{include file='public/head' /}
+	<title></title>
+
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+
+	<div class="layui-header">
+		{include file='public/header' /}
+	</div>
+
+	<div class="layui-side layui-bg-black">
+		<div class="layui-side-scroll">
+			<!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+			{include file='public/left_menu' /}
+		</div>
+	</div>
+
+	<div class="layui-body">
+
+		<!-- 内容主体区域 -->
+		<div style="padding: 15px;">
+			<div class='layui-form-item'>
+		   		<span class="layui-breadcrumb" lay-separator="-">
+					<a>{$language_tag.index_public_homepage}</a>
+					<a>{$language_tag.index_public_system}</a>
+					<a>{$language_tag.index_system_showBillTemplateEdit_bill_template}</a>
+					<a><cite>{$language_tag.index_public_add}{$language_tag.index_system_showBillTemplateEdit_bill_template}</cite></a>
+				</span>
+			</div>
+			<br><br>
+			{foreach name='bill_data_result'  item='vo'}
+			<div class="layui-row" class="d_img">
+				<form class="layui-form layui-col-md4"  onSubmit="return billtemplateEdit()">
+					<div class="layui-form-item">
+						<label class="layui-form-label">{$language_tag.index_system_showCompanyManage_company_name}：</label>
+						<div class="layui-input-block all-select">
+							<select name="company_id" id="company_id"  disabled>
+								<option value="{$vo.company_id}">{$vo.company_name}</option>
+							</select>
+						</div>
+					</div>
+					<div class="layui-form-item">
+						<label class="layui-form-label ">{$language_tag.index_branchcompany_showDistributorManage_bill}{$language_tag.index_product_showRouteTemplateManage_title}：</label>
+						<div class="layui-input-block all-select">
+							<input name="bill_template_title"  id="edit_bill_template_title"  lay-verify="required" disabled placeholder="" autocomplete="off" class="layui-input" type="text" value="{$vo.bill_template_title}" >
+						</div>
+					</div>
+					<div class="layui-form-item">
+						<label class="layui-form-label ">{$language_tag.index_branchcompany_showDistributorManage_bill}{$language_tag.index_branchcompany_showDistributorManage_head}：</label>
+						<div class="layui-input-block bill-picture ">
+							<!--<button type="button" class="layui-btn " id="bill_template_title_pic" disabled >-->
+								<!--<i class="layui-icon">&#xe67c;</i>{$language_tag.index_product_showRouteTemplateManage_uploadImage}-->
+							<!--</button>-->
+						</div>
+						<div id="u-img1" style="padding: 10px; margin-left: 100px" class="del_img">
+							<?php $bill_template_title_pic = $vo['bill_template_title_pic']?explode(',',$vo['bill_template_title_pic']):'';?>
+							{foreach $bill_template_title_pic as $bill_template_title_picV}
+							<div style="padding: 5px;width: 110px;float: left">
+								<div >
+									<img src="{$bill_template_title_picV}" height="100" width="100">
+									<input type="hidden" value="{$bill_template_title_picV}" name="bill_template_title_pic">
+								</div>
+								<!--<div><a class="layui-btn layui-btn-danger r-journey-img nav-edit"  onclick="delpicture(this)">{$language_tag.index_public_del}</a></div>-->
+							</div>
+							{/foreach}
+						</div>
+					</div>
+					<div class="layui-form-item">
+						<label class="layui-form-label ">{$language_tag.index_system_showBillTemplateEdit_bill_ending}：</label>
+						<div class="layui-input-block bill-picture  ">
+							<!--<button type="button" class="layui-btn" id="bill_template_foot_pic" disabled>-->
+								<!--<i class="layui-icon">&#xe67c;</i>{$language_tag.index_product_showRouteTemplateManage_uploadImage}-->
+							<!--</button>-->
+						</div>
+						<div id="u-img" style="padding: 10px; margin-left: 100px">
+							<?php $bill_template_foot_pic = $vo['bill_template_foot_pic']?explode(',',$vo['bill_template_foot_pic']):'';?>
+							{foreach $bill_template_foot_pic as $bill_template_foot_picV}
+							<div style="padding: 5px;width: 110px;float: left" class="del_img">
+								<div >
+									<img src="{$bill_template_foot_picV}" height="100" width="100">
+									<input type="hidden" value="{$bill_template_foot_picV}" name="bill_template_foot_pic">
+								</div>
+								<!--<div><a class="layui-btn layui-btn-danger r-journey-img nav-edit" onclick="delpicture(this)">{$language_tag.index_public_del}</a></div>-->
+							</div>
+							{/foreach}
+						</div>
+						<div class="layui-form-item">
+							<label class="layui-form-label">{$language_tag.index_public_status}:</label>
+							<div class="layui-input-block all-select">
+								<select name="status" id='edit_status' lay-verify="required">
+									<option value="1" {if condition="1 eq $vo['status']"}selected="seleted"{/if}>{$language_tag.index_public_show}</option>
+									<option value="0" {if condition="0 eq $vo['status']"}selected="seleted"{/if}>{$language_tag.index_public_disabled}</option>
+								</select>
+							</div>
+						</div>
+					</div>
+					<div class="layui-form-item">
+						<div class="layui-input-block">
+							<!--<button class="layui-btn nav-submit" lay-submit="" lay-filter="formDemo" >{$language_tag.index_branchcompany_showCompanyOrderManage_addEdit_submit}</button>-->
+							<a href="javascript:history.back(-1)"><button type="button" class="layui-btn layui-btn-primary">{$language_tag.index_public_back}</button></a>
+							<input type="hidden" id="bill_template_id_hidden" value="{$vo.bill_template_id}" >
+						</div>
+					</div>
+				</form>
+			</div>
+			{/foreach}
+		</div>
+	</div>
+
+	<div class="layui-footer">
+		<!-- 底部固定区域 -->
+		© layui.com - 底部固定区域
+	</div>
+</div>
+{include file='public/foot_js' /}
+
+<script src='__STATIC__/javascript/system/system.js'></script>
+<script>
+    layui.use('upload', function(){
+        var upload = layui.upload;
+        //头部图片
+        var uploadInst = upload.render({
+            elem: '#bill_template_title_pic' //绑定元素
+            ,url: '/demo/uploadFile', //上传接口
+            multiple:false,
+            drag:'true'
+            ,acceptMime:'image/*'
+            ,accept:'images'
+            ,before: function(obj){ //obj参数包含的信息，跟 choose回调完全一致，可参见上文。
+                layer.load(); //上传loading
+            }
+            ,done: function(res){
+                //上传完毕回调
+                // console.log(res);
+                layer.closeAll('loading'); //关闭loading
+                if(res.code == 200){
+                    var h = '<div style="padding: 5px;width: 110px;float: left" class="img_list"><div><img src="'+res.data+'" height="100" width="100" /><input type="hidden" value="'+res.data+'" name="title-picture" /></div><div><a class="layui-btn layui-btn-danger r-journey-img nav-edit" onclick="del(this)">{$language_tag.index_public_del}</a></div></div>';
+                    $('#u-img1').append(h);
+                }
+            }
+            ,error: function(res){
+                //请求异常回调
+                console.log(res);
+                layer.closeAll('loading'); //关闭loading
+            }
+        });
+
+        //尾部图片
+        var uploadInst = upload.render({
+            elem: '#bill_template_foot_pic' //绑定元素
+            ,url: '/demo/uploadFile', //上传接口
+            multiple:'true',
+            drag:'true'
+            ,acceptMime:'image/*'
+            ,accept:'images'
+            ,before: function(obj){ //obj参数包含的信息，跟 choose回调完全一致，可参见上文。
+                layer.load(); //上传loading
+            }
+            ,done: function(res){
+                //上传完毕回调
+                // console.log(res);
+                layer.closeAll('loading'); //关闭loading
+                if(res.code == 200){
+                    var h = '<div style="padding: 5px;width: 110px;float: left" class="img_list"><div><img src="'+res.data+'" height="100" width="100" /><input type="hidden" value="'+res.data+'" name="foot-picture" /></div><div><a class="layui-btn layui-btn-danger r-journey-img nav-edit" onclick="del(this)" >{$language_tag.index_public_del}</a></div></div>';
+                    $('#u-img').append(h);
+                }
+            }
+            ,error: function(res){
+                //请求异常回调
+                console.log(res);
+                layer.closeAll('loading'); //关闭loading
+            }
+        });
+    });
+    function del(obj){
+        $(obj).parents(".img_list").remove();
+    }
+    function delpicture(obj){
+        $(obj).parents(".del_img").remove();
+    }
+</script>
+
+</body>
+</html>

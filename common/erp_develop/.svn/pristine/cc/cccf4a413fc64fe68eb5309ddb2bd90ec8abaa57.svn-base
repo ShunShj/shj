@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {include file='public/head' /}
+    <title>应收汇总</title>
+    <link href="__STATIC__/layui/font/iconfont.css" rel="stylesheet">
+    <link href="__STATIC__/css/product.css" rel="stylesheet">
+    <link href="__STATIC__/css/finance.css" rel="stylesheet">
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+    <div class="layui-header">
+        {include file='public/header' /}
+    </div>
+
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll">
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            {include file='public/left_menu' /}
+        </div>
+    </div>
+
+    <div class="layui-body">
+
+        <!-- 内容主体区域 -->
+        <div style="padding: 15px;">
+            <div class='layui-form-item'>
+                <span class="layui-breadcrumb" lay-separator="-">
+                    <a>{$Think.lang.index_public_homepage}</a>
+                    <a>{$Think.lang.index_public_finance}</a>
+                    <a>{$Think.lang.index_finance_showAgentExpenseManage_travel_agency_reimbursement}</a>
+                    <a><cite>{$Think.lang.index_finance_showAgentExpenseManage_add_travel_agency_reimbursement}</cite></a>
+                </span>
+            </div>
+            <br>
+            <form class="layui-form" onSubmit="return companyproductAdd()">
+                <div class="layui-col-md8">
+                    <label class="layui-form-label input-required">{$Think.lang.index_finance_showAgentExpenseManage_update_group}</label>
+                    <div class="layui-input-block">
+                        <select name="agentExpenseType" lay-filter="checkTeam" id='team_product_number' xm-select="team_product_id" xm-select-search=""
+                                                    xm-select-search-type="dl">
+                          
+                            {foreach name='team_product_result' item='v'}
+                            	<option value="{$v.team_product_id}" >{$v.team_product_name}</option>
+                            {/foreach}
+                        </select>
+                    </div>
+        
+                </div>
+			</form>
+
+                <!--<div class='layui-input-inline'>
+                    <button class="layui-btn" >搜索</button>
+                </div>-->
+            <form class="layui-form" onSubmit="return submitAdd()">
+            <div id="agentExpenseTable">
+         
+            	<input type='hidden' id='team_product_number' value="{$Think.get.team_product_number}"/>
+            	<!-- 
+                <table class="layui-table layui-form" style="table-layout:fixed;display:none" id="shouru">
+                    <thead>
+                        <tr>
+                            <th class="input-required">项目</th>
+                            <th class="input-required">团内订单</th>
+                            <th class="input-required">供应商类型</th>
+                            <th class="input-required">项目名称</th>
+                            <th class="input-required">游客</th>
+                            <th class="input-required">币种</th>
+                            <th class="input-required">价格</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody id='shouru_info'>
+                        <tr>
+                            <td>收入</td>
+                            <td>
+                            	<select name="agentExpenseNote" lay-verify="required">
+                            	 	<option value="">请选择</option>
+                            		{foreach name='company_order_result' item='v'}
+                                    <option value="{$v.company_order_number}">{$v.company_order_number}</option>
+									{/foreach}
+                                </select>
+                            </td>
+                            <td>
+                            	<select name="agentExpenseNote">
+                            		<option value="1">团队产品</option>
+                                    <option value="2">酒店</option>
+                                    <option value="3">用餐</option>
+                                    <option value="4">航班</option>
+                                    <option value="5">邮轮</option>
+                                    <option value="6">签证</option>
+                                    <option value="7">景点</option>
+                                    <option value="8">车辆</option>
+                                    <option value="9">导游</option>
+                                    <option value="10">单项资源</option>
+                                    <option value="11">自费项目</option>
+                                </select>
+                            <td>
+								<input type="text" id="" name="agentExpenseTdTeam" lay-verify="required" placeholder="" class="layui-input" "></td>
+								
+                            </td>
+                            <td><a href='javascript:void(0)' class='look' company_order_customer_id_and_customer_id='' company_order_customer_id=''>查看</a></td>
+                            <td>
+                                <select name="agentExpenseNote">
+                                	{foreach name='currency_result' item='v'}
+                                    <option value="{$v.currency_id}">{$v.currency_name}</option>
+ 									{/foreach}
+                                </select>
+                            </td>
+                            <td><input type="text" id=""  lay-verify="required" name="agentExpensePrice"  placeholder="" class="layui-input"></td>
+                            <td>
+                                <a class="layui-btn layui-btn-sm layui-btn-primary hover-add" onclick="agentExpenseAdd(this)">添加</a>
+                                <a class="layui-btn layui-btn-sm layui-btn-primary nav-del" onclick="agentExpenseReduce(this)">删除</a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                 -->
+                <br>
+                <table class="layui-table layui-form" style="table-layout:fixed;" >
+                    <thead>
+                    <tr>
+                        <th class="input-required">{$Think.lang.index_finance_showAgentExpenseManage_project}</th>
+                        <th class="input-required">{$Think.lang.index_finance_showAgentExpenseManage_type}</th>
+                        <th class="input-required">{$Think.lang.index_finance_showAgentExpenseManage_supplier_name}</th>
+                        <th class="input-required">{$Think.lang.index_finance_showAgentExpenseManage_product_name}</th>
+                        <th class="input-required">{$Think.lang.index_finance_showAgentExpenseManage_currency}</th>
+                        <th style='width:6%' class="input-required">{$Think.lang.index_finance_showAgentExpenseManage_unit_price}</th>
+                        <th style='width:6%' class="input-required">{$Think.lang.index_finance_showAgentExpenseManage_quantity}</th>
+                        <th style='width:6%' class="input-required">{$Think.lang.index_finance_showAgentExpenseManage_total_price}</th>
+                        <th>{$Think.lang.index_source_operation}</th>
+                    </tr>
+                    </thead>
+                    <tbody id="zhichu_info">
+                    <tr >
+                        <td>支出</td>
+                        <td>
+                        	<select name="agentExpenseNote2" id='select_c1_1'  lay-filter='agentExpenseNote2'
+                                    lay-verify="required" class='chose_source_type' lay-search>
+                        		<option value="">{$Think.lang.index_finance_showAgentExpenseManage_choose}</option>
+                                <option value="2">{$Think.lang.index_finance_showReceivableManage_hotel}</option>
+                                <option value="3">{$Think.lang.index_finance_showReceivableManage_dining}</option>
+                                <option value="4">{$Think.lang.index_finance_showReceivableManage_flight}</option>
+                                <option value="5">{$Think.lang.index_finance_showReceivableManage_cruise}</option>
+                                <option value="6">{$Think.lang.index_finance_showReceivableManage_visa}</option>
+                                <option value="7">{$Think.lang.index_finance_showReceivableManage_scenic_spot}</option>
+                                <option value="8">{$Think.lang.index_finance_showReceivableManage_vehicle}</option>
+                                <option value="9">{$Think.lang.index_finance_showReceivableManage_tourguide}</option>
+                                <option value="10">{$Think.lang.index_finance_showReceivableManage_singlesource}</option>
+                                <option value="11">{$Think.lang.index_finance_showReceivableManage_ownexpense}</option>
+                            </select>
+                        </td>
+                        <td >
+                        	<select id='select_c1_1_select' lay-search>
+                        	
+                        	</select>
+                        </td>
+                        <td><input type="text" lay-verify="required" id="" name="agentExpenseSupplier"  placeholder="" class="layui-input"></td>
+                        
+                        <td>
+                                <select name="agentExpenseNote" lay-search>
+                                	{foreach name='currency_result' item='v'}
+                                    <option value="{$v.currency_id}">{$v.currency_name}</option>
+ 									{/foreach}
+                                </select>
+                        </td>
+                        <td><input type="text" id="" lay-verify="required" name="agentExpenseTdTeam"  placeholder="" class="layui-input"></td>
+                        <td>
+							<input type="text" id="" lay-verify="required" name="agentExpenseTdTeam"  placeholder="" class="layui-input">
+                        </td>
+                        <td><input type="text" id="" lay-verify="required" name="agentExpensePrice"  placeholder="" class="layui-input"></td>
+                        <td>
+                            <a class="layui-btn layui-btn-sm layui-btn-primary hover-add" onclick="agentExpenseAddTwo(this)">{$Think.lang.index_finance_showAgentExpenseManage_add}</a>
+                            <a class="layui-btn layui-btn-sm layui-btn-primary nav-del" onclick="agentExpenseReduce(this)">{$Think.lang.index_finance_showAgentExpenseManage_del}</a>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+         
+            </div>
+            <br><br>
+            <div class="layui-row">
+                <div class="layui-form-button" style="text-align: center">
+
+                    <a href="javascript:void(0)">
+                        <button class="layui-btn nav-submit" lay-submit="">{$Think.lang.index_public_submit}</button>
+
+                    </a>
+                    <a href="/finance/showAgentExpenseManage"><button type="button" class="layui-btn layui-btn-primary">{$Think.lang.index_finance_showAgentExpenseManage_cancel}</button></a>
+
+                </div>
+            </div>
+            </form>
+        </div>
+    </div>
+    <input type='hidden' id="cope_count"  value="0" />
+    <!--对应游客选择弹出-->
+<div  class="layui-layer layui-layer-dialog" id="open_window" type="dialog" times="1" showtime="0" contype="string" style="display:none;z-index: 19891015; width: 450px; height: 380px; top: 169.5px; left: 735px;">
+    <div class="layui-layer-title" style="cursor: move;">{$Think.lang.index_finance_showReceivableManage_choose_customer}</div>
+        <div id="" class="layui-layer-content" style="height: 244px;">
+            <form class="layui-form visitorListTips">
+                <div id="choose_all">
+                    <input type="checkbox" name="productCheckboxAll" title="{$Think.lang.index_finance_showReceivableManage_choose_all}" lay-skin="primary" lay-filter="checkboxAll">
+                    <div class="layui-unselect layui-form-checkbox" lay-skin="primary">
+                        <span>{$Think.lang.index_finance_showReceivableManage_choose_all}</span><i class="layui-icon layui-icon-ok"></i>
+                    </div>
+                </div> <br>
+                <div class="checkboxList" id="insert_input">
+                <!-- 
+                    {foreach name='customer_result' item='vo'}
+                    <input type="checkbox" name="productCheckbox1" value="{$vo.customer_number}" title="{$vo.customer_first_name}{$vo.customer_last_name}" lay-skin="primary" class="productCheckbox">
+                   {/foreach}
+                 -->
+                </div>
+            </form>
+        </div>
+
+    <div class="layui-layer-btn layui-layer-btn-c">
+    	<input type='hidden' id='update_company_order_number' value='' />
+    	<input type='hidden' id='look_index' value='' />
+        <a class="layui-layer-btn0" id="update_customer" >{$Think.lang.index_finance_showMustPayManage_sure}</a>
+        <a class="layui-layer-btn1" id="close_div">{$Think.lang.index_finance_showAgentExpenseManage_cancel}</a>
+    </div>
+    <span class="layui-layer-resize"></span>
+</div> 
+    <div class="layui-footer">
+        <!-- 底部固定区域 -->
+        © layui.com - 底部固定区域
+    </div>
+</div>
+<!--table--》one--》添加-->
+<script type="text/html" id="agentExpenseAdd">
+    <tr>
+	
+        <td>{$Think.lang.index_finance_showAgentExpenseManage_income}</td>
+        <td>
+			<select lay-verify="required">
+				<option value=''>{$Think.lang.index_finance_showAgentExpenseManage_choose}</option>
+			
+			{foreach name='company_order_result' item='v'}
+            	<option value="{$v.company_order_number}">{$v.company_order_number}</option>
+			{/foreach}
+			</select>
+		</td>
+        
+        <td>
+            <select name="agentExpenseNote{{d}}" lay-verify="required">
+				<option value="">{$Think.lang.index_finance_showAgentExpenseManage_choose}</option>
+                <option value="1">{$Think.lang.index_finance_showReceivableManage_teamproduct}</option>
+                <option value="2">{$Think.lang.index_finance_showReceivableManage_hotel}</option>
+                <option value="3">{$Think.lang.index_finance_showReceivableManage_dining}</option>
+                <option value="4">{$Think.lang.index_finance_showReceivableManage_flight}</option>
+                <option value="5">{$Think.lang.index_finance_showReceivableManage_cruise}</option>
+                <option value="6">{$Think.lang.index_finance_showReceivableManage_visa}</option>
+                <option value="7">{$Think.lang.index_finance_showReceivableManage_scenic_spot}</option>
+                <option value="8">{$Think.lang.index_finance_showReceivableManage_vehicle}</option>
+                <option value="9">{$Think.lang.index_finance_showReceivableManage_tourguide}</option>
+                <option value="10">{$Think.lang.index_finance_showReceivableManage_singlesource}</option>
+                <option value="11">{$Think.lang.index_finance_showReceivableManage_ownexpense}</option>
+            </select>
+        </td>
+		<td><input type="text" id="" lay-verify="required" name="agentExpenseSN{{d}}"  placeholder="" class="layui-input" ></td>
+        <td><a href='javascript:void(0)' class='look' company_order_customer_id_and_customer_id='' company_order_customer_id=''>{$Think.lang.index_finance_showAgentExpenseManage_look}</a></td>
+       	<td>
+            <select name="agentExpenseNote" lay-verify="required" lay-search>
+					<option value=''></option>
+            	{foreach name='currency_result' item='v'}
+                	<option value="{$v.currency_id}">{$v.currency_name}</option>
+ 				{/foreach}
+            </select>
+        </td>
+        <td><input type="text" id="" lay-verify="required" name="agentExpensePrice{{d}}"  placeholder="" class="layui-input"></td>
+        <td>
+
+            <a class="layui-btn layui-btn-sm layui-btn-primary hover-add" onclick="agentExpenseAdd(this)">{$Think.lang.index_finance_showAgentExpenseManage_add}</a>
+            <a class="layui-btn layui-btn-sm layui-btn-primary nav-del" onclick="agentExpenseReduce(this)">{$Think.lang.index_finance_showAgentExpenseManage_del}</a>
+
+        </td>
+    </tr>
+</script>
+<!--table--》two--》添加-->
+<script type="text/html" id="agentExpenseAddTwo">
+
+                    <tr>
+                        <td>{$Think.lang.index_finance_showAgentExpenseManage_expenses}</td>
+                        <td>
+                        	<select name="agentExpenseNote2" id='select_c1_{{d}}' lay-filter='agentExpenseNote2' lay-verify='required' class='chose_source_type' lay-search>
+                                <option value="">{$Think.lang.index_finance_showAgentExpenseManage_choose}</option>
+                                <option value="2">{$Think.lang.index_finance_showReceivableManage_hotel}</option>
+                                <option value="3">{$Think.lang.index_finance_showReceivableManage_dining}</option>
+                                <option value="4">{$Think.lang.index_finance_showReceivableManage_flight}</option>
+                                <option value="5">{$Think.lang.index_finance_showReceivableManage_cruise}</option>
+                                <option value="6">{$Think.lang.index_finance_showReceivableManage_visa}</option>
+                                <option value="7">{$Think.lang.index_finance_showReceivableManage_scenic_spot}</option>
+                                <option value="8">{$Think.lang.index_finance_showReceivableManage_vehicle}</option>
+                                <option value="9">{$Think.lang.index_finance_showReceivableManage_tourguide}</option>
+                                <option value="10">{$Think.lang.index_finance_showReceivableManage_singlesource}</option>
+                                <option value="11">{$Think.lang.index_finance_showReceivableManage_ownexpense}</option>
+                            </select>
+                        </td>
+                        <td >
+							<select id='select_c1_{{d}}_select' lay-search></select>
+						</td>
+                        <td><input type="text" id="" lay-verify='required' name="agentExpenseSupplier"  placeholder="" class="layui-input"></td>
+                        
+                        <td>
+                                <select name="agentExpenseNote" lay-search>
+                                	{foreach name='currency_result' item='v'}
+                                    <option value="{$v.currency_id}">{$v.currency_name}</option>
+ 									{/foreach}
+                                </select>
+                        </td>
+                        <td><input type="text" lay-verify='required' id="" name="agentExpenseTdTeam"  placeholder="" class="layui-input"></td>
+                        <td>
+							<input type="text" lay-verify='required' id="" name="agentExpenseTdTeam"  placeholder="" class="layui-input">
+                        </td>
+                        <td><input type="text" lay-verify='required' id="" name="agentExpensePrice"  placeholder="" class="layui-input"></td>
+                        <td>
+
+            				<a class="layui-btn layui-btn-sm layui-btn-primary hover-add" onclick="agentExpenseAddTwo(this)">{$Think.lang.index_finance_showAgentExpenseManage_add}</a>
+            				<a class="layui-btn layui-btn-sm layui-btn-primary nav-del" onclick="agentExpenseReduce(this)">{$Think.lang.index_finance_showAgentExpenseManage_del}</a>
+                        </td>
+                    </tr>
+
+
+</script>
+<input type='hidden' id='#numTwo' value="1"/>
+{include file='public/foot_js' /}
+<script src='__STATIC__/javascript/product/all.js'></script>
+<script src='__STATIC__/javascript/finance/agentExpense.js'></script>
+</body>
+</html>
+

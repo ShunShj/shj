@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head>
+	{include file='public/head' /}
+  	<title>country-manage-add</title>
+	<style>
+		.layui-form .layui-form-label {
+			width: 115px;
+		}
+		.layui-form .layui-input-block {
+			margin-left: 145px;
+		}
+	</style>
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+
+	<div class="layui-header">
+	{include file='public/header' /}
+	</div>
+
+	 <div class="layui-side layui-bg-black">
+	   <div class="layui-side-scroll">
+	     <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+		{include file='public/left_menu' /}
+	   </div>
+	 </div>
+
+	<div class="layui-body">
+
+		<!-- 内容主体区域 -->
+		<div style="padding: 15px;">
+			<div class='layui-form-item'>
+		   		<span class="layui-breadcrumb" lay-separator="-">
+					<a>{$language_tag.index_public_homepage}</a>
+					<a>{$language_tag.index_public_system}</a>
+					<a>{$language_tag.index_system_showCountryManage_country_manage}</a>
+					<a><cite>{$language_tag.index_system_showCountryManage_add_zone}</cite></a>
+				</span>
+			</div>
+			<br/>
+			<br/>
+			<div class="layui-field-box layui-row">
+				<form class="layui-form layui-col-md4" onSubmit="return countryZoneAdd()">
+
+					<label class="layui-form-label input-required">{$language_tag.index_system_showCountryManage_own_country_city}:</label>
+					<div class="layui-input-block layui-form" >
+						<select id="country_city_name_d3" name="country_name2" lay-verify="required"
+								lay-filter="country_name_d3" lay-search>
+							<option value="">--{$language_tag.index_system_showCountryManage_choose_city}--</option>
+							{foreach name="country_level2_result" item='vo'}
+							<option value="{$vo.province_id}">{$vo.country_name}-{$vo.province_name}</option>
+							{/foreach}
+						</select>
+					</div>
+					<br/>
+					<div class="layui-form-item">
+						<label class="layui-form-label input-required">{$language_tag.index_system_showCountryManage_zone}:</label>
+						<div class="layui-input-block">
+							<input id="country_zone_name" name="country_name" lay-verify="required" placeholder="{$language_tag.index_system_showCountryManage_input_zone}" autocomplete="off" class="layui-input" type="text">
+						</div>
+					</div>
+					<label class="layui-form-label">{$language_tag.index_system_showCountryManage_currency}:</label>
+					<div class="layui-input-block layui-form" >
+						<select id="currency_id_d3" name="pid"   lay-filter="country_name_d3" lay-search>
+							<option value="">--{$language_tag.index_system_showCountryManage_choose_currency}--</option>
+							{foreach name="currency_data_result" item='vo'}
+							<option value="{$vo.currency_id}">{$vo.currency_name}</option>
+							{/foreach}
+						</select>
+					</div>
+					<br/>
+					<label class="layui-form-label">{$language_tag.index_system_showCountryManage_language}:</label>
+					<div class="layui-input-block layui-form" >
+						<select id="language_id_d3" name="language_id"   lay-filter="country_name_d3" lay-search>
+							<option value="">--{$language_tag.index_system_showCountryManage_choose_language}--</option>
+							{foreach name="language_data_result" item='vo'}
+							<option value="{$vo.language_id}">{$vo.language_name}</option>
+							{/foreach}
+						</select>
+					</div>
+					<br/>
+					<div class="layui-form-item">
+						<label class="layui-form-label">{$language_tag.index_system_showCountryManage_time_zone}:</label>
+						<div class="layui-input-block">
+							<input id="country_time_zone" name="time_zone"  placeholder="" autocomplete="off" class="layui-input" type="number">
+						</div>
+					</div>
+					<div class="layui-form-item">
+						<div class="layui-input-block">
+							<button class="layui-btn nav-submit" lay-submit="" lay-filter="formDemo" id="currency_add_sp3_button">{$language_tag.index_public_submit}</button>
+							<a href="javascript:history.back(-1)"><button type="button" class="layui-btn layui-btn-primary">{$language_tag.index_public_back}</button></a>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+
+  <div class="layui-footer">
+    <!-- 底部固定区域 -->
+    © layui.com - 底部固定区域
+  </div>
+</div>
+{include file='public/foot_js' /}
+<script src='__STATIC__/javascript/system/system.js'></script>
+</body>
+</html>

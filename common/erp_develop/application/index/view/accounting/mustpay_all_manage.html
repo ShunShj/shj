@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {include file='public/head' /}
+    <title>{$language_tag.index_finance_showMustPayAllManage_batch_cope_money}</title>
+    <link href="__STATIC__/css/finance.css" rel="stylesheet">
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+    <div class="layui-header">
+        {include file='public/header' /}
+    </div>
+
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll">
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            {include file='public/left_menu' /}
+        </div>
+    </div>
+
+    <div class="layui-body">
+
+        <!-- 内容主体区域 -->
+        <div style="padding: 15px;">
+            <div class='layui-form-item'>
+                <span class="layui-breadcrumb" lay-separator="-">
+                   <a>{$language_tag.index_public_homepage}</a>
+                    <a>{$language_tag.index_public_finance}</a>
+                    <a>{$language_tag.index_finance_showMustpayAllManage_total}</a>
+                    <a><cite>{$language_tag.index_finance_showMustpayAllManage_manage}</cite></a>
+                </span>
+            </div>
+            <br>
+            <div class="table-nont">
+                <table class="layui-table layui-form">
+                    <thead>
+                    <tr>
+                        <th style='width:10%'>{$language_tag.index_finance_showMustpayAllManage_payment_type_number}</th>
+						
+                        <th style='width:12%'>{$language_tag.index_finance_showMustpayAllManage_payment_type}</th>
+                        <th>收款方</th>
+						<!-- <th class="input-required">{$language_tag.index_finance_showMustpayAllManage_currency}</th> -->
+                        <th >{$language_tag.index_finance_showMustpayAllManage_receivable_voucher}</th>
+                        <th style='width:10%'>{$language_tag.index_finance_showMustpayAllManage_voucher_time}</th>
+                          <th>{$language_tag.index_public_mark}</th>
+                        <!-- <th>应付总计</th> -->
+                        <th  style='width:10%'>{$language_tag.index_finance_showMustpayAllManage_money}</th>
+                        <th  style='width:10%'>余额</th>
+                        <th>{$language_tag.index_product_showRouteTemplateManage_resources_enclosure} </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>{$language_tag.index_finance_showMustpayAllManage_auto}</td>
+                        <td class="table-input-none">
+                            <select name="allMustpayWay" id='payment_type'>
+                                <option value="1" {if condition='$receipts_pay_result.pay_type eq 1'} selected{/if}>Cash</option>
+                                <option value="2" {if condition='$receipts_pay_result.pay_type eq 2'} selected{/if}>Check</option>
+                                <option value="3" {if condition='$receipts_pay_result.pay_type eq 3'} selected{/if}>Debit Card</option>
+                                <option value="4" {if condition='$receipts_pay_result.pay_type eq 4'} selected{/if}>Credit Card(MC)</option>
+                                <option value="5" {if condition='$receipts_pay_result.pay_type eq 5'} selected{/if}>Credit Card(VS)</option>
+                                <option value="6" {if condition='$receipts_pay_result.pay_type eq 6'} selected{/if}>Credit Card(AX)</option>
+                                <option value="7" {if condition='$receipts_pay_result.pay_type eq 7'} selected{/if}>Credit Deposit</option>
+                                <option value="8" {if condition='$receipts_pay_result.pay_type eq 8'} selected{/if}>OTHERS</option>
+                            	<option value="8" {if condition='$receipts_pay_result.pay_type eq 9'} selected{/if}>paypal</option>
+                            	<option value="8" {if condition='$receipts_pay_result.pay_type eq 10'} selected{/if}>加拿大信用卡</option>
+                            </select>
+                        </td>
+                        <!-- 
+                        <td>
+
+
+                            <select name="allMustpayCurrency" id='currency_id'>
+                                {foreach name='currency_result' item='v'}
+                                <option value="{$v.currency_id}">{$MultilingualAll['currency-currency_name-'.$v.currency_id.'-'.$Think.session.user.language_id][0]['translate']|default=$v.currency_name}</option>
+                                {/foreach}
+
+                            </select>
+                        </td>
+                         -->
+						  <td>{$receipts_pay_result.object_name}</td>
+                        <td class="table-input-none"><input type="text"  id="invoice_number" name="receivable_voucher"  disabled value="{$receipts_pay_result.voucher_number}"   placeholder="{$language_tag.index_finance_showMustpayAllManage_receivable_voucher}" class="layui-input"></td>
+                       
+						<td class="table-input-none"><input type="text" id="invoice_time" name="voucher_time"  disabled {if condition="$receipts_pay_result.voucher_time neq ''"}value="{$receipts_pay_result.voucher_time|date='Y-m-d',###}"{/if}  placeholder="{$language_tag.index_finance_showMustpayAllManage_time}" class="layui-input layui-input-date"></td>
+                        <!--  <td id='cope_money'>{$cope_count}</td>-->
+                       <td class="table-input-none"><input type='text' id='remark' class="layui-input"  disabled value="{$receipts_pay_result.remark}"  /></td>
+                        <td class="table-input-none"><input type="text" id="allMustpayMoney" disabled value="{$receipts_pay_result.base_money}" class="layui-input" ></td>
+                        <td class="table-input-none"><input type="text"  class="layui-input" disabled value="{$receipts_pay_result.balance_money}"></td>
+                    	                   	
+                    	<td class="table-input-none">
+                    	
+                    	    <a id="download" href="{$receipts_pay_result.attachment}" target="_blank" class="layui-btn layui-btn-danger">{$language_tag.index_source_showVisaSourceManage_download}</a>
+                    	 	<input type="hidden" name="file_url" id="uploadVisa" value="{$receipts_pay_result.attachment}" />
+                    	
+                    	</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <br><hr><br>
+            <div class="layui-row">
+                <div class="layui-form-button" style="text-align: right">
+
+                    <a class="layui-btn nav-submit" lay-submit="" id='cope_submit' lay-filter="mustpayAllSubmit">{$language_tag.index_finance_companyOrderManage_add_finance_approval}</a>
+
+                    <a href="/finance/receipts">
+                        <button type="button" class="layui-btn layui-btn-primary">{$language_tag.index_finance_showMustPayManage_cancel}</button>
+                    </a>
+                </div>
+            </div>
+            <br>
+            <form class="layui-form" method='get' action='/finance/showMustpayAllManage'>
+            <input type='hidden' name='receipts_pay_id' id='receipts_pay_id' value='{$receipts_pay_id}' />
+                        <div class='layui-input-inline'>
+                            <input type="text" id="" name="team_product_number"  placeholder="{$language_tag.index_finance_showMustPayManage_team_product_number} "  value="{$Think.get.team_product_number}"  class="layui-input">
+                        </div>
+                        <div class='layui-input-inline'>
+                            <input type="text" id="" name="cope_number"  placeholder="{$language_tag.index_finance_showMustPayManage_cope_number}"  value="{$Think.get.cope_number}"  class="layui-input">
+                        </div>
+                        <!-- 
+                        <div class='layui-input-inline'>
+                            <input type="text" id="" name="supplier_name"  placeholder="{$language_tag.index_finance_showMustPayManage_supplier_name}"  value="{$Think.get.supplier_name}"  class="layui-input">
+                        </div>
+                         -->
+                        <div class='layui-input-inline'>
+                            <input type="text" id="" name="product_name"  placeholder="{$language_tag.index_finance_showMustPayManage_product_name}"  value="{$Think.get.product_name}"  class="layui-input">
+                        </div>
+                        <div class='layui-input-inline'>
+                            <select name="currency_id" id='currency_id'>
+                            	<option value=''>请选择</option>
+                                {foreach name='currency_result' item='v'}
+                                <option value="{$v.currency_id}" {if condition="$v.currency_id eq $use_currency_id"}selected {/if}>{$MultilingualAll['currency-currency_name-'.$v.currency_id.'-'.$Think.session.user.language_id][0]['translate']|default=$v.currency_name}</option>
+                                {/foreach}
+
+                            </select>
+						</div>
+                    <button class="layui-btn nav-search" >{$language_tag.index_public_search}</button>
+            </form>
+            <div class="table-nont">
+                <table class="layui-table layui-form table-product-poper">
+                    <thead>
+                    <tr>
+                        <th><input type="checkbox" name="receivableCheckboxAll" lay-skin="primary" lay-filter="mustpayCheckboxAll" ></th>
+                       	<th >{$language_tag.index_finance_showMustPayManage_team_product_number} </th>
+                        <th >{$language_tag.index_finance_showMustPayManage_cope_number}</th>
+						<th >{$language_tag.index_finance_showMustPayManage_receivable_object_name}</th>
+
+
+
+                        <th >{$language_tag.index_finance_showMustPayManage_product_name}</th>
+
+                        <th>{$language_tag.index_finance_showMustPayManage_currency_name}</th>
+                        <th>{$language_tag.index_finance_showMustPayManage_cope_money}</th>
+                        <th width="140px">{$language_tag.index_finance_showMustPayManage_unpaid}</th>
+                        <th width="140px">{$language_tag.index_finance_showMustpayAllManage_true_receipt_allocation}</th>
+                         <th width="140px">扣除金额</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+            		{foreach name='cope_data_result' item='cdr'}
+            			{if condition="($Think.get.supplier_name == '') or ($cdr.receivable_object_name == $Think.get.supplier_name)"}
+		                    <tr class='cope_info'>
+		                    	
+								<td><input lay-filter="filter" type="checkbox" name="copeCheckbox"  class='cope_checkbox' lay-skin="primary" ></td> 
+		 						<td>{$cdr.team_product_number}</td>
+		                        <td>{$cdr.cope_number}</td>
+								<td>{$cdr.receivable_object_name}</td>
+		                        <!--
+								<td>{$cdr.invoice_number}</td>
+		                        <td>{if condition="$cdr.invoice_time neq ''"} {$cdr.invoice_time|date='Y-m-d',###}{/if}</td>
+		                         -->
+								<td>
+									{$cdr.product_name}
+		
+		
+		                        </td>
+		                        <td class="table-input-none">
+		
+		                            <select name="allMustpayCurrency" disabled>
+		                            	{foreach name='currency_result' item='vv'}
+		                                <option value="{$vv.currency_id}" {if condition='$vv.currency_id eq $cdr.cope_currency_id'}selected{/if}>{$MultilingualAll['currency-currency_name-'.$vv.currency_id.'-'.$Think.session.user.language_id][0]['translate']|default=$vv.currency_name}</option>
+										{/foreach}
+		                            </select>
+		
+		                        </td>
+		                         <td class="table-input-none"><input type="text" name="allMustpayTotal" value="{$cdr.cope_money}{$cdr.currency_unit}" class="layui-input total" disabled  ></td>
+		                        <td class="table-input-none"><input type="text" style='display:inline;width:100px;' value="{$cdr.need_cope_money}" class="layui-input total" disabled  >{$cdr.currency_unit}</td>
+		                        <td><input type="text" style='display:inline;width:100px;' disabled placeholder="" class="layui-input cope_count" value="0" currency_id='{$cdr.cope_currency_id}'>{$cdr.currency_unit}</td>
+		                   		<td class="table-input-none"><input type="text" style='display:inline;width:100px;' disabled placeholder="" disabled value='0'  class="layui-input shikou"  >{$receipts_pay_result.base_currency_unit}</td>
+                   		
+		                    </tr>
+						{/if}
+					{/foreach}
+
+                    </tbody>
+                     {foreach name='$proportion_result' item='v'}
+                    <input type='hidden'  id='huilv{$v.currency_id}' value='{$v.currency_proportion}'/>
+                    
+                    {/foreach}
+                </table>
+            </div>
+
+            <br><br>
+
+        </div>
+    </div>
+
+    <div class="layui-footer">
+        <!-- 底部固定区域 -->
+        © layui.com - 底部固定区域
+    </div>
+</div>
+{include file='public/foot_js' /}
+<script src='__STATIC__/javascript/product/all.js'></script>
+<script src='__STATIC__/javascript/finance/mustpay.js'></script>
+<script>
+
+var upload = layui.upload; //得到 upload 对象
+upload.render({
+    elem: '.test',
+    url:'/upload/uploadFileAll',
+    accept:'file',
+  	size:20480,
+    before: function(obj){ //obj参数包含的信息，跟 choose回调完全一致，可参见上文。
+    layer.load(); //上传loading
+    },
+    done: function(res, index, upload){
+        layer.closeAll('loading'); //关闭loading
+        console.log(res);
+        if(res.code == 200){
+            //do something （比如将res返回的图片链接保存到表单的隐藏域）
+            $('#uploadVisa').val(res.data);
+            $('#download').attr('href',res.data);
+            $('#download').show();
+        }
+    },error: function(index, upload){
+        layer.closeAll('loading'); //关闭loading
+    }
+});
+
+</script>
+</body>
+</html>

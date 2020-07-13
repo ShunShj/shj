@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {include file='public/head' /}
+    <title>费用分摊</title>
+    <link href="__STATIC__/css/product.css" rel="stylesheet">
+    <link href="__STATIC__/css/finance.css" rel="stylesheet">
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+    <div class="layui-header">
+        {include file='public/header' /}
+    </div>
+
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll">
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            {include file='public/left_menu' /}
+        </div>
+    </div>
+
+    <div class="layui-body">
+        <div style="padding: 15px 15px 0px;">
+            <div class="body-top">
+                <div class='layui-form-item'>
+                <span class="layui-breadcrumb" lay-separator="-">
+                    <a>{$Think.lang.index_public_homepage}</a>
+                    <a>{$Think.lang.index_public_finance}</a>
+                    <a>{$Think.lang.index_finance_CostSharingList_apportion_proportion}</a>
+                    <a><cite>{$_GET['year']}{$Think.lang.index_finance_CostSharingList_year}{$_GET['month']}{$Think.lang.index_finance_CostSharingList_month_detail}</cite></a>
+                </span>
+                </div>
+                <br>
+                <div class='layui-block input-inline'>
+                    <form class="layui-form mustpay-form" method='get' action='/finance/CostSharingInfo'>
+                        <div class='layui-input-inline'>
+                            <select name="company"  lay-search >
+                                <option value="">{$Think.lang.index_finance_CostSharingList_all_branchcompany}</option>
+                                {foreach $Company as $k=>$v}
+                                <option value="{$v.company_id}" {$v.company_id==$_GET['company']?'selected':''}>{$v.company_name}</option>
+                                {/foreach}
+                            </select>
+                        </div>
+                        <input type="hidden" value="{$_GET['year']}" name="year">
+                        <input type="hidden" value="{$_GET['month']}" name="month">
+
+                        <div class='layui-button-inline layui-search-inline'>
+                            <button class="layui-btn nav-search" >{$Think.lang.index_public_search}</button>
+                        </div>
+                    </form>
+                    <div class='layui-button-inline'>
+                        <a href="/finance/CostSharingInfoCsv?company={$_GET['company']}&year={$_GET['year']}&month={$_GET['month']}"><button class="layui-btn nav-add">{$Think.lang.index_finance_CostSharingList_upload}</button></a>
+                    </div>
+                </div>
+                <hr><br>
+            </div>
+
+            <p style="font-size: 20px;font-weight: bold">{$Think.lang.index_finance_CostSharingList_add_detail}</p>
+            <div class="table-nont pageHeight">
+                <table class="layui-table layui-form"  id="">
+                    <thead>
+                    <tr>
+                        <td>{$Think.lang.index_finance_CostSharingList_branchcompany}</td>
+                        <td>{$Think.lang.index_finance_CostSharingList_add_detail}</td>
+                        <td>{$Think.lang.index_finance_CostSharingList_add_total_money}（{$Think.lang.index_finance_CostSharingList_add_chinese_money}）</td>
+                        <td>{$Think.lang.index_source_operation}</td>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {foreach $ApportionProportion as $k=>$v}
+                    <tr>
+                        <td>{$CompanyGroup[$v.company_id][0]['company_name']}</td>
+                        <td>{$v.project_name}</td>
+                        <td>{$v.total_money|number_format=2}</td>
+                        <td>
+                            <!--<a href="" class="layui-btn layui-btn-sm hover-edit layui-btn-primary">查看</a>-->
+                            <a href="/finance/UpCostSharing?apportion_proportion_id={$v.apportion_proportion_id}&year={$_GET['year']}&month={$_GET['month']}" class="layui-btn layui-btn-sm hover-edit layui-btn-primary">{$Think.lang.index_public_update}</a>
+                            <a href="/finance/DelCostSharing?apportion_proportion_id={$v.apportion_proportion_id}" class="layui-btn layui-btn-sm hover-edit layui-btn-primary">{$Think.lang.index_public_del}</a>
+                        </td>
+                    </tr>
+                    {/foreach}
+                    </tbody>
+                </table>
+            </div>
+            <br><br>
+            <div style="text-align: right;font-size: 16px;font-weight: bold">{$Think.lang.index_finance_CostSharingList_total}：{$ApportionProportion[0]['all_money']|number_format=2} RMB</div>
+            <br>
+            <div style="text-align: right">
+                <a href="/finance/AddCostSharing?year={$_GET['year']}&month={$_GET['month']}"><button class="layui-btn nav-add">{$Think.lang.index_finance_CostSharingList_add_proportion}</button></a>
+            </div>
+            <br><hr><br>
+            <p style="font-size: 20px;font-weight: bold">{$Think.lang.index_finance_CostSharingList_total_proportion}</p>
+            <div class="table-nont pageHeight">
+                <table class="layui-table layui-form" >
+                    <thead>
+                    <tr>
+                        <td>{$Think.lang.index_finance_CostSharingList_branchcompany}</td>
+                        <td>{$Think.lang.index_finance_CostSharingList_proportion}</td>
+                        <td>{$Think.lang.index_finance_CostSharingList_apportion_proportion_money}（{$Think.lang.index_finance_CostSharingList_add_chinese_money}）</td>
+                    </tr>
+                    </thead>
+                    </tbody>
+                    {assign name='nust' value='0'}
+                    {foreach $Company as $k=>$v}
+                    {if $v.company_id<>1}
+                        <tr>
+                            <?php $nust+=round($CompanyApportionProportion[$v['company_id']][0]['apportion_proportion']*$ApportionProportion[0]['all_money']/100,2);?>
+                            <td>{$v.company_name}</td>
+                            <td><?=sprintf('%.2f',$CompanyApportionProportion[$v['company_id']][0]['apportion_proportion']);?> %</td>
+                            <td id="company_id-{$v.company_id}">
+                                <?=number_format(round($CompanyApportionProportion[$v['company_id']][0]['apportion_proportion']*$ApportionProportion[0]['all_money']/100,2),2)?>
+                            </td>
+                            <td class="company_id" id="class-{$v.company_id}"  style="display: none"><?=round($CompanyApportionProportion[$v['company_id']][0]['apportion_proportion']*$ApportionProportion[0]['all_money']/100,2)?></td>
+                        </tr>
+                    {/if}
+                    {/foreach}
+                    </table>
+            </div>
+            <div style="text-align: right;font-size: 16px;font-weight: bold" >{$Think.lang.index_finance_CostSharingList_total}：<font id="nust">{$nust|number_format=2}</font> RMB</div><br>
+            <div style="text-align: right">
+                <a href="/finance/EstablishmentOfAScaleOfAssessments"><button class="layui-btn nav-add">{$Think.lang.index_finance_CostSharingList_set_proportion}</button></a>
+            </div>
+            <br><br><br><br>
+
+        </div>
+    </div>
+    <div class="layui-footer">
+        <!-- 底部固定区域 -->
+        © layui.com - 底部固定区域
+    </div>
+</div>
+{include file='public/foot_js' /}
+<script src='__STATIC__/javascript/product/all.js'></script>
+<script src='__STATIC__/javascript/finance/receivable.js'></script>
+<script>
+    var nust = {$nust};
+    var all_money = {$ApportionProportion[0]['all_money']};
+    !function() {
+        if(all_money>nust){
+            var u = all_money-nust;
+            company  = parseFloat($('#company_id-13').parent().find('td').eq(3).html())+u;
+            company = parseFloat(company.toFixed(2));
+            $('#company_id-13').html(company.toLocaleString());
+            $('#class-13').html(company);
+
+            var sun = 0;
+            $('.company_id').each(function(){
+                sun += (parseFloat($(this).html())) ;
+            });
+            sun = sun.toFixed(2);
+            sun =  parseFloat(sun);
+            $('#nust').html(sun.toLocaleString());
+
+        }
+    }();
+
+</script>
+</body>
+</html>

@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<head>
+    {include file='public/head' /}
+    <title>layout 后台大布局 - Layui</title>
+
+    <style>
+        .nav {
+            display: inline-block;
+            position: relative;
+            height: 54px;
+            font-size: 15px;
+        }
+
+        .nav > * {
+            display: inline-block;
+        }
+
+        .nav > .t {
+            position: absolute;
+            top: 0;
+            background: rgb(208, 210, 211);
+            /* Skew */
+            -webkit-transform: skew(30deg);
+            -moz-transform: skew(30deg);
+            -o-transform: skew(30deg);
+            transform: skew(30deg);
+        }
+
+        .nav > .b {
+            position: absolute;
+            bottom: 0;
+            background: rgb(208, 210, 211);
+            /* Skew */
+            -webkit-transform: skew(-30deg);
+            -moz-transform: skew(-30deg);
+            -o-transform: skew(-30deg);
+            transform: skew(-30deg);
+        }
+
+        .tab .nav>.t,.tab .nav>.b{
+            -webkit-transform: none;
+            -moz-transform: none;
+            -o-transform: none;
+            transform: none;
+        }
+
+
+        .nav > a {
+            /*position:absolute;
+            top:0;*/
+            margin-left: 13px;
+            vertical-align: middle;
+            text-align: center;
+            text-decoration: none;
+            cursor: default;
+            font-weight: bold;
+            color: #77787b !important;
+        }
+
+        .nav.hover>a{
+            color: #ffffff !important;
+        }
+
+        .nav.hover > span {
+            background-color: #3376ba;
+            cursor: pointer;
+        }
+
+        .nav.done_step.hover>span{
+            background-color: #3376ba;
+        }
+
+        .nav.hover > a {
+            cursor: pointer;
+        }
+
+        .ab_position {
+            position: absolute;
+        }
+
+        .nav > .first_mark {
+            position: absolute;
+            top: 0;
+            z-index: 1;
+            width: 16px;
+            height: 100%;
+            background-color: #ffffff;
+            left: -8px;
+        }
+
+        .nav.done_step>a,.nav.active_step>a{
+            color: #ffffff !important;
+        }
+
+        .nav.done_step>.t,.nav.done_step>.b{
+            background-color: #767780;
+        }
+
+        .nav.active_step>.t,.nav.active_step>.b{
+            background-color: #3376ba;
+        }
+
+        .tab_border{
+            height: 2px;
+            background-color: #767780;
+            margin-left: 8px;
+            margin-top: -4px;
+        }
+
+    </style>
+
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+    <div class="layui-header">
+        {include file='public/header' /}
+    </div>
+
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll">
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            {include file='public/left_menu_booknexus' /}
+        </div>
+    </div>
+
+    <div class="layui-body">
+
+        <!-- 内容主体区域 -->
+        <div style="padding: 15px 15px 0px;">
+            <div class='layui-row'>
+		   		<span class="layui-breadcrumb" lay-separator="-">
+                    <a>首页</a>
+                    <a>B2B</a>
+					<a>创建产品</a>
+				</span>
+            </div>
+            <br>
+            {include file='booknexus_tour/menu' /}
+
+            <div class="layui-row layui-col-space12" style="padding: 20px 10px">
+                <div class="layui-col-md8">
+                    <div class="layui-form-item">
+                        <label class="layui-form-label ">AIRPORT 机场:</label>
+                        <div class="layui-input-block layui-form add-s">
+                            <select class="layui-select" id="add-airport">
+                                <option value="1">1</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-col-md8">
+                    <div class="layui-form-item">
+                        <label class="layui-form-label ">FROM:</label>
+                        <div class="layui-input-block layui-form">
+                            <input class="layui-input time  add-s" value=""   placeholder="HH:mm:ss" id="add-from" >
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-col-md8">
+                    <div class="layui-form-item">
+                        <label class="layui-form-label ">To:</label>
+                        <div class="layui-input-block layui-form">
+                            <input class="layui-input  time  add-s"  placeholder="HH:mm:ss" id="add-to" >
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-col-md8">
+                    <div class="layui-form-item">
+                        <label class="layui-form-label ">Min Pax:</label>
+                        <div class="layui-input-block layui-form">
+                            <input class="layui-input  add-s" id="add-pax" >
+                        </div>
+                    </div>
+                </div>
+
+                <div class="layui-col-md8">
+                    <div class="layui-form-item">
+                        <label class="layui-form-label ">Type:</label>
+                        <div class="layui-input-block layui-form">
+                            <select class="layui-select  add-s" id="add-type">
+                                <option></option>
+                                <option value="1">Hotel Transfer</option>
+                                <option value="2">Airport Transfer</option>
+                                <option value="3">Bus Pickup</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="layui-col-md8" style="text-align: center">
+                    <a  class="layui-btn layui-btn-sm layui-btn-primary add-transfer">Add Transfer</a>
+                </div>
+
+            </div>
+
+
+            <br>
+            <div class="layui-row layui-col-space12" style="padding: 10px;font-size: 14px;font-weight: bold">Added Tour Transfer</div>
+            <br><br>
+
+            <form class="layui-form" id="form1" onSubmit="return add()">
+            <div class="sel-transfer">
+                {empty name="$Think.session.addTourTransferForm"}
+
+                {else /}
+                    <?php $kk=0; ?>
+                    {foreach $Think.session.addTourTransferForm.transfer as $k=>$v }
+                    <div  class="layui-row layui-col-space8 d-transfer" style="border-bottom: 1px solid #000;margin-bottom: 20px">
+                        <div class="layui-col-md8">
+                            <div class="layui-form-item">
+                                <label class="layui-form-label ">AIRPORT 机场:</label>
+                                <div class="layui-input-block layui-form">
+                                    <select class="layui-select" id="airport-{$kk}" name="transfer[{$kk}][airport]">
+                                        <option value="1">1</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-col-md8">
+                            <div class="layui-form-item">
+                                <label class="layui-form-label ">FROM:</label>
+                                <div class="layui-input-block layui-form">
+                                    <input class="layui-input  time" value="{$v.from}"   placeholder="HH:mm:ss" id="from-{$kk}" name="transfer[{$kk}][from]" >
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-col-md8">
+                            <div class="layui-form-item">
+                                <label class="layui-form-label ">To:</label>
+                                <div class="layui-input-block layui-form">
+                                    <input class="layui-input  time"  placeholder="HH:mm:ss" id="to-{$kk}" name="transfer[{$kk}][to]" value="{$v.to}" >
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-col-md8">
+                            <div class="layui-form-item">
+                                <label class="layui-form-label ">Min Pax:</label>
+                                <div class="layui-input-block layui-form">
+                                    <input class="layui-input" id="pax-{$kk}" name="transfer[{$kk}][pax]" value="{$v.pax}">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-col-md8">
+                            <div class="layui-form-item">
+                                <label class="layui-form-label ">Type:</label>
+                                <div class="layui-input-block layui-form">
+                                    <select class="layui-select" id="type-{$kk}" name="transfer[{$kk}][type]">
+                                        <option></option>
+                                        <option value="1" {$v.type==1?'selected':''}>Hotel Transfer</option>
+                                        <option value="2" {$v.type==2?'selected':''}>Airport Transfer</option>
+                                        <option value="3" {$v.type==3?'selected':''}>Bus Pickup</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-col-md8">
+                            <div class="layui-form-item">
+                                <label class="layui-form-label "></label>
+                                <div class="layui-input-block layui-form">
+                                    <a  class="layui-btn layui-btn-sm layui-btn-primary romove">Romove</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <?php $kk++; ?>
+                    {/foreach}
+
+                {/empty}
+
+
+            </div>
+            <div class="layui-col-md8" style="padding: 20px;font-weight: bold;font-size:14px;text-align: center">
+                <button   class="layui-btn nav-submit" >Save & Next</button>
+            </div>
+            </form>
+        </div>
+    </div>
+
+
+    <div  style="display: none" id="hinnd-div">
+        <div  class="layui-row layui-col-space8 d-transfer" style="border-bottom: 1px solid #000;margin-bottom: 20px">
+            <div class="layui-col-md8">
+                <div class="layui-form-item">
+                    <label class="layui-form-label ">AIRPORT 机场:</label>
+                    <div class="layui-input-block layui-form">
+                        <select class="layui-select" id="airport-ii" name="transfer[ii][airport]">
+                            <option value="1">1</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-col-md8">
+                <div class="layui-form-item">
+                    <label class="layui-form-label ">FROM:</label>
+                    <div class="layui-input-block layui-form">
+                        <input class="layui-input" value=""   placeholder="HH:mm:ss" id="from-ii" name="transfer[ii][from]" >
+                    </div>
+                </div>
+            </div>
+            <div class="layui-col-md8">
+                <div class="layui-form-item">
+                    <label class="layui-form-label ">To:</label>
+                    <div class="layui-input-block layui-form">
+                        <input class="layui-input"  placeholder="HH:mm:ss" id="to-ii" name="transfer[ii][to]" >
+                    </div>
+                </div>
+            </div>
+            <div class="layui-col-md8">
+                <div class="layui-form-item">
+                    <label class="layui-form-label ">Min Pax:</label>
+                    <div class="layui-input-block layui-form">
+                        <input class="layui-input" id="pax-ii" name="transfer[ii][pax]">
+                    </div>
+                </div>
+            </div>
+            <div class="layui-col-md8">
+                <div class="layui-form-item">
+                    <label class="layui-form-label ">Type:</label>
+                    <div class="layui-input-block layui-form">
+                        <select class="layui-select" id="type-ii" name="transfer[ii][type]">
+                            <option></option>
+                            <option value="1">Hotel Transfer</option>
+                            <option value="2">Airport Transfer</option>
+                            <option value="3">Bus Pickup</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-col-md8">
+                <div class="layui-form-item">
+                    <label class="layui-form-label "></label>
+                    <div class="layui-input-block layui-form">
+                        <a  class="layui-btn layui-btn-sm layui-btn-primary romove">Romove</a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+
+    <div class="layui-footer">
+        <!-- 底部固定区域 -->
+        © layui.com - 底部固定区域
+    </div>
+</div>
+{include file='public/foot_js' /}
+<script>
+    //JavaScript代码区域
+    var layer = layui.layer;
+    var form = layui.form;
+    var laydate = layui.laydate;
+
+    {empty name='$Think.session.addTourTransferForm.transfer'}
+    var ii = 0;
+    {else /}
+    var ii = {$Think.session.addTourTransferForm.transfer|count};
+    {/empty}
+
+    $('.time').each(function(){
+        laydate.render({
+            elem: this
+            ,type: 'time'
+        });
+    });
+
+
+
+    $('.add-transfer').click(function(){
+        var airport = $('#add-airport').val();
+        var from =  $('#add-from').val();
+        var to =  $('#add-to').val();
+        var pax = $('#add-pax').val();
+        var type = $('#add-type').val();
+
+        var html = $('#hinnd-div').html();
+        console.log(html);
+        for(var ij=0;ij<20;ij++){
+            html = html.replace('ii',ii);
+        }
+        $('.sel-transfer').append(html);
+
+        $('#airport-'+ii).val(airport);
+        $('#from-'+ii).val(from);
+        $('#to-'+ii).val(to);
+        $('#pax-'+ii).val(pax);
+        $('#type-'+ii).val(type);
+
+        $('.add-s').val('');
+
+        laydate.render({
+            elem: '#from-'+ii
+            ,type: 'time'
+        });
+        laydate.render({
+            elem: '#to-'+ii
+            ,type: 'time'
+        });
+
+        form.render();
+        ii++;
+
+        $('.romove').click(function(){
+            $(this).parents('.d-transfer').remove();
+        });
+
+    });
+
+
+
+    $('.romove').click(function(){
+        $(this).parents('.d-transfer').remove();
+    });
+
+    function add(){
+        $.ajax({
+            type: "POST",
+            url: '/booknexus_tour/addTourTransferFormAjax',
+            data:  $('#form1').serializeArray(),
+            success: function(data){
+                //console.log(data);
+                if(data.code!=200){
+                    layer.msg(data.msg);
+                    return false;
+                }else if(data.code==200) {
+                    layer.msg('操作成功',{time:2000,end : function(layero, index){
+                         location.href="/booknexus_tour/addTourCommissionForm";
+                    }
+                    });
+                }
+            },
+            error:function(XMLHttpRequest, textStatus, errorThrown){
+                layer.msg('验证失败')
+            }
+        });
+        return false;
+    }
+
+
+</script>
+
+</body>
+</html>

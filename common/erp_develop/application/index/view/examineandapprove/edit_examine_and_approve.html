@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {include file='public/head' /}
+    <title>{$language_tag.index_public_role}-{$language_tag.index_examineAndApprove_editExamineAndApprove_approval_auth}</title>
+    <style>
+        .aa>tbody>tr>td{
+            border: 1px solid #ddd;
+        }
+        .bb>tbody>tr>td:first-child,.cc>tbody>tr>td:first-child {
+            border-right: 1px solid #ddd;
+        }
+        .cc{
+            border-bottom:1px solid #ddd;
+            width:100%;
+        }
+        .cc:last-child{
+            border:none;
+        }
+        .cc>tbody>tr>td:first-child{
+            width:200px;
+        }
+    </style>
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+
+    <div class="layui-header">
+        {include file='public/header' /}
+    </div>
+
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll">
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            {include file='public/left_menu' /}
+        </div>
+    </div>
+
+    <div class="layui-body">
+
+        <!-- 内容主体区域 -->
+        <div style="padding: 15px;">
+            <div class='layui-form-item'>
+		   		<span class="layui-breadcrumb">
+					<a href="#">{$language_tag.index_public_homepage}</a>
+					<a href="#">{$language_tag.index_public_system}</a>
+                    <a href="#">{$language_tag.index_system_showRoleManage_role_manage}</a>
+					<a href="#"><cite>{$language_tag.index_examineAndApprove_editExamineAndApprove_approval_auth}</cite></a>
+				</span>
+            </div>
+            <br/>
+
+            <h3>{$language_tag.index_examineAndApprove_editExamineAndApprove_approval_role}：{$role.role_name}</h3><br/><hr>
+            <form class="layui-form" id="form1"  onSubmit="return add()">
+                <div class="layui-form-item">
+                    <table class="aa">
+                        {foreach $obtain_approval_type_g['0-1'] as $v1}
+                        <tr>
+                            <td class="layui-input-block" style="width: 15%;text-align: left;padding-left: 15px">
+                                <input class="level1-{$v1.approval_type_id}" data-v="{$v1.approval_type_id}-1" value="{$v1.approval_type_id}" type="checkbox" name="types[]" title="{$v1.apellation}"  lay-skin="primary" {if in_array($v1.approval_type_id,$approval_type_id_ar)}checked{/if} >
+                            </td>
+
+                            <td>
+                            {if empty($obtain_approval_type_g[$v1.approval_type_id.'-2'])}
+                            <table class="bb">
+                                <tr>
+                                    <td style="width: 200px;text-align: left;padding-left: 15px">&nbsp;</td>
+                                    <td style="clear: both">
+                                        {foreach $obtain_approval_type_g[$v1.approval_type_id.'-3'] as $v3}
+                                        <div style="width: 150px;float: left;padding: 5px">
+                                            <input class="level1-{$v1.approval_type_id}" value="{$v3.approval_type_id}" type="checkbox" name="types[]" title="{$v3.apellation}"  lay-skin="primary"  {if in_array($v3.approval_type_id,$approval_type_id_ar)}checked{/if}>
+                                        </div>
+                                        {/foreach}
+                                    </td>
+                                </tr>
+                            </table>
+                            {else/}
+                                {foreach $obtain_approval_type_g[$v1.approval_type_id.'-2'] as $v2}
+                                    <table class="cc">
+                                        <tr>
+                                            <td style="width: 200px;text-align: left;padding-left: 15px"><input data-v="{$v2.approval_type_id}-2" class="level1-{$v1.approval_type_id}" value="{$v2.approval_type_id}" type="checkbox" name="types[]" title="{$v2.apellation}"  lay-skin="primary" {if in_array($v2.approval_type_id,$approval_type_id_ar)}checked{/if}></td>
+                                            <td style="clear: both">
+                                                {foreach $obtain_approval_type_g[$v2.approval_type_id.'-3'] as $v3}
+                                                <div style="width: 150px;float: left;padding: 5px">
+                                                    <input class="level1-{$v1.approval_type_id} level2-{$v2.approval_type_id}" value="{$v3.approval_type_id}" type="checkbox" name="types[]" title="{$v3.apellation}"  lay-skin="primary" {if in_array($v3.approval_type_id,$approval_type_id_ar)}checked{/if} >
+                                                </div>
+                                                {/foreach}
+                                            </td>
+                                        </tr>
+                                    </table>
+                                {/foreach}
+                            {/if}
+                            </td>
+
+                        </tr>
+                        {/foreach}
+                    </table>
+                </div>
+                <br><br><br>
+                <div class="layui-form-item">
+                    <div class="layui-input-block">
+                        <button class="layui-btn" lay-submit="" lay-filter="formDemo" id="language_add_button">{$language_tag.index_public_submit}</button>
+                        <button type="reset" class="layui-btn layui-btn-primary">{$language_tag.index_product_showRouteTemplateManage_reload}</button>
+                        <a href='/system/showRoleManage'><button type="button" class="layui-btn layui-btn-primary">{$language_tag.index_public_back}</button></a>
+                    </div>
+                </div>
+            </form>
+
+        </div>
+
+    </div>
+
+    <div class="layui-footer">
+        <!-- 底部固定区域 -->
+        © layui.com - 底部固定区域
+    </div>
+</div>
+{include file='public/foot_js' /}
+<script src='__STATIC__/javascript/system/language.js'></script>
+
+<script>
+    !function() {
+        var layer = layui.layer;
+        var form = layui.form;
+        var laydate = layui.laydate;
+        var table = layui.table;
+        var laytpl = layui.laytpl;
+
+        form.on('checkbox', function(data){
+            console.log(data);
+            var v = data.elem.dataset.v;
+            var it = v.split('-');
+            var child = $('.level'+it[1]+'-'+it[0]);
+            console.log(child);
+            child.each(function(index, item){
+                item.checked = data.elem.checked;
+            })
+            form.render('checkbox');
+        });
+
+
+
+
+    }();
+
+
+    function add(){
+        layer.load(2);
+        $.ajax({
+            type: "POST",
+            url: '/examine_and_approve/editExamineAndApproveAjax?role_id={$_GET["role_id"]}',
+            data: $('#form1').serializeArray(),
+            success: function (data) {
+                layer.closeAll();
+                if(data.code!=200){
+                    layer.msg(data.msg);
+                    return false;
+                }else if(data.code==200){
+                    layer.msg('success',{time:1,end : function(layero, index){
+                        location.reload();
+                    }
+                    });
+                }
+            },
+            error:function(XMLHttpRequest, textStatus, errorThrown){
+                //console.log(errorThrown)
+                layer.closeAll();
+                layer.msg('{$language_tag.index_public_verificationFailure}')
+
+            }
+        });
+        return false;
+    }
+
+
+</script>
+
+</body>
+</html>

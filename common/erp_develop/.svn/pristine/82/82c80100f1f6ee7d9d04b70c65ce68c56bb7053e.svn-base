@@ -1,0 +1,30 @@
+//取消订单
+$('.del_company_order').click(function(){
+	var company_order_number = $(this).attr('company_order_number')
+	//调取AJAX
+    $.ajax({
+        type: "POST",
+        url: '/branchcompany/del_company_order',
+        data: {
+
+            "company_order_number":company_order_number,
+
+            "status":0
+        },
+        success: function(data){
+            // console.log(data);
+        	
+            if(data.code!=200){
+                layer.msg(data.msg);
+                return false;
+            }else if(data.code==200) {
+                layer.msg('操作成功',{time:1,end : function(layero, index){
+                        location.reload();
+                       
+                    }
+                });
+            }
+        }
+    });
+	
+})

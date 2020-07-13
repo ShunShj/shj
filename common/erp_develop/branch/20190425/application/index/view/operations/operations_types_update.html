@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {include file='public/head' /}
+    <title>修改待办类型</title>
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+
+    <div class="layui-header">
+        {include file='public/header' /}
+    </div>
+
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll">
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            {include file='public/left_menu' /}
+        </div>
+    </div>
+
+    <div class="layui-body">
+
+        <!-- 内容主体区域 -->
+        <div style="padding: 15px;">
+            <div class='layui-form-item'>
+		   		<span class="layui-breadcrumb" lay-separator="-">
+                    <a>首页</a>
+                    <a>分公司管理</a>
+                    <a>待办模板</a>
+                    <a><cite>修改待办类型</cite></a>
+				</span>
+            </div>
+
+            <br/>
+            <br/>
+            <br/>
+            <form class="layui-form" id="form1" onSubmit="return add()">
+                <div class="layui-row layui-col-space10">
+                    <div class="layui-col-md10">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label input-required">待办类型:</label>
+                            <div class="layui-input-block layui-form">
+                                <input class="layui-input" type="text" name="name"  lay-verify="required" value="{$OperationsType.name}"/>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="layui-col-md10">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label input-required">状态:</label>
+                            <div class="layui-input-block layui-form">
+                                <select name="status" class="layui-select" >
+                                    <option value="1" {$OperationsType.status==1?'selected':''} >开启</option>
+                                    <option value="2" {$OperationsType.status==2?'selected':''}>关闭</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="layui-form-item">
+                        <div class="layui-input-block all-button-center">
+                            <button class="layui-btn nav-submit" lay-submit="" lay-filter="formDemo" id="addBut">提交</button>
+                            <a href="/operations/types"><button type="button" class="layui-btn layui-btn-primary">取消</button></a>
+                        </div>
+                    </div>
+
+            </form>
+        </div>
+    </div>
+
+
+    <div class="layui-footer">
+        <!-- 底部固定区域 -->
+        © layui.com - 底部固定区域
+    </div>
+</div>
+{include file='public/foot_js' /}
+
+
+<script>
+
+    !function() {
+        var layer = layui.layer;
+        var form = layui.form;
+        var laydate = layui.laydate;
+
+
+
+    }();
+
+
+    function add() {
+        layer.load(2);
+        $.ajax({
+            type: "POST",
+            url: '/operations/upOperationsTypesAjax?id={$_GET["id"]}',
+            data: $('#form1').serializeArray(),
+            success: function (data) {
+                layer.closeAll();
+                if(data.code!=200){
+                    layer.msg(data.msg)
+                    return false;
+                }else if(data.code==200){
+                    layer.msg('{$Think.lang.index_public_success}',{time:1,end : function(layero, index){
+                        history.back(-1);
+                    }
+                    });
+                }
+            },
+            error:function(XMLHttpRequest, textStatus, errorThrown){
+                layer.closeAll();
+                //console.log(errorThrown)
+                layer.msg('{$Think.lang.index_public_verificationFailure}')
+
+            }
+        });
+        return false;
+    }
+</script>
+
+
+<script>
+    // opener.addHotel();
+</script>
+
+</body>
+</html>
+

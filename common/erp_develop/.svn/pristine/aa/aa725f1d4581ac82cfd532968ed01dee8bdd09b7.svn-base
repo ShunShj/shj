@@ -1,0 +1,207 @@
+<style>
+    .nav {
+        display: inline-block;
+        position: relative;
+        height: 54px;
+        font-size: 15px;
+    }
+
+    .nav > * {
+        display: inline-block;
+    }
+
+    .nav > .t {
+        position: absolute;
+        top: 0;
+        background: rgb(208, 210, 211);
+        /* Skew */
+        -webkit-transform: skew(30deg);
+        -moz-transform: skew(30deg);
+        -o-transform: skew(30deg);
+        transform: skew(30deg);
+    }
+
+    .nav > .b {
+        position: absolute;
+        bottom: 0;
+        background: rgb(208, 210, 211);
+        /* Skew */
+        -webkit-transform: skew(-30deg);
+        -moz-transform: skew(-30deg);
+        -o-transform: skew(-30deg);
+        transform: skew(-30deg);
+    }
+
+    .tab .nav>.t,.tab .nav>.b{
+        -webkit-transform: none;
+        -moz-transform: none;
+        -o-transform: none;
+        transform: none;
+    }
+
+
+    .nav > a {
+        /*position:absolute;
+        top:0;*/
+        margin-left: 13px;
+        vertical-align: middle;
+        text-align: center;
+        text-decoration: none;
+        cursor: default;
+        font-weight: bold;
+        color: #77787b !important;
+    }
+
+    .nav.hover>a{
+        color: #ffffff !important;
+    }
+
+    .nav.hover > span {
+        background-color: #3376ba;
+        cursor: pointer;
+    }
+
+    .nav.done_step.hover>span{
+        background-color: #3376ba;
+    }
+
+    .nav.hover > a {
+        cursor: pointer;
+    }
+
+    .ab_position {
+        position: absolute;
+    }
+
+    .nav > .first_mark {
+        position: absolute;
+        top: 0;
+        z-index: 1;
+        width: 16px;
+        height: 100%;
+        background-color: #ffffff;
+        left: -8px;
+    }
+
+    .nav.done_step>a,.nav.active_step>a{
+        color: #ffffff !important;
+    }
+
+    .nav.done_step>.t,.nav.done_step>.b{
+        background-color: #767780;
+    }
+
+    .nav.active_step>.t,.nav.active_step>.b{
+        background-color: #3376ba;
+    }
+
+    .tab_border{
+        height: 2px;
+        background-color: #767780;
+        margin-left: 8px;
+        margin-top: -4px;
+    }
+
+    .layui-form .layui-form-label{
+        width: 200px;
+        padding: 9px 5px 9px 0;
+        text-align: left;
+
+    }
+
+    .layui-form .layui-input-block{
+        margin-left:210px;
+    }
+
+</style>
+
+<div class="step" style="overflow-x: hidden;">
+                    <span class="nav {$function_name=='createtourform'?'active_step':'' } {$Think.session.createTourForm?' done_step':'' }" style="width: 81px;">
+                        <label class="first_mark"></label>
+                        <span class="t" style="width: 81px; height: 27px;"></span>
+                        <span class="b" style="width: 81px; height: 27px;"></span>
+                        <a href="/booknexus_tour/createTourForm" class="ab_position" style="top: 18.5px;">General</a>
+                    </span>
+                    <span class="nav {$function_name=='addtourdatesform'?'active_step':'' } {$Think.session.addTourDatesForm?' done_step':'' }" style="width: 66px;">
+                        <span class="t" style="width: 66px; height: 27px;"></span>
+                        <span class="b" style="width: 66px; height: 27px;"></span>
+                        <a href="/booknexus_tour/addTourDatesForm" class="ab_position" style="top: 18.5px;">Dates</a>
+                    </span>
+                    <span class="nav {$function_name=='addtouritineraryform'?'active_step':'' } {$Think.session.addTourItineraryForm?' done_step':'' }" style="width: 84px;">
+                        <span class="t" style="width: 84px; height: 27px;"></span>
+                        <span class="b" style="width: 84px; height: 27px;"></span>
+                        <a href="/booknexus_tour/addTourItineraryForm" class="ab_position" style="top: 18.5px;">Itinerary</a>
+                    </span>
+                    <span class="nav {$function_name=='addtourroomform'?'active_step':'' } {$Think.session.addTourRoomForm?' done_step':'' }"  style="width: 68px;">
+                        <span class="t" style="width: 68px; height: 27px;"></span>
+                        <span class="b" style="width: 68px; height: 27px;"></span>
+                        <a href="/booknexus_tour/addTourRoomForm" class="ab_position" style="top: 18.5px;">Room</a>
+                    </span>
+                    <span class="nav {$function_name=='addtourtransferform'?'active_step':'' } {$Think.session.addTourTransferForm?' done_step':'' }" style="width: 85px;">
+                        <span class="t" style="width: 85px; height: 27px;"></span>
+                        <span class="b" style="width: 85px; height: 27px;"></span>
+                        <a href="/booknexus_tour/addTourTransferForm" class="ab_position" style="top: 18.5px;">Transfer</a>
+                    </span>
+                    <span class="nav {$function_name=='addtourcommissionform'?'active_step':'' } {$Think.session.addTourCommissionForm?' done_step':'' }" style="width: 115px;">
+                        <span class="t" style="width: 115px; height: 27px;"></span>
+                        <span class="b" style="width: 115px; height: 27px;"></span>
+                        <a href="/booknexus_tour/addTourCommissionForm" class="ab_position" style="top: 18.5px;">Commission</a>
+                    </span>
+                    <span class="nav {$function_name=='addtouroptionsform'?'active_step':'' }  {$Think.session.addTourOptionsForm?' done_step':'' }" style="width: 82px;">
+                        <span class="t" style="width: 82px; height: 27px;"></span>
+                        <span class="b" style="width: 82px; height: 27px;"></span>
+                        <a href="/booknexus_tour/addTourOptionsForm" class="ab_position" style="top: 18.5px;">Options</a>
+                    </span>
+                        <span class="nav {$function_name=='addtoursettingform'?'active_step':'' }" style="width: 76px;">
+                        <span class="t" style="width: 76px; height: 27px;"></span>
+                        <span class="b" style="width: 76px; height: 27px;"></span>
+                        <a href="/booknexus_tour/addTourSettingForm" class="ab_position" style="top: 18.5px;">Setting</a>
+                    </span>
+</div>
+<script>
+    $(function () {
+        var navWidth=0;
+        //init layout
+        $(".nav>a").each(function () {
+            var width = $(this).outerWidth(), height = $(this).outerHeight(), parH = $(this).closest(".nav").height();
+            var mH = (parH - height) / 2;
+            var parWidth = width + 25;
+            navWidth+=parWidth+5;
+            $(this).closest(".nav").width(parWidth);
+            $(this).siblings(":not(.first_mark)").width(parWidth).height(parH / 2);
+            $(this).addClass("ab_position");
+            $(this).css("top", mH);
+        });
+
+        $(".tab_border").width(navWidth);
+
+
+        $(".nav>span").hover(setColor, removeColor);
+        $(".nav>a").hover(setColor, removeColor);
+
+        $(".nav>span,.nav>a").click(function (e) {
+            e.preventDefault();
+            var parNav=$(this).closest(".nav");
+            if(parNav.hasClass("done_step")||parNav.hasClass("active_step")||parNav.hasClass("editing_step")){
+                var h=parNav.find("a").attr("href");
+                window.location.href=h;
+            }
+        });
+
+        function setColor(e) {
+            e.preventDefault();
+            var parNav=$(this).closest(".nav");
+            if(parNav.hasClass("done_step")||parNav.hasClass("active_step")||parNav.hasClass("editing_step")){
+                parNav.addClass("hover");
+            }
+        }
+
+        function removeColor(e) {
+            $(this).closest(".nav").removeClass("hover");
+            e.preventDefault();
+        }
+
+    })
+
+
+</script>

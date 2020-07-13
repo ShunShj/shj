@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {include file='public/head' /}
+    <title>language-manage</title>
+    <link href="__STATIC__/css/source.css" rel="stylesheet">
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+    <div class="layui-header">
+        {include file='public/header' /}
+    </div>
+
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll">
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            {include file='public/left_menu' /}
+        </div>
+    </div>
+
+    <div class="layui-body">
+
+        <!-- 内容主体区域 -->
+        <div style="padding: 15px 15px 0px;">
+            <div class="body-top">
+                <div class='layui-form-item'>
+			<span class="layui-breadcrumb" lay-separator="-">
+                <a>{$language_tag.index_public_homepage}</a>
+				<a>{$language_tag.index_public_system}</a>
+				<a><cite>{$language_tag.index_nav_exchangeRate_management}</cite></a>
+			</span>
+                </div>
+                <br/>
+                <div class='layui-block input-inline' >
+                    <form method='get' action='/system/showCurrencyProportionEdit' >
+                        <div class='layui-input-inline'>
+                            <div class="layui-form">
+                                <input type="text" class="layui-input"  name="proportion_time" id="proportion_time" placeholder="{$language_tag.index_finance_CostSharingList_year_time}" value="{$currency_proportion_result.proportion_time}" lay-verify="required">
+                            </div>
+                        </div>
+                        <div class='layui-button-inline layui-search-inline'>
+                            <button class="layui-btn nav-search">{$language_tag.index_public_search}</button>
+                        </div>
+                    </form>
+                    <div class='layui-button-inline input-inline'>
+                        <button class="layui-btn nav-add" onclick="currencyproportionEdit()">{$language_tag.index_public_save}</button>
+                        <a href='/system/showCurrencyProportionManage'><button class="layui-btn nav-add">{$language_tag.index_public_back}</button></a>
+                    </div>
+                </div>
+                <hr><br>
+            </div>
+            <div class="table-nont  ">
+                <table class="layui-table">
+                    <thead id="currency_proportion_currency">
+                    <tr>
+                        <th>{$language_tag.index_source_showCruisesSourceManage_currency}</th>
+                        {foreach name="currency_proportion_result" item="vo" }
+                        <th data-value="{$vo.currency_id}">{$MultilingualAll['currency-currency_name-'.$vo.currency_id.'-'.$Think.session.user.language_id][0]['translate']|default=$vo.currency_name}</th>
+                        {/foreach}
+                    </tr>
+                    </thead>
+                    <tbody id="currency_proportion_result">
+                    {volist name="currency_proportion_result" id="vo" key='i'}
+                    <tr>
+
+                        <td data-value="{$vo.currency_id}" >{$MultilingualAll['currency-currency_name-'.$vo.currency_id.'-'.$Think.session.user.language_id][0]['translate']|default=$vo.currency_name}</td>
+                        {if condition="count($vo.currency_array)>0"}
+                        {volist name="vo.currency_array" id="vvo"}
+                        <td><input  class="layui-input currency_proportion "  type="text" name="currency_proportion" value="{$vvo.currency_proportion}" currency_attr="{$vvo.currency_proportion_id}"  lay-verify="required"></td>
+                         {/volist}
+                        {else/}
+                        {foreach name="currency_proportion_result" item="vo" }
+                        <td><input  class="layui-input " type="text" name="" value="" ></td>
+                        {/foreach}
+                        {/if}
+                    </tr>
+                    {/volist}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+	<input type='hidden' id='t' value="{$Think.get.t}" />
+    <div class="layui-footer">
+        <!-- 底部固定区域 -->
+        © layui.com - 底部固定区域
+    </div>
+</div>
+{include file='public/foot_js' /}
+<script src='__STATIC__/javascript/system/system.js'></script>
+<script>
+
+    layui.use('laydate', function(){
+        var laydate = layui.laydate;
+        laydate.render({
+            elem: '#proportion_time'
+            ,type: 'month'
+            ,format: 'yyyyMM'
+            ,value:$('#t').val()
+        });
+
+    });
+</script>
+</body>
+</html>

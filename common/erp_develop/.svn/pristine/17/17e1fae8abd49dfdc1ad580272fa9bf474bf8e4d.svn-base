@@ -1,0 +1,32 @@
+      <ul class="layui-nav layui-nav-tree" id="left-nav" lay-filter="test">
+
+          <li {if condition="$controller_name eq 'otaarticle' or $controller_name eq 'otatheme' or $controller_name eq 'enquirty' or $controller_name eq 'otasystem' or $controller_name eq 'otaslide' or $controller_name eq 'otaproduct' or $controller_name eq 'otamember' or $controller_name eq 'otamediapool'"} class="layui-nav-item layui-nav-itemed"{else/} class="layui-nav-item" {/if}>
+          <a class="" href="javascript:void(0)"><i class="layui-icon layui-icon-website"></i><em>官网管理</em></a>
+          <dl class="layui-nav-child">
+              <dd {in name="function_name" value="showotawebsitemanage,showotawebsiteedit"} class="layui-this" {/in}><a href="/ota_system/showOtaWebsiteManage?status=1">网站设置</a></dd>
+              {notempty name="$Think.session.website_uuid"}
+              <dd {in name="function_name" value="showotamenumanage,showotamenuadd,showotamenuedit,showotamenulistmanage,showotamenulistadd,showotamenulistedit"} class="layui-this" {/in} ><a href="/ota_system/showOtaMenuListManage?status=1">菜单</a></dd>
+              <dd {in name="function_name" value="showmediapoolmanage,showmediapooladd"} class="layui-this" {/in} ><a href="/ota_media_pool/showMediaPoolManage">媒体库</a></dd>
+              <dd {in name="function_name" value="showarticletypemanage,showarticletypeadd,showarticletypeedit,showarticletypeinfo"} class="layui-this" {/in} ><a href="/ota_article/showArticleTypeManage?status=1">文章分类</a></dd>
+              <dd {in name="function_name" value="showarticlemanage,showarticleadd,showarticleedit,showarticleinfo"} class="layui-this" {/in} ><a href="/ota_article/showArticleManage?status=1">文章</a></dd>
+              <dd {in name="function_name" value="showslidelistmanage,showslidelistadd,showslidelistedit,showslidemanage,showslideadd,showslideedit,showslideinfo"} class="layui-this" {/in} ><a href="/ota_slide/showSlideListManage?status=1">幻灯片</a></dd>
+              <dd {in name="function_name" value="showadvertlistmanage,showadvertlistadd,showadvertlistedit,showadvertlistinfo,showadvertmanage,showadvertadd,showadvertedit,showadvertinfo"} class="layui-this" {/in} ><a href="/ota_slide/showAdvertListManage?status=1">友情链接</a></dd>
+              <dd {in name="function_name" value="showadvertisingmanage,showadvertisingadd,showadvertisinginfo,showadvertisingedit,showadvertisingproductmanage,showadvertisingproductedit,showadvertisingproductadd,showadvertisingsubtitleedit,showadvertisingsubtitleadd,showadvertisingsubtitlemanage"} class="layui-this" {/in} ><a href="/ota_slide/showAdvertisingManage?status=1">广告位</a></dd>
+              <!--<dd {in name="function_name" value="showcompanywebsitemanage"} class="layui-this" {/in} ><a href="/ota_system/showCompanyWebsiteManage?status=1">域名管理</a></dd>-->
+              <dd {in name="function_name" value="index,addenquirty,editenquirty"} class="layui-this" {/in} ><a href="/enquirty/index">需求定制</a></dd>
+              <dd {in name="function_name" value="lst,add,edit"} class="layui-this" {/in} ><a href="/ota_member/lst?status=1">账号管理</a></dd>
+              <dd {in name="function_name" value="types,addtype,edittype,gettypeinfo"} class="layui-this" {/in} ><a href="/ota_product/types?status=1">旅游产品分类</a></dd>
+              <dd {in name="function_name" value="products,addlist,editlist"} class="layui-this" {/in} ><a href="/ota_product/products?status=1">旅游产品</a></dd>
+
+			  <dd {in name="function_name" value="page_index"} class="layui-this" {/in} ><a href="/ota_theme/page_index">主题</a></dd>
+              <dd {in name="function_name" value="page_list,new_built_page,update_built_page"} class="layui-this" {/in} ><a href="/ota_theme/page_list">页面列表</a></dd>
+
+              <dd {in name="function_name" value="showotasubscribemanage"} class="layui-this" {/in} ><a href="/ota_system/showOtaSubscribeManage">订阅</a></dd>
+
+              <dd {in name="function_name" value="showotawebsitepaymanage,showpaypaladd"} class="layui-this" {/in} ><a href="/ota_system/showOtaWebsitePayManage">支付管理</a></dd>
+
+            {/notempty}
+          </dl>
+
+          </li>
+      </ul>

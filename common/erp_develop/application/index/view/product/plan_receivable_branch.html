@@ -1,0 +1,1885 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {include file='public/head' /}
+    <title>{$language_tag.index_product_ShowPlanTour_resources_teamProduct}-{$language_tag.index_product_PlanReceivableBranch_receivable_branch}</title>
+    <link href="__STATIC__/css/select2.min.css" rel="stylesheet">
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+    <div class="layui-header">
+        {include file='public/header' /}
+    </div>
+
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll">
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            {include file='public/left_menu' /}
+        </div>
+    </div>
+
+    <div class="layui-body">
+
+        <!-- 内容主体区域 -->
+        <div style="padding: 15px;">
+            <div class='layui-form-item'>
+			<span class="layui-breadcrumb" lay-separator="-">
+                <a>{$language_tag.index_public_homepage}</a>
+				<a>{$language_tag.index_public_product}</a>
+				<a>{$language_tag.index_product_ShowPlanTour_resources_teamProduct}</a>
+                <a><cite>{$language_tag.index_product_ShowPlanTour_suppliersPayable}</cite></a>
+			</span>
+            </div>
+            <br/>
+            <div class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief">
+                <ul class="layui-tab-title">
+                    <li><a href="/product/PlanSuppliersPayable?plan_id={$_GET['plan_id']}&number={$_GET['number']}">{$language_tag.index_product_PlanSuppliersPayable_payableToSuppliers}</a></li>
+                    <li class="layui-this">{$language_tag.index_product_PlanSuppliersPayable_receivableBranch}</li>
+                    <li><a href="">{$language_tag.index_product_PlanSuppliersPayable_incomeStatement}</a></li>
+                </ul>
+                <br/>
+                <div class="layui-tab-content">
+                    <form class="layui-form"  id="form1" onSubmit="return add()" >
+                        <table class="layui-table" >
+                            <thead>
+                            <tr style="text-align: center">
+                                <td rowspan="2">{$language_tag.index_product_PlanSuppliersPayable_receivableItem}</td>
+                                <td rowspan="2">{$language_tag.index_product_PlanSuppliersPayable_sourceBranch}</td>
+                                <td rowspan="2">{$language_tag.index_finance_showReceivableManage_order_number}</td>
+                                <td rowspan="2">{$language_tag.index_finance_showReceivableManage_receivable_number}</td>
+                                <td colspan="5">{$language_tag.index_product_PlanSuppliersPayable_detail}</td>
+                                <td rowspan="2" width="11%">{$language_tag.index_source_operation}</td>
+                            </tr>
+                            <tr style="text-align: center">
+                                <td>{$language_tag.index_product_visitor_order_visitor}</td>
+                                <td>{$language_tag.index_public_type}</td>
+                                <td>{$language_tag.index_product_PlanBooking_order_product}</td>
+                                <td>{$language_tag.index_product_showRouteTemplateManage_resources_currency}</td>
+                                <td>{$language_tag.index_product_showRouteTemplateManage_resources_price}</td>
+                            </tr>
+                            </thead>
+                            <tbody id="tb">
+
+                            {notempty name='$list["团费"]'}
+                            {assign name='s1' value='1'}
+                            {assign name='s2' value='1'}
+                            {assign name='ss2' value='1'}
+                            {assign name='s3' value='1'}
+                            {assign name='u1' value=''}
+                            <!--类型-->
+                            {assign name='u2' value=''}
+                            <!--供应商-->
+                            {assign name='u3' value='0'}
+                            {assign name='bl' value='1'}
+                            {foreach $list['团费']['data'] as $k1=>$v1}
+                            {foreach $v1['data'] as $k2=>$v2}
+                            {foreach $v2 as $k3=>$v3}
+                            <tr>
+                                {if ($bl==1)}
+                                <td id="r-1" rowspan="{$list['团费']['count']}">{$language_tag.index_product_PlanSuppliersPayable_teamCoping}</td>
+                                {assign name='bl' value='0'}
+                                {/if}
+
+                                {if ($u2!=$k1)}
+                                {assign name='ss2' value='1'}
+                                <td class="layui-form type" id="r-1-{$s1}" rowspan="{$v1['count']}" >
+                                    <select name="team_coping_branch[{$s1}]" lay-filter="team_coping_branch" data-ky="{$s1}" class="team_coping_branch team_coping_branch-{$s1}" lay-search>
+                                        <option value="a">{$language_tag.index_public_select}</option>
+                                        {foreach $branchs as $k=>$v}
+                                        <option value="{$v.company_id}" {$v.company_id==$k1?'selected':''}>{$v.company_name}</option>
+                                        {/foreach}
+                                    </select>
+                                    <a class="layui-btn layui-btn-sm r-add nav-add" style="width: 100%;margin-top:10px;{if (count($list['团费']['data'])!=$s1) }display: none{/if}" >{$language_tag.index_public_add}</a>
+                                </td>
+                                {assign name='s1' value='$s1+1'}
+                                {/if}
+
+                                {if ($u3!=$k2 || $u2!=$k1) }
+                                <td class="layui-form supplier" id="r-2-{$s2}" rowspan="{$v2|count}">
+                                    <select name="team_coping_booking[{$s1-1}][{$s2}]" class="team_coping_booking  ab-{$s1-1} ac-{$s1-1}-{$s2}" lay-filter="team_coping_booking" data-ky="{$s1-1}" data-ky2="{$s2}" lay-search>
+                                        <option value="a">{$language_tag.index_public_select}</option>
+                                        {foreach $ReceivableList[$k1] as $k=>$v}
+                                        <option value="{$v.order_number}" {$k2==$v.order_number?'selected':''}>{$v.order_number}</option>
+                                        {/foreach}
+                                    </select>
+
+                                    <a class="layui-btn layui-btn-sm r-add2 nav-add" style="width: 100%;margin-top:10px;{if (count($v1['data'])!=$ss2)}display: none{/if}" data-info="{$s1-1}">{$language_tag.index_public_add}</a>
+
+                                </td>
+                                {assign name='s2' value='$s2+1'}
+                                {assign name='ss2' value='$ss2+1'}
+                                {/if}
+
+                                <td>
+                                    {$v3.receivable_number}
+                                    <input name="team_coping_receivable_number[{$s1-1}][{$s2-1}][{$s3}]" type="hidden" value="{$v3.receivable_number}" />
+                                </td>
+
+                                <td width="20%" >
+                                    <select name='team_coping_sn[{$s1-1}][{$s2-1}][{$s3}][]' class="team_coping_sn at-{$s1-1} au-{$s1-1}-{$s2-1} ad-{$s1-1}-{$s2-1}-{$s3} select2" multiple="multiple"  lay-ignore >
+                                        {foreach $v3['youke'] as $v}
+                                        <option value="{$v.company_order_customer_id}" <?php if(in_array($v['company_order_customer_id'],$v3['customer_info'])){echo 'selected';} ?>>{$v.company_order_customer_id}</option>
+                                        {/foreach}
+                                    </select>
+                                </td>
+
+                                <td>
+                                    <select name="team_coping_types[{$s1-1}][{$s2-1}][{$s3}]" class="team_coping_types-{$s1-1}-{$s2-1}-{$s3}" lay-search >
+                                        {foreach $types as $k=>$v}
+                                        <option value="{$k}" {$k==$v3.product_source_type_id?'selected':''}>{$v}</option>
+                                        {/foreach}
+                                    </select>
+                                </td>
+
+                                <td>
+                                    <input  class="layui-input" name="team_coping_item[{$s1-1}][{$s2-1}][{$s3}]" value="{$v3.product_name}" />
+                                </td>
+
+                                <td>
+                                    <select name="team_coping_currency[{$s1-1}][{$s2-1}][{$s3}]" lay-search>
+                                        <option value="a">{$language_tag.index_public_select}</option>
+                                        {foreach $Currency as $v}
+                                        <option value="{$v.currency_id}" {$v3.currency_id==$v.currency_id?'selected':''}>{$v.currency_name}</option>
+                                        {/foreach}
+                                    </select>
+                                </td>
+
+                                <td>
+                                    <input  class="layui-input" name="team_coping_price[{$s1-1}][{$s2-1}][{$s3}]" value="{$v3.receivable_money}" />
+                                </td>
+
+                                <td>
+                                    <a class="layui-btn layui-btn-sm r-del hover-edit layui-btn-primary" data-info="{$s1-1}" data-info2="{$s2-1}">{$language_tag.index_public_del}</a>
+                                    <a class="layui-btn layui-btn-sm r-add3 hover-add layui-btn-primary" data-info="{$s1-1}" data-info2="{$s2-1}">{$language_tag.index_public_add}</a>
+                                </td>
+
+                                {assign name='s3' value='$s3+1'}
+                                {assign name='u2' value='$k1'}
+                                {assign name='u3' value='$k2'}
+
+                            </tr>
+                            {/foreach}
+                            {/foreach}
+                            {/foreach}
+                            {else/}
+                            <tr>
+                                    <td  id="r-1" rowspan="1" >{$language_tag.index_product_PlanSuppliersPayable_teamReceivable}</td>
+                                    <td  class="layui-form branch" id="r-1-1" rowspan="1" >
+                                        <select name="team_coping_branch[1]" lay-filter="team_coping_branch" data-ky="1" class="team_coping_branch team_coping_branch-1"   lay-search>
+                                            <option value="a">{$language_tag.index_public_select}</option>
+                                            {foreach $branchs as $k=>$v}
+                                            <option value="{$v.company_id}">{$v.company_name}</option>
+                                            {/foreach}
+                                        </select>
+                                        <a class="layui-btn layui-btn-sm r-add nav-add" style="width: 100%;margin-top:10px" >{$language_tag.index_public_add}</a>
+                                    </td>
+                                    <td class="layui-form booking" id="r-2-1" rowspan="1">
+                                        <select name="team_coping_booking[1][1]" lay-filter="team_coping_booking"  class="team_coping_booking  ab-1 ac-1-1" data-ky="1" data-ky2="1" lay-search>
+                                            <option value="a">{$language_tag.index_public_select}</option>
+                                        </select>
+                                        <a class="layui-btn layui-btn-sm r-add2 nav-add" style="width: 100%;margin-top:10px" data-info="1" >{$language_tag.index_public_add}</a>
+                                    </td>
+                                    <td>{$language_tag.index_branchcompany_showBranchProductManage_number}</td>
+                                    <td width="20%" >
+                                        <select name='team_coping_sn[1][1][1][]' class="team_coping_sn at-1 au-1-1 ad-1-1-1 select2" multiple="multiple"  lay-ignore ></select>
+                                    </td>
+                                    <td>
+                                        <select name="team_coping_types[1][1][1]" class="team_coping_types-1-1-1" lay-search >
+                                            {foreach $types as $k=>$v}
+                                                <option value="{$k}">{$v}</option>
+                                            {/foreach}
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <input  class="layui-input" name="team_coping_item[1][1][1]" />
+                                    </td>
+                                    <td>
+                                        <select name="team_coping_currency[1][1][1]" lay-search>
+                                            <option value="a">{$language_tag.index_public_select}</option>
+                                            {foreach $Currency as $v}
+                                            <option value="{$v.currency_id}">{$v.currency_name}</option>
+                                            {/foreach}
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <input  class="layui-input" name="team_coping_price[1][1][1]" />
+                                    </td>
+                                    <td>
+                                        <a class="layui-btn layui-btn-sm r-del hover-edit layui-btn-primary" data-info="1" data-info2="1">{$language_tag.index_public_del}</a>
+                                        <a class="layui-btn layui-btn-sm r-add3 hover-add layui-btn-primary" data-info="1" data-info2="1">{$language_tag.index_public_add}</a>
+                                    </td>
+                                </tr>
+                            {/notempty}
+
+
+                            {notempty name='$list["地接"]'}
+                            {assign name='Qs1' value='1'}
+                            {assign name='Qs2' value='1'}
+                            {assign name='Qss2' value='1'}
+                            {assign name='Qs3' value='1'}
+                            {assign name='Qu1' value=''}
+                            <!--类型-->
+                            {assign name='Qu2' value=''}
+                            <!--供应商-->
+                            {assign name='Qu3' value='0'}
+                            {assign name='Qbl' value='1'}
+                            {foreach $list['地接']['data'] as $k1=>$v1}
+                            {foreach $v1['data'] as $k2=>$v2}
+                            {foreach $v2 as $k3=>$v3}
+
+                                <tr>
+                                {if ($Qbl==1)}
+                                <td id="v-1" rowspan="{$list['地接']['count']}">{$language_tag.index_finance_showAgentExpenseManage_travel_agency_reimbursement}</td>
+                                {assign name='Qbl' value='0'}
+                                {/if}
+
+                                {if ($Qu2!=$k1)}
+                                {assign name='Qss2' value='1'}
+                                <td class="layui-form type" id="v-1-{$Qs1}" rowspan="{$v1['count']}" >
+                                    <select name="ground_connection_branch[{$Qs1}]" lay-filter="ground_connection_branch" data-ky="{$Qs1}" class="ground_connection_branch ground_connection_branch-{$Qs1}" lay-search>
+                                        <option value="a">{$language_tag.index_public_select}</option>
+                                        {foreach $branchs as $k=>$v}
+                                        <option value="{$v.company_id}" {$v.company_id==$k1?'selected':''}>{$v.company_name}</option>
+                                        {/foreach}
+                                    </select>
+                                    <a class="layui-btn layui-btn-sm v-add nav-add" style="width: 100%;margin-top:10px;{if (count($list['地接']['data'])!=$Qs1) }display: none{/if}" >{$language_tag.index_public_add}</a>
+                                </td>
+                                {assign name='Qs1' value='$Qs1+1'}
+                                {/if}
+
+                                {if ($Qu3!=$k2 || $Qu2!=$k1) }
+                                <td class="layui-form supplier" id="v-2-{$Qs2}" rowspan="{$v2|count}">
+                                    <select name="ground_connection_booking[{$Qs1-1}][{$Qs2}]" class="ground_connection_booking  vb-{$Qs1-1} vc-{$Qs1-1}-{$Qs2}" lay-filter="ground_connection_booking" data-ky="{$Qs1-1}" data-ky2="{$Qs2}" lay-search>
+                                        <option value="a">{$language_tag.index_public_select}</option>
+                                        {foreach $ReceivableList[$k1] as $k=>$v}
+                                        <option value="{$v.order_number}" {$k2==$v.order_number?'selected':''}>{$v.order_number}</option>
+                                        {/foreach}
+                                    </select>
+                                    <a class="layui-btn layui-btn-sm v-add2 nav-add" style="width: 100%;margin-top:10px;{if (count($v1['data'])!=$Qss2)}display: none{/if}" data-info="{$Qs1-1}">{$language_tag.index_public_add}</a>
+                                </td>
+                                {assign name='Qs2' value='$Qs2+1'}
+                                {assign name='Qss2' value='$Qss2+1'}
+                                {/if}
+
+                                    <td>
+                                        {$v3.receivable_number}
+                                        <input name="ground_connection_receivable_number[{$Qs1-1}][{$Qs2-1}][{$Qs3}]" type="hidden" value="{$v3.receivable_number}" />
+                                    </td>
+
+                                    <td width="20%" >
+                                        <select name='ground_connection_sn[{$Qs1-1}][{$Qs2-1}][{$Qs3}][]' class="ground_connection_sn vt-{$Qs1-1} vu-{$Qs1-1}-{$Qs2-1} vd-{$Qs1-1}-{$Qs2-1}-{$Qs3} select2" multiple="multiple"  lay-ignore >
+                                            {foreach $v3['youke'] as $v}
+                                            <option value="{$v.company_order_customer_id}" <?php if(in_array($v['company_order_customer_id'],$v3['customer_info'])){echo 'selected';} ?>>{$v.company_order_customer_id}</option>
+                                            {/foreach}
+                                        </select>
+                                    </td>
+
+                                    <td>
+                                        <select name="ground_connection_types[{$Qs1-1}][{$Qs2-1}][{$Qs3}]" class="ground_connection_types-{$Qs1-1}-{$Qs2-1}-{$Qs3}" lay-search >
+                                            {foreach $types as $k=>$v}
+                                            <option value="{$k}" {$k==$v3.product_source_type_id?'selected':''}>{$v}</option>
+                                            {/foreach}
+                                        </select>
+                                    </td>
+
+                                    <td>
+                                        <input  class="layui-input" name="ground_connection_item[{$Qs1-1}][{$Qs2-1}][{$Qs3}]" value="{$v3.product_name}" />
+                                    </td>
+
+                                    <td>
+                                        <select name="ground_connection_currency[{$Qs1-1}][{$Qs2-1}][{$Qs3}]" lay-search>
+                                            <option value="a">{$language_tag.index_public_select}</option>
+                                            {foreach $Currency as $v}
+                                            <option value="{$v.currency_id}" {$v3.currency_id==$v.currency_id?'selected':''}>{$v.currency_name}</option>
+                                            {/foreach}
+                                        </select>
+                                    </td>
+
+                                    <td>
+                                        <input  class="layui-input" name="ground_connection_price[{$Qs1-1}][{$Qs2-1}][{$Qs3}]" value="{$v3.receivable_money}" />
+                                    </td>
+
+                                    <td>
+                                        <a class="layui-btn layui-btn-sm v-del hover-edit layui-btn-primary" data-info="{$Qs1-1}" data-info2="{$Qs2-1}">{$language_tag.index_public_del}</a>
+                                        <a class="layui-btn layui-btn-sm v-add3 hover-add layui-btn-primary" data-info="{$Qs1-1}" data-info2="{$Qs2-1}">{$language_tag.index_public_add}</a>
+                                    </td>
+
+                                    {assign name='Qs3' value='$Qs3+1'}
+                                    {assign name='Qu2' value='$k1'}
+                                    {assign name='Qu3' value='$k2'}
+
+                                </tr>
+                            {/foreach}
+                            {/foreach}
+                            {/foreach}
+                            {else/}
+                                <tr>
+                                    <td  id="v-1" rowspan="1" >{$language_tag.index_finance_showAgentExpenseManage_travel_agency_reimbursement}</td>
+                                    <td  class="layui-form branch" id="v-1-1" rowspan="1" >
+                                        <select name="ground_connection_branch[1]" lay-filter="ground_connection_branch" data-ky="1" class="ground_connection_branch ground_connection_branch-1"   lay-search>
+                                            <option value="a">{$language_tag.index_public_select}</option>
+                                            {foreach $branchs as $k=>$v}
+                                            <option value="{$v.company_id}">{$v.company_name}</option>
+                                            {/foreach}
+                                        </select>
+                                        <a class="layui-btn layui-btn-sm v-add nav-add" style="width: 100%;margin-top:10px" >{$language_tag.index_public_add}</a>
+                                    </td>
+                                    <td class="layui-form booking" id="v-2-1" rowspan="1">
+                                        <select name="ground_connection_booking[1][1]" lay-filter="ground_connection_booking"  class="ground_connection_booking  vb-1 vc-1-1" data-ky="1" data-ky2="1"  lay-search>
+                                            <option value="a">{$language_tag.index_public_select}</option>
+                                        </select>
+                                        <a class="layui-btn layui-btn-sm v-add2 nav-add" style="width: 100%;margin-top:10px" data-info="1" >{$language_tag.index_public_add}</a>
+                                    </td>
+                                    <td>{$language_tag.index_branchcompany_showBranchProductManage_number}</td>
+                                    <td>
+                                        <select name="ground_connection_sn[1][1][1][]" class="ground_connection_sn vt-1 vu-1-1 vd-1-1-1 select2" multiple="multiple" lay-ignore >
+
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <select name="ground_connection_types[1][1][1]"  class="ground_connection_types-1-1-1"  lay-search >
+                                            {foreach $types as $k=>$v}
+                                            <option value="{$k}">{$v}</option>
+                                            {/foreach}
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <input  class="layui-input" name="ground_connection_item[1][1][1]" />
+                                    </td>
+                                    <td>
+                                        <select name="ground_connection_currency[1][1][1]" lay-search >
+                                            <option value="a">{$language_tag.index_public_select}</option>
+                                            {foreach $Currency as $v}
+                                            <option value="{$v.currency_id}">{$v.currency_name}</option>
+                                            {/foreach}
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <input  class="layui-input" name="ground_connection_price[1][1][1]" />
+                                    </td>
+                                    <td>
+                                        <a class="layui-btn layui-btn-sm v-del hover-edit layui-btn-primary" data-info="1" data-info2="1">{$language_tag.index_public_del}</a>
+                                        <a class="layui-btn layui-btn-sm v-add3 hover-add layui-btn-primary" data-info="1" data-info2="1">{$language_tag.index_public_add}</a>
+                                    </td>
+                                </tr>
+                                {/notempty}
+
+
+                            {notempty name='$list["其他"]'}
+                            {assign name='Ws1' value='1'}
+                            {assign name='Ws2' value='1'}
+                            {assign name='Wss2' value='1'}
+                            {assign name='Ws3' value='1'}
+                            {assign name='Wu1' value=''}
+                            <!--类型-->
+                            {assign name='Wu2' value=''}
+                            <!--供应商-->
+                            {assign name='Wu3' value='0'}
+                            {assign name='Wbl' value='1'}
+                            {foreach $list['其他']['data'] as $k1=>$v1}
+                            {foreach $v1['data'] as $k2=>$v2}
+                            {foreach $v2 as $k3=>$v3}
+                            <tr>
+                                {if ($Wbl==1)}
+                                <td id="u-1" rowspan="{$list['其他']['count']}">{$language_tag.index_product_PlanSuppliersPayable_otherPayable}</td>
+                                {assign name='Wbl' value='0'}
+                                {/if}
+
+                                {if ($Wu2!=$k1)}
+                                {assign name='Wss2' value='1'}
+                                <td class="layui-form type" id="u-1-{$Ws1}" rowspan="{$v1['count']}" >
+                                    <select name="other_receivable_branch[{$Ws1}]" lay-filter="other_receivable_branch" data-ky="{$Ws1}" class="other_receivable_branch other_receivable_branch-{$Ws1}" lay-search>
+                                        <option value="a">{$language_tag.index_public_select}</option>
+                                        {foreach $branchs as $k=>$v}
+                                        <option value="{$v.company_id}" {$v.company_id==$k1?'selected':''}>{$v.company_name}</option>
+                                        {/foreach}
+                                    </select>
+                                    <a class="layui-btn layui-btn-sm u-add nav-add" style="width: 100%;margin-top:10px;{if (count($list['其他']['data'])!=$Ws1) }display: none{/if}" >{$language_tag.index_public_add}</a>
+                                </td>
+                                {assign name='Ws1' value='$Ws1+1'}
+                                {/if}
+
+                                {if ($Wu3!=$k2 || $Wu2!=$k1) }
+                                <td class="layui-form supplier" id="u-2-{$Ws2}" rowspan="{$v2|count}">
+                                    <select name="other_receivable_booking[{$Ws1-1}][{$Ws2}]" class="other_receivable_booking  ub-{$Ws1-1} uc-{$Ws1-1}-{$Ws2}" lay-filter="other_receivable_booking" data-ky="{$Ws1-1}" data-ky2="{$Ws2}" lay-search>
+                                        <option value="a">{$language_tag.index_public_select}</option>
+                                        {foreach $ReceivableList[$k1] as $k=>$v}
+                                        <option value="{$v.order_number}" {$k2==$v.order_number?'selected':''}>{$v.order_number}</option>
+                                        {/foreach}
+                                    </select>
+
+                                    <a class="layui-btn layui-btn-sm u-add2 nav-add" style="width: 100%;margin-top:10px;{if (count($v1['data'])!=$Wss2)}display: none{/if}" data-info="{$Ws1-1}">{$language_tag.index_public_add}</a>
+
+                                </td>
+                                {assign name='Ws2' value='$Ws2+1'}
+                                {assign name='Wss2' value='$Wss2+1'}
+                                {/if}
+
+                                <td>
+                                    {$v3.receivable_number}
+                                    <input name="other_receivable_number[{$Ws1-1}][{$Ws2-1}][{$Ws3}]" type="hidden" value="{$v3.receivable_number}" />
+                                </td>
+
+                                <td width="20%" >
+                                    <select name='other_receivable_sn[{$Ws1-1}][{$Ws2-1}][{$Ws3}][]' class="other_receivable_sn ut-{$Ws1-1} uu-{$Ws1-1}-{$Ws2-1} ud-{$Ws1-1}-{$Ws2-1}-{$Ws3} select2" multiple="multiple"  lay-ignore >
+                                        {foreach $v3['youke'] as $v}
+                                        <option value="{$v.company_order_customer_id}" <?php if(in_array($v['company_order_customer_id'],$v3['customer_info'])){echo 'selected';} ?>>{$v.company_order_customer_id}</option>
+                                        {/foreach}
+                                    </select>
+                                </td>
+
+                                <td>
+                                    <select name="other_receivable_types[{$Ws1-1}][{$Ws2-1}][{$Ws3}]" class="other_receivable_types-{$Ws1-1}-{$Ws2-1}-{$Ws3}" lay-search >
+                                        {foreach $types as $k=>$v}
+                                        <option value="{$k}" {$k==$v3.product_source_type_id?'selected':''}>{$v}</option>
+                                        {/foreach}
+                                    </select>
+                                </td>
+
+                                <td>
+                                    <input  class="layui-input" name="other_receivable_item[{$Ws1-1}][{$Ws2-1}][{$Ws3}]" value="{$v3.product_name}" />
+                                </td>
+
+                                <td>
+                                    <select name="other_receivable_currency[{$Ws1-1}][{$Ws2-1}][{$Ws3}]" lay-search>
+                                        <option value="a">{$language_tag.index_public_select}</option>
+                                        {foreach $Currency as $v}
+                                        <option value="{$v.currency_id}" {$v3.currency_id==$v.currency_id?'selected':''}>{$v.currency_name}</option>
+                                        {/foreach}
+                                    </select>
+                                </td>
+
+                                <td>
+                                    <input  class="layui-input" name="other_receivable_price[{$Ws1-1}][{$Ws2-1}][{$Ws3}]" value="{$v3.receivable_money}" />
+                                </td>
+
+                                <td>
+                                    <a class="layui-btn layui-btn-sm r-del hover-edit layui-btn-primary" data-info="{$Ws1-1}" data-info2="{$Ws2-1}">{$language_tag.index_public_del}</a>
+                                    <a class="layui-btn layui-btn-sm r-add3 hover-add layui-btn-primary" data-info="{$Ws1-1}" data-info2="{$Ws2-1}">{$language_tag.index_public_add}</a>
+                                </td>
+
+                                {assign name='Ws3' value='$Ws3+1'}
+                                {assign name='Wu2' value='$k1'}
+                                {assign name='Wu3' value='$k2'}
+
+                            </tr>
+                            {/foreach}
+                            {/foreach}
+                            {/foreach}
+                            {else/}
+                                <tr>
+                                    <td  id="u-1" rowspan="1" >{$language_tag.index_product_PlanSuppliersPayable_OtherReceivable}</td>
+                                    <td  class="layui-form branch" id="u-1-1" rowspan="1" >
+                                        <select name="other_receivable_branch[1]" lay-filter="other_receivable_branch" data-ky="1" class="other_receivable_branch other_receivable_branch-1" lay-search>
+                                            <option value="a">{$language_tag.index_public_select}</option>
+                                            {foreach $branchs as $k=>$v}
+                                            <option value="{$v.company_id}">{$v.company_name}</option>
+                                            {/foreach}
+                                        </select>
+                                        <a class="layui-btn layui-btn-sm u-add nav-add" style="width: 100%;margin-top:10px" >{$language_tag.index_public_add}</a>
+                                    </td>
+                                    <td class="layui-form booking" id="u-2-1" rowspan="1">
+                                        <select name="other_receivable_booking[1][1]" lay-filter="other_receivable_booking"  class="other_receivable_booking  ub-1 uc-1-1" data-ky="1" data-ky2="1" lay-search>
+                                            <option value="a">{$language_tag.index_public_select}</option>
+                                        </select>
+                                        <a class="layui-btn layui-btn-sm u-add2 nav-add" style="width: 100%;margin-top:10px" data-info="1" >{$language_tag.index_public_add}</a>
+                                    </td>
+                                    <td>{$language_tag.index_branchcompany_showBranchProductManage_number}</td>
+                                    <td>
+                                        <select name="other_receivable_sn[1][1][1][]" class="other_receivable_sn ut-1 uu-1-1 select2" multiple="multiple" lay-ignore >
+
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <select name="other_receivable_types[1][1][1]"  class="other_receivable_types-1-1-1"  lay-search>
+                                            {foreach $types as $k=>$v}
+                                            <option value="{$k}">{$v}</option>
+                                            {/foreach}
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <input  class="layui-input" name="other_receivable_item[1][1][1]" />
+                                    </td>
+                                    <td>
+                                        <select name="other_receivable_currency[1][1][1]" lay-search>
+                                            <option value="a">{$language_tag.index_public_select}</option>
+                                            {foreach $Currency as $v}
+                                            <option value="{$v.currency_id}">{$v.currency_name}</option>
+                                            {/foreach}
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <input  class="layui-input" name="other_receivable_price[1][1][1]" />
+                                    </td>
+                                    <td>
+                                        <a class="layui-btn layui-btn-sm u-del hover-edit layui-btn-primary" data-info="1" data-info2="1">{$language_tag.index_public_del}</a>
+                                        <a class="layui-btn layui-btn-sm u-add3 hover-add layui-btn-primary" data-info="1" data-info2="1">{$language_tag.index_public_add}</a>
+                                    </td>
+                                </tr>
+                                {/notempty}
+
+                            </tbody>
+                        </table>
+                        <br><br>
+                        <div class="layui-form-item">
+                            <div class="all-button-center">
+                                <button class="layui-btn nav-submit"  lay-filter="formDemo" id="language_add_button">{$language_tag.index_public_submit}</button>
+                                <a href="javascript:location.reload()" class="layui-btn layui-btn-primary">{$language_tag.index_product_showRouteTemplateManage_reload}</a>
+                                <a href="/product/ShowPlanTour"><button type="button" class="layui-btn layui-btn-primary">{$language_tag.index_public_back}</button></a>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!--团队应收 - 来源分公司按钮-->
+    <table style="display: none">
+        <tbody class="r1">
+        <tr>
+             <td  class="layui-form branch" id="r-1-ctv" rowspan="1" >
+                 <select name="team_coping_branch[ctv]" lay-filter="team_coping_branch" data-ky="ctv" class="team_coping_branch team_coping_branch-ctv" lay-search>
+                     <option></option>
+                     {foreach $branchs as $k=>$v}
+                     <option value="{$v.company_id}">{$v.company_name}</option>
+                     {/foreach}
+                 </select>
+                <a class="layui-btn layui-btn-sm r-add nav-add" style="width: 100%;margin-top:10px" >{$language_tag.index_public_add}</a>
+            </td>
+            <td class="layui-form booking" id="r-2-ctu" rowspan="1">
+                <select name="team_coping_booking[ctv][ctu]"  lay-filter="team_coping_booking"  class="team_coping_booking  ab-ctv ac-ctv-ctu" data-ky="ctv" data-ky2="ctu" lay-search>
+                    <option></option>
+                </select>
+                <a class="layui-btn layui-btn-sm r-add2 nav-add" style="width: 100%;margin-top:10px" data-info="ctv" >{$language_tag.index_public_add}</a>
+            </td>
+            <td>{$language_tag.index_branchcompany_showBranchProductManage_number}</td>
+            <td>
+                <select name="team_coping_sn[ctv][ctu][cte][]" class="team_coping_sn at-ctv au-ctv-ctu ad-ctv-ctu-cte select2" multiple="multiple" lay-ignore >
+
+                </select>
+            </td>
+            <td>
+                <select name="team_coping_types[ctv][ctu][cte]" lay-search >
+                    {foreach $types as $k=>$v}
+                    <option value="{$k}">{$v}</option>
+                    {/foreach}
+                </select>
+            </td>
+            <td>
+                <input  class="layui-input" name="team_coping_item[ctv][ctu][cte]" />
+            </td>
+            <td>
+                <select name="team_coping_currency[ctv][ctu][cte]" lay-search>
+                    <option value="a">{$language_tag.index_public_select}</option>
+                    {foreach $Currency as $v}
+                    <option value="{$v.currency_id}">{$v.currency_name}</option>
+                    {/foreach}
+                </select>
+            </td>
+            <td>
+                <input  class="layui-input" name="team_coping_price[ctv][ctu][cte]" />
+            </td>
+            <td>
+                <a class="layui-btn layui-btn-sm r-del hover-edit layui-btn-primary" data-info="ctv" data-info2="ctu">{$language_tag.index_public_del}</a>
+                <a class="layui-btn layui-btn-sm r-add3 hover-add layui-btn-primary" data-info="ctv" data-info2="ctu">{$language_tag.index_public_add}</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <!--团队应收 - 订单编号-->
+    <table style="display: none">
+        <tbody class="r2">
+        <tr>
+            <td class="layui-form booking" id="r-2-ctu" rowspan="1">
+                <select name="team_coping_booking[ctv][ctu]"   lay-filter="team_coping_booking"  class="team_coping_booking  ab-ctv ac-ctv-ctu" data-ky="ctv" data-ky2="ctu" lay-search>
+                    <option></option>
+                </select>
+                <a class="layui-btn layui-btn-sm r-add2 nav-add" style="width: 100%;margin-top:10px" data-info="ctv" >{$language_tag.index_public_add}</a>
+            </td>
+            <td>{$language_tag.index_branchcompany_showBranchProductManage_number}</td>
+            <td>
+                <select name="team_coping_sn[ctv][ctu][cte][]" class="team_coping_sn at-ctv au-ctv-ctu  ad-ctv-ctu-cte select2" multiple="multiple" lay-ignore >
+
+                </select>
+            </td>
+            <td>
+                <select name="team_coping_types[ctv][ctu][cte]" >
+                    {foreach $types as $k=>$v}
+                    <option value="{$k}">{$v}</option>
+                    {/foreach}
+                </select>
+            </td>
+            <td>
+                <input  class="layui-input" name="team_coping_item[ctv][ctu][cte]" />
+            </td>
+            <td>
+                <select name="team_coping_currency[ctv][ctu][cte]" lay-search>
+                    <option value="a">{$language_tag.index_public_select}</option>
+                    {foreach $Currency as $v}
+                    <option value="{$v.currency_id}">{$v.currency_name}</option>
+                    {/foreach}
+                </select>
+            </td>
+            <td>
+                <input  class="layui-input" name="team_coping_price[ctv][ctu][cte]" />
+            </td>
+            <td>
+                <a class="layui-btn layui-btn-sm r-del hover-edit layui-btn-primary" data-info="ctv" data-info2="ctu">{$language_tag.index_public_del}</a>
+                <a class="layui-btn layui-btn-sm r-add3 hover-add layui-btn-primary" data-info="ctv" data-info2="ctu">{$language_tag.index_public_add}</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <!--团队产品 - 操作-->
+    <table style="display: none">
+        <tbody class="r3">
+        <tr>
+            <td>{$language_tag.index_branchcompany_showBranchProductManage_number}</td>
+            <td>
+                <select name="team_coping_sn[ctv][ctu][cte][]" class="team_coping_sn at-ctv au-ctv-ctu  ad-ctv-ctu-cte select2" multiple="multiple" lay-ignore >
+
+                </select>
+            </td>
+            <td>
+                <select name="team_coping_types[ctv][ctu][cte]" >
+                    {foreach $types as $k=>$v}
+                    <option value="{$k}">{$v}</option>
+                    {/foreach}
+                </select>
+            </td>
+            <td>
+                <input  class="layui-input" name="team_coping_item[ctv][ctu][cte]" />
+            </td>
+            <td>
+                <select name="team_coping_currency[ctv][ctu][cte]" lay-search>
+                    <option value="a">{$language_tag.index_public_select}</option>
+                    {foreach $Currency as $v}
+                    <option value="{$v.currency_id}">{$v.currency_name}</option>
+                    {/foreach}
+                </select>
+            </td>
+            <td>
+                <input  class="layui-input" name="team_coping_price[ctv][ctu][cte]" />
+            </td>
+            <td>
+                <a class="layui-btn layui-btn-sm r-del hover-edit layui-btn-primary" data-info="ctv" data-info2="ctu">{$language_tag.index_public_del}</a>
+                <a class="layui-btn layui-btn-sm r-add3 hover-add layui-btn-primary" data-info="ctv" data-info2="ctu">{$language_tag.index_public_add}</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <!--地接报账 - 来源公司-->
+    <table style="display: none">
+        <tbody class="v1">
+        <tr>
+            <td  class="layui-form branch" id="v-1-ctv" rowspan="1" >
+                <select name="ground_connection_branch[ctv]"  lay-filter="ground_connection_branch" data-ky="ctv" class="ground_connection_branch ground_connection_branch-ctv" lay-search >
+                    <option value="a">{$language_tag.index_public_select}</option>
+                    {foreach $branchs as $k=>$v}
+                    <option value="{$v.company_id}">{$v.company_name}</option>
+                    {/foreach}
+                </select>
+                <a class="layui-btn layui-btn-sm v-add nav-add" style="width: 100%;margin-top:10px" >{$language_tag.index_public_add}</a>
+            </td>
+            <td class="layui-form booking" id="v-2-ctu" rowspan="1">
+                <select name="ground_connection_booking[ctv][ctu]"   lay-filter="ground_connection_booking"  class="ground_connection_booking  vb-ctv vc-ctv-ctu" data-ky="ctv" data-ky2="ctu" lay-search>
+                    <option value="a">{$language_tag.index_public_select}</option>
+                </select>
+                <a class="layui-btn layui-btn-sm v-add2 nav-add" style="width: 100%;margin-top:10px" data-info="ctv" >{$language_tag.index_public_add}</a>
+            </td>
+            <td>{$language_tag.index_branchcompany_showBranchProductManage_number}</td>
+            <td>
+                <select name="ground_connection_sn[ctv][ctu][cte][]" class="ground_connection_sn vt-ctv vu-ctv-ctu vd-ctv-ctu-cte select2"  multiple="multiple" lay-ignore >
+
+                </select>
+            </td>
+            <td>
+                <select name="ground_connection_types[ctv][ctu][cte]" lay-search>
+                    {foreach $types as $k=>$v}
+                    <option value="{$k}">{$v}</option>
+                    {/foreach}
+                </select>
+            </td>
+            <td>
+                <input  class="layui-input" name="ground_connection_item[ctv][ctu][cte]" />
+            </td>
+            <td>
+                <select name="ground_connection_currency[ctv][ctu][cte]" lay-search>
+                    <option value="a">{$language_tag.index_public_select}</option>
+                    {foreach $Currency as $v}
+                    <option value="{$v.currency_id}">{$v.currency_name}</option>
+                    {/foreach}
+                </select>
+            </td>
+            <td>
+                <input  class="layui-input" name="ground_connection_price[ctv][ctu][cte]" />
+            </td>
+            <td>
+                <a class="layui-btn layui-btn-sm v-del hover-edit layui-btn-primary" data-info="ctv" data-info2="ctu">{$language_tag.index_public_del}</a>
+                <a class="layui-btn layui-btn-sm v-add3 hover-add layui-btn-primary" data-info="ctv" data-info2="ctu">{$language_tag.index_public_add}</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <!--地接报账 - 订单编号-->
+    <table style="display: none">
+        <tbody class="v2">
+        <tr>
+            <td class="layui-form booking" id="v-2-ctu" rowspan="1">
+                <select name="ground_connection_booking[ctv][ctu]" lay-filter="ground_connection_booking"  class="ground_connection_booking  vb-ctv vc-ctv-ctu" data-ky="ctv" data-ky2="ctu" lay-search>
+                    <option value="a">{$language_tag.index_public_select}</option>
+                </select>
+                <a class="layui-btn layui-btn-sm v-add2 nav-add" style="width: 100%;margin-top:10px" data-info="ctv" >{$language_tag.index_public_add}</a>
+            </td>
+            <td>{$language_tag.index_branchcompany_showBranchProductManage_number}</td>
+            <td>
+                <select name="ground_connection_sn[ctv][ctu][cte][]" class="ground_connection_sn vt-ctv vu-ctv-ctu vd-ctv-ctu-cte select2"  multiple="multiple" lay-ignore >
+
+                </select>
+            </td>
+            <td>
+                <select name="ground_connection_types[ctv][ctu][cte]" lay-search>
+                    {foreach $types as $k=>$v}
+                    <option value="{$k}">{$v}</option>
+                    {/foreach}
+                </select>
+            </td>
+            <td>
+                <input  class="layui-input" name="ground_connection_item[ctv][ctu][cte]" />
+            </td>
+            <td>
+                <select name="ground_connection_currency[ctv][ctu][cte]" lay-search>
+                    <option value="a">{$language_tag.index_public_select}</option>
+                    {foreach $Currency as $v}
+                    <option value="{$v.currency_id}">{$v.currency_name}</option>
+                    {/foreach}
+                </select>
+            </td>
+            <td>
+                <input  class="layui-input" name="ground_connection_price[ctv][ctu][cte]" />
+            </td>
+            <td>
+                <a class="layui-btn layui-btn-sm v-del hover-edit layui-btn-primary" data-info="ctv" data-info2="ctu">{$language_tag.index_public_del}</a>
+                <a class="layui-btn layui-btn-sm v-add3 hover-add layui-btn-primary" data-info="ctv" data-info2="ctu">{$language_tag.index_public_add}</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <!--地接报账 - 操作-->
+    <table style="display: none">
+        <tbody class="v3">
+        <tr>
+            <td>{$language_tag.index_branchcompany_showBranchProductManage_number}</td>
+            <td>
+                <select name="ground_connection_sn[ctv][ctu][cte][]" class="ground_connection_sn vt-ctv vu-ctv-ctu vd-ctv-ctu-cte select2"  multiple="multiple" lay-ignore >
+
+                </select>
+            </td>
+            <td>
+                <select name="ground_connection_types[ctv][ctu][cte]" >
+                    {foreach $types as $k=>$v}
+                    <option value="{$k}">{$v}</option>
+                    {/foreach}
+                </select>
+            </td>
+            <td>
+                <input  class="layui-input" name="ground_connection_item[ctv][ctu][cte]" />
+            </td>
+            <td>
+                <select name="ground_connection_currency[ctv][ctu][cte]" lay-search>
+                    <option value="a">{$language_tag.index_public_select}</option>
+                    {foreach $Currency as $v}
+                    <option value="{$v.currency_id}">{$v.currency_name}</option>
+                    {/foreach}
+                </select>
+            </td>
+            <td>
+                <input  class="layui-input" name="ground_connection_price[ctv][ctu][cte]" />
+            </td>
+            <td>
+                <a class="layui-btn layui-btn-sm v-del hover-edit layui-btn-primary" data-info="ctv" data-info2="ctu">{$language_tag.index_public_del}</a>
+                <a class="layui-btn layui-btn-sm v-add3 hover-add layui-btn-primary" data-info="ctv" data-info2="ctu">{$language_tag.index_public_add}</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <!--其他应收 - 来源公司-->
+    <table style="display: none">
+        <tbody class="u1">
+        <tr>
+            <td  class="layui-form branch" id="u-1-ctv" rowspan="1" >
+                <select name="other_receivable_branch[ctv]"  lay-filter="other_receivable_branch" data-ky="ctv" class="other_receivable_branch other_receivable_branch-ctv" lay-search>
+                    <option value="a">{$language_tag.index_public_select}</option>
+                    {foreach $branchs as $k=>$v}
+                    <option value="{$v.company_id}">{$v.company_name}</option>
+                    {/foreach}
+                </select>
+                <a class="layui-btn layui-btn-sm u-add nav-add" style="width: 100%;margin-top:10px" >{$language_tag.index_public_add}</a>
+            </td>
+            <td class="layui-form booking" id="u-2-ctu" rowspan="1">
+                <select name="other_receivable_booking[ctv][ctu]" lay-filter="other_receivable_booking"  class="other_receivable_booking  ub-ctv uc-ctv-ctu" data-ky="ctv" data-ky2="ctu" lay-search>
+                    <option value="a">{$language_tag.index_public_select}</option>
+                </select>
+                <a class="layui-btn layui-btn-sm u-add2 nav-add" style="width: 100%;margin-top:10px" data-info="ctv" >{$language_tag.index_public_add}</a>
+            </td>
+            <td>{$language_tag.index_branchcompany_showBranchProductManage_number}</td>
+            <td>
+                <select name="other_receivable_sn[ctv][ctu][cte][]" class="other_receivable_sn ut-ctv uu-ctv-ctu ud-ctv-ctu-cte select2"  multiple="multiple" lay-ignore >
+
+                </select>
+            </td>
+            <td>
+                <select name="other_receivable_types[ctv][ctu][cte]" lay-search>
+                    {foreach $types as $k=>$v}
+                    <option value="{$k}">{$v}</option>
+                    {/foreach}
+                </select>
+            </td>
+            <td>
+                <input  class="layui-input" name="other_receivable_item[ctv][ctu][cte]" />
+            </td>
+            <td>
+                <select name="other_receivable_currency[ctv][ctu][cte]" lay-search>
+                    <option value="a">{$language_tag.index_public_select}</option>
+                    {foreach $Currency as $v}
+                    <option value="{$v.currency_id}">{$v.currency_name}</option>
+                    {/foreach}
+                </select>
+            </td>
+            <td>
+                <input  class="layui-input" name="other_receivable_price[ctv][ctu][cte]" />
+            </td>
+            <td>
+                <a class="layui-btn layui-btn-sm u-del hover-edit layui-btn-primary" data-info="ctv" data-info2="ctu">{$language_tag.index_public_del}</a>
+                <a class="layui-btn layui-btn-sm u-add3 hover-add layui-btn-primary" data-info="ctv" data-info2="ctu">{$language_tag.index_public_add}</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <!--其他应收 - 订单编号-->
+    <table style="display: none">
+        <tbody class="u2">
+        <tr>
+            <td class="layui-form booking" id="u-2-ctu" rowspan="1">
+                <select name="other_receivable_booking[ctv][ctu]" lay-filter="other_receivable_booking"  class="other_receivable_booking  ub-ctv uc-ctv-ctu" data-ky="ctv" data-ky2="ctu" lay-search>
+                    <option value="a">{$language_tag.index_public_select}</option>
+                </select>
+                <a class="layui-btn layui-btn-sm u-add2 nav-add" style="width: 100%;margin-top:10px" data-info="ctv" >{$language_tag.index_public_add}</a>
+            </td>
+            <td>{$language_tag.index_branchcompany_showBranchProductManage_number}</td>
+            <td>
+                <select name="other_receivable_sn[ctv][ctu][cte][]" class="other_receivable_sn ut-ctv uu-ctv-ctu ud-ctv-ctu-cte select2"  multiple="multiple" lay-ignore >
+
+                </select>
+            </td>
+            <td>
+                <select name="other_receivable_types[ctv][ctu][cte]" lay-search>
+                    {foreach $types as $k=>$v}
+                    <option value="{$k}">{$v}</option>
+                    {/foreach}
+                </select>
+            </td>
+            <td>
+                <input  class="layui-input" name="other_receivable_item[ctv][ctu][cte]" />
+            </td>
+            <td>
+                <select name="other_receivable_currency[ctv][ctu][cte]" lay-search>
+                    <option value="a">{$language_tag.index_public_select}</option>
+                    {foreach $Currency as $v}
+                    <option value="{$v.currency_id}">{$v.currency_name}</option>
+                    {/foreach}
+                </select>
+            </td>
+            <td>
+                <input  class="layui-input" name="other_receivable_price[ctv][ctu][cte]" />
+            </td>
+            <td>
+                <a class="layui-btn layui-btn-sm u-del hover-edit layui-btn-primary" data-info="ctv" data-info2="ctu">{$language_tag.index_public_del}</a>
+                <a class="layui-btn layui-btn-sm u-add3 hover-add layui-btn-primary" data-info="ctv" data-info2="ctu">{$language_tag.index_public_add}</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <!--其他应收 - 操作-->
+    <table style="display: none">
+        <tbody class="u3">
+        <tr>
+            <td>{$language_tag.index_branchcompany_showBranchProductManage_number}</td>
+            <td>
+                <select name="other_receivable_sn[ctv][ctu][cte][]" class="other_receivable_sn ut-ctv uu-ctv-ctu ud-ctv-ctu-cte select2"  multiple="multiple" lay-ignore >
+
+                </select>
+            </td>
+            <td>
+                <select name="other_receivable_types[ctv][ctu][cte]" lay-search>
+                    {foreach $types as $k=>$v}
+                    <option value="{$k}">{$v}</option>
+                    {/foreach}
+                </select>
+            </td>
+            <td>
+                <input  class="layui-input" name="other_receivable_item[ctv][ctu][cte]" />
+            </td>
+            <td>
+                <select name="other_receivable_currency[ctv][ctu][cte]" lay-search>
+                    <option value="a">{$language_tag.index_public_select}</option>
+                    {foreach $Currency as $v}
+                    <option value="{$v.currency_id}">{$v.currency_name}</option>
+                    {/foreach}
+                </select>
+            </td>
+            <td>
+                <input  class="layui-input" name="other_receivable_price[ctv][ctu][cte]" />
+            </td>
+            <td>
+                <a class="layui-btn layui-btn-sm u-del hover-edit layui-btn-primary" data-info="ctv" data-info2="ctu">{$language_tag.index_public_del}</a>
+                <a class="layui-btn layui-btn-sm u-add3 hover-add layui-btn-primary" data-info="ctv" data-info2="ctu">{$language_tag.index_public_add}</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <div class="layui-footer">
+        <!-- 底部固定区域 -->
+        © layui.com - 底部固定区域
+    </div>
+</div>
+{include file='public/foot_js' /}
+<script src='__STATIC__/javascript/public/select2.min.js'></script>
+<script>
+    //JavaScript代码区域
+    !function(){
+        $('#tb').find('.select2').select2({width:'100%'});
+
+        var layer = layui.layer ;
+        var form = layui.form;
+        var laydate = layui.laydate;
+
+        var r_1 = {$s1?$s1-1:1}; //团队应收分公司
+        var r_2 = {$s2?$s2-1:1}; //团队应收订单号
+        var r_3 = {$s3?$s3-1:1};
+
+
+        var v_1 = {$Qs1?$Qs1-1:1}; //地接报账分公司
+        var v_2 = {$Qs2?$Qs2-1:1}; //地接报账订单号
+        var v_3 = {$Qs3?$Qs3-1:1};
+
+        var u_1 = {$Ws1?$Ws1-1:1}; //其他应收分公司
+        var u_2 = {$Ws2?$Ws2-1:1}; //其他应收订单号
+        var u_3 = {$Ws3?$Ws3-1:1};
+
+        var tr;
+        var class_sel;
+        var class_sel2;
+        //根据来源分公司获得订单编号
+        form.on('select(team_coping_branch)', function(data) {
+            tr = $(this).parent().parent().parent().parent();
+            class_sel = tr.find('.team_coping_branch').data('ky');
+            var payment_company_id = data.value;
+            if(payment_company_id=='a'){
+                var h = '<option value="a">{$language_tag.index_public_select}</option>';
+                $('.ab-'+class_sel).html('');
+                $('.ab-'+class_sel).html(h);
+                $('.at-'+class_sel).html(h);
+                form.render();
+                $('#tb').find('.select2').select2({width:'100%'});
+            }else{
+                layer.load(2);
+                $.post('/product/getReceivableAjax?team_product_number={$_GET["number"]}',{payment_company_id:payment_company_id},function(a){
+                    layer.closeAll('loading');
+                    var h = '<option value="a">{$language_tag.index_public_select}</option>';
+                    $('.ab-'+class_sel).html('');
+                    $('.at-'+class_sel).html(h);
+                    for(var x in a){
+                        h += '<option value="'+a[x]['order_number']+'">'+a[x]['order_number']+'</option>';
+                    }
+                    $('.ab-'+class_sel).html(h);
+                    form.render();
+                    $('#tb').find('.select2').select2({width:'100%'});
+                },'json');
+            }
+        });
+        form.on('select(ground_connection_branch)', function(data) {
+            tr = $(this).parent().parent().parent().parent();
+            class_sel = tr.find('.ground_connection_branch').data('ky');
+            var payment_company_id = data.value;
+            if(payment_company_id=='a'){
+                var h = '<option value="a">{$language_tag.index_public_select}</option>';
+                $('.vb-'+class_sel).html('');
+                $('.vb-'+class_sel).html(h);
+                $('.vt-'+class_sel).html(h);
+                form.render();
+                $('#tb').find('.select2').select2({width:'100%'});
+            }else{
+                layer.load(2);
+                $.post('/product/getReceivableAjax?team_product_number={$_GET["number"]}',{payment_company_id:payment_company_id},function(a){
+                    layer.closeAll('loading');
+                    var h = '<option value="a">{$language_tag.index_public_select}</option>';
+                    $('.vb-'+class_sel).html('');
+                    $('.vt-'+class_sel).html(h);
+                    for(var x in a){
+                        h += '<option value="'+a[x]['order_number']+'">'+a[x]['order_number']+'</option>';
+                    }
+                    $('.vb-'+class_sel).html(h);
+                    form.render();
+                    $('#tb').find('.select2').select2({width:'100%'});
+                },'json');
+            }
+        });
+        form.on('select(other_receivable_branch)', function(data) {
+            tr = $(this).parent().parent().parent().parent();
+            class_sel = tr.find('.other_receivable_branch').data('ky');
+            var payment_company_id = data.value;
+            if(payment_company_id=='a'){
+                var h = '<option value="a">{$language_tag.index_public_select}</option>';
+                $('.ub-'+class_sel).html('');
+                $('.ub-'+class_sel).html(h);
+                $('.ut-'+class_sel).html(h);
+                form.render();
+                $('#tb').find('.select2').select2({width:'100%'});
+            }else{
+                layer.load(2);
+                $.post('/product/getReceivableAjax?team_product_number={$_GET["number"]}',{payment_company_id:payment_company_id},function(a){
+                    layer.closeAll('loading');
+                    var h = '<option value="a">{$language_tag.index_public_select}</option>';
+                    $('.ub-'+class_sel).html('');
+                    $('.ut-'+class_sel).html(h);
+                    for(var x in a){
+                        h += '<option value="'+a[x]['order_number']+'">'+a[x]['order_number']+'</option>';
+                    }
+                    $('.ub-'+class_sel).html(h);
+                    form.render();
+                    $('#tb').find('.select2').select2({width:'100%'});
+                },'json');
+            }
+        });
+
+        //根据订单编号获取游客
+        form.on('select(team_coping_booking)',function(data){
+            tr = $(this).parent().parent().parent().parent();
+            class_sel = tr.find('.team_coping_booking').data('ky');
+            class_sel2 = tr.find('.team_coping_booking').data('ky2');
+            //getCompanyOrderCustomer
+            var team_coping_booking = data.value;
+
+            if(team_coping_booking==0){
+                var h = '<option>{$language_tag.index_public_select}</option>';
+                $('.au-'+class_sel+'-'+class_sel2).html('');
+                $('.au-'+class_sel+'-'+class_sel2).html(h);
+                form.render();
+                $('#tb').find('.select2').select2({width:'100%'});
+            }else{
+                layer.load(2);
+                $.post('/product/getCompanyOrderCustomerAjax',{team_coping_booking:team_coping_booking},function(a){
+                    layer.closeAll('loading');
+                    var h = '';
+                    $('.au-'+class_sel+'-'+class_sel2).html('');
+                    for(var x in a){
+                        h += '<option value="'+a[x]['company_order_customer_id']+'">'+a[x]['company_order_customer_id']+'</option>';
+                    }
+                    $('.au-'+class_sel+'-'+class_sel2).html(h);
+                    form.render();
+                    $('#tb').find('.select2').select2({width:'100%'});
+                },'json');
+            }
+        });
+        form.on('select(ground_connection_booking)',function(data){
+            tr = $(this).parent().parent().parent().parent();
+            class_sel = tr.find('.ground_connection_booking').data('ky');
+            class_sel2 = tr.find('.ground_connection_booking').data('ky2');
+            //getCompanyOrderCustomer
+            var team_coping_booking = data.value;
+
+            if(team_coping_booking==0){
+                var h = '';
+                $('.vu-'+class_sel+'-'+class_sel2).html('');
+                $('.vu-'+class_sel+'-'+class_sel2).html(h);
+                form.render();
+                $('#tb').find('.select2').select2({width:'100%'});
+            }else{
+                layer.load(2);
+                $.post('/product/getCompanyOrderCustomerAjax',{team_coping_booking:team_coping_booking},function(a){
+                    layer.closeAll('loading');
+                    var h = '<option>{$language_tag.index_public_select}</option>';
+                    $('.vu-'+class_sel+'-'+class_sel2).html('');
+                    for(var x in a){
+                        h += '<option value="'+a[x]['company_order_customer_id']+'">'+a[x]['company_order_customer_id']+'</option>';
+                    }
+                    $('.vu-'+class_sel+'-'+class_sel2).html(h);
+                    form.render();
+                    $('#tb').find('.select2').select2({width:'100%'});
+                },'json');
+            }
+        });
+        form.on('select(other_receivable_booking)',function(data){
+            tr = $(this).parent().parent().parent().parent();
+            class_sel = tr.find('.other_receivable_booking').data('ky');
+            class_sel2 = tr.find('.other_receivable_booking').data('ky2');
+            //getCompanyOrderCustomer
+            var team_coping_booking = data.value;
+
+            if(team_coping_booking==0){
+                var h = '';
+                $('.uu-'+class_sel+'-'+class_sel2).html('');
+                $('.uu-'+class_sel+'-'+class_sel2).html(h);
+                form.render();
+                $('#tb').find('.select2').select2({width:'100%'});
+            }else{
+                layer.load(2);
+                $.post('/product/getCompanyOrderCustomerAjax',{team_coping_booking:team_coping_booking},function(a){
+                    layer.closeAll('loading');
+                    var h = '<option>{$language_tag.index_public_select}</option>';
+                    $('.uu-'+class_sel+'-'+class_sel2).html('');
+                    for(var x in a){
+                        h += '<option value="'+a[x]['company_order_customer_id']+'">'+a[x]['company_order_customer_id']+'</option>';
+                    }
+                    $('.uu-'+class_sel+'-'+class_sel2).html(h);
+                    form.render();
+                    $('#tb').find('.select2').select2({width:'100%'});
+                },'json');
+            }
+        });
+
+
+
+//        团队应收
+        $('#tb').delegate('.r-add','click',function(){
+            r_1++;r_2++;r_3++;
+            $(this).hide();
+            var rowspan = parseInt($('#r-1').attr('rowspan'))+1;
+            $('#r-1').attr('rowspan',rowspan);
+            var h = $('.r1').html();
+            for(var ii=0;ii<20;ii++){
+                h = h.replace('ctv',r_1);
+            }
+            for(var ii=0;ii<20;ii++){
+                h = h.replace('ctu',r_2);
+            }
+            for(var ii=0;ii<20;ii++){
+                h = h.replace('cte',r_3);
+            }
+            $('#v-1').parent().before(h);
+            form.render();
+            $('#tb').find('.select2').select2({width:'100%'});
+        });
+        var rr;
+        $('#tb').delegate('.r-add2','click',function(){
+            r_2++;r_3++;
+            $(this).hide();
+            var r1 = $(this).data('info');
+            rr=r1;
+            var eq =  parseInt($('#tb').find('.r-add2').index(this))+1;
+            console.log(eq);
+
+            var tr = $('#tb').find('.r-add2').eq(eq).parent().parent();
+            console.log(tr);
+
+
+            var rowspan = parseInt($('#r-1').attr('rowspan'))+1;
+            $('#r-1').attr('rowspan',rowspan);
+            var rowspan = parseInt($('#r-1-'+r1).attr('rowspan'))+1;
+            $('#r-1-'+r1).attr('rowspan',rowspan);
+
+            var h = $('.r2').html();
+            for(var ii=0;ii<20;ii++){
+                h = h.replace('ctv',r1);
+            }
+            for(var ii=0;ii<20;ii++){
+                h = h.replace('ctu',r_2);
+            }
+            for(var ii=0;ii<20;ii++){
+                h = h.replace('cte',r_3);
+            }
+            if(tr.length){
+                tr.before(h);
+            }else{
+                $('#v-1').parent().before(h);
+            }
+            var payment_company_id = $('.team_coping_branch-'+rr).val();
+            layer.load(2);
+            $.post('/product/getReceivableAjax?team_product_number={$_GET["number"]}',{payment_company_id:payment_company_id},function(a){
+                layer.closeAll('loading');
+                var h = '<option value="a">{$language_tag.index_public_select}</option>';
+                $('.ac-'+rr+'-'+r_2).html('');
+                for(var x in a){
+                    h += '<option value="'+a[x]['order_number']+'">'+a[x]['order_number']+'</option>';
+                }
+//                    alert(class_sel);
+                $('.ac-'+rr+'-'+r_2).html(h);
+                form.render();
+                $('#tb').find('.select2').select2({width:'100%'});
+            },'json');
+
+
+
+        });
+        $('#tb').delegate('.r-add3','click',function(){
+            r_3++;
+            var r1 = $(this).data('info');
+            var r2 = $(this).data('info2');
+            var tr = $(this).parent().parent().next();
+
+            var rowspan = parseInt($('#r-1').attr('rowspan'))+1;
+            $('#r-1').attr('rowspan',rowspan);
+            var rowspan = parseInt($('#r-1-'+r1).attr('rowspan'))+1;
+            $('#r-1-'+r1).attr('rowspan',rowspan);
+            var rowspan = parseInt($('#r-2-'+r2).attr('rowspan'))+1;
+            $('#r-2-'+r2).attr('rowspan',rowspan);
+
+            var h = $('.r3').html();
+            for(var ii=0;ii<20;ii++){
+                h = h.replace('ctv',r1);
+            }
+            for(var ii=0;ii<20;ii++){
+                h = h.replace('ctu',r2);
+            }
+            for(var ii=0;ii<20;ii++){
+                h = h.replace('cte',r_3);
+            }
+            if(tr.length){
+                tr.before(h);
+            }else{
+                $('#v-1').parent().before(h);
+            }
+            team_coping_booking = $('.ac-'+r1+'-'+r2).val();
+            layer.load(2);
+            $.post('/product/getCompanyOrderCustomerAjax',{team_coping_booking:team_coping_booking},function(a){
+                layer.closeAll('loading');
+                var h = '';
+                $('.ad-'+r1+'-'+r2+'-'+r_3).html('');
+                for(var x in a){
+                    h += '<option value="'+a[x]['company_order_customer_id']+'">'+a[x]['company_order_customer_id']+'</option>';
+                }
+                $('.ad-'+r1+'-'+r2+'-'+r_3).html(h);
+                form.render();
+                $('#tb').find('.select2').select2({width:'100%'});
+            },'json');
+
+        });
+        $('#tb').delegate('.r-del','click',function(){
+            var tr = $(this).parent().parent();
+            var r1 = $(this).data('info');
+            var r2 = $(this).data('info2');
+
+            var td = tr.find('#r-1');
+            var td1 = tr.find('#r-1-'+r1);
+            var td2 = tr.find('#r-2-'+r2);
+
+            if(td.length==0 && td1.length==0  && td2.length==0 ){
+                var rowspan = parseInt($('#r-1').attr('rowspan'))-1;
+                $('#r-1').attr('rowspan',rowspan);
+                var rowspan = parseInt($('#r-1-'+r1).attr('rowspan'))-1;
+                $('#r-1-'+r1).attr('rowspan',rowspan);
+                var rowspan = parseInt($('#r-2-'+r2).attr('rowspan'))-1;
+                $('#r-2-'+r2).attr('rowspan',rowspan);
+                $(this).parent().parent().remove();
+            }
+
+            if(td.length==0 && td1.length==0 && td2.length==1){
+                if($(this).parent().parent().next().find('.branch').length==1){
+                    var tt = $(this).parent().parent().prev();
+                    while(1){
+                        if(tt.find('.booking').length==1){
+                            tt.find('.booking').find('a').show();break;
+                        }else{
+                            tt = tt.prev();
+                        }
+                    }
+                }
+
+                var rowspan = parseInt($('#r-1').attr('rowspan'))-1;
+                $('#r-1').attr('rowspan',rowspan);
+                var rowspan = parseInt($('#r-1-'+r1).attr('rowspan'))-1;
+                $('#r-1-'+r1).attr('rowspan',rowspan);
+                var rowspan = parseInt($('#r-2-'+r2).attr('rowspan'))-1;
+                $('#r-2-'+r2).attr('rowspan',rowspan);
+
+                var tr_next = $(this).parent().parent().next();
+                var td_booking = tr_next.find('.booking');
+                if(td_booking.length==0){
+                    tr_next.prepend(td2);
+                    $(this).parent().parent().remove();
+                }else{
+                    $(this).parent().parent().remove();
+                }
+            }
+
+            if(td.length==0 && td1.length==1 && td2.length==1){
+                if($(this).parent().parent().next().find('#v-1').length==1){
+                    var tt = $(this).parent().parent().prev();
+                    while(1){
+                        if(tt.find('.type').length==1){
+                            tt.find('.type').find('a').show();
+                            break;
+                        }else{
+                            tt = tt.prev();
+                        }
+                    }
+                }
+                var rowspan = parseInt($('#r-1').attr('rowspan'))-1;
+                $('#r-1').attr('rowspan',rowspan);
+                var rowspan = parseInt($('#r-1-'+r1).attr('rowspan'))-1;
+                $('#r-1-'+r1).attr('rowspan',rowspan);
+                var rowspan = parseInt($('#r-2-'+r2).attr('rowspan'))-1;
+                $('#r-2-'+r2).attr('rowspan',rowspan);
+
+                var tr_next = $(this).parent().parent().next();
+                var td_branch = tr_next.find('.branch');
+                var td_booking = tr_next.find('.booking');
+
+                if(td_branch.length==0 && td_booking.length==0){
+                    tr_next.prepend(td2);
+                    tr_next.prepend(td1);
+                    $(this).parent().parent().remove();
+                }else if(td_branch.length==0 && td_booking.length==1){
+                    tr_next.prepend(td1);
+                    $(this).parent().parent().remove();
+                }else{
+                    $(this).parent().parent().remove();
+                }
+
+            }
+
+            if(td.length==1 && td1.length==1 && td2.length==1){
+
+                var rowspan = parseInt($('#r-1').attr('rowspan'))-1;
+                if(rowspan==0){
+                    $(this).parent().parent().find('input').val('');
+                    $(this).parent().parent().find('select').val('a');
+                    $(this).parent().parent().find('.select2').html('');
+                    form.render();
+                    $('#tb').find('.select2').select2({width:'100%'});
+                    return;
+                }
+                $('#r-1').attr('rowspan',rowspan);
+                var rowspan = parseInt($('#r-1-'+r1).attr('rowspan'))-1;
+                $('#r-1-'+r1).attr('rowspan',rowspan);
+                var rowspan = parseInt($('#r-2-'+r2).attr('rowspan'))-1;
+                $('#r-2-'+r2).attr('rowspan',rowspan);
+
+                var tr_next = $(this).parent().parent().next();
+
+                var td_branch = tr_next.find('.branch');
+                var td_booking = tr_next.find('.booking');
+
+                if(td_booking.length==0){
+                    tr_next.prepend(td2);
+                    tr_next.prepend(td1);
+                    tr_next.prepend(td);
+                }
+                if(td_branch.length==0 && td_booking.length==1){
+                    tr_next.prepend(td1);
+                    tr_next.prepend(td);
+                }
+                if(td_branch.length==1 && td_booking.length==1) {
+                    tr_next.prepend(td);
+                }
+                $(this).parent().parent().remove();
+
+            }
+
+        });
+
+//        地接报账
+        $('#tb').delegate('.v-add','click',function(){
+            v_1++;v_2++;v_3++;
+            $(this).hide();
+            var rowspan = parseInt($('#v-1').attr('rowspan'))+1;
+            $('#v-1').attr('rowspan',rowspan);
+            var h = $('.v1').html();
+            for(var ii=0;ii<20;ii++){
+                h = h.replace('ctv',v_1);
+            }
+            for(var ii=0;ii<20;ii++){
+                h = h.replace('ctu',v_2);
+            }
+            for(var ii=0;ii<20;ii++){
+                h = h.replace('cte',v_3);
+            }
+            $('#u-1').parent().before(h);
+            form.render();
+            $('#tb').find('.select2').select2({width:'100%'});
+        });
+        $('#tb').delegate('.v-add2','click',function(){
+            v_2++;v_3++;
+            $(this).hide();
+            var v1 = $(this).data('info');
+            rr = v1;
+            var eq =  parseInt($('#tb').find('.v-add2').index(this))+1;
+            console.log(eq);
+
+            var tr = $('#tb').find('.v-add2').eq(eq).parent().parent();
+            console.log(tr);
+            var rowspan = parseInt($('#v-1').attr('rowspan'))+1;
+            $('#v-1').attr('rowspan',rowspan);
+            var rowspan = parseInt($('#v-1-'+v1).attr('rowspan'))+1;
+            $('#v-1-'+v1).attr('rowspan',rowspan);
+
+            var h = $('.v2').html();
+            for(var ii=0;ii<20;ii++){
+                h = h.replace('ctv',v1);
+            }
+            for(var ii=0;ii<20;ii++){
+                h = h.replace('ctu',v_2);
+            }
+            for(var ii=0;ii<20;ii++){
+                h = h.replace('cte',v_3);
+            }
+            if(tr.length){
+                tr.before(h);
+            }else{
+                $('#u-1').parent().before(h);
+            }
+
+            var payment_company_id = $('.ground_connection_branch-'+rr).val();
+            layer.load(2);
+            $.post('/product/getReceivableAjax?team_product_number={$_GET["number"]}',{payment_company_id:payment_company_id},function(a){
+                layer.closeAll('loading');
+                var h = '<option value="a">{$language_tag.index_public_select}</option>';
+                $('.vc-'+rr+'-'+v_2).html('');
+                for(var x in a){
+                    h += '<option value="'+a[x]['order_number']+'">'+a[x]['order_number']+'</option>';
+                }
+//                    alert(class_sel);
+                $('.vc-'+rr+'-'+v_2).html(h);
+                form.render();
+                $('#tb').find('.select2').select2({width:'100%'});
+            },'json');
+
+        });
+        $('#tb').delegate('.v-add3','click',function(){
+            v_3++;
+            var v1 = $(this).data('info');
+            var v2 = $(this).data('info2');
+            var tr = $(this).parent().parent().next();
+
+            var rowspan = parseInt($('#v-1').attr('rowspan'))+1;
+            $('#v-1').attr('rowspan',rowspan);
+            var rowspan = parseInt($('#v-1-'+v1).attr('rowspan'))+1;
+            $('#v-1-'+v1).attr('rowspan',rowspan);
+            var rowspan = parseInt($('#v-2-'+v2).attr('rowspan'))+1;
+            $('#v-2-'+v2).attr('rowspan',rowspan);
+
+            var h = $('.v3').html();
+            for(var ii=0;ii<20;ii++){
+                h = h.replace('ctv',v1);
+            }
+            for(var ii=0;ii<20;ii++){
+                h = h.replace('ctu',v2);
+            }
+            for(var ii=0;ii<20;ii++){
+                h = h.replace('cte',v_3);
+            }
+            if(tr.length){
+                tr.before(h);
+            }else{
+                $('#u-1').parent().before(h);
+            }
+
+            team_coping_booking = $('.vc-'+v1+'-'+v2).val();
+            layer.load(2);
+            $.post('/product/getCompanyOrderCustomerAjax',{team_coping_booking:team_coping_booking},function(a){
+                layer.closeAll('loading');
+                var h = '';
+                $('.vd-'+v1+'-'+v2+'-'+v_3).html('');
+                for(var x in a){
+                    h += '<option value="'+a[x]['company_order_customer_id']+'">'+a[x]['company_order_customer_id']+'</option>';
+                }
+                $('.vd-'+v1+'-'+v2+'-'+v_3).html(h);
+                form.render();
+                $('#tb').find('.select2').select2({width:'100%'});
+            },'json');
+        });
+        $('#tb').delegate('.v-del','click',function(){
+            var tr = $(this).parent().parent();
+            var v1 = $(this).data('info');
+            var v2 = $(this).data('info2');
+
+            var td = tr.find('#v-1');
+            var td1 = tr.find('#v-1-'+v1);
+            var td2 = tr.find('#v-2-'+v2);
+
+            if(td.length==0 && td1.length==0  && td2.length==0 ){
+                var rowspan = parseInt($('#v-1').attr('rowspan'))-1;
+                $('#v-1').attr('rowspan',rowspan);
+                var rowspan = parseInt($('#v-1-'+v1).attr('rowspan'))-1;
+                $('#v-1-'+v1).attr('rowspan',rowspan);
+                var rowspan = parseInt($('#v-2-'+v2).attr('rowspan'))-1;
+                $('#v-2-'+v2).attr('rowspan',rowspan);
+                $(this).parent().parent().remove();
+            }
+
+            if(td.length==0 && td1.length==0 && td2.length==1){
+                if($(this).parent().parent().next().find('.branch').length==1){
+                    var tt = $(this).parent().parent().prev();
+                    while(1){
+                        if(tt.find('.booking').length==1){
+                            tt.find('.booking').find('a').show();break;
+                        }else{
+                            tt = tt.prev();
+                        }
+                    }
+                }
+
+                var rowspan = parseInt($('#v-1').attr('rowspan'))-1;
+                $('#v-1').attr('rowspan',rowspan);
+                var rowspan = parseInt($('#v-1-'+v1).attr('rowspan'))-1;
+                $('#v-1-'+v1).attr('rowspan',rowspan);
+                var rowspan = parseInt($('#v-2-'+v2).attr('rowspan'))-1;
+                $('#v-2-'+v2).attr('rowspan',rowspan);
+
+                var tr_next = $(this).parent().parent().next();
+                var td_booking = tr_next.find('.booking');
+                if(td_booking.length==0){
+                    tr_next.prepend(td2);
+                    $(this).parent().parent().remove();
+                }else{
+                    $(this).parent().parent().remove();
+                }
+            }
+
+            if(td.length==0 && td1.length==1 && td2.length==1){
+                if($(this).parent().parent().next().find('#u-1').length==1){
+                    var tt = $(this).parent().parent().prev();
+                    while(1){
+                        if(tt.find('.branch').length==1){
+                            tt.find('.branch').find('a').show();
+                            break;
+                        }else{
+                            tt = tt.prev();
+                        }
+                    }
+                }
+
+                var rowspan = parseInt($('#v-1').attr('rowspan'))-1;
+                $('#v-1').attr('rowspan',rowspan);
+                var rowspan = parseInt($('#v-1-'+v1).attr('rowspan'))-1;
+                $('#v-1-'+v1).attr('rowspan',rowspan);
+                var rowspan = parseInt($('#v-2-'+v2).attr('rowspan'))-1;
+                $('#v-2-'+v2).attr('rowspan',rowspan);
+
+                var tr_next = $(this).parent().parent().next();
+                var td_branch = tr_next.find('.branch');
+                var td_booking = tr_next.find('.booking');
+
+                if(td_branch.length==0 && td_booking.length==0){
+                    tr_next.prepend(td2);
+                    tr_next.prepend(td1);
+                    $(this).parent().parent().remove();
+                }else if(td_branch.length==0 && td_booking.length==1){
+                    tr_next.prepend(td1);
+                    $(this).parent().parent().remove();
+                }else{
+                    $(this).parent().parent().remove();
+                }
+            }
+
+            if(td.length==1 && td1.length==1 && td2.length==1){
+                var rowspan = parseInt($('#v-1').attr('rowspan'))-1;
+
+                if(rowspan==0){
+                    $(this).parent().parent().find('input').val('');
+                    $(this).parent().parent().find('select').val('a');
+                    $(this).parent().parent().find('.select2').html('');
+                    form.render();
+                    $('#tb').find('.select2').select2({width:'100%'});
+                    return;
+                }
+                $('#v-1').attr('rowspan',rowspan);
+                var rowspan = parseInt($('#v-1-'+v1).attr('rowspan'))-1;
+                $('#v-1-'+v1).attr('rowspan',rowspan);
+                var rowspan = parseInt($('#v-2-'+v2).attr('rowspan'))-1;
+                $('#v-2-'+v2).attr('rowspan',rowspan);
+
+                var tr_next = $(this).parent().parent().next();
+                var td_booking = tr_next.find('.booking');
+                var td_branch = tr_next.find('.branch');
+                if(td_booking.length==0){
+                    tr_next.prepend(td2);
+                    tr_next.prepend(td1);
+                    tr_next.prepend(td);
+                }
+                if(td_branch.length==0 && td_booking.length==1){
+                    tr_next.prepend(td1);
+                    tr_next.prepend(td);
+                }
+                if(td_branch.length==1 && td_booking.length==1) {
+                    tr_next.prepend(td);
+                }
+                $(this).parent().parent().remove();
+            }
+        });
+
+
+//        其他应收
+        $('#tb').delegate('.u-add','click',function(){
+            u_1++;u_2++;u_3++;
+            $(this).hide();
+            var rowspan = parseInt($('#u-1').attr('rowspan'))+1;
+            $('#u-1').attr('rowspan',rowspan);
+            var h = $('.u1').html();
+            for(var ii=0;ii<20;ii++){
+                h = h.replace('ctv',u_1);
+            }
+            for(var ii=0;ii<20;ii++){
+                h = h.replace('ctu',u_2);
+            }
+            for(var ii=0;ii<20;ii++){
+                h = h.replace('cte',u_3);
+            }
+            $('#tb').append(h);
+            form.render();
+            $('#tb').find('.select2').select2({width:'100%'});
+        });
+        $('#tb').delegate('.u-add2','click',function(){
+            u_2++;u_3++;
+            $(this).hide();
+            var u1 = $(this).data('info');
+            var rr = u1;
+            var eq =  parseInt($('#tb').find('.u-add2').index(this))+1;
+            console.log(eq);
+
+            var tr = $('#tb').find('.u-add2').eq(eq).parent().parent();
+            console.log(tr);
+            var rowspan = parseInt($('#u-1').attr('rowspan'))+1;
+            $('#u-1').attr('rowspan',rowspan);
+            var rowspan = parseInt($('#u-1-'+u1).attr('rowspan'))+1;
+            $('#u-1-'+u1).attr('rowspan',rowspan);
+
+            var h = $('.u2').html();
+            for(var ii=0;ii<20;ii++){
+                h = h.replace('ctv',u1);
+            }
+            for(var ii=0;ii<20;ii++){
+                h = h.replace('ctu',u_2);
+            }
+            for(var ii=0;ii<20;ii++){
+                h = h.replace('cte',u_3);
+            }
+
+            if(tr.length){
+                tr.before(h);
+            }else{
+                $('#tb').append(h);
+            }
+
+            var payment_company_id = $('.other_receivable_branch-'+rr).val();
+            layer.load(2);
+            $.post('/product/getReceivableAjax?team_product_number={$_GET["number"]}',{payment_company_id:payment_company_id},function(a){
+                layer.closeAll('loading');
+                var h = '<option value="a">{$language_tag.index_public_select}</option>';
+                $('.uc-'+rr+'-'+u_2).html('');
+                for(var x in a){
+                    h += '<option value="'+a[x]['order_number']+'">'+a[x]['order_number']+'</option>';
+                }
+                $('.uc-'+rr+'-'+u_2).html(h);
+                form.render();
+                $('#tb').find('.select2').select2({width:'100%'});
+            },'json');
+
+
+        });
+        $('#tb').delegate('.u-add3','click',function(){
+            u_3++;
+            var u1 = $(this).data('info');
+            var u2 = $(this).data('info2');
+            var tr = $(this).parent().parent().next();
+
+            var rowspan = parseInt($('#u-1').attr('rowspan'))+1;
+            $('#u-1').attr('rowspan',rowspan);
+            var rowspan = parseInt($('#u-1-'+u1).attr('rowspan'))+1;
+            $('#u-1-'+u1).attr('rowspan',rowspan);
+            var rowspan = parseInt($('#u-2-'+u2).attr('rowspan'))+1;
+            $('#u-2-'+u2).attr('rowspan',rowspan);
+
+            var h = $('.u3').html();
+            for(var ii=0;ii<20;ii++){
+                h = h.replace('ctv',u1);
+            }
+            for(var ii=0;ii<20;ii++){
+                h = h.replace('ctu',u2);
+            }
+            for(var ii=0;ii<20;ii++){
+                h = h.replace('cte',u_3);
+            }
+            if(tr.length){
+                tr.before(h);
+            }else{
+                $('#tb').append(h);
+            }
+
+            team_coping_booking = $('.uc-'+u1+'-'+u2).val();
+            layer.load(2);
+            $.post('/product/getCompanyOrderCustomerAjax',{team_coping_booking:team_coping_booking},function(a){
+                layer.closeAll('loading');
+                var h = '';
+                $('.ud-'+u1+'-'+u2+'-'+u_3).html('');
+                for(var x in a){
+                    h += '<option value="'+a[x]['company_order_customer_id']+'">'+a[x]['company_order_customer_id']+'</option>';
+                }
+                $('.ud-'+u1+'-'+u2+'-'+u_3).html(h);
+                form.render();
+                $('#tb').find('.select2').select2({width:'100%'});
+            },'json');
+
+        });
+        $('#tb').delegate('.u-del','click',function(){
+            var tr = $(this).parent().parent();
+            var u1 = $(this).data('info');
+            var u2 = $(this).data('info2');
+
+            var td = tr.find('#u-1');
+            var td1 = tr.find('#u-1-'+u1);
+            var td2 = tr.find('#u-2-'+u2);
+
+            if(td.length==0 && td1.length==0  && td2.length==0 ){
+                var rowspan = parseInt($('#u-1').attr('rowspan'))-1;
+                $('#u-1').attr('rowspan',rowspan);
+                var rowspan = parseInt($('#u-1-'+u1).attr('rowspan'))-1;
+                $('#u-1-'+u1).attr('rowspan',rowspan);
+                var rowspan = parseInt($('#u-2-'+u2).attr('rowspan'))-1;
+                $('#u-2-'+u2).attr('rowspan',rowspan);
+                $(this).parent().parent().remove();
+            }
+
+            if(td.length==0 && td1.length==0 && td2.length==1){
+                if($(this).parent().parent().next().find('.branch').length==1 || $(this).parent().parent().next().length==0){
+                    var tt = $(this).parent().parent().prev();
+                    while(1){
+                        if(tt.find('.booking').length==1){
+                            tt.find('.booking').find('a').show();
+                            break;
+                        }else{
+                            tt = tt.prev();
+                        }
+                    }
+                }
+
+                var rowspan = parseInt($('#u-1').attr('rowspan'))-1;
+                $('#u-1').attr('rowspan',rowspan);
+                var rowspan = parseInt($('#u-1-'+u1).attr('rowspan'))-1;
+                $('#u-1-'+u1).attr('rowspan',rowspan);
+                var rowspan = parseInt($('#u-2-'+u2).attr('rowspan'))-1;
+                $('#u-2-'+u2).attr('rowspan',rowspan);
+
+                var tr_next = $(this).parent().parent().next();
+                var td_booking = tr_next.find('.booking');
+                if(td_booking.length==0){
+                    tr_next.prepend(td2);
+                    $(this).parent().parent().remove();
+                }else{
+                    $(this).parent().parent().remove();
+                }
+            }
+
+            if(td.length==0 && td1.length==1 && td2.length==1){
+                if($(this).parent().parent().next().length==0){
+                    var tt = $(this).parent().parent().prev();
+                    while(1){
+                        if(tt.find('.branch').length==1){
+                            tt.find('.branch').find('a').show();
+                            break;
+                        }else{
+                            tt = tt.prev();
+                        }
+                    }
+                }
+
+                var rowspan = parseInt($('#u-1').attr('rowspan'))-1;
+                $('#u-1').attr('rowspan',rowspan);
+                var rowspan = parseInt($('#u-1-'+u1).attr('rowspan'))-1;
+                $('#u-1-'+u1).attr('rowspan',rowspan);
+                var rowspan = parseInt($('#u-2-'+u2).attr('rowspan'))-1;
+                $('#u-2-'+u2).attr('rowspan',rowspan);
+
+                var tr_next = $(this).parent().parent().next();
+                var td_branch = tr_next.find('.branch');
+                var td_booking = tr_next.find('.booking');
+
+                if(td_branch.length==0 && td_booking.length==0){
+                    tr_next.prepend(td2);
+                    tr_next.prepend(td1);
+                    $(this).parent().parent().remove();
+                }else if(td_branch.length==0 && td_booking.length==1){
+                    tr_next.prepend(td1);
+                    $(this).parent().parent().remove();
+                }else{
+                    $(this).parent().parent().remove();
+                }
+            }
+
+            if(td.length==1 && td1.length==1 && td2.length==1){
+                var rowspan = parseInt($('#u-1').attr('rowspan'))-1;
+                if(rowspan==0){
+                    $(this).parent().parent().find('input').val('');
+                    $(this).parent().parent().find('select').val('a');
+                    $(this).parent().parent().find('.select2').html('');
+                    form.render();
+                    $('#tb').find('.select2').select2({width:'100%'});
+                    return;
+                }
+                $('#u-1').attr('rowspan',rowspan);
+                var rowspan = parseInt($('#u-1-'+u1).attr('rowspan'))-1;
+                $('#u-1-'+u1).attr('rowspan',rowspan);
+                var rowspan = parseInt($('#u-2-'+u2).attr('rowspan'))-1;
+                $('#u-2-'+u2).attr('rowspan',rowspan);
+
+                var tr_next = $(this).parent().parent().next();
+                var td_booking = tr_next.find('.booking');
+                var td_branch = tr_next.find('.branch');
+                if(td_booking.length==0){
+                    tr_next.prepend(td2);
+                    tr_next.prepend(td1);
+                    tr_next.prepend(td);
+                }
+                if(td_branch.length==0 && td_booking.length==1){
+                    tr_next.prepend(td1);
+                    tr_next.prepend(td);
+                }
+                if(td_branch.length==1 && td_booking.length==1) {
+                    tr_next.prepend(td);
+                }
+                $(this).parent().parent().remove();
+
+            }
+
+        });
+
+
+    }();
+    function add() {
+        $.ajax({
+            type: "POST",
+            url: '/product/addTeamProductReceivableCompanyAjax?team_product_number={$_GET["number"]}',
+            data: $('#form1').serializeArray(),
+            success: function (data) {
+                if(data.code!=200){
+                    layer.msg(data.msg)
+                    return false;
+                }else if(data.code==200){
+                    layer.msg('success',{time:1,end : function(layero, index){
+                        location.reload();
+                    }
+                    });
+                }
+            },
+            error:function(XMLHttpRequest, textStatus, errorThrown){
+                //console.log(errorThrown)
+                layer.msg('{$language_tag.index_public_verificationFailure}')
+
+            }
+        });
+        return false;
+    }
+</script>
+</body>
+</html>
+
+<script>
+
+
+</script>

@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<head>
+	{include file='public/head' /}
+  	<title>layout 后台大布局 - Layui</title>
+ 
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+  <div class="layui-header">
+	{include file='public/header' /}
+  </div>
+  
+  <div class="layui-side layui-bg-black">
+    <div class="layui-side-scroll">
+      <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+		{include file='public/left_menu_web' /}
+    </div>
+  </div>
+  
+  <div class="layui-body">
+  
+		<!-- 内容主体区域 -->
+		<div style="padding: 15px 15px 0px;">
+		<div class="body-top">
+			<div class='layui-form-item'>
+			<span class="layui-breadcrumb" lay-separator="-">
+				<a>{$language_tag.index_public_homepage}</a>
+				<a>管网管理</a>
+				<a>广告位管理</a>
+				<a><cite>产品位管理</cite></a>
+			</span>
+			</div>
+			<br/>
+			<div class='layui-block input-inline' >
+				<form method='get' action='/ota_slide/showAdvertisingProductManage'>
+					<div class='layui-input-inline'>
+						<input type="text" name="product_title" value="{$Think.get.product_title}"  lay-verify="" placeholder="标题" autocomplete="off" class="layui-input">
+					</div>
+					<div class='layui-input-inline'>
+						<div class="layui-form">
+							<select name="status" lay-verify="required">
+								<option value="2" {if condition="$Think.get.status eq 2"}selected='selected' {/if}>-{$language_tag.index_source_showCruisesManage_search_status}-</option>
+								<option value="1" {if condition="$Think.get.status eq 1"}selected='selected' {/if}>{$language_tag.index_public_show}</option>
+								<option value="0" {if condition="$Think.get.status eq 0"}selected='selected' {/if}>{$language_tag.index_public_disabled}</option>
+							</select>
+						</div>
+					</div>
+					<div class='layui-button-inline layui-search-inline'>
+						<button class="layui-btn nav-search">{$language_tag.index_public_search}</button>
+					</div>
+				</form>
+				<div class='layui-button-inline'>
+					<span><a href='/ota_slide/showAdvertisingProductAdd?ota_advertising_uuid={$Think.get.ota_advertising_uuid}'><button class="layui-btn nav-add">添加产品位</button></a></span>
+				</div>
+			</div>
+			<hr><br>
+		</div>
+		<div class="table-nont user-manage pageHeight">
+			<table class="layui-table" >
+				<thead>
+				<tr>
+					<th>ID</th>
+					<th>标题</th>
+					<th>图片</th>
+					<th>状态</th>
+					<th>排序</th>
+					<th>创建人</th>
+					<th class="layui-table-width">{$language_tag.index_source_operation}</th>
+				</tr>
+
+				</thead>
+				<tbody>
+				{foreach name="data" item="vo"}
+				<tr>
+					<th>{$vo.ota_advertising_product_id}</th>
+					<th>{$vo.product_title}</th>
+					<th><img src="{$vo.banner_image}" /></th>
+					<th>{if condition="$vo.status eq 1"}{$language_tag.index_public_show}{else/}{$language_tag.index_public_disabled}{/if}</th>
+					<th>{$vo.sort}</th>
+					<th>{$vo.nickname}</th>
+					<th>
+						<span><a href='/ota_slide/showAdvertisingProductEdit?ota_advertising_uuid={$vo.ota_advertising_uuid}&&ota_advertising_product_id={$vo.ota_advertising_product_id}'><button class="layui-btn layui-btn-sm hover-edit layui-btn-primary">{$language_tag.index_public_update}</button></a></span>
+					</th>
+				</tr>
+				{/foreach}
+				</tbody>
+			</table>
+		</div>
+
+		<div class="listButtom">
+			<!--加载分页-->
+			{include file='public/page' /}
+		</div>
+    </div>
+  </div>
+  
+  <div class="layui-footer">
+    <!-- 底部固定区域 -->
+    © layui.com - 底部固定区域
+  </div>
+</div>
+{include file='public/foot_js' /}
+<script>
+  //JavaScript代码区域
+  var layer = layui.layer
+</script>
+</body>
+</html>

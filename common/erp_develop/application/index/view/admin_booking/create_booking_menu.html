@@ -1,0 +1,235 @@
+<style>
+    .nav {
+        display: inline-block;
+        position: relative;
+        height: 54px;
+        font-size: 15px;
+    }
+
+    .nav > * {
+        display: inline-block;
+    }
+
+    .nav > .t {
+        position: absolute;
+        top: 0;
+        background: rgb(208, 210, 211);
+        /* Skew */
+        -webkit-transform: skew(30deg);
+        -moz-transform: skew(30deg);
+        -o-transform: skew(30deg);
+        transform: skew(30deg);
+    }
+
+    .nav > .b {
+        position: absolute;
+        bottom: 0;
+        background: rgb(208, 210, 211);
+        /* Skew */
+        -webkit-transform: skew(-30deg);
+        -moz-transform: skew(-30deg);
+        -o-transform: skew(-30deg);
+        transform: skew(-30deg);
+    }
+
+    .tab .nav>.t,.tab .nav>.b{
+        -webkit-transform: none;
+        -moz-transform: none;
+        -o-transform: none;
+        transform: none;
+    }
+
+
+    .nav > a {
+        /*position:absolute;
+        top:0;*/
+        margin-left: 13px;
+        vertical-align: middle;
+        text-align: center;
+        text-decoration: none;
+        cursor: default;
+        font-weight: bold;
+        color: #77787b !important;
+    }
+
+    .nav.hover>a{
+        color: #ffffff !important;
+    }
+
+    .nav.hover > span {
+        background-color: #3376ba;
+        cursor: pointer;
+    }
+
+    .nav.done_step.hover>span{
+        background-color: #3376ba;
+    }
+
+    .nav.hover > a {
+        cursor: pointer;
+    }
+
+    .ab_position {
+        position: absolute;
+    }
+
+    .nav > .first_mark {
+        position: absolute;
+        top: 0;
+        z-index: 1;
+        width: 16px;
+        height: 100%;
+        background-color: #ffffff;
+        left: -8px;
+    }
+
+    .nav.done_step>a,.nav.active_step>a{
+        color: #ffffff !important;
+    }
+
+    .nav.done_step>.t,.nav.done_step>.b{
+        background-color: #767780;
+    }
+
+    .nav.active_step>.t,.nav.active_step>.b{
+        background-color: #3376ba;
+    }
+
+    .tab_border{
+        height: 2px;
+        background-color: #767780;
+        margin-left: 8px;
+        margin-top: -4px;
+    }
+
+    .layui-form .layui-form-label{
+        width: 200px;
+        padding: 9px 5px 9px 0;
+        text-align: left;
+
+    }
+
+    .layui-form .layui-input-block{
+        margin-left:210px;
+    }
+
+</style>
+
+
+<div class="step" style="overflow-x: hidden;">
+    <span class="nav {$function_name=='createbookingform'?'active_step':''}  {$Think.session.adminBooking_createBookingFormAjax?'done_step':''}" style="width: 109px;">
+        <label class="first_mark"></label>
+        <span class="t" style="width: 109px; height: 27px;"></span>
+        <span class="b" style="width: 109px; height: 27px;"></span>
+        <a href="/admin_booking/createBookingForm" class="ab_position" style="top: 10px;" data-info="1">Select Tour <br>&amp; Agent</a>
+    </span>
+    <span class="nav {$function_name=='select_date'?'active_step':''} {$Think.session.adminBooking_select_dateAjax?'done_step':''}"    style="width: 138px;">
+        <span class="t" style="width: 138px; height: 27px;"></span>
+        <span class="b" style="width: 138px; height: 27px;"></span>
+        <a href="/admin_booking/select_date" class="ab_position" style="top: 10px;" data-info="2">Date, Language <br>&amp; Options</a>
+    </span>
+    <span class="nav {$function_name=='passenger_details'?'active_step':''} {$Think.session.adminBooking_passenger_detailsAjax?'done_step':''}"  style="width: 103px;">
+        <span class="t" style="width: 103px; height: 27px;"></span>
+        <span class="b" style="width: 103px; height: 27px;"></span>
+        <a href="/admin_booking/passenger_details" class="ab_position" style="top: 10px;" data-info="3">Passenger <br>Details</a>
+    </span>
+    <span class="nav {$function_name=='room_config'?'active_step':''} {$Think.session.adminBooking_room_configAjax?'done_step':''}  " style="width: 95px;">
+        <span class="t" style="width: 95px; height: 27px;"></span>
+        <span class="b" style="width: 95px; height: 27px;"></span>
+        <a href="/admin_booking/room_config" class="ab_position" style="top: 10px;" data-info="4">Room <br>Configure</a>
+    </span>
+    <span class="nav {$function_name=='service_requests'?'active_step':''} {$Think.session.adminBooking_service_requestsAjax?'done_step':''}" style="width: 91px;">
+        <span class="t" style="width: 91px; height: 27px;"></span>
+        <span class="b" style="width: 91px; height: 27px;"></span>
+        <a href="/admin_booking/service_requests" class="ab_position" style="top: 10px;" data-info="5">Service <br>Requests</a>
+    </span>
+    <span class="nav {$function_name=='booking_summary'?'active_step':''}  {$Think.session.adminBooking_service_booking_summaryAjax?'done_step':''}" style="width: 92px;">
+        <span class="t" style="width: 92px; height: 27px;"></span>
+        <span class="b" style="width: 92px; height: 27px;"></span>
+        <a href="/admin_booking/booking_summary" class="ab_position" style="top: 10px;" data-info="6">Booking <br>Summary</a>
+    </span>
+</div>
+
+<script>
+    $(function () {
+        var navWidth=0;
+        //init layout
+        $(".nav>a").each(function () {
+            var width = $(this).outerWidth(), height = $(this).outerHeight(), parH = $(this).closest(".nav").height();
+            var mH = (parH - height) / 2;
+            var parWidth = width + 25;
+            navWidth+=parWidth+5;
+            $(this).closest(".nav").width(parWidth);
+            $(this).siblings(":not(.first_mark)").width(parWidth).height(parH / 2);
+            $(this).addClass("ab_position");
+            $(this).css("top", mH);
+        });
+
+        $(".tab_border").width(navWidth);
+
+
+        $(".nav>span").hover(setColor, removeColor);
+        $(".nav>a").hover(setColor, removeColor);
+        var h = '';
+        $(".nav>span,.nav>a").click(function (e) {
+            e.preventDefault();
+            var parNav=$(this).closest(".nav");
+            if(parNav.hasClass("done_step")||parNav.hasClass("active_step")||parNav.hasClass("editing_step")){
+                var in1 = $('.step').find('.active_step').find('a').data('info');
+//                alert(in1);
+                h =parNav.find("a").attr("href");
+                var urt = '';
+                switch (in1){
+                    case 1 : urt='/admin_booking/createBookingFormAjax';break;
+                    case 2 : urt='/admin_booking/select_dateAjax';break;
+                    case 3 : urt='/admin_booking/passenger_detailsAjax';break;
+                    case 4 : urt='/admin_booking/room_configAjax';break;
+                    case 5 : urt='/admin_booking/service_requestsAjax';break;
+                    case 6:  urt='/admin_booking/booking_summaryAjax';break;
+                    default :  urt='';  break;
+                }
+                $.ajax({
+                    type: "POST",
+                    url: urt,
+                    data:  $('#form1').serializeArray(),
+                    success: function(data){
+                        //console.log(data);
+                        if(data.code!=200){
+                            layer.msg(data.msg);
+                            return false;
+                        }else if(data.code==200) {
+                            layer.msg('操作成功',{time:2000,end : function(layero, index){
+                                window.location.href=h;
+                            }
+                            });
+                        }
+                    },
+                    error:function(XMLHttpRequest, textStatus, errorThrown){
+                        layer.msg('验证失败')
+                    }
+                });
+                return false;
+
+            }
+        });
+
+        function setColor(e) {
+            e.preventDefault();
+            var parNav=$(this).closest(".nav");
+            if(parNav.hasClass("done_step")||parNav.hasClass("active_step")||parNav.hasClass("editing_step")){
+                parNav.addClass("hover");
+            }
+        }
+
+        function removeColor(e) {
+            $(this).closest(".nav").removeClass("hover");
+            e.preventDefault();
+        }
+
+
+
+
+    })
+
+
+</script>

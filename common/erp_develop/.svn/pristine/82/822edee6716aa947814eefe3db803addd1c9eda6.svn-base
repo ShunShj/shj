@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {include file='public/head' /}
+    <title>团队产品-利润表</title>
+    <link href="__STATIC__/css/select2.min.css" rel="stylesheet">
+
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+    <div class="layui-header">
+        {include file='public/header' /}
+    </div>
+
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll">
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            {include file='public/left_menu' /}
+        </div>
+    </div>
+
+    <div class="layui-body">
+
+        <!-- 内容主体区域 -->
+        <div style="padding: 15px;">
+            <div class='layui-form-item'>
+			<span class="layui-breadcrumb" lay-separator="-">
+                <a>{$Think.lang.index_public_homepage}</a>
+                <a>{$Think.lang.index_public_product}</a>
+				<a>{$Think.lang.index_product_ShowPlanTour_resources_teamProduct}</a>
+                <a><cite>{$Think.lang.index_product_ShowPlanTour_suppliersPayable}</cite></a>
+			</span>
+            </div>
+            <br/>
+            <div class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief">
+                <ul class="layui-tab-title">
+                    <li><a href="/product/PlanSuppliersPayable?plan_id={$_GET['plan_id']}&number={$_GET['number']}">{$Think.lang.index_product_PlanSuppliersPayable_payableToSuppliers}</a></li>
+                    <li ><a href="/product/PlanReceivableBranch?plan_id={$_GET['plan_id']}&number={$_GET['number']}">{$Think.lang.index_product_PlanSuppliersPayable_receivableBranch}</a></li>
+                    <li class="layui-this">{$Think.lang.index_product_PlanSuppliersPayable_incomeStatement}</li>
+                </ul>
+                <br/>
+                <div class="layui-tab-content">
+
+                        <div class="table-nont">
+                            <table class="layui-table">
+                                <thead>
+                                <tr style="text-align: center;">
+                                    <td rowspan="2"></td>
+                                    <td rowspan="2">{$Think.lang.index_product_PlanSuppliersPayable_sourceBranch}</td>
+                                    <td rowspan="2">{$Think.lang.index_finance_showReceivableManage_order_number}</td>
+                                    <td rowspan="2">{$Think.lang.index_finance_showReceivableManage_receivable_number}</td>
+                                    <td colspan="5">{$Think.lang.index_product_PlanSuppliersPayable_detail}</td>
+                                    <td rowspan="2" >{$Think.lang.index_product_PlanSuppliersPayable_receivableBranch}</td>
+                                    <td rowspan="2" >{$Think.lang.index_finance_showReceivableManage_true_receipt}</td>
+                                    <td rowspan="2" >{$Think.lang.index_finance_showReceivableManage_uncollected}</td>
+                                    <td rowspan="2" width="5%" >{$Think.lang.index_product_PlanSuppliersPayable_totalReceivable}</td>
+                                    <td rowspan="2" width="5%" >{$Think.lang.index_product_PlanSuppliersPayable_totalReceived}</td>
+
+                                </tr>
+                                <tr style="text-align: center;">
+                                    <td>{$Think.lang.index_product_visitor_order_visitor}</td>
+                                    <td>{$Think.lang.index_public_type}</td>
+                                    <td>{$Think.lang.index_product_PlanBooking_order_product}</td>
+                                    <td>{$Think.lang.index_product_showRouteTemplateManage_resources_currency}</td>
+                                    <td>{$Think.lang.index_product_showRouteTemplateManage_resources_price}</td>
+                                </tr>
+                                </thead>
+                                <tbody id="tb">
+
+                                <?php $yingshouzhongji=0;$shishouzongji=0;?>
+
+                                {notempty name='$list["团费"]'}
+                                {assign name='s1' value='1'}
+                                {assign name='s2' value='1'}
+                                {assign name='ss2' value='1'}
+                                {assign name='s3' value='1'}
+                                {assign name='u1' value=''}
+                                <!--类型-->
+                                {assign name='u2' value=''}
+                                <!--供应商-->
+                                {assign name='u3' value='0'}
+                                {assign name='bl' value='1'}
+
+                                {foreach $list['团费']['data'] as $k1=>$v1}
+                                <?php $tuanduiyingshou[$k1]=0;?>
+                                <?php $tuanduishishou[$k1]=0;?>
+                                <?php $tuanduiweishou[$k1]=0;?>
+                                {foreach $v1['data'] as $k2=>$v2}
+                                {foreach $v2 as $k3=>$v3}
+                                <tr>
+                                    {if ($bl==1)}
+                                    <td id="r-1" rowspan="{$list['团费']['count']}">{$Think.lang.index_product_PlanSuppliersPayable_teamReceivable}</td>
+                                    {/if}
+
+                                    {if ($u2!=$k1)}
+                                    {assign name='ss2' value='1'}
+                                    <td class="layui-form type" rowspan="{$v1['count']}" >
+                                        {$branchs[$k1][0]['company_name']}
+                                    </td>
+                                    {assign name='s1' value='$s1+1'}
+                                    {/if}
+
+                                    {if ($u3!=$k2 || $u2!=$k1) }
+                                    <td class="layui-form supplier"  rowspan="{$v2|count}">
+                                        {foreach $ReceivableList[$k1] as $k=>$v}
+                                        {$k2==$v.company_order_number?$v.company_order_number:''}
+                                        {/foreach}
+                                    </td>
+                                    {assign name='s2' value='$s2+1'}
+                                    {assign name='ss2' value='$ss2+1'}
+                                    {/if}
+
+                                    <td>{$v3.receivable_number}</td>
+
+                                    <td width="20%" >
+                                        {foreach $v3['youke'] as $v}
+                                        <?php if(in_array($v['company_order_customer_id'],$v3['customer_info'])){echo $v[$_GET['number']].',';} ?>
+                                        {/foreach}
+                                    </td>
+
+                                    <td>
+                                        {assign name='product_source_type_id' value='$v3.product_source_type_id?:1'}
+                                        {$types[$product_source_type_id]}
+                                    </td>
+
+                                    <td>
+                                        {$v3.product_name}
+                                    </td>
+
+                                    <td>
+                                        {$Currency[$v3.receivable_currency_id][0]['currency_name']}
+                                    </td>
+
+                                    <td>
+                                        {$v3.receivable_money}
+                                    </td>
+
+                                    {if ($u2!=$k1)}
+                                    <td class="tuanduiyingshou-{$k1}" rowspan="{$v1['count']}">{$Think.lang.index_product_PlanSuppliersPayable_receivableBranch}</td>
+                                    <td class="tuanduishishou-{$k1}" rowspan="{$v1['count']}">{$Think.lang.index_finance_showReceivableManage_true_receipt}</td>
+                                    <td class="tuanduiweishou-{$k1}" rowspan="{$v1['count']}">{$Think.lang.index_finance_showReceivableManage_uncollected}</td>
+                                    {/if}
+
+                                    {if ($bl==1)}
+                                    <td class="yingshouzongji" rowspan="{$list['团费']['count']+$list['其他']['count']}">{$Think.lang.index_product_PlanSuppliersPayable_totalReceivable}</td>
+                                    <td class="shishouzongji" rowspan="{$list['团费']['count']+$list['其他']['count']}">{$Think.lang.index_product_PlanSuppliersPayable_totalReceived}</td>
+                                    {assign name='bl' value='0'}
+                                    {/if}
+
+                                    {assign name='s3' value='$s3+1'}
+                                    {assign name='u2' value='$k1'}
+                                    {assign name='u3' value='$k2'}
+                                    <?php $tuanduiyingshou[$k1]+=$v3['receivable_money'];?>
+                                    <?php $tuanduishishou[$k1]+=$v3['true_receipt'];?>
+                                    <?php $tuanduiweishou[$k1]+=$v3['balance_money'];?>
+                                    <?php $yingshouzhongji+=$v3['receivable_money'];$shishouzongji+=$v3['true_receipt'];?>
+                                </tr>
+                                {/foreach}
+                                {/foreach}
+                                <script>
+                                    var k1 = <?=$k1?$k1:0?>;
+                                    var tuanduiyingshou = <?=$tuanduiyingshou[$k1]?$tuanduiyingshou[$k1]:0; ?>;
+                                    var tuanduishishou = <?=$tuanduishishou[$k1]?$tuanduishishou[$k1]:0; ?>;
+                                    var tuanduiweishou = <?=$tuanduiweishou[$k1]?$tuanduiweishou[$k1]:0; ?>;
+
+                                    $('.tuanduiyingshou-'+k1).html(tuanduiyingshou.toFixed(2));
+                                    $('.tuanduishishou-'+k1).html(tuanduishishou.toFixed(2));
+                                    $('.tuanduiweishou-'+k1).html(tuanduiweishou.toFixed(2));
+                                </script>
+
+                                {/foreach}
+                                {/notempty}
+
+                                {notempty name='$list["其他"]'}
+                                {assign name='Ws1' value='1'}
+                                {assign name='Ws2' value='1'}
+                                {assign name='Wss2' value='1'}
+                                {assign name='Ws3' value='1'}
+                                {assign name='Wu1' value=''}
+                                <!--类型-->
+                                {assign name='Wu2' value=''}
+                                <!--供应商-->
+                                {assign name='Wu3' value='0'}
+                                {assign name='Wbl' value='1'}
+                                {foreach $list['其他']['data'] as $k1=>$v1}
+                                <?php $qitayingshou[$k1]=0;?>
+                                <?php $qitashishou[$k1]=0;?>
+                                <?php $qitaweishou[$k1]=0;?>
+                                {foreach $v1['data'] as $k2=>$v2}
+                                {foreach $v2 as $k3=>$v3}
+                                <tr>
+                                    {if ($Wbl==1)}
+                                    <td id="u-1" rowspan="{$list['其他']['count']}">{$Think.lang.index_product_PlanSuppliersPayable_OtherReceivable}</td>
+                                    {/if}
+
+                                    {if ($Wu2!=$k1)}
+                                    {assign name='Wss2' value='1'}
+                                    <td class="layui-form type" rowspan="{$v1['count']}" >
+                                        {$branchs[$k1][0]['company_name']}
+                                    </td>
+                                    {assign name='Ws1' value='$Ws1+1'}
+                                    {/if}
+
+                                    {if ($Wu3!=$k2 || $Wu2!=$k1) }
+                                    <td class="layui-form supplier"  rowspan="{$v2|count}">
+                                        {foreach $ReceivableList[$k1] as $k=>$v}
+                                        {$k2==$v.company_order_number?$v.company_order_number:''}
+                                        {/foreach}
+                                    </td>
+                                    {assign name='Ws2' value='$Ws2+1'}
+                                    {assign name='Wss2' value='$Wss2+1'}
+                                    {/if}
+
+                                    <td>{$v3.receivable_number}</td>
+
+                                    <td width="20%" >
+                                        {foreach $v3['youke'] as $v}
+                                        <?php if(in_array($v['company_order_customer_id'],$v3['customer_info'])){echo $v[$_GET['number']];} ?>,
+                                        {/foreach}
+                                    </td>
+
+                                    <td>
+                                        {assign name='product_source_type_id' value='$v3.product_source_type_id?:1'}
+                                        {$types[$product_source_type_id]}
+                                    </td>
+
+                                    <td>
+                                        {$v3.product_name}
+                                    </td>
+
+                                    <td>{$Currency[$v3.receivable_currency_id][0]['currency_name']}</td>
+
+                                    <td>{$v3.receivable_money}</td>
+
+                                    {if ($Wu2!=$k1)}
+                                    <td class="qitayingshou-{$k1}" rowspan="{$v1['count']}">{$Think.lang.index_product_PlanSuppliersPayable_receivableBranch}</td>
+                                    <td class="qitashishou-{$k1}" rowspan="{$v1['count']}">{$Think.lang.index_finance_showReceivableManage_true_receipt}</td>
+                                    <td class="qitaweishou-{$k1}" rowspan="{$v1['count']}">{$Think.lang.index_finance_showReceivableManage_uncollected}</td>
+                                    {/if}
+
+                                    {empty name='$list["团费"]'}
+                                    {if ($Wbl==1)}
+                                    <td rowspan="{$list['团费']['count']+$list['其他']['count']}">{$Think.lang.index_product_PlanSuppliersPayable_totalReceivable}</td>
+                                    <td rowspan="{$list['团费']['count']+$list['其他']['count']}">{$Think.lang.index_product_PlanSuppliersPayable_totalReceived}</td>
+                                    {/if}
+                                    {/empty}
+
+                                    {assign name='Wbl' value='0'}
+                                    {assign name='Ws3' value='$Ws3+1'}
+                                    {assign name='Wu2' value='$k1'}
+                                    {assign name='Wu3' value='$k2'}
+                                    <?php $qitayingshou[$k1]+=$v3['receivable_money'];?>
+                                    <?php $qitashishou[$k1]+=$v3['true_receipt'];?>
+                                    <?php $qitaweishou[$k1]+=$v3['balance_money'];?>
+                                    <?php $yingshouzhongji+=$v3['receivable_money'];$shishouzongji+=$v3['true_receipt'];?>
+                                </tr>
+                                {/foreach}
+                                {/foreach}
+                                <script>
+                                    var kk1 = <?=$k1?$k1:0;?>;
+                                    var qitayingshou = <?=$qitayingshou[$k1]?$qitayingshou[$k1]:0; ?>;
+                                    var qitashishou = <?=$qitashishou[$k1]?$qitashishou[$k1]:0; ?>;
+                                    var qitaweishou = <?=$qitaweishou[$k1]?$qitaweishou[$k1]:0; ?>;
+
+                                    $('.qitayingshou-'+kk1).html(qitayingshou.toFixed(2));
+                                    $('.qitashishou-'+kk1).html(qitashishou.toFixed(2));
+                                    $('.qitaweishou-'+kk1).html(qitaweishou.toFixed(2));
+
+                                </script>
+
+                                {/foreach}
+                                {/notempty}
+
+                                </tbody>
+                            </table>
+
+                            <script>
+                                var yingshouzhongji = <?=$yingshouzhongji?$yingshouzhongji:0;?>;
+                                var shishouzongji = <?=$shishouzongji?$shishouzongji:0;?>;
+
+                                $('.yingshouzongji').html(yingshouzhongji.toFixed(2));
+                                $('.shishouzongji').html(shishouzongji.toFixed(2));
+
+                            </script>
+
+                        </div>
+
+
+                        <div class="table-nont">
+                            <table class="layui-table" >
+                                <thead>
+                                <tr style="text-align: center">
+                                    <td rowspan="2"></td>
+                                    <td rowspan="2" width="14%">{$Think.lang.index_public_type}</td>
+                                    <td rowspan="2" width="15%">{$Think.lang.index_public_supplier}</td>
+                                    <td colspan="6" width="50%">{$Think.lang.index_product_PlanSuppliersPayable_detail}</td>
+                                    <td rowspan="2">{$Think.lang.index_product_PlanSuppliersPayable_payableToSuppliers}</td>
+                                    <td rowspan="2">{$Think.lang.index_finance_showMustPayManage_true_receipt}</td>
+                                    <td rowspan="2">{$Think.lang.index_finance_showMustPayManage_unpaid}</td>
+                                    <td rowspan="2" width="5%">{$Think.lang.index_product_PlanSuppliersPayable_totalPayable}</td>
+                                    <td rowspan="2" width="5%">{$Think.lang.index_product_PlanSuppliersPayable_totalActualPayments}</td>
+                                </tr>
+                                <tr style="text-align: center">
+                                    <td width="10%">{$Think.lang.index_product_PlanSuppliersPayable_payableNumber}</td>
+                                    <td width="10%">{$Think.lang.index_product_PlanSuppliersPayable_name}</td>
+                                    <td width="10%">{$Think.lang.index_product_showRouteTemplateManage_resources_currency}</td>
+                                    <td width="10%">{$Think.lang.index_public_price}</td>
+                                    <td width="10%">{$Think.lang.index_product_showRouteTemplateManage_resource_number}</td>
+                                    <td width="10%">{$Think.lang.index_product_PlanSuppliersPayable_total}</td>
+                                </tr>
+                                </thead>
+                                <tbody >
+
+
+                                <?php $yingfuzongji=0;$shifuzogji=0;?>
+                                {notempty name='$list2["团费"]'}
+                                <?php $tuanduiyingfu=0; $tuanduishifu=0; $tuanduiweifu=0; ?>
+
+                                {assign name='s1' value='1'}
+                                {assign name='s2' value='1'}
+                                {assign name='ss2' value='1'}
+                                {assign name='s3' value='1'}
+                                {assign name='u1' value=''}
+                                <!--类型-->
+                                {assign name='u2' value=''}
+                                <!--供应商-->
+                                {assign name='u3' value='0'}
+                                {assign name='bl' value='1'}
+                                {foreach $list2['团费']['data'] as $k1=>$v1}
+                                {foreach $v1['data'] as $k2=>$v2}
+                                {foreach $v2 as $k3=>$v3}
+                                <tr>
+                                    {if ($bl==1)}
+                                    <td  rowspan="{$list2['团费']['count']}">{$Think.lang.index_product_PlanSuppliersPayable_teamCoping}</td>
+                                    {/if}
+
+                                    {if ($u2!=$k1)}
+                                    {assign name='ss2' value='1'}
+                                    <td class="layui-form type" rowspan="{$v1['count']}" >
+                                        {$types[$k1]}
+                                    </td>
+                                    {assign name='s1' value='$s1+1'}
+                                    {/if}
+
+                                    {if ($u3!=$k2 || $u2!=$k1) }
+                                    <td class="layui-form supplier"  rowspan="{$v2|count}">
+                                        {foreach $SupplierArr[$k1] as $vv}
+                                        {$vv["supplier_id"]==$k2?$vv['supplier_name']:""}
+                                        {/foreach}
+                                    </td>
+                                    {assign name='s2' value='$s2+1'}
+                                    {assign name='ss2' value='$ss2+1'}
+                                    {/if}
+
+                                    <td>
+                                        {$v3.cope_number}
+
+                                    </td>
+                                    <td>{$v3.product_name|default='-'}</td>
+                                    <td class="layui-form">{$Currency[$v3.cope_currency_id][0]['currency_name']}</td>
+                                    <td>{$v3.price}</td>
+                                    <td>{$v3.unit}</td>
+                                    <td>{$v3.cope_money}</td>
+
+                                    {if ($bl==1)}
+                                    <td class="tuanduiyingfu"  rowspan="{$list2['团费']['count']}">{$Think.lang.index_product_PlanSuppliersPayable_payableToSuppliers}</td>
+                                    <td class="tuanduishifu" rowspan="{$list2['团费']['count']}">{$Think.lang.index_finance_showMustPayManage_true_receipt}</td>
+                                    <td class="tuanduiweifu"  rowspan="{$list2['团费']['count']}">{$Think.lang.index_finance_showMustPayManage_unpaid}</td>
+
+                                    <td class="yingfuzongji" rowspan="{$list2['团费']['count']+$list2['地接']['count']+$list2['其他']['count']}"></td>
+                                    <td class="shifuzogji" rowspan="{$list2['团费']['count']+$list2['地接']['count']+$list2['其他']['count']}"></td>
+                                    {assign name='bl' value='0'}
+                                    {/if}
+
+                                    <?php $tuanduiyingfu+=$v3['cope_money'];?>
+                                    <?php $tuanduishifu+=$v3['true_receipt'];?>
+                                    <?php $tuanduiweifu+=$v3['balance_money'];?>
+                                    <?php $yingfuzongji+=$v3['cope_money'];$shifuzogji+=$v3['true_receipt'];?>
+                                    {assign name='s3' value='$s3+1'}
+                                    {assign name='u2' value='$k1'}
+                                    {assign name='u3' value='$k2'}
+                                </tr>
+                                {/foreach}
+                                {/foreach}
+                                {/foreach}
+
+                                <script>
+                                    var tuanduiyingfu = <?=$tuanduiyingfu?$tuanduiyingfu:0;?>;
+                                    var tuanduishifu = <?=$tuanduishifu?$tuanduishifu:0;?>;
+                                    var tuanduiweifu = <?=$tuanduiweifu?$tuanduiweifu:0;?>;
+
+                                    $('.tuanduiyingfu').html(tuanduiyingfu.toFixed(2));
+                                    $('.tuanduishifu').html(tuanduishifu.toFixed(2));
+                                    $('.tuanduiweifu').html(tuanduiweifu.toFixed(2));
+                                </script>
+
+                                {/notempty}
+
+                                {notempty name='$list2["地接"]'}
+                                <?php $dijieyingfu=0;?>
+                                <?php $dijieshifu=0;?>
+                                <?php $dijieweifu=0;?>
+
+                                {assign name='Ds1' value='1'}
+                                {assign name='Ds2' value='1'}
+                                {assign name='Dss2' value='1'}
+                                {assign name='Ds3' value='1'}
+                                {assign name='Du1' value=''}
+
+                                {assign name='Du2' value=''}
+                                {assign name='Du3' value='0'}
+                                {assign name='Dbl' value='1'}
+
+                                {foreach $list2['地接']['data'] as $k1=>$v1}
+                                {foreach $v1['data'] as $k2=>$v2}
+                                {foreach $v2 as $k3=>$v3}
+                                <tr>
+                                    {if ($Dbl==1)}
+                                    <td id="v-1" rowspan="{$list2['地接']['count']}">地接报账</td>
+                                    {/if}
+
+                                    {if ($Du2!=$k1)}
+                                    {assign name='Dss2' value='1'}
+                                    <td class="layui-form type" rowspan="{$v1['count']}" >{$types[$k1]}</td>
+                                    {assign name='Ds1' value='$Ds1+1'}
+                                    {/if}
+
+                                    {if ($Du3!=$k2 || $Du2!=$k1) }
+                                    <td class="layui-form supplier"   rowspan="{$v2|count}">
+                                        {foreach $SupplierArr[$k1] as $vv}
+                                        {$vv["supplier_id"]==$k2?$vv['supplier_name']:""}
+                                        {/foreach}
+                                    </td>
+                                    {assign name='Ds2' value='$Ds2+1'}
+                                    {assign name='Dss2' value='$Dss2+1'}
+                                    {/if}
+
+                                    <td>{$v3.cope_number}</td>
+                                    <td>{$v3.product_name}</td>
+                                    <td class="layui-form">{$Currency[$v3.cope_currency_id][0]['currency_name']}</td>
+                                    <td>{$v3.price}</td>
+                                    <td>{$v3.unit}</td>
+                                    <td>{$v3.cope_money}</td>
+
+                                    {if ($Dbl==1)}
+                                    <td class="dijieyingfu" rowspan="{$list2['地接']['count']}"></td>
+                                    <td class="dijieshifu" rowspan="{$list2['地接']['count']}"></td>
+                                    <td class="dijieweifu" rowspan="{$list2['地接']['count']}"></td>
+
+                                    {empty name='$list2["团费"]'}
+                                    <td class="yingfuzongji" rowspan="{$list2['地接']['count']+$list2['其他']['count']}"></td>
+                                    <td class="shifuzogji" rowspan="{$list2['地接']['count']+$list2['其他']['count']}"></td>
+                                    {/empty}
+
+
+                                    {assign name='Dbl' value='0'}
+                                    {/if}
+
+                                    <?php $dijieyingfu+=$v3['cope_money'];?>
+                                    <?php $dijieshifu+=$v3['true_receipt'];?>
+                                    <?php $dijieweifu+=$v3['balance_money'];?>
+                                    <?php $yingfuzongji+=$v3['cope_money'];$shifuzogji+=$v3['true_receipt'];?>
+                                    {assign name='Ds3' value='$Ds3+1'}
+                                    {assign name='Du2' value='$k1'}
+                                    {assign name='Du3' value='$k2'}
+                                </tr>
+                                {/foreach}
+                                {/foreach}
+                                {/foreach}
+
+                                <script>
+                                    var dijieyingfu=<?=$dijieyingfu?$dijieyingfu:0;?>;
+                                    var dijieshifu=<?=$dijieshifu?$dijieshifu:0;?>;
+                                    var dijieweifu=<?=$dijieweifu?$dijieweifu:0;?>;
+
+                                    $('.dijieyingfu').html(dijieyingfu.toFixed(2));
+                                    $('.dijieshifu').html(dijieshifu.toFixed(2));
+                                    $('.dijieweifu').html(dijieweifu.toFixed(2));
+                                </script>
+
+                                {/notempty}
+
+                                {notempty name='$list2["其他"]'}
+                                <?php $qitayingfu=0; ?>
+                                <?php $qitashifu=0; ?>
+                                <?php $qitaweifu=0; ?>
+
+                                {assign name='Qs1' value='1'}
+                                {assign name='Qs2' value='1'}
+                                {assign name='Qss2' value='1'}
+                                {assign name='Qs3' value='1'}
+                                {assign name='Qu1' value=''}
+                                <!--类型-->
+                                {assign name='Qu2' value=''}
+                                <!--供应商-->
+                                {assign name='Qu3' value='0'}
+                                {assign name='Qbl' value='1'}
+                                {foreach $list2['其他']['data'] as $k1=>$v1}
+                                {foreach $v1['data'] as $k2=>$v2}
+                                {foreach $v2 as $k3=>$v3}
+                                <tr>
+                                    {if ($Qbl==1)}
+                                    <td  rowspan="{$list2['其他']['count']}">{$Think.lang.index_product_PlanSuppliersPayable_otherCosts}</td>
+                                    {/if}
+
+                                    {if ($Qu2!=$k1)}
+                                    {assign name='Qss2' value='1'}
+                                    <td class="layui-form type" rowspan="{$v1['count']}" >{$types[$k1]}</td>
+                                    {assign name='Qs1' value='$Qs1+1'}
+                                    {/if}
+
+                                    {if ($Qu3!=$k2 || $Qu2!=$k1) }
+                                    <td class="layui-form supplier" id="u-2-{$Qs2}" rowspan="{$v2|count}">
+                                        {foreach $SupplierArr[$k1] as $vv}
+                                            {$vv["supplier_id"]==$k2?$vv['supplier_name']:""}
+                                        {/foreach}
+                                    </td>
+                                    {assign name='Qs2' value='$Qs2+1'}
+                                    {assign name='Qss2' value='$Qss2+1'}
+                                    {/if}
+
+                                    <td>{$v3.cope_number}</td>
+                                    <td>{$v3.product_name|default='-'}</td>
+                                    <td class="layui-form">{$Currency[$v3.cope_currency_id][0]['currency_name']}</td>
+                                    <td>{$v3.price}</td>
+                                    <td>{$v3.unit}</td>
+                                    <td>{$v3.cope_money}</td>
+
+
+                                    {if ($Qbl==1)}
+                                    <td class="qitayingfu" rowspan="{$list2['其他']['count']}"> </td>
+                                    <td class="qitashifu" rowspan="{$list2['其他']['count']}"> </td>
+                                    <td class="qitaweifu" rowspan="{$list2['其他']['count']}"> </td>
+                                    {assign name='Qbl' value='0'}
+
+                                    {empty name='$list2["团费"]'}
+                                    {empty name='$list2["地接"]'}
+                                    <td class="yingfuzongji" rowspan="{$list2['其他']['count']}"></td>
+                                    <td class="shifuzogji" rowspan="{$list2['其他']['count']}"></td>
+                                    {/empty}
+                                    {/empty}
+
+                                    {/if}
+
+                                    <?php $qitayingfu+=$v3['cope_money'];?>
+                                    <?php $qitashifu+=$v3['true_receipt'];?>
+                                    <?php $qitaweifu+=$v3['balance_money'];?>
+                                    <?php $yingfuzongji+=$v3['cope_money'];$shifuzogji+=$v3['true_receipt'];?>
+                                    {assign name='Qs3' value='$Qs3+1'}
+                                    {assign name='Qu2' value='$k1'}
+                                    {assign name='Qu3' value='$k2'}
+                                </tr>
+                                {/foreach}
+                                {/foreach}
+                                {/foreach}
+
+                                <script>
+                                    var qitayingfu = <?=$qitayingfu?$qitayingfu:0;?>;
+                                    var qitashifu = <?=$qitashifu?$qitashifu:0;?>;
+                                    var qitaweifu = <?=$qitaweifu?$qitaweifu:0;?>;
+
+                                    $('.qitayingfu').html(qitayingfu.toFixed(2));
+                                    $('.qitashifu').html(qitashifu.toFixed(2));
+                                    $('.qitaweifu').html(qitaweifu.toFixed(2));
+                                </script>
+                                {/notempty}
+                        </tbody>
+                                <script>
+                                    var yingfuzongji = <?=$yingfuzongji?$yingfuzongji:0;?>;
+                                    var shifuzogji = <?=$shifuzogji?$shifuzogji:0;?>;
+
+                                    $('.yingfuzongji').html(yingfuzongji.toFixed(2));
+                                    $('.shifuzogji').html(shifuzogji.toFixed(2));
+                                </script>
+
+                    </table>
+
+                        </div>
+
+                    <div class="table-nont">
+                        <table class="layui-table" >
+                            <thead>
+                            <tr>
+                                <td></td>
+                                <td width="5%">预计利润</td>
+                                <td width="5%">实际利润</td>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td></td>
+                                <td width="5%"><?=sprintf("%.2f",$yingshouzhongji-$yingfuzongji)?></td>
+                                <td width="5%"><?=sprintf("%.2f",$shishouzongji-$shifuzogji)?></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+
+    <div class="layui-footer">
+        <!-- 底部固定区域 -->
+        © layui.com - 底部固定区域
+    </div>
+</div>
+{include file='public/foot_js' /}
+<script src='__STATIC__/javascript/public/select2.min.js'></script>
+<script>
+
+    !function(){
+        var layer = layui.layer ;
+        var form = layui.form;
+        var laydate = layui.laydate;
+    }();
+
+</script>
+</body>
+</html>
+
+<script>
+
+
+</script>

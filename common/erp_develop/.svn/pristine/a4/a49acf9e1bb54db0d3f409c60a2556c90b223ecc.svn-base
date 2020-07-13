@@ -1,0 +1,830 @@
+<?php
+/**
+ * Created by PhpStorm.
+ * User: Hugh
+ * Date: 2019/11/04
+ * Time: 13:40
+ */
+
+namespace app\index\controller;
+use \Underscore\Types\Arrays;
+use think\Session;
+use think\Paginator;
+use think\Request;
+use think\Controller;
+use app\common\help\Help;
+
+class BookTour extends Base
+{
+    public function select_tour(){
+
+        //获取TAB
+        $where['status'] = 1;
+        $where['company_id'] = session('user')['company_id'];
+        $result = $this->callSoaErp('post', '/btob/getCommission',$where);
+        $this->assign('tabs',$result['data']);
+//        var_dump($result['data']);exit;
+//        unset($where); unset($result);
+
+        $where['status'] = 1;
+        $where['system_type'] = 'Tour';
+        $result = $this->callSoaErp('post', '/btob/getTourTypeAjax',$where);
+        $this->assign('type_arr',$result['data']);
+//        var_dump($result['data']);
+        unset($where); unset($result);
+
+        $data['status'] = 1;
+        $data['company_id'] =  session('user')['company_id'];
+        $result = $this->callSoaErp('post', '/b2b_tour/getB2bTour',$data);
+        $this->assign('all_tours',$result['data']);
+//        var_dump($result['data']);exit;
+
+        unset($where); unset($result);
+
+        session::set('booking',1);
+
+        $this->assign('site_title','1.Select Tour');
+        return $this->fetch('/book_tour/select_tour');
+    }
+
+    public function select_date(){
+
+        if($_GET['btb_tour_id']){
+
+            if(session('select_tour')['btb_tour_id'] != $_GET['btb_tour_id']  && session('booking')==1){
+                session::delete('select_tour');
+                //获取产品信息
+                $where['btb_tour_id'] = $_GET['btb_tour_id'];
+                $result = $this->callSoaErp('post','/b2b_tour/getB2bTourGeneral',$where);
+                session::set('select_tour',$result['data']);
+            }
+
+
+
+            //获取团日期
+            $where['status'] = 1;
+            $where['btb_tour_id'] = $_GET['btb_tour_id'];
+            $result = $this->callSoaErp('post','/b2b_tour/getB2bTourDates',$where);
+            $dateOj = [];
+            foreach($result['data'] as $date){
+                if(date('Y-m-d')<=$date['arrival_date'])
+                    $dateOj[] = date('d-m-Y',strtotime($date['arrival_date']));
+            }
+            sort($dateOj);
+            $this->assign('dateOj',$dateOj);
+            unset($date);unset($result);
+
+            //获取语言
+            $where['btb_tour_id'] = $_GET['btb_tour_id'];
+            $result = $this->callSoaErp('post', '/b2b_tour/getB2bTour',$where);
+            $this->assign('sLanguage',explode(',',$result['data'][0]['tour_languages']));
+            unset($date);unset($result);
+            $where = ['status'=>1];
+            $Language = $this->callSoaErp('post','/system/getLanguage',$where);
+            $this->assign('Language',$Language['data']);
+//        var_dump($Language);exit;
+            unset($date);
+
+            $this->assign('important_notice','<strong>Important Notice:</strong> Cantonese tour guide is not guaranteed available.');
+            $this->assign('site_title','2.Select Date & Language');
+            $side_content_path = session('side_content_path'); // Booking Summary
+            $this->assign('side_content',$side_content_path);
+
+            session::set('booking',2);
+
+            return $this->fetch('/book_tour/select_date');
+        }else{
+            echo '<script>location.href="/book_tour/select_tour"</script>';
+        }
+
+
+
+    }
+
+
+
+
+    public function passenger_details(){
+        if(session('select_tour')['btb_tour_id'] && session('booking')==2){
+            //获取语言
+            $where['language_id'] = $_POST['language'];
+            $Language = $this->callSoaErp('post','/system/getLanguage',$where);
+            $_POST['tour_lang'] = $Language['data'][0]['language_name'];
+            session::delete('select_date2');
+            session::set('select_date2',$_POST);
+            unset($where);
+
+            //获取日期的季节
+
+
+        }
+//        echo '<pre>';print_r($_SESSION);echo '</pre>';exit;
+//        var_dump($_POST);exit;
+
+        //获取国籍
+        $where['status'] = 1;
+        $where['level'] = 1;
+        $nations = $this->callSoaErp('post','/system/getCountry',$where);
+//        var_dump($nations);exit;
+        $this->assign('all_nations',$nations['data']);
+        $this->assign('site_title','3.Enter Passenger Details');
+
+        session::set('booking',3);
+        return $this->fetch('/book_tour/passenger_details');
+    }
+
+
+    //获取年龄
+    public function check_age($dob, $tour_date, $tour_id){
+        $date_format = date('Y',strtotime($tour_date));
+        $bday = date('Y',strtotime($dob));
+        $age = ($date_format-$bday)?($date_format-$bday):1;
+        error_log(print_r($bday,1));
+
+        $infant = session('select_tour')['infant'];
+        $child  = session('select_tour')['child'];
+
+        if($age <= $infant) {
+            return "Infant";
+        }
+        if($age > $child) {
+            return "Adult";
+        } else {
+            return "Child";
+        }
+
+    }
+
+    //判断是否有成人
+    public function is_adult_pax($age_cat)
+    {
+        if (in_array("Adult", $age_cat)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public function passenger_details_check(){
+        $post = Request::instance()->param();
+
+//        var_dump($post);exit;
+
+        $lname 			=		Arrays::get($post,'lname');
+        $fname 			= 		Arrays::get($post,'fname');
+        $dob 			= 		Arrays::get($post,'dob');
+        $passport 		= 		Arrays::get($post,'passport');
+        $nationality 	= 		Arrays::get($post,'nationality');
+        $ethnicity 		= 		Arrays::get($post,'ethnicity');
+        $gender 		= 		Arrays::get($post,'gender');
+        $speaking 		= 		Arrays::get($post,'speaking');
+        $temp_id 		= 		array();
+
+        for($i=0;$i<count($lname);$i++){
+            $age = $this->check_age($dob[$i],session('select_date2')['tour_date'],session('select_tour')['btb_tour_id']);
+            $age_cat[]  = $age;
+            $allow_nbed_arr[] = 1;
+            $nation_type[] = 0;
+            $temp_id[$i] = $i+1;
+        }
+
+
+        $passenger_info = [
+            'temp_id'		=>  $temp_id,
+            'lname' 		=> 	$lname,
+            'fname' 		=> 	$fname,
+            'dob' 			=> 	$dob,
+            'passport' 		=> 	$passport,
+            'nation_type'	=>  $nation_type,  // Use for pricing
+            'nationality' 	=> 	$nationality,
+            'ethnicity' 	=> 	$ethnicity,
+            'gender' 		=> 	$gender,
+            'age_cat'		=> 	$age_cat,
+            'allow_nbed'    =>  $allow_nbed_arr,
+            'speaking'		=> 	$speaking
+        ];
+
+        $is_adult	=		$this->is_adult_pax($age_cat);
+        $pax_num = array('pax' => count($lname));
+
+        session::delete('passenger_info');
+        session::delete('pax_num');
+
+        session::set('passenger_info',$passenger_info);
+        session::set('pax_num',$pax_num);
+
+
+        echo '<script>location.href="/book_tour/room_config"</script>';
+
+    }
+
+    //获取房信息
+    public function get_room_info(){
+        $room_type = $_POST['room_type'];
+
+        $where['status'] =1;
+        $where['language_id'] = session('user')['language_id'];
+        $result = $this->callSoaErp('post', '/system/getRoomTypeAjax', $where);
+
+        $translate = Arrays::group($result['data'],'translate');
+        if($translate[$room_type]){
+            $ar['capacity'] = $translate[$room_type][0]['accommodate'];
+            $ar['id'] = $translate[$room_type][0]['room_type_id'];
+            $ar['max_capacity'] = $translate[$room_type][0]['accommodate'];
+            $ar['status'] = 1;
+            $ar['type'] = $translate[$room_type][0]['translate'];
+            $obj[] = $ar;
+        }
+        echo json_encode($obj);exit;
+    }
+
+
+    public function room_config(){
+        $tour_type = 'outbound';
+//        echo '<pre>';print_r($_SESSION);echo '</pre>';exit;
+
+        $where['btb_tour_id'] = session('select_tour')['btb_tour_id'];
+        $result = $this->callSoaErp('post','/b2b_tour/getB2bTourSetting',$where);
+        session('is_opt_tip_comp',$result['data']['is_tip']);
+
+        if($tour_type == "US") {
+            $room_config_js = '<script type="text/javascript" src="' . base_url('assets/js/room-config-us-201703031346.js?111') . '"></script>'; // need to add and modify this js file
+        } else {
+            $room_config_js = '<script type="text/javascript" src="' . base_url('assets/js/room-config-201703031347.js?1111') . '"></script>';
+        }
+
+        $this->assign('room_config_js',$room_config_js);
+        $all_rooms = [];
+        //获取房型
+        $where['btb_tour_id'] = session('select_tour')['btb_tour_id'];
+        $result = $this->callSoaErp('post','/b2b_tour/getB2bTourRoom',$where);
+//        var_dump($result);exit;
+        $this->assign('all_rooms',$result['data']);
+        unset($where);unset($result);
+
+        $where['status'] =1;
+        $where['language_id'] = session('user')['language_id'];
+        $result = $this->callSoaErp('post', '/system/getRoomTypeAjax', $where);
+        $roomType = Arrays::group($result['data'],'room_type_id');
+        $this->assign('roomType',$roomType);
+
+        $this->assign('site_title','4.Room Configure');
+
+        session::set('booking',4);
+
+        return $this->fetch('/book_tour/room_config');
+    }
+
+    //是否小费自费
+    public function tip_comp_status_change(){
+        $isPrePaid = json_decode($_POST['isPrePaid']);
+        session::delete('is_tip');
+        session::delete('is_comp_progm');
+        session::set('is_tip',$_POST['isPrePaid']);
+        session::set('is_comp_progm',$_POST['isPrePaid']);
+        echo json_encode($isPrePaid);
+    }
+
+    //重置用房信息
+    public function kill_roomconfig_session(){
+        session::delete('room_info');
+        session::delete('t_info');
+    }
+
+
+    /**
+     *  Function to check if
+     *  the child has bed
+     *  @param $age_cat -- Array
+     *  @param $pax_num -- integer -- number of pax
+     *  @param $max_capacity -- integer
+     *
+     *  @return integer;
+     **/
+    public function check_child_has_bed($age_cat, $pax_num, $max_capacity)
+    {
+        $child = 0;
+        $adult = 0;
+        $child_with_bed = 0;
+
+        // Find child from $params
+        for($i=0; $i < $pax_num; $i++)
+        {
+            if($age_cat[$i] == 'Child')
+            {
+                $child++;
+            }
+            if($age_cat[$i] == 'Adult')
+            {
+                $adult++;
+            }
+        }
+
+        if($child > 0)
+        {
+            $child_with_bed = $max_capacity - $adult;
+            if($adult > 0 && $adult != $max_capacity)
+            {
+                return $child_with_bed;
+            }
+            else if ($adult == $max_capacity)
+            {
+                return $child_with_bed;
+            }
+            else
+            {
+                return $child_with_bed;
+            }
+        }
+        else
+        {
+            return $child_with_bed;
+        }
+    }
+
+    /**
+     *  Function to check if the customer
+     *  the customer is single suppliment
+     *  @param $room_type -- string
+     *  @param $max_capacity -- integer
+     *  @param $pax_num -- integer -- number of pax
+     *
+     *
+     *  @return integer
+     **/
+    public function check_single_suppliment($room_type)
+    {
+        $single_suppliment = 0;
+        // check is single suppliment
+        if($room_type == "Single")
+        {
+            return $single_suppliment = 1;
+        }
+        else
+        {
+            return $single_suppliment;
+        }
+    }
+
+    public function room_config_check()
+    {
+        $selected_num_pax = 0;
+        $num_type = 0;
+        $total_child_with_bed = 0;
+        $child_with_bed = 0;
+        $single_suppliment = 0;
+        $total_single_suppliment = 0;
+
+        $r_info['room_info'] = array();
+        // Get data from room config
+
+        // json_decodoe only accept string
+        // So we need JSON.stringify($array) in jquery
+        $room_params = $_POST['get_param'];
+
+        // Get num of choosed room / rooms
+        $num_room = count($room_params);
+
+        for($i=0; $i < $num_room; $i++)
+        {
+            $room_info 		= json_decode($room_params[$i], true);
+            $type[$i]		= $room_info['roomType'];
+            $r_type 		= $room_info['roomType'];
+            $r_age  		= $room_info['ageCat'];
+            $r_pax 			= $room_info['paxName'];
+            $r_max			= $room_info['maxPax'];
+            $r_temp_id = $room_info['temp_id'];
+            $charge_type            = 0; // 0: None 1: Single Suppliment 2: Child with bed
+            $charge_num             = 0; // How many people get charged
+
+
+            // check is the child has bed
+            $num_of_pax 	= count($r_pax);
+
+            $child_with_bed = $this->check_child_has_bed($r_age, $num_of_pax, $r_max);
+            $total_child_with_bed = $total_child_with_bed + $child_with_bed;
+
+            // Check is single suppliment
+            $single_suppliment = $this->check_single_suppliment($r_type);
+            $total_single_suppliment = $total_single_suppliment + $single_suppliment;
+
+            if($child_with_bed > 0) {
+                $charge_type    = 2;
+                $charge_num     = $child_with_bed;
+            }
+            if($single_suppliment > 0) {
+                $charge_type    = 1;
+                $charge_num     = $single_suppliment;
+            }
+
+            $r_info['room_info'][$i] = array(
+                'type' 			=> $r_type,
+                'age' 			=> $r_age,
+                'pax' 			=> $r_pax,
+                'max' 			=> $r_max,
+                'charge_type'	=> $charge_type,
+                'charge_num'    => $charge_num,
+                'temp_id' => $r_temp_id
+            );
+        }
+        session::delete('room_info');
+        session::set('room_info',$r_info);
+
+        for($i=0; $i < count($r_info['room_info']); $i++)
+        {
+            $arr_num = count($r_info['room_info'][$i]['age']);
+        }
+        // Find same type of room
+        $room_same_type = array_count_values($type);
+
+        foreach ($room_same_type as $key => $type)
+        {
+            $t_info['room_type'][$num_type] =  array(
+                'type' => $key,
+                'num'  => $type
+            );
+
+            //echo $num_type;
+            $num_type++;
+        }
+        session::delete('t_info');
+        session::set('t_info',$t_info);
+
+        echo json_encode(array(
+            'msg' => "success"
+        ));
+    }
+
+    public function service_requests(){
+
+//        echo '<pre>';
+//        print_r(session('room_info'));
+//        print_r(session('t_info'));
+//        echo '</pre>';
+//        exit;
+
+        //获取接送机
+        $where['btb_tour_id'] = session('select_tour')['btb_tour_id'];
+        $result = $this->callSoaErp('post','/b2b_tour/getB2bTourTransfer',$where);
+//        var_dump($result);exit;
+        $tourTransfer = Arrays::group($result['data'],'type');
+        $this->assign('tourTransfer',$tourTransfer);
+        unset($where);
+
+        //获取房型
+        $where['btb_tour_id'] = session('select_tour')['btb_tour_id'];
+        $result = $this->callSoaErp('post','/b2b_tour/getB2bTourRoom',$where);
+//        var_dump($result);exit;
+        $this->assign('all_rooms',$result['data']);
+        unset($where);unset($result);
+        $where['status'] =1;
+        $where['language_id'] = session('user')['language_id'];
+        $result = $this->callSoaErp('post', '/system/getRoomTypeAjax', $where);
+        $roomType = Arrays::group($result['data'],'room_type_id');
+        $this->assign('roomType',$roomType);
+
+
+        $this->assign('site_title','5.Service Requests');
+
+        session::set('booking',5);
+
+        return $this->fetch('/book_tour/service_requests');
+
+    }
+
+
+    public function service_requests_check(){
+//        echo '<pre>';print_r($_POST);echo '</pre>';exit;
+
+        session::delete('special_requests_text');
+        session::delete('h_info');
+        session::delete('a_info');
+        session::delete('pre_info');
+        session::delete('post_info');
+
+
+        if(!empty($_POST['get_param_special'])) {
+            $params_special = $_POST['get_param_special']; 		// Get value via json from jquery data - Hotel
+            $special_requests_text['special_requests'] = $params_special;
+            // Save into session
+            session::set('special_requests_text',$special_requests_text);
+        } else {
+            $special_requests_text['special_requests'] = "";
+            // Save into session
+            session::set('special_requests_text','');
+        }
+
+        if(!empty($_POST['get_param_hotel'])) {
+            $params_hotel = $_POST['get_param_hotel']; 			// Get value via json from jquery data - Hotel
+            $h_info['hotel_transfer_info'] = array();           // Array for store hotel tansfer info
+            $total_hotel_charge = 0;
+
+            //print_r($params_hotel);
+            $num_of_service = count($params_hotel);
+            for($i=0; $i < $num_of_service; $i++)
+            {
+                $hotel_transfer_info 	= json_decode($params_hotel[$i], true);
+                $h_date					= $hotel_transfer_info['date'];
+                $h_flight 				= $hotel_transfer_info['flight'];
+                $h_time  				= $hotel_transfer_info['time'];
+                $h_airport				= $hotel_transfer_info['airport'];
+                $h_pax 					= $hotel_transfer_info['pax'];
+                $h_charge 			    = $hotel_transfer_info['charge'];
+
+                // check is the child has bed
+                $num_of_pax 	        = count($h_pax);
+                $total_hotel_charge = $total_hotel_charge + $h_charge;
+                $h_info['hotel_transfer_info'][$i] = array(
+                    'date' 				=> $h_date,
+                    'flight' 			=> $h_flight,
+                    'time' 				=> $h_time,
+                    'airport'			=> $h_airport,
+                    'pax' 				=> $h_pax,
+                    'charge' 			=> $h_charge,
+                );
+            }
+            //echo $total_hotel_charge;
+
+            // Save into session
+            session::set('h_info',$h_info);
+        }
+
+        if(!empty($_POST['get_param_airport'])) {
+            $params_airport = $_POST['get_param_airport']; 		// Get value via json from jquery data - Airport
+            $a_info['airport_transfer_info'] = array();           // Array for store hotel tansfer info
+            $total_airport_charge = 0;
+            //print_r($params_airport);
+            $num_of_service = count($params_airport);
+
+            for($i=0; $i < $num_of_service; $i++)
+            {
+                $airport_transfer_info 	= json_decode($params_airport[$i], true);
+                $a_date					= $airport_transfer_info['date'];
+                $a_flight 				= $airport_transfer_info['flight'];
+                $a_time  				= $airport_transfer_info['time'];
+                $a_airport				= $airport_transfer_info['airport'];
+                $a_pax 					= $airport_transfer_info['pax'];
+                $a_charge 			    = $airport_transfer_info['charge'];
+
+                $total_airport_charge = $total_airport_charge + $a_charge;
+                $a_info['airport_transfer_info'][$i] = array(
+                    'date' 				=> $a_date,
+                    'flight' 			=> $a_flight,
+                    'time' 				=> $a_time,
+                    'airport'			=> $a_airport,
+                    'pax' 				=> $a_pax,
+                    'charge' 			=> $a_charge,
+                );
+            }
+            //echo $total_airport_charge;
+            // Save into session
+            session::set('a_info',$a_info);
+        }
+
+
+        if(!empty($_POST['get_param_pre'])) {
+            $params_pre = $_POST['get_param_pre']; 				// Get value via json from jquery data - Pre
+            $pre_info['pre_tour_accommodation_info'] = array();           // Array for store hotel tansfer info
+            //$total_pre_tour_accommodation_charge = 0;
+            //print_r($params_airport);
+            $num_of_service = count($params_pre);
+            for($i=0; $i < $num_of_service; $i++)
+            {
+                $pre_tour_accommodation_info 	= json_decode($params_pre[$i], true);
+                $pre_nights						= $pre_tour_accommodation_info['nights'];
+                $pre_room 						= $pre_tour_accommodation_info['roomType'];
+                $pre_room_array[$i]				= $pre_tour_accommodation_info['roomType'];
+                $pre_pax  						= $pre_tour_accommodation_info['pax'];
+
+                //$total_pre_tour_accommodation_charge = $total_pre_tour_accommodation_charge + $h_charge;
+                $pre_info['pre_tour_accommodation_info'][$i] = array(
+                    'nights' 				=> $pre_nights,
+                    'room_type' 			=> $pre_room,
+                    'pax' 					=> $pre_pax,
+                );
+            }
+            // Save into session
+            session::set('pre_info',$pre_info);
+        }
+
+
+        if(!empty($_POST['get_param_post'])) {
+            $params_post = $_POST['get_param_post']; 			// Get value via json from jquery data - Post
+            $post_info['post_tour_accommodation_info'] = array();           // Array for store hotel tansfer info
+            $total_post_tour_accommodation_charge = 0;
+            //print_r($params_airport);
+            $num_of_service = count($params_post);
+            for($i=0; $i < $num_of_service; $i++)
+            {
+                $post_tour_accommodation_info 	= json_decode($params_post[$i], true);
+                $post_nights					= $post_tour_accommodation_info['nights'];
+                $post_room 						= $post_tour_accommodation_info['roomType'];
+                $post_pax  						= $post_tour_accommodation_info['pax'];
+
+                //$total_post_tour_accommodation_charge = $total_post_tour_accommodation_charge + $h_charge;
+                $post_info['post_tour_accommodation_info'][$i] = array(
+                    'nights' 				=> $post_nights,
+                    'room_type' 			=> $post_room,
+                    'pax' 					=> $post_pax,
+                );
+            }
+            // Save into session
+            session::set('post_info',$post_info);
+        }
+
+//        echo '<pre>';print_r($_SESSION);echo '</pre>';exit;
+
+        echo json_encode(array("success"=>true));
+    }
+
+    //重置 接送机 前后酒店
+    public function kill_service_requests_session(){
+        session::delete('post_info');
+        session::delete('pre_info');
+        session::delete('a_info');
+        session::delete('h_info');
+    }
+
+
+
+    public function booking_summary(){
+//      echo '<pre>';print_r($_SESSION);exit;
+//      echo session('select_tour')['terms'];exit;
+        //echo '<pre>';
+        //print_r($_SESSION);die;
+        $where['return_receipt_id'] = session('select_tour')['terms'];
+        $ReturnReceiptInfo = $this->callSoaErp('post','/system/getReturnReceiptInfo',$where);
+        $this->assign('ReturnReceiptInfo',$ReturnReceiptInfo['data']);
+        //var_dump($ReturnReceiptInfo);exit;
+
+
+        $this->assign('site_title','6.Booking Summary');
+        return $this->fetch('/book_tour/booking_summary');
+    }
+
+    //前台创建订单
+    public function emergecy_contact_check(){
+        $data['upload_passport'] = [];
+        foreach($_FILES as $fieldName => $fileObject){
+            $arr = $this->uploadFile($fieldName);
+            if ($arr['code']==400) return $arr;
+            $data['upload_passport'][] = $arr;
+        }
+
+        $post = $_SESSION;
+        $get_param_emergecy = json_decode($_POST['get_param_emergecy'], true);
+        $data['begin_time'] = $erp_order_data['begin_time'] = strtotime($post['think']['select_date2']['tour_date']); //开团日期
+        $erp_order_data['order_type'] = 3; //b2b订单
+        $erp_order_data['contect_name'] = $get_param_emergecy['name'];      //紧急联系人
+        $erp_order_data['tel'] = $get_param_emergecy['phone'];      //紧急联系人tel
+        $erp_order_data['email'] = $get_param_emergecy['email'];      //紧急联系人email
+        $erp_order_data['wr'] = 1;
+        $erp_order_data['channel_type'] = 1;
+        $erp_order_data['buy_order_time'] = time();
+        $erp_order_data['distributor_id'] = $get_param_emergecy['consultant'];          //代理id
+        $erp_order_result = $this->callSoaErp('post','/branchcompany/addCompanyOrder', $erp_order_data);
+        if ($erp_order_result['code'] == 400) return $erp_order_result;
+
+        $reveivable_result = $this->callSoaErp('post','/branchcompany/updateCompanyOrderReveivableAndCope', ['company_order_number' => $erp_order_result['data']]);
+        if ($reveivable_result['code'] == 400) return $reveivable_result;
+
+        $data['company_order_number'] = $erp_order_result['data'];      //erp订单编号
+        $data['btb_tour_id'] = $post['think']['select_tour']['btb_tour_id'];    //b2b产品id
+        $data['language_id'] = $post['think']['select_date2']['language'];      //语言id
+        $data['special_requests'] = $post['think']['special_requests_text']['special_requests'];       //特殊要求
+        $data['lead_pax_mobile'] = $get_param_emergecy['lead_pax_mobile'];          //游客联系人
+        $data['agent_reference_id'] = $get_param_emergecy['reference'];     //代理商相关ID
+        $data['agent_id'] = $post['agent_id'];          //代理id
+        $data['consultant'] = $get_param_emergecy['consultant'];          //代理商顾问
+        //游客信息
+        $data['customer'] = [];
+        foreach ($post['think']['passenger_info']['temp_id'] as $customer_k => $customer_v)
+        {
+            $arr = [];
+            $arr['seat_no'] = $customer_v;           //座位号
+            $arr['customer_last_name'] = $post['think']['passenger_info']['lname'][$customer_k];        //名
+            $arr['customer_first_name'] = $post['think']['passenger_info']['fname'][$customer_k];       //姓
+            $arr['gender'] = $post['think']['passenger_info']['gender'][$customer_k]=='Male' ? 1 : 2;       //性别
+            $arr['passport_number'] = $post['think']['passenger_info']['passport'][$customer_k]; //护照号
+            $arr['birthday'] = $post['think']['passenger_info']['dob'][$customer_k]; //生日
+            $arr['age_group'] = $post['think']['passenger_info']['age_cat'][$customer_k]; //age_group
+            $arr['speaking_fluent'] = $post['think']['passenger_info']['speaking_fluent'][$customer_k]; //speaking_fluent
+            $arr['ethnicity'] = $post['think']['passenger_info']['ethnicity'][$customer_k]; //种族
+            $arr['nationality'] = $post['think']['passenger_info']['nationality'];  //国籍
+            array_push($data['customer'], $arr);
+        }
+
+        //房间数组
+        $data['room'] = [];
+        foreach ($post['think']['room_info']['room_info'] as $k=>$room_v)
+        {
+            $arr = [];
+            $arr['temp_group'] = implode(',', $room_v['temp_id']);           //座位号字符串
+            $arr['room_type'] = $room_v['temp_id']['type'];        //房间类型
+            $arr['charge_num'] = $room_v['charge_num'];
+            $arr['room_code'] = $k+1;
+            $arr['charge_type'] = $room_v['charge_type'];
+            array_push($data['room'], $arr);
+        }
+
+        $data['transfer'] = [];
+        $data['airport_transfer'] = $data['hotel_transfer'] = 0;
+        //接机
+        foreach ($post['think']['h_info']['hotel_transfer_info'] as $hotel_transfer_info_v)
+        {
+            $arr = [];
+            $arr['transfer_type'] = 1;
+            $arr['airport'] = $hotel_transfer_info_v['airport'];    //机场
+            $arr['flight'] = $hotel_transfer_info_v['flight'];    //航班号
+            $arr['temp_group'] = implode(',', $hotel_transfer_info_v['temp_id']);  //游客号
+            $arr['date'] = $hotel_transfer_info_v['date'];      //日期
+            $arr['time'] = $hotel_transfer_info_v['time'];      //时间
+            $data['hotel_transfer'] += count($hotel_transfer_info_v['temp_id']);
+            array_push($data['transfer'], $arr);
+        }
+
+        //送机
+        foreach ($post['think']['a_info']['airport_transfer_info'] as $airport_transfer_info_v)
+        {
+            $arr = [];
+            $arr['transfer_type'] = 2;
+            $arr['airport'] = $airport_transfer_info_v['airport'];    //机场
+            $arr['flight'] = $airport_transfer_info_v['flight'];    //航班号
+            $arr['temp_group'] = implode(',', $airport_transfer_info_v['temp_id']);  //游客号
+            $arr['date'] = $airport_transfer_info_v['date'];      //日期
+            $arr['time'] = $airport_transfer_info_v['time'];      //时间
+            $data['airport_transfer'] += count($airport_transfer_info_v['temp_id']);
+            array_push($data['transfer'], $arr);
+        }
+
+        $data['accommodation'] = [];
+        //提前
+        foreach ($post['think']['pre_info']['pre_tour_accommodation_info'] as $pre_tour_accommodation_info_v)
+        {
+            $arr = [];
+            $arr['transfer_type'] = 1;
+            $arr['room_type'] = $pre_tour_accommodation_info_v['room_type'];    //房型
+            $arr['nights'] = $pre_tour_accommodation_info_v['nights'];    //几晚
+            $arr['temp_group'] = implode(',', $pre_tour_accommodation_info_v['temp_id']);  //游客号
+            array_push($data['accommodation'], $arr);
+        }
+        //延后
+        foreach ($post['think']['post_info']['post_tour_accommodation_info'] as $post_tour_accommodation_info_v)
+        {
+            $arr = [];
+            $arr['transfer_type'] = 1;
+            $arr['room_type'] = $post_tour_accommodation_info_v['room_type'];    //房型
+            $arr['nights'] = $post_tour_accommodation_info_v['nights'];    //几晚
+            $arr['temp_group'] = implode(',', $post_tour_accommodation_info_v['temp_id']);  //游客号
+            array_push($data['accommodation'], $arr);
+        }
+
+        $result = $this->callSoaErp('post','/b2b_booking/addB2bBooking', $data);
+        print_r($result);die;
+
+    }
+
+
+    public function uploadFile($fieldName){
+        $file = request()->file($fieldName);
+        if($file){
+            $file_result = $file->getInfo();
+            $info = $file->move(ROOT_PATH . 'public' . DS . 'static'.DS.'uploads'.DS.'images');
+
+            $image_name = $file_result['name'];
+            //获取后缀名
+            $image_name = substr($image_name,strpos($image_name,'.')+1);
+
+            $temp_name = $file_result['tmp_name'];
+            $temp_name = str_replace('tmp',$image_name,$temp_name);
+            $url = config('soaupload')['ip'].':'.config('soaupload')['port'];
+
+            $result = help::curlImages($info->getPathname(), $url."/index/uploadImages");
+
+            if($result){
+                $result = json_decode($result,true);
+                $result['name'] = $file_result['name'];
+                $result['get'] = $_GET;
+                return $result;
+
+            }else{
+                $d['data'] = '/static/uploads/images/'.$info->getSaveName();
+                $d['code'] = 200;
+                $d['get'] = $_GET;
+                $d['name'] = $file_result['name'];
+               return $d;
+            }
+        }else{
+            // 上传失败获取错误信息
+            echo $file->getError();
+        }
+
+    }
+
+
+    public function order_flyer(){
+        echo json_encode(1);
+    }
+
+
+}

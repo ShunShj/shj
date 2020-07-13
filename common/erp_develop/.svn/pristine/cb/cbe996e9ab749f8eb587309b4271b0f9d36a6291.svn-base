@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    {include file='public/head' /}
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title></title>
+    <link href="__STATIC__/css/product.css" rel="stylesheet">
+</head>
+<body>
+<div style="margin:15px;">
+    <fieldset class="layui-elem-field layui-field-title">
+        <legend>{$language_tag.index_branchcompany_showCompanyOrderManage_addEdit_baseInformation}</legend>
+    </fieldset>
+    <form class="layui-form" action="">
+        <div class="layui-row">
+            <div class="layui-col-md6">
+                <div class="layui-form-item" id="t1">
+                    <label class="layui-form-label input-required">{$language_tag.index_branchcompany_showCompanyOrderManage_addEdit_zhanwei}:</label>
+                    <div class="layui-input-block" id="IsPurchased">
+                        <input type="radio" name="IsPurchased" lay-filter="zhanwei" value="1" title="{$language_tag.index_branchcompany_showCompanyOrderManage_addEdit_yes}" lay-filter="visitorYN">
+                        <input type="radio" name="IsPurchased" lay-filter="zhanwei" value="2" title="{$language_tag.index_branchcompany_showCompanyOrderManage_addEdit_no}" lay-filter="visitorYN" checked>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="yesNo">
+
+        </div>
+        <div class="layui-form all-button-center">
+            <a class="layui-btn nav-cancel visitorCancel">{$language_tag.index_public_cancel}</a>
+            <a class="layui-btn nav-submit" lay-submit="" id="addVisitor" lay-filter="ok">{$language_tag.index_public_ok}</a>
+        </div>
+    </form>
+</div>
+<input type="hidden" id="hideNumber" value="" />
+
+<!--是占位-->
+<script id="yesHtml" type="text/html">
+    <div class="layui-row">
+        <div class="layui-col-md4">
+            <div class="layui-form-item">
+                <label class="layui-form-label input-required">{$language_tag.index_branchcompany_showCompanyOrderManage_numberOf_occupants}:</label>
+                <div class="layui-input-block">
+                    <input type="text" id="zhanNumbers" name="zhanNumbers" placeholder="" autocomplete="off" lay-verify="required" class="layui-input" value="">
+                </div>
+            </div>
+        </div>
+    </div>
+</script>
+
+<!--不是占位-->
+<script id="noHtml" type="text/html">
+    <div class="layui-row">
+        <div class="layui-col-md4">
+            <div class="layui-form-item">
+                <label class="layui-form-label input-required">{$language_tag.index_branchcompany_showBranchProductManage_passport}:</label>
+                <div class="layui-input-block">
+                    <input type="text" id="passport" name="passport" placeholder="" autocomplete="off" lay-verify="required" class="layui-input" value="">
+                </div>
+            </div>
+        </div>
+        <!--<div class="layui-col-md4">
+            <div class="layui-form-item">
+                <label class="layui-form-label">{$language_tag.index_branchcompany_showBranchProductManage_documentType}:</label>
+                <div class="layui-input-block">
+                    <select id="cardType" name="card_type">
+                        <option value=""></option>
+                        <option value="2">{$language_tag.index_branchcompany_showBranchProductManage_idCard}</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="layui-col-md4">
+            <div class="layui-form-item">
+                <label class="layui-form-label">{$language_tag.index_branchcompany_showBranchProductManage_certificateNumber}:</label>
+                <div class="layui-input-block">
+                    <input type="text" id="cardNumber" name="card_number" placeholder="{$language_tag.index_public_placeHolder}" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+        </div>-->
+    </div>
+    <div class="layui-row">
+        <div class="layui-col-md4">
+            <div class="layui-form-item">
+                <label class="layui-form-label input-required">{$language_tag.index_branchcompany_showBranchProductManage_name}:</label>
+                <div class="layui-input-block">
+                    <input type="text" id="lastName" name="customer_last_name" placeholder="{$language_tag.index_public_placeHolder}" autocomplete="off" lay-verify="required" class="layui-input" value="">
+                </div>
+            </div>
+        </div>
+        <div class="layui-col-md4">
+            <div class="layui-form-item">
+                <label class="layui-form-label">{$language_tag.index_branchcompany_showCompanyOrderManage_middleName}:</label>
+                <div class="layui-input-block">
+                    <input type="text" id="middleName" name="middleName" placeholder="" autocomplete="off" class="layui-input" value="">
+                </div>
+            </div>
+        </div>
+        <div class="layui-col-md4">
+            <div class="layui-form-item">
+                <label class="layui-form-label input-required">{$language_tag.index_branchcompany_showBranchProductManage_surname}:</label>
+                <div class="layui-input-block">
+                    <input type="text" id="firstName" name="customer_first_name" placeholder="{$language_tag.index_public_placeHolder}" autocomplete="off" lay-verify="required" class="layui-input" value="{$vv.customer_first_name}">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="layui-row">
+        <div class="layui-col-md4">
+            <div class="layui-form-item">
+                <label class="layui-form-label input-required">{$language_tag.index_branchcompany_showBranchProductManage_sex}:</label>
+                <div class="layui-input-block" lay-filter="selFilter">
+                    <select id="gender" name="gender" lay-verify="required">
+                        <option value=""></option>
+                        <option value="1">{$language_tag.index_branchcompany_showBranchProductManage_boy}</option>
+                        <option value="2">{$language_tag.index_branchcompany_showBranchProductManage_girl}</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="layui-col-md4">
+            <div class="layui-form-item">
+                <label class="layui-form-label">{$language_tag.index_branchcompany_showBranchProductManage_nationality}:</label>
+                <div class="layui-input-block">
+                    <select id="countryId" name="country_id" lay-search=''>
+
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="layui-col-md4">
+            <div class="layui-form-item">
+                <label class="layui-form-label">{$language_tag.index_branchcompany_showCompanyOrderManage_birthday}:</label>
+                <div class="layui-input-block">
+                    <input type="text" id="birthday" name="birthday" placeholder="" autocomplete="off" class="layui-input sales-date">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="layui-row">
+        <div class="layui-col-md4">
+            <div class="layui-form-item">
+                <label class="layui-form-label">{$language_tag.index_branchcompany_showBranchProductManage_language}:</label>
+                <div class="layui-input-block">
+                    <select id="language" name="language_id">
+
+                    </select>
+                </div>
+            </div>
+        </div>
+        <!--<div class="layui-col-md4">
+            <div class="layui-form-item">
+                <label class="layui-form-label input-required">{$language_tag.index_public_type}:</label>
+                <div class="layui-input-block">
+                    <select id="customerType" name="customer_type" lay-verify="required">
+                        <option value=""></option>
+                        <option value="1">{$language_tag.index_branchcompany_showBranchProductManage_growUp}</option>
+                        <option value="2">{$language_tag.index_branchcompany_showBranchProductManage_childrenInBed}</option>
+                        <option value="3">{$language_tag.index_branchcompany_showBranchProductManage_childrenNotInBed}</option>
+                        <option value="4">{$language_tag.index_branchcompany_showBranchProductManage_oldMan}</option>
+                    </select>
+                </div>
+            </div>
+        </div>-->
+        <div class="layui-col-md4">
+            <div class="layui-form-item">
+                <label class="layui-form-label">{$language_tag.index_branchcompany_showBranchProductManage_phone}:</label>
+                <div class="layui-input-block">
+                    <input type="text" id="visitorPhone" name="phone" placeholder="{$language_tag.index_public_placeHolder}" autocomplete="off" lay-verify="" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-col-md4">
+            <div class="layui-form-item">
+                <label class="layui-form-label">{$language_tag.index_branchcompany_showCompanyOrderManage_issueData}:</label>
+                <div class="layui-input-block">
+                    <input type="text" id="issuingDate" name="issuingDte" placeholder="{$language_tag.index_public_placeHolder}" autocomplete="off" class="layui-input sales-date">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="layui-row">
+        <div class="layui-col-md4">
+            <div class="layui-form-item">
+                <label class="layui-form-label">{$language_tag.index_branchcompany_showBranchProductManage_effectiveDate}:</label>
+                <div class="layui-input-block">
+                    <input type="text" id="validity" name="term_of_validity" placeholder="{$language_tag.index_public_placeHolder}" autocomplete="off" class="layui-input sales-date">
+                </div>
+            </div>
+        </div>
+        <div class="layui-col-md4">
+            <div class="layui-form-item">
+                <label class="layui-form-label">{$language_tag.index_branchcompany_showBranchProductManage_email}:</label>
+                <div class="layui-input-block">
+                    <input type="text" id="visitorEmail" name="email" placeholder="{$language_tag.index_public_placeHolder}" autocomplete="off" class="layui-input layui-input-date">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="layui-row">
+        <div class="layui-col-md4">
+            <div class="layui-form-item">
+                <label class="layui-form-label">{$language_tag.index_branchcompany_showCompanyOrderManage_emergencyContact}:</label>
+                <div class="layui-input-block">
+                    <input type="text" id="emergencyContact" name="emergency_contact" placeholder="{$language_tag.index_public_placeHolder}" autocomplete="off" lay-verify="" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-col-md4">
+            <div class="layui-form-item">
+                <label class="layui-form-label">{$language_tag.index_branchcompany_showCompanyOrderManage_emergencyContact_phone}:</label>
+                <div class="layui-input-block">
+                    <input type="text" id="emergencyCall" name="emergency_call" placeholder="{$language_tag.index_public_placeHolder}" autocomplete="off" lay-verify="" class="layui-input">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="layui-row">
+        <div class="layui-col-md8">
+            <div class="layui-form-item">
+                <label class="layui-form-label">{$language_tag.index_branchcompany_showDistributorManage_address}:</label>
+                <div class="layui-input-block">
+                    <textarea class="layui-textarea" id="visitorAddress" name="address"></textarea>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="layui-row">
+        <div class="layui-col-md8">
+            <div class="layui-form-item">
+                <label class="layui-form-label">{$language_tag.index_product_visitor_special_require}:</label>
+                <div class="layui-input-block">
+                    <textarea class="layui-textarea" id="specialClaim" name="specialClaim"></textarea>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="flightMessage">
+        <fieldset class="layui-elem-field layui-field-title">
+            <legend>{$language_tag.index_public_flightInformation}</legend>
+        </fieldset>
+        <div id="flightList_add">
+
+        </div>
+        <div class="layui-col-md4 layui-flight-edit">
+            <div class="layui-btn nav-add layui-btn-sm" onclick="flightAdd()">{$language_tag.index_source_showFlightSourceManage_add_flight}</div>
+        </div>
+    </div><!--航班信息--end-->
+    <div class="accommodation_information">
+        <fieldset class="layui-elem-field layui-field-title">
+            <legend>{$language_tag.index_product_visitor_accommodationInformation}</legend>
+        </fieldset>
+        <div class="layui-row">
+            <div class="layui-col-md4">
+                <div class="layui-form-item">
+                    <label class="layui-form-label input-required">{$language_tag.index_product_visitor_roomNumber}:</label>
+                    <div class="layui-input-block">
+                        <select name="room_code" id="roomCode" lay-verify="required">
+                            <option value=""></option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-col-md4">
+                <div class="layui-form-item">
+                    <label class="layui-form-label input-required">{$language_tag.index_product_visitor_roomType}:</label>
+                    <div class="layui-input-block">
+                        <select name="room_type" id="roomType" lay-verify="required">
+
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="layui-row">
+            <div class="layui-col-md4">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">{$language_tag.index_product_visitor_checkIn}:</label>
+                    <div class="layui-input-block">
+                        <select id="checkIn" name="check_in" lay-verify="" lay-filter="check_in">
+                            <option value="-1">{$language_tag.index_branchcompany_showCompanyOrderManage_addEdit_moveUp_one}</option>
+                            <option value="-2">{$language_tag.index_branchcompany_showCompanyOrderManage_addEdit_moveUp_two}</option>
+                            <option value="-3">{$language_tag.index_branchcompany_showCompanyOrderManage_addEdit_moveUp_three}</option>
+                            <option value="-4">{$language_tag.index_branchcompany_showCompanyOrderManage_addEdit_moveUp_four}</option>
+                            <option value="-5">{$language_tag.index_branchcompany_showCompanyOrderManage_addEdit_moveUp_five}</option>
+                            <option value="0" selected>{$language_tag.index_product_visitor_specialRequirements}</option>
+                            <option value="1">{$language_tag.index_branchcompany_showCompanyOrderManage_addEdit_postpone_one}</option>
+                            <option value="2">{$language_tag.index_branchcompany_showCompanyOrderManage_addEdit_postpone_two}</option>
+                            <option value="3">{$language_tag.index_branchcompany_showCompanyOrderManage_addEdit_postpone_three}</option>
+                            <option value="4">{$language_tag.index_branchcompany_showCompanyOrderManage_addEdit_postpone_four}</option>
+                            <option value="5">{$language_tag.index_branchcompany_showCompanyOrderManage_addEdit_postpone_five}</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-col-md4">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">{$language_tag.index_product_visitor_checkOut}:</label>
+                    <div class="layui-input-block">
+                        <select id="checkOn" name="check_on" lay-verify="" lay-filter="check_on">
+                            <option value="-1">{$language_tag.index_branchcompany_showCompanyOrderManage_addEdit_moveUp_one}</option>
+                            <option value="-2">{$language_tag.index_branchcompany_showCompanyOrderManage_addEdit_moveUp_two}</option>
+                            <option value="-3">{$language_tag.index_branchcompany_showCompanyOrderManage_addEdit_moveUp_three}</option>
+                            <option value="-4">{$language_tag.index_branchcompany_showCompanyOrderManage_addEdit_moveUp_four}</option>
+                            <option value="-5">{$language_tag.index_branchcompany_showCompanyOrderManage_addEdit_moveUp_five}</option>
+                            <option value="0" selected>{$language_tag.index_product_visitor_specialRequirements}</option>
+                            <option value="1">{$language_tag.index_branchcompany_showCompanyOrderManage_addEdit_postpone_one}</option>
+                            <option value="2">{$language_tag.index_branchcompany_showCompanyOrderManage_addEdit_postpone_two}</option>
+                            <option value="3">{$language_tag.index_branchcompany_showCompanyOrderManage_addEdit_postpone_three}</option>
+                            <option value="4">{$language_tag.index_branchcompany_showCompanyOrderManage_addEdit_postpone_four}</option>
+                            <option value="5">{$language_tag.index_branchcompany_showCompanyOrderManage_addEdit_postpone_five}</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="hotelList">
+
+        </div>
+    </div>
+</script>
+
+<!--提前延后入住酒店-->
+<script id="hotel" type="text/html">
+    <div class="layui-row">
+        <div class="layui-col-md4">
+            <div class="layui-form-item">
+                <div class="isHide">
+                    <label class="layui-form-label">{$language_tag.index_branchcompany_showCompanyOrderManage_check_moveUp_one}:</label>
+                    <div class="layui-input-block">
+                        <input type="text" id="tiOne" autocomplete="off" class="layui-input" disabled>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="layui-col-md4">
+            <div class="layui-form-item">
+                <div class="isHide">
+                    <label class="layui-form-label">{$language_tag.index_branchcompany_showCompanyOrderManage_check_postpone_one}:</label>
+                    <div class="layui-input-block">
+                        <input type="text" id="yanOne" autocomplete="off" class="layui-input" disabled>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="layui-row">
+        <div class="layui-col-md4">
+            <div class="layui-form-item">
+                <div class="isHide">
+                    <label class="layui-form-label">{$language_tag.index_branchcompany_showCompanyOrderManage_check_moveUp_two}:</label>
+                    <div class="layui-input-block">
+                        <input type="text" id="tiTwo" autocomplete="off" class="layui-input" disabled>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="layui-col-md4">
+            <div class="layui-form-item">
+                <div class="isHide">
+                    <label class="layui-form-label">{$language_tag.index_branchcompany_showCompanyOrderManage_check_postpone_two}:</label>
+                    <div class="layui-input-block">
+                        <input type="text" id="yanTwo" autocomplete="off" class="layui-input" disabled>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="layui-row">
+        <div class="layui-col-md4">
+            <div class="layui-form-item">
+                <div class="isHide">
+                    <label class="layui-form-label">{$language_tag.index_branchcompany_showCompanyOrderManage_check_moveUp_three}:</label>
+                    <div class="layui-input-block">
+                        <input type="text" id="tiThree" autocomplete="off" class="layui-input" disabled>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="layui-col-md4">
+            <div class="layui-form-item">
+                <div class="isHide">
+                    <label class="layui-form-label">{$language_tag.index_branchcompany_showCompanyOrderManage_check_postpone_three}:</label>
+                    <div class="layui-input-block">
+                        <input type="text" id="yanThree" autocomplete="off" class="layui-input" disabled>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="layui-row">
+        <div class="layui-col-md4">
+            <div class="layui-form-item">
+                <div class="isHide">
+                    <label class="layui-form-label">{$language_tag.index_branchcompany_showCompanyOrderManage_check_moveUp_four}:</label>
+                    <div class="layui-input-block">
+                        <input type="text" id="tiFour" autocomplete="off" class="layui-input" disabled>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="layui-col-md4">
+            <div class="layui-form-item">
+                <div class="isHide">
+                    <label class="layui-form-label">{$language_tag.index_branchcompany_showCompanyOrderManage_check_postpone_four}:</label>
+                    <div class="layui-input-block">
+                        <input type="text" id="yanFour" autocomplete="off" class="layui-input" disabled>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="layui-row">
+        <div class="layui-col-md4">
+            <div class="layui-form-item">
+                <div class="isHide">
+                    <label class="layui-form-label">{$language_tag.index_branchcompany_showCompanyOrderManage_check_moveUp_five}:</label>
+                    <div class="layui-input-block">
+                        <input type="text" id="tiFive" autocomplete="off" class="layui-input" disabled>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="layui-col-md4">
+            <div class="layui-form-item">
+                <div class="isHide">
+                    <label class="layui-form-label">{$language_tag.index_branchcompany_showCompanyOrderManage_check_postpone_five}:</label>
+                    <div class="layui-input-block">
+                        <input type="text" id="yanFive" autocomplete="off" class="layui-input" disabled>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</script>
+
+
+<!--添加游客--航班添加--start-->
+<script id="visitor_flight_add" type="text/html">
+    {{#  layui.each(d, function(index, item){ }}
+    <div class="customer-flight-list" data-num="{{typeof(d)=='object'?item.num:d}}">
+        <hr>
+        <div class="layui-row layui-form" style="margin-top:35px">
+            <div class="layui-col-md4">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">{$language_tag.index_finance_showReceivableManage_flight}:</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="messageFlight{{typeof(d)=='object'?item.num:d}}" id="flightCode{{typeof(d)=='object'?item.num:d}}" value="{{item.flight_code?item.flight_code:''}}" placeholder="{$language_tag.index_public_placeHolder}" autocomplete="off" class="layui-input input-flight-node" lay-verify="">
+                    </div>
+                </div>
+            </div>
+            <div class="layui-col-md4">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">{$language_tag.index_public_startPlace}:</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="orderStartPlace{{typeof(d)=='object'?item.num:d}}" id="startPlace{{typeof(d)=='object'?item.num:d}}" value="{{item.start_place?item.start_place:''}}" placeholder="{$language_tag.index_public_placeHolder}" autocomplete="off" class="layui-input input-flight-startplace" lay-verify="">
+                    </div>
+                </div>
+            </div>
+            <div class="layui-col-md4">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">{$language_tag.index_public_endPlace}:</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="orderEndPlace{{typeof(d)=='object'?item.num:d}}" id="endPlace{{typeof(d)=='object'?item.num:d}}" value="{{item.end_place?item.end_place:''}}" placeholder="{$language_tag.index_public_placeHolder}" autocomplete="off" class="layui-input input-flight-endplace" lay-verify="">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="layui-row">
+            <div class="layui-col-md4">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">{$language_tag.index_branchcompany_showCompanyOrderManage_takeTime}:</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="" placeholder="{$language_tag.index_product_ShowPlanTour_pleaseSelectTheDate}" value="{{item.flight_begin_time?date('Y-m-d H:i:s',item.flight_begin_time):''}}" autocomplete="off" id="flightBeginTime{{typeof(d)=='object'?item.num:d}}" class="layui-input sales-dates">
+                    </div>
+                </div>
+            </div>
+            <div class="layui-col-md4">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">{$language_tag.index_branchcompany_showCompanyOrderManage_landingTime}:</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="" placeholder="{$language_tag.index_product_ShowPlanTour_pleaseSelectTheDate}" value="{{item.flight_end_time?date('Y-m-d H:i:s',item.flight_end_time):''}}" autocomplete="off" id="flightEndTime{{typeof(d)=='object'?item.num:d}}" class="layui-input sales-dates">
+                    </div>
+                </div>
+            </div>
+            <div class="layui-col-md4">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">{$language_tag.index_public_transportMachine}:</label>
+                    <div class="layui-input-block flightCheckbox" style="margin-left:80px" id="flightCheckbox{{typeof(d)=='object'?item.num:d}}">
+                        {{#  if(item.flight_type&&item.flight_type==1){ }}
+                        <input type="checkbox" checked name="messageAirport{{typeof(d)=='object'?item.num:d}}" value="1" title="{$language_tag.index_public_meetAirport}" lay-skin="primary" lay-filter="messageAirport" class="input-flight-type">
+                        <input type="checkbox" name="messageAirport{{typeof(d)=='object'?item.num:d}}" value="2" title="{$language_tag.index_public_giveAirport}" lay-skin="primary" lay-filter="messageAirport" class="input-flight-type">
+                        {{#  } else if(item.flight_type&&item.flight_type==2) { }}
+                        <input type="checkbox" name="messageAirport{{typeof(d)=='object'?item.num:d}}" value="1" title="{$language_tag.index_public_meetAirport}" lay-skin="primary" lay-filter="messageAirport" class="input-flight-type">
+                        <input type="checkbox" checked name="messageAirport{{typeof(d)=='object'?item.num:d}}" value="2" title="{$language_tag.index_public_giveAirport}" lay-skin="primary" lay-filter="messageAirport" class="input-flight-type">
+                        {{#  } else { }}
+                        <input type="checkbox" name="messageAirport{{typeof(d)=='object'?item.num:d}}" value="1" title="{$language_tag.index_public_meetAirport}" lay-skin="primary" lay-filter="messageAirport" class="input-flight-type">
+                        <input type="checkbox" name="messageAirport{{typeof(d)=='object'?item.num:d}}" value="2" title="{$language_tag.index_public_giveAirport}" lay-skin="primary" lay-filter="messageAirport" class="input-flight-type">
+                        {{#  } }}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="layui-row">
+            <div class="layui-col-md8">
+                <label class="layui-form-label">{$language_tag.index_public_mark}:</label>
+                <div class="layui-input-block">
+                    <textarea class="layui-textarea" id="visitorRemark{{typeof(d)=='object'?item.num:d}}">{{item.remark?item.remark:''}}</textarea>
+                </div>
+            </div>
+        </div>
+        <i class="layui-icon layui-icon-close flight-list-close" onclick="flightListClose(this)"></i>
+    </div>
+    {{#  }); }}
+</script>
+
+
+{include file='public/foot_js' /}
+<script type="text/javascript" src="__STATIC__/javascript/data.js"></script>
+<script type="text/javascript" src="__STATIC__/javascript/booking/company_order_addvisitor.js"></script>
+<script>
+    layui.use(['laydate','element','form'], function(){
+        var laydate = layui.laydate;
+        var element = layui.element;
+
+        lay('.sales-date').each(function(){
+            laydate.render({
+                elem: this
+                ,trigger: 'click'
+                ,done: function(value, date){
+                    console.log(date)
+                }
+            });
+        });
+
+        var noHtml=$("#noHtml").html();
+        $("#yesNo").html(noHtml);
+        $(".input-required i").remove();
+        $(".input-required").prepend("<i>*</i>");
+        flightAdd();
+        var list=$("#hotel").html();
+        $("#hotelList").html(list);
+        $("#hotelList .isHide").css("display","none");
+
+    });
+</script>
+</body>
+</html>

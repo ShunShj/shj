@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {include file='public/head' /}
+    <title>{$language_tag.index_finance_showReceivableManage_recevible}</title>
+    <link href="__STATIC__/css/finance.css" rel="stylesheet">
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+    <div class="layui-header">
+        {include file='public/header' /}
+    </div>
+
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll">
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            {include file='public/left_menu_booknexus' /}
+        </div>
+    </div>
+
+    <div class="layui-body">
+
+        <!-- 内容主体区域 -->
+        <div style="padding: 15px;">
+            <div class='layui-form-item'>
+                <span class="layui-breadcrumb" lay-separator="-">
+                    <a>{$language_tag.index_public_homepage}</a>
+                    <a>{$language_tag.index_public_finance}</a>
+                    <a>{$language_tag.index_finance_showReceivableAllManage_total}</a>
+                    <a><cite>{$language_tag.index_finance_showReceivableAllManage_manage}</cite></a>
+                 
+                </span>
+            </div>
+            <br>
+            <div class="table-nont">
+<form class="layui-form layui-form-pane" onsubmit="return addReceipts()">
+
+  <div class="layui-form-item">
+    <label class="layui-form-label" style='width:200px;'>AGENT CODE</label>
+    <div class="layui-input-inline">
+      <input type="text"   value="{$receipts_pay_result.object_code}" placeholder="" autocomplete="off" class="layui-input">
+    </div>
+    
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label" style='width:200px;'>DEPOSIT BALANCE</label>
+    <div class="layui-input-inline">
+      	<input type="text"   id='true_receipt' balance_money="{$receipts_pay_result.balance_money}"   value="{$receipts_pay_result.balance_money}{$receipts_pay_result.base_currency_unit}" placeholder="" autocomplete="off" class="layui-input">
+
+    </div>
+    
+  </div>
+  <input type='hidden' id='remark' value="{$receipts_pay_result.remark}" />
+  <input type='hidden' id='payment_type' value="{$receipts_pay_result.pay_type}" />
+  <input type='hidden' id='receipts_pay_id' value="{$receipts_pay_id}" />
+  
+  
+ <div class="layui-form-item">
+    <label class="layui-form-label" style='width:200px;'>PAYMENT METHOD</label>
+    <div class="layui-input-inline">
+	<input type="text"   
+	                         {if condition='$receipts_pay_result.pay_type eq 1'}
+                            		value="cash"
+                            	{elseif condition="$receipts_pay_result.pay_type eq 2"}
+                            			value="check"
+                            	{elseif condition='$receipts_pay_result.pay_type eq 3'}
+                            		value="debit card"
+                            	{elseif condition='$receipts_pay_result.pay_type eq 4'}
+                            		value="credit card(mc)"
+                            	{elseif condition='$receipts_pay_result.pay_type eq 5'}
+                            		value="credit card(vs)"
+                            	{elseif condition='$receipts_pay_result.pay_type eq 6'}
+                            		value="credit card(ax)"
+                            	{elseif condition='$receipts_pay_result.pay_type eq 7'}
+                            		value="direct depsit"
+                            	{elseif condition='$receipts_pay_result.pay_type eq 8'}
+                            		value="others"
+                            	{elseif condition='$receipts_pay_result.pay_type eq 9'}
+                            		value="paypal"
+                            	{elseif condition='$receipts_pay_result.pay_type eq 10'}
+                            		value="加拿大信用卡支付 "                       		                            		
+                            	{/if}	
+	" placeholder="" autocomplete="off" class="layui-input">
+	
+    </div>
+
+  </div>
+
+  <div class="layui-form-item">
+    <label class="layui-form-label" style='width:200px;'>PAYMENT DATE</label>
+    <div class="layui-input-inline">
+		<input type="text" 
+		{if condition="$receipts_pay_result.deposit_payment_time neq '' "}
+			value="{$receipts_pay_result.deposit_payment_time|date='Y-m-d',###}"
+		{/if}
+		
+		placeholder="" autocomplete="off" class="layui-input">
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label" style='width:200px;'>Booking ID</label>
+    <div class="layui-input-inline">
+		<input type="text" value="{$Think.get.order_number}"  name='order_number' placeholder="" autocomplete="off" class="layui-input">
+
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <div class="layui-input-block">
+      <button class="layui-btn nav-submit"  lay-submit="" lay-filter="formDemo" id="hotel_add_button">筛选</button>
+  
+	
+    </div>
+  </div>
+</form>
+			
+            </div>
+            <br><hr><br>
+
+            <br>
+
+            <div class="table-nont">
+                <table class="layui-table layui-form table-product-poper ">
+                    <thead>
+                    <tr>
+                         <th><input type="checkbox" name="receivableCheckboxAll" lay-skin="primary" lay-filter="receivableCheckboxAll" ></th>
+                      
+                        <th >BOOKING ID</th>
+                        <th >Payment status</th>
+                        <th>Issue Date</th>
+                        <th>Invoice Total</th>
+                        <th>GST</th>
+
+                        
+                        <th>Balance</th>
+
+                        <th width="140px">{$language_tag.index_finance_showReceivableAllManage_true_receipt_allocation}</th>
+                        <th width="140px">扣除金额</th>
+                    
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {volist name="receivable_data_result" id="vo"}
+                    <tr class='receivable_info'>
+                        <td><input lay-filter="filter" type="checkbox" name="receivableCheckbox"  class='receivable_checkbox' lay-skin="primary" ></td> 
+                        <td>{$vo.order_number}</td>
+                        <td receivable_number="{$vo.receivable_number}">
+
+                        </td>
+                        <td >
+                            {if condition="$vo.company_create_time neq ''"}
+                        		{$vo.company_create_time|date='Y-m-d',###}
+                        	{/if}
+                        
+                        </td>
+                        <td>
+							{$vo.receivable_money}{$vo.currency_unit}
+                        </td>
+                        <td class="table-input-none">
+                        
+                        	{$vo.tax_money}
+                        </td>
+
+                        <td class="table-input-none">
+							<input type="text"  style='display:inline;width:100px;' class="layui-input" disabled value="{$vo.need_receivable_money}" currency_id ='{$vo.receivable_currency_id}'> {$vo.currency_unit}
+                        </td>
+
+
+                        <td><input type="text" style='display:inline;width:100px;'  placeholder="" disabled class="layui-input receivable_count" value="0" currency_id='{$vo.receivable_currency_id}'>{$vo.currency_unit}</td>
+                   		<td class="table-input-none"><input type="text" style='display:inline;width:100px;'  placeholder="" disabled value='0'  class="layui-input shikou"  >{$receipts_pay_result.base_currency_unit}</td>
+                   		
+                    </tr>
+                    {/volist}
+                    </tbody>
+                </table>
+            </div>
+
+            <br><br>
+            <div class="layui-row">
+                <div class="layui-form-button" style="text-align: center">
+                    <button class="layui-btn nav-submit" lay-submit="" lay-filter="receivableSubmit" id='receivable_submit'>{$language_tag.index_finance_companyOrderManage_add_finance_approval}</button>
+                    <a href="/accounting/showDepositPaymentManage">
+                        <button type="button" class="layui-btn layui-btn-primary">{$language_tag.index_public_back}</button>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+<div  class="layui-layer layui-layer-dialog" id="open_window" type="dialog" times="1" showtime="0" contype="string" style="display:none;z-index: 19891015; width: 450px; height: 380px; top: 169.5px; left: 50%;">
+        <div class="layui-layer-title" style="cursor: move;">{$language_tag.index_finance_showReceivableManage_choose_customer}</div>
+        <div id="" class="layui-layer-content" style="height: 244px;">
+            <form class="layui-form visitorListTips">
+
+                <div class="checkboxList" id="insert_input">
+
+                </div>
+            </form>
+        </div>
+
+    <div class="layui-layer-btn layui-layer-btn-c">
+    	<input type='hidden' id='update_company_order_number' value='' />
+    	<input type='hidden' id='update_receivable_number' value='' />
+    	<a class="layui-layer-btn0 close_div2"  >{$language_tag.index_finance_showReceivableManage_sure}</a>
+        <a class="layui-layer-btn1" id="close_div">{$language_tag.index_finance_showReceivableManage_cancel}</a>
+    </div>
+    <span class="layui-layer-resize"></span>
+</div>      
+
+<div  class="layui-layer layui-layer-dialog" id="open_window2" type="dialog" times="1" showtime="0" contype="string" style="display:none;z-index: 19891015; width: 450px; height: 380px; top: 169.5px; left: 50%;">
+        <div class="layui-layer-title" style="cursor: move;">{$language_tag.index_finance_showReceivableManage_choose_customer}</div>
+        <div id="" class="layui-layer-content" style="height: 244px;">
+            <form class="layui-form visitorListTips">
+                <div class="checkboxList" id="visitorList3">
+
+                </div>
+            </form>
+        </div>
+
+    <div class="layui-layer-btn">
+        <a class="layui-layer-btn0 close_div2 " style="background: #FF5700">{$language_tag.index_finance_showReceivableManage_sure}</a>
+        <a class="layui-layer-btn1" id="close_div2" >{$language_tag.index_finance_showReceivableManage_cancel}</a>
+    </div>
+                    {foreach name='$proportion_result' item='v'}
+                    <input type='hidden'  id='huilv{$v.currency_id}' value='{$v.currency_proportion}'/>
+                    
+                    {/foreach}
+</div>  
+    <div class="layui-footer">
+        <!-- 底部固定区域 -->
+        © layui.com - 底部固定区域
+    </div>
+</div>
+{include file='public/foot_js' /}
+<script src='__STATIC__/javascript/product/all.js'></script>
+<script src='__STATIC__/javascript/finance/receivablebtob.js'></script>
+
+<script>
+
+var upload = layui.upload; //得到 upload 对象
+var laydate = layui.laydate;
+var table=layui.table;
+var laytpl=layui.laytpl;
+
+//常规用法
+
+laydate.render({
+    elem: '.begin_time'
+    ,lang: 'zn'
+});
+laydate.render({
+    elem: '.end_time'
+    ,lang: 'zn'
+});
+
+
+
+upload.render({
+    elem: '.test',
+    url:'/upload/uploadFileAll',
+    accept:'file',
+  	size:20480,
+    before: function(obj){ //obj参数包含的信息，跟 choose回调完全一致，可参见上文。
+    layer.load(); //上传loading
+    },
+    done: function(res, index, upload){
+        layer.closeAll('loading'); //关闭loading
+        console.log(res);
+        if(res.code == 200){
+            //do something （比如将res返回的图片链接保存到表单的隐藏域）
+            $('#uploadVisa').val(res.data);
+            $('#download').attr('href',res.data);
+            $('#download').show();
+        }
+    },error: function(index, upload){
+        layer.closeAll('loading'); //关闭loading
+    }
+});
+
+</script>
+
+
+</body>
+</html>

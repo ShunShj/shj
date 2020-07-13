@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {include file='public/head' /}
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link href="__STATIC__/css/product.css" rel="stylesheet">
+    <style>
+        .receipt_box1{
+            background-color:#fff;
+            margin:0 auto;
+            width:1000px;
+        }
+        #receipt_box div,#receipt_box td{
+            font-size:16px;color: #000;
+        }
+        #receipt_box thead tr{
+            background:#CCCCCC!important;
+            color:#000;
+        }
+        #receipt_box tbody tr:nth-child(even){
+            background:#E0EBFF;
+        }
+        #receipt_box td,th{
+            border:none!important;
+        }
+        #receipt_box table{
+            border:1px solid #333!important;
+        }
+        #receipt_box th{
+            font-weight: bold;
+        }
+        #receipt_box .footer{
+            border-top:3px solid #000;
+            border-bottom:3px solid #000;
+            padding:10px 0px;
+        }
+        #receipt_box .footer-right span{
+            width:45%;
+            text-align: right!important;
+            display: inline-block;
+            padding-right:10px;
+        }
+        #receipt_box .footer-right em{
+            width:47%;
+            border:1px solid #000;
+            text-align: right!important;
+            display: inline-block;
+        }
+        #receipt_box .footer-right>div{
+            line-height: 26px;
+        }
+        #receipt_box .footer-right{
+            vertical-align: bottom;
+        }
+    </style>
+</head>
+<body style='font-family:simsun'>
+<div class="receipt_box1" >
+	<div style='width:100%;float:left;height:30px;border:1px solid black'>
+		<div style='width:99px;height:30px;float:left;line-height:30px;text-align:center;font-weight:bold;border-right:1px solid black'>付款方</div>
+		<div style='width:399px;height:30px;float:left;line-height:30px;text-align:center;border-right:1px solid black'>{$fukuanfang}</div>
+		<div style='width:99px;height:30px;float:left;line-height:30px;text-align:center;font-weight:bold;border-right:1px solid black'>团号</div>
+		<div style='width:400px;height:30px;float:left;line-height:30px;text-align:center'>{$tuanhao}</div>
+	</div>
+	<div style='width:100%;float:left;height:30px;border:1px solid black'>
+		<div style='width:99px;height:30px;float:left;line-height:30px;text-align:center;font-weight:bold;border-right:1px solid black'>开户名称</div>
+		<div style='width:399px;height:30px;float:left;line-height:30px;text-align:center;border-right:1px solid black'>{$kaihumingcheng}</div>
+		<div style='width:99px;height:30px;float:left;line-height:30px;text-align:center;font-weight:bold;border-right:1px solid black'>银行行号</div>
+		<div style='width:400px;height:30px;float:left;line-height:30px;text-align:center'>{$yinhanghanghao}</div>
+	</div>	
+	<div style='width:100%;float:left;height:30px;border:1px solid black'>
+		<div style='width:99px;height:30px;float:left;line-height:30px;text-align:center;font-weight:bold;border-right:1px solid black'>银行名称</div>
+		<div style='width:399px;height:30px;float:left;line-height:30px;text-align:center;border-right:1px solid black'>{$yinhangmingcheng}</div>
+		<div style='width:99px;height:30px;float:left;line-height:30px;text-align:center;font-weight:bold;border-right:1px solid black'>银行账号</div>
+		<div style='width:400px;height:30px;float:left;line-height:30px;text-align:center'>{$yinhangzhanghao}</div>
+	</div>	
+
+	<div style='width:100%;float:left;height:30px;border:1px solid black'>
+		<div style='width:99px;height:30px;float:left;line-height:30px;text-align:center;font-weight:bold;border-right:1px solid black'>付款方式</div>
+		<div style='width:399px;height:30px;float:left;line-height:30px;text-align:center;border-right:1px solid black'>{$fukuanfangshi}</div>
+		<div style='width:99px;height:30px;float:left;line-height:30px;text-align:center;font-weight:bold;border-right:1px solid black'>金额</div>
+		<div style='width:400px;height:30px;float:left;line-height:30px;text-align:center'>{$company_unit} {$jine}</div>
+	</div>
+	<!--  
+	<div style='width:100%;float:left;height:30px;border:1px solid black'>
+		<div style='width:99px;height:30px;float:left;line-height:30px;text-align:center;font-weight:bold;border-right:1px solid black'>大写金额</div>
+		<div style='width:899px;height:30px;float:left;line-height:30px;text-align:center;border-right:1px solid black'>asdd</div>
+
+	</div>	
+	 -->
+	<div style='width:100%;float:left;height:30px;border:1px solid black'>
+		<div style='width:99px;height:30px;float:left;line-height:30px;text-align:center;font-weight:bold;border-right:1px solid black'>备注</div>
+		<div style='width:899px;height:30px;float:left;line-height:30px;text-align:center;border-right:1px solid black'>{$remark}</div>
+	</div>
+	<div style='width:100%;float:left;height:30px;border:1px solid black'>
+		<div style='width:99px;height:30px;float:left;line-height:30px;text-align:center;font-weight:bold;border-right:1px solid black'>审核人</div>
+		<div style='width:899px;height:30px;float:left;line-height:30px;text-align:center;border-right:1px solid black'>{$shenheren}</div>
+	</div>		
+	<div style='width:100%;float:left;height:30px;border:1px solid black;text-align:center;line-height:30px;'>
+	付款成本明细
+	</div>	
+	<div style='width:100%;float:left;height:30px;border:1px solid black'>
+		<div style='width:99px;height:30px;float:left;line-height:30px;text-align:center;font-weight:bold;border-right:1px solid black'>类型</div>
+		<div style='width:299px;height:30px;float:left;line-height:30px;text-align:center;border-right:1px solid black'>项目名称</div>
+		<div style='width:199px;height:30px;float:left;line-height:30px;text-align:center;font-weight:bold;border-right:1px solid black'>团号</div>
+		<div style='width:400px;height:30px;float:left;line-height:30px;text-align:center'>付款金额</div>
+	</div>	
+	{foreach name='result' item='vo'}
+	<div style='width:100%;float:left;height:30px;border:1px solid black'>
+		<div style='width:99px;height:30px;float:left;line-height:30px;text-align:center;font-weight:bold;border-right:1px solid black'>
+			{if condition="$vo.source_type_id eq 1"}
+				团队产品
+			{elseif condition="$vo.source_type_id eq 2"}
+				酒店
+			{elseif condition="$vo.source_type_id eq 3"}
+				用餐
+			{elseif condition="$vo.source_type_id eq 4"}
+				航班
+			{elseif condition="$vo.source_type_id eq 5"}
+				邮轮
+			{elseif condition="$vo.source_type_id eq 6"}
+				签证
+			{elseif condition="$vo.source_type_id eq 7"}
+				景点
+			{elseif condition="$vo.source_type_id eq 8"}
+				车辆
+			{elseif condition="$vo.source_type_id eq 9"}
+				导游
+			{elseif condition="$vo.source_type_id eq 10"}
+				单项资源
+			{elseif condition="$vo.source_type_id eq 11"}
+		     
+		     自费项目
+		     {/if}            
+              
+
+		
+		</div>
+		<div style='width:299px;height:30px;float:left;line-height:30px;text-align:center;border-right:1px solid black'>{$vo.product_name}</div>
+		<div style='width:199px;height:30px;float:left;line-height:30px;text-align:center;font-weight:bold;border-right:1px solid black'>{$vo.team_product_number}</div>
+		<div style='width:400px;height:30px;float:left;line-height:30px;text-align:center'>{$vo.unit} {$vo.receivable_money}</div>
+	</div>	
+	{/foreach}
+	<div style='width:100%;float:left;height:30px;border:1px solid black'>
+		<div style='width:99px;height:30px;float:left;line-height:30px;text-align:center;font-weight:bold;border-right:1px solid black'></div>
+		<div style='width:299px;height:30px;float:left;line-height:30px;text-align:center;border-right:1px solid black'></div>
+		<div style='width:199px;height:30px;float:left;line-height:30px;text-align:center;font-weight:bold;border-right:1px solid black'>合计</div>
+		<div style='width:400px;height:30px;float:left;line-height:30px;text-align:center'>{$company_unit} {$jine}</div>
+	</div>	
+	<div style='width:100%;float:left;height:30px;'>
+		<div style='width:100px;height:30px;float:left;line-height:30px;text-align:center;font-weight:bold;'></div>
+		<div style='width:300px;height:30px;float:left;line-height:30px;text-align:center;'></div>
+		<div style='width:200px;height:30px;float:left;line-height:30px;text-align:center;font-weight:bold;'>
+		
+			申请人:{$username}
+		
+		</div>
+		<div style='width:400px;height:30px;float:left;line-height:30px;text-align:center'>
+			日期 {php}echo date('Y-m-d');{/php}
+		</div>
+	</div>									
+</div>
+
+
+<div style='clear:both'></div>
+<div style='margin-top:400px'></div>
+<div class="receipt_box1" >
+	<div style='width:100%;float:left;height:30px;border:1px solid black'>
+		<div style='width:99px;height:30px;float:left;line-height:30px;text-align:center;font-weight:bold;border-right:1px solid black'>付款方</div>
+		<div style='width:399px;height:30px;float:left;line-height:30px;text-align:center;border-right:1px solid black'>{$fukuanfang}</div>
+		<div style='width:99px;height:30px;float:left;line-height:30px;text-align:center;font-weight:bold;border-right:1px solid black'>团号</div>
+		<div style='width:400px;height:30px;float:left;line-height:30px;text-align:center'>{$tuanhao}</div>
+	</div>
+	<div style='width:100%;float:left;height:30px;border:1px solid black'>
+		<div style='width:99px;height:30px;float:left;line-height:30px;text-align:center;font-weight:bold;border-right:1px solid black'>开户名称</div>
+		<div style='width:399px;height:30px;float:left;line-height:30px;text-align:center;border-right:1px solid black'>{$kaihumingcheng}</div>
+		<div style='width:99px;height:30px;float:left;line-height:30px;text-align:center;font-weight:bold;border-right:1px solid black'>银行行号</div>
+		<div style='width:400px;height:30px;float:left;line-height:30px;text-align:center'>{$yinhanghanghao}</div>
+	</div>	
+	<div style='width:100%;float:left;height:30px;border:1px solid black'>
+		<div style='width:99px;height:30px;float:left;line-height:30px;text-align:center;font-weight:bold;border-right:1px solid black'>银行名称</div>
+		<div style='width:399px;height:30px;float:left;line-height:30px;text-align:center;border-right:1px solid black'>{$yinhangmingcheng}</div>
+		<div style='width:99px;height:30px;float:left;line-height:30px;text-align:center;font-weight:bold;border-right:1px solid black'>银行账号</div>
+		<div style='width:400px;height:30px;float:left;line-height:30px;text-align:center'>{$yinhangzhanghao}</div>
+	</div>	
+
+	<div style='width:100%;float:left;height:30px;border:1px solid black'>
+		<div style='width:99px;height:30px;float:left;line-height:30px;text-align:center;font-weight:bold;border-right:1px solid black'>付款方式</div>
+		<div style='width:399px;height:30px;float:left;line-height:30px;text-align:center;border-right:1px solid black'>{$fukuanfangshi}</div>
+		<div style='width:99px;height:30px;float:left;line-height:30px;text-align:center;font-weight:bold;border-right:1px solid black'>金额</div>
+		<div style='width:400px;height:30px;float:left;line-height:30px;text-align:center'>{$company_unit} {$jine}</div>
+	</div>
+	<!--  
+	<div style='width:100%;float:left;height:30px;border:1px solid black'>
+		<div style='width:99px;height:30px;float:left;line-height:30px;text-align:center;font-weight:bold;border-right:1px solid black'>大写金额</div>
+		<div style='width:899px;height:30px;float:left;line-height:30px;text-align:center;border-right:1px solid black'>asdd</div>
+
+	</div>	
+	 -->
+	<div style='width:100%;float:left;height:30px;border:1px solid black'>
+		<div style='width:99px;height:30px;float:left;line-height:30px;text-align:center;font-weight:bold;border-right:1px solid black'>备注</div>
+		<div style='width:899px;height:30px;float:left;line-height:30px;text-align:center;border-right:1px solid black'>{$remark}</div>
+	</div>
+	<div style='width:100%;float:left;height:30px;border:1px solid black'>
+		<div style='width:99px;height:30px;float:left;line-height:30px;text-align:center;font-weight:bold;border-right:1px solid black'>审核人</div>
+		<div style='width:899px;height:30px;float:left;line-height:30px;text-align:center;border-right:1px solid black'>{$shenheren}</div>
+	</div>		
+	<div style='width:100%;float:left;height:30px;border:1px solid black;text-align:center;line-height:30px;'>
+	付款成本明细
+	</div>	
+	<div style='width:100%;float:left;height:30px;border:1px solid black'>
+		<div style='width:99px;height:30px;float:left;line-height:30px;text-align:center;font-weight:bold;border-right:1px solid black'>类型</div>
+		<div style='width:299px;height:30px;float:left;line-height:30px;text-align:center;border-right:1px solid black'>项目名称</div>
+		<div style='width:199px;height:30px;float:left;line-height:30px;text-align:center;font-weight:bold;border-right:1px solid black'>团号</div>
+		<div style='width:400px;height:30px;float:left;line-height:30px;text-align:center'>付款金额</div>
+	</div>	
+	{foreach name='result' item='vo'}
+	<div style='width:100%;float:left;height:30px;border:1px solid black'>
+		<div style='width:99px;height:30px;float:left;line-height:30px;text-align:center;font-weight:bold;border-right:1px solid black'>
+			{if condition="$vo.source_type_id eq 1"}
+				团队产品
+			{elseif condition="$vo.source_type_id eq 2"}
+				酒店
+			{elseif condition="$vo.source_type_id eq 3"}
+				用餐
+			{elseif condition="$vo.source_type_id eq 4"}
+				航班
+			{elseif condition="$vo.source_type_id eq 5"}
+				邮轮
+			{elseif condition="$vo.source_type_id eq 6"}
+				签证
+			{elseif condition="$vo.source_type_id eq 7"}
+				景点
+			{elseif condition="$vo.source_type_id eq 8"}
+				车辆
+			{elseif condition="$vo.source_type_id eq 9"}
+				导游
+			{elseif condition="$vo.source_type_id eq 10"}
+				单项资源
+			{elseif condition="$vo.source_type_id eq 11"}
+		     
+		     自费项目
+		     {/if}            
+              
+
+		
+		</div>
+		<div style='width:299px;height:30px;float:left;line-height:30px;text-align:center;border-right:1px solid black'>{$vo.product_name}</div>
+		<div style='width:199px;height:30px;float:left;line-height:30px;text-align:center;font-weight:bold;border-right:1px solid black'>{$vo.team_product_number}</div>
+		<div style='width:400px;height:30px;float:left;line-height:30px;text-align:center'>{$vo.unit} {$vo.receivable_money}</div>
+	</div>	
+	{/foreach}
+	<div style='width:100%;float:left;height:30px;border:1px solid black'>
+		<div style='width:99px;height:30px;float:left;line-height:30px;text-align:center;font-weight:bold;border-right:1px solid black'></div>
+		<div style='width:299px;height:30px;float:left;line-height:30px;text-align:center;border-right:1px solid black'></div>
+		<div style='width:199px;height:30px;float:left;line-height:30px;text-align:center;font-weight:bold;border-right:1px solid black'>合计</div>
+		<div style='width:400px;height:30px;float:left;line-height:30px;text-align:center'>{$company_unit} {$jine}</div>
+	</div>	
+	<div style='width:100%;float:left;height:30px;'>
+		<div style='width:100px;height:30px;float:left;line-height:30px;text-align:center;font-weight:bold;'></div>
+		<div style='width:300px;height:30px;float:left;line-height:30px;text-align:center;'></div>
+		<div style='width:200px;height:30px;float:left;line-height:30px;text-align:center;font-weight:bold;'>
+		
+			申请人:{$username}
+		
+		</div>
+		<div style='width:400px;height:30px;float:left;line-height:30px;text-align:center'>
+			日期 {php}echo date('Y-m-d');{/php}
+		</div>
+	</div>									
+</div>
+
+<script src="__STATIC__/layui/layui.all.js"></script>
+<script type="text/javascript" src="__STATIC__/javascript/data.js"></script>
+<script>
+    var laytpl=layui.laytpl;
+
+    function fn(names) {
+        if(names==null || names==''){
+            return '--';
+        }else{
+            return names
+        }
+    }
+    //性别
+    function genders(obj) {
+        return obj==1?'男':obj==2?'女':'';
+    }
+    //房型
+    function roomType(obj) {
+        return obj==1?'双人房':obj==2?'大床房':obj==3?'单人房':obj==4?'加床':'-';
+    }
+    //支付方式
+    function fnPayment(type) {
+        return type==1?'cash':type==2?'check':type==3?'debit card':type==4?'credit card(mc)':type==5?'credit card(vs)':type==6?'credit card(ax)':type==7?'direct depsit':type==8?'others':'';
+    }
+    //支付类型
+    function stage(type) {
+        return type==1?'Balance':type==2?'Deposit':type==3?'Fullpmt':type==4?'Gratuities':type==5?'Insurance':type==6?'Partpmt':type==7?'Rebate':type==8?'Tkt':type==9?'Visa':'';
+    }
+    function getQueryVariable(variable)
+    {
+        var query = window.location.search.substring(1);
+        var vars = query.split("&");
+        for (var i=0;i<vars.length;i++) {
+            var pair = vars[i].split("=");
+            if(pair[0] == variable){return pair[1];}
+        }
+        return(false);
+    }
+</script>
+</body>
+</html>

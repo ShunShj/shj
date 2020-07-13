@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<head>
+    {include file='public/head' /}
+    <title>language-manage-info</title>
+
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+
+    <div class="layui-header">
+        {include file='public/header' /}
+    </div>
+
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll">
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            {include file='public/left_menu_web' /}
+        </div>
+    </div>
+
+    <div class="layui-body">
+
+        <!-- 内容主体区域 -->
+        <div style="padding: 15px;">
+            <div class='layui-form-item'>
+		   		<span class="layui-breadcrumb" lay-separator="-">
+					<a>{$language_tag.index_public_homepage}</a>
+                    <a>管网管理</a>
+                    <a>文章管理</a>
+                    <a><cite>文章详情</cite></a>
+				</span>
+            </div>
+            <br/>
+            <br/>
+            <div class="layui-row">
+                    <div class="layui-form-item">
+                        <label class="layui-form-label input-required">标题：</label>{$result.title}
+                    </div>
+                    <br/>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label input-required">分类：</label>{$result.pid}
+                    </div>
+                    <br/>
+
+                    <div class="layui-form-item">
+                        <label class="layui-form-label input-required">内容：</label>{$result.content}
+                    </div>
+
+                    <div class="layui-form-item">
+                        <label class="layui-form-label input-required">上架时间：</label>{$result.start_time}-{$result.end_time}
+                    </div>
+
+                    <div class="layui-form-item">
+                        <label class="layui-form-label input-required">keywords：</label>{$result.keywords}
+                    </div>
+
+                    <div class="layui-form-item">
+                        <label class="layui-form-label input-required">description：</label>{$result.description}
+                    </div>
+
+                    <br/>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">{$language_tag.index_public_status}：</label>{$result.status}
+                    </div>
+                    <br/>
+                    <div class="layui-form-item">
+                        <div class="layui-input-block">
+                            <a href="#" onClick="javascript :history.back(-1);"><button type="button" class="layui-btn layui-btn-primary">{$language_tag.index_public_back}</button></a>
+                        </div>
+                    </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="layui-footer">
+        <!-- 底部固定区域 -->
+        © layui.com - 底部固定区域
+    </div>
+</div>
+{include file='public/foot_js' /}
+</body>
+</html>

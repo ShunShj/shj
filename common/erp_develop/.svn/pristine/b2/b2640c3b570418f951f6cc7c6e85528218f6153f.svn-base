@@ -1,0 +1,684 @@
+
+
+var formSelects = layui.formSelects;
+
+var message='';
+function cancel() {
+    layer.close(layer.index);
+}
+function subs() {
+    if( message=='add'){
+    
+        var payment_company_id = $("#company_id").val();
+        var product_type = $("#product_type").val();
+        var currency_id = $("#currency_id").val();
+        var product_name = $("#product_name").val();
+        var receivable_money = $("#receivable_money").val();
+        var remark = $("#receivable_remark").val();
+        var order_number = $("#order_number").val();
+        var company_order_customer_id = layui.formSelects.value('example10_1', 'val');
+        //var company_order_customer_id = layui.formSelects.value('example10_1', 'company_order_customer_id');
+
+        company_order_customer_id = company_order_customer_id.join(",");
+
+        $.ajax({
+
+            type: "POST",
+            url: '/finance/addComapnyFinacneApproveAjax',
+            data: {
+            	object_company_id:payment_company_id,
+                product_type:product_type,
+                product_name:product_name,
+                currency_id:currency_id,
+                receivable_money:receivable_money,
+                remark:remark,
+
+                type:1
+
+            },
+            success: function(data){
+
+                if(data.code!=200){
+
+                    //layer.msg(data.msg);
+                    return false;
+                }else if(data.code==200) {
+
+                	
+                	
+                    layer.msg('已提交审批，请在审批-往来账审批中查看，审批通过后生效！',{time:3000,end : function(layero, index){
+                            window.location.href='/finance/showReceivableManage';
+                        }
+                    });
+                }
+            },
+            error:function(XMLHttpRequest, textStatus, errorThrown){
+                layer.msg('验证失败')
+            }
+        });
+    }else{
+        var receivable_number = $("#receivable_number").val();
+        // alert(receivable_number);
+        var payment_company_id = $("#company_id").val();
+        var product_type = $("#product_type").val();
+        var currency_id = $("#currency_id").val();
+        var product_name = $("#product_name").val();
+        var receivable_money = $("#receivable_money").val();
+        var remark = $("#receivable_remark").val();
+        var order_number = $("#order_number").val();
+        var company_order_customer_id = layui.formSelects.value('example10_1', 'val');
+
+
+        company_order_customer_id = company_order_customer_id.join(",");
+        // console.log(company_order_customer_id)
+        $.ajax({
+            type: "POST",
+            url: '/finance/editReceivableAjax',
+            data: {
+                receivable_number:receivable_number,
+                payment_company_id:payment_company_id,
+                product_type:product_type,
+                product_name:product_name,
+                currency_id:currency_id,
+                receivable_money:receivable_money,
+                remark:remark,
+                order_number:order_number,
+                company_order_customer_id:company_order_customer_id
+
+            },
+            success: function(data){
+                //console.log(data.data);
+                if(data.code!=200){
+                    //layer.msg(data.msg);
+                    return false;
+                }else if(data.code==200) {
+                    layer.msg('操作成功',{time:1,end : function(layero, index){
+                            window.location.href='/finance/showReceivableManage';
+                        }
+                    });
+                }
+            },
+            error:function(XMLHttpRequest, textStatus, errorThrown){
+                layer.msg('验证失败')
+            }
+        });
+    }
+}
+
+
+function newReceivable(obj,edit) {
+   var gettpl = $('#receivableTips').html();
+   var title='';
+   laytpl(gettpl).render('0', function(html){
+       obj=='add'?title='新增应收':title='修改';
+       layer.confirm(html, {
+           skin:'my-skin',
+           type:'1',
+           btn: [] //按钮
+           ,title:title
+           ,btnAlign: 'c' //按钮居中
+           ,area: ['700px','480px']
+           ,shadeClose:true,
+           scrollbar: false,
+           success:function () {
+               formSelects.render();
+               if(obj=='edit'){
+                   message=obj;
+                   var receivable_number = $(edit).parent().parent().find('.receivable_number').html();
+                   var payment_company_id = $(edit).parent().parent().find('.payment_company_id').val();
+                   var order_number = $(edit).parent().parent().find(".order_number").html();
+                   var currency_id = $(edit).parent().parent().find(".pay_currency_id").val();
+                   var product_name = $(edit).parent().parent().find(".product_name").val();
+                   var receivable_money = $(edit).parent().parent().find(".receivable_money").val();
+                   var remark = $(edit).parent().parent().find(".remark").val();
+                   var product_type = $(edit).parent().parent().find(".product_type").val();
+                   var product_source_type_id =  $(edit).parent().parent().find(".product_source_type_id").val();
+                   if($(edit).parent().parent().find(".product_type").val()>=2){
+                       $("#product_type").val(product_source_type_id);
+                   }else{
+                       $("#product_type").val(product_type);
+                   }
+                   $("#receivable_number").val(receivable_number);
+                   $("#company_id").val(payment_company_id);
+                   $("#order_number").val(order_number);
+                   $("#currency_id").val(currency_id);
+                   $("#product_name").val(product_name);
+                   $("#receivable_money").val(receivable_money);
+                   $("#receivable_remark").val(remark);
+                    //$("#product_type").val(product_type);
+                   layui.formSelects.config('example10_1', 'server', {
+
+                   }).data('example10_1', 'server', {
+                       url: '/json/getCustomerIsSelect?company_order_number='+order_number+'&receivable_number='+receivable_number
+                   });
+                   form.render();
+               }else{
+                   message=obj;
+               }
+               /*label加星号*/
+               $(".input-required").prepend("<i>*</i>");
+           }
+       });
+   });
+   form.render();
+}
+/*全选*/
+form.on('checkbox(receivableCheckboxAll)', function(data){
+    var child = $(data.elem).parents('thead').siblings("tbody").find('td input[type="checkbox"]');
+    child.each(function(index, item){
+        item.checked = data.elem.checked;
+    });
+    form.render('checkbox');
+});
+/*弹窗*/
+
+$('.look').click(function(){
+	var receivable_number  = $(this).attr('receivable_number');
+	var company_order_number = $(this).attr('company_order_number')
+
+	$('#update_company_order_number').val(company_order_number)
+	$('#update_receivable_number').val(receivable_number)
+	var insert_input = $('#insert_input');
+	insert_input.html('')
+	//首先 先通过receivable_number查询到有多少顾客
+	//通过应收编号查询应收的顾客信息
+	$.ajax({
+	  type: "POST",
+	  url: '/finance/getReceivableCustomerCompanyOrderCustomerIdAjax',
+	  data: {
+		  company_order_number:company_order_number,
+
+	  },
+	  success: function(data){
+		 
+		  if(data.code==200){
+			  	var data_result =data.data//eval('(' +data.data+ ')')
+			 
+			  	for(var i=0;i<data_result.length;i++){
+			  		
+			  		var h = "<input type='checkbox' name='productCheckbox1' company_customer_id='"+data_result[i].company_order_customer_id+"' value='"+data_result[i].customer_id+"' title='"+data_result[i].customer_name+"' lay-skin='primary' class='productCheckbox'>"
+			  		insert_input.append(h)
+			  	}
+
+
+
+				//通过应收编号查询应收的顾客信息
+				$.ajax({
+				  type: "POST",
+				  url: '/finance/getReceivableCustomerAjax',
+				  data: {
+					  receivable_number:receivable_number,
+
+				  },
+				  success: function(data){
+					  //先把数据插入到 数组中
+					  var company_customer_id_arr = new Array();
+					  for(var i =0;i<data.length;i++){
+						  company_customer_id_arr.push(data[i]['company_order_customer_id'])
+					  }			 
+//					  	
+//					  	data.each(function(index,val){
+//					  		console.log(val.customer_id)
+//					  		
+//					  	})
+					  	
+				        $("input[name='productCheckbox1']").each(function(item,index){
+
+				            var c_customer = $(this).attr('company_customer_id')
+				            c_customer = Number(c_customer)
+
+			      
+				            //开始做判断如果c_customer 在customer_id中则checkbox为选中
+				            if($.inArray(c_customer,company_customer_id_arr) >= 0){
+				        
+				                $(this).prop('checked',true)
+				            }else{
+				            	
+				                $(this).prop('checked',false)
+				            }
+				        });
+				        form.render();
+				  },
+				  error:function(XMLHttpRequest, textStatus, errorThrown){
+				      layer.msg('验证失败')
+				  }
+				});
+		  }
+
+	       
+
+	  },
+	  error:function(XMLHttpRequest, textStatus, errorThrown){
+	      layer.msg('验证失败')
+	  }
+	});
+
+
+    form.render();
+	$('#open_window').show();
+})
+$('.look2').click(function(){
+	var receivable_number  = $(this).attr('receivable_number');
+
+//	var insert_input = $('#insert_input');
+//	insert_input.html('')
+	//首先 先通过receivable_number查询到有多少顾客
+	//通过应收编号查询应收的顾客信息
+	$.ajax({
+	  type: "POST",
+	  url: '/finance/getReceivableCustomerAjax',
+	  data: {
+		  receivable_number:receivable_number,
+
+	  },
+	  success: function(data){
+		  
+			var insert_input = $('#visitorList3');
+			insert_input.html('')
+		  	var data_result =data//eval('(' +data.data+ ')')
+		  	for(var i=0;i<data_result.length;i++){
+		  		var h = "<input type='checkbox' disabled checked='checked' name='productCheckbox1' company_customer_id='"+data_result[i].company_order_customer_id+"' value='"+data_result[i].customer_id+"' title='"+data_result[i].customer_name+"' lay-skin='primary' class='productCheckbox'>"
+		  		insert_input.append(h)
+		  	}
+	        form.render();
+	    	$('#open_window2').show();
+	  },
+	  error:function(XMLHttpRequest, textStatus, errorThrown){
+	      layer.msg('验证失败')
+	  }
+	});
+
+
+})
+$('#close_div').click(function(){
+	$('#open_window').hide();
+
+})
+$('#close_div2').click(function(){
+
+	$('#open_window2').hide();
+})
+$('.close_div2').click(function(){
+
+	$('#open_window2').hide();
+})
+
+function visitorList(obj) {
+    var index=$(obj).parents("tr").index();
+    var gettpl = $('#visitorListTips').html();
+    // var receivable_number=$(obj).parent('td').siblings(".receivable_number").html();
+    var company_order_number = $(obj).closest("tr").find("td").eq(2).html();
+
+    $.ajax({
+        type: "POST",
+        url: '/finance/getCompanyOrderCustomerAjax',
+        data: {
+            'company_order_number':company_order_number
+        },
+        success: function(data) {
+            console.log(data);
+            var customer ={id:index,list:[]};
+             //console.log(data);
+            var CustomerList = eval('('+data+')');
+            for(var i=0;i<CustomerList.length;i++){
+
+                customer.list.push({"customer_name":CustomerList[i]['customer_first_name']+CustomerList[i]['customer_last_name'],"customer_number":CustomerList[i]['customer_number'],"aaa":i});
+
+            }
+            //console.log(CustomerList)
+            laytpl(gettpl).render(customer, function(html){
+                layer.confirm(html, {
+                    skin:'my-skin'
+                    ,btn: ['确定','取消'] //按钮
+                    ,title:'游客编号'
+                    ,btnAlign: 'c' //按钮居中
+                    ,area: ['450px','380px']
+                    ,shadeClose:true,
+                    scrollbar: false,
+                    success:function () {
+                        form.render();
+
+                            for(var i=0;i<customer.length;i++){
+                                $("input:radio[name='productCheckbox2"+i+"'][value='']").attr("checked",'checked');
+                            }
+
+                    }
+                }, function(){
+                    layer.msg('游客选择成功', {time:1,icon: 1});
+                });
+            });
+
+
+        }
+
+    })
+
+}
+
+/*全选*/
+form.on('checkbox(checkboxAll)', function(data){
+    var child = $(data.elem).parents('.visitorListTips').find('.checkboxList input[type="checkbox"]');
+    child.each(function(index, item){
+        item.checked = data.elem.checked;
+    });
+    form.render('checkbox');
+});
+//删除产品
+function receivableDel(obj) {
+    var receivable_number = $(obj).parent('td').siblings(".receivable_number").html();
+    //alert(receivable_number);
+
+    $.ajax({
+        type: "POST",
+        url: '/finance/editReceivableAjax',
+        data: {
+            "receivable_number":receivable_number,
+            "status":0
+        },
+        success: function(data){
+
+            $(obj).parents("tr").remove();
+        }
+    });
+
+    return false;
+}
+
+
+$('#receivable_submit').click(function(){
+
+	//首先获得应收总计
+	//再获得实收金额
+
+	var true_receipt = $('#true_receipt').val();
+	var invoice_time = $('#invoice_time').val()//收款日期
+	var invoice_number = $('#invoice_number').val();//收款凭证
+	var payment_currency_id = $('#currency_id').val();
+	var remark = $('#remark').val()
+	var attachment = $('#uploadVisa').val()
+	var receipts_pay_id = $('#receipts_pay_id').val()
+	var receivable_info = $('.receivable_info');
+	var receivable_info_result = '';
+	var all_receivable_money = 0;
+	receivable_info.each(function(index, item){
+		if($(this).children('td').eq(0).children('input').eq(0).is(':checked') == true){
+			
+			  
+			
+			 all_receivable_money+=parseFloat($(this).children('td').eq(10).children('input').eq(0).val())
+			
+			
+			receivable_info_result+=','+$(this).children('td').eq(2).html()+'_'+$(this).children('td').eq(9).children('input').eq(0).val()+'_'+$(this).children('td').eq(10).children('input').eq(0).val()
+		}
+
+
+	});
+
+	if(all_receivable_money>true_receipt){
+		layer.msg('实收分配加起来的金额必须小于实收金额');
+
+		return false;
+	}
+	
+	if(true_receipt.length==0){
+		layer.msg('实收不能为空');
+
+		return false;
+	}
+	
+	receivable_info_result = receivable_info_result.substring(1)
+
+	//开始调用接口
+	
+	
+	$.ajax({
+		  type: "POST",
+		  url: '/finance/addReceivableInfoAjax',
+		  data: {
+			  invoice_time:invoice_time,
+			  invoice_number:invoice_number,
+	
+			  payment_type:$('#payment_type').val(),
+			  receivable_info_result:receivable_info_result,
+			  remark:remark,
+			  attachment:attachment,
+			  receipts_pay_id:receipts_pay_id
+
+
+		  },
+		  success: function(data){
+
+              if(data.code!=200){
+                  layer.msg(data.msg);
+                  return false;
+              }else if(data.code==200) {
+                  setTimeout(function () {
+                      layer.msg("已提交审批，请在财务审批中查看，审批通过后生效！", {
+                    	 
+                    	  time: 3000 //2秒关闭（如果不配置，默认是3秒）
+                    	},function(){
+                    		 window.location.reload()
+                    	});
+
+                  },1);
+                 
+              }
+
+		  },
+		  error:function(XMLHttpRequest, textStatus, errorThrown){
+		      layer.msg('验证失败')
+		  }
+		});
+
+
+})
+//实收金额键盘事件
+$('#true_receipt').blur(function(){
+
+
+	var true_receipt = parseFloat($(this).val())
+
+	if(jQuery.isNumeric(true_receipt)==false){
+		layer.msg('必须数字');
+		$('#true_receipt').val(0);
+		return false;
+	}
+
+	
+	var r = $('.receivable_checkbox');
+	for(var i =0; i<r.length;i++){
+		r.eq(i).attr('disabled',false)
+	}
+	  form.render();
+
+
+})
+form.on('checkbox(filter)', function(data){
+
+  var data_dom = $(data.elem); //得到checkbox原始DOM对象
+  var is_check = data.elem.checked; //是否被选中，true或者false
+  if(is_check==true){
+
+	  
+	  //每次需要判断总共有多少钱
+//	  var true_receipt = $('#true_receipt').val();
+//	  
+//	  
+//	  var miss_receivable_money =  data_dom.parent().parent().children('td').eq(8).children('input').eq(0).val()
+//	  
+//	  //首先先计算已经填写 的价格
+//	  var receivable_checkbox = $('.receivable_checkbox');
+//	  var all_receivable_money = 0;
+//	  for(var i =0;i<receivable_checkbox.length;i++){
+//		  console.log(receivable_checkbox.eq(i).parent().parent().children('td').eq(10).children('input').eq(0).val())
+//		  
+//		  all_receivable_money+=parseFloat(receivable_checkbox.eq(i).parent().parent().children('td').eq(10).children('input').eq(0).val())
+//	  }
+//	  
+//	  
+//	  var now_money = true_receipt-all_receivable_money //获取剩余金额
+//	  
+//		var currency_id = data_dom.parent().parent().children('td').eq(6).children('select').val()
+//		
+//		var proportion_result= $("#huilv"+currency_id).val()
+//	  
+//	  	if(now_money>=miss_receivable_money){
+//	  		
+//
+//
+//			var huilv_money = miss_receivable_money*proportion_result
+//			
+//			huilv_money = huilv_money.toFixed(2)
+//	  		
+//	  		data_dom.parent().parent().children('td').eq(9).children('input').eq(0).val(huilv_money)
+//	  		
+//	  		data_dom.parent().parent().children('td').eq(10).children('input').eq(0).val(huilv_money)
+//	  	}else{
+//			var huilv_money = now_money*proportion_result
+//			
+//			huilv_money = huilv_money.toFixed(2)
+//	  		data_dom.parent().parent().children('td').eq(9).children('input').eq(0).val(huilv_money)
+//	  		data_dom.parent().parent().children('td').eq(10).children('input').eq(0).val(huilv_money)
+//	  	}
+	  data_dom.parent().parent().children('td').eq(9).children('input').attr("disabled",false); 
+  }else{
+	  data_dom.parent().parent().children('td').eq(9).children('input').eq(0).val(0)
+	  data_dom.parent().parent().children('td').eq(10).children('input').eq(0).val(0)
+	  data_dom.parent().parent().children('td').eq(10).children('input').attr("disabled",true); 
+  }
+
+//  if(true_receipt>all_receivable_money){//实收金额大于应收金额情况下
+//	  
+//  }
+  form.render();
+//  console.log(data.value); //复选框value值，也可以通过data.elem.value得到
+ // console.log(data.othis); //得到美化后的DOM对象
+});        
+$('.receivable_count').keyup(function(){
+	var prev_val = $(this).parent().prev('td').eq(0).find('input').eq(0).val();
+	var now_value = $(this).val();
+	prev_val = parseFloat(prev_val);
+	now_value = parseFloat(now_value);
+
+	if(now_value>prev_val){
+		layer.msg('不能超出未收');
+		$(this).parent().next('td').children('input').eq(0).val('')
+		$(this).val('');
+	}else{
+		if(isNaN(now_value)){
+			$(this).val('');
+			$(this).parent().next('td').children('input').eq(0).val('')
+			return false;
+		}
+		var currency_id = $(this).attr('currency_id')
+		
+		var proportion_result= $("#huilv"+currency_id).val()
+
+		var huilv_money = now_value*proportion_result
+		
+		huilv_money = huilv_money.toFixed(2)
+		$(this).parent().next('td').children('input').eq(0).val(huilv_money)		
+		
+		
+	}
+	
+
+})
+//游客选择
+form.on('select(orderNumber)', function(data){
+
+    var company_order_number = data.value; //得到被选中的值
+
+//    $.ajax({
+//        type: "POST",
+//        url: '/finance/getCompanyOrderCustomerAjax',
+//        data: {
+//            company_order_number:company_order_number
+//        },
+//        success: function(data){
+
+            layui.formSelects.config('example10_1', 'server', {
+
+            }).data('example10_1', 'server', {
+                url: '/json/getCustomer?company_order_number='+company_order_number
+            });
+            form.render();
+
+   //     }
+   // });
+
+});
+
+/**
+修改游客
+*/
+$('#update_customer').click(function(){
+	//开始获取选中的游客
+	var customer_str='';
+	var company_order_number = $('#update_company_order_number').val();
+	var receivable_number = $('#update_receivable_number').val();
+
+	$("input[name='productCheckbox1']").each(function(index, item){
+
+		if($(this).is(':checked')){
+			customer_str+=','+$(this).val()+'_'+$(this).attr('company_customer_id');
+		}
+
+
+
+	});
+	customer_str = customer_str.substring(1);
+
+	$.ajax({
+		  type: "POST",
+		  url: '/finance/updateReceivableCustomerAjax',
+		  data: {
+			  company_order_number:company_order_number,
+			  customer_str:customer_str,
+			  receivable_number:receivable_number
+
+		  },
+		  success: function(data){
+
+            if(data.code!=200){
+                layer.msg(data.msg);
+                return false;
+            }else if(data.code==200) {
+                layer.msg('操作成功',{time:1,end : function(layero, index){
+                        window.location.reload()
+                    }
+                });
+            }
+
+		  },
+		  error:function(XMLHttpRequest, textStatus, errorThrown){
+		      layer.msg('验证失败')
+		  }
+		});
+})
+
+
+/**
+ * 扣款
+*/
+$('.shikou').keyup(function(){
+	//首先获取当前数据的币种
+	
+	
+	var money = $(this).val();
+	if(isNaN(money)){
+		$(this).val('');
+		$(this).parent().prev('td').children('input').eq(0).val('')
+		return false;
+	}
+	var currency_id = $(this).attr('currency_id')
+	
+	var proportion_result= $("#huilv"+currency_id).val()
+
+	var huilv_money = money*proportion_result
+	
+	huilv_money = huilv_money.toFixed(2)
+	$(this).parent().prev('td').children('input').eq(0).val(huilv_money)
+	//再获取应该分配的币种 
+	
+})

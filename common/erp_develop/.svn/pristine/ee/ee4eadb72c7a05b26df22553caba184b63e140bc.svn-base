@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+<head>
+	{include file='public/head' /}
+  	<title>layout 后台大布局 - Layui</title>
+ 	<style>
+		.bill-picture{
+			position: relative;
+		}
+		.upload-hide{
+			display: none;
+			position: absolute;
+			left:0px;
+			top:0px;
+			background: rgba(0,0,0,0);
+			width: 100%;
+			height: 38px;
+		}
+	</style>
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+	
+	<div class="layui-header">
+	{include file='public/header' /}
+	</div>
+  
+	 <div class="layui-side layui-bg-black">
+	   <div class="layui-side-scroll">
+	     <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+		{include file='public/left_menu_web' /}
+	   </div>
+	 </div>
+  
+	<div class="layui-body">
+	 
+		<!-- 内容主体区域 -->
+		<div style="padding: 15px;">
+			<div class='layui-form-item'>
+		   		<span class="layui-breadcrumb" lay-separator="-">
+					<a>首页</a>
+					<a>网站设置</a>
+					<a>友情链接管理</a>
+					<a><cite>添加友情链接列表</cite></a>
+				</span>
+			</div>
+			<br><br>
+			<div class="layui-row" >
+				<form class="layui-form layui-col-md4"  onSubmit="return advertListAdd()">
+
+					<div class="layui-form-item">
+						<label class="layui-form-label input-required ">标题：</label>
+						<div class="layui-input-block ">
+							<input name="ota_advert_list_name"  id="ota_advert_list_name" lay-verify="required" placeholder="" autocomplete="off" class="layui-input" type="text">
+						</div>
+					</div>
+					<div class="layui-form-item">
+						<label class="layui-form-label">样式:</label>
+						<div class="layui-input-block">
+							<select name="style" id='style' lay-verify="required">
+								<option value="1" selected>样式1</option>
+							</select>
+						</div>
+					</div>
+
+					<div class="layui-form-item">
+							<label class="layui-form-label">状态:</label>
+							<div class="layui-input-block">
+								<select name="status" id='status' lay-verify="required">
+									<option value="1" selected>启用</option>
+									<option value="0">禁用</option>
+								</select>
+							</div>
+					</div>
+					<div class="layui-form-item">
+						<div class="layui-input-block">
+							<button class="layui-btn nav-submit" lay-submit="" lay-filter="formDemo" >提交</button>
+							<a href="javascript:history.back(-1)"><button type="button" class="layui-btn layui-btn-primary">返回</button></a>
+						</div>
+					</div>
+				</form>
+			</div>
+
+		</div>
+	</div>
+  
+  <div class="layui-footer">
+    <!-- 底部固定区域 -->
+    © layui.com - 底部固定区域
+  </div>
+</div>
+{include file='public/foot_js' /}
+
+<script>
+	function advertListAdd(){
+
+		var ota_advert_list_name = $("#ota_advert_list_name").val();
+		var style=$("#style").val();
+		var status = $("#status").val();
+		var data={
+			ota_advert_list_name:ota_advert_list_name,
+			style:style,
+			status:status
+		}
+		$.ajax({
+			type: "POST",
+			url: '/ota_slide/addAdvertListAjax',
+			data: data,
+			dataType: "json",
+			success: function(data){
+				if(data.code!=200){
+					layer.msg(data.msg);
+					return false;
+				}else if(data.code==200) {
+					layer.msg('success',{time:1,end : function(layero, index){
+							//location.href='/ota_slide/showAdvertListManage?status=1';
+							layer.load(2);
+							history.back(-1);
+						}
+					});
+				}
+			},
+			error:function(XMLHttpRequest, textStatus, errorThrown){
+				layer.msg('验证失败')
+			}
+		});
+		return false;
+	}
+</script>
+
+</body>
+</html>

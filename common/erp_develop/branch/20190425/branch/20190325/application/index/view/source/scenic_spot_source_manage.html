@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {include file='public/head' /}
+    <title>{$supplierName}景点资源</title>
+
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+    <div class="layui-header">
+        {include file='public/header' /}
+    </div>
+
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll">
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            {include file='public/left_menu' /}
+        </div>
+    </div>
+
+    <div class="layui-body">
+
+        <!-- 内容主体区域 -->
+        <div style="padding: 15px;">
+            <div class='layui-form-item'>
+			<span class="layui-breadcrumb" lay-separator="-">
+                <a>{$Think.lang.index_public_homepage}</a>
+				<a>{$Think.lang.index_source_showScenicSpotManage_source_administrate}</a>
+				<a>{$Think.lang.index_source_showScenicSpotManage_scenicspot_administrate}</a>
+                <a><cite>{$Think.lang.index_source_showScenicSpotSourceManage_all_source}</cite></a>
+			</span>
+            </div>
+            <br/>
+            <div class="layui-block input-inline">
+                <form action="/source/setScenicSpotSourceManage?id={$_GET['id']}"  method="post">
+                    <div class='layui-inline' >
+                        <div class='layui-input-inline'>
+                            <div class="layui-form">
+                                <select  id="search_status" name="search_status">
+                                    <option value="0" {$setScenicSpotSourceManage.search_status==0?'selected':''}>-{$Think.lang.index_source_showScenicSpotManage_search_status}-</option>
+                                    <option value="1" selected>{$Think.lang.index_public_show}</option>
+                                    <option value="2" {$setScenicSpotSourceManage.search_status==2?'selected':''}>{$Think.lang.index_public_disabled}</option>
+                                </select>
+                            </div>
+                        </div>
+                        <!--<div class='layui-input-inline'>-->
+                        <!--<input type="text" id="search_Id" name="search_Id" value="{$setScenicSpotSourceManage.search_Id}"  placeholder="ID" class="layui-input">-->
+                    <!--</div>-->
+                    <div class='layui-input-inline'>
+                        <input type="text" id="search_Name" name="search_Name" value="{$setScenicSpotSourceManage.search_Name}"  placeholder="{$Think.lang.index_source_showScenicSpotSourceManage_scenicspot_name}" class="layui-input">
+                    </div>
+
+                        <!--<div class='layui-input-inline'>-->
+                        <!--<div class="layui-form">-->
+                        <!--<select  id="Owned_country" name="Owned_country"  lay-filter='Owned_country' lay-search >-->
+                        <!--<option value="" >所属国家</option>-->
+                        <!--{foreach $Country as $CountryV}-->
+                        <!--<option value="{$CountryV.country_id}" {$setScenicSpotSourceManage.Owned_country==$CountryV.country_id?'selected':''}>{$CountryV.country_name} </option>-->
+                        <!--{/foreach}-->
+                        <!--</select>-->
+                        <!--</div>-->
+                        <!--</div>-->
+
+                        <!--<div class='layui-input-inline'>-->
+                        <!--<div class="layui-form">-->
+                        <!--<select  id="Owned_City" name="Owned_City" lay-filter='Owned_City' lay-search >-->
+                        <!--<option value="" >所属城市</option>-->
+                        <!--{foreach CityAr as $CityArV}-->
+                        <!--<option value="{$CityArV.country_id}" {$setScenicSpotSourceManage.Owned_City==$CityArV.country_id?'selected':''}>{$CityArV.country_name} </option>-->
+                        <!--{/foreach}-->
+                        <!--</select>-->
+                        <!--</div>-->
+                        <!--</div>-->
+
+
+
+                        <div class='layui-button-inline layui-search-inline'>
+                            <button class="layui-btn nav-search"  >{$Think.lang.index_public_search}</button>
+                        </div>
+                    </div>
+                </form>
+                <div class='layui-button-inline'>
+                    <span style="{:action('index/auth/check_auth',['role_id'=>'202'])}"><a href='/source/showScenicSpotSourceAdd?id={$_GET["id"]}'><button class="layui-btn nav-add">{$Think.lang.index_source_showScenicSpotSourceManage_add_source}</button></a></span>
+                    <a href='/source/showScenicSpotManage'><button class="layui-btn nav-add">{$Think.lang.index_public_history_back}</button></a>
+                </div>
+            </div>
+
+            <table class="layui-table" id="language-table">
+                <thead>
+                <tr>
+                    <th>{$Think.lang.index_source_showScenicSpotManage_id}</th>
+                    <th>{$Think.lang.index_source_showScenicSpotManage_supplier}</th>
+                    <th>{$Think.lang.index_source_showScenicSpotSourceManage_source_level}</th>
+                    <th>{$Think.lang.index_source_showScenicSpotSourceManage_scenicspot_name}</th>
+
+                    <th>{$Think.lang.index_source_showScenicSpotSourceManage_zone}</th>
+                    <th>{$Think.lang.index_public_status}</th>
+                    <!--<th>最后操作时间</th>-->
+                    <!--<th>操作人</th>-->
+                    <th class="layui-table-width">{$Think.lang.index_source_operation}</th>
+                </tr>
+                </thead>
+                    <tbody>
+                    {foreach name="data" item="vo"}
+                    <tr>
+                        <th>{$vo.scenic_spot_id}</th>
+                        <th>{$MultilingualAll['supplier-supplier_name-'.$vo.supplier_id.'-'.$Think.session.user.language_id][0]['translate']|default=$vo.supplier_name}</th>
+                        <th>{$vo.level_name}</th>
+                        <th>{$MultilingualAll['scenic_spot-scenic_spot_name-'.$vo.scenic_spot_id.'-'.$Think.session.user.language_id][0]['translate']|default=$vo.scenic_spot_name}</th>
+                        <th>{$MultilingualAll['country-country_name-'.$vo.city_id.'-'.$Think.session.user.language_id][0]['translate']|default=$vo.city_name}</th>
+                        <th>{if condition="$vo.status==1"}{$Think.lang.index_public_show}{else/}{$Think.lang.index_public_disabled}{/if}</th>
+                        <!--<th><?=date("Y-m-d H:i:s", strtotime("0 hour",$vo['update_time']))?></th>-->
+                        <!--<th>{$vo.create_user_name}</th>-->
+                        <th>
+                            <span style="{:action('index/auth/check_auth',['role_id'=>'203'])}"><a href='/source/showScenicSpotSourceEdit?id={$vo.scenic_spot_id}'><button class="layui-btn layui-btn-sm hover-edit layui-btn-primary">{$Think.lang.index_public_update}</button></a></span>
+                            <span style="{:action('index/auth/check_auth',['role_id'=>'204'])}"><a href='/source/showScenicSpotSourceInfo?id={$vo.scenic_spot_id}'><button class="layui-btn layui-btn-sm hover-details layui-btn-primary">{$Think.lang.index_public_info}</button></a></span>
+                            <!--<a href='/source/showScenicSpotEditLanguage?source_number={$vo.source_number}'><button class="layui-btn layui-btn-sm hover-polylingual layui-btn-primary">{$Think.lang.index_public_language}</button></a>-->
+                        </th>
+                    </tr>
+                    {/foreach}
+                    </tbody>
+
+                </table>
+            <div class="listButtom">
+                {include file='public/page' /}
+            </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="layui-footer">
+        <!-- 底部固定区域 -->
+        © layui.com - 底部固定区域
+    </div>
+</div>
+{include file='public/foot_js' /}
+<script>
+    //JavaScript代码区域
+
+
+</script>
+</body>
+</html>
+
+<script>
+    $(function(){
+        var layer = layui.layer  ,form = layui.form;
+
+        //选择国家更新城市
+        form.on('select(Owned_country)',function(data){
+            var cid = data.value;
+            $.ajax({
+                type: "POST",
+                url: '/source/getCityAjax',
+                data: {
+                    'cid': cid,
+                },
+                'dataType':'json',
+                success: function (a) {
+//                    console.log(a);
+                    var data = a.data;
+                    console.log(data);
+                    $('#Owned_City').html('');
+                    var h = "<option value=''>所属城市</option>";
+                    for(i in data){
+                        h += "<option value='"+data[i]['country_id']+"'>"+data[i]['country_name']+"</option>";
+                    }
+                    $('#Owned_City').html(h);
+                    form.render();
+
+                },
+                error:function(XMLHttpRequest, textStatus, errorThrown){
+                    //console.log(errorThrown)
+                    layer.msg('验证失败')
+
+                }
+            });
+        });
+
+    });
+</script>

@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {include file='public/head' /}
+    <title>language-manage</title>
+    <link href="__STATIC__/css/source.css" rel="stylesheet">
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+    <div class="layui-header">
+        {include file='public/header' /}
+    </div>
+
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll">
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            {include file='public/left_menu' /}
+        </div>
+    </div>
+
+    <div class="layui-body">
+
+        <!-- 内容主体区域 -->
+        <div class="agent-source" style="padding: 15px;">
+            <div class='layui-form-item'>
+			<span class="layui-breadcrumb" lay-separator="-">
+                <a>{$language_tag.index_public_homepage}</a>
+				<a>{$language_tag.index_source_showSupplierManage_supplier_administrate}</a>
+                <a>{$language_tag.index_source_showAgentManage_manage_agent}</a>
+				<a><cite>{$language_tag.index_source_showAgentSource_agent_content_set}</cite></a>
+			</span>
+            </div>
+
+            <div class="layui-tab" lay-filter="test">
+                <ul class="layui-tab-title">
+                    <li><a href='/source/showAgentHotelSource?status=1&supplier_id={$supplier_id}'>{$language_tag.index_finance_showReceivableManage_hotel}</a></li>
+                    <li><a href='/source/showAgentDiningSource?status=1&supplier_id={$supplier_id}'>{$language_tag.index_finance_showReceivableManage_dining}</a></li>
+                    <li><a href='/source/showAgentFlightSource?status=1&supplier_id={$supplier_id}'>{$language_tag.index_finance_showReceivableManage_flight}</a></li>
+                    <li  class="layui-this"><a href='/source/showAgentCruiseSource?status=1&supplier_id={$supplier_id}'>{$language_tag.index_finance_showReceivableManage_cruise}</a></li>
+                    <li><a href='/source/showAgentVisaSource?status=1&supplier_id={$supplier_id}'>{$language_tag.index_finance_showReceivableManage_visa}</a></li>
+                    <li><a href='/source/showAgentScenicSpotSource?status=1&supplier_id={$supplier_id}'>{$language_tag.index_finance_showReceivableManage_scenic_spot}</a></li>
+                    <li><a href='/source/showAgentVehicleSource?status=1&supplier_id={$supplier_id}'>{$language_tag.index_finance_showReceivableManage_vehicle}</a></li>
+                    <li><a href='/source/showAgentTourGuideSource?status=1&supplier_id={$supplier_id}'>{$language_tag.index_finance_showReceivableManage_tourguide}</a></li>
+                    <li><a href='/source/showAgentSingleSourceSource?status=1&supplier_id={$supplier_id}'>{$language_tag.index_finance_showReceivableManage_singlesource}</a></li>
+                    <li><a href='/source/showAgentOwnExpenseSource?status=1&supplier_id={$supplier_id}'>{$language_tag.index_finance_showReceivableManage_ownexpense}</a></li>
+                    <li><a href='/source/showAgentShoppingSource?status=1&supplier_id={$supplier_id}'>购物店</a></li>
+                </ul>
+                <div class="layui-tab-content">
+                    <div class="layui-tab-item">
+                    </div>
+                    <div class="layui-tab-item">
+                    </div>
+                    <div class="layui-tab-item">
+                    </div>
+                    <div class="layui-tab-item layui-show">
+                        <span><a href='/source/showCruisesSourceAdd?id={$supplier_id}'><button class="layui-btn nav-add">{$language_tag.index_source_showCruisesManage_source_add}</button></a></span>
+                        <div class="table-nont">
+                            <table class="layui-table layui-form">
+                            <thead>
+                            <tr>
+                                <th>{$language_tag.index_source_showCruisesSourceManage_id}</th>
+                                <th>{$language_tag.index_source_showCruisesSourceManage_Supplier}</th>
+                                <th>{$language_tag.index_source_showCruisesManage_CruisesName}</th>
+                                <th>{$language_tag.index_source_showCruisesManage_room_name}</th>
+                                <th>{$language_tag.index_source_showCruisesSourceManage_Deck}</th>
+                                <th>{$language_tag.index_product_showRouteTemplateManage_resources_costPrice}</th>
+                                <th>{$language_tag.index_branchcompany_showBranchProductManage_settlementPrice}</th>
+                                <th>{$language_tag.index_source_showCruisesSourceManage_state}</th>
+                                <!--<th>{$language_tag.index_source_showCruisesSourceManage_FinalOperationTime}</th>-->
+                                <!--<th>{$language_tag.index_source_showCruisesSourceManage_Operator}</th>-->
+                                <th class="layui-table-width">{$language_tag.index_source_showCruisesSourceManage_operation}</th>
+                            </tr>
+                            </thead>
+
+                            <tbody>
+                            {foreach name="cruise_result" item="vo" }
+                            <tr>
+                                <th class="cruise_id">{$vo.cruise_id}</th>
+                                <th>{$MultilingualAll['supplier-supplier_name-'.$vo.supplier_id.'-'.$Think.session.user.language_id][0]['translate']|default=$vo.supplier_name}</th>
+                                <th>{$MultilingualAll['cruise-cruise_name-'.$vo.cruise_id.'-'.$Think.session.user.language_id][0]['translate']|default=$vo.cruise_name}</th>
+                                <th>{$MultilingualAll['cruise-room_name-'.$vo.cruise_id.'-'.$Think.session.user.language_id][0]['translate']|default=$vo.room_name}</th>
+                                <th>{$vo.deck}</th>
+                                <th>{$vo.normal_price}</th>
+                                <th>{$vo.normal_settlement_price}</th>
+                                <th>
+                                    {if condition="in_array('193',$auth_id) OR $Think.session.user.role_id eq 1"}<input type="checkbox" {if condition="$vo.status eq 1"}checked=""{else/}{/if} name="open" lay-skin="switch" lay-filter="switchTest" lay-text="{$language_tag.index_public_show}|{$language_tag.index_public_disabled}">{else/}{if condition="$vo.status eq 1"}{$language_tag.index_public_show}{else}{$language_tag.index_public_disabled}{/if}{/if}
+                                </th>
+
+                                <!--<th>{$vo.update_time|date='Y-m-d H:i:s',###}</th>-->
+                                <!--<th>{$vo.create_user_name}</th>-->
+
+                                <th>
+                                    {if condition="$vo.company_id eq $Think.session.user.company_id"}
+                                    <span style="{:action('index/auth/check_auth',['role_id'=>'193'])}"><a href='/source/showCruisesSourceEdit?id={$vo.cruise_id}'><button class="layui-btn layui-btn-sm hover-edit layui-btn-primary">{$language_tag.index_source_showCruisesSourceManage_edit}</button></a></span>
+                                    {/if}
+                                    <span style="{:action('index/auth/check_auth',['role_id'=>'194'])}"><a href='/source/showCruisesSourceInfo?id={$vo.cruise_id}'><button class="layui-btn layui-btn-sm hover-details layui-btn-primary">{$language_tag.index_source_showCruisesSourceManage_info}</button></a></span>
+                                    <!--<a href='/source/showCruiseEditLanguage?source_number={$vo.source_number}'><button class="layui-btn layui-btn-sm hover-polylingual layui-btn-primary">{$language_tag.index_public_language}</button></a>-->
+                                </th>
+                            </tr>
+                            {/foreach}
+                            </tbody>
+
+                        </table>
+                        </div>
+                        <div class="listButtom">
+                            {include file='public/page' /}
+                        </div>
+                    </div>
+                    <div class="layui-tab-item">
+                    </div>
+                    <div class="layui-tab-item">
+                    </div>
+                    <div class="layui-tab-item">
+                    </div>
+                    <div class="layui-tab-item">
+                    </div>
+                    <div class="layui-tab-item">
+                    </div>
+                    <div class="layui-tab-item">
+                    </div>
+                    <div class="layui-tab-item">
+                    </div>
+                </div>
+            </div>
+
+            <!--<div class="layui-form-item">-->
+                <!--<div class="layui-input-block agent-save">-->
+                    <!--<a href='/source/showAgentManage'><button type="button" class="layui-btn layui-btn-primary">{$language_tag.index_public_back}</button></a>-->
+                <!--</div>-->
+            <!--</div>-->
+        </div>
+    </div>
+
+    <div class="layui-footer">
+        <!-- 底部固定区域 -->
+        © layui.com - 底部固定区域
+    </div>
+</div>
+{include file='public/foot_js' /}
+<script src='__STATIC__/javascript/system/source.js'>
+</script>
+<script>
+    var layer = layui.layer;
+
+    var form = layui.form;
+    form.on('switch(switchTest)', function(data){
+        var table_id = $(data.elem).parents("tr").children(".cruise_id").html();
+        var table_id_name = "cruise_id";
+        var table_name = "cruise";
+        if(this.checked == true){
+            var status = 1;
+        }else{
+            var status = 2;
+        }
+
+        $.ajax({
+            type: "POST",
+            url: '/index/changeStatus',
+            data: {
+                table_id:table_id,
+                table_id_name:table_id_name,
+                table_name:table_name,
+                status:status,
+            },
+            success: function(data){
+                //console.log(data);
+                if(data.code!=200){
+                    layer.msg(data.msg);
+                    return false;
+                }else if(data.code==200) {
+                    layer.msg('操作成功',{time:1,end : function(layero, index){
+
+                        }
+                    });
+                }
+            },
+            error:function(XMLHttpRequest, textStatus, errorThrown){
+                layer.msg('验证失败')
+            }
+        });
+    });
+
+
+</script>
+</body>
+</html>
+

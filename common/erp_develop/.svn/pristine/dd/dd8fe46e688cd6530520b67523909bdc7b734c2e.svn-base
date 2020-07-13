@@ -1,0 +1,136 @@
+
+var form=layui.form;
+var laytpl=layui.laytpl;
+var pages=1;
+
+$(function () {
+    var dataThat={};
+    if((window.location.search).split("=")[3]=='true') {
+        dataThat = JSON.parse(localStorage.getItem("loc"));
+        $("#branch_product_number").val(dataThat.branch_product_number);
+        $("#branch_product_name").val(dataThat.branch_product_name);
+        $("#create_user_name").val(dataThat.create_user_name);
+        $("#status").val(dataThat.status);
+        pages=dataThat.page;
+        window.location.href=window.location.href+'&page='+dataThat.page;
+    }
+    $.ajax({
+        type: "post",
+        url: "/branchcompany/getBranchProductTypeAjax",
+        data:"",
+        dataType: "json",
+        success: function (result) {
+            if(result.code==200){
+                var list=result.data;
+
+                var branchTypeHtml='';
+                branchTypeHtml+='<option value="">' + please + '</option>';
+                for(var i=0;i<list.length;i++){
+                    if(dataThat.branch_product_type_id==list[i].branch_product_type_id){
+                        branchTypeHtml+='<option value="'+list[i].branch_product_type_id+'" selected>'+list[i].branch_product_type_name+'</option>';
+                    }else{
+                        branchTypeHtml+='<option value="'+list[i].branch_product_type_id+'">'+list[i].branch_product_type_name+'</option>';
+                    }
+                }
+                $("#branch_product_type_id").html(branchTypeHtml);
+                form.render();
+            }else if(result.code!=200){
+                layer.closeAll('loading');
+                layer.msg('类型获取失败！'+result.code);
+                return false;
+            }
+        }
+    });
+    manageSearch();
+    $("#mangeSearch").click(function () {
+        manageSearch()
+    })
+})
+
+//获取分公司产品
+function manageSearch() {
+    layer.load(2);
+    var status=$("#status").val();
+    var branch_product_type_id=$("#branch_product_type_id").val();
+    var branch_product_number=$("#branch_product_number").val();
+    var branch_product_name=$("#branch_product_name").val();
+    var create_user_name=$("#create_user_name").val();
+    if((window.location.search).split("=")[3]!=undefined&&(window.location.search).split("=")[3]!='true'){
+        pages=(window.location.search).split("=")[3];
+    }
+    var datasLis={
+        page:pages,
+        branch_product_number:branch_product_number,
+        branch_product_name: branch_product_name,
+        branch_product_type_id: branch_product_type_id,
+        create_user_name:create_user_name,
+        status:status,
+        is_like:1
+    };
+    localStorage.setItem("loc", JSON.stringify(datasLis));
+    $.ajax({
+        type: "post",
+        url: "/branchcompany/getBranchProductAjax",
+        data: datasLis,
+        dataType: "json",
+        success: function (result) {
+            if(result.code==200){
+                var list=result.data.list;
+                var tbodyTr=$("#tbody_tr").html();
+                laytpl(tbodyTr).render(list, function(html) {
+                    $("#manage_tbody").html(html);
+                })
+                layer.closeAll('loading');
+                tableNone()
+            }else if(result.code!=200){
+                layer.closeAll('loading');
+                layer.msg('搜索失败！'+result.code);
+                return false;
+            }
+        }
+    })
+}
+//锁定
+function lock(obj) {
+    var branch_product_number=$(obj).parents("tr").find(".number").html();
+    $.ajax({
+        type: "post",
+        url: "/branchcompany/updateBranchProductLockedAjax",
+        data: {
+            branch_product_number: branch_product_number
+        },
+        dataType: "json",
+        success: function (result) {
+            if(result.code==200){
+                layer.msg('锁定成功！');
+                location.href="/branchcompany/showBranchProductManage"
+            }else if(result.code!=200){
+                layer.closeAll('loading');
+                layer.msg('锁定失败！'+result.code);
+                return false;
+            }
+        }
+    })
+}
+//删除
+function delete_branch_product(obj,stat) {
+    var branch_product_number=$(obj).parents("tr").find(".number").html();
+    $.ajax({
+        type: "post",
+        url: "/branchcompany/updateBranchProductStatusByBranchProductNumberAjax",
+        data: {
+            branch_product_number: branch_product_number,
+            status:stat
+        },
+        dataType: "json",
+        success: function (result) {
+            if(result.code==200){
+                location.href="/branchcompany/showBranchProductManage?status=1"
+            }else if(result.code!=200){
+                layer.closeAll('loading');
+                layer.msg('删除失败！'+result.code);
+                return false;
+            }
+        }
+    })
+}

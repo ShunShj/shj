@@ -1,0 +1,278 @@
+//修改订单基础信息
+var company_order_number_url=(window.location.search).split("=")[0];
+if(company_order_number_url==""||company_order_number_url=="undefined"){
+
+}else{
+    //执行修改操作
+    $("#base_edit").val("edit");
+    $(".order_tab").hide();
+}
+var qudaoshang = $('#qudaoshang').val();
+var zhike = $('#zhike').val();
+
+var add_submit = 1;
+form.on('submit(companySubmit)', function(data){
+	if(add_submit==2){
+		 layer.msg('请不要多次提交');
+		return false;
+	}
+	add_submit = 2
+    if($("#base_edit").val()=="edit"){
+        //基本信息修改
+        if(data.field.orderGroup==qudaoshang){
+            //分销商提交
+            var company_order_number = (window.location.search).split("=")[1];
+            var order_wr = $("#order_wr").val();
+            var order_cs = $("#order_cs").val();
+            var begin_time = $("#orderStartDate").val();
+            var end_time = $("#orderEndDate").val();
+            var distributor_id = $("#distributor_id").val();
+            var order_remark = $("#order_remark").val();
+
+            $.ajax({
+                type: "POST",
+                url: '/product/editCompanyOrderBaseAjax',
+                data: {
+                    company_order_number:company_order_number,
+                    wr:order_wr,
+                    begin_time:begin_time,
+                    end_time:end_time,
+                    clientsource:order_cs,
+                    distributor_id:distributor_id,
+                    remark:order_remark,
+                    channel_type:1
+                },
+                success: function(data){
+                	
+                	add_submit=1
+                    // console.log(data);
+                    if(data.code!=200){
+                        layer.msg(data.msg);
+                        return false;
+                    }else if(data.code==200) {
+                        layer.msg('操作成功',{time:1,end : function(layero, index){
+
+                        }});
+                    }
+                },error:function(XMLHttpRequest, textStatus, errorThrown) {
+                    // alert(XMLHttpRequest.status);
+                    // alert(XMLHttpRequest.readyState);
+                    // alert(textStatus);
+                }
+
+            });
+        }else{
+            //直客提交
+            var company_order_number = (window.location.search).split("=")[1];
+            var order_wr = $("#order_wr").val();
+            var order_cs = $("#order_cs").val();
+            var begin_time = $("#orderStartDate").val();
+            var end_time = $("#orderEndDate").val();
+            var direct_guest_name = $("#direct_guest_name").val();
+            var order_remark = $("#order_remark").val();
+            var direct_guest_tel = $("#direct_guest_tel").val();
+            var direct_guest_email = $("#direct_guest_email").val();
+
+            $.ajax({
+                type: "POST",
+                url: '/product/editCompanyOrderBaseAjax',
+                data: {
+                    company_order_number:company_order_number,
+                    wr:order_wr,
+                    clientsource:order_cs,
+                    contect_name:direct_guest_name,
+                    remark:order_remark,
+                    tel:direct_guest_tel,
+                    email:direct_guest_email,
+                    channel_type:2
+                },
+                success: function(data){
+                	add_submit=1
+                    // console.log(data)
+                    if(data.code!=200){
+                        layer.msg(data.msg);
+                        return false;
+                    }else if(data.code==200) {
+                        layer.msg('操作成功',{time:1,end : function(layero, index){
+
+                        }});
+                    }
+                }
+            });
+        }
+    }else{
+        if(data.field.orderGroup==qudaoshang){
+            //基本信息添加
+            //分销商提交
+            var order_wr = $("#order_wr").val();
+            var order_cs = $("#order_cs").val();
+            var begin_time = $("#orderStartDate").val();
+            var end_time = $("#orderEndDate").val();
+            var distributor_id = $("#distributor_id").val();
+            var order_remark = $("#order_remark").val();
+
+            $.ajax({
+                type: "POST",
+                url: '/product/addCompanyOrderBaseAjax',
+                data: {
+                    wr:order_wr,
+                    clientsource:order_cs,
+                    begin_time:begin_time,
+                    end_time:end_time,
+                    distributor_id:distributor_id,
+                    remark:order_remark,
+                    channel_type:1
+                },
+                success: function(data){
+                
+                	add_submit=1;
+                    if(data.code!=200){
+                        layer.msg(data.msg);
+                        return false;
+                    }else if(data.code==200) {
+                        layer.msg('操作成功',{time:1,end : function(layero, index){
+                                location.href='/product/showCompanyOrderBaseAdd?company_order_number='+data.data;
+                                $(".order_tab").hide();
+                            }});
+                    }
+                },error:function(XMLHttpRequest, textStatus, errorThrown) {
+                    // alert(XMLHttpRequest.status);
+                    // alert(XMLHttpRequest.readyState);
+                    // alert(textStatus);
+                }
+
+            });
+
+        }else{
+            //直客提交
+            var order_wr = $("#order_wr").val();
+            var order_cs = $("#order_cs").val();
+            var begin_time = $("#orderStartDate").val();
+            var end_time = $("#orderEndDate").val();
+            var direct_guest_name = $("#direct_guest_name").val();
+            var order_remark = $("#order_remark").val();
+            var direct_guest_tel = $("#direct_guest_tel").val();
+            var direct_guest_email = $("#direct_guest_email").val();
+
+            $.ajax({
+                type: "POST",
+                url: '/product/addCompanyOrderBaseAjax',
+                data: {
+                    wr:order_wr,
+                    clientsource:order_cs,
+                    begin_time:begin_time,
+                    end_time:end_time,
+                    contect_name:direct_guest_name,
+                    remark:order_remark,
+                    tel:direct_guest_tel,
+                    email:direct_guest_email,
+                    channel_type:2
+                },
+                success: function(data){
+                    if(data.code!=200){
+                        layer.msg(data.msg);
+                        return false;
+                    }else if(data.code==200) {
+                        layer.msg('操作成功',{time:1,end : function(layero, index){
+                                location.href='/product/showCompanyOrderBaseAdd?company_order_number='+data.data;
+                                $(".order_tab").hide();
+                            }});
+                    }
+                }
+            });
+        }
+    }
+    return false;
+});
+
+form.on('select(orderCountry)', function(data){
+	$("#orderCity").val('');
+
+	$("#orderLanguage").val('');
+
+	$("#orderAssociate").val('');
+  
+	$("#orderProState").val('');
+
+	$("#orderAddress").val('');
+
+	$("#orderCountryName").val('');
+
+	$("#orderCountry").val('');
+
+	$("#orderPostCode").val('');
+
+
+	$("#orderTel").val('');
+
+	$("#orderEmail").val('');
+
+	$("#orderRemark").val('');
+    var distributor_id = data.value; //得到被选中的值
+	if(distributor_id>0){
+		    $.ajax({
+        type: "POST",
+        url: '/product/CompanyInfoAjax',
+        data: {
+            distributor_id:distributor_id
+        },
+        success: function(data){
+
+			//首先都清空
+
+    
+
+			
+			
+            $("#orderCity").val(data[0]['city_name']);
+            $("#orderCity").attr("readonly","readonly");
+            $("#orderLanguage").val(data[0]['language_name']);
+            $("#orderLanguage").attr("readonly","readonly");
+            $("#orderAssociate").val(data[0]['associate_type']);
+            $("#orderAssociate").attr("disabled","disabled");
+            $("#orderProState").val(data[0]['province_name']);
+            $("#orderProState").attr("disabled","disabled");
+            $("#orderAddress").val(data[0]['address']);
+            $("#orderAddress").attr("disabled","disabled");
+            $("#orderCountryName").val(data[0]['contect']);
+            $("#orderCountryName").attr("disabled","disabled");
+            $("#orderCountry").val(data[0]['country_name']);
+            $("#orderCountry").attr("disabled","disabled");
+            $("#orderPostCode").val(data[0]['zip_code']);
+            $("#orderPostCode").attr("disabled","disabled");
+
+            $("#orderTel").val(data[0]['tel']);
+            $("#orderTel").attr("disabled","disabled");
+            // $("#orderStartDate").val(data[0]['tel']);
+            // $("#orderStartDate").attr("disabled","disabled");
+            // $("#orderEndDate").val(data[0]['tel']);
+            // $("#orderEndDate").attr("disabled","disabled");
+            $("#orderEmail").val(data[0]['email']);
+            $("#orderEmail").attr("disabled","disabled");
+            $("#orderRemark").val(data[0]['remark']);
+            $("#orderRemark").attr("disabled","disabled");
+
+            form.render();
+        }
+    });
+	}
+
+});
+
+
+
+form.on('radio', function (data) {
+	console.log(data.value)
+    if(data.value=="渠道商"){
+        $("#show_tp1").show();
+        $("#show_tp2").hide();
+    }else{
+        $("#show_tp1").hide();
+        $("#show_tp2").show();
+        $("#distributor_id").removeAttr("lay-verify");
+    }
+});
+
+function orderTab() {
+    layer.msg("请先填写并保存基本信息！")
+}

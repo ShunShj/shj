@@ -1,0 +1,373 @@
+{include file='/book_tour/includes/header' /}
+{include file='/book_tour/includes/top_nav' /}
+
+<!--
+	This is view/mybooking/index.php
+-->
+<link rel="stylesheet" href="<?php echo base_url('assets/css/mybooking.css'); ?>" type="text/css" media="screen"/>
+<style xmlns="http://www.w3.org/1999/html">
+    .invoice_no {
+        color: blue;
+    }
+
+    .search_status, .search_consultant_name {
+        width: 160px;
+        padding: 5px;
+    }
+
+    .agent_summary {
+        font-size: 18px;
+        margin-top: 20px;
+        border-collapse: separate;
+        border-spacing: 0;
+        border: 1px solid #CCC;
+        width: 1230px;
+        margin-bottom: 30px;
+    }
+
+    .agent_summary tr td {
+
+        text-align: center;
+        border: 1px dotted #CCC;
+        padding: 5px;
+    }
+
+    .agent_summary tr td:last-child {
+        color: blue;
+        font-weight: bold;
+    }
+
+    .agent_summary tr th {
+        width: 150px;
+        text-align: center;
+        background-color: #ccc;
+        padding: 5px;
+    }
+
+    .agent_summary tr th:last-child {
+
+    }
+
+    .strike {
+        text-decoration: line-through;
+    }
+
+    em.tick {
+        color: #09F713;
+    }
+
+    /*My bookings Table*/
+    .booking_ref, .booking_id, .tour_date, .nett, .balance, .invoice_id {
+        width: 65px;
+        text-align: center;
+    }
+
+    .tour_pax {
+        width: 50px;
+    }
+
+    .action, .status, .consultant {
+        width: 70px;
+    }
+
+    .tour_name {
+        width: 280px;
+    }
+
+    .submit-btn {
+        padding: 5px;
+    }
+
+</style>
+
+<section id="content">
+    <section id="mybooking">
+        <article>
+            <h1><img src="<?php echo base_url('assets/images/mybooking.png'); ?>" width="32" alt="My Booking"/>My
+                Bookings</h1>
+
+            <div id="errorMessage"><?php echo session('fail_message'); ?></div>
+            <div id="successMessage"><?php echo session('success_message'); ?></div>
+
+            <form action="/my_booking/index" method="post" accept-charset="utf-8" class="myinfo" id="myinfo">
+                <p><input id="search_id" name="search_id" class="search_booking_sinput" value="" placeholder="Booking ID .">
+                <input id="search_ref" name="search_ref" class="search_booking_sinput" value="" placeholder="My Reference No .">
+                <input id="search_tourdate" name="search_tourdate" class="search_booking_sinput date_input" value="" placeholder="Tour Date (DD-MM-YYYY)">
+                <input id="search_pax" name="search_pax" class="search_booking" value="" placeholder="Passenger name" title="Search for passenger eg: Lastname/Firstname">
+                <select id="search_consultant" class="search_consultant_name" name="search_consultant">
+                    <option value="">-- Consultant --</option>
+                </select>
+
+                <select id="search_status" class="search_status" name="search_status">
+                    <option value="">-- Booking Status --</option>
+                    <option value="1">Saved</option>
+                    <option value="2">Submitted</option>
+                    <option value="3">Confirmed</option>
+                    <option value="4">Invoice Paid</option>
+                    <option value="5">Completed</option>
+                    <option value="6">Cancelled</option>
+                    <option value="7">Final</option>
+                    <option value="8">Waiting for Approval</option>
+                </select>
+
+                <input type="submit" id="search_submit" name="search_submit" value="Search">
+                <input type="submit" class="submit-btn" name="search_clear" value="Clear">
+            </p></form>
+
+
+            <div id="select_tour" style="margin-top: 20px; color:#3376BB"><!-- sidebar -->
+                <h2>Nexus Holidays Bookings</h2>
+                <table width="1180" cellspacing='0' id="mybooking_table">
+                    <tr>
+                        <th class="booking_id">Booking ID</th>
+                        <th class="booking_ref">My Reference</th>
+                        <th class="booking_consultant">Consultant</th>
+
+                        <th class="tour_name">Tour Name</th>
+                        <th class="tour_date">Tour Date</th>
+                        <th class="total_pax">Pax</th>
+                        <th class="lead_pax_name">Lead Pax Name</th>
+                        <!--th class="balance">Total</th-->
+                        <th class="invoice_id">Invoice No</th>
+                        <th class="nett">Nett</th>
+                        <th class="balance">Balance</th>
+
+                        <th class="status">Status</th>
+                        <!--                        <th class="Payment" width="150">Payment</th>-->
+                        <th class="action">Action</th>
+                    </tr>
+                    <?php
+                    if (!empty($all_booking)) {
+                        for ($i = 0; $i < count($all_booking); $i++) {
+                            echo "<tr id=" . $i . ">";
+                    echo "<td id=" . $all_booking[$i]['booking_id_num'] . ">" . $all_booking[$i]['booking_id'] . "</td>";
+                    echo "<td>" . $all_booking[$i]['agent_ref'] . "</td>";
+                    echo "<td>" . $all_booking[$i]['consultant'] . "</td>";
+                    echo "<td>" . $all_booking[$i]['tour_name'] . "</td>";
+                    echo "<td>" . to_view_date_format($all_booking[$i]['tour_date']) . "</td>";
+                    echo "<td>" . $all_booking[$i]['num_pax'] . "</td>";
+                    echo "<td>" . $all_booking[$i]['lead_pax'] . "</td>";
+                    echo "<td>" . $all_booking[$i]['invoice'] . "</td>";
+                    echo "<td>" . $all_booking[$i]['nett'] . "</td>";
+                    echo "<td id=" . $i . " class='balance'>" . $all_booking[$i]['balance'] . "</td>";
+                    echo "<td><span class=" . $all_booking[$i]['status_class'] . ">" . $all_booking[$i]['status'] . "</span></td>";
+                    //                            echo '<td>'.$all_booking[$i]['Payment'].'</td>';
+                    echo "<td>";
+                    echo "<span><ul id='menu'>";
+                        echo "<li><a href='#'>Manage</a>";
+                            echo "<ul class='sub-menu'>";
+                                echo "<li>" . anchor("mybooking/view_booking_summary/" . $all_booking[$i]['booking_id_num'], "View", ['target' => '_blank']) . "</li>";
+                                echo ($all_booking[$i]['voucher_menu'] !== NULL) ? "<li>" . $all_booking[$i]['voucher_menu'] . "</li>" : '';
+                                echo ($all_booking[$i]['voucher_menu'] !== NULL) ?
+                                "<li>" . anchor("#", "Email" . ($all_booking[$i]['is_sent'] == 1 ? "&nbsp;<em class='tick'>&#10004;</em>" : ""),
+                                    array('data-id' => $all_booking[$i]['booking_id_num'], "class" => "email_action"))
+                                    . "</li>" : '';
+                                echo ($all_booking[$i]['invoice_menu'] !== NULL) ? "<li>" . $all_booking[$i]['invoice_menu'] . "</li>" : "";
+                                echo "</lu></li></ul></span>";
+                    echo "</td>";
+                    echo "</tr>";
+                    }
+                    } // END if empty all booking
+                    ?>
+                    <?php if (empty($all_booking)): ?>
+                    <tr>
+                        <td colspan='11' style='text-align: center; font-weight: bold; font-size:16px;'>There is no
+                            booking found under your account.<br/>Go to <a href='/book_tour/select_tour'>book a tour</a>
+                            now !
+                    </tr>
+                    </td></table>
+                <p>&nbsp;</p>
+                <?php else: ?>
+                </table><p>
+                <p><center><?php echo (isset($links))?$links:''; ?></center></p>
+
+                <?php
+                endif; // end if all booking
+                ?>
+                <br/>
+            </div>
+            <!-- end select_tour -->
+            <div id="payment-pop-up">
+                <p></p>
+            </div>
+        </article>
+        <!-- beauty of china -->
+        <!--        <article>-->
+        <!--            <div id="select_tour" style="margin-top: 20px; color:#E3120B"><!-- sidebar -->
+        <!--                <h2>Beautiful China Bookings</h2>-->
+        <!--                <link rel="stylesheet" href="--><?php //echo base_url('assets/css/mybooking.css'); ?><!--" type="text/css"-->
+        <!--                      media="screen"/>-->
+        <!--                <table width="1180" cellspacing='0' id="mybooking_table">-->
+        <!--                    <tr>-->
+        <!--                        <th class="booking_id">Booking ID</th>-->
+        <!--                        <th class="booking_ref">My Reference</th>-->
+        <!--                        <th class="booking_consultant">Consultant</th>-->
+        <!---->
+        <!--                        <th class="tour_name">Tour Name</th>-->
+        <!--                        <th class="tour_date">Tour Date</th>-->
+        <!--                        <th class="total_pax">Pax</th>-->
+        <!--                        <th class="lead_pax_name">Lead Pax Name</th>-->
+        <!--                        <!--th class="balance">Total</th-->
+        <!--                        <th class="invoice_id">Invoice No</th>-->
+        <!--                        <th class="nett">Nett</th>-->
+        <!--                        <th class="balance">Balance</th>-->
+        <!---->
+        <!--                        <th class="status">Status</th>-->
+        <!--                        <th class="action">Action</th>-->
+        <!--                    </tr>-->
+        <!--                    --><?php
+//                    if (!empty($boc_booking)) {
+//                        for ($i = 0; $i < count($boc_booking); $i++) {
+//                            echo "<tr id=" . $i . ">";
+        //                            echo "<td id=" . $boc_booking[$i]['booking_id_num'] . "> " . $boc_booking[$i]['booking_id'] . "</td>";
+        //                            echo "<td>" . $boc_booking[$i]['agent_ref'] . "</td>";
+        //                            echo "<td>" . $boc_booking[$i]['consultant'] . "</td>";
+        //                            echo "<td>" . $boc_booking[$i]['tour_name'] . "</td>";
+        //                            echo "<td>" . to_view_date_format($boc_booking[$i]['tour_date']) . "</td>";
+        //                            echo "<td>" . $boc_booking[$i]['num_pax'] . "</td>";
+        //                            echo "<td>" . $boc_booking[$i]['lead_pax'] . "</td>";
+        //                            echo "<td>" . $boc_booking[$i]['invoice'] . "</td>";
+        //                            echo "<td>" . $boc_booking[$i]['nett'] . "</td>";
+        //                            echo "<td id=" . $i . " class='balance'>" . $boc_booking[$i]['balance'] . "</td>";
+        //                            echo "<td><span class=" . $boc_booking[$i]['status_class'] . ">" . $boc_booking[$i]['status'] . "</span></td>";
+        //                            echo "<td>" . $boc_booking[$i]['action'] . "</td>";
+        //                            echo "</tr>";
+        //                        }
+        //                    } // END if empty all booking
+        //                    ?>
+        <!--                    --><?php //if (empty($boc_booking)): ?>
+        <!--                    <tr>-->
+        <!--                        <td colspan='11' style='text-align: center; font-weight: bold; font-size:16px;'>There is no-->
+        <!--                            booking found under your account.<br/>Go to <a href='booktour/select_tour'>book a tour</a>-->
+        <!--                            now !-->
+        <!--                    </tr>-->
+        <!--                    </td></table>-->
+        <!--                <p>&nbsp;</p>-->
+        <!--                --><?php //else: ?>
+        <!--                    </table><p>-->
+        <!--                    <p><center>--><?php //echo $links_beautyofchina; ?><!--</center></p>-->
+        <!---->
+        <!--                --><?php
+//                endif; // end if all booking
+//                ?>
+        <!--                <br/>-->
+        <!--            </div>-->
+        <!--            <!-- end select_tour -->
+        <!--            <div id="payment-pop-up">-->
+        <!--                <p></p>-->
+        <!--            </div>-->
+        <!--        </article>-->
+        <!-- end beauty of china -->
+    </section>
+    <!-- end mybooking section -->
+
+
+</section><!-- end content -->
+
+<?php //include("email_voucher_pop_up_template.php"); ?>
+<?php $this->load->view("mybooking/email_voucher_pop_up_template.php"); ?>
+<?php //$this->load->view("mybooking/message_pop_up_template.php"); ?>
+<script>
+    $(function() {
+        $( "#tabs" ).tabs();
+    });
+    // Javascript for mybooking - search_reference.php and index.php
+    jQuery(document).ready(function ($) {
+
+
+        var warning = $(".message");
+        var booking_id = "";
+
+
+        $('.cancel').click(function () {                                          // Add Btn Clicked for Creating Forms
+            ConfirmDialog('Are you sure to cancel the booking ?');
+            booking_id = this.id;
+            action_type = 6;// 2: Cancel the booking
+//        console.log(booking_id);
+        })
+
+        $('.submit').click(function () {                                          // Add Btn Clicked for Creating Forms
+            ConfirmDialog('Are you sure to submit the booking ?');
+            booking_id = this.id;
+            action_type = 2; // 1: Submit the booking
+//        console.log(booking_id);
+        })
+
+        $('#search_submit').click(function () {
+
+            $searchField = 0;
+            $statusValue = $('select#search_status').val();
+            $consultantName = $('select#search_consultant').val();
+            //alert($statusValue);
+            $("form#myinfo input").each(function (index) {
+
+                //alert($("form#myinfo input"))
+                $hello = $(this).attr('id');
+                $inputValue = $("form#myinfo input#" + $hello).val();
+                if ($inputValue != "" && $inputValue != "Search") {
+                    $searchField++;
+                }
+            });
+            if ($statusValue != "") {
+                $searchField++;
+            }
+            if ($consultantName != "") {
+                $searchField++;
+            }
+
+            if ($searchField == 0) {
+                alert("Please input your search criteria !");
+                return false;
+            }
+
+
+        })
+
+
+        function ConfirmDialog(message) {
+            $('<div></div>').appendTo('body')
+                    .html('<div><h6>' + message + '?</h6></div>')
+                    .dialog({
+                        modal: true, title: 'Action Confirmation', zIndex: 1000, autoOpen: true,
+                        width: '300px', resizable: false,
+                        buttons: {
+                            Yes: function () {
+                                // Process in PHP when true
+
+                                $.ajax({
+                                    type: "POST",
+                                    dataType: "json",
+                                    data: {get_param: booking_id, get_type: action_type},
+                                    beforeSend: function (x) {
+                                        if (x && x.overrideMimeType) {
+                                            x.overrideMimeType("application/json;charet=UTF-8");
+                                        }
+                                    },
+                                    url: '<?php echo base_url("mybooking/change_booking_status");?>',
+                                    success: function (data) {
+                                        //window.location.href = "mybooking";
+                                        //setTimeout(function(){document.location.href = "mybooking"},500);
+                                        //alert(data);
+                                    }
+                                });
+                                var delay = 500; //Your delay in milliseconds
+                                setTimeout(function () {
+                                    window.location = "<?php echo base_url('mybooking');?>";
+                                }, delay);
+                            },
+                            No: function () {
+                                $(this).dialog("close");
+                            }
+                        },
+                        close: function (event, ui) {
+                            $(this).remove();
+                        }
+                    });
+        }
+        ;
+    })
+    ;
+</script>
+
+
+{include file='/book_tour/includes/footer' /}

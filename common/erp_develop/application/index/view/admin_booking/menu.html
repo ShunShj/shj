@@ -1,0 +1,79 @@
+<style>
+  .nav{
+      width: auto;
+      padding: 0px 15px;
+      text-align: center;
+      height:40px;
+      font-weight: bold;
+      border: 1px solid #c3c3c3;
+      float: left;
+  }
+  .active_step{
+      border: 1px solid blue;
+      background: blue;
+      color: #fff
+  }
+  .active_step a{
+      border: 1px solid blue;
+      background: blue;
+      color: #fff
+  }
+
+  .layui-form .layui-form-label{
+      width: 200px;
+      padding: 9px 5px 9px 0;
+      text-align: left;
+
+  }
+
+  .layui-form .layui-input-block{
+      margin-left:210px;
+  }
+
+
+</style>
+
+<div class="step" style="overflow-x: hidden;">
+    <div class="nav  {$function_name=='updatebookingformgeneral'?'active_step':'' }" >
+        <a href="/admin_booking/updateBookingFormGeneral" class="ab_position" style="top: 3px;position: relative;">基本信息<br>general</a>
+    </div>
+    <div class="nav  {$function_name=='updatebookingformpassenger'?'active_step':'' }" >
+        <a href="/admin_booking/updateBookingFormPassenger" class="ab_position" style="top: 3px;position: relative;">游客<br>Passenger</a>
+    </div>
+    <div class="nav  {$function_name=='updatebookingformroom'?'active_step':'' }" >
+        <a href="/admin_booking/updateBookingFormRoom" class="ab_position" style="top: 3px;position: relative;">房间<br>room</a>
+    </div>
+    <div class="nav  {$function_name=='updatebookingformtransfer'?'active_step':'' }" >
+        <a href="/admin_booking/updateBookingFormTransfer" class="ab_position" style="top: 3px;position: relative;">接送机<br>transfer</a>
+    </div>
+    <div class="nav  {$function_name=='updatebookingformoption'?'active_step':'' }" >
+        <a href="/admin_booking/updateBookingFormOption" class="ab_position" style="top: 3px;position: relative;">自费<br>option</a>
+    </div>
+    <div class="nav  {$function_name=='updatebookingformaccommodation'?'active_step':'' }" >
+        <a href="/admin_booking/updateBookingFormAccommodation" class="ab_position" style="top: 3px;position: relative;">前置后置酒店<br>accommodation</a>
+    </div>
+    <div class="nav  {$function_name=='updatebookingformhotel'?'active_step':'' }" >
+        <a href="/admin_booking/updateBookingFormHotel" class="ab_position" style="top: 3px;position: relative;">酒店<br>hotel</a>
+    </div>
+    <div class="nav  {$function_name=='updatebookingformfile'?'active_step':'' }" >
+        <a href="/admin_booking/updateBookingFormFile" class="ab_position" style="top: 3px;position: relative;">附件<br>File</a>
+    </div>
+    <div class="nav  {$function_name=='updatebookingformsales'?'active_step':'' }" >
+        <a href="/admin_booking/updateBookingFormSales" class="ab_position" style="top: 3px;position: relative;">应收应付<br>sales</a>
+    </div>
+    <div class="nav  {$function_name==''?'active_step':'' }" >
+        <a href="" class="ab_position" style="top: 3px;position: relative;">收款<br>payment</a>
+    </div>
+    <div class="nav  {$function_name==''?'active_step':'' }" >
+        <a href="" class="ab_position" style="top: 3px;position: relative;">留言板<br>comment</a>
+    </div>
+
+</div>
+<script>
+    $(function () {
+
+
+    });
+
+
+</script>

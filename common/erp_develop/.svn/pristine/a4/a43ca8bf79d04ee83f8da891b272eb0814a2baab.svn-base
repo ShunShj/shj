@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {include file='public/head' /}
+    <title>language-manage-add</title>
+
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+
+    <div class="layui-header">
+        {include file='public/header' /}
+    </div>
+
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll">
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            {include file='public/left_menu' /}
+        </div>
+    </div>
+
+    <div class="layui-body">
+
+        <!-- 内容主体区域 -->
+        <div style="padding: 15px;">
+            <div class='layui-form-item'>
+		   		<span class="layui-breadcrumb">
+					<a href="#">{$language_tag.index_public_product}</a>
+				    <a href="#">{$language_tag.index_product_ShowPlanTour_resources_teamProduct}</a>
+					<a href="#"><cite>{$language_tag.index_product_ShowPlanTour_addingTeamProducts}</cite></a>
+				</span>
+            </div>
+            <br/>
+            <div class="layui-tab layui-tab-card" lay-filter="test">
+                <ul class="layui-tab-title">
+                    <li class="layui-this">{$language_tag.index_product_showTeamProductAdd_basic_configuration}</li>
+                    <li class="layui-checked">{$language_tag.index_product_showTeamProductAdd_product_open_date}</li>
+                    <li>{$language_tag.index_public_travelContent}</li>
+                    <li>{$language_tag.index_product_showRouteTemplateManage_resourceAllocation}</li>
+                    <li>{$language_tag.index_product_ShowPlanTour_productQuotation}</li>
+                </ul>
+            </div>
+            <br/>
+            <br/>
+            <form class="layui-form" onSubmit="return team_peoduct_add()">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">{$language_tag.index_product_ShowPlanTour_productNumber}</label>
+                    <div class="layui-input-block">
+                        <input id="" name="" value="NHC19-TW6D0202" required="" lay-verify="required" placeholder="{$language_tag.index_product_showRouteTypeManage_typeName}" autocomplete="off" class="layui-input" type="text">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label"><span style="color:red;">*</span>&nbsp;{$language_tag.index_product_ShowPlanTour_regimentName}</label>
+                    <div class="layui-input-block">
+                        <input id="" name="" required="required" lay-verify="required" placeholder="{$language_tag.index_branchcompany_showBranchProductManage_placeholderTeamName}" autocomplete="off" class="layui-input" type="text">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label"><span style="color:red;">*</span>&nbsp;{$language_tag.index_product_showRouteTemplateManage_routeType}</label>
+                    <div class="layui-input-block">
+                        <select id="" name="" lay-filter="required" >
+                            <option value="" selected="selected">{$language_tag.index_product_showTeamProductAdd_please_input_circuit_type}</option>
+                            <option value="1">{$language_tag.index_product_showRouteTemplateManage_chineseGroup}</option>
+                            <option value="2">{$language_tag.index_product_showRouteTemplateManage_foreignRegiment}</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">{$language_tag.index_finance_showAgentExpenseManage_route_type_id}</label>
+                    <div class="layui-input-block">
+                        <input type="radio" name="type" value="1" title="{$language_tag.index_product_showTeamProductAdd_disperse_group_booking}" checked="checked">
+                        <input type="radio" name="type" value="2" title="{$language_tag.index_product_showTeamProductAdd_single_gropu_customization}">
+                    </div>
+                </div>
+                <div class="layui-form-item" id="sp1">
+                    <label class="layui-form-label">{$language_tag.index_product_showTeamProductAdd_collect_guest_upto}</label>
+                    <div class="layui-form-mid">{$language_tag.index_product_ShowPlanTour_beforeLeaving}</div>
+                    <div class="layui-input-inline">
+                        <input id="" name="" required="" lay-verify="required" placeholder="{$language_tag.index_product_showTeamProductAdd_please_input_days}" autocomplete="off" class="layui-input" type="text">
+                    </div>
+                    <div class="layui-form-mid">{$language_tag.index_product_ShowPlanTour_day}</div>
+                </div>
+                <div class="layui-form-item" id="sp2">
+                    <label class="layui-form-label"><span style="color:red;">*</span>&nbsp;{$language_tag.index_product_showTeamProductAdd_plan_collect_guest_number}</label>
+                    <div class="layui-input-inline">
+                        <input id="" name="" required="" lay-verify="required" placeholder="{$language_tag.index_product_showTeamProductAdd_please_input_days}" autocomplete="off" class="layui-input" type="text">
+                    </div>
+                    <div class="layui-form-mid">{$language_tag.index_product_ShowPlanTour_receivedVisitors}: 0</div>
+                </div>
+                <div class="layui-form-item" id="sp3">
+                    <label class="layui-form-label"><span style="color:red;">*</span>&nbsp;{$language_tag.index_product_showTeamProductAdd_customer_name}</label>
+                    <div class="layui-input-block">
+                        <input id="" name="" required="required" lay-verify="required" placeholder="{$language_tag.index_product_showTeamProductAdd_please_input_customer_name}" autocomplete="off" class="layui-input" type="text">
+                    </div>
+                </div>
+                <div class="layui-form-item" id="sp4" style="display:none;">
+                    <label class="layui-form-label">{$language_tag.index_branchcompany_showDistributorManage_contacts}</label>
+                    <div class="layui-input-block">
+                        <input id="" name="" required="" lay-verify="required" placeholder="{$language_tag.index_source_showSupplier_input_linkman}" autocomplete="off" class="layui-input" type="text">
+                    </div>
+                </div>
+                <div class="layui-form-item" id="sp5">
+                    <label class="layui-form-label">{$language_tag.index_system_showJobManage_phone}</label>
+                    <div class="layui-input-block">
+                        <input id="" name="" required="" lay-verify="required" placeholder="{$language_tag.index_system_showCompanyManage_input_phone}" autocomplete="off" class="layui-input" type="text">
+                    </div>
+                </div>
+                <div class="layui-form-item" id="sp6">
+                    <label class="layui-form-label"><span style="color:red;">*</span>&nbsp;{$language_tag.index_product_showTeamProductAdd_single_gropu_customization_number}</label>
+                    <div class="layui-input-block">
+                        <input id="" name="" required="" lay-verify="required" placeholder="{$language_tag.index_system_showCompanyManage_input_phone}" autocomplete="off" class="layui-input" type="text">
+                    </div>
+                </div>
+                <div class="layui-form">
+                    <label class="layui-form-label">{$language_tag.index_product_ShowPlanTour_visibleBranch}</label>
+                    <div class="layui-input-block">
+                        <select name="" id="" xm-select="example10_1" xm-select-search="" xm-select-search-type="dl">
+                            <option value="1" selected="selected">{$language_tag.index_public_america}</option>
+                            <option value="2" selected="selected">{$language_tag.index_public_shanghai}</option>
+                            <option value="3">{$language_tag.index_public_guangzhou}</option>
+                            <option value="4">{$language_tag.index_public_shenzhen}</option>
+                            <option value="5">{$language_tag.index_public_tianjin}</option>
+                        </select>
+                    </div>
+                </div>
+                <br/>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">{$language_tag.index_product_ShowPlanTour_methodOfSettlingAccounts}</label>
+                    <div class="layui-input-block">
+                        <select name="" id="" lay-filter="required" >
+                            <option value="1" selected="selected">{index_product_ShowPlanTour_oneBitePrice}</option>
+                            <option value="2">{$language_tag.index_product_ShowPlanTour_trueSettlement}</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">{$language_tag.index_product_showRouteTemplateManage_userName}</label>
+                    <div class="layui-input-block">
+                        <input id="" name="" value="胡胡" required="" lay-verify="required" placeholder="{$language_tag.index_branchcompany_showBranchProductManage_placeholderTeamName}" autocomplete="off" class="layui-input" type="text">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">{$language_tag.index_public_status}</label>
+                    <div class="layui-input-block">
+                        <select name="status" id="route_type_status" lay-filter="required" >
+                            <option value="1" selected="selected">{$language_tag.index_source_showCruisesSourceManage_available}</option>
+                            <option value="2">{$language_tag.index_public_disabled}</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-input-block">
+                        <button class="layui-btn" lay-submit="" lay-filter="formDemo" id="route_type_add_button">{$language_tag.index_public_submit}</button>
+                        <button type="reset" class="layui-btn layui-btn-primary">{$language_tag.index_product_showRouteTemplateManage_reload}</button>
+                        <a href='/product/showRouteTypeManage'><button type="button" class="layui-btn layui-btn-primary">{$language_tag.index_public_back}</button></a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="layui-footer">
+        <!-- 底部固定区域 -->
+        © layui.com - 底部固定区域
+    </div>
+</div>
+{include file='public/foot_js' /}
+<script src='__STATIC__/javascript/system/product.js'></script>
+</body>
+</html>
+<script>
+    $("#sp3").hide();
+    $("#sp4").hide();
+    $("#sp5").hide();
+    $("#sp6").hide();
+
+    form.on('radio', function(data){
+        if(data.value==1 && data.value !=''){
+
+            $("#sp1").show();
+            $("#sp2").show();
+
+            $("#sp3").hide();
+            $("#sp4").hide();
+            $("#sp5").hide();
+            $("#sp6").hide();
+        }else if(data.value==2 && data.value !=''){
+
+            $("#sp1").hide();
+            $("#sp2").hide();
+
+            $("#sp3").show();
+            $("#sp4").show();
+            $("#sp5").show();
+            $("#sp6").show();
+        }
+    });
+</script>

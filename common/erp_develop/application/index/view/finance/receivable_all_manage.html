@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {include file='public/head' /}
+    <title>{$language_tag.index_finance_showReceivableManage_recevible}</title>
+    <link href="__STATIC__/css/finance.css" rel="stylesheet">
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+    <div class="layui-header">
+        {include file='public/header' /}
+    </div>
+
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll">
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            {include file='public/left_menu' /}
+        </div>
+    </div>
+
+    <div class="layui-body">
+
+        <!-- 内容主体区域 -->
+        <div style="padding: 15px;">
+            <div class='layui-form-item'>
+                <span class="layui-breadcrumb" lay-separator="-">
+                    <a>{$language_tag.index_public_homepage}</a>
+                    <a>{$language_tag.index_public_finance}</a>
+                    <a>{$language_tag.index_finance_showReceivableAllManage_total}</a>
+                    <a><cite>{$language_tag.index_finance_showReceivableAllManage_manage}</cite></a>
+                 
+                </span>
+            </div>
+            <br>
+            <div class="table-nont">
+                <table class="layui-table layui-form">
+                    <thead>
+                    <tr>
+
+                        <th style='width:10%'>{$language_tag.index_finance_showReceivableAllManage_payment_type}</th>
+						 <th style='width:10%'>付款方</th>
+                       <!--  <th class="input-required">{$language_tag.index_finance_showReceivableManage_currency_name}</th> -->
+                        <th style='width:12%'>{$language_tag.index_finance_showReceivableAllManage_receivable_voucher}</th>
+                        <th >{$language_tag.index_finance_showReceivableAllManage_voucher_time}</th>
+                        <!-- <th>应收总计</th> -->
+						<th style='width:10%'>{$language_tag.index_public_mark}</th>
+                        <th  style='width:10%'>{$language_tag.index_finance_showReceivableAllManage_true_receipt}</th>
+                        <th>剩余</th>
+                        <th>{$language_tag.index_source_operation}</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td class="table-input-none">
+                            <select name="allReceivableWay" id='payment_type' disabled>
+                                <option value="1" {if condition='$receipts_pay_result.pay_type eq 1'} selected{/if}>Cash</option>
+                                <option value="2" {if condition='$receipts_pay_result.pay_type eq 2'} selected{/if}>Check</option>
+                                <option value="3" {if condition='$receipts_pay_result.pay_type eq 3'} selected{/if}>Debit Card</option>
+                                <option value="4" {if condition='$receipts_pay_result.pay_type eq 4'} selected{/if}>Credit Card(MC)</option>
+                                <option value="5" {if condition='$receipts_pay_result.pay_type eq 5'} selected{/if}>Credit Card(VS)</option>
+                                <option value="6" {if condition='$receipts_pay_result.pay_type eq 6'} selected{/if}>Credit Card(AX)</option>
+                                <option value="7" {if condition='$receipts_pay_result.pay_type eq 7'} selected{/if}>Credit Deposit</option>
+                                <option value="8" {if condition='$receipts_pay_result.pay_type eq 8'} selected{/if}>OTHERS</option>
+                            	<option value="8" {if condition='$receipts_pay_result.pay_type eq 9'} selected{/if}>paypal</option>
+                            	<option value="8" {if condition='$receipts_pay_result.pay_type eq 10'} selected{/if}>加拿大信用卡</option>
+                            </select>
+                        </td>
+						<td>{$receipts_pay_result.object_name}</td>
+                        <!-- 
+                        <td>
+                            <select name="allReceivableCurrency" id='currency_id' >
+                                {foreach name='currency_result' item='v'}
+                                <option value="{$v.currency_id}">{$MultilingualAll['currency-currency_name-'.$v.currency_id.'-'.$Think.session.user.language_id][0]['translate']|default=$v.currency_name}</option>
+                                {/foreach}
+                            </select>
+                        </td>
+                         -->
+                        <td class="table-input-none"><input type="text" id='invoice_number' disabled value="{$receipts_pay_result.voucher_number}" name="receivable_voucher" placeholder="" class="layui-input"></td>
+                        <td class="table-input-none"><input type="text" id='invoice_time' disabled  {if condition="$receipts_pay_result.voucher_time neq ''"}value="{$receipts_pay_result.voucher_time|date='Y-m-d',###}"{/if}  name="voucher_time" placeholder="" class="layui-input layui-input-date"></td>
+                        <td class="table-input-none"><input type='text' id='remark' class="layui-input" disabled value='{$receipts_pay_result.remark}' /></td>
+                        <td class="table-input-none"><input type="text" name="allReceivableMoney"  disabled value="{$receipts_pay_result.base_money}{$receipts_pay_result.base_currency_unit}"   class="layui-input"></td>
+                        <td class="table-input-none"><input type="text" name="allReceivableMoney" disabled value="{$receipts_pay_result.balance_money}{$receipts_pay_result.base_currency_unit}"  placeholder="{$language_tag.index_finance_showReceivableAllManage_input_number}"   class="layui-input">
+                        
+                        <input type="text" name="allReceivableMoney" style='display:none' value="{$receipts_pay_result.balance_money}" id='true_receipt' placeholder="{$language_tag.index_finance_showReceivableAllManage_input_number}"   class="layui-input">
+                        
+                        </td>
+                    	                   	
+                    	
+                    	<td>
+                    	
+                    	    <a id="download"  href="{$receipts_pay_result.attachment}" target="_blank" class="layui-btn layui-btn-danger">{$language_tag.index_source_showVisaSourceManage_download}</a>
+                    	 	<input type="hidden" name="file_url" id="uploadVisa" value="{$receipts_pay_result.attacgment}"/>
+                    	
+                    	</td>
+                    
+                    </tr>
+                    </tbody>
+                    {foreach name='$proportion_result' item='v'}
+                    <input type='hidden'  id='huilv{$v.currency_id}' value='{$v.currency_proportion}'/>
+                    
+                    {/foreach}
+                </table>
+			
+            </div>
+            <br><hr><br>
+            <div class="layui-row">
+                <div class="layui-form-button" style="text-align: right">
+                    <button class="layui-btn nav-submit" lay-submit="" lay-filter="receivableSubmit" id='receivable_submit'>{$language_tag.index_finance_companyOrderManage_add_finance_approval}</button>
+                    <a href="/finance/receipts">
+                        <button type="button" class="layui-btn layui-btn-primary">{$language_tag.index_public_back}</button>
+                    </a>
+                </div>
+            </div>
+            <br>
+            <form class="layui-form">
+                <input type='hidden' name='receipts_pay_id' id='receipts_pay_id' value='{$receipts_pay_id}' />
+                <div class='layui-input-inline'>
+                    <input type="text" id="" name="team_product_number" value="{$Think.get.team_product_number}"  placeholder="{$language_tag.index_finance_showReceivableAllManage_team_product_number}" class="layui-input">
+                </div>
+                <div class='layui-input-inline'>
+                    <input type="text" id="" name="receivable_number" value="{$Think.get.receivable_number}"  placeholder="{$language_tag.index_finance_showReceivableManage_receivable_number}" class="layui-input">
+                </div>
+                <div class='layui-input-inline'>
+                    <input type="text" id="" name="order_number"  placeholder="{$language_tag.index_finance_showReceivableManage_order_number}"  value="{$Think.get.order_number}" class="layui-input">
+                </div>
+                <div class='layui-input-inline'>
+                    <input type="text" id="" name="product_name"  placeholder="{$language_tag.index_finance_showReceivableManage_product_name}" value="{$Think.get.product_name}" class="layui-input">
+                </div>
+                <div class='layui-input-inline'>
+                	        <select name="currency_id" id='currency_id' >
+                	        	<option value=''>请选择</option>
+                                {foreach name='currency_result' item='v'}
+                                <option value="{$v.currency_id}">{$MultilingualAll['currency-currency_name-'.$v.currency_id.'-'.$Think.session.user.language_id][0]['translate']|default=$v.currency_name}</option>
+                                {/foreach}
+                            </select>
+                
+                </div>
+                 <div class='layui-input-inline'>
+                	        <select name="approve_status" id='approve_status' >
+                	        	<option value=''>{$language_tag.index_public_approve_status}</option>
+                             
+                                <option value="1" {if condition="$Think.get.approve_status eq 1"}selected {/if}>{$language_tag.index_public_approving}</option>
+                             	<option value="2" {if condition="$Think.get.approve_status eq 2"}selected {/if}>{$language_tag.index_public_unreviewed}</option>
+                           		<option value="3" {if condition="$Think.get.approve_status eq 3"}selected {/if}>{$language_tag.index_public_settlement}</option>
+                            </select>
+                
+                </div>               
+                <!--  
+                <div class='layui-input-inline'>
+                	<input  type="text" class="layui-input begin_time" name="begin_time" value="{$Think.get.begin_time}"  placeholder="{$language_tag.index_public_begin_time}" />
+
+                
+                </div>
+                <div class='layui-input-inline'>
+                        <input  type="text" class="layui-input end_time" name="end_time"  value="{$Think.get.end_time}" placeholder="{$language_tag.index_product_visitor_endTime}" />
+
+                </div>    
+                 -->            
+                <!--  
+                <div class="layui-input-inline">
+                     <label class="layui-form-label">{$language_tag.index_product_ShowPlanTour_departureDate}:</label>
+                     <div class='layui-input-block'>
+                         <div class="layui-input-inline date-width">
+                          <input  type="text" class="layui-input all_time_name" name="search_all_time_name" value="{$setPlanTourManage.search_all_time_name}" />
+                      	
+                      </div>
+	   					<div class="date-and">-</div>
+                      <div class="layui-input-inline date-width">
+                          <input  type="text" class="layui-input all_time_name2" name="search_all_time_name2" value="{$setPlanTourManage.search_all_time_name2}" />
+                      	
+                      </div>
+                     </div>
+
+                 </div>                
+                 -->
+                
+                <div class='layui-input-inline'>
+                    <button class="layui-btn nav-search" >{$language_tag.index_public_search}</button>
+                </div>
+            </form>
+            <div class="table-nont">
+                <table class="layui-table layui-form table-product-poper ">
+                    <thead>
+                    <tr>
+                         <th><input type="checkbox" name="receivableCheckboxAll" lay-skin="primary" lay-filter="receivableCheckboxAll" ></th>
+                      
+                        <th >{$language_tag.index_finance_showReceivableAllManage_team_product_number}</th>
+                        <th>{$language_tag.index_public_approve_status}</th>
+                        <th>{$language_tag.index_public_approve_money}</th>
+                        <th >{$language_tag.index_finance_showReceivableManage_receivable_number}</th>
+                        <th>{$language_tag.index_finance_showReceivableManage_order_number}</th>
+                        <th>{$language_tag.index_finance_showReceivableManage_customer_number}</th>
+                        <th>{$language_tag.index_finance_showReceivableManage_product_name}</th>
+
+                        
+                        <th>{$language_tag.index_finance_showReceivableManage_currency_name}</th>
+                        <th >{$language_tag.index_finance_showReceivableManage_receivable_money}</th>
+						<th width="140px">{$language_tag.index_finance_showReceivableManage_uncollected}</th>
+                        <th width="140px">{$language_tag.index_finance_showReceivableAllManage_true_receipt_allocation}</th>
+                        <th width="140px">{$language_tag.index_finance_showMustPayManage_true_receipt}</th>
+                    
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {volist name="receivable_data_result" id="vo"}
+                    <tr class='receivable_info'>
+                        <td><input lay-filter="filter" type="checkbox" name="receivableCheckbox"  class='receivable_checkbox' lay-skin="primary" ></td> 
+                        <td>{$vo.team_product_number}</td>
+                       	<th>
+                       		{if condition="$vo.need_receivable_money eq 0"}
+                       			{$language_tag.index_public_settlement}
+                       			
+                       		{else/}
+	                       		{if condition="$vo.finance_approve_money gt 0"}
+	                       			{$language_tag.index_public_approving}
+	                       		
+	                       		{else/}
+	                       			{$language_tag.index_public_unreviewed}
+	                       		{/if}
+                       		
+                       		{/if}
+
+                       	</th>
+                        <th>{$vo.finance_approve_money}</th>
+                        <td>{$vo.receivable_number}</td>
+                        <td >{$vo.order_number}</td>
+                        <td><a {if condition="$vo.resource_type eq 2"}class="look" {else/}class="look2"{/if}  href='javascript:void(0)' company_order_number='{$vo.order_number}' receivable_number="{$vo.receivable_number}" >{$language_tag.index_finance_showReceivableManage_look}</a></td>
+                        <td class="table-input-none"><input type="text" name="allReceivableItem" placeholder="1000" class="layui-input" disabled value="{$vo.product_name}"></td>
+
+                        <td class="table-input-none">
+                            <select name="allReceivableCurrency" class="currency_id" disabled>
+                                {foreach name='currency_result' item='v' }
+                                <option  value="{$v.currency_id}" {if condition="$v.currency_id eq $vo.receivable_currency_id" } selected='selected'{/if}>{$MultilingualAll['currency-currency_name-'.$v.currency_id.'-'.$Think.session.user.language_id][0]['translate']|default=$v.currency_name}</option>
+                                {/foreach}
+                            </select>
+                        </td>
+                        <td class="table-input-none">
+                        <input type="text" name="allReceivableTotal" class="layui-input" disabled value="{$vo.receivable_money}{$vo.currency_unit}">
+
+                        </td>
+                        <td class="table-input-none"><input type="text"  style='display:inline;width:100px;' class="layui-input" disabled value="{$vo.need_receivable_money}">{$vo.currency_unit}</td>
+
+                        <td><input type="text" style='display:inline;width:100px;'  placeholder="" disabled class="layui-input receivable_count" value="0" currency_id='{$vo.receivable_currency_id}'>{$vo.currency_unit}</td>
+                   		<td class="table-input-none"><input type="text" style='display:inline;width:100px;'  placeholder="" disabled value='0'  class="layui-input shikou"  >{$receipts_pay_result.base_currency_unit}</td>
+                   		
+                    </tr>
+                    {/volist}
+                    </tbody>
+                </table>
+            </div>
+
+            <br><br>
+
+        </div>
+    </div>
+<div  class="layui-layer layui-layer-dialog" id="open_window" type="dialog" times="1" showtime="0" contype="string" style="display:none;z-index: 19891015; width: 450px; height: 380px; top: 169.5px; left: 50%;">
+        <div class="layui-layer-title" style="cursor: move;">{$language_tag.index_finance_showReceivableManage_choose_customer}</div>
+        <div id="" class="layui-layer-content" style="height: 244px;">
+            <form class="layui-form visitorListTips">
+
+                <div class="checkboxList" id="insert_input">
+
+                </div>
+            </form>
+        </div>
+
+    <div class="layui-layer-btn layui-layer-btn-c">
+    	<input type='hidden' id='update_company_order_number' value='' />
+    	<input type='hidden' id='update_receivable_number' value='' />
+    	<a class="layui-layer-btn0 close_div2"  >{$language_tag.index_finance_showReceivableManage_sure}</a>
+        <a class="layui-layer-btn1" id="close_div">{$language_tag.index_finance_showReceivableManage_cancel}</a>
+    </div>
+    <span class="layui-layer-resize"></span>
+</div>      
+
+<div  class="layui-layer layui-layer-dialog" id="open_window2" type="dialog" times="1" showtime="0" contype="string" style="display:none;z-index: 19891015; width: 450px; height: 380px; top: 169.5px; left: 50%;">
+        <div class="layui-layer-title" style="cursor: move;">{$language_tag.index_finance_showReceivableManage_choose_customer}</div>
+        <div id="" class="layui-layer-content" style="height: 244px;">
+            <form class="layui-form visitorListTips">
+                <div class="checkboxList" id="visitorList3">
+
+                </div>
+            </form>
+        </div>
+
+    <div class="layui-layer-btn">
+        <a class="layui-layer-btn0 close_div2 " style="background: #FF5700">{$language_tag.index_finance_showReceivableManage_sure}</a>
+        <a class="layui-layer-btn1" id="close_div2" >{$language_tag.index_finance_showReceivableManage_cancel}</a>
+    </div>
+
+</div>  
+    <div class="layui-footer">
+        <!-- 底部固定区域 -->
+        © layui.com - 底部固定区域
+    </div>
+</div>
+{include file='public/foot_js' /}
+<script src='__STATIC__/javascript/product/all.js'></script>
+<script src='__STATIC__/javascript/finance/receivable.js'></script>
+
+<script>
+
+var upload = layui.upload; //得到 upload 对象
+var laydate = layui.laydate;
+var table=layui.table;
+var laytpl=layui.laytpl;
+
+//常规用法
+
+laydate.render({
+    elem: '.begin_time'
+    ,lang: 'zn'
+});
+laydate.render({
+    elem: '.end_time'
+    ,lang: 'zn'
+});
+
+
+
+upload.render({
+    elem: '.test',
+    url:'/upload/uploadFileAll',
+    accept:'file',
+  	size:20480,
+    before: function(obj){ //obj参数包含的信息，跟 choose回调完全一致，可参见上文。
+    layer.load(); //上传loading
+    },
+    done: function(res, index, upload){
+        layer.closeAll('loading'); //关闭loading
+        console.log(res);
+        if(res.code == 200){
+            //do something （比如将res返回的图片链接保存到表单的隐藏域）
+            $('#uploadVisa').val(res.data);
+            $('#download').attr('href',res.data);
+            $('#download').show();
+        }
+    },error: function(index, upload){
+        layer.closeAll('loading'); //关闭loading
+    }
+});
+
+</script>
+
+
+</body>
+</html>

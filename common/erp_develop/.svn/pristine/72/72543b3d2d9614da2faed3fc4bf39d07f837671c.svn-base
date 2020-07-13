@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<head>
+    {include file='public/head' /}
+    <title>language-manage-add</title>
+
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+
+    <div class="layui-header">
+        {include file='public/header' /}
+    </div>
+
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll">
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            {include file='public/left_menu_web' /}
+        </div>
+    </div>
+
+    <div class="layui-body">
+
+        <!-- 内容主体区域 -->
+        <div style="padding: 15px;">
+            <div class='layui-form-item'>
+		   		<span class="layui-breadcrumb" lay-separator="-">
+					<a>{$language_tag.index_public_homepage}</a>
+                    <a>管网管理</a>
+                    <a>域名管理</a>
+                    <a><cite>修改域名</cite></a>
+				</span>
+            </div>
+            <br/>
+            <br/>
+            <div class="layui-row">
+                <form class="layui-form layui-col-md4" onSubmit="return website_edit()">
+                    <div class="layui-form-item">
+                        <label class="layui-form-label input-required">域名地址：</label>
+                        {$result.website}
+                    </div>
+                    <br/>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label input-required">域名描述：</label>
+                        {$result.describe}
+                    </div>
+                    <br/>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label input-required">{$language_tag.index_public_company}:</label>
+                        {$result.company_name}
+                    </div>
+                    <br/>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">{$language_tag.index_public_status}：</label>{$result.status}
+                    </div>
+                    <br/>
+                    <div class="layui-form-item">
+                        <div class="layui-input-block">
+                            <a href="#" onClick="javascript :history.back(-1);"><button type="button" class="layui-btn layui-btn-primary">{$language_tag.index_public_back}</button></a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="layui-footer">
+        <!-- 底部固定区域 -->
+        © layui.com - 底部固定区域
+    </div>
+</div>
+{include file='public/foot_js' /}
+</body>
+</html>

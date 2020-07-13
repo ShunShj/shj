@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {include file='public/head' /}
+    <title>{$language_tag.index_product_showRouteTemplateManage_receiptTemplate}</title>
+    <link href="__STATIC__/css/product.css" rel="stylesheet">
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+    <div class="layui-header">
+        {include file='public/header' /}
+    </div>
+
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll">
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            {include file='public/left_menu' /}
+        </div>
+    </div>
+
+    <div class="layui-body layui-body-bg">
+
+        <!-- 内容主体区域 -->
+        <div style="padding: 15px 15px 0px;">
+            <div class="body-top">
+                <div class='layui-form-item'>
+                    <span class="layui-breadcrumb" lay-separator="-">
+                        <a>{$language_tag.index_public_homepage}</a>
+                        <a>{$language_tag.index_branchcompany_showBranchProductManage_branchManagement}</a>
+                        <a><cite>{$language_tag.index_branchcompany_showCompanyOrderManage_orderManagement}</cite></a>
+                    </span>
+                </div>
+                <div class='layui-block all-search-bg'>
+                    <form class="layui-form" method='get' action='/branchcompany/showCompanyOrderManage'>
+                        <div class="layui-row">
+                            <div class="layui-col-md4">
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">{$language_tag.index_finance_showReceivableManage_order_number}:</label>
+                                    <div class="layui-input-block">
+                                        <input type="text" id="" value="{$Think.get.one_id_search}" name="one_id_search"
+                                               placeholder="{$language_tag.index_finance_showReceivableManage_order_number}" autocomplete="off" class="layui-input">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-col-md4">
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">{$language_tag.index_branchcompany_showCompanyOrderManage_orderTime}:</label>
+                                    <div class="layui-input-block">
+                                        <input type="text" id="" value="{$Think.get.one_time_search}" name="one_time_search"
+                                               placeholder="{$language_tag.index_branchcompany_showCompanyOrderManage_orderTime}" autocomplete="off" class="layui-input layui-date">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-col-md4">
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">{$language_tag.index_branchcompany_showCompanyOrderManage_retail}/{$language_tag.index_branchcompany_showCompanyOrderManage_wholeSale}:</label>
+                                    <div class="layui-input-block">
+                                        <select name="one_wr_search" id="">
+                                            <option value="">{$language_tag.index_branchcompany_showCompanyOrderManage_retail}/{$language_tag.index_branchcompany_showCompanyOrderManage_wholeSale}</option>
+                                            <option value="1">retail</option>
+                                            <option value="2">wholesale</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-row">
+                            <div class="layui-col-md4">
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">{$language_tag.index_branchcompany_showCompanyOrderManage_orderContent}:</label>
+                                    <div class="layui-input-block">
+                                        <input type="text" id="" value="{$Think.get.one_content_search}" name="one_content_search"
+                                               placeholder="{$language_tag.index_branchcompany_showCompanyOrderManage_orderContent}" autocomplete="off" class="layui-input">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-col-md4">
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">{$language_tag.index_branchcompany_showCompanyOrderManage_creater}:</label>
+                                    <div class="layui-input-block">
+                                        <input type="text" id="" value="{$Think.get.one_agent_search}" name="one_agent_search"  placeholder="创建人、客户"
+                                               autocomplete="off" class="layui-input">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-row">
+                            <div class="layui-col-md4 layui-col-md-offset4">
+                                <div class='input-inline all-button-center pages-search-margin'>
+                                    <button class="layui-btn nav-search" >{$language_tag.index_public_search}</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                    <!--<div class='layui-button-inline'>
+
+                         <a href='#'><button class="layui-btn nav-details">打印订单</button></a>
+                    </div>-->
+                </div>
+            </div>
+            <div class="content-bg">
+                <a href='/product/showCompanyOrderBaseAdd'><button class="layui-btn nav-add layui-btn-sm">{$language_tag.index_branchcompany_showCompanyOrderManage_newOrder}</button></a>
+                <hr>
+                <div class="table-nont user-manage newBg-pageHeight">
+                    <table class="layui-table" id="language-table">
+                        <colgroup>
+                            <col width="150px">
+                            <col width="100px">
+                            <col width="180px">
+                            <col width="80px">
+                            <col width="120px">
+                            <col width="220px">
+                            <col width="100px">
+                            <col width="80px">
+                            <col width="80px">
+                            <col width="80px">
+                            <col width="80px">
+                            <col width="300px">
+                        </colgroup>
+                        <thead>
+                        <tr>
+                            <th>{$language_tag.index_finance_showReceivableManage_order_number}</th>
+                            <th>{$language_tag.index_branchcompany_showCompanyOrderManage_retail}/{$language_tag.index_branchcompany_showCompanyOrderManage_wholeSale}</th>
+                            <th>{$language_tag.index_branchcompany_showCompanyOrderManage_orderContent}</th>
+                            <th>{$language_tag.index_product_PlanBooking_number}</th>
+                            <th>{$language_tag.index_branchcompany_showCompanyOrderManage_creater}</th>
+                            <th>{$language_tag.index_branchcompany_showCompanyOrderManage_channel}</th>
+                            <th>{$language_tag.index_product_showRouteTemplateManage_resources_currency}</th>
+                            <th>{$language_tag.index_finance_showMustPayManage_cope_money}</th>
+                            <th>{$language_tag.index_finance_showMustPayManage_true_receipt}</th>
+                            <th>{$language_tag.index_finance_showReceivableManage_receivable_money}</th>
+                            <th>{$language_tag.index_finance_showReceivableManage_true_receipt}</th>
+                            <th>{$language_tag.index_source_operation}</th>
+                        </tr>
+                        </thead>
+
+                        {foreach name='data' item='vo'}
+                        <tbody>
+                        <tr>
+                            <th>{$vo.company_order_number}</th>
+                            <th>{if condition="$vo.wr eq 1"}retail{else/}wholesale{/if}</th>
+                            <th>{$vo.order_name}</th>
+                            <th>{$vo.customer_count}</th>
+                            <th>{$vo.create_user_name}</th>
+                            <th>{if condition="$vo.channel_type eq 1"}{php}echo $vo['distributor_info'][0]['distributor_name'];{/php}{else/}直客{/if}</th>
+                            <th>{$language_tag.index_product_showRouteTemplateManage_RMB}</th>
+                            <th>{if condition="$vo.cope_money eq ''"} 0 {else/}{$vo.cope_money} {/if}</th>
+                            <th>{if condition="$vo.true_cope eq ''"} 0 {else/}{$vo.true_cope} {/if}</th>
+                            <th>{if condition="$vo.receivable_money eq ''"} 0 {else/}{$vo.receivable_money} {/if}</th>
+                            <th>{if condition="$vo.true_receivable eq ''"} 0 {else/}{$vo.true_receivable}{/if}</th>
+                            <th><a href="javascript:void(0)"><button class="layui-btn layui-btn-sm hover-edit layui-btn-primary" onclick="company_order_base_edit(this)">{$language_tag.index_public_update}</button></a> <!--<a href="javascript:void(0)"><button class="layui-btn layui-btn-sm hover-details layui-btn-primary" onclick="company_order_base_info(this)">{$language_tag.index_public_info}</button></a>-->
+                                <a class="layui-btn layui-btn-sm hover-edit layui-btn-primary" href="/product/showCompanyOrderCustomerGuideReceipt?company_order_number={$vo.company_order_number}">{$language_tag.index_branchcompany_showCompanyOrderManage_touristItinerary}</a>
+                                <a href="javascript:void(0)" ><button company_order_number="{$vo.company_order_number}" class="del_company_order layui-btn layui-btn-sm nav-del layui-btn-primary">{$language_tag.index_public_del}</button></a>
+                            </th>
+                        </tr>
+                        </tbody>
+                        {/foreach}
+                    </table>
+                </div>
+            </div>
+            <div class="listButtom">
+                {include file='public/page' /}
+            </div>
+        </div>
+    </div>
+    <div class="layui-footer">
+        <!-- 底部固定区域 -->
+        © layui.com - 底部固定区域
+    </div>
+</div>
+{include file='public/foot_js' /}
+<script src='__STATIC__/javascript/product/all.js'></script>
+<script src='__STATIC__/javascript/product/company_order.js'></script>
+</body>
+</html>

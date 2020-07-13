@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {include file='public/head' /}
+    <title>{$language_tag.index_source_showCruisesManage_cruises_administrate}</title>
+
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+    <div class="layui-header">
+        {include file='public/header' /}
+    </div>
+
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll">
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            {include file='public/left_menu' /}
+        </div>
+    </div>
+
+    <div class="layui-body layui-body-bg">
+
+        <!-- 内容主体区域 -->
+        <div style="padding: 15px 15px 0px;">
+            <div class="body-top">
+                <div class='layui-form-item'>
+                    <span class="layui-breadcrumb" lay-separator="-">
+                        <a>{$language_tag.index_public_homepage}</a>
+                        <a>{$language_tag.index_source_showCruisesManage_source_administrate}</a>
+                        <a><cite>{$language_tag.index_source_showCruisesManage_cruises_administrate}</cite></a>
+                    </span>
+                </div>
+                <div class='layui-block all-search-bg'>
+                    <form class="layui-form" action="/source/setCruisesManage" method="post" >
+                        <div class="layui-row">
+                            <div class="layui-col-md4">
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">{$language_tag.index_public_status}:</label>
+                                    <div class="layui-input-block">
+                                        <select  id="search_status" name="search_status">
+                                            <option value="0" {$setCruisesManage.search_status==0?'selected':''}>-{$language_tag.index_source_showCruisesManage_search_status}-</option>
+                                            <option value="1" selected >{$language_tag.index_public_show}</option>
+                                            <option value="2" {$setCruisesManage.search_status==2?'selected':''} >{$language_tag.index_public_disabled}</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-col-md4">
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">{$language_tag.index_source_showCruisesManage_suppliername}:</label>
+                                    <div class="layui-input-block">
+                                        <input type="text"  name="search_Name" value="{$setCruisesManage.search_Name}"  placeholder="{$language_tag.index_source_showCruisesManage_suppliername}" class="layui-input">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-row">
+                            <div class="layui-col-md4 layui-col-md-offset4">
+                                <div class='input-inline all-button-center pages-search-margin'>
+                                    <button class="layui-btn nav-search">{$language_tag.index_source_showCruisesManage_search}</button>
+                                </div>
+                            </div>
+                        </div>
+                        <!--<div class='layui-inline' >
+
+                            &lt;!&ndash;<div class='layui-input-inline'>&ndash;&gt;
+                            &lt;!&ndash;<input type="text"  name="search_Id" value="{$setCruisesManage.search_Id}"   placeholder="ID" class="layui-input">&ndash;&gt;
+                            &lt;!&ndash;</div>&ndash;&gt;
+
+
+                            <div class='layui-button-inline layui-search-inline'>
+                                <button class="layui-btn nav-search">{$language_tag.index_source_showCruisesManage_search}</button>
+                                &lt;!&ndash;<a href="/source/clearCruisesManage" class="layui-btn layui-btn-primary"> {$language_tag.index_source_showCruisesManage_Eliminate}</a>&ndash;&gt;
+                            </div>
+                        </div>-->
+                    </form>
+                    <!--<div class='layui-button-inline'>
+
+                        <a href='/source/showCruisesSourceAdd'><button class="layui-btn nav-add">{$language_tag.index_source_showCruisesManage_source_add}</button></a>
+
+                        &lt;!&ndash;<a href='/source/showSupplierAdd?supplier_type_id=5'><button class="layui-btn nav-add">添加供应商</button></a>&ndash;&gt;
+                        <a href='/source/showCruisesSourceManage?id='><button class="layui-btn nav-look">{$language_tag.index_source_showCruisesManage_look_all_source}</button></a>
+                    </div>-->
+                </div>
+            </div>
+            <div class="content-bg">
+                <span style="{:action('index/auth/check_auth',['role_id'=>'192'])}"><a href='/source/showCruisesSourceAdd'><button class="layui-btn nav-add layui-btn-sm">{$language_tag.index_source_showCruisesManage_source_add}</button></a></span>
+                <span style="{:action('index/auth/check_auth',['role_id'=>'190'])}"><a href='/source/showCruisesSourceManage?id='><button class="layui-btn nav-look layui-btn-sm">{$language_tag.index_source_showCruisesManage_look_all_source}</button></a></span>
+                <hr>
+                <div class="table-nont user-manage company-pageHeight">
+                    <table class="layui-table" id="language-table">
+                        <thead>
+                        <tr>
+                            <th>{$language_tag.index_source_showCruisesManage_id}</th>
+                            <th>{$language_tag.index_source_showCruisesManage_supplier}</th>
+                            <th>{$language_tag.index_source_showCruisesManage_status}</th>
+                            <!--<th>{$language_tag.index_source_showCruisesManage_FinalOperationTime}</th>-->
+                            <!--<th>{$language_tag.index_source_showCruisesManage_Operator}</th>-->
+                            <th>{$language_tag.index_source_showCruisesManage_Cruises}</th>
+                            <!--<th class="layui-table-width">{$language_tag.index_source_showCruisesManage_operation}</th>-->
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {foreach name="data" item="vo" }
+                        <tr>
+                            <th>{$vo.supplier_id}</th>
+                            <th>{$MultilingualAll['supplier-supplier_name-'.$vo.supplier_id.'-'.$Think.session.user.language_id][0]['translate']|default=$vo.supplier_name}</th>
+                            <th>{if condition="$vo.status==1"}{$language_tag.index_public_show}{else/}{$language_tag.index_public_disabled}{/if}</th>
+                            <!--<th><?=date("Y-m-d H:i:s", strtotime("0 hour",$SupplierArV['update_time']))?></th>-->
+                            <!--<th>{$SupplierArV.create_user_name}</th>-->
+                            <th><span style="{:action('index/auth/check_auth',['role_id'=>'191'])}"><a href="/source/showCruisesSourceManage?id={$vo.supplier_id}"><button class="layui-btn layui-btn-sm hover-edit layui-btn-primary">{$language_tag.index_source_showCruisesManage_source}</button> </a></span></th>
+                            <!--<th>
+                                <a href='/source/showSupplierEdit?supplier_id={$vo.supplier_id}'><button class="layui-btn layui-btn-sm hover-edit layui-btn-primary"">{$language_tag.index_public_update}</button></a>
+                                <a href='/source/showSupplierInfo?supplier_id={$vo.supplier_id}'><button class="layui-btn layui-btn-sm hover-details layui-btn-primary">{$language_tag.index_public_info}</button></a>
+                            </th>-->
+                        </tr>
+                        {/foreach}
+
+                        </tbody>
+
+                    </table>
+                </div>
+                <div class="listButtom">
+                    {include file='public/page' /}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="layui-footer">
+        <!-- 底部固定区域 -->
+        © layui.com - 底部固定区域
+    </div>
+</div>
+{include file='public/foot_js' /}
+<script>
+    //JavaScript代码区域
+    ;!function(){
+        var layer = layui.layer
+                ,form = layui.form;
+
+
+    }();
+
+</script>
+</body>
+</html>
+
+<script>
+
+
+</script>

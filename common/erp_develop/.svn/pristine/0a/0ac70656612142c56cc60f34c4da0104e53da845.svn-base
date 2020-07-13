@@ -1,0 +1,715 @@
+var layer = layui.layer ;
+var form = layui.form;
+var element=layui.element;
+var laydate=layui.laydate;
+var table=layui.table;
+var laytpl=layui.laytpl;
+
+/*游客信息*/
+//添加站位的非必填字段
+function addClass_zw() {
+    $("#occupy_count").Attr("lay-verify","required");
+}
+
+//去除站位的非必填字段
+function removeClass_zw(){
+    $("#occupy_count").removeAttr("lay-verify");
+}
+
+//去除编辑站位的非必填字段
+function removeClass_edit_zw(){
+    $("#occupy_count_edit").removeAttr("lay-verify");
+}
+
+//添加游客的非必填字段
+function addClass(){
+    $("#company_order_number_hidden").Attr("lay-verify","required");
+    $("#customer_first_name").Attr("lay-verify","required");
+    $("#customer_last_name").Attr("lay-verify","required");
+    $("#english_last_name").Attr("lay-verify","required");
+    $("#english_first_name").Attr("lay-verify","required");
+    $("#card_type").Attr("lay-verify","required");
+    $("#gender").Attr("lay-verify","required");
+    $("#card_number").Attr("lay-verify","required");
+    $("#term_of_validity").Attr("lay-verify","required");
+    $("#country_id").Attr("lay-verify","required");
+    $("#phone").Attr("lay-verify","required");
+    $("#email").Attr("lay-verify","required");
+    $("#customer_type").Attr("lay-verify","required");
+    $("#language_id").Attr("lay-verify","required");
+    $("#room_code").Attr("lay-verify","required");
+    $("#room_type").Attr("lay-verify","required");
+    $("#check_in").Attr("lay-verify","required");
+    $("#check_on").Attr("lay-verify","required");
+    //航班信息
+    $("input[name='messageFlight']").Attr("lay-verify","required");
+}
+
+//去除游客的非必填字段
+function removeClass(){
+    $("#company_order_number_hidden").removeAttr("lay-verify");
+    $("#customer_first_name").removeAttr("lay-verify");
+    $("#customer_last_name").removeAttr("lay-verify");
+    $("#english_last_name").removeAttr("lay-verify");
+    $("#english_first_name").removeAttr("lay-verify");
+    $("#card_type").removeAttr("lay-verify");
+    $("#gender").removeAttr("lay-verify");
+    $("#card_number").removeAttr("lay-verify");
+    $("#term_of_validity").removeAttr("lay-verify");
+    $("#country_id").removeAttr("lay-verify");
+    $("#phone").removeAttr("lay-verify");
+    $("#email").removeAttr("lay-verify");
+    $("#customer_type").removeAttr("lay-verify");
+    $("#language_id").removeAttr("lay-verify");
+    $("#room_code").removeAttr("lay-verify");
+    $("#room_type").removeAttr("lay-verify");
+    $("#check_in").removeAttr("lay-verify");
+    $("#check_on").removeAttr("lay-verify");
+    //航班信息
+    $("input[name='messageFlight']").removeAttr("lay-verify");
+}
+
+//去除游客的非必填字段
+function removeClass(){
+    $("#company_order_number_hidden").removeAttr("lay-verify");
+    $("#customer_first_name").removeAttr("lay-verify");
+    $("#customer_last_name").removeAttr("lay-verify");
+    $("#english_last_name").removeAttr("lay-verify");
+    $("#english_first_name").removeAttr("lay-verify");
+    $("#card_type").removeAttr("lay-verify");
+    $("#gender").removeAttr("lay-verify");
+    $("#card_number").removeAttr("lay-verify");
+    $("#term_of_validity").removeAttr("lay-verify");
+    $("#country_id").removeAttr("lay-verify");
+    $("#phone").removeAttr("lay-verify");
+    $("#email").removeAttr("lay-verify");
+    $("#customer_type").removeAttr("lay-verify");
+    $("#language_id").removeAttr("lay-verify");
+    $("#room_code").removeAttr("lay-verify");
+    $("#room_type").removeAttr("lay-verify");
+    $("#check_in").removeAttr("lay-verify");
+    $("#check_on").removeAttr("lay-verify");
+    //航班信息
+    $("input[name='messageFlight']").removeAttr("lay-verify");
+}
+
+//去除游客的非必填字段
+function removeClass_edit(){
+    $("#company_order_number_hidden").removeAttr("lay-verify");
+    $("#customer_first_name_edit").removeAttr("lay-verify");
+    $("#customer_last_name_edit").removeAttr("lay-verify");
+    $("#english_last_name_edit").removeAttr("lay-verify");
+    $("#english_first_name_edit").removeAttr("lay-verify");
+    $("#card_type_edit").removeAttr("lay-verify");
+    $("#gender_edit").removeAttr("lay-verify");
+    $("#card_number_edit").removeAttr("lay-verify");
+    $("#term_of_validity_edit").removeAttr("lay-verify");
+    $("#country_id_edit").removeAttr("lay-verify");
+    $("#phone_edit").removeAttr("lay-verify");
+    $("#email_edit").removeAttr("lay-verify");
+    $("#customer_type_edit").removeAttr("lay-verify");
+    $("#language_id_edit").removeAttr("lay-verify");
+    $("#room_code_edit").removeAttr("lay-verify");
+    $("#room_type_edit").removeAttr("lay-verify");
+    $("#check_in_edit").removeAttr("lay-verify");
+    $("#check_on_edit").removeAttr("lay-verify");
+    //航班信息
+    $("input[name='messageFlight_edit']").removeAttr("lay-verify");
+}
+
+function getMyDate(str){
+    var oDate = new Date(str*1000),
+        oYear = oDate.getFullYear(),
+        oMonth = oDate.getMonth()+1,
+        oDay = oDate.getDate(),
+        oTime = oYear +'-'+ getzf(oMonth) +'-'+ getzf(oDay);//最后拼接时间
+    return oTime;
+};
+//补0操作
+function getzf(num){
+    if(parseInt(num) < 10){
+        num = '0'+num;
+    }
+    return num;
+}
+
+/*游客信息--》table*/
+visitorMessBack();
+table.on('tool(visitorTable)', function(obj){
+    if(obj.event==='lookOne'){
+        console.log("obj")
+    }
+});
+/*游客信息--》添加游客form*/
+$(".lay-visitor-holderNumber,.visitor-message-other").hide();
+form.on('radio(visitorYN)', function(data){
+    if(data.value=='是'){
+        $(".lay-visitor-holderNumber").show();
+        $(".visitor-message-other").hide();
+        removeClass();
+
+        $("#visitor-message-other-edit").hide();
+    }else{
+        $(".visitor-message-other").show();
+        $(".lay-visitor-holderNumber").hide();
+        removeClass_zw();
+
+        $("#visitor-message-other-edit").show();
+    }
+});
+
+function UnixToDate(unixTime, isFull, timeZone) {
+    if (typeof (timeZone) == 'number'){
+        unixTime = parseInt(unixTime) + parseInt(timeZone) * 60 * 60;
+    }
+    var time = new Date(unixTime * 1000);
+    var ymdhis = "";
+    ymdhis += time.getUTCFullYear() + "-";
+    ymdhis += (time.getUTCMonth()+1) + "-";
+    ymdhis += time.getUTCDate();
+    if (isFull === true){
+        ymdhis += " " + time.getUTCHours() + ":";
+        ymdhis += time.getUTCMinutes() + ":";
+        ymdhis += time.getUTCSeconds();
+    }
+    return ymdhis;
+}
+
+ii=1;
+form.on('submit(visitorMessAdd)', function(data){
+    var order_hold = data.field.order_hold;
+    var company_order_number = $("#company_order_number_hidden").val();
+    var occupy_count = $("#occupy_count").val();
+
+    if(order_hold=="是"){
+        //站位
+
+        $.ajax({
+            type: "POST",
+            url: '/branchcompany/addCompanyOrderCustomerAjax',
+            data: {
+                company_order_number: company_order_number,
+                occupy_count: occupy_count
+            },
+            success: function (data) {
+                // console.log(data)
+
+                if(data.company_order_number !="undefined" && data.company_order_number != null && data.company_order_number != ""){
+                    layer.msg('操作成功', {
+                        time:1,end: function (layero, index) {
+                            element.tabChange('companyOrder', '12'); //切换到： 游客信息
+                            visitorMessBack()
+
+                            //循环站位人数
+                            for(var i=0;i<parseInt(data.occupy_count);i++){
+                                var html="";
+                                html += '<tbody><tr>' +
+                                    '<td></td>' +
+                                    '<td>站位</td>' +
+                                    '<td>-</td>' +
+                                    '<td>-</td>' +
+                                    '<td>-</td>' +
+                                    '<td>-</td>' +
+                                    '<td>-</td>' +
+                                    '<td>-</td>' +
+                                    '<td>-</td>' +
+                                    '<td>-</td>' +
+                                    '<td>-</td>' +
+                                    '<td>-</td>' +
+                                    '<td><button class="layui-btn layui-btn-sm hover-look layui-btn-primary" onclick="hotelLook(this)">查看</button></td>' +
+                                    '<td><button class="layui-btn layui-btn-sm hover-look layui-btn-primary" onclick="flightLook(this)">查看</button></td>' +
+                                    '<td><a href="javascript:void(0)"><button class="layui-btn layui-btn-sm hover-edit layui-btn-primary" onclick="order_customer_edit(this)" company_order_customer="{$vo.company_order_customer_id}">修改</button></a> <button class="layui-btn layui-btn-sm nav-del layui-btn-primary">删除</button></td>' +
+                                    '</tr></tbody>'
+                                $("#visitorTable").append(html);
+                            }
+                        }
+                    });
+                }else{
+                    layer.msg('请添加订单基础信息');
+                    $("#show_tp1").show();
+                    $("#show_tp2").hide();
+                }
+            }
+        });
+    }else{
+        //游客
+
+        //游客信息
+        var company_order_number = $("#company_order_number_hidden").val();
+        var customer_first_name = $("#customer_first_name").val();
+        var customer_last_name = $("#customer_last_name").val();
+        var english_last_name = $("#english_last_name").val();
+        var english_first_name = $("#english_first_name").val();
+        var card_type = $("#card_type").val();
+        var gender = $("#gender").val();
+        var card_number = $("#card_number").val();
+        var term_of_validity = $("#term_of_validity").val();
+        var country_id = $("#country_id").val();
+        var phone = $("#phone").val();
+        var email = $("#email").val();
+        var customer_type = $("#customer_type").val();
+        var language_id = $("#language_id").val();
+
+        //航班信息
+        var flight_length = $("input[name='messageFlight']");
+        var treeCol=new Array();
+
+        for(var i=0;i<flight_length.length;i++){
+            treeCol[i]=new Array();
+
+            treeCol[i].push($("input[name='messageFlight']:eq("+i+")").val());
+            treeCol[i].push($("input[name='orderFlightDate']:eq("+i+")").val());
+            treeCol[i].push($("input[name='messageAirport"+i+"']:eq("+i+")").val());
+            treeCol[i].push($("input[name='orderStartPlace']:eq("+i+")").val());
+            treeCol[i].push($("input[name='orderEndPlace']:eq("+i+")").val());
+
+        }
+
+        var customer_flight = treeCol;
+        var room_code = $("#room_code").val();
+        var room_type = $("#room_type").val();
+        var check_in = $("#check_in").val();
+        var check_on = $("#check_on").val();
+
+        // console.log(typeof treeCol);
+        // console.log(treeCol);
+
+        //提交游客信息大数组
+        $.ajax({
+            type: "POST",
+            url: '/branchcompany/addCompanyOrderCustomerAjax',
+            data: {
+                "company_order_number": company_order_number,
+                "customer_first_name": customer_first_name,
+                "customer_last_name": customer_last_name,
+                "english_last_name": english_last_name,
+                "english_first_name": english_first_name,
+                "card_type": card_type,
+                "gender": gender,
+                "card_number": card_number,
+                "term_of_validity": term_of_validity,
+                "country_id": country_id,
+                "phone": phone,
+                "email": email,
+                "customer_type": customer_type,
+                "language_id": language_id,
+                "room_code": room_code,
+                "room_type": room_type,
+                "check_in": check_in,
+                "check_on": check_on,
+                "customer_flight": JSON.stringify(customer_flight)
+            },
+            success: function (data) {
+                if(data.company_order_number !="undefined" && data.company_order_number != null && data.company_order_number != ""){
+                    layer.msg('操作成功', {
+                        time:1,end: function (layero, index) {
+                            element.tabChange('companyOrder', '12'); //切换到： 游客信息
+                            visitorMessBack()
+                            // console.log(data);
+
+                                var html = "";
+                                var customer_type="";
+                                var gender="";
+                                var card_type="";
+
+                                if(data.customer_type==1){
+                                    customer_type="成人";
+                                }else if(data.customer_type==2){
+                                    customer_type="占床儿童";
+                                }else if(data.customer_type==3){
+                                    customer_type="不占床儿童";
+                                }else if(data.customer_type==4){
+                                    customer_type="老人";
+                                }
+
+                                if(data.gender==1){
+                                    gender="男";
+                                }else if(data.gender==2){
+                                    gender="女";
+                                }
+
+                                if(data.card_type==1){
+                                    card_type="护照";
+                                }else if(data.card_type==2){
+                                    card_type="身份证";
+                                }
+
+                                html += '<tbody><tr>' +
+                                    '<td>'+ii+'</td>' +
+                                    '<td>游客</td>' +
+                                    '<td>'+customer_type+'</td>' +
+                                    '<td>'+ data.customer_first_name + data.customer_last_name + '</td>' +
+                                    '<td>'+gender+'</td>' +
+                                    '<td>'+$("#country_id").find("option:selected").text()+'</td>' +
+                                    '<td>'+card_type+'</td>' +
+                                    '<td>'+data.card_number+'</td>' +
+                                    '<td>'+UnixToDate(data.term_of_validity,'Y-m-d')+'</td>' +
+                                    '<td>'+data.phone+'</td>' +
+                                    '<td>'+data.email+'</td>' +
+                                    '<td>'+$("#language_id").find("option:selected").text()+'</td>' +
+                                    '<td><button class="layui-btn layui-btn-sm hover-look layui-btn-primary" onclick="hotelLook(this)">查看</button></td>' +
+                                    '<td><button class="layui-btn layui-btn-sm hover-look layui-btn-primary" onclick="flightLook(this)">查看</button></td>' +
+                                    '<td><button class="layui-btn layui-btn-sm hover-edit layui-btn-primary" onclick="order_customer_edit(this)" company_order_customer='+data.company_order_customer_id+'>修改</button> <button class="layui-btn layui-btn-sm nav-del layui-btn-primary">删除</button></td>' +
+                                    '</tr></tbody>'
+                                $("#visitorTable").append(html);
+                                ii++;
+                        }
+                    });
+                }else{
+                    layer.msg('请添加订单基础信息');
+                    $("#show_tp1").show();
+                    $("#show_tp2").hide();
+                }
+            }
+        });
+    }
+    // visitorMessBack()
+    // layer.msg("添加！")
+    return false;
+});
+
+
+
+/*游客信息--》添加游客form*/
+function visitor() {
+    $(".lay-visitor-message").hide();
+    $(".lay-visitor-add").show();
+}
+function visitorMessBack() {
+    $(".lay-visitor-message").show();
+    $(".lay-visitor-add").hide();
+
+    $("#lay-visitor-edit").hide();
+}
+
+/*住宿信息查看*/
+function hotelLook(obj) {
+
+    var gettpl = $('#hotelLook').html();
+    var company_order_number = $("#company_order_number_hidden").val();
+
+    $.ajax({
+        type: "POST",
+        url: '/branchcompany/getCustomerInfoAjax',
+        data: {
+            cc:"hotel",
+            company_order_number:company_order_number
+        },
+        success: function(data){
+            
+
+            var message = eval('('+data+')');
+
+            laytpl(gettpl).render(message, function(html){
+                layer.tips(html, obj, {
+                    tips: [4, '#ccc'],
+                    padding:'0',
+                    tipsMore: false,
+                    area: ['450px', 'auto'],
+                    closeBtn :1,
+                    time:0
+                });
+            })
+
+        }
+    });
+}
+/*航班信息查看*/
+function flightLook(obj) {
+    var gettpl = $('#flightLook').html();
+    var company_order_number = $("#company_order_number_hidden").val();
+
+    $.ajax({
+        type: "POST",
+        url: '/branchcompany/getCustomerInfoAjax',
+        data: {
+            cc:"flight",
+            company_order_number:company_order_number
+        },
+        success: function(data){
+
+
+            var flightList = eval('('+data+')');
+
+            laytpl(gettpl).render(flightList, function(html){
+                layer.tips(html, obj, {
+                    tips: [4, '#ccc'],
+                    padding:'0',
+                    tipsMore: false,
+                    area: ['450px', 'auto'],
+                    closeBtn :1,
+                    time:0
+                });
+            });
+
+        }
+    });
+}
+
+/*游客信息--》添加游客form--》航班信息*/
+var gettpl = $('#flightBox').html();
+var num='0';
+laytpl(gettpl).render(num, function(html){
+    $('#flightList').html(html);
+});
+laydate.render({
+    elem: '#FlightDate0'
+});
+form.render();
+
+/*修改游客信息--》添加游客form--》航班信息*/
+var gettpl_edit = $('#flightBoxEdit').html();
+var num='0';
+laytpl(gettpl_edit).render(num, function(html){
+    $('#flightList_edit').html(html);
+});
+laydate.render({
+    elem: '#FlightDateEdit0'
+});
+form.render();
+
+function flightAdd() {//点击添加航班
+    num=parseInt(num)+1;
+    var newNum=num.toString();
+    laytpl(gettpl).render(newNum, function(html){
+        $('#flightList').append(html);
+    });
+    $(".layui-input-date").each(function(){
+        laydate.render({
+            elem: this
+        });
+    });
+    form.render();
+}
+
+function flightEdit() {//点击添加航班
+    num=parseInt(num)+1;
+    var newNum=num.toString();
+    laytpl(gettpl).render(newNum, function(html){
+        $('#flightList_edit').append(html);
+    });
+    $(".layui-input-date").each(function(){
+        laydate.render({
+            elem: this
+        });
+    });
+    form.render();
+}
+
+function flightListClose(obj) {
+    $(obj).parent(".customer-flight-list").slideUp(200);
+}
+
+function flightListCloseEdit(obj) {
+    $(obj).parent().remove();
+}
+
+//编辑游客信息
+function order_customer_edit(obj){
+
+    $(".lay-visitor-message").hide();
+    $(".lay-visitor-add").hide();
+    $(".visitor-message-other").hide();
+    $(".lay-visitor-holderNumber").hide();
+
+    $("#lay-visitor-edit").show();
+    $("#visitor-message-other").show();
+
+    var customer_id = $(obj).attr("company_order_customer");
+    var company_order_number = $("#company_order_number_hidden").val();
+
+    $.ajax({
+        type: "POST",
+        url: '/branchcompany/getCustomerOnlyAjax',
+        data: {
+            company_order_number:company_order_number,
+            customer_id:customer_id
+        },
+        success: function(data){
+           
+            var html='';
+
+            $("#customer_id_hidden").val(data.customer_id);
+            $("#customer_last_name").val(data.customer_last_name);
+            $("#customer_first_name").val(data.customer_first_name);
+            $("#card_type").val(data.card_type);
+            $("#english_last_name").val(data.english_last_name);
+            $("#english_first_name").val(data.english_first_name);
+            $("#gender").val(data.gender);
+            $("#card_number").val(data.card_number);
+            $("#term_of_validity").val(data.term_of_validity);
+            $("#country_id").val(data.country_id);
+            $("#phone").val(data.phone);
+            $("#email").val(data.email);
+            $("#customer_type").val(data.customer_type);
+            $("#language_id").val(data.language_id);
+            return false;
+
+            for(var i=0;i<data.flight_info.length;i++){
+                var kk = i
+                kk = kk.toString();
+                $("#flight_node_div div,i").remove();
+                // $("input[name='messageFlight"+i+"']").val(data.flight_info[i].flight_code);
+
+                var time = getMyDate(data.flight_info[i].flight_time);
+
+                html+='<div>'+
+                        '<input type="hidden" id="company_order_customer_id_hidden" value="'+company_order_customer_id+'">'+
+                            '<div class="layui-col-md4">'+
+                                '<div class="layui-form-item">'+
+                                    '<label class="layui-form-label">航班</label>'+
+                                    '<div class="layui-input-block">'+
+                                        '<input type="text" name="messageFlight'+i+'" placeholder="请输入" autocomplete="off" class="layui-input input-flight-node" value="'+data.flight_info[i].flight_code+'">'+
+                                    '</div>'+
+                                '</div>'+
+                            '</div>'+
+                            '<div class="layui-col-md4">'+
+                                '<div class="layui-form-item">'+
+                                    '<label class="layui-form-label">航班时间</label>'+
+                                    '<div class="layui-input-block">'+
+                                        '<input type="text" name="orderFlightDate'+i+'" placeholder="请输入" autocomplete="off" class="layui-input layui-input-date input-flight-time" value="'+time+'">'+
+                                    '</div>'+
+                                '</div>'+
+                            '</div>'+
+                            '<div class="layui-col-md4">'+
+                                '<div class="layui-form-item">'+
+                                    '<label class="layui-form-label"></label>'+
+                                    '<div class="layui-input-block">'+
+                                        '<input type="radio" name="messageAirport1'+kk+'" value="1" title="接机" class="input-flight-type">'+
+                                        '<input type="radio" name="messageAirport1'+kk+'" value="2" title="送机" class="input-flight-type">'+
+                                        '<input type="radio" name="messageAirport1'+kk+'" value="3" title="中转" class="input-flight-type">'+
+                                    '</div>'+
+                                '</div>'+
+                            '</div>'+
+                          '</div>'+
+                        '<div class="layui-row">'+
+                            '<div class="layui-col-md4">'+
+                                '<div class="layui-form-item">'+
+                                    '<label class="layui-form-label">出发地</label>'+
+                                    '<div class="layui-input-block">'+
+                                        '<input type="text" name="orderStartPlace'+i+'" placeholder="请输入" autocomplete="off" class="layui-input input-flight-startplace" value="'+data.flight_info[i].start_place+'">'+
+                                    '</div>'+
+                                '</div>'+
+                            '</div>'+
+                            '<div class="layui-col-md4">'+
+                                '<div class="layui-form-item">'+
+                                    '<label class="layui-form-label">目的地</label>'+
+                                    '<div class="layui-input-block">'+
+                                        '<input type="text" name="orderEndPlace'+i+'" placeholder="请输入" autocomplete="off" class="layui-input input-flight-endplace" value="'+data.flight_info[i].end_place+'">'+
+                                    '</div>'+
+                                '</div>'+
+                            '</div>'+
+                        '</div>'+
+                        '<i class="layui-icon layui-icon-close flight-list-close" style="position:relative;right:-99%;top:-100px;" onclick="flightListCloseEdit(this)"></i>'+
+                    '</div>';
+
+                $("#flight_node_div").append(html);
+            }
+
+            for(var i=0;i<data.flight_info.length;i++){
+                $("input:radio[name='messageAirport1"+i+"'][value='"+data.flight_info[i].flight_type+"']").attr("checked",'checked');
+            }
+
+            $("#room_code_edit").val(data.accommodation_info[0].room_code);
+            $("#room_type_edit").val(data.accommodation_info[0].room_type);
+            $("#check_in_edit").val(data.accommodation_info[0].check_in);
+            $("#check_on_edit").val(data.accommodation_info[0].check_on);
+
+            form.render('select');
+            form.render('radio');
+
+        }
+    });
+}
+
+//编辑游客-基础信息
+function order_customer_edit_ajax(){
+    //去除表单验证过滤
+    removeClass_zw();
+    removeClass();
+    removeClass_edit_zw();
+    removeClass_edit();
+
+    var treeCol=new Array();
+
+    for(var i=1;i<($(".input-flight-node").length);i++){
+        treeCol[i]=new Array();
+
+        treeCol[i].push($(".input-flight-node:eq("+i+")").val());
+        treeCol[i].push($(".input-flight-time:eq("+i+")").val());
+        treeCol[i].push($(".input-flight-type:eq("+i+")").val());
+        treeCol[i].push($(".input-flight-startplace:eq("+i+")").val());
+        treeCol[i].push($(".input-flight-endplace:eq("+i+")").val());
+
+    }
+
+    //航班数组
+    var customer_flight = treeCol;
+
+    var company_order_customer_id = parseInt($("#company_order_customer_id_hidden").val());
+    var customer_id = parseInt($("#customer_id_hidden").val());
+    var company_order_number = $("#company_order_number_hidden").val();
+    var customer_first_name = $("#customer_first_name_edit").val();
+    var customer_last_name = $("#customer_last_name_edit").val();
+    var english_last_name = $("#english_last_name_edit").val();
+    var english_first_name = $("#english_first_name_edit").val();
+    var card_type = $("#card_type_edit").val();
+    var gender = $("#gender_edit").val();
+    var card_number = $("#card_number_edit").val();
+    var term_of_validity = $("#term_of_validity_edit").val();
+    var country_id = $("#country_id_edit").val();
+    var phone = $("#phone_edit").val();
+    var email = $("#email_edit").val();
+    var customer_type = $("#customer_type_edit").val();
+    var language_id = $("#language_id_edit").val();
+
+    var room_code = $("#room_code_edit").val();
+    var room_type = $("#room_type_edit").val();
+    var check_in = $("#check_in_edit").val();
+    var check_on = $("#check_on_edit").val();
+
+    // return false;
+
+    $.ajax({
+        type: "POST",
+        url: '/product/editCompanyOrderCustomerBaseAjax',
+        data: {
+            company_order_customer_id:company_order_customer_id,
+            customer_id:customer_id,
+            company_order_number:company_order_number,
+            customer_first_name:customer_first_name,
+            customer_last_name:customer_last_name,
+            english_last_name:english_last_name,
+            english_first_name:english_first_name,
+            card_type:card_type,
+            gender:gender,
+            card_number:card_number,
+            term_of_validity:term_of_validity,
+            country_id:country_id,
+            phone:phone,
+            email:email,
+            customer_type:customer_type,
+            language_id:language_id,
+            room_code:room_code,
+            room_type:room_type,
+            check_in:check_in,
+            check_on:check_on,
+            customer_flight:JSON.stringify(customer_flight)
+        },
+        success: function(data){
+        
+            if(data.code!=200){
+                layer.msg(data.msg);
+                return false;
+            }else if(data.code==200) {
+                layer.msg('操作成功',{time:1,end : function(layero, index){
+                        location.href='/product/showCompanyOrderCustomerEdit?company_order_number='+company_order_number;
+
+                    }
+                });
+            }
+        }
+    });
+
+    return false;
+}

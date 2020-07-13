@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<head>
+    {include file='public/head' /}
+    <title>language-manage-edit</title>
+
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+
+    <div class="layui-header">
+        {include file='public/header' /}
+    </div>
+
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll">
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            {include file='public/left_menu_web' /}
+        </div>
+    </div>
+
+    <div class="layui-body">
+
+        <!-- 内容主体区域 -->
+        <div style="padding: 15px;">
+            <div class='layui-form-item'>
+		   		<span class="layui-breadcrumb" lay-separator="-">
+					<a>{$language_tag.index_public_homepage}</a>
+                    <a>管网管理</a>
+                    <a>文章分类</a>
+                    <a><cite>修改文章分类</cite></a>
+				</span>
+            </div>
+            <br/>
+            <br/>
+            <div class="layui-row">
+                <form class="layui-form layui-col-md4" onSubmit="return article_edit()">
+                    <div class="layui-form-item">
+                        <label class="layui-form-label input-required">分类名称：</label>
+                        <div class="layui-input-block">
+                            <input id="article_type_name" name="article_type_name" required="" lay-verify="required" placeholder="" autocomplete="off" class="layui-input" type="text" value="{$type_result.article_type_name}">
+                        </div>
+                    </div>
+                    <br/>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label input-required">上级分类：</label>
+                        <div class="layui-input-block">
+                            <select name="pid" id="article_type_pid" lay-filter="required" lay-search disabled>
+                                <option value="0">{$language_tag.index_product_showRouteTypeEdit_first_level}</option>
+                                {foreach $result as $vl}
+                                <option value="{$vl.ota_article_type_id}" {if condition="$vl.ota_article_type_id eq $type_result.pid"}selected='selected'{/if}>{$vl.article_type_name}</option>
+                                {/foreach}
+                            </select>
+                        </div>
+                    </div>
+                    <br/>
+
+                    <div class="layui-form-item">
+                        <label class="layui-form-label input-required">{$language_tag.index_public_company}:</label>
+                        <div class="layui-input-block">
+                            <select {$Think.session.user.company_id!=1?'disabled':''} name="choose_company_id" id="choose_company_id" lay-verify="required" >
+                                <option value="0">{$language_tag.index_source_showSupplier_choose_company}</option>
+                                {foreach name='company_result'  item='vo'}
+                                <option value="{$vo.company_id}" {if condition="$vo.company_id eq $type_result.company_id"}selected='selected'{/if}>{$MultilingualAll['company-company_name-'.$vo.company_id.'-'.$Think.session.user.language_id][0]['translate']|default=$vo.company_name}</option>
+                                {/foreach}
+                            </select>
+                        </div>
+                    </div>
+                    <br/>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">{$language_tag.index_public_status}：</label>
+                        <div class="layui-input-block">
+                            <select name="status" id="article_type_status" lay-filter="required" >
+                                <option value="1">{$language_tag.index_public_show}</option>
+                                <option value="0" {if condition="$type_result.status eq 0"} selected {/if}>{$language_tag.index_public_disabled}</option>
+                            </select>
+                        </div>
+                    </div>
+                    <input type="hidden" id="ota_article_type_id" value="{$type_result.ota_article_type_id}" >
+                    <br/>
+                    <div class="layui-form-item">
+                        <div class="layui-input-block">
+                            <button class="layui-btn nav-submit" lay-submit="" lay-filter="formDemo" id="">{$language_tag.index_public_submit}</button>
+                            <a href="#" onClick="javascript :history.back(-1);"><button type="button" class="layui-btn layui-btn-primary">{$language_tag.index_public_back}</button></a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="layui-footer">
+        <!-- 底部固定区域 -->
+        © layui.com - 底部固定区域
+    </div>
+</div>
+{include file='public/foot_js' /}
+<script>
+    function article_edit(){
+
+        var article_type_name = $("#article_type_name").val();
+        var pid = $("#article_type_pid").val();
+        var status = $("#article_type_status").val();
+        var company_id = $("#choose_company_id").val();
+        var ota_article_type_id = $("#ota_article_type_id").val();
+
+        $.ajax({
+            type: "POST",
+            url: '/ota_article/editArticleTypeAjax',
+            data: {
+                article_type_name:article_type_name,
+                pid:pid,
+                status:status,
+                choose_company_id:company_id,
+                ota_article_type_id:ota_article_type_id
+            },
+            success: function(data){
+                //console.log(data);
+                if(data.code!=200){
+                    layer.msg(data.msg);
+                    return false;
+                }else if(data.code==200) {
+                    layer.msg('操作成功',{time:1,end : function(layero, index){
+                            //location.href="/ota_article/showArticleTypeManage?pid=0&status=1";
+                            layer.load(2);
+                            history.back(-1);
+                        }
+                    });
+                }
+            },
+            error:function(XMLHttpRequest, textStatus, errorThrown){
+                layer.msg('验证失败')
+            }
+        });
+        return false;
+
+    }
+</script>
+</body>
+</html>

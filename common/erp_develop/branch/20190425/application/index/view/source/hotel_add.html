@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html>
+<head>
+	{include file='public/head' /}
+	<title>dining-manage-add</title>
+
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+
+	<div class="layui-header">
+		{include file='public/header' /}
+	</div>
+
+	<div class="layui-side layui-bg-black">
+		<div class="layui-side-scroll">
+			<!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+			{include file='public/left_menu' /}
+		</div>
+	</div>
+
+	<div class="layui-body">
+
+		<!-- 内容主体区域 -->
+		<div style="padding: 15px;">
+			<div class='layui-form-item'>
+		   		<span class="layui-breadcrumb" lay-separator="-">
+					<a>{$language_tag.index_public_homepage}</a>
+					<a>{$language_tag.index_source_showHotelSource_source_administrate}</a>
+					<a>{$language_tag.index_source_showHotelManage_source_administrate}</a>
+					<a>{$language_tag.index_source_showHotelSource_hotel_source}</a>
+					<a><cite>{$language_tag.index_source_showHotelSource_add_hotel}</cite></a>
+				</span>
+			</div>
+			<br/>
+			<span style="margin-left: 510px"><a href='/source/showSupplierAdd'><button
+					class="layui-btn nav-add layui-btn-sm">{$language_tag.index_source_showSupplierManage_add_supplier}</button></a></span>
+			<br/>
+			<form class="layui-form" onSubmit="return hotelAdd()">
+				<div class="layui-row layui-col-space10">
+					<div class="layui-col-md4">
+						<div class="layui-form-item">
+							<label class="layui-form-label input-required">{$language_tag.index_source_showHotelSource_supplier}:</label>
+							<div class="layui-input-block">
+								{if condition="$_GET['id'] gt 0"}
+									<select  name="supplier_id" id='hotel_supplier_id' lay-verify="required" lay-search disabled>
+								{else/}
+									<select  name="supplier_id" id='hotel_supplier_id' lay-verify="required" lay-search>
+								{/if}
+									<option>{$language_tag.index_public_select}</option>
+									{foreach name='data' item='vo'}
+									<option value="{$vo.supplier_id}" {$vo.supplier_id==$_GET['id']?"selected":''}>{$MultilingualAll['supplier-supplier_name-'.$vo.supplier_id.'-'.$Think.session.user.language_id][0]['translate']|default=$vo.supplier_name}</option>
+									{/foreach}
+								</select>
+							</div>
+						</div>
+
+					</div>
+					<!--<div class="layui-col-md4">-->
+						<!--<div class="layui-form-item">-->
+							<!--<label class="layui-form-label input-required">所属代理商:</label>-->
+							<!--<div class="layui-input-block">-->
+								<!--<select name="agent_id" id="hotel_agent_id" lay-search >-->
+									<!--<option></option>-->
+									<!--{foreach name='data_agent' item='vo'}-->
+									<!--<option value="{$vo.supplier_id}" >{$vo.supplier_name}</option>-->
+									<!--{/foreach}-->
+								<!--</select>-->
+							<!--</div>-->
+						<!--</div>-->
+					<!--</div>-->
+					<div class="layui-col-md4">
+						<div class="layui-form-item">
+							<label class="layui-form-label">{$language_tag.index_public_status}:</label>
+							<div class="layui-input-block">
+								<select name="status" id='hotel_status' lay-verify="required">
+									<option value="1" selected>{$language_tag.index_public_show}</option>
+									<option value="2">{$language_tag.index_public_disabled}</option>
+								</select>
+							</div>
+						</div>
+					</div>
+				</div>
+
+
+
+				<div class="layui-row layui-col-space10">
+					<div class="layui-col-md4">
+						<div class="layui-form-item">
+							<label class="layui-form-label">{$language_tag.index_source_showHotelSource_guest_number}:</label>
+							<div class="layui-input-block">
+								<input name="guest_number" id="hotel_guest_number" type="text"   autocomplete="off" placeholder="{$language_tag.index_source_showHotelSource_input_guest_number}" class="layui-input" >
+							</div>
+						</div>
+					</div>
+					<div class="layui-col-md4">
+						<div class="layui-form-item">
+							<label class="layui-form-label input-required">{$language_tag.index_source_showHotelSource_room_name}:</label>
+							<div class="layui-input-block">
+									<input name="room_name" id="hotel_room_name" lay-verify="required" placeholder="{$language_tag.index_source_showHotelSource_input_room_name}" autocomplete="off" class="layui-input" type="text">
+							</div>
+						</div>
+					</div>
+					<div class="layui-col-md4">
+						<div class="layui-form-item">
+							<label class="layui-form-label input-required">{$language_tag.index_source_showHotelSource_room_type}:</label>
+							<div class="layui-input-block">
+								<select name='hotel_room_type' id='hotel_room_type'>
+									<option value='1'>{$language_tag.index_source_showHotelSource_doubble_room_name}</option>
+									<option value='2'>{$language_tag.index_source_showHotelSource_big_room_name}</option>
+									<option value='3'>{$language_tag.index_source_showHotelSource_single_room_name}</option>
+									<option value='4'>{$language_tag.index_source_showHotelSource_extra}</option>
+								</select>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="layui-row layui-col-space10">
+					<div class="layui-col-md4">
+						<div class="layui-form-item">
+							<label class="layui-form-label">{$language_tag.index_source_showHotelSource_room_area}:</label>
+							<div class="layui-input-block">
+								<input name="room_area" id="hotel_room_area"  placeholder="{$language_tag.index_source_showHotelSource_input_room_area}" autocomplete="off" class="layui-input" type="text">
+							</div>
+						</div>
+					</div>
+					<div class="layui-col-md4">
+						<div class="layui-form-item">
+							<label class="layui-form-label">{$language_tag.index_source_showHotelSource_is_add_bed}:</label>
+							<div class="layui-input-block">
+								<select name="is_add_bed" id='hotel_is_add_bed' >
+									<option value="0">{$language_tag.index_public_select}</option>
+									<option value="1" >{$language_tag.index_source_showHotelSource_allow}</option>
+									<option value="2">{$language_tag.index_source_showHotelSource_not_allow}</option>
+								</select>
+							</div>
+						</div>
+					</div>
+					<div class="layui-col-md4">
+						<div class="layui-form-item">
+							<div class="layui-form-item">
+								<label class="layui-form-label">{$language_tag.index_source_showHotelSource_hotel_floor}:</label>
+								<div class="layui-input-block">
+									<input name="floor" id="hotel_floor"  placeholder="{$language_tag.index_source_showHotelSource_input_hotel_floor}" autocomplete="off" class="layui-input" type="text">
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="layui-row layui-col-space10">
+					<div class="layui-col-md4">
+						<div class="layui-form-item">
+							<div class="layui-form-item">
+								<label class="layui-form-label">{$language_tag.index_source_showHotelSource_level}:</label>
+								<div class="layui-input-block">
+									<input name="level_name" id="hotel_level_name"  placeholder="{$language_tag.index_source_showHotelSource_input_level}" autocomplete="off" class="layui-input" type="text">
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="layui-col-md4">
+						<div class="layui-form-item">
+							<div class="layui-form-item">
+								<label class="layui-form-label">{$language_tag.index_source_showHotelSource_free_wifi}:</label>
+								<div class="layui-input-block">
+									<select name="free_wifi" id='hotel_free_wifi'>
+										<option value="0">{$language_tag.index_public_select}</option>
+										<option value="1" >{$language_tag.index_source_showHotelSource_free_wifi_yes}</option>
+										<option value="2">{$language_tag.index_source_showHotelSource_free_wifi_no}</option>
+									</select>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="layui-col-md4">
+						<div class="layui-form-item">
+							<label class="layui-form-label">{$language_tag.index_source_showHotelSource_smoke_treatment}:</label>
+							<div class="layui-input-block">
+								<select name="smoke_treatment" id='hotel_smoke_treatment' >
+									<option value="0">{$language_tag.index_public_select}</option>
+									<option value="1" >{$language_tag.index_source_showHotelSource_allow}</option>
+									<option value="2">{$language_tag.index_source_showHotelSource_not_allow}</option>
+								</select>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="layui-row layui-col-space10">
+					<div class="layui-col-md4">
+						<div class="layui-form-item">
+							<label class="layui-form-label input-required">{$language_tag.index_public_company}:</label>
+							<div class="layui-input-block">
+								<select {$Think.session.user.company_id!=1?'disabled':''} name="choose_company_id" id="choose_company_id" lay-verify="required" >
+									<option value="0">{$language_tag.index_source_showHotelSource_own_company}</option>
+									{foreach name='company_result'  item='vo'}
+									<option value="{$vo.company_id}" {if condition="$vo.company_id eq  $Think.session.user.company_id"} selected='selected'{/if}>{$MultilingualAll['company-company_name-'.$vo.company_id.'-'.$Think.session.user.language_id][0]['translate']|default=$vo.company_name}</option>
+									{/foreach}
+								</select>
+							</div>
+						</div>
+					</div>
+				</div>
+				<br/>
+				<hr/>
+				<br/>
+				<div class="layui-inline">
+					<label class="layui-form-label input-required">{$language_tag.index_source_showHotelSource_currency}</label>
+					<div class="layui-input-inline ">
+						<select name="payment_currency_type" id="payment_currency_type"  class=layui-input-inline" required lay-verify="required" >
+							<option value="">{$language_tag.index_public_select}</option>
+							{foreach name='currency_data_result '  item='vo'}
+							<option  value="{$vo.currency_id}">{$MultilingualAll['currency-currency_name-'.$vo.currency_id.'-'.$Think.session.user.language_id][0]['translate']|default=$vo.currency_name}</option>
+							{/foreach}
+						</select>
+					</div>
+				</div>
+				<div class="layui-row layui-col-space10">
+					<div class="layui-col-md4">
+						<div class="layui-form-item">
+							<label class="layui-form-label input-required">{$language_tag.index_public_price}:</label>
+							<div class="layui-input-block">
+								<table class="layui-table">
+									<colgroup>
+										<col width="20%">
+										<col width="20%">
+										<col width="25%">
+										<!--<col width="20%">-->
+									</colgroup>
+									<thead>
+									<tr>
+										<th>{$language_tag.index_public_type_price}</th>
+										<th>{$language_tag.index_public_costprice}</th>
+										<th>{$language_tag.index_public_settlementprice}</th>
+										<!--<th>建议客户售价</th>-->
+									</tr>
+									</thead>
+									<tbody>
+									<tr>
+										<td>{$language_tag.index_public_count_price}:</td>
+										<td>
+											<input type="text" name="normal_price" id="hotel_normal_price" class="layui-input" required lay-verify="required|number">
+										</td>
+										<td>
+											<input type="text" name="normal_settlement_price" id="hotel_normal_settlement_price" class="layui-input" required lay-verify="required|number">
+										</td>
+										<!--<td>-->
+										<!--<input type="text" name="normal_retail_price" id="hotel_normal_retail_price" lay-verify="required" autocomplete="off" class="layui-input">-->
+										<!--</td>-->
+									</tr>
+									<!--<tr>-->
+									<!--<td>成人:</td>-->
+									<!--<td>-->
+									<!--<input type="text" name="adult_price" id="hotel_adult_price" lay-verify="" autocomplete="off" class="layui-input">-->
+									<!--</td>-->
+									<!--<td>-->
+									<!--<input type="text" name="adult_settlement_price" id="hotel_adult_settlement_price" lay-verify="" autocomplete="off" class="layui-input">-->
+									<!--</td>-->
+									<!--<td>-->
+									<!--<input type="text" name="adult_retail_price" id="hotel_adult_retail_price" lay-verify="" autocomplete="off" class="layui-input">-->
+									<!--</td>-->
+									<!--</tr>-->
+									<!--<tr>-->
+									<!--<td>占床儿童:</td>-->
+									<!--<td>-->
+									<!--<input type="text" name="child_bed_price" id="hotel_child_bed_price" lay-verify="" autocomplete="off" class="layui-input">-->
+									<!--</td>-->
+									<!--<td>-->
+									<!--<input type="text" name="child_bed_settlement_price" id="hotel_child_bed_settlement_price" lay-verify="" autocomplete="off" class="layui-input">-->
+									<!--</td>-->
+									<!--<td>-->
+									<!--<input type="text" name="child_bed_retail_price" id="hotel_child_bed_retail_price" lay-verify="" autocomplete="off" class="layui-input">-->
+									<!--</td>-->
+									<!--</tr>-->
+									<!--<tr>-->
+									<!--<td>老人:</td>-->
+									<!--<td>-->
+									<!--<input type="text" name="old_price" id="hotel_old_price" lay-verify="" autocomplete="off" class="layui-input">-->
+									<!--</td>-->
+									<!--<td>-->
+									<!--<input type="text" name="old_settlement_price" id="hotel_old_settlement_price" lay-verify="" autocomplete="off" class="layui-input">-->
+									<!--</td>-->
+									<!--<td>-->
+									<!--<input type="text" name="old_retail_price" id="hotel_old_retail_price" lay-verify="" autocomplete="off" class="layui-input">-->
+									<!--</td>-->
+									<!--</tr>-->
+									<!--<tr>-->
+									<!--<td>不占床儿童:</td>-->
+									<!--<td>-->
+									<!--<input type="text" name="child_price" id="hotel_child_price" lay-verify="" autocomplete="off" class="layui-input">-->
+									<!--</td>-->
+									<!--<td>-->
+									<!--<input type="text" name="child_settlement_price" id="hotel_child_settlement_price" lay-verify="" autocomplete="off" class="layui-input">-->
+									<!--</td>-->
+									<!--<td>-->
+									<!--<input type="text" name="child_retail_price" id="hotel_child_retail_price" lay-verify="" autocomplete="off" class="layui-input">-->
+									<!--</td>-->
+									<!--</tr>-->
+									<!--<tr>-->
+									<!--<td>单房差:</td>-->
+									<!--<td>-->
+									<!--<input type="text" name="single_price" id="hotel_single_price" lay-verify="" autocomplete="off" class="layui-input">-->
+									<!--</td>-->
+									<!--<td>-->
+									<!--<input type="text" name="single_settlement_price" id="hotel_single_settlement_price" lay-verify="" autocomplete="off" class="layui-input">-->
+									<!--</td>-->
+									<!--<td>-->
+									<!--<input type="text" name="single_retail_price" id="hotel_single_retail_price" lay-verify="" autocomplete="off" class="layui-input">-->
+									<!--</td>-->
+									<!--</tr>-->
+									</tbody>
+								</table>
+							</div>
+						</div>
+
+					</div>
+				</div>
+				<br/>
+				
+				<!--<div class="layui-form-item layui-form-text">-->
+					<!--<label class="layui-form-label">说明:</label>-->
+					<!--<div class="layui-input-block">-->
+						<!--<textarea id="hotel_remark" name="remark" placeholder="请输入内容" class="layui-textarea"></textarea>-->
+					<!--</div>-->
+				<!--</div>-->
+				<div class="layui-form-item">
+					<div class="layui-input-block all-button-center">
+						<button class="layui-btn nav-submit" lay-submit="" lay-filter="formDemo" id="hotel_add_button">{$language_tag.index_public_submit}</button>
+						<a href='javascript:history.back(-1)'><button type="button" class="layui-btn layui-btn-primary">{$language_tag.index_public_back}</button></a>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+
+	<div class="layui-footer">
+		<!-- 底部固定区域 -->
+		© layui.com - 底部固定区域
+	</div>
+</div>
+{include file='public/foot_js' /}
+<script src='__STATIC__/javascript/system/source.js'>
+</script>
+
+</body>
+</html>

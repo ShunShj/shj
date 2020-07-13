@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {include file='public/head' /}
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link href="__STATIC__/css/product.css" rel="stylesheet">
+    <style rel="stylesheet">
+        .container{width: 820px;margin: 0 auto;}
+        .wide_h{margin: 15px 0;}
+        .wide_h_40{margin: 40px 0;}
+        .header ul{margin-left: 30px;}
+        .customer table,.transfer table{border:2px #036ec3 solid;}
+        .b_bottom{border-bottom:2px #036ec3 solid;}
+        .customer  table tr:first-child,.transfer table tr:first-child{background-color: #036ec3;color: #fff;}
+        .hotel table tr:first-child,.transfer table tr:first-child{background-color: #036ec3;color: #fff;}
+        .transfer_d{background-color: #036ec3;color: #fff;}
+        table tr{text-align: center;}
+        .pick .b_k{width: 740px;height: 100px;border:2px #036ec3 solid;}
+        .b_k ul li{letter-spacing: 2px;}
+        .hotel{padding-bottom:10px;clear:both;}
+        .hotel .hotle_h ul{margin-top:10px;}
+        .hotel .hotle_h ul li{display: inline-block;margin-right: 5px;width:235px;height: 45px;line-height: 45px;background-color: #036ec3;text-align: center;margin-bottom:20px;color:#fff;font-size:16px;}
+        .trip ul li{color: #f70c49;}
+        .trip ul li ul li{font-size: 14px;color: #221418;margin-left: 10px;}
+        .box{width: 740px;border:2px #036ec3 solid;padding-bottom: 10px;}
+        .box .bg{width: 740px;height: 45px;line-height:45px;background-color: #036ec3;color:#fff;}
+        .box ul li{margin-left: 25px;width:710px}
+        /*.box ul li:first-child{font-size: 24px;font-weight: bold;margin-bottom: 35px;}*/
+        .notice_page{width:710px;margin: 0 auto;text-align: justify;padding-bottom: 20px;}
+        .notice .notice_page ul li ul li{list-style-type:circle;margin-left:20px;}
+        .asia{font-weight:bolder;}
+        table td{border:2px solid #aaa;line-height: 38px;}
+    </style>
+</head>
+<body id="container">
+<div class="layui-layout layui-layout-admin">
+<div id="pdf" class="container" style="padding-bottom: 100px">
+    <div class="header" style="text-align: right;"><img src="__STATIC__/image/product/1234.png"></div>
+
+    <div id="company_order_name" style="text-align: center;color:#0081c9;font-size: 20px;font-weight: bold  "></div>
+
+    <div>
+        <p style="font-size: 16px;font-weight: bold;line-height: 22px;>Dear Valued Customer,</p>
+        <p style="font-size: 14px;line-height: 20px">Thank you for booking with Nexus Holidays Inc. We are excited to have your join our tour. We have prepared a trip confirmation for you. Please check the information carefully. If you have any questions, please feel free to contact me directly. </p>
+    </div>
+
+    <div style="font-weight:bold;margin-top:20px;font-size:13px;background-color:#0081c9;border-radio:6px;border-radius: 6px; color: #fff; padding:0 15px; line-height: 20px;width: 207px ">
+        TOUR CODE/ BOOKING ID
+    </div>
+    <div style="width: 740px;margin-top: 10px;line-height: 28px">
+        <div style="width: 250px;font-size: 14px;float: left;background: #fff;font-weight: bold">Tour Code:</div>
+        <div style="font-size: 12px;float: left;"><span style="background: #efefef;padding:4px 20px" id="tour_code"></span></div>
+    </div>
+    <div style="width: 740px;clear:both;line-height: 28px">
+        <div style="width: 250px;font-size: 14px;float: left;background: #fff;font-weight: bold">Booking ID:</div>
+        <div style="font-size: 12px;float: left;"><span style="background: #efefef;padding:4px 20px" id="company_order_number">/</span></div>
+    </div>
+
+    <div style="font-weight:bold;clear:both;margin-top:45px;font-size:13px;background-color:#0081c9;border-radio:6px;border-radius: 6px; color: #fff; padding:0 15px; line-height: 20px;width: 348px">
+        TOUR GUIDE/ LOCAL CONTACT INFORMATION
+    </div>
+    <div style="width: 740px;margin-top: 10px;line-height: 28px">
+        <div style="width: 250px;font-size: 14px;float: left;background: #fff;font-weight: bold">Tour Guide:</div>
+        <div style="font-size: 12px;float: left;"><span style="background: #efefef;padding:4px 20px" id="begin_time"></span></div>
+    </div>
+    <div style="width: 740px;margin-top: 10px;line-height: 28px;clear:both;">
+        <div style="width: 250px;font-size: 14px;float: left;background: #fff;font-weight: bold">Local Contact Information:</div>
+        <div style="font-size: 12px;float: left;"><span style="background: #efefef;padding:4px 20px" id="begin_city"></span></div>
+    </div>
+    <div style="width: 740px;margin-top: 10px;line-height: 28px;clear:both;">
+        <div style="width: 250px;font-size: 14px;float: left;background: #fff;font-weight: bold" id=""></div>
+        <div style="font-size: 12px;float: left;">
+            <img src="__STATIC__/image/product/jiejipai.png" width="300">
+        </div>
+    </div>
+
+    <div style="font-weight:bold;clear:both;margin-top:45px;font-size:13px;background-color:#0081c9;border-radio:6px;border-radius: 6px; color: #fff; padding:0 15px; line-height: 20px;width: 226px">
+        FINAL HOTEL INFORMATION
+    </div>
+    <div style="font-size: 14px;line-height: 20px;margin-top: 10px;color: red ">
+        Note: Due to the limited room availability, for in case that we may use other similar standard hotels for substitution
+    </div>
+    <div style="margin-top:10px ">
+        <table border="1" cellspacing="0" cellpadding="0" style="border-color: #fff;width: 100%" id="team_hotel_jounery">
+            <thead>
+                <tr style="color: #fff">
+                    <td style="border:2px solid #aaa;width: 220px;background: #0081c9;border: 1px solid #0081c9">hotel or similar</td>
+                    <!--<td style="border:2px solid #aaa;width: 220px;background: #ff0000;border: 1px solid #ff0000">Telephone</td>
+                    <td style="border:2px solid #aaa;width: 296px;background: #8e8a88;border: 1px solid #8e8a88">Address</td>-->
+                </tr>
+            </thead>
+            <tbody>
+
+            </tbody>
+        </table>
+    </div>
+
+    <div style="font-weight:bold;clear:both;margin-top:45px;font-size:13px;background-color:#0081c9;border-radio:6px;border-radius: 6px; color: #fff; padding:0 15px; line-height: 20px;width: 460px">
+        TRAVELER PERSONAL INFORMATION WITH HOTEL ROOM TYPE
+    </div>
+    <div style="font-size: 14px;line-height: 20px;margin-top: 10px;color: red ">
+        Due to the limited room availability, room type you request may not be guaranteed
+    </div>
+    <div style="margin-top: 10px">
+        <table border="1" cellspacing="0" cellpadding="0" style="border-color: #fff" id="information">
+            <thead>
+            <tr style="color: #0081c9;font-size: 14px">
+                <td style="width: 250px;">FULL NAMES</td>
+                <td style="border:2px solid #aaa;width: 180px;">PASSPORT NUMBER</td>
+                <td style="border:2px solid #aaa;width: 136px;">ROOM TYPE</td>
+                <td style="border:2px solid #aaa;width: 200px;">特殊要求</td>
+            </tr>
+            </thead>
+            <tbody>
+
+            </tbody>
+        </table>
+    </div>
+
+    <div style="font-weight:bold;clear:both;margin-top:45px;font-size:13px;background-color:#0081c9;border-radio:6px;border-radius: 6px; color: #fff; padding:0 15px; line-height: 20px;width: 260px">
+        接送机
+    </div>
+    <div style="margin-top: 10px">
+        <table border="1" cellspacing="0" cellpadding="0" style="border-color: #fff">
+            <thead>
+            <tr style="color: #0081c9;font-size: 14px">
+                <td style="border:2px solid #aaa;width: 150px;">航班</td>
+                <td style="border:2px solid #aaa;width: 120px;">日期</td>
+                <td style="border:2px solid #aaa;width: 180px;">时间</td>
+                <td style="border:2px solid #aaa;width: 200px;">出发地</td>
+                <td style="border:2px solid #aaa;width: 200px;">目的地</td>
+                <td style="border:2px solid #aaa;width: 160px;">备注</td>
+            </tr>
+            </thead>
+            <tbody id="flight">
+
+            </tbody>
+        </table>
+    </div>
+
+    <div style="font-weight:bold;clear:both;margin-top:45px;font-size:13px;background-color:#0081c9;border-radio:6px;border-radius: 6px; color: #fff; padding:0 15px; line-height: 20px;width: 260px">
+        自费项目
+    </div>
+    <div style="margin-top: 10px">
+        <table border="1" cellspacing="0" cellpadding="0" style="border-color: #fff">
+            <thead>
+            <tr style="color: #0081c9;font-size: 14px">
+                <td style="border:2px solid #aaa;width: 300px;">产品</td>
+                <td style="border:2px solid #aaa;width: 180px;">币种</td>
+                <td style="border:2px solid #aaa;width: 136px;">价格</td>
+                <td style="border:2px solid #aaa;width: 300px;">游客</td>
+            </tr>
+            </thead>
+            <tbody id="own_expense_info">
+
+            </tbody>
+        </table>
+    </div>
+
+
+    <div style="font-weight:bold;clear:both;margin-top:45px;font-size:13px;background-color:#0081c9;border-radio:6px;border-radius: 6px; color: #fff; padding:0 15px; line-height: 20px;width: 260px">
+        备注
+    </div>
+    <div style="font-size: 14px;line-height: 20px;margin-top: 10px;" id="remark">
+        Guide, transfers and admission are included in the prices for all optional programs. Payment is to be made in US.
+    </div>
+    <div style="padding-top: 5px">
+    </div>
+
+    <!--<p style="font-size: 14px;line-height: 20px;margin-top: 10px;color: #0081c9 ">Mandatory Tipping</p>-->
+    <div style="font-weight:bold;clear:both;margin-top:25px;margin-bottom:15px;font-size:13px;background-color:#0081c9;border-radio:6px;border-radius: 6px; color: #fff; padding:0 15px; line-height: 20px;width: 260px">
+        Mandatory Tipping
+    </div>
+    <hr>
+    <div style="font-size: 14px;line-height: 20px; padding: 10px 20px ">
+        Tipping is a firm and expected element in tourism industry today and China is no exception. The nominated tip amount $10/day/person - total $100 includes National Escort , local guides, drivers and bell-boys. If you have already PRE-PAID the tipping when signing up the tour, you do not need to pay the tour guide and driver again during the time when you are in China. If you wish to pay tipping during the trip in China, please pay CASH to tour guide in local currency. ( 100 USD= APPROX 665.00RMB)
+    </div>
+
+
+
+    <div style="font-weight:bold;clear:both;margin-top:45px;font-size:13px;background-color:#0081c9;border-radio:6px;border-radius: 6px; color: #fff; padding:0 15px; line-height: 20px;width: 147px">
+        TOUR ITINERARY
+    </div>
+    <div style="font-size: 14px;line-height: 20px;margin-top: 10px;color: red">
+        Note：Our experienced local guides will take into consideration the local situation &amp; traffic and adjust the sequence of sightseeing spots if necessary. Be rest assured, you will not miss out anything promised on the itinerary.
+    </div>
+    <div style="margin-top:10px " id="team_product_jounery">
+
+    </div>
+
+
+    <!--<div style="font-weight:bold;clear:both;margin-top:45px;font-size:13px;background-color:#0081c9;border-radio:6px;border-radius: 6px; color: #fff; padding:0 15px; line-height: 20px;width: 48px">
+        Remark
+    </div>
+    <div style="background: url(__STATIC__/image/product/bg12.png?11) repeat-y;background-size:100%;margin-top: 10px">
+        <p style="height: 20px">&nbsp;</p>
+        <p style="padding-left: 30px;font-size: 14px;line-height: 20px">1. Nexus Holidays reserves the right to cancel or vary a tour prior to departure or during the trip,due to insufficient numbers, severe weather condition, major events, holidays etc.</p>
+        <p style="padding-left: 30px;font-size: 14px;line-height: 20px">2. Due to the limited room availability, for in case that we may use other similar standard hotels for substitution.</p>
+        <p style="padding-left: 30px;font-size: 14px;line-height: 20px">3. When choosing one of our amazing tour packages, please understand that you are signing up for a group tour. Although you may not want to go on certain optional tours, since it is a group tour, you are required to remain with the group, This is to ensure the over safety of all members of the tour and to ensure that the tour guide can do his/her job accordingly. Please understand that failure to do so may result in the ancellation of your hotel and airline reservation.We thank you for your understanding and feel free to contact us if you have any questions.</p>
+        <p style="height: 20px">&nbsp;</p>
+    </div>-->
+
+
+    <div style="font-weight:bold;clear:both;margin-top:45px;font-size:13px;background-color:#0081c9;border-radio:6px;border-radius: 6px; color: #fff; padding:0 15px; line-height: 20px;width: 214px">
+        CUSTOMER INFORMATION
+    </div>
+
+    <div id="return_receipt">
+
+    </div>
+
+    <input type="hidden" name="number" value="{$_GET['company_order_number']}" id="number" />
+</div>
+</div>
+{include file='public/foot_js' /}
+<script type="text/javascript" src="__STATIC__/javascript/data.js"></script>
+<script type="text/javascript" src="__STATIC__/javascript/branchcompany/planTourIframe.js"></script>
+</body>
+</html>

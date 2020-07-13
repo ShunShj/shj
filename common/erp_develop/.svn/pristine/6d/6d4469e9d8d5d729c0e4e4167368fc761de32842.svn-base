@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {include file='public/head' /}
+    <title>{$language_tag.index_nav_approvalManagement}-{$language_tag.index_nav_examineAnd_approve}</title>
+    <style>
+        .aa>tbody>tr>td{
+            border: 1px solid #ddd;
+        }
+        .bb>tbody>tr>td:first-child,.cc>tbody>tr>td:first-child {
+            border-right: 1px solid #ddd;
+        }
+        .cc{
+            border-bottom:1px solid #ddd;
+            width:100%;
+        }
+        .cc:last-child{
+            border:none;
+        }
+        .cc>tbody>tr>td:first-child{
+            width:200px;
+        }
+    </style>
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+
+    <div class="layui-header">
+        {include file='public/header' /}
+    </div>
+
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll">
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            {include file='public/left_menu' /}
+        </div>
+    </div>
+
+    <div class="layui-body">
+
+        <!-- 内容主体区域 -->
+        <div style="padding: 15px;">
+            <div class='layui-form-item'>
+		   		<span class="layui-breadcrumb">
+					<a href="#">{$language_tag.index_public_homepage}</a>
+					<a href="#">{$language_tag.index_nav_approvalManagement}</a>
+                    <a href="#">{$language_tag.index_nav_examineAnd_approve}</a>
+					<a href="#"><cite>{$language_tag.index_index_pendingMyApproval}</cite></a>
+				</span>
+            </div>
+            <br/>
+            <ul class="layui-tab-title">
+                <li ><a href="/examine_and_approve/companyFinanceApproveByMe">{$language_tag.index_index_pendingMyApproval}</a></li>
+                <li><a href="/examine_and_approve/iPostCompanyFinanceApprove">{$language_tag.index_index_iStartedIt}</a></li>
+                <li class="layui-this">{$language_tag.index_index_approved}</li>
+            </ul>
+            <br>
+
+              <form class="layui-form" method="get" action="/examine_and_approve/companyFinanceApproveOver" >
+                <div class="layui-row">
+                
+                
+                    <div class="layui-col-md4">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">{$language_tag.index_examineAndApprove_financeApproveByMe_applicationTime}</label>
+                            <div class="layui-input-block">
+                                <input type="text" class='layui-input all_time_name' name="create_time" value="{$_GET['create_time']}" class="layui-input"  />
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="layui-col-md4">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">{$language_tag.index_examineAndApprove_financeApproveByMe_order_number}</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="company_order_number" value="{$_GET['company_order_number']}" class="layui-input"  />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="layui-col-md4">
+                        <div class="layui-form-item">
+                            <div class="layui-input-block">
+                                <button class="layui-btn nav-search">{$language_tag.index_public_search}</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </form>
+
+            <div class="layui-tab-content">
+                <table class="layui-table" >
+                    <thead>
+                    <tr>
+                    	<th>{$language_tag.index_examineAndApprove_financeApproveByMe_id}</th>
+                       
+                        <th>{$language_tag.index_examineAndApprove_financeApproveByMe_project}</th>
+                        <th>{$language_tag.index_public_type}</th>
+                        <th>{$language_tag.index_examineAndApprove_companyFinanceApproveByMe_applyCompany}</th>
+                        <th>{$language_tag.index_examineAndApprove_companyFinanceApproveByMe_paymentReceipt}</th>
+                    	<th>{$language_tag.index_examineAndApprove_companyFinanceApproveByMe_oppositeCompany}</th>
+                        <th>{$language_tag.index_examineAndApprove_financeApproveByMe_money}</th>
+                    
+                     
+                        <th>{$language_tag.index_examineAndApprove_companyFinanceApproveByMe_applicant}</th>
+                 
+                        <th>{$language_tag.index_examineAndApprove_companyFinanceApproveByMe_detail}</th>
+                        <th>{$language_tag.index_examineAndApprove_financeApproveByMe_isPass}</th>
+                       	<th>{$language_tag.index_examineAndApprove_iChecked_approval_opinion}</th>
+                       	
+                        <th>{$language_tag.index_examineAndApprove_iChecked_apply_time}</th>
+                       	<th>{$language_tag.index_examineAndApprove_iChecked_approval_time}</th>
+                        
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {volist name='data' id='v'}
+                    <tr>
+                    	<td>{$v.company_finance_approve_id}</td>
+          
+                        <td>
+							{$v.product_name}
+                        </td>
+                        <td>
+                        	{if condition='$v.source_type_id eq 1'}
+                        		{$language_tag.index_product_ShowPlanTour_resources_teamProduct}
+                        	{elseif condition='$v.source_type_id eq 2'}
+                        		{$language_tag.index_finance_showReceivableManage_hotel}
+                        	{elseif condition='$v.source_type_id eq 3'}
+                        		{$language_tag.index_finance_showReceivableManage_dining}
+                        	{elseif condition='$v.source_type_id eq 4'}
+                            {$language_tag.index_finance_showReceivableManage_flight}
+                        	{elseif condition='$v.source_type_id eq 5'}
+                            {$language_tag.index_source_showCruisesManage_Cruises}
+                        	{elseif condition='$v.source_type_id eq 6'}
+                            {$language_tag.index_source_showVisaManage_Visa}
+                        	{elseif condition='$v.source_type_id eq 7'}
+                            {$language_tag.index_finance_showReceivableManage_scenic_spot}
+                        	{elseif condition='$v.source_type_id eq 8'}
+                            {$language_tag.index_finance_showReceivableManage_vehicle}
+                        	{elseif condition='$v.source_type_id eq 9'}
+                            {$language_tag.index_finance_showReceivableManage_tourguide}
+                        	{elseif condition='$v.source_type_id eq 10'}
+                            {$language_tag.index_finance_showReceivableManage_singlesource}
+                        	{elseif condition='$v.source_type_id eq 11'}
+                            {$language_tag.index_finance_showReceivableManage_ownexpense}
+                        	{elseif condition='$v.source_type_id eq 12'}
+                            {$language_tag.index_nav_shoppingShop}
+                        	{elseif condition='$v.source_type_id eq 13'}
+                            {$language_tag.index_finance_showReceivableManage_other}
+                        	{/if}
+                        </td>
+                         <td>{$v.company_name}</td>
+                        <td>
+                        	{if condition="$v.type eq 1"}
+                        		{$language_tag.index_examineAndApprove_companyFinanceApproveByMe_collect}
+                        	{else/}
+                            {$language_tag.index_examineAndApprove_companyFinanceApproveByMe_pay}
+                        	{/if}
+                       
+                        
+                        </td>
+         				<td>{$v.object_company_name}</td>
+                        <td>{$v.currency_unit}:{$v.money}</td>
+                   
+                       
+                        <td>{$v.create_user_name}</td>
+
+                        <td>{$v.remark}</td>
+ 						<td>{if condition='$v.approve_result eq 1'}{$language_tag.index_examineAndApprove_financeApproveByMe_approved}{else/}{$language_tag.index_examineAndApprove_toBeApprovedByMe_no_pass}{/if}</td>
+ 						<td>{$v.approve_opinion}</td>                         						
+ 						<td>{$v.create_time|date='Y-m-d H:i:s',###}</td>
+ 						<td>{$v.approve_time|date='Y-m-d H:i:s',###}</td>
+                    </tr>
+                    {/volist}
+                    </tbody>
+
+                </table>
+                <div class="listButtom">
+                    {include file='public/page' /}
+                </div>
+            </div>
+
+
+    </div>
+
+    <div class="layui-footer">
+        <!-- 底部固定区域 -->
+        © layui.com - 底部固定区域
+    </div>
+</div>
+{include file='public/foot_js' /}
+<script src='__STATIC__/javascript/system/language.js'></script>
+
+
+    <script id="T-shengpi" type="text/html">
+        <form id="F-shengpi" >
+            <div style="margin-left: 20px;font-size: 18px;font-weight: bold">{$language_tag.index_examineAndApprove_iChecked_approval_opinion}</div>
+            <div style="padding: 10px" >
+                <textarea class="layui-textarea approval_opinion" name="approval_opinion"></textarea>
+            </div>
+            <div style="text-align: center;margin-bottom: 10px">
+                <a class="layui-btn layui-btn-primary cancel">{$language_tag.index_public_cancel}</a>&nbsp;&nbsp;&nbsp; <a class="layui-btn layui-btn-normal confirm">{$language_tag.index_public_ok}</a>
+            </div>
+        </form>
+    </script>
+
+
+<script>
+    !function() {
+        var layer = layui.layer;
+        var form = layui.form;
+        var laydate = layui.laydate;
+        var table = layui.table;
+        var laytpl = layui.laytpl;
+     
+        laydate.render({
+            elem: '.all_time_name'
+            ,lang: 'zn'
+        });
+        $('.tongguo').on('click',function(){
+        
+            company_finance_approve_id = $(this).data('info');
+            $('.approval_opinion').val('');
+            var h = $('#T-shengpi').html();
+            layer.open({
+                title: "{$language_tag.index_examineAndApprove_financeApproveByMe_approved}"
+                ,type: 1
+                ,content: h
+                ,area:['30%','250px']
+            });
+
+            //取消
+            $('.cancel').on('click',function(){
+                layer.closeAll();
+            });
+
+            //确认
+            $('.confirm').on('click',function(){
+                layer.load(2);
+        		$.ajax({
+        			  type: "POST",
+        			  url: "/finance/postCompanyFinanceApproveAjax",
+        			  data: {
+        				  company_finance_approve_id:company_finance_approve_id,
+        				  approve_result:1,
+        				  approve_opinion:$('.approval_opinion').val()
+
+        			  },
+        			  success: function(data){
+                          if(data.code==400){
+                              layer.msg('{$language_tag.index_public_verificationFailure}');
+                          }else{
+                              layer.msg('{$language_tag.index_public_success}',{time:1});
+                              layer.closeAll();
+                              location.reload();
+                          }
+        			  },
+        			  error:function(XMLHttpRequest, textStatus, errorThrown){
+        			      layer.msg('{$language_tag.index_public_verificationFailure}')
+        			  }
+        			});
+                
+                
+
+            });
+
+        });
+
+       
+
+        $('.butongguo').on('click',function(){
+        	company_finance_approve_id = $(this).data('info');
+            $('.approval_opinion').val('');
+            var h = $('#T-shengpi').html();
+            layer.open({
+                title: "{$language_tag.index_examineAndApprove_financeApproveByMe_failApproved}"
+                ,type: 1
+                ,content: h
+                ,area:['30%','250px']
+            });
+
+            //取消
+            $('.cancel').on('click',function(){
+                layer.closeAll();
+            });
+
+            //确认
+            $('.confirm').on('click',function(){
+                layer.load(2);
+        		$.ajax({
+      			  type: "POST",
+      			  url: "/finance/postCompanyFinanceApproveAjax",
+      			  data: {
+      				company_finance_approve_id:company_finance_approve_id,
+      				  approve_result:2,
+      				  approve_opinion:$('.approval_opinion').val()
+
+      			  },
+      			  success: function(data){
+                        if(data.code==400){
+                            layer.msg('{$language_tag.index_public_verificationFailure}');
+                        }else{
+                            layer.msg('{$language_tag.index_public_success}',{time:1});
+                            layer.closeAll();
+                            location.reload();
+                        }
+      			  },
+      			  error:function(XMLHttpRequest, textStatus, errorThrown){
+      			      layer.msg('{$language_tag.index_public_verificationFailure}')
+      			  }
+      			});
+            });
+
+        });
+
+	$('.mingxi').click(function(){
+        layer.open({
+            title: "游客信息"
+            ,type: 1
+            ,content: $(this).attr('title')
+            ,area:['30%','250px']
+        });
+		
+	})
+
+    }();
+
+
+
+
+
+</script>
+
+</body>
+</html>

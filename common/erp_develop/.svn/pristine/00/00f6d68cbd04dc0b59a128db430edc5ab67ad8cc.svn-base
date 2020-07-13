@@ -1,0 +1,2263 @@
+
+
+var form=layui.form;
+var laydate = layui.laydate;
+var laytpl=layui.laytpl;
+var element=layui.element;
+var upload = layui.upload;
+
+
+
+var qudao='1';//用来判断销售渠道是代理还是直客
+var isqudao='';
+var isagentA=[];
+var agentA=[];
+var city='';
+var urlNumber='';
+var distributorId='';//获取代理
+var visitorLists=[];//获取游客
+var productTeamPop=[];//团队产品弹窗
+var productTeam=[];//团队产品
+var threeList=[];//获取产品、成本、报价
+var addNumber='';//销售收款--对应应收编号
+var price=[];//税点
+var product=[];//展示产品-拼数组
+var curreys=[];//币种
+var suppli=[];//供应商
+var status='';//添加修改状态
+var locked='';//状态锁定
+var routePop=[];//产品--添加线路模板要添加的分公司产品
+var productRoute=[];//获取产品
+var addRoute=[];
+
+$(function () {
+
+    layer.load(2);
+    $.ajax({
+        type: "post",
+        url: "/system/getCountryAjax",
+        data:{
+            level:3,
+            status:1
+        },
+        dataType: "json",
+        success: function (result) {
+            if(result.code==200) {
+                var list=result.data;
+                var cityHtml='';
+                cityHtml+='<option value=""></option>';
+                console.log(city)
+                for(var i=0;i<list.length;i++){
+                    if(city==''){
+                        cityHtml+='<option value="'+list[i].country_name+'">'+list[i].country_name+'</option>';
+                    }else{
+                        if(list[i].country_name==city){
+                            cityHtml+='<option value="'+list[i].country_name+'" selected>'+list[i].country_name+'</option>';
+                        }
+                    }
+
+                }
+                $("#startCity").html(cityHtml);
+                form.render();
+                layer.closeAll('loading');
+            }else if(result.code!=200){
+                return false;
+            }
+        }
+    });
+    $("#ifemail").val($("#user_email").val());
+    $(".input-required i").remove();
+    $(".input-required").prepend("<i>*</i>");
+    urlNumber=(window.location.search).split("=")[0];
+    //获取基本信息
+    if(urlNumber!=''){
+
+        //基本信息右侧表
+        $.ajax({
+            type: "post",
+            url: "/companyorder/getCompanyOrderReceivableInfoAjax",
+            data:{
+                company_order_number:(window.location.search).split("=")[1]
+            },
+            dataType: "json",
+            success: function (result) {
+                if(result.code==200) {
+                    layer.load(2);
+                    var list=result.data;
+                    $("#create_user_nameT").html(list.create_user_name);
+                    $("#price").html(list.price);
+                    $("#tax").html(list.tax);
+                    $("#total").html(list.total);
+                    $("#sale_receivable").html(list.sale_receivable);
+                    $("#finance_receivable").html(list.finance_receivable);
+                    $("#miss_sale_receivable").html(list.miss_sale_receivable);
+                    $("#miss_finance_receivable").html(list.miss_finance_receivable);
+                    $("#cost").html(list.cost);
+                    $("#huiduisunyi").html(list.huiduisunyi);
+                    $("#maoli").html(list.maoli);
+                }else if(result.code!=200){
+                    return false;
+                }
+            }
+        });
+        //other
+        //基本信息
+        message();
+
+        currey();
+        tax();
+        //sup();
+        comCustomer();
+        //productOther();
+        tableNone();
+    }else{
+        $(".topSubmit,.tabsList").hide();
+        distributor();
+    }
+    //基本信息提交
+    $("#orderSubmit").click(function () {
+        var wr=$("#wr").val();//零售/整售
+        var clientsource=$("#clientsource").val();//客户来源
+        var begin_time=$("#begin_time").val();//开始日期
+        var end_time=$("#end_time").val();//结束日期
+        var channel_type=qudao;//销售渠道
+        var remark=$("#description").val();//备注
+        var distributor_id=$("#agent").val();//代理id
+        var contect_name=$("#twoContect").val();//联系人
+        var tel=$("#twoTel").val();//电话
+        var email=$("#twoEmail").val();//邮箱
+        var begin_city=$("#startCity").val();//出发城市
+        var persions_count=$("#persions_count").val();
+        if(urlNumber!=''){//修改基本信息
+            layer.load(2);
+            $.ajax({
+                type: "post",
+                url: "/companyorder/updateCompanyOrderByCompanyOrderNumberAjax",
+                data:{
+                    company_order_number:(window.location.search).split("=")[1],
+                    wr:wr,
+                    clientsource:clientsource,
+                    begin_time:begin_time,
+                    end_time:end_time,
+                    channel_type:channel_type,
+                    remark:remark,
+                    distributor_id:distributor_id,
+                    contect_name:contect_name,
+                    tel:tel,
+                    email:email,
+                    begin_city:begin_city,
+                    persions_count:persions_count
+                },
+                dataType: "json",
+                success: function (result) {
+                    if(result.code==200) {
+                        message();
+                        layer.closeAll('loading');
+                        //location.href='/branchcompany/companyOrderManage?company_order_number='+(window.location.search).split("=")[1];
+                    }else if(result.code!=200){
+                        return false;
+                    }
+                }
+            });
+        }else{//添加基本信息
+            /*location.href='/branchcompany/companyOrderManage?company_order_number=BO20190219530960';*/
+            $.ajax({
+                type: "post",
+                url: "/companyorder/addCompanyOrderAjax",
+                data:{
+                    wr:wr,
+                    clientsource:clientsource,
+                    begin_time:begin_time,
+                    end_time:end_time,
+                    channel_type:channel_type,
+                    remark:remark,
+                    distributor_id:distributor_id,
+                    contect_name:contect_name,
+                    tel:tel,
+                    email:email,
+                    begin_city:begin_city,
+                    persions_count:persions_count,
+                    status:0
+                },
+                dataType: "json",
+                success: function (result) {
+                    if(result.code==200) {
+                        layer.load(2);
+                        location.href='/bookings/companyOrderManageAdd?company_order_number='+result.data;
+                    }else if(result.code!=200){
+                        return false;
+                    }
+                }
+            });
+        }
+    });
+
+
+    //保存游客信息
+    /*$(".visitorSubmit").click(function () {
+        $.ajax({
+            type: "post",
+            url: "/companyorder/addCompanyOrderCustomerAjax",
+            data:{
+                company_order_number:(window.location.search).split("=")[1],
+                status:0
+            },
+            dataType: "json",
+            success: function (result) {
+                if(result.code==200) {
+                    var list=result.data;
+                    form.render();
+                }else if(result.code!=200){
+                    return false;
+                }
+            }
+        });
+    });*/
+
+    //暂存
+    $(".allZan").click(function () {
+        $.ajax({
+            type: "post",
+            url: "/companyorder/updateCompanyOrderByCompanyOrderNumberAjax",
+            data:{
+                company_order_number:(window.location.search).split("=")[1],
+                status:2
+            },
+            dataType: "json",
+            success: function (result) {
+                if(result.code==200) {
+                    layer.msg("暂存成功！");
+                    layer.loading(2);
+                    location.href='/branchcompany/showCompanyOrderManage';
+                }else if(result.code!=200){
+                    return false;
+                }
+            }
+        });
+    })
+    //右上角大提交
+    $(".allSubmit").click(function(){
+        $.ajax({
+            type: "post",
+            url: "/companyorder/addCompanyOrderBigAjax",
+            data:{
+                company_order_number:(window.location.search).split("=")[1]
+            },
+            dataType: "json",
+            success: function (result) {
+                if(result.code==200) {
+                    layer.msg("保存成功！");
+                    layer.load(2);
+                }else if(result.code!=200){
+                    return false;
+                }
+            }
+        });
+    })
+})
+//基本信息
+function message() {
+    $.ajax({
+        type: "post",
+        url: "/companyorder/getCompanyOrderAjax",
+        data:{company_order_number:(window.location.search).split("=")[1]},
+        dataType: "json",
+        success: function (result) {
+            if(result.code==200) {
+                $(".topSubmit,.tabsList").show();
+                var list=result.data[0];
+                distributorId=list.distributorId;
+                status=list.status;
+                $("#wr").val(list.wr);//零售/整售
+                $("#clientsource").val(list.clientsource);//客户来源
+                $("#begin_time").val(date('Y-m-d',list.begin_time));//开始日期
+                $("#end_time").val(date('Y-m-d',list.end_time));//结束日期
+                $("#description").val(list.remark);//备注
+                $("#startCity").val(list.begin_city);
+                $("#persions_count").val(list.persions_count);
+                //销售渠道
+                qudao=list.channel_type;
+                isqudao=list.channel_type;
+                isagentA=list.distributor_info;
+                locked=list.locked;
+                city=list.begin_city;
+                if(status==0){
+                    $(".status li").eq(4).hide();
+                }else {
+                    $(".status li").eq(4).show();
+                }
+                if(list.channel_type==1){
+                    var qudaoOne=$("#qudao").html();
+                    $("#foot_tab").html(qudaoOne);
+                    $(".orderFroups").find("input[type='radio']").each(function (index,item) {
+                        if(list.channel_type==index+1){
+                            item.checked=true;
+                        }
+                    })
+                }else{
+                    var zhikeTwo=$("#zhike").html();
+                    $("#foot_tab").html(zhikeTwo);
+                    $(".orderFroups").find("input[type='radio']").each(function (index,item) {
+                        if(list.channel_type==index+1){
+                            item.checked=true;
+                        }
+                    })
+                }
+                form.render();
+                //代理
+                if($("#agent").html()!=undefined){
+                    distributor(list.distributor_info);
+                    $("#agentType").val(1);//代理类别
+                    $("#language").val(isNull(list.distributor_info[0].language_name));//语言
+                    $("#country").val(isNull(list.distributor_info[0].country_name));//国家
+                    $("#stateProvince").val(isNull(list.distributor_info[0].province_name));//州省
+                    $("#city").val(isNull(list.distributor_info[0].city_name));//城市
+                    $("#address").html(isNull(list.distributor_info[0].address));//地址
+                    $("#zipCode").val(isNull(list.distributor_info[0].zip_code));//邮编
+                    $("#contect").val(isNull(list.distributor_info[0].contect));//联系人
+                    $("#phone").val(isNull(list.distributor_info[0].tel));//电话
+                    $("#email,#emailHide").val(isNull(list.distributor_info[0].email));//邮箱
+                }else{
+                    $("#twoContect").val(isNull(list.contect));//联系人
+                    $("#twoTel").val(isNull(list.tel));//电话
+                    $("#twoEmail,#emailHide").val(isNull(list.email));//邮箱
+                }
+
+                $(".input-required i").remove();
+                $(".input-required").prepend("<i>*</i>");
+                form.render();
+                layer.closeAll('loading');
+            }else if(result.code!=200){
+                return false;
+            }
+        }
+    });
+}
+
+
+
+//弹窗返回
+function popBack() {
+    layer.closeAll();
+}
+
+//代理接口
+function distributor(list) {
+
+    $.ajax({
+        type: "post",
+        url: "/distributor/getDistributorAjax",
+        data:"",
+        dataType: "json",
+        success: function (result) {
+
+            if(result.code==200) {
+                var distributors=result.data;
+                agentA=distributors;
+                var agentHtml='';
+                agentHtml+='<option value=""></option>';
+                for(var i=0;i<distributors.length;i++){
+                    if(urlNumber!=''){
+                        if(list!=undefined){
+                            if(distributors[i].distributor_id==list[0].distributor_id){
+                                agentHtml+='<option value="'+distributors[i].distributor_id+'" selected>'+distributors[i].distributor_name+'</option>';
+                            }else{
+                                agentHtml+='<option value="'+distributors[i].distributor_id+'">'+distributors[i].distributor_name+'</option>';
+                            }
+                        }
+                        else{
+                            agentHtml+='<option value="'+distributors[i].distributor_id+'">'+distributors[i].distributor_name+'</option>';
+                        }
+                    }else{
+                        agentHtml+='<option value="'+distributors[i].distributor_id+'">'+distributors[i].distributor_name+'</option>';
+                    }
+                }
+                $("#agent").html(agentHtml);
+                form.render();
+                layer.closeAll('loading');
+            }else if(result.code!=200){
+                return false;
+            }
+        }
+    });
+}
+
+
+//代理OR直客
+var qudaoOne=$("#qudao").html();
+$("#foot_tab").html(qudaoOne);
+form.on('radio(branch)',function (data) {
+    layer.load(2);
+    if(data.value=='1'){
+        distributor();
+        $("#agent").val("");
+        if(isqudao==1){
+            distributor(isagentA);
+            message();
+        }
+        qudao='1';
+        var qudaoOne=$("#qudao").html();
+        $("#foot_tab").html(qudaoOne);
+    }else{
+        qudao='2';
+        var zhikeTwo=$("#zhike").html();
+        $("#foot_tab").html(zhikeTwo);
+        layer.closeAll('loading');
+    }
+    $(".input-required i").remove();
+    $(".input-required").prepend("<i>*</i>");
+    form.render();
+})
+
+//代理选择
+form.on('select(agent)',function (data) {
+    for(var i=0;i<agentA.length;i++){
+        if(data.value==agentA[i].distributor_id){
+            $("#agentType").val("1");//代理类别
+            $("#language").val(isNull(agentA[i].language_name)).attr("data-value",agentA[i].language_id);//语言
+            $("#country").val(isNull(agentA[i].country_name)).attr("data-value",agentA[i].country_id);//国家
+            $("#stateProvince").val(isNull(agentA[i].province_name)).attr("data-value",agentA[i].province_name);//州省
+            $("#city").val(isNull(agentA[i].city_name)).attr("data-value",agentA[i].city_id);//城市
+            $("#contect").val(isNull(agentA[i].contect));//联系人
+            $("#phone").val(isNull(agentA[i].tel));//电话
+            $("#address").html(isNull(agentA[i].address));//地址
+            $("#zipCode").val(isNull(agentA[i].zip_code));//邮编
+            $("#email").val(isNull(agentA[i].email));//邮箱
+            form.render();
+        }
+    }
+});
+
+form.render();
+
+//添加游客弹窗
+function visitor(isEdit,obj){
+    var editHtml=$(obj).parent("td").siblings("td.tdOrder").attr("data-ids");
+    layer.open({
+        skin:'my-skin'
+        ,closeBtn: 1
+        ,content:'/bookings/companyOrderAddvisitor'
+        ,type: 2
+        ,title:'添加游客'
+        ,area: ['1200px','511px']
+        ,shadeClose:true,
+        scrollbar: false,
+        success:function (layero, index) {
+            // 获取子页面的iframe
+            var iframe = window['layui-layer-iframe' + index];
+            var huzhao=[];
+            $("#vTable").find("tr").each(function (index,item) {
+                huzhao.push($(item).find(".passport").html());
+            });
+            var zhanweiVal='';
+            // 向子页面的全局函数child传参
+            iframe.child(isEdit,editHtml,huzhao,zhanweiVal);
+            if(isEdit=='edit'){
+                layer.load(2);
+            }
+        }
+    })
+};
+//住宿信息
+function hotelLook(obj) {
+    var gettpl = $('#hotelLook').html();
+    var indexs=$(obj).parents("tr").attr("data-value");
+    laytpl(gettpl).render(visitorLists[indexs], function(html){
+        layer.tips(html,obj, {
+            tips: [4, '#ccc'],
+            padding:'0',
+            tipsMore: false,
+            area: ['450px', 'auto'],
+            closeBtn :1,
+            time:0
+        });
+    })
+}
+//航班信息
+function flightLook(obj) {
+    var gettpl = $('#flightLook').html();
+    var indexs=$(obj).parents("tr").attr("data-value");
+    if(!visitorLists[indexs].flight_info){
+        visitorLists[indexs].flight_info=[];
+    }
+    laytpl(gettpl).render(visitorLists[indexs].flight_info, function(html){
+        layer.tips(html,obj, {
+            tips: [4, '#ccc'],
+            padding:'0',
+            tipsMore: false,
+            area: ['600px', 'auto'],
+            closeBtn :1,
+            time:0
+        });
+    })
+}
+//接受iframe页面的值
+function GetValue(obj){
+    comCustomer();
+
+    form.render();
+}
+
+//删除游客信息
+function delete_customer(obj) {
+    var company_order_customer_id=$(obj).parents("tr").find(".tdOrder").attr("data-ids");
+    $.ajax({
+        type: "post",
+        url: "/companyorder/updateCompanyOrderCustomerStatusByCompanyOrderCustomerIdAjax",
+        data: {
+            company_order_customer_id:company_order_customer_id,
+            status:0
+        },
+        dataType: "json",
+        success: function (result) {
+            if(result.code==200) {
+                var list=result.data;
+                comCustomer();
+            }else if(result.code!=200){
+                //layer.msg("请填写必填项");
+                return false;
+            }
+        }
+    })
+}
+
+//获取游客
+function comCustomer() {
+
+    $.ajax({
+        type: "post",
+        url: "/companyorder/getCompanyOrderCustomerAjax",
+        data: {
+            company_order_number:(window.location.search).split("=")[1]
+        },
+        dataType: "json",
+        success: function (result) {
+
+            if(result.code==200) {
+
+                var list=result.data;
+                list.locked=locked;
+                visitorLists=result.data;
+                if(locked==1){
+                    $("#islocked").hide();
+                }
+                console.log(list)
+                var getTpl=$("#visitorTable").html();
+                laytpl(getTpl).render(list, function(html){
+                    $("#vTable").html(html);
+                });
+                layer.closeAll('loading');
+            }else if(result.code!=200){
+                //layer.msg("请填写必填项");
+                return false;
+            }
+        }
+    })
+}
+
+
+
+///订单---产品js
+
+//添加自定义
+function addOther() {
+    var addOther=$("#addOther").html();
+    layer.open({
+        skin:'my-skin'
+        ,content:addOther
+        ,type: 1
+        ,title:'添加其他'
+        ,btnAlign: 'c' //按钮居中
+        ,area: ['500px','400px']
+        ,shadeClose:true,
+        scrollbar: false,
+        success:function () {
+            layer.load(2);
+            curreyHtml();
+            suppliHtml();
+            $(".input-required i").remove();
+            $(".input-required").prepend("<i>*</i>");
+            form.render();
+            layer.closeAll('loading');
+        }
+    })
+}
+//添加产品
+function addProduct() {
+    team();
+    addRoute=[];
+    var gettpl = $('#branchPop').html();
+    layer.confirm(gettpl, {
+        skin: 'my-skin'
+        , btn: ['立即提交', '取消'] //按钮
+        , title: '添加分公司产品'
+        , btnAlign: 'c' //按钮居中
+        , area: ['1200px', '490px']
+        , shadeClose: true,
+        scrollbar: false,
+        success:function () {
+            //获取分公司
+            $.ajax({
+                type: "post",
+                url: "/branchcompany/getBranchProductTypeAjax",
+                data:"",
+                dataType: "json",
+                success: function (result) {
+                    if(result.code==200){
+                        var list=result.data;
+                        var branchHtml='';
+                        branchHtml+='<option value="">请输入选择分公司产品类型</option>';
+                        for(var i=0;i<list.length;i++){
+                            branchHtml+='<option value="'+list[i].branch_product_type_id+'">'+list[i].branch_product_type_name+'</option>';
+                        }
+                        $("#branch_product_type_id").html(branchHtml);
+                        form.render();
+                    }else if(result.code!=200){
+                        return false;
+                    }
+                }
+            });
+        }
+    }, function () {
+        layer.load(2);
+        console.log(routePop)
+        console.log(productRoute)
+        $("#team_table").find('td input[type="checkbox"]').each(function(index, item) {
+            if (item.checked === true) {
+                if($(item).parent("td").attr("data-old")!='old'){
+                    addRoute.push({branch_product_number:productTeamPop[index].branch_product_number,branch_product_name:productTeamPop[index].branch_product_name,route_teamplate_array:productTeamPop[index].route_teamplate_array});
+                }
+            }
+        });
+        console.log(addRoute)
+        if(addRoute.length>0){
+            for(var c=0;c<addRoute.length;c++){
+                if(addRoute[c].route_teamplate_array.length>0){
+                    for(var d=0;d<addRoute[c].route_teamplate_array.length;d++){
+                        addRoute[c].route_teamplate_array[d].times=[];
+                        var route_template_id=addRoute[c].route_teamplate_array[d].route_number.substring(3);
+                        $.ajax({
+                            type : "post",
+                            async: false,
+                            url : "/product/selTeamProductbyRouteTemplateId",
+                            data : {
+                                route_template_id:route_template_id
+                            },
+                            dataType : "json",
+                            success : function(result) {
+                                if(result.code==200){
+                                    var list=result.data;
+                                    addRoute[c].route_teamplate_array[d].times=list;
+                                    form.render();
+                                    layer.closeAll();
+                                }else if(result.code!=200){
+                                    return false;
+                                }
+                            }
+                        })
+
+                    }
+                }
+            }
+            for(var i=0;i<addRoute.length;i++){
+                routePop.push(addRoute[i]);
+            }
+            addproducts();
+        }else{
+            layer.closeAll();
+        }
+        form.render();
+    });
+}
+//产品--下拉请求
+function tdSelect(obj) {
+    var route_template_id=$(obj).parent("td").attr("data-number").substring(3);
+    $.ajax({
+        type : "post",
+        url : "/product/selTeamProductbyRouteTemplateId",
+        data : {
+            route_template_id:route_template_id
+        },
+        dataType : "json",
+        success : function(result) {
+            if(result.code==200){
+                var list=result.data;
+                var selectHtml='<option> </option>';
+                for(var i=0;i<list.length;i++){
+                    selectHtml+='<option>'+date('Y-m-d',list[i].begin_time)+' </option>';
+                }
+                $(obj).siblings("select").html(selectHtml);
+                form.render();
+            }else if(result.code!=200){
+                return false;
+            }
+
+        }
+    })
+}
+//获取--产品--其他
+function productOther() {
+    $.ajax({
+        type : "post",
+        url : "/companyorder/getCompanyOrderProductAjax",
+        data : {
+            company_order_number:(window.location.search).split("=")[1],
+            status:1
+        },
+        dataType : "json",
+        success : function(result) {
+            if(result.code==200){
+                var list=result.data;
+                threeList=list;
+                product=[];
+                productRoute=[];
+
+                //获取产品
+                products();
+                comCustomer();
+                team();
+                others();
+                cost();
+                prices();
+                layer.closeAll();
+                form.render();
+            }else if(result.code!=200){
+                return false;
+            }
+
+        }
+    })
+}
+//添加产品
+function addproducts() {
+    addRoute.addDel='1';
+    addRoute.locked=locked;
+    var productTr=$("#productTr").html();
+    laytpl(productTr).render(addRoute, function(html) {
+        $("#productList").append(html);
+    });
+    layer.closeAll();
+}
+//获取产品
+function products() {
+    if(productRoute.length==0){
+        for(var x=0;x<threeList.company_order_product.length;x++){
+            threeList.company_order_product[x].route_teamplate_array=[];
+            threeList.company_order_product[x].children=[];
+            for(var y=0;y<threeList.company_order_product_team.length;y++){
+                if(threeList.company_order_product[x].branch_product_number==threeList.company_order_product_team[y].branch_product_number){
+                    threeList.company_order_product[x].route_teamplate_array.push({route_name:threeList.company_order_product_team[y].route_name,route_number:threeList.company_order_product_team[y].route_template_number,begin_time:threeList.company_order_product_team[y].begin_time,team_product_id:threeList.company_order_product_team[y].team_product_id});
+                }
+            }
+            for(var z=0;z<threeList.company_order_product_source.length;z++){
+                if(threeList.company_order_product[x].team_product_id==threeList.company_order_product_source[z].team_product_id||threeList.company_order_product[x].branch_product_number==threeList.company_order_product_source[z].branch_product_number){
+                    if(threeList.company_order_product_source[z].supplier_type_id==11){
+                        threeList.company_order_product[x].children.push(threeList.company_order_product_source[z]);
+                    }
+                }
+            }
+
+            productRoute.push(threeList.company_order_product[x]);
+        }
+        productRoute.locked=locked;
+        var productTr=$("#productTr").html();
+        laytpl(productTr).render(productRoute, function(html) {
+            $("#productList").html(html);
+        });
+    }
+    if(addRoute.length>0){
+        addproducts();
+    }
+    layer.closeAll();
+}
+//获取其他产品
+function others() {
+    threeList.company_order_product_diy.locked=locked;
+    var productOther=$("#productOther").html();
+    laytpl(productOther).render(threeList.company_order_product_diy, function(html) {
+        $("#other").html(html);
+    });
+    layer.closeAll();
+}
+//获取成本
+function cost() {
+    threeList.locked=locked;
+    var getTpl = $("#costTbody").html();
+    laytpl(getTpl).render(threeList, function(html){
+        $("#costTable").html(html);
+        curreyHtml();
+        lay('.sales-date').each(function(index,item){
+            laydate.render({
+                elem: this
+                ,trigger: 'click'
+                ,done: function(value, date){
+
+                }
+            });
+        });
+    });
+    setTimeout(function () {
+        $("#costTable").find("tr").each(function (index,item) {
+            if($(item).attr("data-number")==1){
+                var values=$(item).attr("data-values");
+                if(threeList.company_order_product_team[values].is_own_company==1){
+                    $(item).find(".priceCurrey").val(threeList.company_order_product_team[values].cost_currency_id);
+                }
+            }else if($(item).attr("data-number")==2){
+                var values=$(item).attr("data-values");
+                if(threeList.company_order_product_source[values].is_own_company==1){
+                    $(item).find(".priceCurrey").val(threeList.company_order_product_source[values].cost_currency_id);
+                }
+            }else if($(item).attr("data-number")==3){
+                var values=$(item).attr("data-values");
+                $(item).find(".priceCurrey").val(threeList.company_order_product_diy[values].cost_currency_id);
+            }
+        });
+        form.render('select');
+    },0)
+}
+//获取报价
+function prices() {
+    var priceTr=$("#priceTr").html();
+    productRoute.company_order_product_diy=[];
+    productRoute.company_order_product_diy=threeList.company_order_product_diy;
+    console.log(productRoute)
+    laytpl(priceTr).render(productRoute, function(html) {
+        $("#priceTable").html(html);
+        curreyHtml();
+        taxHtml();
+    });
+    $("#priceTable").find("tr").each(function (index,item) {
+        if($(item).attr("data-num")!=undefined){//分公司
+            var values=$(item).attr("data-num");
+            $(item).find(".priceCurrey").val(productRoute[values].price_currency_id);
+            $(item).find(".priceTax").val(productRoute[values].tax_id);
+        }else if($(item).attr("data-children")!=undefined){
+            var values=$(item).attr("data-children");
+            var valueNum=$(item).attr("data-childNum");
+            console.log(productRoute[valueNum].children[values].tax_id)
+            $(item).find(".priceCurrey").val(productRoute[valueNum].children[values].price_currency_id);
+            $(item).find(".priceTax").val(productRoute[valueNum].children[values].tax_id);
+        }else if($(item).attr("data-diy")!=undefined){
+            var values=$(item).attr("data-diy");
+            $(item).find(".priceCurrey").val(productRoute.company_order_product_diy[values].price_currency_id);
+            $(item).find(".priceTax").val(productRoute.company_order_product_diy[values].tax_id);
+        }
+        form.render();
+    });
+
+}/*old*/
+/*function prices() {
+    var priceTr=$("#priceTr").html();
+
+    laytpl(priceTr).render(threeList, function(html) {
+        $("#priceTable").html(html);
+        curreyHtml();
+        taxHtml();
+    });
+    $("#priceTable").find("tr").each(function (index,item) {
+        if($(item).attr("data-number")==1){
+            var values=$(item).attr("data-values");
+            $(item).find(".priceCurrey").val(threeList.company_order_product_team[values].cost_currency_id);
+            $(item).find(".priceTax").val(threeList.company_order_product_team[values].tax_id);
+        }else if($(item).attr("data-number")==2){
+            var values=$(item).attr("data-values");
+            $(item).find(".priceCurrey").val(threeList.company_order_product_source[values].cost_currency_id);
+            $(item).find(".priceTax").val(threeList.company_order_product_source[values].tax_id);
+        }else if($(item).attr("data-number")==3){
+            var values=$(item).attr("data-values");
+            $(item).find(".priceCurrey").val(threeList.company_order_product_diy[values].cost_currency_id);
+            $(item).find(".priceTax").val(threeList.company_order_product_diy[values].tax_id);
+        }
+        form.render();
+    });
+
+}*//*new*/
+element.on('tab(filtertab)', function(data){
+    if(locked==1&&data.index==1){
+        $(".ishide").hide();
+        sup();
+    }
+    if(data.index==1||data.index==2||data.index==3){
+        productOther();
+        sup();
+        layer.load(2);
+    }
+    if(data.index==4){
+        layer.load(2);
+        receivable();
+        sup('sup');
+    }
+    if(data.index==5){
+        financial();
+        sup('sup');
+    }
+    if(data.index==6){
+        OperationsListAjax();
+    }
+});
+//点击游客弹窗确定
+function visitorSubmit(obj) {
+    layer.load(2);
+    var datas={};
+    var company_order_product_source_id=$(obj).attr("data-vid");
+    var company_order_product_diy_id=$(obj).attr("data-oid");
+    var company_order_customer='';
+    $(obj).parents(".visitorBottom").siblings(".checkboxList").find("input[type='checkbox']").each(function (index,item) {
+        if(item.checked==true){
+            company_order_customer+=$(item).attr("data-name")+',';
+        }
+    });
+    if($(obj).attr("data-stat")=='children'){
+        datas={company_order_number:(window.location.search).split("=")[1],company_order_customer:company_order_customer,company_order_product_source_id:company_order_product_source_id}
+    }else if($(obj).attr("data-stat")=='other'){
+        datas={company_order_number:(window.location.search).split("=")[1],company_order_customer:company_order_customer,company_order_product_diy_id:company_order_product_diy_id}
+    }
+    $.ajax({
+        type: "post",
+        url: "/companyorder/updateCompanyOrderProductCustomerAjax",
+        data: datas,
+        dataType: "json",
+        success: function (result) {
+            if(result.code==200) {
+                productOther();
+                layer.closeAll();
+                layer.msg("修改成功！");
+            }else if(result.code!=200){
+                layer.msg("添加失败！"+result.code);
+                return false;
+            }
+        }
+    });
+}
+
+//点击添加其他弹窗提交
+function otherSubmit() {
+    layer.load(2);
+    var diy_name=$("#diyName").val();
+    var cost_currency_id=$("#costCurrencyId").val();
+    var diy_cost=$("#diyCost").val();
+    var supplier_id=$("#supplierId").val();
+    //添加自定义
+    $.ajax({
+        type: "post",
+        url: "/companyorder/addCompanyOrderProductDiyAjax",
+        data: {
+            company_order_number:(window.location.search).split("=")[1],
+            diy_name:diy_name,
+            cost_currency_id:cost_currency_id,
+            diy_cost:diy_cost,
+            supplier_id:supplier_id
+        },
+        dataType: "json",
+        success: function (result) {
+            if(result.code==200) {
+                productOther();
+                layer.closeAll();
+                others();
+                layer.closeAll();
+            }else if(result.code!=200){
+                layer.msg("添加失败！"+result.code);
+                return false;
+            }
+        }
+    });
+}
+function addDel(obj) {
+    var count='';
+    var branch=$(obj).parents("tr").attr("data-branch");
+    $(obj).parents("tbody").find("tr").each(function (index,item) {
+        var dataBranch=$(item).attr("data-branch");
+        if(branch==dataBranch){
+            $(item).remove();
+        }
+        for(var i=0;i<addRoute.length;i++){
+            if(addRoute[i].branch_product_number==branch){
+                count=i;
+            }
+        }
+    })
+    addRoute.splice(count,1);
+}
+//删除其他产品
+function otherDel(obj,isProduct) {
+    layer.load(2);
+    var datas={};
+    if(isProduct=='other'){
+        var company_order_product_diy_number=$(obj).parent("td").attr("data-diynumber");
+        datas={status:0,type:2,company_order_product_diy_number:company_order_product_diy_number};
+    }else{
+        var branch_product_number=$(obj).parent("td").attr("data-productnumber");
+        //var company_order_number=$(obj).parent("td").attr("data-ordernumber");
+        var count=0;
+        for(var i=0;i<routePop.length;i++){
+            if(routePop[i].branch_product_number==branch_product_number){
+                count=i;
+                routePop.splice(i,1);
+            }
+        }
+        addRoute.splice(count,1);
+        datas={status:0,type:1,company_order_number:(window.location.search).split("=")[1],branch_product_number:branch_product_number};
+    }
+    $.ajax({
+        type : "post",
+        url : "/companyorder/updateCompanyOrderProductAjax",
+        data : datas,
+        dataType : "json",
+        success : function(result) {
+            if(result.code==200){
+                var list=result.data;
+                productOther();
+            }else if(result.code!=200){
+                return false;
+            }
+
+        }
+    })
+}
+
+/*弹窗获取分公司产品*/
+function team() {
+    var branch_product_type_id=$("#branch_product_type_id").val();
+    var branch_product_number=$("#branch_product_number").val();
+    var branch_product_name=$("#branch_product_name").val();
+    var create_user_name=$("#create_user_name").val();
+    $.ajax({
+        type : "post",
+        url : "/branchcompany/getBranchProductAjax",
+        data : {
+            branch_product_type_id:branch_product_type_id,
+            branch_product_number:branch_product_number,
+            branch_product_name:branch_product_name,
+            create_user_name:create_user_name,
+            is_like:1,
+            status:1
+        },
+        dataType : "json",
+        success : function(result) {
+            if(result.code==200){
+                var addTeams=result.data;
+                addTeams.qudao=qudao;
+                /*for(var c=0;c<addTeams.length;c++){
+                    var zum=0;
+                    for(var y=0;y<addTeams[c].team_product_array.length;y++){
+                        for(var z=0;z<addTeams[c].team_product_array[y].own_expens_source_array.length;z++){
+                            zum++;
+                        }
+                    }
+                    if(addTeams[c].source_array.length>0){
+                        for(var x=0;x<addTeams[c].source_array.length;x++){
+                            if(addTeams[c].source_array[x].supplier_type_id==11){
+                                zum++;
+                            }
+                        }
+                    }
+                    addTeams[c].zum=zum;
+                }*///分公司，资源全部显示合并单元格
+
+                productTeamPop=addTeams;
+                console.log(11)
+                console.log(productRoute)
+                var tableList=$("#team_table_pop").html();
+                laytpl(tableList).render(addTeams, function(html) {
+                    $("#team_table").html(html);
+                    if($("#productList").find("tr").length>0){
+                        $("#productList").find("tr").each(function (index,item) {
+                            var onNumber=$("#team_table").find(".sameNumber");
+                            onNumber.each(function (indexs,items) {
+                                if($(items).html()==$(item).attr("data-branch")){
+                                    $(items).parent("td").prev("td").find("input[type='checkbox']").attr("checked","true");
+                                    $(items).parent("td").prev("td").attr("data-old","old");
+                                }
+                            })
+                        })
+                    }
+                    form.render();
+                })
+            }else if(result.code!=200){
+                return false;
+            }
+
+        }
+    })
+}
+//保存产品
+function productSubmit() {
+    var branch_product_array=[];
+    var count=0;
+    if(addRoute.length>0){
+        for(var i=0;i<addRoute.length;i++){
+            branch_product_array.push({branch_product_number:addRoute[i].branch_product_number,branch_product_name:addRoute[i].branch_product_name,branch_product_params_array:[]})
+            if($("#productList").find("select").attr("data-vals")==i){
+                $("#productList").find("select").each(function (index,item) {
+                    if(item.value==''){
+                        count++;
+                    }else{
+                        branch_product_array[i].branch_product_params_array.push({team_product_id:item.value,route_template_number:$(item).parent("td").attr("data-number")})
+                    }
+                })
+            }
+        }
+    }
+    if(count==0){
+        var yan=[];
+        $("#productList").find("td").each(function (index, item) {
+            if ($(item).attr("data-number") != undefined) {
+                var number=$(item).attr("data-tims");
+                yan.push(number);
+            }
+        })
+        var nary=yan.sort();
+        var counts=0;
+        for(var i=0;i<yan.length;i++) {
+            if (nary[i] == nary[i + 1]) {
+                counts++;
+            }
+        }
+        if(counts==0){
+            layer.load(2);
+            $.ajax({
+                type : "post",
+                url : "/companyorder/addCompanyOrderProductAjax",
+                data : {
+                    company_order_number:(window.location.search).split("=")[1],
+                    branch_product_array:JSON.stringify(branch_product_array)
+                },
+                dataType : "json",
+                success : function(result) {
+                    if(result.code==200){
+                        var list=result.data;
+                        addRoute=[];
+                        productOther();
+                    }else if(result.code!=200){
+                        return false;
+                    }
+
+                }
+            })
+        }else{
+            layer.msg("不能选择重复的团！请重新选择到达日期");
+        }
+    }
+
+}
+form.on('select(test)', function(data){
+    var branch=$(data.elem).parents("tr").attr("data-branch");
+    var indexs=$(data.elem).attr("data-ids");
+    $(data.elem).parents("td").attr("data-tims",data.value);
+    for(var i=0;i<addRoute.length;i++){
+        if(addRoute[i].branch_product_number==branch){
+            addRoute[i].route_teamplate_array[indexs].team_product_id=data.value;
+        }
+    }
+});
+
+//保存成本、保存报价
+function costSubmit(obj) {
+    var team_product_array=[];
+    var source_array=[];
+    var diy_array=[];
+    var branch_product_array=[];
+    var datas={};
+    layer.load(2);
+    if(obj=='cost'){
+        $("#costTable").find("tr").each(function (index,item) {
+            if($(item).attr("data-number")==1){
+                var company_order_product_team_id=$(item).attr("data-id");
+                var invoice_number=$(item).find(".invoice_number input").val();
+                var invoice_time=$(item).find(".invoice_time input").val();
+                var tax_cd=$(item).find(".tax_cd input").val();
+                var netamt=$(item).find(".netamt input").val();
+                var gst=$(item).find(".gst input").val();
+                var pst=$(item).find(".pst input").val();
+                var hst=$(item).find(".hst input").val();
+                var p_otx=$(item).find(".p_otx input").val();
+                var invamt=$(item).find(".invamt input").val();
+                var estcost=$(item).find(".estcost input").val();
+                var paidamt=$(item).find(".paidamt input").val();
+                var balance=$(item).find(".balance input").val();
+                if($(item).find("td").attr("currencyid")==undefined){
+                    var cost_currency_id=$(item).find("td").attr("currencyid");
+                    var team_product_cost=$(item).find(".team_product_price").html();
+                }else{
+                    var cost_currency_id=$(item).find(".priceCurrey").val();
+                    var team_product_cost=$(item).find(".source_cost input").val();
+                }
+                team_product_array.push({company_order_product_team_id:company_order_product_team_id,invoice_number:invoice_number,invoice_time:invoice_time,cost_currency_id:cost_currency_id,team_product_cost:team_product_cost,tax_cd:tax_cd,netamt:netamt,gst:gst,pst:pst,hst:hst,p_otx:p_otx,invamt:invamt,estcost:estcost,paidamt:paidamt,balance:balance});
+
+            }else if($(item).attr("data-number")==2){
+                var company_order_product_source_id=$(item).attr("data-id");
+                var invoice_number=$(item).find(".invoice_number input").val();
+                var invoice_time=$(item).find(".invoice_time input").val();
+                var tax_cd=$(item).find(".tax_cd input").val();
+                var netamt=$(item).find(".netamt input").val();
+                var gst=$(item).find(".gst input").val();
+                var pst=$(item).find(".pst input").val();
+                var hst=$(item).find(".hst input").val();
+                var p_otx=$(item).find(".p_otx input").val();
+                var invamt=$(item).find(".invamt input").val();
+                var estcost=$(item).find(".estcost input").val();
+                var paidamt=$(item).find(".paidamt input").val();
+                var balance=$(item).find(".balance input").val();
+                if($(item).find("td").attr("currencyid")==undefined){
+                    var cost_currency_id=$(item).find("td").attr("currencyid");
+                }else{
+                    var cost_currency_id=$(item).find(".priceCurrey").val();
+                    var source_cost=$(item).find(".source_cost input").val();
+                }
+                source_array.push({company_order_product_source_id:company_order_product_source_id,invoice_number:invoice_number,invoice_time:invoice_time,cost_currency_id:cost_currency_id,source_cost:source_cost,tax_cd:tax_cd,netamt:netamt,gst:gst,pst:pst,hst:hst,p_otx:p_otx,invamt:invamt,estcost:estcost,paidamt:paidamt,balance:balance});
+            }else if($(item).attr("data-number")==3){
+                var company_order_product_diy_number=$(item).attr("data-id");
+                var invoice_number=$(item).find(".invoice_number input").val();
+                var invoice_time=$(item).find(".invoice_time input").val();
+                var tax_cd=$(item).find(".tax_cd input").val();
+                var netamt=$(item).find(".netamt input").val();
+                var gst=$(item).find(".gst input").val();
+                var pst=$(item).find(".pst input").val();
+                var hst=$(item).find(".hst input").val();
+                var p_otx=$(item).find(".p_otx input").val();
+                var invamt=$(item).find(".invamt input").val();
+                var estcost=$(item).find(".estcost input").val();
+                var paidamt=$(item).find(".paidamt input").val();
+                var balance=$(item).find(".balance input").val();
+                /*                var price_currency_id=$(item).find("td").attr("currencyid");
+                                var team_product_price=$(item).find(".team_product_price").html();*/
+                var cost_currency_id=$(item).find(".priceCurrey").val();
+                var diy_cost=$(item).find(".diy_cost input").val();
+                diy_array.push({company_order_product_diy_number:company_order_product_diy_number,invoice_number:invoice_number,invoice_time:invoice_time,cost_currency_id:cost_currency_id,diy_cost:diy_cost,tax_cd:tax_cd,netamt:netamt,gst:gst,pst:pst,hst:hst,p_otx:p_otx,invamt:invamt,estcost:estcost,paidamt:paidamt,balance:balance});
+            }
+        });
+        datas={company_order_number:(window.location.search).split("=")[1],team_product_array:JSON.stringify(team_product_array),source_array:JSON.stringify(source_array),diy_array:JSON.stringify(diy_array)};
+    }else{
+        $("#priceTable").find("tr").each(function (index,item) {
+            if($(item).attr("data-num")!=undefined){
+                var num=$(item).attr("data-num");
+                var company_order_product_id=$(item).attr("data-id");//分公司id
+                var price_currency_id=$(item).find(".priceCurrey").val();//币种
+                var branch_product_price=$(item).find(".sourcePrice").attr("price");//应收
+                var tax_id=$(item).find(".priceTax").val();//税种
+                var price_before_tax=$(item).find(".priceBeforeTax").html();//税前价格
+                var remark=$(item).find(".remark").val();//备注
+                branch_product_array.push({company_order_product_id:company_order_product_id,price_currency_id:price_currency_id,branch_product_price:branch_product_price,tax_id:tax_id,price_before_tax:price_before_tax,remark:remark});
+            }else if($(item).attr("data-children")!=undefined){
+                var company_order_product_source_id=$(item).attr("data-id");//资源id
+                var price_currency_id=$(item).find(".priceCurrey").val();//币种
+                var source_price=$(item).find(".sourcePrice").attr("price");//应收
+                var tax_id=$(item).find(".priceTax").val();//税种
+                var price_before_tax=$(item).find(".priceBeforeTax").html();//税前价格
+                var remark=$(item).find(".remark").val();//备注
+                source_array.push({company_order_product_source_id:company_order_product_source_id,price_currency_id:price_currency_id,source_price:source_price,tax_id:tax_id,price_before_tax:price_before_tax,remark:remark});
+            }else if($(item).attr("data-diy")!=undefined){
+                var company_order_product_diy_number=$(item).attr("data-id");//资源id
+                var price_currency_id=$(item).find(".priceCurrey").val();//币种
+                var diy_price=$(item).find(".sourcePrice").attr("price");//应收
+                var tax_id=$(item).find(".priceTax").val();//税种
+                var price_before_tax=$(item).find(".priceBeforeTax").html();//税前价格
+                var remark=$(item).find(".remark").val();//备注
+                diy_array.push({company_order_product_diy_number:company_order_product_diy_number,price_currency_id:price_currency_id,diy_price:diy_price,tax_id:tax_id,price_before_tax:price_before_tax,remark:remark});
+            }
+        });/*old*/
+        /*$("#priceTable").find("tr").each(function (index,item) {
+            if($(item).attr("data-number")==1){
+                var num=$(item).attr("data-num");
+                var company_order_product_id=$(item).attr("data-id");//团队
+                var price_currency_id=$(item).find(".priceCurrey").val();//币种
+                var branch_product_price=$(item).find(".sourcePrice").attr("price");//应收
+                var tax_id=$(item).find(".priceTax").val();//税种
+                var price_before_tax=$(item).find(".priceBeforeTax").html();//税前价格
+                var remark=$(item).find(".remark").val();//备注
+                team_product_array.push({company_order_product_id:company_order_product_id,price_currency_id:price_currency_id,branch_product_price:branch_product_price,tax_id:tax_id,price_before_tax:price_before_tax,remark:remark});
+            }else if($(item).attr("data-number")==2){
+                var company_order_product_source_id=$(item).attr("data-id");//资源id
+                var price_currency_id=$(item).find(".priceCurrey").val();//币种
+                var source_price=$(item).find(".sourcePrice").attr("price");//应收
+                var tax_id=$(item).find(".priceTax").val();//税种
+                var price_before_tax=$(item).find(".priceBeforeTax").html();//税前价格
+                var remark=$(item).find(".remark").val();//备注
+                source_array.push({company_order_product_source_id:company_order_product_source_id,price_currency_id:price_currency_id,source_price:source_price,tax_id:tax_id,price_before_tax:price_before_tax,remark:remark});
+            }else if($(item).attr("data-number")==3){
+                var company_order_product_diy_number=$(item).attr("data-id");//资源id
+                var price_currency_id=$(item).find(".priceCurrey").val();//币种
+                var diy_price=$(item).find(".sourcePrice").attr("price");//应收
+                var tax_id=$(item).find(".priceTax").val();//税种
+                var price_before_tax=$(item).find(".priceBeforeTax").html();//税前价格
+                var remark=$(item).find(".remark").val();//备注
+                diy_array.push({company_order_product_diy_number:company_order_product_diy_number,price_currency_id:price_currency_id,diy_price:diy_price,tax_id:tax_id,price_before_tax:price_before_tax,remark:remark});
+            }
+        });*//*new*/
+        datas={company_order_number:(window.location.search).split("=")[1],source_array:JSON.stringify(source_array),branch_product_array:JSON.stringify(branch_product_array),diy_array:JSON.stringify(diy_array)};
+    }
+    $.ajax({
+        type: "post",
+        url: "/companyorder/updateCompanyOrderCostAndPriceAjax",
+        data: datas,
+        dataType: "json",
+        success: function (result) {
+            if(result.code==200) {
+                var list=result.data;
+                productOther();
+                form.render();
+                layer.closeAll();
+                layer.msg("保存成功！");
+            }else if(result.code!=200){
+
+                return false;
+            }
+        }
+    })
+}
+
+//获取币种
+function currey() {
+    $.ajax({
+        type: "post",
+        url: "/system/getCurrencyAjax",
+        data: {
+            company_order_number:(window.location.search).split("=")[1]
+        },
+        dataType: "json",
+        success: function (result) {
+            if(result.code==200) {
+                var list=result.data;
+                curreys=list;
+                form.render();
+            }else if(result.code!=200){
+                return false;
+            }
+        }
+    })
+}
+function curreyHtml() {
+    var priceHtml='';
+    priceHtml+='<option value=""></option>';
+    for(var i=0;i<curreys.length;i++){
+        priceHtml+='<option value="'+curreys[i].currency_id+'">'+curreys[i].currency_name+'</option>';
+    }
+    $(".priceCurrey").html(priceHtml);
+}
+
+//产品中的查看游客
+function productLook(obj,lei) {
+    var visitorListTips=$("#visitorListTips").html();
+    var indexs=$(obj).parent("td").attr("data-values");
+    visitorLists.selected=[];
+    if(lei=='children'){
+        for(var i=0;i<threeList.company_order_product[indexs].children.length;i++){
+            if(threeList.company_order_product[indexs].children[i].company_order_product_source_id==$(obj).parent("td").attr("data-productid")){
+                for(var j=0;j<threeList.company_order_product[indexs].children[i].customer_info.length;j++){
+                    for(var k=0;k<visitorLists.length;k++){
+                        if(threeList.company_order_product[indexs].children[i].customer_info[j].company_order_customer_id==visitorLists[k].company_order_customer_id){
+                            visitorLists.selected.push(threeList.company_order_product[indexs].children[i].customer_info[j].company_order_customer_id);//为选中状态
+                            visitorLists.indexs=i;
+                        }
+                    }
+                }
+            }
+        }
+    }else if(lei=='other'){
+        for(var j=0;j<threeList.company_order_product_diy[indexs].customer_info.length;j++){
+            for(var k=0;k<visitorLists.length;k++){
+                if(threeList.company_order_product_diy[indexs].customer_info[j].company_order_customer_id==visitorLists[k].company_order_customer_id){
+                    visitorLists.selected.push(threeList.company_order_product_diy[indexs].customer_info[j].company_order_customer_id);//为选中状态
+                    visitorLists.indexs=j;
+                }
+            }
+        }
+    }
+
+    visitorLists.lei=lei;
+    visitorLists.locked=locked;
+    visitorLists.productId=$(obj).parent("td").attr("data-productid");//资源id
+    laytpl(visitorListTips).render(visitorLists, function(html) {
+        layer.open({
+            skin: 'my-skin'
+            , content: html
+            , type: 1
+            , title: '查看游客'
+            , btnAlign: 'c' //按钮居中
+            , area: ['500px', '400px']
+            , shadeClose: true,
+            scrollbar: false,
+            success: function () {
+                $(".checkboxList").find("input[type='checkbox']").each(function (index,item) {
+                    if(locked==1){
+                        item.disabled=true;
+                    }
+                    for(var i=0;i<visitorLists.selected.length;i++){
+                        if($(item).attr("data-selected")==visitorLists.selected[i]){
+                            item.checked=true;
+                        }
+                    }
+                })
+                form.render();
+            }
+        })
+    })
+}
+
+/*获取税点*/
+function tax() {
+    $.ajax({
+        type: "post",
+        url: "/system/getTaxAjax",
+        data: {
+            status:1
+        },
+        dataType: "json",
+        success: function (result) {
+            if(result.code==200) {
+                var list=result.data;
+                price=list;
+                form.render();
+                layer.closeAll();
+            }else if(result.code!=200){
+
+                return false;
+            }
+        }
+    })
+}
+function taxHtml() {
+    var taxHtml='';
+    for(var d=0;d<price.length;d++){
+        taxHtml+='<option value="'+price[d].tax_id+'">'+price[d].txcd+'</option>';
+    }
+    $(".priceTax").append(taxHtml);
+}
+/*打印*/
+function put(obj) {
+    var gettpl=$("#put").html();
+    layer.confirm(gettpl,{
+        skin:'my-skin'
+        ,btn: ['确定','取消'] //按钮
+        ,btnAlign: 'c' //按钮居中
+        ,closeBtn: 0
+        ,title:'打印'
+        ,area: ['550px','470px']
+        ,shadeClose:true,
+        scrollbar: false,
+        success:function () {
+            //获取账单模板
+            $.ajax({
+                type: "post",
+                url: "/system/getBillTemplateAjax",
+                data: "",
+                dataType: "json",
+                success: function (result) {
+                    layer.load(2);
+                    if(result.code==200) {
+                        var list=result.data;
+                        var billHtml='';
+                        var count=0;
+                        for(var i=0;i<list.length;i++){
+                            if(list[i].is_default==1){
+                                count=1;
+                                billHtml+='<option value="'+list[i].bill_template_id+'" selected>'+list[i].bill_template_title+'</option>';
+                            }else{
+                                billHtml+='<option value="'+list[i].bill_template_id+'">'+list[i].bill_template_title+'</option>';
+                            }
+
+                        }
+                        $("#bill_template_id").append(billHtml);
+                        if(count==1){
+                            $("#default_bill_template_id").attr("checked",true);
+                        }else{
+                            $("#default_bill_template_id").attr("checked",false);
+                        }
+                        form.render();
+                        layer.closeAll('loading');
+                    }else if(result.code!=200){
+
+                        return false;
+                    }
+                }
+            });
+            form.render();
+        }
+    },function () {
+        $("#putCheckbox").find('input[type="checkbox"]').each(function(index, item) {
+            if(item.checked===true){
+                $("#default_bill_template_id").val("1");
+            }else{
+                $("#default_bill_template_id").val("0");
+            }
+        });
+
+        var bill_template_id=$("#bill_template_id").val();
+        /*var company_order_number=$("#company_order_number").val();*/
+        var company_order_number=(window.location.search).split("=")[1];
+      
+        var company_order_id = company_order_number.substring(3);
+        var receivable_info_id=$(obj).parents("tr").attr("data-value");
+        var default_bill_template_id=$("#default_bill_template_id").val();
+        
+        var now_user_id = $('#now_user_id').val();
+        
+        $.ajax({
+            type: "post",
+            url: "/publicshow/downloadPdf",
+            data : {
+            	bill_template_id:bill_template_id,
+            	company_order_id:company_order_id,
+            	receivable_info_id:receivable_info_id,
+            	default_bill_template_id:default_bill_template_id,
+            	now_user_id:now_user_id
+
+            },
+   
+            dataType: "json",
+            success: function (result) {
+            	window.location.href=result
+            }
+        });     
+        //window.open('/publicshow/pdf?bill_template_id='+bill_template_id+'&company_order_id='+company_order_id+'&receivable_info_id='+receivable_info_id+'&default_bill_template_id='+default_bill_template_id);
+    });
+}
+
+
+//获取销售收款
+function receivable() {
+    $.ajax({
+        type: "post",
+        url: "/finance/getReceivableInfoAjax",
+        data:{
+            company_order_number:(window.location.search).split("=")[1],
+            status:1,
+            receivable_info_type:2
+        },
+        dataType: "json",
+        success: function (result) {
+            layer.load(2);
+            if(result.code==200) {
+                var list=result.data;
+
+                var arr=[];
+                for(var i=0;i<list.length;i++){
+                    list[i].children=[];
+                    if(arr.length==0){
+                        list[i].indexs=1;
+                        arr.push(list[i].payment_number);
+                    }else{
+                        var index=0;
+                        for(var j=0;j<arr.length;j++){
+                            if(list[i].payment_number==arr[j]){
+                                index++;
+                            }
+                        }
+                        if(index==0){
+                            list[i].indexs=1;
+                            arr.push(list[i].payment_number);
+                        }else{
+                            list[i].indexs=2;
+                        }
+                    }
+                    for(var k=0;k<list.length;k++){
+                        if(list[i].payment_number==list[k].payment_number){
+                            list[i].children.push(list[k]);
+                        }
+                    }
+                    list[i].children.splice(0,1);
+                }
+                var getTpl=$("#salesTr").html();
+                laytpl(getTpl).render(list,function(html){
+                    $("#salesTable").html(html);
+                    suppliHtml();
+                });
+                form.render();
+                layer.closeAll();
+            }else if(result.code!=200){
+                return false;
+            }
+        }
+    });
+}
+//添加销售收款弹窗
+function addSale(obj,htmls) {
+    var salesAdd=$("#addSales").html();
+    var title='';
+    htmls=='add'?title='添加':title='修改';
+    layer.open({
+        skin: 'my-skin'
+        , content: salesAdd
+        , type: 1
+        , title: title+'销售收款'
+        , area: ['700px', '550px']
+        , shadeClose: true,
+        scrollbar: false,
+        success: function () {
+            addNumber='';
+            $(".input-required i").remove();
+            $(".input-required").prepend("<i>*</i>");
+            lay('.sales-date').each(function(){
+                laydate.render({
+                    elem: this
+                    ,trigger: 'click'
+                    ,done: function(value, date){
+                    }
+                });
+            });
+            curreyHtml();
+            suppliHtml();
+            if(htmls=='edit'){
+                //调修改销售收款接口
+            }
+            /*选择对应应收编号*/
+            $("#saleNumber").click(function () {
+                layer.load(2);
+                receivables();
+            });
+            form.render();
+            layer.closeAll('loading');
+        }
+    });
+}
+/*添加销售收款--应收编号弹窗确定*/
+var money;
+var sales;
+function numberOk() {
+    addNumber='';//编号
+    money=0;//价格
+    sales='';//币种
+    $("#popSaleTr").find('input[type="checkbox"]').each(function(index, item) {
+        if(item.checked===true){
+            var number=$(item).parent("td").siblings(".receivable_number").html();
+            var zum=$(item).parent("td").siblings(".money").attr("money");
+            sales=$(item).parent("td").siblings(".money").attr("sales");
+            addNumber+=number+',';
+            money=parseFloat(zum)+money;
+        }
+    });
+    addNumber = addNumber.substring(0, addNumber.length-1);
+    $("#saleNumber,#financialNumber").html(addNumber);
+    $("#salesRMB,#financialRMB").val(sales);
+    $("#zum,#financialZum").val(money);
+    layer.close(layer.index);
+
+}
+/*添加销售收款弹窗确定*/
+function addSales() {
+    var saleSN=$("#saleSN").val();
+    var receivable_number=$("#saleNumber").val();
+    var payment_time=$("#saleDate").val();
+    var payment_stage=$("#saleStage").val();
+    var payment_type=$("#saleMode").val();
+    var payment_currency_id=$("#salesRMB").val();
+    var payment_money=$("#salePMT").val();
+    var supplier_name=$("#saleSupplier").attr("data-names");
+    var remark=$("#saleRemark").val();
+    $.ajax({
+        type: "post",
+        url: "/companyOrder/addSaleReceivableInfoAjax",
+        data:{
+            order_number:(window.location.search).split("=")[1],
+            sn_number:saleSN,
+            receivable_number:receivable_number,
+            payment_stage:payment_stage,
+            payment_currency_id:payment_currency_id,
+            payment_money:payment_money,
+            supplier_name:supplier_name,
+            payment_type:payment_type,
+            payment_time:dates(payment_time),
+            remark:remark
+        },
+        dataType: "json",
+        success: function (result) {
+            layer.load(2);
+            if(result.code==200) {
+                var list=result.data;
+                receivable();
+                form.render();
+                layer.close(layer.index);
+                layer.closeAll('loading');
+            }else if(result.code!=200){
+                layer.msg("添加失败！"+result.code);
+                layer.closeAll('loading');
+                return false;
+            }
+        }
+    });
+}
+//供应商
+function sup(obj) {
+    var supplier_type_id;
+    if(obj=='sup'){
+        supplier_type_id='';
+    }else{
+        supplier_type_id=12;
+    }
+    $.ajax({
+        type: "post",
+        url: "/source/getSupplierAjax",
+        data:{
+            supplier_type_id:supplier_type_id,
+            status:1
+        },
+        dataType: "json",
+        success: function (result) {
+            layer.load(2);
+            if(result.code==200) {
+                var list=result.data;
+                suppli=[];
+                suppli=result.data;
+                form.render();
+                layer.closeAll('loading');
+            }else if(result.code!=200){
+                layer.msg("添加失败！"+result.code);
+                layer.closeAll('loading');
+                return false;
+            }
+        }
+    });
+}
+form.on('select(fSupplierId)',function (data) {
+    $("#supplier,#saleSupplier").find("option").each(function (index,item) {
+        if($(item).val()==data.value){
+            $("#supplier,#saleSupplier").attr("data-names",$(item).html());
+        }
+    })
+})
+function suppliHtml() {
+    var suppliHtml='';
+    for(var i=0;i<suppli.length;i++){
+        suppliHtml+='<option value="'+suppli[i].supplier_id+'">'+suppli[i].supplier_name+'</option>';
+    }
+    $("#supplierId,#supplier,#saleSupplier").append(suppliHtml);
+}
+
+/*修改销售收款*/
+function slaves_edit(obj,btns) {
+    var receivable_info_id=$(obj).parent("td").siblings(".receivable").attr("data-value");
+    $.ajax({
+        type: "post",
+        url: "/finance/updateCompanyOrderSaleAjax",
+        data:{
+            receivable_info_id:receivable_info_id,
+            status:0
+        },
+        dataType: "json",
+        success: function (result) {
+            layer.load(2);
+            if(result.code==200) {
+                var list=result.data;
+                receivable();
+                form.render();
+                layer.closeAll('loading');
+            }else if(result.code!=200){
+                layer.msg("修改失败！"+result.code);
+                return false;
+            }
+        }
+    });
+}
+
+
+/*全选*/
+form.on('checkbox(checkboxAllSale)', function(data){
+    var child = $(data.elem).parents('thead').siblings("tbody").find('td input[type="checkbox"]');
+    child.each(function(index, item){
+        item.checked = data.elem.checked;
+    });
+    form.render('checkbox');
+});
+/*全选*/
+form.on('checkbox(filterSale)', function(data){
+    var child = $(data.elem).parents('thead').siblings("tbody").find('td input[type="checkbox"]');
+    if(data.elem.checked==false){
+        child.each(function(index, item){
+            if(item.disabled!=true){
+                item.checked = data.elem.checked;
+            }else{
+                item.disabled=data.elem.checked;
+                data.elem.disabled=true;
+                $(item).parents("tr").css("background","#fff");
+            }
+        });
+    }
+    child.each(function(index, item){
+        if(item.disabled!=true){
+            item.checked = data.elem.checked;
+        }
+    });
+    form.render('checkbox');
+});
+
+/*选择税种*/
+form.on('select(price)',function (data) {
+    for(var i=0;i<price.length;i++){
+        if(data.value==price[i].tax_id){
+            var priceTd=$(data.elem).parent('td');
+            var sourcePrice=priceTd.siblings(".sourcePrice").attr("price");
+            var priceBeforeTax;
+            priceTd.siblings(".gstrate").find("span").html(price[i].gstrate);
+            priceTd.siblings(".pstrate").find("span").html(price[i].pstrate);
+            priceTd.siblings(".hstrate").find("span").html(price[i].hstrate);
+            priceTd.siblings(".otx").find("span").html(price[i].otx);
+            var zum=sourcePrice/(1+price[i].gstrate/100+price[i].pstrate/100+price[i].hstrate/100+price[i].otx/100);
+            if(isNaN(zum)){
+                priceTd.siblings(".priceBeforeTax").html(0);
+            }else{
+                priceTd.siblings(".priceBeforeTax").html(zum.toFixed(2));
+            }
+        }
+    }
+});
+function changes(obj) {
+    if($(obj).parent("td").next("td").find(".priceTax").val()!=''){
+        var gstrate=$(obj).parent("td").siblings(".gstrate").find("span").html();
+        var pstrate=$(obj).parent("td").siblings(".pstrate").find("span").html();
+        var hstrate=$(obj).parent("td").siblings(".hstrate").find("span").html();
+        var otx=$(obj).parent("td").siblings(".otx").find("span").html();
+        $(obj).parent("td").attr("price",$(obj).val());
+        var sourcePrice=$(obj).parent("td").attr("price");
+        var zum=sourcePrice/(1+gstrate/100+pstrate/100+hstrate/100+otx/100);
+        $(obj).parent("td").siblings(".priceBeforeTax").html(zum.toFixed(2));
+    }else{
+        var zum=$(obj).val();
+        $(obj).parent(".sourcePrice").attr("price",$(obj).val());
+        $(obj).parent("td").siblings(".priceBeforeTax").html(zum);
+    }
+}
+
+
+//房型
+function roomType(obj) {
+    return obj==1?'双人房':obj==2?'大床房':obj==3?'单人房':obj==4?'加床':'-';
+}
+//入住
+function roomIn(obj) {
+    if(obj<0){
+        return '提前'+obj.substring(1)+'天入住';
+    }else if(obj==0){
+        return '无特殊要求';
+    }else{
+        return '延后'+obj.substring(1)+'天入住';
+    }
+}
+//接送机
+function flightType(obj) {
+    return obj==1?'接机':obj==2?'送机':'-';
+}
+//退房
+function roomOn(obj) {
+    if(obj<0){
+        return '提前'+obj.substring(1)+'天退房';
+    }else if(obj==0){
+        return '无特殊要求';
+    }else{
+        if(obj.length==2){
+            return '延后'+obj.substring(1)+'天退房';
+        }else{
+            return '延后'+obj+'天退房';
+        }
+    }
+}
+//类型
+function types(obj) {
+    return obj==1?'成人':obj==2?'占床儿童':obj==3?'不占床儿童':obj==4?'老人':'';
+}
+//性别
+function genders(obj) {
+    return obj==1?'男':obj==2?'女':'';
+}
+//供应商
+function supplier(obj) {
+    return obj==2?'酒店':obj==3?'用餐':obj==4?'航班':obj==5?'邮轮':obj==6?'签证':obj==7?'景点':obj==8?'车辆':obj==9?'导游':obj==10?'单项资源':obj==11?'自费项目':obj==12?'其他':'';
+}
+
+//字段返回为null时处理方法
+function isNull(type) {
+    if(type&&type!=null){
+        return type;
+    }else{
+        return '';
+    }
+}
+function fn(names) {
+    if(names==null || names==''){
+        return '--';
+    }else{
+        return names
+    }
+}
+//支付方式
+function fnPayment(type) {
+    return type==1?'cash':type==2?'check':type==3?'debit card':type==4?'credit card(mc)':type==5?'credit card(vs)':type==6?'credit card(ax)':type==7?'direct depsit':type==8?'others':'';
+}
+//支付类型
+function stage(type) {
+    return type==1?'Balance':type==2?'Deposit':type==3?'Fullpmt':type==4?'Gratuities':type==5?'Insurance':type==6?'Partpmt':type==7?'Rebate':type==8?'Tkt':type==9?'Visa':'';
+}
+/*人数*/
+function user(items) {
+    var users='';
+    for(var i=0;i<items.length;i++){
+        if(i==0){
+            users+=items[i].company_order_customer_id;
+        }else{
+            users+=','+items[i].company_order_customer_id;
+        }
+    }
+    return users;
+}
+/*销售收款总价格*/
+function maxprice(num,children) {
+    if(children.length>0){
+        var zum=0;
+        for(var i=0;i<children.length;i++){
+            zum=zum+parseFloat(children[i].payment_money);
+        }
+        return parseFloat(num)+zum;
+    }else{
+        return num;
+    }
+}
+/*全选*/
+form.on('checkbox(checkboxAll)', function(data){
+    var child = $(data.elem).parents('.visitorListTips').find('.checkboxList input[type="checkbox"]');
+    child.each(function(index, item){
+        item.checked = data.elem.checked;
+    });
+    form.render('checkbox');
+});
+//币种转换
+function curey(type) {
+    for(var i=0;i<curreys.length;i++){
+        if(curreys[i].currency_name==type){
+            return curreys[i].currency_id;
+        }
+    }
+}
+/*销售收款锁定*/
+function lock(obj) {
+    var receivable_info_id=$(obj).parents("tr").attr("data-value");
+    financialPayment(receivable_info_id,1,'paids');
+}
+/*销售收款解锁*/
+function delocking(obj) {
+    var receivable_info_id=$(obj).parents("tr").attr("data-value");
+    financialPayment(receivable_info_id,0,'paids');
+}
+
+/*财务收款table*/
+function financial() {
+    $.ajax({
+        type: "post",
+        url: "/finance/getReceivableInfoAjax",
+        data:{
+            company_order_number:(window.location.search).split("=")[1],
+            status:1,
+            receivable_info_type:1
+        },
+        dataType: "json",
+        success: function (result) {
+            layer.load(2);
+            if(result.code==200) {
+                var list=result.data;
+
+                var arr=[];
+                for(var i=0;i<list.length;i++){
+                    list[i].children=[];
+                    if(arr.length==0){
+                        list[i].indexs=1;
+                        arr.push(list[i].payment_number);
+                    }else{
+                        var index=0;
+                        for(var j=0;j<arr.length;j++){
+                            if(list[i].payment_number==arr[j]){
+                                index++;
+                            }
+                        }
+                        if(index==0){
+                            list[i].indexs=1;
+                            arr.push(list[i].payment_number);
+                        }else{
+                            list[i].indexs=2;
+                        }
+                    }
+                    for(var k=0;k<list.length;k++){
+                        if(list[i].payment_number==list[k].payment_number){
+                            list[i].children.push(list[k]);
+                        }
+                    }
+                    list[i].children.splice(0,1);
+                }
+
+                var financial=$("#financialTbody").html();
+                laytpl(financial).render(list, function(html){
+                    $("#financial").html(html);
+                });
+                form.render();
+                layer.closeAll('loading');
+            }else if(result.code!=200){
+                return false;
+            }
+        }
+    });
+}
+/*财务收款PTS选择*/
+form.on('checkbox(pts)', function(data){
+    var receivable_info_id=$(data.elem).parents("tr").attr("data-receivable");
+    var status;
+    data.elem.checked==true?status=1:status=0;
+    financialPayment(receivable_info_id,status,'pts');
+});
+/*财务收款PAID选择*/
+form.on('checkbox(paid)', function(data){
+    var receivable_info_id=$(data.elem).parents("tr").attr("data-receivable");
+    var status;
+    data.elem.checked==true?status=1:status=0;
+    financialPayment(receivable_info_id,status,'paid');
+});
+
+
+/*添加财务收款*/
+function financialAdd(obj,html) {
+    var financialAdd=$("#addFinancial").html();
+    var title='';
+    html=='add'?title='添加':title='修改';
+    layer.open({
+        skin: 'my-skin'
+        , content: financialAdd
+        , type: 1
+        , title: title+'财务收款'
+        , area: ['850px', '550px']
+        , shadeClose: true,
+        scrollbar: false,
+        success: function () {
+            $("#financialOk").attr("data-title",html);
+            addNumber='';
+            $(".input-required i").remove();
+            $(".input-required").prepend("<i>*</i>");
+            lay('.sales-date').each(function(){
+                laydate.render({
+                    elem: this
+                    ,trigger: 'click'
+                    ,done: function(value, date){
+                    }
+                });
+            });
+            suppliHtml();
+            curreyHtml();
+            if(html=='edit'){
+                //调修改接口
+                /*$.ajax({
+                    type: "post",
+                    url: "/finance/getReceivableAjax",
+                    data:{
+                        order_number:(window.location.search).split("=")[1]
+                    },
+                    dataType: "json",
+                    success: function (result) {
+                        layer.load(2);
+                        if(result.code==200) {
+                            var list=result.data;
+
+                            layer.closeAll('loading');
+                        }else if(result.code!=200){
+                            return false;
+                        }
+                    }
+                });*/
+            }
+            /*选择对应应收编号*/
+            $("#financialNumber").click(function () {
+                layer.load(2);
+                receivables();
+            });
+            form.render();
+        }
+    });
+}
+/*财务收款弹出确定*/
+function addFinancial(obj) {
+    var sn=$("#SN").val();
+    var payment_currency_id=$("#financialRMB").val();
+    var financialTime=$("#financialTime").val();
+    var financialType=$("#financialType").val();
+    var financialPayment=$("#financialPayment").val();
+    var payNumber=$("#payNumber").val();
+    var supplier=$("#supplier").attr("data-names");
+    var amount=$("#amount").val();
+    var financialNumber=$("#financialNumber").val();
+    var huidui=$("#huidui").val();
+    var accountNumber=$("#accountNumber").val();
+    var financialRemark=$("#financialRemark").val();
+    $.ajax({
+        type: "post",
+        url: "/companyOrder/addReceivableInfoAjax",
+        data:{
+            sn_number:sn,
+            payment_time:dates(financialTime),
+            payment_type:financialType,
+            payment_stage:financialPayment,
+            payment_currency_id:payment_currency_id,
+            payment_number:payNumber,
+            supplier_name:supplier,
+            payment_money:amount,
+            receivable_number:financialNumber,
+            exg_rate_gain:huidui,
+            account_number:accountNumber,
+            remark:financialRemark
+        },
+        dataType: "json",
+        success: function (result) {
+            if(result.code==200) {
+                layer.load(2);
+                layer.msg("添加成功！");
+                financial();
+                layer.closeAll();
+            }else if(result.code!=200){
+                return false;
+            }
+        }
+    });
+}
+function dates(obj) {
+    if(obj!=''){
+        return Math.round(new Date(obj).getTime()/1000).toString();
+    }else{
+        return '';
+    }
+}
+/*删除销售收款*/
+function sales_del(obj,names) {
+    var ids=$(obj).parents("tr").attr("data-value");
+    financial_del(ids,names)
+}
+/*删除财务收款*/
+function financial_del(obj,names) {
+
+    layer.load(2);
+    var receivable_info_id;
+    if(names=='sales'){
+        receivable_info_id=obj;
+    }else{
+        receivable_info_id=$(obj).attr("data-infoId");
+    }
+    $.ajax({
+        type: "post",
+        url: "/finance/delReceivableInfoAjax",
+        data:{
+            receivable_info_id:receivable_info_id
+        },
+        dataType: "json",
+        success: function (result) {
+            if(result.code==200) {
+                var list=result.data;
+                layer.msg("删除成功！");
+                if(names=='sales'){
+                    receivable();
+                }else{
+                    financial();
+                }
+                layer.closeAll('loading');
+            }else if(result.code!=200){
+                return false;
+            }
+        }
+    });
+}
+/*修改财务收款*/
+function financialPayment(obj,stutas,names) {//receivable_info_id、选择状态、选择的名称pts/paid
+    layer.load(2);
+    var pts='';
+    var paid='';
+    names=='pts'?pts=stutas:paid=stutas;
+    $.ajax({
+        type: "post",
+        url: "/finance/updateFinancialPaymentStatus",
+        data:{
+            receivable_info_id:obj,
+            pts:pts,
+            is_locked:paid
+        },
+        dataType: "json",
+        success: function (result) {
+            if(result.code==200) {
+                var list=result.data;
+                layer.msg("选择成功！")
+                if(names=='paids'){
+                    receivable();
+                }
+                layer.closeAll('loading');
+            }else if(result.code!=200){
+                return false;
+            }
+        }
+    });
+}
+
+/*对应应收*/
+function receivables() {
+    $.ajax({
+        type: "post",
+        url: "/finance/getReceivableAjax",
+        data:{
+            order_number:(window.location.search).split("=")[1]
+        },
+        dataType: "json",
+        success: function (result) {
+            layer.load(2);
+            if(result.code==200) {
+                var list=result.data;
+                var popSaleNumber=$("#popSaleNumber").html();
+                laytpl(popSaleNumber).render(list, function(html) {
+                    layer.open({
+                        skin: 'my-skin'
+                        , content: html
+                        , type: 1
+                        , title: '对应应收'
+                        , area: ['700px', '550px']
+                        , shadeClose: true,
+                        scrollbar: false,
+                        success: function () {
+                            var number='';
+                            var arrayNum=addNumber.split(",");
+                            $("#allNumber").attr("disabled","true");
+                            for(var y=0;y<arrayNum.length;y++){
+                                $("#popSaleTr").find('input[type="checkbox"]').each(function(index, item) {
+                                    if($(item).parent("td").attr("data-number")==arrayNum[y]){
+                                        number=$(item).parent("td").attr("data-currency");
+                                        document.getElementById("allNumber").disabled=false;
+                                        item.checked=true;
+                                    }else{
+                                        if($(item).parent("td").attr("data-currency")!=number&&number!=''){
+                                            item.disabled=true;
+                                            $(item).parents("tr").css("background","#ddd");
+                                        }
+                                    }
+                                });
+                            }
+                            form.on('checkbox(saleList)', function(data){
+                                var sum=0;
+                                var currencyName=$(data.elem).parent("td").attr("data-currency");
+                                $("#popSaleTr").find('input[type="checkbox"]').each(function(index, item) {
+                                    if(item.checked==true){
+                                        document.getElementById("allNumber").disabled=false;
+                                        sum++;
+                                    }
+                                    if(sum==0&&data.elem.checked==false){
+                                        if($(item).parent("td").attr("data-currency")!=currencyName){
+                                            item.disabled=data.elem.disabled;
+                                            $(item).parents("tr").css("background","#fff");
+                                        }
+                                    }else{
+                                        if($(item).parent("td").attr("data-currency")!=currencyName){
+                                            item.disabled=true;
+                                            $(item).parents("tr").css("background","#ddd");
+                                        }
+                                    }
+                                });
+                                form.render('checkbox');
+                            });
+                            form.render();
+                        }
+                    })
+                });
+                layer.closeAll('loading');
+            }else if(result.code!=200){
+                return false;
+            }
+        }
+    });
+}

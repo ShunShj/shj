@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<head>
+    {include file='public/head' /}
+    <title>layout 后台大布局 - Layui</title>
+
+    <style>
+        .nav {
+            display: inline-block;
+            position: relative;
+            height: 54px;
+            font-size: 15px;
+        }
+
+        .nav > * {
+            display: inline-block;
+        }
+
+        .nav > .t {
+            position: absolute;
+            top: 0;
+            background: rgb(208, 210, 211);
+            /* Skew */
+            -webkit-transform: skew(30deg);
+            -moz-transform: skew(30deg);
+            -o-transform: skew(30deg);
+            transform: skew(30deg);
+        }
+
+        .nav > .b {
+            position: absolute;
+            bottom: 0;
+            background: rgb(208, 210, 211);
+            /* Skew */
+            -webkit-transform: skew(-30deg);
+            -moz-transform: skew(-30deg);
+            -o-transform: skew(-30deg);
+            transform: skew(-30deg);
+        }
+
+        .tab .nav>.t,.tab .nav>.b{
+            -webkit-transform: none;
+            -moz-transform: none;
+            -o-transform: none;
+            transform: none;
+        }
+
+
+        .nav > a {
+            /*position:absolute;
+            top:0;*/
+            margin-left: 13px;
+            vertical-align: middle;
+            text-align: center;
+            text-decoration: none;
+            cursor: default;
+            font-weight: bold;
+            color: #77787b !important;
+        }
+
+        .nav.hover>a{
+            color: #ffffff !important;
+        }
+
+        .nav.hover > span {
+            background-color: #3376ba;
+            cursor: pointer;
+        }
+
+        .nav.done_step.hover>span{
+            background-color: #3376ba;
+        }
+
+        .nav.hover > a {
+            cursor: pointer;
+        }
+
+        .ab_position {
+            position: absolute;
+        }
+
+        .nav > .first_mark {
+            position: absolute;
+            top: 0;
+            z-index: 1;
+            width: 16px;
+            height: 100%;
+            background-color: #ffffff;
+            left: -8px;
+        }
+
+        .nav.done_step>a,.nav.active_step>a{
+            color: #ffffff !important;
+        }
+
+        .nav.done_step>.t,.nav.done_step>.b{
+            background-color: #767780;
+        }
+
+        .nav.active_step>.t,.nav.active_step>.b{
+            background-color: #3376ba;
+        }
+
+        .tab_border{
+            height: 2px;
+            background-color: #767780;
+            margin-left: 8px;
+            margin-top: -4px;
+        }
+
+    </style>
+    <link href="/assets/css/admin_booking.css" type="text/css" media="all" rel="stylesheet"/>
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+    <div class="layui-header">
+        {include file='public/header' /}
+    </div>
+
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll">
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            {include file='public/left_menu_booknexus' /}
+        </div>
+    </div>
+
+    <div class="layui-body">
+
+        <!-- 内容主体区域 -->
+        <div style="padding: 15px 15px 0px;">
+            <div class='layui-row'>
+		   		<span class="layui-breadcrumb" lay-separator="-">
+                    <a>首页</a>
+                    <a>B2B</a>
+					<a>创建订单</a>
+				</span>
+            </div>
+            <br>
+            {include file='admin_booking/create_booking_menu' /}
+
+            <div class="layui-row layui-col-space12" style="padding: 20px 10px">
+                <form class="layui-form" id="form1" onSubmit="return add()">
+                    <h2 class="top_icn">
+                        <span class="top_icn_text">1</span>
+                        <img src="/assets/images/select_tour_icn.png" alt="Select Tour - Step 1">
+                        <span class="top_text"></span>
+                    </h2>
+
+                    <div class="layui-col-md8">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label input-required">Select an agent:</label>
+                            <div class="layui-input-block layui-form">
+                                <select class="layui-input" name="s_agent"  lay-verify="required"  lay-search>
+                                    <option></option>
+                                    {foreach $all_agent as $v}
+                                    <option value="{$v.distributor_id}" {$Think.session.adminBooking_createBookingFormAjax.s_agent==$v.distributor_id?'selected':''}>{$v.distributor_name}</option>
+                                    {/foreach}
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-col-md8">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label input-required">Select a tour:</label>
+                            <div class="layui-input-block layui-form">
+                                <select class="layui-input" name="s_tour"  lay-verify="required" lay-search>
+                                    <option></option>
+                                    {foreach $all_tours as $v}
+                                    <option value="{$v.btb_tour_id}"  {$Think.session.adminBooking_createBookingFormAjax.s_tour==$v.btb_tour_id?'selected':''}>{$v.tour_name} {$v.tour_name_ch}</option>
+                                    {/foreach}
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="layui-col-md8" style="padding: 20px;font-weight: bold;font-size:14px;text-align: center">
+                        <button   class="layui-btn nav-submit" lay-submit  >Next</button>
+                    </div>
+
+                </form>
+            </div>
+
+
+        </div>
+
+
+        <div class="layui-footer">
+            <!-- 底部固定区域 -->
+            © layui.com - 底部固定区域
+        </div>
+    </div>
+    {include file='public/foot_js' /}
+    <script>
+        //JavaScript代码区域
+        var layer = layui.layer;
+        var form = layui.form;
+        var laydate = layui.laydate;
+
+
+        function add(){
+            $.ajax({
+                type: "POST",
+                url: '/admin_booking/createBookingFormAjax',
+                data:  $('#form1').serializeArray(),
+                success: function(data){
+                    //console.log(data);
+                    if(data.code!=200){
+                        layer.msg(data.msg);
+                        return false;
+                    }else if(data.code==200) {
+                        layer.msg('操作成功',{time:2000,end : function(layero, index){
+                            location.href="/admin_booking/select_date";
+                        }
+                        });
+                    }
+                },
+                error:function(XMLHttpRequest, textStatus, errorThrown){
+                    layer.msg('验证失败')
+                }
+            });
+            return false;
+        }
+
+
+    </script>
+
+</body>
+</html>

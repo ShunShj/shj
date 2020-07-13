@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {include file='public/head' /}
+    <title>{$language_tag.index_product_ShowPlanTour_resources_teamProduct}-{$language_tag.index_product_PlanReceivableBranch_receivable_branch}</title>
+    <link href="__STATIC__/css/select2.min.css" rel="stylesheet">
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+    <div class="layui-header">
+        {include file='public/header' /}
+    </div>
+
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll">
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            {include file='public/left_menu' /}
+        </div>
+    </div>
+
+    <div class="layui-body">
+
+        <!-- 内容主体区域 -->
+        <div style="padding: 15px;">
+            <div class='layui-form-item'>
+			<span class="layui-breadcrumb" lay-separator="-">
+                <a>{$language_tag.index_public_homepage}</a>
+				<a>{$language_tag.index_public_finance}</a>
+				<a>{$language_tag.index_finance_codeDetail_cost_statement}</a>
+                <a><cite>{$_GET['number']}{$language_tag.index_finance_codeDetail_cost_detail}</cite></a>
+			</span>
+            </div>
+            <br/>
+            <div class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief">
+                <div style="font-size: 20px;font-weight: bold">{$language_tag.index_finance_codeDetail_group_number}： {$_GET['number']}</div>
+                <div class="layui-tab-content">
+                    <table class="layui-table" >
+                        <thead>
+                        <tr style="text-align: center">
+                            <td rowspan="2"></td>
+                            <td rowspan="2" width="14%">{$language_tag.index_public_type}</td>
+                            <td rowspan="2" width="15%">{$language_tag.index_public_supplier}</td>
+                            <td colspan="6" width="50%">{$language_tag.index_finance_CostSharingList_add_detail}</td>
+                            <td rowspan="2">{$language_tag.index_product_PlanSuppliersPayable_payableToSuppliers}</td>
+                            <td rowspan="2">{$language_tag.index_finance_showMustPayManage_true_receipt}</td>
+                            <td rowspan="2">{$language_tag.index_finance_showMustPayManage_unpaid}</td>
+                            <td rowspan="2">{$language_tag.index_product_PlanSuppliersPayable_totalPayable}</td>
+                            <td rowspan="2">{$language_tag.index_product_PlanSuppliersPayable_totalActualPayments}</td>
+                        </tr>
+                        <tr style="text-align: center">
+                            <td width="10%">{$language_tag.index_finance_showMustPayManage_cope_number}</td>
+                            <td width="10%">{$language_tag.index_system_showLanguageManage_name}</td>
+                            <td width="10%">{$language_tag.index_finance_showReceivableManage_currency_name}</td>
+                            <td width="10%">{$language_tag.index_public_price}</td>
+                            <td width="10%">{$language_tag.index_finance_showAgentExpenseManage_quantity}</td>
+                            <td width="10%">{$language_tag.index_finance_showAgentExpenseManage_total_price}</td>
+                        </tr>
+                        </thead>
+                        <tbody >
+                        {notempty name='$list["团费"]'}
+                        {assign name='s1' value='1'}
+                        {assign name='s2' value='1'}
+                        {assign name='ss2' value='1'}
+                        {assign name='s3' value='1'}
+                        {assign name='u1' value=''}
+                        <!--类型-->
+                        {assign name='u2' value=''}
+                        <!--供应商-->
+                        {assign name='u3' value='0'}
+                        {assign name='bl' value='1'}
+                        {foreach $list['团费']['data'] as $k1=>$v1}
+                        {foreach $v1['data'] as $k2=>$v2}
+                        {foreach $v2 as $k3=>$v3}
+                        <tr>
+                            {if ($bl==1)}
+                            <td  rowspan="{$list['团费']['count']}">{$language_tag.index_product_PlanSuppliersPayable_teamCoping}</td>
+                            {/if}
+
+                            {if ($u2!=$k1)}
+                            {assign name='ss2' value='1'}
+                            <td class="layui-form type" rowspan="{$v1['count']}" >
+                                {$types[$k1]}
+                            </td>
+                            {assign name='s1' value='$s1+1'}
+                            {/if}
+
+                            {if ($u3!=$k2 || $u2!=$k1) }
+                            <td class="layui-form supplier"  rowspan="{$v2|count}">
+                                {foreach $SupplierArr[$k1] as $vv}
+                                {$vv["supplier_id"]==$k2?$vv['supplier_name']:""}
+                                {/foreach}
+                            </td>
+                            {assign name='s2' value='$s2+1'}
+                            {assign name='ss2' value='$ss2+1'}
+                            {/if}
+
+                            <td>{$v3.cope_number}</td>
+                            <td>{$v3.product_name|default='-'}</td>
+                            <td class="layui-form">{$Currency[$v3.cope_currency_id][0]['currency_name']}</td>
+                            <td>{$v3.price}</td>
+                            <td>{$v3.unit}</td>
+                            <td>{$v3.cope_money}</td>
+
+                            {if ($bl==1)}
+                            <td  rowspan="{$list['团费']['count']}">{$language_tag.index_product_PlanSuppliersPayable_payableToSuppliers}</td>
+                            <td  rowspan="{$list['团费']['count']}">{$language_tag.index_finance_showMustPayManage_true_receipt}</td>
+                            <td  rowspan="{$list['团费']['count']}">{$language_tag.index_finance_showMustPayManage_unpaid}</td>
+                            {assign name='bl' value='0'}
+                            {/if}
+
+                            {assign name='s3' value='$s3+1'}
+                            {assign name='u2' value='$k1'}
+                            {assign name='u3' value='$k2'}
+                        </tr>
+                        {/foreach}
+                        {/foreach}
+                        {/foreach}
+                        {/notempty}
+
+                        {notempty name='$list["地接"]'}
+                        {assign name='Ds1' value='1'}
+                        {assign name='Ds2' value='1'}
+                        {assign name='Dss2' value='1'}
+                        {assign name='Ds3' value='1'}
+                        {assign name='Du1' value=''}
+
+                        {assign name='Du2' value=''}
+                        {assign name='Du3' value='0'}
+                        {assign name='Dbl' value='1'}
+
+                        {foreach $list['地接']['data'] as $k1=>$v1}
+                        {foreach $v1['data'] as $k2=>$v2}
+                        {foreach $v2 as $k3=>$v3}
+                        <tr>
+                            {if ($Dbl==1)}
+                            <td id="v-1" rowspan="{$list['地接']['count']}">{$language_tag.index_finance_showAgentExpenseManage_travel_agency_reimbursement}</td>
+                            {/if}
+
+                            {if ($Du2!=$k1)}
+                            {assign name='Dss2' value='1'}
+                            <td class="layui-form type" rowspan="{$v1['count']}" >{$types[$k1]}</td>
+                            {assign name='Ds1' value='$Ds1+1'}
+                            {/if}
+
+                            {if ($Du3!=$k2 || $Du2!=$k1) }
+                            <td class="layui-form supplier"   rowspan="{$v2|count}">
+                                {foreach $SupplierArr[$k1] as $vv}
+                                {$vv["supplier_id"]==$k2?$vv['supplier_name']:""}
+                                {/foreach}
+                            </td>
+                            {assign name='Ds2' value='$Ds2+1'}
+                            {assign name='Dss2' value='$Dss2+1'}
+                            {/if}
+
+                            <td>{$v3.cope_number}</td>
+                            <td>{$v3.product_name}</td>
+                            <td class="layui-form">{$Currency[$v3.cope_currency_id][0]['currency_name']}</td>
+                            <td>{$v3.price}</td>
+                            <td>{$v3.unit}</td>
+                            <td>{$v3.cope_money}</td>
+
+                            {if ($Dbl==1)}
+                            <td rowspan="{$list['地接']['count']}"></td>
+                            <td rowspan="{$list['地接']['count']}"></td>
+                            <td rowspan="{$list['地接']['count']}"></td>
+                            {assign name='Dbl' value='0'}
+                            {/if}
+
+
+                            {assign name='Ds3' value='$Ds3+1'}
+
+                            {assign name='Du2' value='$k1'}
+                            {assign name='Du3' value='$k2'}
+
+
+                        </tr>
+
+                        {/foreach}
+                        {/foreach}
+                        {/foreach}
+                        {/notempty}
+
+                        </tbody>
+                    </table>
+
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+
+    <div class="layui-footer">
+        <!-- 底部固定区域 -->
+        © layui.com - 底部固定区域
+    </div>
+</div>
+{include file='public/foot_js' /}
+<script src='__STATIC__/javascript/public/select2.min.js'></script>
+<script>
+
+    !function(){
+        var layer = layui.layer ;
+        var form = layui.form;
+        var laydate = layui.laydate;
+    }();
+
+</script>
+</body>
+</html>
+
+<script>
+
+
+</script>

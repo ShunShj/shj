@@ -1,0 +1,168 @@
+@page{
+    size:A4;
+    margin: .4in .2in;
+}
+
+body{
+    margin:0;
+    padding: 0;
+}
+
+#header, #top_nav, #footer, br.clear,.actions_wrapper {
+    display: none;
+}
+
+#statement_wrapper{
+    padding: 0px 0px;
+}
+
+.statement_header {
+    font-size: 9pt;
+    padding-right: 15pt;
+}
+
+.statement_header #logo img {
+    width: 250px;
+}
+
+.statement_header #logo em {
+    font-size: 7.5pt;
+}
+
+.statement_header #company-info {
+    margin: 31px 10px 0px 10px;
+    margin: 40px 10px 0px 10px\9; /*For IE 6-10*/
+    padding-right: 5px;
+}
+
+/* FOr Firefox 2+ */
+body:last-child .statement_header #company-info, x:-moz-any-link {
+    margin: 38px 10px 0px 10px;
+}
+
+.page_wrapper{
+    padding-top: 1px\9;/* Important For IE 6-10*/
+}
+
+.banner {
+    padding-left: 20px;
+    margin: 0px 0 0 0;
+}
+
+.banner img {
+    width: 20px;
+}
+
+.banner .title {
+    font-size: 30px;
+}
+
+hr.banner_border {
+    margin-top: -8px;
+    border: 2px solid #1b75bb;
+}
+
+.content {
+    font-size: 9pt;
+    padding:10px 20px;
+}
+
+.agent_info{
+    margin-bottom: 15px;
+}
+
+.page_print{
+    display: block;
+}
+.content .agent_info td {
+    padding: 5px;
+}
+
+.filed_label {
+    width: 90px;
+}
+.statement_info thead th {
+    padding: 5px;
+    font-size: 10.5pt;
+}
+
+.statement_info tbody td {
+    padding: 2px 5px;
+    padding: 4px 5px\9;/*For IE 6-10*/
+}
+
+/*body {counter-reset: myPage;}*/
+
+/*.statement_info{*/
+    /*counter-increment: myPage;*/
+/*}*/
+
+/*.statement_info:after{*/
+    /*content: "Chapter " counter(myPage);*/
+/*}*/
+
+.item_row{
+    font-size: 8.25pt;
+
+}
+
+.summary_info tbody td {
+    padding: 5px;
+}
+
+.footer_separator {
+    margin-bottom: 15px;
+}
+
+.footer_content {
+    font-size: 10.5pt;
+    padding: 0 20px;
+}
+
+.payment_header {
+    font-size: 18px;
+    margin: 20px 0;
+}
+
+.payment_title {
+    font-size: 10.5pt;
+}
+
+.footer_content img {
+    width: 60px;
+}
+
+/*
+* For breaking a info table
+*/
+
+.page_wrapper:not(.first_page){
+    display: block;
+    page-break-before: always;
+}
+
+table{
+    page-break-inside: avoid;
+}
+
+.page_print{
+    display: block;
+}
+
+table.statement_info tbody tr:not(.first_page_item) {
+    display: none;
+}
+h3.not_show{
+    display: none;
+}
+table.statement_info.not_show thead tr:not(.first_page_item) {
+    display: none;
+}
+
+h3>br{
+    display: none;
+}
+
+.statement_footer{
+    page-break-inside: avoid;
+}

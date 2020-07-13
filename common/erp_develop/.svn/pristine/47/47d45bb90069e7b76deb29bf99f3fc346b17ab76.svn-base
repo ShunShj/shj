@@ -1,0 +1,49 @@
+    <div class="layui-logo"><img src="__STATIC__/image/head/logo_head.png" width="180px" /></div>
+    <!-- 头部区域（可配合layui已有的水平导航） -->
+    <ul class="layui-nav layui-layout-left">
+      <li class="layui-nav-item"><a href="">erp后台</a></li>
+      <li class="layui-nav-item"><a href="">官网后台</a></li>
+      <!-- 
+      <li class="layui-nav-item"><a href="">用户</a></li>
+      <li class="layui-nav-item">
+        <a href="javascript:;">其它系统</a>
+        <dl class="layui-nav-child head-top">
+          <dd><a href="">邮件管理</a></dd>
+          <dd><a href="">消息管理</a></dd>
+          <dd><a href="">授权管理</a></dd>
+        </dl>
+      </li>
+       -->
+    </ul>
+    <ul class="layui-nav layui-layout-right">
+      <li class="layui-nav-item tips-system-message" style="cursor: pointer">{$Think.lang.index_nav_system_message} <span class="system-message-quantity" style="color: red"> {$InStationLetterList|count} </span> </li>
+      <li class="layui-nav-item">
+        <a href="javascript:;">
+          <!-- <img src="http://t.cn/RCzsdCq" class="layui-nav-img"> -->
+          {$Think.session.user.nickname}
+        </a>
+        <dl class="layui-nav-child head-top">
+          <dd><a href="/system/setUserInfo/user_id/{$Think.session.user.user_id}">{$Think.lang.index_nav_basicDocument}</a></dd>
+          <dd><a href="/system/showChangePassword/user_id/{$Think.session.user.user_id}">{$Think.lang.index_nav_resetPassword}</a></dd>
+        </dl>
+      </li>
+      <li class="layui-nav-item"><a href="/login/loginOut">{$Think.lang.index_nav_loginOff}</a></li>
+    </ul>
+
+    <div id="tips-system-message-js" style="display: none">
+        <div  style="max-height:350px;width: 450px">
+             <div style="color: #000;text-align: center;height: 10px;padding: 10px">你有 <font class="f-tips-system-message">{$InStationLetterList|count}</font> 条未读消息</div>
+             <hr>
+             <div class="tips-system-message-div" style="height:220px;overflow-y: auto">
+                {foreach $InStationLetterList as $v}
+                 <li style="color: #000; padding: 10px;cursor: pointer" data-href="{$v.url}" data-id="{$v.in_station_letter_id}" class="aUrl" onclick="Aurl(this)" >{$v.content}</li>
+                 <hr>
+                {/foreach}
+             </div>
+            <div style="color: #000;text-align: center;height: 40px;padding-top: 15px"><a href="/reminderManagement/allInStationLetter">{$Think.lang.index_nav_viewAll_messa}</a></div>
+        </div>
+    </div>
+    <!--  下列保存用户SESSION信息 -->
+    <input type="hidden" id='user_language_id'  value="{$Think.session.user.language_id}" />
+    <input type="hidden" id='user_language_name' value="{$Think.session.user.language_name}" />
+    <input type="hidden" id='user_email' value="{$Think.session.user.email}" />

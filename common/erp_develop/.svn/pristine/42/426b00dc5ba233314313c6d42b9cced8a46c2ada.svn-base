@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {include file='public/head' /}
+    <title>currency-manage-edit</title>
+
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+
+    <div class="layui-header">
+        {include file='public/header' /}
+    </div>
+
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll">
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            {include file='public/left_menu' /}
+        </div>
+    </div>
+
+    <div class="layui-body">
+
+        <!-- 内容主体区域 -->
+        <div style="padding: 15px;">
+            <div class='layui-form-item'>
+		   		<span class="layui-breadcrumb" lay-separator="-">
+                    <a>{$Think.lang.index_public_homepage}</a>
+					<a>{$Think.lang.index_public_system}</a>
+					<a>{$Think.lang.index_system_showCountryManage_country_manage}</a>
+					<a><cite>{$Think.lang.index_public_language}</cite></a>
+				</span>
+            </div>
+            <br/>
+            <br/>
+
+            <div class="layui-row">
+                <form class="layui-form layui-col-md4" onSubmit="return country_edit_language()">
+                    {volist name='country_language_result' id='v'}
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">{$v.language_name}{$Think.lang.index_system_showCountryManage_name}:</label>
+                        <div class="layui-input-block layui-form" >
+                            <input  class="layui-input edit_country_language" name="country_code" country_language_id='{$v.language_info.country_language_id}' country_name='{$v.language_info.country_name}' lang_id='{$v.language_id}' placeholder="{$Think.lang.index_system_showCountryManage_input_name}" autocomplete="off"  type="text" value="{$v.language_info.country_name}">
+
+                        </div>
+                    </div>
+                    {/volist}
+
+                    <input type='hidden' value="{$Think.get.country_id}" id='country_id' />
+                    <div class="layui-form-item">
+                        <div class="layui-input-block">
+                            <button class="layui-btn nav-submit" lay-submit="" lay-filter="formDemo" id="country_edit_button">{$Think.lang.index_public_submit}</button>
+                            <a href='/system/showCountryManage'><button type="button" class="layui-btn layui-btn-primary">{$Think.lang.index_public_back}</button></a>
+                            <input type="hidden" id="country_id_hidden" name="country_id" value="{$data.country_id}">
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="layui-footer">
+        <!-- 底部固定区域 -->
+        © layui.com - 底部固定区域
+    </div>
+</div>
+{include file='public/foot_js' /}
+<script src='__STATIC__/javascript/system/system.js'></script>
+</body>
+</html>
+

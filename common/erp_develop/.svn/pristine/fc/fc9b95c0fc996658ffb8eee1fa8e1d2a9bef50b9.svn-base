@@ -1,0 +1,422 @@
+
+
+/*产品*/
+var product={isInput:'0',num:'0'};
+var gettplAdd = $('#addOther').html();
+var append_other = 1;
+/*function addOther() {/!*添加一行空数据*!/
+    product.num=parseInt(product.num)+1;
+    product.oth_num="生成中...";
+    product.oth_type="其他";
+	if(append_other==2){
+        layer.msg('请一个一个填');
+		return false;
+	}
+    laytpl(gettplAdd).render(product, function(html){
+        $("#table-product tbody").append(html)
+		append_other=2;
+    })
+}*/
+//产品--添加其他
+function addOther() {
+    laytpl(gettplAdd).render('0', function(html){
+        layer.confirm(html, {
+            skin:'my-skin',
+            btn: ['确定','取消'] //按钮
+            ,title:'添加其他'
+            ,btnAlign: 'c' //按钮居中
+            ,area: ['500px','auto']
+            ,shadeClose:true,
+            scrollbar: false
+        }, function(){
+
+        });
+    });
+    form.render();
+}
+
+//删除产品
+function productDel(obj) {
+    var company_order_product_str1_check = localStorage.getItem("company_order_product_str1");
+    // localStorage.setItem("company_order_product_str1",'');
+
+    var company_order_number = (window.location.search).split("=")[1];
+    var branch_product_number = $(obj).closest("tr").find("td").html();
+    var type_info = $(obj).closest("tr").find("td").eq(1).html();
+    var company_order_product_diy_number = $(obj).closest("tr").find("td").html();
+
+    var lo_str2 = [];
+    var lo_array = (company_order_product_str1_check||'').split(",");
+    for(var i=0;i<lo_array.length;i++){
+        if(lo_array[i]!=branch_product_number){
+            lo_str2.push(lo_array[i]);
+        }
+    }
+    localStorage.setItem("company_order_product_str1",lo_str2);
+
+    if(type_info=="分公司产品"){
+        type=1;
+    }else{
+        type=2;
+    }
+
+    $.ajax({
+        type: "POST",
+        url: '/product/CompanyOrderCostDelete',
+        data: {
+            "type":type,
+            "branch_product_number":branch_product_number,
+            "company_order_number":company_order_number,
+            "company_order_product_diy_number":company_order_product_diy_number,
+            "status":0
+        },
+        success: function(data){
+            // console.log(data);
+
+            if(data.code!=200){
+                layer.msg(data.msg);
+                return false;
+            }else if(data.code==200) {
+                layer.msg('操作成功',{time:1,end : function(layero, index){
+                        location.reload();
+                        $(obj).parents("tr").remove();
+                    }
+                });
+            }
+        }
+    });
+
+    return false;
+}
+
+/*保存订单-产品*/
+function addSave(){/*保存数据*/
+    alert(123)
+}
+
+
+
+/*全选*/
+form.on('checkbox(checkboxAll)', function(data){
+    var child = $(data.elem).parents('.visitorListTips').find('.checkboxList input[type="checkbox"]');
+    child.each(function(index, item){
+        item.checked = data.elem.checked;
+    });
+    form.render('checkbox');
+});
+
+var newQ=[];
+/*添加产品*/
+function addProduct() {
+
+    company_order_product_search();
+
+    var company_order_number = (window.location.search).split("=")[1];
+    var gettpl = $('#addProduct').html();
+    laytpl(gettpl).render('0', function(html){
+        layer.confirm(html, {
+            skin:'my-skin',
+            btn: ['确定','取消'] //按钮
+            ,title:'添加产品'
+            ,btnAlign: 'c' //按钮居中
+            ,area: ['1100px','480px'],
+            scrollbar: false
+        }, function(){
+        	//这里放loading
+        	layer.load();
+
+        	var is_checked="";
+            $("input[name='productCheckboxTable']").each(function(index, item) {
+                $(this).disabled = true
+                if (item.checked === true && item.disabled != true) {
+                    is_checked+=$(item).parent("td").siblings("td").find("a").html()+",";
+                }
+            });
+
+            var company_order_product_str1_old = localStorage.getItem("company_order_product_str1");
+            if(company_order_product_str1_old!=null){
+                is_checked+=company_order_product_str1_old+","+is_checked;
+            }
+
+            is_checked=is_checked.substring(0, is_checked.lastIndexOf(','));
+            localStorage.setItem("company_order_product_str1",is_checked);
+
+            $("#productPoper").find('td input[type="checkbox"]').each(function(index, item) {
+                if(item.checked===true && item.disabled != true) {
+                    var a = $(item).parents("tr").find("td[class='a']").text();
+                    var b = $(item).parents("tr").find("td[class='b']").html();
+                    var c = $(item).parents("tr").find("td[class='c']").html();
+                    var d = $(item).parents("tr").find("td[class='d']").html();
+                    var e = $(item).parents("tr").find("td[class='e']").html();
+                    var g = $(item).parents("tr").find("td[class='g']").html();
+                    newQ.push({branch_product_number:a,team_name:d,branch_product_cost:e,branch_cost_cost:e,price_currency_id:g,cost_currency_id:g});
+                }
+            });
+
+            //产品提交-非自定义
+            $.ajax({
+                type: "POST",
+                url: '/product/addCompanyOrderProductAjax',
+                data: {
+                    "company_order_number":company_order_number,
+                    "branch_product_array":JSON.stringify(newQ)
+                },
+                success: function(data){
+               
+
+                    if(data.code!=200){
+                        layer.msg(data.msg);
+                        return false;
+                    }else if(data.code==200) {
+                    	layer.closeAll('loading');
+                        layer.msg('操作成功',{time:1,end : function(layero, index){
+                                window.location.reload();
+                            }
+                        });
+                    }
+
+                }
+            });
+
+        });
+    });
+    form.render();
+}
+var gettplProduct = $('#addProduct').html();
+var addProductPoper='0';
+laytpl(gettplProduct).render(addProductPoper, function(html){
+    $("#poperTable tbody").append(html)
+});
+form.on('checkbox(poperCheckboxAll)', function(data){
+    var child = $(data.elem).parents('thead').siblings("tbody").find('td input[type="checkbox"]');
+    child.each(function(index, item){
+        item.checked = data.elem.checked;
+    });
+    form.render('checkbox');
+});
+
+//订单产品搜索
+function company_order_product_search(){
+
+    var branch_product_number = $("#product_branch_product_number").val();
+    var team_name = $("#product_team_name").val();
+
+    $.ajax({
+        type: "POST",
+        url: '/product/CompanyOrderProductSearchAjax',
+        data: {
+            branch_product_number:branch_product_number,
+            team_name:team_name
+        },
+        success: function(data){
+            // console.log(data);
+
+            var check='';
+            company_order_product_str2 = (localStorage.getItem("company_order_product_str1")||'').split(",");
+
+            $("#productPoper tr").remove();
+
+            for(i in data){
+
+                if(company_order_product_str2.indexOf(data[i].branch_product_number)!=-1){
+                    check="checked";
+                    disable="disabled";
+                }else{
+                    check="";
+                    disable="";
+                }
+
+                var html='';
+
+                html+='<tr>'+
+                    '<td><input type="checkbox" name="productCheckboxTable" '+check+' '+disable+' lay-skin="primary"></td>'+
+                    '<td class="a"><a href="#">'+data[i].branch_product_number+'</a></td>'+
+                    '<td class="b">分公司产品</td>'+
+                    '<td class="c">'+data[i].supplier_name+'</td>'+
+                    '<td class="d">'+data[i].team_name+'</td>'+
+                    '<td class="f">'+data[i].price_currency_name+'</td>'+
+                    '<td class="e">'+data[i].branch_product_price+'</td>'+
+                    '<td class="g" style="display:none">'+data[i].price_currency_id+'</td>'+
+                    '</tr>';
+
+                    for(j in data[i]['own_expense_array']){
+                        html+='<tr>'+
+                                '<td></td>'+
+                                '<td class="table-product-poper">'+data[i]['own_expense_array'][j]['source_number']+'</td>'+
+                                '<td>自费项目</td>'+
+                                '<td>'+data[i]['own_expense_array'][j]['supplier_name']+'</td>'+
+                                '<td>'+data[i]['own_expense_array'][j]['source_name']+'</td>'+
+                                '<td>'+data[i]['own_expense_array'][j]['price_currency_name']+'</td>'+
+                                '<td>'+data[i]['own_expense_array'][j]['source_price']+'</td>'+
+                                '<td style="display:none">'+data[i]['own_expense_array'][j]['price_currency_id']+'</td>'+
+                                '</tr>';
+                    }
+
+                    $("#productPoper").append(html);
+
+            }
+            form.render();
+        }
+    });
+
+    return false;
+}
+
+//添加订单产品-自定义
+function productDiy(Obj){
+    var company_order_number = (window.location.search).split("=")[1];
+    var diy_name = $(Obj).closest("tr").find("input[class='layui-input']").val();
+    var diy_cost = $(Obj).closest("tr").find("input[class='layui-input diy_cost']").val();
+    var price_currency_id = $(Obj).closest("tr").find("select[class='layui-input layui-select price_currency_id']").val();
+    var supplier_id = $(Obj).closest("tr").find("select[class='layui-input layui-select supplier_id']").val();
+    if(diy_name.length==0 || diy_cost.length==0){
+        layer.msg('产品名称与成本为必填项');
+		return false;
+    }
+    $.ajax({
+        type: "POST",
+        url: '/product/addCompanyOrderProductDiyAjax',
+        data: {
+            company_order_number:company_order_number,
+            diy_name:diy_name,
+            diy_cost:diy_cost,
+            price_currency_id:price_currency_id,
+            supplier_id:supplier_id
+        },
+        success: function(data){
+           
+
+            if(data.code!=200){
+                layer.msg(data.msg);
+                return false;
+            }else if(data.code==200) {
+                layer.msg('操作成功',{time:1,end : function(layero, index){
+                        location.href='/product/showCompanyOrderProductEdit?company_order_number='+company_order_number;
+
+                    }
+                });
+            }
+        }
+    });
+}
+
+/*弹窗-产品游客*/
+function visitorList2() {
+
+    var gettpl = $('#visitorListTips').html();
+    laytpl(gettpl).render(aaa, function(html){
+        layer.confirm(html, {
+            skin:'my-skin',
+            btn: ['确定','取消'] //按钮
+            ,title:'游客选择'
+            ,btnAlign: 'c' //按钮居中
+            ,area: ['450px','380px']
+            ,shadeClose:true,
+            scrollbar: false
+        }, function(){
+            layer.msg('游客选择成功', {icon: 1});
+        });
+    });
+    form.render();
+}
+
+$('.visitorList3').click(function(){
+    //首先把当前div_id存入隐藏域
+    $('#div_id').val($(this).attr('div_id'))
+    var key_type = $(this).attr('key_type');
+    if(key_type==2){//自费
+    	
+    	$('#source_id').val($(this).attr('key_id'));
+    	$('#diy_id').val();
+    }else if(key_type==3){
+    	$('#source_id').val();
+    
+    	$('#diy_id').val($(this).attr('div_id'));    	
+    	
+    }
+    console.log($('#diy_id').val())
+    //首先把所有input都设为未选中
+    var key = $(this).attr('key');
+    if(key==1){
+        $('#update_customer').hide();
+        $('#choose_all').hide();
+        $("input[name='productCheckbox1']").each(function(item,index){
+
+            $(this).prop('checked','checked')
+        //    $(this).prop('disabled','true')
+        });
+    }else{
+        $('#update_customer').show();
+        $('#choose_all').show();
+        //首先获得 当前行的 游客ID
+        var customer_id = $(this).attr('customer_str');
+
+        //开始循环INPUT 来判断 是否存在 存在则checked
+        $("input[name='productCheckbox1']").each(function(item,index){
+            var c_customer = $(this).val()
+            //开始做判断如果c_customer 在customer_id中则checkbox为选中
+            if(customer_id.indexOf(c_customer) >= 0){
+                $(this).prop('checked','checked')
+            }else{
+                $(this).prop('checked',false)
+            }
+
+           ;
+
+        });
+    }
+
+    form.render();
+    $('#han_test').show();
+
+})
+$('#close_div').click(function(){
+    $('#han_test').hide();
+})
+
+//添加游客关联
+function add_customer_relation(){
+
+    var company_order_number = (window.location.search).split("=")[1];
+    var company_order_product_diy_id = $('#diy_id').val();
+    var company_order_product_source_id  = $('#source_id').val();
+    var customer_info ='';
+
+    $("input[name='productCheckbox1']").each(function(item,index){
+
+        if($(this).is(':checked')){
+            customer_info+=$(this).val()+",";
+        }
+
+    });
+    
+
+    
+    $.ajax({
+        type: "POST",
+        url: '/product/Customer_Relation_Edit',
+        data: {
+            company_order_number:company_order_number,
+            company_order_customer:customer_info,
+            company_order_product_diy_id:company_order_product_diy_id,
+            company_order_product_source_id:company_order_product_source_id
+        },
+        success: function(data){
+   
+
+            if(data.code!=200){
+                layer.msg(data.msg);
+                return false;
+            }else if(data.code==200) {
+                layer.msg('操作成功',{time:1,end : function(layero, index){
+                        location.href='/product/showCompanyOrderProductEdit?company_order_number='+company_order_number;
+
+                    }
+                });
+            }
+        }
+    });
+}
+
+
+

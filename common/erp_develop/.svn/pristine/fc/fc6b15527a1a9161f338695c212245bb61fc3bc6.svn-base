@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+<head>
+	{include file='public/head' /}
+  	<title>language-manage</title>
+ 
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+  <div class="layui-header">
+	{include file='public/header' /}
+  </div>
+  
+  <div class="layui-side layui-bg-black">
+    <div class="layui-side-scroll">
+      <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+		{include file='public/left_menu' /}
+    </div>
+  </div>
+  
+  <div class="layui-body layui-body-bg">
+  
+    <!-- 内容主体区域 -->
+    <div style="padding: 15px 15px 0px;">
+		<div class="body-top">
+			<div class='layui-form-item'>
+			<span class="layui-breadcrumb" lay-separator="-">
+				<a>{$Think.lang.index_public_homepage}</a>
+				<a>{$Think.lang.index_branchcompany_showBranchProductManage_branchManagement}</a>
+				<a><cite>{$Think.lang.index_branchcompany_showBranchProductTypeManage_branchCompanyProductType}</cite></a>
+			</span>
+			</div>
+			<div class='layui-block all-search-bg' >
+				<form class="layui-form" method='get' action='/branchcompany/showBranchProductTypeManage'>
+					<div class="layui-row">
+						<div class="layui-col-md4">
+							<div class="layui-form-item">
+								<label class="layui-form-label">{$Think.lang.index_public_status}:</label>
+								<div class="layui-input-block">
+									<select name="status">
+										<option valeu='' >-{$Think.lang.index_source_showCruisesManage_search_status}-</option>
+										<option value="1" selected >{$Think.lang.index_public_show}</option>
+										<option value="0" {if condition="$Think.get.status eq '0'"}selected='selected' {/if}>{$Think.lang.index_public_disabled}</option>
+									</select>
+								</div>
+							</div>
+						</div>
+						<div class="layui-col-md4">
+							<div class="layui-form-item">
+								<label class="layui-form-label">分公司名称:</label>
+								<div class="layui-input-block">
+									<select name="company_id" {if condition="$Think.session.user.company_id  neq 1"}disabled {/if}>
+									<option value="0" >-所有公司-</option>
+									{foreach name='company_result' item='cr'}
+									<option value="{$cr.company_id}" {if condition="($Think.session.user.company_id neq 1 and $Think.session.user.company_id eq $cr.company_id) or ($Think.session.user.company_id eq 1 and $Think.get.company_id eq $cr.company_id)"}selected {/if}>{$cr.company_name}</option>
+									{/foreach}
+									</select>
+								</div>
+							</div>
+						</div>
+						<div class="layui-col-md4">
+							<div class="layui-form-item">
+								<label class="layui-form-label">分公司产品类型:</label>
+								<div class="layui-input-block">
+									<input type="text" name="branch_product_type_name"  value="{$Think.get.branch_product_type_name}"  placeholder="分公司类型名称" class="layui-input">
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="layui-row">
+						<div class="layui-col-md4">
+							<div class="layui-form-item">
+								<label class="layui-form-label">创建人:</label>
+								<div class="layui-input-block">
+									<input type="text" name="create_user_name"  value="{$Think.get.create_user_name}"  placeholder="创建人" class="layui-input">
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="layui-row">
+						<div class="layui-col-md4 layui-col-md-offset4">
+							<div class='input-inline all-button-center pages-search-margin'>
+								<button class="layui-btn nav-search">{$Think.lang.index_public_search}</button>
+							</div>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+		<div class="content-bg">
+			<span style="{:action('index/auth/check_auth',['role_id'=>'245'])}"><a href='/branchcompany/showBranchProductTypeAdd'><button class="layui-btn nav-add layui-btn-sm">添加分公司产品类型</button></a></span>
+			<hr>
+			<div class="table-nont user-manage company-pageHeight">
+				<table class="layui-table" id="language-table">
+					<thead>
+					<tr>
+						<th>分公司产品类型</th>
+						<th>分公司名称</th>
+						<th>创建时间</th>
+						<th>创建人</th>
+
+						<th>{$Think.lang.index_public_status}</th>
+						<th class="layui-table-width">{$Think.lang.index_source_operation}</th>
+					</tr>
+					</thead>
+
+					<tbody>
+					{foreach name='data' item='v'}
+					<tr>
+						<th>{$v.branch_product_type_name}</th>
+						<th>{$v.company_name}</th>
+						<th>{$v.create_time|date='Y-m-d H:i:s',###}</th>
+						<th>{$v.create_user_name}</th>
+						<th>{if condition="$v.status eq 1"}{$Think.lang.index_public_show}{else}{$Think.lang.index_public_disabled}{/if}</th>
+						<th>
+								<span style="{:action('index/auth/check_auth',['role_id'=>'246'])}"><a href='/branchcompany/showBranchProductTypeEdit?branch_product_type_id={$v.branch_product_type_id}'><button class="layui-btn layui-btn-sm hover-edit layui-btn-primary">{$Think.lang.index_public_update}</button></a></span>
+								{if condition="$v.status eq 1"}
+									<span style="{:action('index/auth/check_auth',['role_id'=>'247'])}"><button branch_product_type_id="{$v.branch_product_type_id}" class="layui-btn layui-btn-sm branch_product_type_edit layui-btn-primary">{$Think.lang.index_public_del}</button></span>
+								{/if}
+								<!-- <a href='/system/showLanguageInfo?id={$v.language_id}'><button class="layui-btn layui-btn-sm nav-details">详情</button></a> -->
+						</th>
+					</tr>
+					{/foreach}
+					</tbody>
+
+				</table>
+			</div>
+			<div class="listButtom">
+				<!--加载分页-->
+				{include file='public/page' /}
+			</div>
+		</div>
+    </div>
+  </div>
+  
+  <div class="layui-footer">
+    <!-- 底部固定区域 -->
+    © layui.com - 底部固定区域
+  </div>
+</div>
+{include file='public/foot_js' /}
+<script src='__STATIC__/javascript/branchcompany/branch_product_type.js'></script>
+</body>
+</html>

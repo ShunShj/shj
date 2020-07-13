@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {include file='public/head' /}
+    <title>用户列表</title>
+    <link href="__STATIC__/css/product.css" rel="stylesheet">
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+    <div class="layui-header">
+        {include file='public/header' /}
+    </div>
+
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll">
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            {include file='public/left_menu_web' /}
+        </div>
+    </div>
+
+    <div class="layui-body layui-body-bg">
+
+        <!-- 内容主体区域 -->
+        <div style="padding: 15px 15px 0px;">
+            <div class="body-top">
+                <div class='layui-form-item'>
+                    <span class="layui-breadcrumb" lay-separator="-">
+                        <a>首页</a>
+                        <a>用户列表</a>
+                        <a><cite>用户列表</cite></a>
+                    </span>
+                </div>
+
+                <div class='layui-block all-search-bg'>
+                    <form class="layui-form" method='get' action='/ota_member/lst?is_like=1'>
+                        <div class="layui-row">
+                            <div class="layui-col-md4">
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">{$language_tag.index_system_showUserManage_user_name}:</label>
+                                    <div class="layui-input-block">
+                                        <input type="text" id="" name="username" autocomplete="off"  placeholder="{$language_tag.index_system_showUserManage_user_name}" class="layui-input" value="{$_GET['username']}" >
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-col-md4">
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">昵称:</label>
+                                    <div class="layui-input-block">
+                                        <input type="text" id="" name="nickname" autocomplete="off"  placeholder="昵称" class="layui-input" value="{$_GET['nickname']}" >
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="layui-col-md4">
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">{$language_tag.index_system_showUserManage_email}:</label>
+                                    <div class="layui-input-block">
+                                        <input class="layui-input" type="text" name="email" value="{$_GET['email']}" placeholder="{$language_tag.index_system_showUserManage_email}" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="layui-row">
+                            <div class="layui-col-md4 layui-col-md-offset4">
+                                <div class='input-inline all-button-center pages-search-margin'>
+                                    <button class="layui-btn nav-search" >{$language_tag.index_public_search}</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+            </div>
+            <div class="content-bg">
+                <a href='/ota_member/add/'><button class="layui-btn nav-add layui-btn-sm">添加</button></a>
+                <hr>
+                <div class="table-nont user-manage newBg-pageHeight">
+                    <table class="layui-table layui-form" id="language-table">
+                        <thead>
+                        <tr>
+                            <th>客户编号</th>
+                            <th>{$language_tag.index_system_showUserManage_user_name}</th>
+                            <th>昵称</th>
+                            <th>{$language_tag.index_system_showUserManage_email}</th>
+                            <th>账户</th>
+                            <th>注册时间</th>
+                            <th>{$language_tag.index_source_operation}</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+
+                        {foreach $data as $v}
+                        <tr>
+                            <td>{$v.member_id}</td>
+                            <td>{$v.username}</td>
+                            <td>{$v.nickname}</td>
+                            <td>{$v.email}</td>
+                            <td>{$v.account}</td>
+                            <td>{$v.create_time|date="Y-m-d H:i:s",###}</td>
+                            <td>
+                                <span style="{:action('index/auth/check_auth',['role_id'=>'226'])}"><a href='/ota_member/edit?uuid={$v.uuid}'><button class="layui-btn layui-btn-sm hover-edit layui-btn-primary">{$language_tag.index_public_update}</button></a></span>
+
+                                <span><a class="layui-btn layui-btn-sm hover-edit layui-btn-primary del-operations" data-tit="{$v.username}" data-uuid="{$v.uuid}" >{$language_tag.index_public_del}</a></span>
+
+                            </td>
+                        </tr>
+                        {/foreach}
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="listButtom">
+                    {include file='public/page' /}
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <div class="layui-footer">
+        <!-- 底部固定区域 -->
+        © layui.com - 底部固定区域
+    </div>
+</div>
+
+
+
+
+{include file='public/foot_js' /}
+<script src='__STATIC__/javascript/product/all.js'></script>
+<script src='__STATIC__/javascript/product/company_order.js'></script>
+
+<script>
+    !function() {
+        var layer = layui.layer;
+        var form = layui.form;
+        var laydate = layui.laydate;
+        var uuid;
+        $('.del-operations').on('click',function(){
+            var tit = $(this).data('tit');
+            uuid = $(this).data('uuid');
+
+            layer.confirm('确定要删除<font style="color: red">'+tit+'</font>么？', {icon:3, title:'提示'}, function(index){
+                $.post('/ota_member/delAjax',{uuid:uuid},function(a){
+                    if (a.code == 200)
+                    {
+                        layer.closeAll();
+                        location.reload();
+                    }
+                    else
+                    {
+                        layer.msg('fail  ' + a.msg);
+                    }
+                });
+
+                layer.close(index);
+            });
+        });
+
+        //选择邮件模板
+        form.on('select(operations_email_templates_id)', function(data){
+            var t = $(data.elem);
+            var idd = t.data('info');
+            var operations_email_templates_id = t.val();
+            layer.load(2);
+            $.post('/operations/ModifyMailTemplateSelection',{id:idd,operations_email_templates_id:operations_email_templates_id},function(){
+                layer.closeAll();
+            });
+
+        });
+
+
+    }();
+</script>
+
+
+</body>
+</html>

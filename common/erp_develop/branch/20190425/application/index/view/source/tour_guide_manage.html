@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {include file='public/head' /}
+    <title>导游管理</title>
+
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+    <div class="layui-header">
+        {include file='public/header' /}
+    </div>
+
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll">
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            {include file='public/left_menu' /}
+        </div>
+    </div>
+
+    <div class="layui-body layui-body-bg">
+
+        <!-- 内容主体区域 -->
+        <div style="padding: 15px 15px 0px;">
+            <div class="body-top">
+                <div class='layui-form-item'>
+                    <span class="layui-breadcrumb" lay-separator="-">
+                        <a>{$language_tag.index_public_homepage}</a>
+                        <a>{$language_tag.index_source_showTourGuideManage_source_administrate}</a>
+                        <a><cite>{$language_tag.index_source_showTourGuideManage_tourguide_administrate}</cite></a>
+                    </span>
+                </div>
+                <div class='layui-block all-search-bg'>
+                    <form class="layui-form" action="setTourGuideManage" method="post" >
+                        <div class="layui-row">
+                            <div class="layui-col-md4">
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">{$language_tag.index_public_status}:</label>
+                                    <div class="layui-input-block">
+                                        <select  id="search_status" name="search_status">
+                                            <option value="0" >-{$language_tag.index_source_showTourGuideManage_search_status}-</option>
+                                            <option value="1" selected>{$language_tag.index_public_show}</option>
+                                            <option value="2" {$setTourGuideManage.search_status==2?'selected':''}>{$language_tag.index_public_disabled}</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-col-md4">
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">{$language_tag.index_source_showTourGuideManage_supplier_name}:</label>
+                                    <div class="layui-input-block">
+                                        <input type="text" id="search_Name" name="search_Name" value="{$setTourGuideManage.search_Name}"   placeholder="{$language_tag.index_source_showTourGuideManage_supplier_name}" class="layui-input">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-row">
+                            <div class="layui-col-md4 layui-col-md-offset4">
+                                <div class='input-inline all-button-center pages-search-margin'>
+                                    <button class="layui-btn nav-search">{$language_tag.index_public_search}</button>
+                                </div>
+                            </div>
+                        </div>
+                        <!--<div class='layui-inline' >
+                            &lt;!&ndash;<div class='layui-input-inline'>&ndash;&gt;
+                            &lt;!&ndash;<input type="text" id="search_ID" name="search_ID" value="{$setTourGuideManage.search_ID}"   placeholder="ID" class="layui-input">&ndash;&gt;
+                            &lt;!&ndash;</div>&ndash;&gt;
+
+                            &lt;!&ndash;<div class='layui-input-inline'>&ndash;&gt;
+                            &lt;!&ndash;<input type="text" id="search_operation" name="search_operation" value=""  placeholder="操作人" class="layui-input">&ndash;&gt;
+                            &lt;!&ndash;</div>&ndash;&gt;
+
+
+
+                            <div class='layui-button-inline layui-search-inline'>
+                                <button class="layui-btn nav-search">{$language_tag.index_public_search}</button>
+                                &lt;!&ndash;<a href="/source/clearTourGuideManage" class="layui-btn layui-btn-primary">清除</a>&ndash;&gt;
+                            </div>
+                        </div>-->
+                    </form>
+                    <!--<div class='layui-button-inline'>
+
+                        <a href='/source/showTourGuideSourceAdd'><button class="layui-btn nav-add">{$language_tag.index_source_showTourGuideManage_add_source}</button></a>
+                        &lt;!&ndash;<a href="/source/showTourGuideSourceManage?id=" class="layui-btn nav-look">查看全部导游资源</a>&ndash;&gt;
+
+                        &lt;!&ndash;<a href='/source/showSupplierAdd?supplier_type_id=9'><button class="layui-btn nav-add">添加供应商</button></a>&ndash;&gt;
+                        <a href="/source/showTourGuideSourceManage?id=" class="layui-btn nav-look">{$language_tag.index_source_showTourGuideManage_look_all_source}</a>
+
+                    </div>-->
+                </div>
+            </div>
+            <div class="content-bg">
+                <span style="{:action('index/auth/check_auth',['role_id'=>'212'])}"><a href='/source/showTourGuideSourceAdd'><button class="layui-btn nav-add layui-btn-sm">{$language_tag.index_source_showTourGuideManage_add_source}</button></a></span>
+                <span style="{:action('index/auth/check_auth',['role_id'=>'210'])}"><a href="/source/showTourGuideSourceManage?id=" class="layui-btn nav-look layui-btn-sm">{$language_tag.index_source_showTourGuideManage_look_all_source}</a></span>
+                <hr>
+                <div class="table-nont user-manage company-pageHeight">
+                    <table class="layui-table" id="language-table">
+                        <thead>
+                        <tr>
+                            <th>{$language_tag.index_source_showTourGuideManage_id}</th>
+                            <th>{$language_tag.index_public_supplier}</th>
+                            <th>{$language_tag.index_public_status}</th>
+                            <!--<th>最后操作时间</th>-->
+                            <!--<th>操作人</th>-->
+                            <th>{$language_tag.index_source_showTourGuideManage_tourguide}</th>
+                            <!--<th class="layui-table-width">操作</th>-->
+                        </tr>
+                        </thead>
+
+                        <tbody>
+                        {foreach name="data" item="vo" }
+                        <tr>
+                            <th>{$vo.supplier_id}</th>
+                            <th>{$MultilingualAll['supplier-supplier_name-'.$vo.supplier_id.'-'.$Think.session.user.language_id][0]['translate']|default=$vo.supplier_name}</th>
+                            <th>{if condition="$vo.status==1"}{$language_tag.index_public_show}{else/}{$language_tag.index_public_disabled}{/if}</th>
+                            <!--<th><?=date("Y-m-d H:i:s", strtotime("0 hour",$vo['update_time']))?></th>-->
+                            <!--<th>{$vo.create_user_name}</th>-->
+                            <th><span style="{:action('index/auth/check_auth',['role_id'=>'211'])}"><a href="/source/showTourGuideSourceManage?id={$vo.supplier_id}"><button class="layui-btn layui-btn-sm hover-edit layui-btn-primary">{$language_tag.index_source_showTourGuideManage_source}</button> </a></span></th>
+                            <!--<th>
+                                <a href='/source/showSupplierEdit?supplier_id={$vo.supplier_id}'><button class="layui-btn layui-btn-sm hover-edit layui-btn-primary">修改</button></a>
+                                <a href='/source/showSupplierInfo?supplier_id={$vo.supplier_id}'><button class="layui-btn layui-btn-sm hover-details layui-btn-primary">详情</button></a>
+                            </th>-->
+                        </tr>
+                        {/foreach}
+                        </tbody>
+
+                    </table>
+                </div>
+                <div class="listButtom">
+                    {include file='public/page' /}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="layui-footer">
+        <!-- 底部固定区域 -->
+        © layui.com - 底部固定区域
+    </div>
+</div>
+{include file='public/foot_js' /}
+<script>
+    //JavaScript代码区域
+    ;!function(){
+        var layer = layui.layer
+                ,form = layui.form;
+
+
+    }();
+
+</script>
+</body>
+</html>
+
+<script>
+
+
+</script>

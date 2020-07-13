@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    {include file='public/head' /}
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>财务管理-资产负债表</title>
+    <style>
+        #page-content th,#page-content td{
+            text-align: center;
+            line-height: 30px;
+            padding:10px;
+        }
+        #page-content th{
+            font-weight: bold;
+        }
+        .tr-none{
+            display: none;
+        }
+    </style>
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+    <div class="layui-header">
+        {include file='public/header' /}
+    </div>
+
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll">
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            {include file='public/left_menu' /}
+        </div>
+    </div>
+
+    <div class="layui-body layui-body-bg">
+        <div style="padding: 15px 15px 0px;">
+            <div class="body-top">
+                <div class='layui-form-item'>
+                    <span class="layui-breadcrumb" lay-separator="-">
+                        <a>首页</a>
+                        <a>财务管理</a>
+                        <a><cite>资产负债表</cite></a>
+                    </span>
+                </div>
+                <div class='layui-block all-search-bg'>
+                    <br/>
+                    <form class="layui-form" method='get'>
+
+                        <div class="layui-row">
+
+                            <div class="layui-col-md4">
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">年月份:</label>
+                                    <div class="layui-input-block">
+                                        <input type="text" id="tableMonths" name="year_month" value="{$year_month}" placeholder="请选择年月" class="layui-input">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-col-md4">
+                                <div class='input-inline button-marginLeft'>
+                                    <button class="layui-btn nav-search" >搜索</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="content-bg">
+                <a class="layui-btn word-export layui-search-inline nav-add layui-btn-sm" onclick="upload()">下载</a>
+                {if $Think.session.user.company_id!=1}
+                <a href='/finance/editBalanceSheet?year_month={$year_month}' class="layui-btn nav-search layui-btn-sm">修改</a>
+                {/if}
+                <hr>
+                <div class="table-nont" id="page-content" style="width: 100%;margin:0px auto">
+                    <table class="layui-table" id="table-list" style="width:100%;margin-bottom:20px;border-collapse: collapse;border:none">
+
+                        <thead>
+                        <tr align="left" class="tr-none" style="background:#fff;border:none;">
+                            <th colspan="5"><img src="__STATIC__/image/login/login-logo.png" style="width:100%" id="aa"></th>
+                        </tr>
+                        <tr align="left" style="background:#f2f2f2">
+                            <th colspan="3">{$Think.session.user.company_name} </th>
+                        </tr>
+                        <tr align="left" style="background:#f2f2f2">
+                            <th width="30%">资 产</th>
+                            <th  width="30%">{$Currency[0]['unit']}</th>
+                            <th  width="30%">RMB</th>
+                        </tr>
+                        </thead>
+                        <tbody style="border:1px solid #e6e6e6">
+                        <tr>
+                            <td>货币资金</td>
+                            <td>{$balanceSheetList.monetary_resources|default=0}</td>
+                            <td>{$balanceSheetCurrencyConversion.monetary_resources|default=0}</td>
+                        </tr>
+                        <tr>
+                            <td>短期投资</td>
+                            <td>{$balanceSheetList.short_term_investment|default=0}</td>
+                            <td>{$balanceSheetCurrencyConversion.short_term_investment|default=0}</td>
+                        </tr>
+                        <tr>
+                            <td>应收股利</td>
+                            <td>{$balanceSheetList.dividends_receivable|default=0}</td>
+                            <td>{$balanceSheetCurrencyConversion.dividends_receivable|default=0}</td>
+                        </tr>
+                        <tr>
+                            <td>应收账款</td>
+                            <td>{$balanceSheetList.accounts_receivable|default=0}</td>
+                            <td>{$balanceSheetCurrencyConversion.accounts_receivable|default=0}</td>
+                        </tr>
+                        <tr>
+                            <td>其他应收款</td>
+                            <td>{$balanceSheetList.other_receivables|default=0}</td>
+                            <td>{$balanceSheetCurrencyConversion.other_receivables|default=0}</td>
+                        </tr>
+                        <tr>
+                            <td>预付账款</td>
+                            <td>{$balanceSheetList.advance_payment|default=0}</td>
+                            <td>{$balanceSheetCurrencyConversion.advance_payment|default=0}</td>
+                        </tr>
+                        <tr>
+                            <td>待摊费用</td>
+                            <td>{$balanceSheetList.deferred_expenses|default=0}</td>
+                            <td>{$balanceSheetCurrencyConversion.deferred_expenses|default=0}</td>
+                        </tr>
+                        <tr>
+                            <td>待处理流动资产净损失</td>
+                            <td>{$balanceSheetList.net_loss_of_current_assets_to_be_processed|default=0}</td>
+                            <td>{$balanceSheetCurrencyConversion.net_loss_of_current_assets_to_be_processed|default=0}</td>
+                        </tr>
+                        <tr>
+                            <td>一年内到期的长期债券投资</td>
+                            <td>{$balanceSheetList.investments_in_longterm_bonds_maturing_in_one_year|default=0}</td>
+                            <td>{$balanceSheetCurrencyConversion.investments_in_longterm_bonds_maturing_in_one_year|default=0}</td>
+                        </tr>
+                        <tr>
+                            <td>其他流动资产</td>
+                            <td>{$balanceSheetList.other_current_assets|default=0}</td>
+                            <td>{$balanceSheetCurrencyConversion.other_current_assets|default=0}</td>
+                        </tr>
+                        <tr>
+                            <td style="color: red">流动资产合计</td>
+                            <td>{$balanceSheetList.total_current_assets|default=0}</td>
+                            <td>{$balanceSheetCurrencyConversion.total_current_assets|default=0}</td>
+                        </tr>
+                        <tr>
+                            <td>长期股权投资</td>
+                            <td>{$balanceSheetList.long_term_equity_investment|default=0}</td>
+                            <td>{$balanceSheetCurrencyConversion.long_term_equity_investment|default=0}</td>
+                        </tr>
+                        <tr>
+                            <td>长期债权投资</td>
+                            <td>{$balanceSheetList.long_term_debt_investment|default=0}</td>
+                            <td>{$balanceSheetCurrencyConversion.long_term_debt_investment|default=0}</td>
+                        </tr>
+                        <tr>
+                            <td>减:长期投资减值准备</td>
+                            <td>{$balanceSheetList.long_term_investment_impairment_provision|default=0}</td>
+                            <td>{$balanceSheetCurrencyConversion.long_term_investment_impairment_provision|default=0}</td>
+                        </tr>
+                        <tr>
+                            <td  style="color: red">长期投资净额</td>
+                            <td>{$balanceSheetList.net_long_term_investment|default=0}</td>
+                            <td>{$balanceSheetCurrencyConversion.net_long_term_investment|default=0}</td>
+                        </tr>
+                        <tr>
+                            <td>固定资产原价</td>
+                            <td>{$balanceSheetList.original_value_of_fixed_assets|default=0}</td>
+                            <td>{$balanceSheetCurrencyConversion.original_value_of_fixed_assets|default=0}</td>
+                        </tr>
+                        <tr>
+                            <td>减:累计折旧</td>
+                            <td>{$balanceSheetList.accumulated_depreciation|default=0}</td>
+                            <td>{$balanceSheetCurrencyConversion.accumulated_depreciation|default=0}</td>
+                        </tr>
+                        <tr>
+                            <td  style="color: red">固定资产净值</td>
+                            <td>{$balanceSheetList.fixed_assetsnet_value|default=0}</td>
+                            <td>{$balanceSheetCurrencyConversion.fixed_assetsnet_value|default=0}</td>
+                        </tr>
+                        <tr>
+                            <td>减:固定资产减值准备</td>
+                            <td>{$balanceSheetList.Provision_for_impairment_of_fixed_assets|default=0}</td>
+                            <td>{$balanceSheetCurrencyConversion.Provision_for_impairment_of_fixed_assets|default=0}</td>
+                        </tr>
+                        <tr>
+                            <td  style="color: red">固定资产净额</td>
+                            <td>{$balanceSheetList.net_fixed_assets|default=0}</td>
+                            <td>{$balanceSheetCurrencyConversion.net_fixed_assets|default=0}</td>
+                        </tr>
+                        <tr>
+                            <td>无形资产</td>
+                            <td>{$balanceSheetList.immaterial_assets|default=0}</td>
+                            <td>{$balanceSheetCurrencyConversion.immaterial_assets|default=0}</td>
+                        </tr>
+                        <tr>
+                            <td>减:无形资产减值准备</td>
+                            <td>{$balanceSheetList.provision_for_impairment_of_intangible_assets|default=0}</td>
+                            <td>{$balanceSheetCurrencyConversion.provision_for_impairment_of_intangible_assets|default=0}</td>
+                        </tr>
+                        <tr>
+                            <td  style="color: red">无形资产净额</td>
+                            <td>{$balanceSheetList.net_intangible_assets|default=0}</td>
+                            <td>{$balanceSheetCurrencyConversion.net_intangible_assets|default=0}</td>
+                        </tr>
+                        <tr>
+                            <td  style="color: red">非流动资产合计</td>
+                            <td>{$balanceSheetList.total_noncurrent_assets|default=0}</td>
+                            <td>{$balanceSheetCurrencyConversion.total_noncurrent_assets|default=0}</td>
+                        </tr>
+                        <tr>
+                            <td  style="color: red">资产总计</td>
+                            <td>{$balanceSheetList.total_assets|default=0}</td>
+                            <td>{$balanceSheetCurrencyConversion.total_assets|default=0}</td>
+                        </tr>
+                        <tr>
+                            <td>短期借款</td>
+                            <td>{$balanceSheetList.overnight_money|default=0}</td>
+                            <td>{$balanceSheetCurrencyConversion.overnight_money|default=0}</td>
+                        </tr>
+                        <tr>
+                            <td>应付账款</td>
+                            <td>{$balanceSheetList.payable_in_account|default=0}</td>
+                            <td>{$balanceSheetCurrencyConversion.payable_in_account|default=0}</td>
+                        </tr>
+                        <tr>
+                            <td>预收账款</td>
+                            <td>{$balanceSheetList.deposit_received|default=0}</td>
+                            <td>{$balanceSheetCurrencyConversion.deposit_received|default=0}</td>
+                        </tr>
+                        <tr>
+                            <td>应付职工薪酬</td>
+                            <td>{$balanceSheetList.pay_payable_to_staff_and_workers|default=0}</td>
+                            <td>{$balanceSheetCurrencyConversion.pay_payable_to_staff_and_workers|default=0}</td>
+                        </tr>
+                        <tr>
+                            <td>应付股利</td>
+                            <td>{$balanceSheetList.dividends_payable|default=0}</td>
+                            <td>{$balanceSheetCurrencyConversion.dividends_payable|default=0}</td>
+                        </tr>
+                        <tr>
+                            <td>应交税费</td>
+                            <td>{$balanceSheetList.due_taxes_and_fees|default=0}</td>
+                            <td>{$balanceSheetCurrencyConversion.due_taxes_and_fees|default=0}</td>
+                        </tr>
+                        <tr>
+                            <td>其他应交款</td>
+                            <td>{$balanceSheetList.other_accounts_payable|default=0}</td>
+                            <td>{$balanceSheetCurrencyConversion.other_accounts_payable|default=0}</td>
+                        </tr><tr>
+                            <td>其他应付款</td>
+                            <td>{$balanceSheetList.accounts_payable_others|default=0}</td>
+                            <td>{$balanceSheetCurrencyConversion.accounts_payable_others|default=0}</td>
+                        </tr><tr>
+                            <td>一年内到期的长期负债</td>
+                            <td>{$balanceSheetList.longterm_liabilities_due_within_one_year|default=0}</td>
+                            <td>{$balanceSheetCurrencyConversion.longterm_liabilities_due_within_one_year|default=0}</td>
+                        </tr><tr>
+                            <td>其他流动负债</td>
+                            <td>{$balanceSheetList.other_current_liabilities|default=0}</td>
+                            <td>{$balanceSheetCurrencyConversion.other_current_liabilities|default=0}</td>
+                        </tr><tr>
+                            <td style="color: red">流动负债合计</td>
+                            <td>{$balanceSheetList.total_current_liabilities|default=0}</td>
+                            <td>{$balanceSheetCurrencyConversion.total_current_liabilities|default=0}</td>
+                        </tr><tr>
+                            <td>长期借款</td>
+                            <td>{$balanceSheetList.money_borrowed_for_long_term|default=0}</td>
+                            <td>{$balanceSheetCurrencyConversion.money_borrowed_for_long_term|default=0}</td>
+                        </tr><tr>
+                            <td>应付债券</td>
+                            <td>{$balanceSheetList.bond_payable|default=0}</td>
+                            <td>{$balanceSheetCurrencyConversion.bond_payable|default=0}</td>
+                        </tr><tr>
+                            <td>长期应付款</td>
+                            <td>{$balanceSheetList.long_term_accounts_payable|default=0}</td>
+                            <td>{$balanceSheetCurrencyConversion.long_term_accounts_payable|default=0}</td>
+                        </tr><tr>
+                            <td>专项应付款</td>
+                            <td>{$balanceSheetList.account_payable_special_funds|default=0}</td>
+                            <td>{$balanceSheetCurrencyConversion.account_payable_special_funds|default=0}</td>
+                        </tr><tr>
+                            <td>其他长期负债</td>
+                            <td>{$balanceSheetList.other_long_term_liabilities|default=0}</td>
+                            <td>{$balanceSheetCurrencyConversion.other_long_term_liabilities|default=0}</td>
+                        </tr><tr>
+                            <td  style="color: red">长期负债合计</td>
+                            <td>{$balanceSheetList.total_long_term_liabilities|default=0}</td>
+                            <td>{$balanceSheetCurrencyConversion.total_long_term_liabilities|default=0}</td>
+                        </tr><tr>
+                            <td style="color: red">负债合计</td>
+                            <td>{$balanceSheetList.total_liabilities|default=0}</td>
+                            <td>{$balanceSheetCurrencyConversion.total_liabilities|default=0}</td>
+                        </tr><tr>
+                            <td>实收资本(或股本)</td>
+                            <td>{$balanceSheetList.paid_in_capital_or_share_capital|default=0}</td>
+                            <td>{$balanceSheetCurrencyConversion.paid_in_capital_or_share_capital|default=0}</td>
+                        </tr><tr>
+                            <td>资本公积</td>
+                            <td>{$balanceSheetList.capital_reserve|default=0}</td>
+                            <td>{$balanceSheetCurrencyConversion.capital_reserve|default=0}</td>
+                        </tr><tr>
+                            <td>盈余公积</td>
+                            <td>{$balanceSheetList.earned_surplus|default=0}</td>
+                            <td>{$balanceSheetCurrencyConversion.earned_surplus|default=0}</td>
+                        </tr><tr>
+                            <td>未分配利润</td>
+                            <td>{$balanceSheetList.undistributed_profit|default=0}</td>
+                            <td>{$balanceSheetCurrencyConversion.undistributed_profit|default=0}</td>
+                        </tr><tr>
+                            <td>外币报表折算差额</td>
+                            <td>{$balanceSheetList.foreign_currency_statement_translation_difference|default=0}</td>
+                            <td>{$balanceSheetCurrencyConversion.foreign_currency_statement_translation_difference|default=0}</td>
+                        </tr><tr>
+                            <td  style="color: red">所有者权益(或股东权益)合计</td>
+                            <td>{$balanceSheetList.total_owners_equity_or_shareholders_equity|default=0}</td>
+                            <td>{$balanceSheetCurrencyConversion.total_owners_equity_or_shareholders_equity|default=0}</td>
+                        </tr><tr>
+                            <td  style="color: red">负债及所有者权益(或股东权益)总计</td>
+                            <td>{$balanceSheetList.total_liabilities_and_owners_equity_or_shareholders_equity|default=0}</td>
+                            <td>{$balanceSheetCurrencyConversion.total_liabilities_and_owners_equity_or_shareholders_equity|default=0}</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="layui-footer">
+        <!-- 底部固定区域 -->
+        © layui.com - 底部固定区域
+    </div>
+    <script id="demo" type="text/html">
+
+    </script>
+</div>
+{include file='public/foot_js' /}
+<script type="text/javascript" src="__STATIC__/javascript/product/all.js"></script>
+<script type="text/javascript" src="__STATIC__/javascript/finance/tableExport.min.js"></script>
+<script>
+    layui.use(['layer', 'form','laydate'], function(){
+        var layer = layui.layer
+                ,laydate=layui.laydate
+                ,form = layui.form;
+
+
+        laydate.render({
+            elem: '#tableMonths'
+            ,type: 'month'
+        });//月份选择
+
+        $("#table-list tbody tr").each(function(index,item){
+            if($(item).find("td").length==0){
+                $(item).remove();
+            }
+        })
+    });
+    function upload() {
+        $('#table-list').tableExport({
+            fileName: '资产负债表{$year_month}',
+            type: 'excel',
+            escape:'true'
+        });
+    }
+</script>
+
+
+</body>
+</html>

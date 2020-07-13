@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<head>
+    {include file='public/head' /}
+    <title>language-manage-add</title>
+
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+
+    <div class="layui-header">
+        {include file='public/header' /}
+    </div>
+
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll">
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            {include file='public/left_menu_booknexus' /}
+        </div>
+    </div>
+
+    <div class="layui-body">
+
+        <!-- 内容主体区域 -->
+        <div style="padding: 15px;">
+            <div class='layui-form-item'>
+		   		<span class="layui-breadcrumb" lay-separator="-">
+					<a>{$language_tag.index_public_homepage}</a>
+                    <a>B2B</a>
+                    <a>News</a>
+                    <a><cite>Add News</cite></a>
+				</span>
+            </div>
+            <br/>
+            <br/>
+            <div class="layui-row">
+                <form class="layui-form layui-col-md4" id="form1" onSubmit="return news_add()">
+
+                    <div class="layui-form-item">
+                        <label class="layui-form-label input-required">TITLE：</label>
+                        <div class="layui-input-block">
+                            <input id="title" name="title" required="" lay-verify="required" placeholder="" autocomplete="off" class="layui-input" type="text">
+                        </div>
+                    </div>
+                    <br/>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label input-required">CHINESE TITLE：</label>
+                        <div class="layui-input-block">
+                            <input id="cn_title" name="cn_title" required="" lay-verify="required" placeholder="" autocomplete="off" class="layui-input" type="text">
+                        </div>
+                    </div>
+                    <br/>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">SUB TITLE：</label>
+                        <div class="layui-input-block">
+                            <input id="sub_title" name="sub_title" placeholder="" autocomplete="off" class="layui-input" type="text">
+                        </div>
+                    </div>
+                    <br/>
+
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">PUBLISH DATE：</label>
+                        <div class="layui-input-block">
+                            <div class="layui-input-inline date-width">
+                                <input type="text" name="date" placeholder="{$language_tag.index_branchcompany_showDistributorManage_pleaseSelectTheDate}" autocomplete="off" id="start_time" class="layui-input sales-date" >
+                            </div>
+                        </div>
+                    </div>
+                    <br/>
+
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">图片：</label>
+                        <div class="layui-input-block bill-picture">
+                            <div class="layui-upload">
+                                <button type="button" class="layui-btn layui-btn-normal" id="testList">请选择图片</button>
+                                <span class="num_pic"></span>
+                                <div class="layui-upload-list">
+                                    <table class="layui-table">
+                                        <thead>
+                                        <tr>
+                                            <th>文件名</th>
+                                            <th id="pic">图片预览</th>
+                                            <th>大小</th>
+                                            <th>状态</th>
+                                            <th id="cao">操作</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody id="demoList"></tbody>
+                                    </table>
+                                </div>
+                                <button type="button" class="layui-btn" id="testListAction">开始上传</button>
+                                <span class="num_pic"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">CONTENT：</label>
+                        <div class="layui-input-block">
+                            <textarea  type="text"  name="content" id="EditorId"></textarea>
+                        </div>
+                    </div>
+                    <script type="text/javascript" charset="utf-8">
+                        window.UEDITOR_HOME_URL = "__STATIC__/ueditor/";
+                        window.onload=function(){
+                            window.UEDITOR_CONFIG.initialFrameHeight=800;
+                            window.UEDITOR_CONFIG.initialFrameWidth=1200;
+                            window.UEDITOR_CONFIG.autoHeightEnabled=false;
+                            window.UEDITOR_CONFIG.autoFloatEnabled=false;
+                            window.UEDITOR_CONFIG.elementPathEnabled=false;
+                            var editor = new UE.ui.Editor({
+                                imageUrl : '',
+                                fileUrl : '',
+                                imagePath : '',
+                                filePath : '',
+                                imageManagerUrl:'',
+                                imageManagerPath:'/static/uploads/images/'
+                            });
+                            editor.render("EditorId");
+                        }
+                    </script>
+
+
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">{$language_tag.index_public_status}：</label>
+
+                        <div class="layui-input-block">
+                            <select name="status" id="status" lay-filter="required" >
+                                <option value="1" selected="selected">{$language_tag.index_public_show}</option>
+                                <option value="0">{$language_tag.index_public_disabled}</option>
+                            </select>
+                        </div>
+                    </div>
+                    <br/>
+                    <div class="layui-form-item">
+                        <div class="layui-input-block">
+                            <button class="layui-btn nav-submit" lay-submit="" lay-filter="formDemo" id="">{$language_tag.index_public_submit}</button>
+                            <a href="#" onClick="javascript :history.back(-1);"><button type="button" class="layui-btn layui-btn-primary">{$language_tag.index_public_back}</button></a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="layui-footer">
+        <!-- 底部固定区域 -->
+        © layui.com - 底部固定区域
+    </div>
+</div>
+{include file='public/foot_js' /}
+
+<script type="text/javascript">
+    layui.use('upload', function() {
+        var $ = layui.jquery,
+            upload = layui.upload;
+        //多文件列表示例
+        var demoListView = $('#demoList'),
+            uploadListIns = upload.render({
+                elem: '#testList',
+                url: "/demo/uploadImages",
+                accept: 'images',
+                acceptMime: 'image/*',
+                size: 8192,
+                multiple: true,
+                number: 400,
+                auto: false,
+                exts: 'jpg|png|jpeg',
+                bindAction: '#testListAction',
+                choose: function(obj) {
+                    var files = this.files = obj.pushFile(); //将每次选择的文件追加到文件队列
+                    //读取本地文件
+                    obj.preview(function(index, file, result) {
+                        var tr = $(['<tr id="upload-' + index + '">', '<td>' + file.name + '</td>', '<td><img src="' + result + '" alt="' + file.name + '" style="width: 100px;height: 40px;"></td>', '<td>' + (file.size / 1014).toFixed(1) + 'kb</td>', '<td>等待上传</td>', '<td>', '<button class="layui-btn layui-btn-xs demo-reload layui-hide">重传</button>', '<button class="layui-btn layui-btn-xs layui-btn-danger demo-delete">删除</button>', '</td>', '</tr>'].join(''));
+                        //单个重传
+                        tr.find('.demo-reload').on('click', function() {
+                            obj.upload(index, file);
+                            $("#upload-" + index).find("td").eq(2).html((file.size / 1014).toFixed(1) + 'kb');
+                        });
+
+                        //删除
+                        tr.find('.demo-delete').on('click', function() {
+                            delete files[index]; //删除对应的文件
+                            tr.remove();
+                            uploadListIns.config.elem.next()[0].value = ''; //清空 input file 值，以免删除后出现同名文件不可选
+                        });
+
+                        demoListView.append(tr);
+                        $(".num_pic").text("总共【" + demoListView.find("tr").length + "】张图片");
+                    });
+                },
+
+                done: function(res, index, upload) {
+                    if(res.code == 0) { //上传成功
+                        $("#cao").text("地址");
+                        var tr = demoListView.find('tr#upload-' + index),
+                            tds = tr.children();
+                        tds.eq(3).html('<span style="color: #5FB878;">上传成功</span>');
+                        tds.eq(4).html('<input type="text" name="imgs[]"  value="' + res.file +
+                            '" class="layui-input" style="width: 600px"/>'); //清空操作
+                        return delete this.files[index]; //删除文件队列已经上传成功的文件
+                    }
+                    this.error(index, upload);
+                },
+                allDone: function(obj) { //当文件全部被提交后，才触发
+                    layer.msg("上传文件数量：【" + obj.total + "】张，上传成功：【" + obj.successful + "】张，失败：【" + obj.aborted + "】", {
+                        time: 3000
+                    });
+                    console.log(obj.total); //得到总文件数
+                    console.log(obj.successful); //请求成功的文件数
+                    console.log(obj.aborted); //请求失败的文件数
+                },
+                error: function(index, upload) {
+                    var tr = demoListView.find('tr#upload-' + index),
+                        tds = tr.children();
+                    tds.eq(2).html('<span style="color: #FF5722;">上传失败</span>');
+                    tds.eq(4).find('.demo-reload').removeClass('layui-hide'); //显示重传
+                }
+            });
+
+    });
+</script>
+
+
+<script>
+
+
+    // layui.use('upload', function(){
+    //     var upload = layui.upload;
+    //
+    //     //头部图片
+    //     var uploadInst = upload.render({
+    //         elem: '#pic' //绑定元素
+    //         ,url: '/demo/uploadFile', //上传接口
+    //         multiple:false,
+    //         drag:'true'
+    //         ,acceptMime:'image/*'
+    //         ,accept:'images'
+    //         ,before: function(obj){ //obj参数包含的信息，跟 choose回调完全一致，可参见上文。
+    //             layer.load(); //上传loading
+    //         }
+    //         ,done: function(res){
+    //             //上传完毕回调
+    //             // console.log(res);
+    //             layer.closeAll('loading'); //关闭loading
+    //             if(res.code == 200){
+    //                 var h = '<div style="padding: 5px;width: 110px;float: left" class="img_list"><div><img src="'+res.data+'" height="100" width="100" /><input type="hidden" value="'+res.data+'" name="title-picture" /></div><div><a class="layui-btn layui-btn-danger r-journey-img nav-edit" onclick="del(this)">删除</a></div></div>';
+    //                 $('#u-img1').append(h);
+    //                 $("#pic").siblings(".upload-hide").show();
+    //             }
+    //         }
+    //         ,error: function(res){
+    //             //请求异常回调
+    //             console.log(res);
+    //             layer.closeAll('loading'); //关闭loading
+    //         }
+    //     });
+    // });
+    // function del(obj){
+    //     $(obj).parents("#u-img1").siblings(".bill-picture").find(".upload-hide").hide();
+    //     $(obj).parents(".img_list").remove();
+    // }
+
+
+    var form = layui.form;
+
+
+    layui.use(['laydate','element','form'], function(){
+        var laydate = layui.laydate;
+        var element = layui.element;
+        var formSelects = layui.formSelects;
+
+        lay('.sales-date').each(function(){
+            laydate.render({
+                elem: this
+                ,trigger: 'click'
+                ,done: function(value, date){
+                    console.log(date)
+                }
+            });
+        });
+
+    });
+
+
+
+
+
+    function news_add(){
+
+        $.ajax({
+            type: "POST",
+            url: '/book_news/addNewsAjax',
+            data:  $('#form1').serializeArray(),
+            success: function(data){
+                //console.log(data);
+                if(data.code!=200){
+                    layer.msg(data.msg);
+                    return false;
+                }else if(data.code==200) {
+                    layer.msg('操作成功',{time:1,end : function(layero, index){
+                            layer.load(2);
+                            history.back(-1);
+                        }
+                    });
+                }
+            },
+            error:function(XMLHttpRequest, textStatus, errorThrown){
+                layer.msg('验证失败')
+            }
+        });
+        return false;
+
+    }
+</script>
+</body>
+</html>

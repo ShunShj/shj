@@ -1,0 +1,1031 @@
+<!DOCTYPE html>
+<head>
+    {include file='public/head' /}
+    <title>layout 后台大布局 - Layui</title>
+
+    <style>
+        .nav {
+            display: inline-block;
+            position: relative;
+            height: 54px;
+            font-size: 15px;
+        }
+
+        .nav > * {
+            display: inline-block;
+        }
+
+        .nav > .t {
+            position: absolute;
+            top: 0;
+            background: rgb(208, 210, 211);
+            /* Skew */
+            -webkit-transform: skew(30deg);
+            -moz-transform: skew(30deg);
+            -o-transform: skew(30deg);
+            transform: skew(30deg);
+        }
+
+        .nav > .b {
+            position: absolute;
+            bottom: 0;
+            background: rgb(208, 210, 211);
+            /* Skew */
+            -webkit-transform: skew(-30deg);
+            -moz-transform: skew(-30deg);
+            -o-transform: skew(-30deg);
+            transform: skew(-30deg);
+        }
+
+        .tab .nav>.t,.tab .nav>.b{
+            -webkit-transform: none;
+            -moz-transform: none;
+            -o-transform: none;
+            transform: none;
+        }
+
+
+        .nav > a {
+            /*position:absolute;
+            top:0;*/
+            margin-left: 13px;
+            vertical-align: middle;
+            text-align: center;
+            text-decoration: none;
+            cursor: default;
+            font-weight: bold;
+            color: #77787b !important;
+        }
+
+        .nav.hover>a{
+            color: #ffffff !important;
+        }
+
+        .nav.hover > span {
+            background-color: #3376ba;
+            cursor: pointer;
+        }
+
+        .nav.done_step.hover>span{
+            background-color: #3376ba;
+        }
+
+        .nav.hover > a {
+            cursor: pointer;
+        }
+
+        .ab_position {
+            position: absolute;
+        }
+
+        .nav > .first_mark {
+            position: absolute;
+            top: 0;
+            z-index: 1;
+            width: 16px;
+            height: 100%;
+            background-color: #ffffff;
+            left: -8px;
+        }
+
+        .nav.done_step>a,.nav.active_step>a{
+            color: #ffffff !important;
+        }
+
+        .nav.done_step>.t,.nav.done_step>.b{
+            background-color: #767780;
+        }
+
+        .nav.active_step>.t,.nav.active_step>.b{
+            background-color: #3376ba;
+        }
+
+        .tab_border{
+            height: 2px;
+            background-color: #767780;
+            margin-left: 8px;
+            margin-top: -4px;
+        }
+        .room_wrapper .pax_info {
+            margin-top: -25px;
+            margin-left: 500px;
+            color: #3376bb;
+            font-size: 16px;
+            height: auto;
+        }
+
+
+    </style>
+    <link href="/assets/css/admin_booking.css" type="text/css" media="all" rel="stylesheet"/>
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+    <div class="layui-header">
+        {include file='public/header' /}
+    </div>
+
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll">
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            {include file='public/left_menu_booknexus' /}
+        </div>
+    </div>
+
+    <div class="layui-body">
+
+        <!-- 内容主体区域 -->
+        <div style="padding: 15px 15px 0px;">
+            <div class='layui-row'>
+		   		<span class="layui-breadcrumb" lay-separator="-">
+                    <a>首页</a>
+                    <a>B2B</a>
+					<a>创建订单</a>
+				</span>
+            </div>
+            <br>
+            {include file='admin_booking/create_booking_menu' /}
+
+            <div class="layui-row layui-col-space12" style="padding: 20px 10px">
+
+                <h2 class="top_icn">
+                    <span class="top_icn_text">5</span>
+                    <img src="/assets/images/service_requests_icn.png" alt="Select Tour - Step 1">
+                    <span class="top_text"></span>
+                </h2>
+
+                <form  class="layui-form" id="form1" onSubmit="return add()">
+                    <div id="transfer">
+                        <h3 style="font-size: 18px;color:#3376BB;font-weight: bold ">Transfer Services&nbsp;&nbsp;&nbsp;<a class="layui-btn layui-btn" id="clear">CLEAR</a></h3>
+                        <div>
+                            <div id="hotel">
+                                <hr>
+                                <table width="700" cellspacing="0" border="0"> <!-- Is Hotel Tranfser -->
+                                    <tbody><tr>
+                                        <td width="30%" class="h1" style="font-weight: bold">Hotel Transfer <br>(接機)</td>
+                                        <td width="50%" class="text">Free service for flight
+                                            arriving on {$Think.session.adminBooking_select_dateAjax.s_date}<br> between 00:00 to 00:00
+                                        <td class="input_label"><label>Yes</label></td>
+                                        <td class="input_box">
+                                            <input id="hotel_transfer" lay-filter="hotel_transfer" name="hotel_transfer" class="css-checkbox" type="checkbox" value="1" lay-skin="primary" {$Think.session.adminBooking_service_requestsAjax.hotel_transfer?'checked':''} >
+                                        </td>
+                                    </tr>
+                                    </tbody></table>
+                                <!-- End Is Hotel Transfer -->
+                            </div>
+                            <div id="hotel_transfer_info" {$Think.session.adminBooking_service_requestsAjax.hotel_transfer?'':'style="display: none"'} >
+                                <hr>
+                                <table>
+                                    <tr style="height: 40px;">
+                                        <th width="20%"  style="padding: 0 10px"><input type="text"  id="hotel_transfer_date" class="layui-input hotel-date" placeholder="Select Date" value="{$Think.session.adminBooking_select_dateAjax.s_date}"></th>
+                                        <th  width="20%" style="padding: 0 10px"><input type="text"  id="hotel_transfer_flight" class="layui-input" placeholder="Flight No." value="" maxlength="10"></th>
+                                        <th  width="20%" style="padding: 0 10px"><input type="text"  id="hotel_transfer_time" class="layui-input hotel-time" placeholder="Arrival Time" value=""></th>
+                                        <th  width="40%" style="padding: 0 10px">
+                                            <select id="service_requests_select_hotel" class="layui-select">
+                                                <!-- input -->
+                                                <option value="">-- Select Airport --</option>
+                                                {foreach $tourTransfer[1] as $vv}
+                                                <option value="{$vv.airport}">{$vv.airport}</option>
+                                                {/foreach}
+                                            </select>
+                                        </th>
+                                    </tr>
+                                    <tr style="height: 40px;">
+                                        <td colspan="3" style="padding: 0 10px">
+                                            <select class="layui-select"  xm-select="hotel_transfer_tour_pax" xm-select-search="" xm-select-search-type="dl"  multiple="multiple" >
+                                                <option value="">-- Select Passengers --</option>
+                                                {foreach $Think.session.adminBooking_passenger_detailsAjax['temp_id'] as $kk=>$vv}
+                                                <option value="{$Think.session.adminBooking_passenger_detailsAjax['temp_id'][$kk]}" >{$kk+1}.{$Think.session.adminBooking_passenger_detailsAjax['lname'][$kk]} {$Think.session.adminBooking_passenger_detailsAjax['fname'][$kk]}({$Think.session.adminBooking_passenger_detailsAjax['age_cat'][$kk]})</option>
+                                                {/foreach}
+                                            </select>
+                                        </td>
+                                        <td style="padding: 0 10px"><span class="add_btn" id="add_btn-hotel-transfer"></span></td>
+                                    </tr>
+                                </table>
+                                <div id="errorMessageHotel"></div>
+                                <div id="hotel_transfer_pax">
+                                    <?php $disabledHotelTransfer = []; ?>
+
+                                    {if $Think.session.adminBooking_service_requestsAjax.hotel_transfer}
+                                    {foreach $Think.session.adminBooking_service_requestsAjax.hotel_transfer_date as $kk=>$vv}
+                                        <?php
+                                            $hotel_transfer_tour_pax = explode(',',session('adminBooking_service_requestsAjax')['hotel_transfer_tour_pax'][$kk]);
+                                            $hotel_transfer_tour_pax_name = explode(',',session('adminBooking_service_requestsAjax')['hotel_transfer_tour_pax_name'][$kk]);
+                                        ?>
+
+                                        <div class="hotelTransferDiv">
+                                            <hr>
+                                            <table class="service_request_table" cellspacing="0" style="width: 700px;text-align: center;">
+                                                <tbody>
+                                                <tr>
+                                                    <th width="5%">{$kk+1}</th>
+                                                    <th width="15%">Date</th>
+                                                    <th width="15%">Flight</th>
+                                                    <th width="10%">Time</th>
+                                                    <th width="20%" class="airport">Airport</th>
+                                                    <th width="35%" class="pax">Transfer Passenger x<?=count($hotel_transfer_tour_pax);?></th>
+                                                </tr>
+                                                <tr>
+                                                    <td>&nbsp;</td>
+                                                    <td class="date">{$Think.session.adminBooking_service_requestsAjax.hotel_transfer_date[$kk]}</td>
+                                                    <td class="flight">{$Think.session.adminBooking_service_requestsAjax.hotel_transfer_flight[$kk]}</td>
+                                                    <td class="time">{$Think.session.adminBooking_service_requestsAjax.hotel_transfer_time[$kk]}</td>
+                                                    <td class="airport">{$Think.session.adminBooking_service_requestsAjax.service_requests_select_hotel[$kk]}</td>
+                                                    <td class="last">
+                                                        <ul>
+                                                            {foreach $hotel_transfer_tour_pax_name as $ky=>$vy}
+                                                            <li data-tmpid="">{$vy}.</li>
+                                                            <?php $disabledHotelTransfer[] = $hotel_transfer_tour_pax[$ky]; ?>
+                                                            {/foreach}
+                                                        </ul>
+                                                    </td>
+                                                </tr>
+                                                </tbody>
+                                            </table><span style="color:#005702;">Transfer charge applies </span><span style="color:#005702;" class="hotel_transfer_charge1"><?=count($hotel_transfer_tour_pax);?></span><span style="color:#005702;"> Passenger/s</span>
+                                            <input type="hidden" name="hotel_transfer_date[]" value="{$Think.session.adminBooking_service_requestsAjax.hotel_transfer_date[$kk]}">
+                                            <input type="hidden" name="hotel_transfer_flight[]" value="{$Think.session.adminBooking_service_requestsAjax.hotel_transfer_flight[$kk]}">
+                                            <input type="hidden" name="hotel_transfer_time[]" value="{$Think.session.adminBooking_service_requestsAjax.hotel_transfer_time[$kk]}">
+                                            <input type="hidden" name="service_requests_select_hotel[]" value="{$Think.session.adminBooking_service_requestsAjax.service_requests_select_hotel[$kk]}">
+                                            <input type="hidden" name="hotel_transfer_tour_pax[]" value="{$Think.session.adminBooking_service_requestsAjax.hotel_transfer_tour_pax[$kk]}">
+                                            <input type="hidden" name="hotel_transfer_tour_pax_name[]" value="{$Think.session.adminBooking_service_requestsAjax.hotel_transfer_tour_pax_name[$kk]}">
+                                        </div>
+                                    {/foreach}
+                                    {/if}
+
+                                </div>
+                                <!-- end hotel transfer pax -->
+                            </div>
+                        </div>
+
+
+                        <div>
+                            <hr>
+                            <div id="airport">
+                                <table width="700" cellspacing="0" border="0">
+                                    <tbody><tr>
+                                        <td width="30%" class="h1"  style="font-weight: bold">Airport Transfer <br>(送機)</td>
+                                        <td width="50%" class="text">Free service for flight<?php $length_days = session('adminBooking_select_tour')['length_days'];?>
+                                            departure on <?=date('d-m-Y',strtotime("+$length_days day",strtotime(session('adminBooking_select_dateAjax')['s_date'])))?><br> between 00:00 to 00:00</td>
+                                        <td class="input_label"><label>Yes</label></td>
+                                        <td class="input_box">
+                                            <input id="airport_transfer" lay-filter="airport_transfer"  name="airport_transfer" value="1" class="css-checkbox" type="checkbox" lay-skin="primary" {$Think.session.adminBooking_service_requestsAjax.airport_transfer?'checked':''}>
+                                        </td>
+                                    </tr>
+                                    </tbody></table>
+                            </div>
+                            <div id="airport_transfer_info" {$Think.session.adminBooking_service_requestsAjax.airport_transfer?'':'style="display: none"'} >
+                                <hr>
+                                <table>
+                                    <tr style="height: 40px;">
+                                        <th width="20%" style="padding: 0 10px"><input type="text" id="airport_transfer_date" class="layui-input hotel-date" placeholder="Select Date" value="<?=date('d-m-Y',strtotime("+$length_days day",strtotime(session('adminBooking_select_dateAjax')['s_date'])))?>"></th>
+                                        <th width="20%" style="padding: 0 10px"><input type="text" id="airport_transfer_flight" class="layui-input" placeholder="Flight No." value=""></th>
+                                        <th width="20%" style="padding: 0 10px"><input type="text" id="airport_transfer_time" class="layui-input hotel-time" placeholder="Departure Time" value=""></th>
+                                        <th width="40%" style="padding: 0 10px">
+                                            <select id="service_requests_select_airport" class="layui-select">
+                                                <!-- input -->
+                                                <option value="">-- Select Airport --</option>
+                                                {foreach $tourTransfer[2] as $vv}
+                                                <option value="{$vv.airport}">{$vv.airport}</option>
+                                                {/foreach}
+                                            </select>
+                                        </th>
+                                    </tr>
+                                    <tr style="height: 40px">
+                                        <td colspan="3" style="padding: 0 10px">
+                                            <select class="layui-select"  xm-select="airport_transfer_tour_pax" xm-select-search="" xm-select-search-type="dl"  multiple="multiple" >
+                                                <option value="">-- Select Passengers --</option>
+                                                {foreach $Think.session.adminBooking_passenger_detailsAjax['temp_id'] as $kk=>$vv}
+                                                <option value="{$Think.session.adminBooking_passenger_detailsAjax['temp_id'][$kk]}" >{$kk+1}.{$Think.session.adminBooking_passenger_detailsAjax['lname'][$kk]} {$Think.session.adminBooking_passenger_detailsAjax['fname'][$kk]}({$Think.session.adminBooking_passenger_detailsAjax['age_cat'][$kk]})</option>
+                                                {/foreach}
+                                            </select>
+                                        </td>
+                                        <td style="padding: 0 10px"><span class="add_btn" id="add_btn-airport-transfer"></span></td>
+
+                                    </tr>
+                                 </table>
+                                <div id="errorMessageAirport"></div>
+                                <div id="airport_transfer_pax">
+                                    <?php $disabledAirportTransfer = []; ?>
+
+                                    {if $Think.session.adminBooking_service_requestsAjax.airport_transfer}
+                                    {foreach $Think.session.adminBooking_service_requestsAjax.airport_transfer_date as $kk=>$yy }
+                                    <?php
+                                        $airport_transfer_tour_pax = explode(',',session('adminBooking_service_requestsAjax')['airport_transfer_tour_pax'][$kk]);
+                                        $airport_transfer_tour_pax_name = explode(',',session('adminBooking_service_requestsAjax')['airport_transfer_tour_pax_name'][$kk]);
+                                    ?>
+
+                                    <div class="airportTransferDiv">
+                                        <hr>
+                                        <table class="service_request_table" cellspacing="0" style="width: 700px;text-align: center;">
+                                            <tbody>
+                                            <tr>
+                                                <th width="5%">{$kk+1}</th>
+                                                <th width="15%">Date</th>
+                                                <th width="15%">Flight</th>
+                                                <th width="10%">Time</th>
+                                                <th width="20%" class="airport">Airport</th>
+                                                <th width="35%" class="pax">Transfer Passenger x<?=count($airport_transfer_tour_pax);?></th>
+                                            </tr>
+                                            <tr>
+                                                <td>&nbsp;</td>
+                                                <td class="date">{$Think.session.adminBooking_service_requestsAjax.airport_transfer_date[$kk]}</td>
+                                                <td class="flight">{$Think.session.adminBooking_service_requestsAjax.airport_transfer_flight[$kk]}</td>
+                                                <td class="time">{$Think.session.adminBooking_service_requestsAjax.airport_transfer_time[$kk]}</td>
+                                                <td class="airport">{$Think.session.adminBooking_service_requestsAjax.service_requests_select_airport[$kk]}</td>
+                                                <td class="last">
+                                                    <ul>
+                                                    {foreach $airport_transfer_tour_pax_name as $ky=>$vy}
+                                                        <li data-tmpid="">{$vy}.</li>
+                                                        <?php $disabledAirportTransfer[] = $airport_transfer_tour_pax[$ky];?>
+                                                    {/foreach}
+                                                    </ul>
+                                                </td>
+                                            </tr>
+                                            </tbody>
+                                        </table><span style="color:#005702;">Transfer charge applies </span><span style="color:#005702;" class="hotel_transfer_charge1"><?=count($airport_transfer_tour_pax);?></span><span style="color:#005702;"> Passenger/s</span>
+                                        <input type="hidden" name="airport_transfer_date[]" value="{$Think.session.adminBooking_service_requestsAjax.airport_transfer_date[$kk]}">
+                                        <input type="hidden" name="airport_transfer_flight[]" value="{$Think.session.adminBooking_service_requestsAjax.airport_transfer_flight[$kk]}">
+                                        <input type="hidden" name="airport_transfer_time[]" value="{$Think.session.adminBooking_service_requestsAjax.airport_transfer_time[$kk]}">
+                                        <input type="hidden" name="service_requests_select_airport[]" value="{$Think.session.adminBooking_service_requestsAjax.service_requests_select_airport[$kk]}">
+                                        <input type="hidden" name="airport_transfer_tour_pax[]" value="{$Think.session.adminBooking_service_requestsAjax.airport_transfer_tour_pax[$kk]}">
+                                        <input type="hidden" name="airport_transfer_tour_pax_name[]" value="{$Think.session.adminBooking_service_requestsAjax.airport_transfer_tour_pax_name[$kk]}">
+                                    </div>
+                                    {/foreach}
+                                    {/if}
+                                </div>
+                                <!-- end airport transfer pax -->
+                            </div>
+                        </div>
+
+
+                        <div>
+                            <hr>
+                            <div>
+                                <table width="700" cellspacing="0" border="0">
+                                    <tbody><tr>
+                                        <td width="30%" class="h1" style="font-weight: bold">Bus Pickup</td>
+                                        <td width="50%" class="text"></td>
+                                        <td class="input_label"><label>N/A</label></td>
+                                        <td class="input_box"></td>
+                                    </tr>
+                                    </tbody></table>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div id="accommodation">
+                        <hr>
+                        <h3 class="parent" style="font-size: 18px;color:#3376BB;font-weight: bold ">Pre/Post Tour Accommodation </h3>
+                        <hr>
+                    </div>
+                    <div id="pre">
+                        <table width="700" cellspacing="0" border="0">
+                            <tbody><tr>
+                                <td  width="30%" style="font-weight: bold">Pre Tour Accommodation</td>
+                                <td class="text" width="50%">&nbsp;</td>
+                                <td class="input_label"><label>Yes</label></td>
+                                <td class="input_box"><input id="pre_accommodation" lay-filter="pre_accommodation" name="pre_accommodation" class="css-checkbox" type="checkbox" value="1"  lay-skin="primary"  {$Think.session.adminBooking_service_requestsAjax.pre_accommodation?'checked':''}>
+                                </td>
+                            </tr>
+                            </tbody></table>
+                    </div>
+                    <div id="pre_accommodation_info"   {$Think.session.adminBooking_service_requestsAjax.pre_accommodation?'':'style="display: none;"'} >
+                        <hr>
+                        <table width="700" cellspacing="0" border="0">
+                            <tbody><tr>
+                                <td width="25%" style="padding: 0px 10px">
+                                    <select title="Nights" class="layui-select" id="pre_accommodation_nights" >
+                                        <option value="" selected="">--Night/s--</option>
+                                        <?php for($i=1;$i<=5;$i++){?>
+                                        <option value="{$i}">{$i} Night</option>
+                                       <?php }?>
+                                    </select>
+                                </td>
+                                <td width="25%" style="padding: 0px 10px">
+                                    <select title="Hotel Rooms" class="layui-select" id="pre_accommodation_room_type" >
+                                        <option value="" selected="">-- Room Type --</option>
+                                        {foreach $all_rooms as $v}
+                                        <option value="{$roomType[$v.room][0]['room_type_name']}">{$roomType[$v.room][0]['room_type_name']}</option>
+                                        {/foreach}
+                                    </select>
+                                </td>
+                                <td width="40%" style="padding: 0px 10px">
+                                    <select class="layui-select"  xm-select="pre_accommodation_pax" xm-select-search="" xm-select-search-type="dl"  multiple="multiple" >
+                                        <option value="">-- Select Passengers --</option>
+                                        {foreach $Think.session.adminBooking_passenger_detailsAjax['temp_id'] as $kk=>$vv}
+                                        <option value="{$Think.session.adminBooking_passenger_detailsAjax['temp_id'][$kk]}" >{$kk+1}.{$Think.session.adminBooking_passenger_detailsAjax['lname'][$kk]} {$Think.session.adminBooking_passenger_detailsAjax['fname'][$kk]}({$Think.session.adminBooking_passenger_detailsAjax['age_cat'][$kk]})</option>
+                                        {/foreach}
+                                    </select>
+                                </td>
+                                <td style="padding: 0px 10px">
+                                    <span class="add_btn" id="add_btn_pre_accommodation" style="margin-left:0px; margin-top: 5px;"></span>
+                                    <div id="errorMessagePre"></div>
+                                </td>
+                            </tr>
+                            </tbody></table>
+                        <div id="pre_accommodation_pax">
+                            <?php $disabledPreAccommodation = [];?>
+
+                            {if $Think.session.adminBooking_service_requestsAjax.pre_accommodation}
+                            {foreach $Think.session.adminBooking_service_requestsAjax.pre_accommodation_nights as $kk=>$yy}
+                                <?php
+                                    $pre_accommodation_pax = explode(',',session('adminBooking_service_requestsAjax')['pre_accommodation_pax'][$kk]);
+                                    $pre_accommodation_pax_name = explode(',',session('adminBooking_service_requestsAjax')['pre_accommodation_pax_name'][$kk]);
+                                ?>
+                                <div class="preTourAccommodationDiv">
+                                    <hr>
+                                    <table class="service_request_table" cellspacing="0" style="text-align: center;width: 700px">
+                                        <tbody>
+                                        <tr>
+                                            <th width="10%">{$kk+1}</th>
+                                            <th width="20%">Nights</th>
+                                            <th width="20%">Room Type</th>
+                                            <th width="50%">Passengers x <?=count($pre_accommodation_pax);?></th>
+                                        </tr>
+                                        <tr>
+                                            <td>&nbsp;</td>
+                                            <td>{$Think.session.adminBooking_service_requestsAjax.pre_accommodation_nights[$kk]}</td>
+                                            <td>{$Think.session.adminBooking_service_requestsAjax.pre_accommodation_room_type[$kk]}</td>
+                                            <td>
+                                                {foreach $pre_accommodation_pax_name as $ky=>$vy}
+                                                    <li data-tmpid="">{$vy}.</li>
+                                                    <?php $disabledPreAccommodation[]=$pre_accommodation_pax[$ky];?>
+                                                {/foreach}
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                    <input type="hidden" name="pre_accommodation_nights[]" value="{$Think.session.adminBooking_service_requestsAjax.pre_accommodation_nights[$kk]}">
+                                    <input type="hidden" name="pre_accommodation_room_type[]" value="{$Think.session.adminBooking_service_requestsAjax.pre_accommodation_room_type[$kk]}">
+                                    <input type="hidden" name="pre_accommodation_pax[]" value="{$Think.session.adminBooking_service_requestsAjax.pre_accommodation_pax[$kk]}">
+                                    <input type="hidden" name="pre_accommodation_pax_name[]" value="{$Think.session.adminBooking_service_requestsAjax.pre_accommodation_pax_name[$kk]}">
+                                </div>
+                            {/foreach}
+                            {/if}
+
+                        </div>
+                        <!-- end pre_accommodation_pax -->
+                    </div>
+
+                    <hr>
+                    <div id="post">
+                        <table width="700" cellspacing="0" border="0">
+                            <tbody><tr>
+                                <td style="font-weight: bold" width="30%">Post Tour Accommodation</td>
+                                <td class="text" width="50%">&nbsp;</td>
+                                <td class="input_label"><label>Yes</label></td>
+                                <td class="input_box">
+                                    <input id="post_accommodation" lay-filter="post_accommodation" name="post_accommodation" class="css-checkbox" type="checkbox" lay-skin="primary" value="1" {$Think.session.adminBooking_service_requestsAjax.post_accommodation?"checked":""}>
+                                </td>
+                            </tr>
+                            </tbody></table>
+                    </div>
+                    <div id="post_accommodation_info"  {$Think.session.adminBooking_service_requestsAjax.post_accommodation?'':'style="display: none;"'} >
+                        <hr>
+                        <table width="700" cellspacing="0" border="0">
+                            <tbody><tr>
+                                <td width="25%" style="padding: 0 10px">
+                                    <select title="Nights" class="layui-select" id="post_accommodation_nights" >
+                                        <option value="" selected="">--Night/s--</option>
+                                        <?php for($i=1;$i<=5;$i++){?>
+                                        <option value="{$i}" >{$i} Night</option>
+                                        <?php }?>
+                                    </select>
+                                </td>
+                                <td width="25%"  style="padding: 0 10px">
+                                    <select title="Hotel Rooms"  class="layui-select"  id="post_accommodation_room_type" >
+                                        <option value="" selected="">-- Room Type --</option>
+                                        {foreach $all_rooms as $v}
+                                        <option value="{$roomType[$v.room][0]['room_type_name']}">{$roomType[$v.room][0]['room_type_name']}</option>
+                                        {/foreach}
+                                    </select>
+                                </td>
+                                <td width="40%" style="padding: 0 10px">
+                                    <select class="layui-select"  xm-select="post_accommodation_pax" xm-select-search="" xm-select-search-type="dl"  multiple="multiple" >
+                                        <option value="">-- Select Passengers --</option>
+                                        {foreach $Think.session.adminBooking_passenger_detailsAjax['temp_id'] as $kk=>$vv}
+                                        <option value="{$Think.session.adminBooking_passenger_detailsAjax['temp_id'][$kk]}" >{$kk+1}.{$Think.session.adminBooking_passenger_detailsAjax['lname'][$kk]} {$Think.session.adminBooking_passenger_detailsAjax['fname'][$kk]}({$Think.session.adminBooking_passenger_detailsAjax['age_cat'][$kk]})</option>
+                                        {/foreach}
+                                    </select>
+                                </td>
+                                <td>
+                                <span class="add_btn" id="add_btn_post_accommodation" style="margin-left:0px; margin-top: 5px;"></span>
+                                <div id="errorMessagePost"></div>
+                            </td>
+
+                            </tr>
+                            </tbody></table>
+                        <div id="post_accommodation_pax">
+                            <?php $disabledPostAccommodation = [];?>
+
+                            {if $Think.session.adminBooking_service_requestsAjax.post_accommodation}
+                            {foreach  $Think.session.adminBooking_service_requestsAjax.post_accommodation_nights  as $kk=>$yy}
+                            <?php
+                              $post_accommodation_pax = explode(',',session('adminBooking_service_requestsAjax')['post_accommodation_pax'][$kk]);
+                              $post_accommodation_pax_name = explode(',',session('adminBooking_service_requestsAjax')['post_accommodation_pax_name'][$kk]);
+                            ?>
+                                <div class="postTourAccommodationDiv">
+                                    <hr>
+                                    <table class="service_request_table" cellspacing="0" style="text-align: center;width: 700px">
+                                        <tbody>
+                                        <tr>
+                                            <th width="10%">{$kk+1}</th>
+                                            <th width="20%">Nights</th>
+                                            <th width="20%">Room Type</th>
+                                            <th width="50%">Passengers x <?=count($post_accommodation_pax);?></th>
+                                        </tr>
+                                        <tr>
+                                            <td>&nbsp;</td>
+                                            <td>{$Think.session.adminBooking_service_requestsAjax.post_accommodation_nights[$kk]}</td>
+                                            <td>{$Think.session.adminBooking_service_requestsAjax.post_accommodation_room_type[$kk]}</td>
+                                            <td>
+                                                {foreach $post_accommodation_pax_name as $kv=>$vv}
+                                                    <li data-tmpid="">{$vv}.</li>
+                                                <?php $disabledPostAccommodation[] = $post_accommodation_pax[$kv];?>
+                                                {/foreach}
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                    <input type="hidden" name="post_accommodation_nights[]" value="{$Think.session.adminBooking_service_requestsAjax.post_accommodation_nights[$kk]}">
+                                    <input type="hidden" name="post_accommodation_room_type[]" value="{$Think.session.adminBooking_service_requestsAjax.post_accommodation_room_type[$kk]}">
+                                    <input type="hidden" name="post_accommodation_pax[]" value="{$Think.session.adminBooking_service_requestsAjax.post_accommodation_pax[$kk]}">
+                                    <input type="hidden" name="post_accommodation_pax_name[]" value="{$Think.session.adminBooking_service_requestsAjax.post_accommodation_pax_name[$kk]}">
+                                </div>
+                            {/foreach}
+                            {/if}
+                        </div>
+                        <!-- end post accommodation pax -->
+                    </div>
+
+                    <div id="special_requests_text">
+                        <hr>
+                        <h3 class="parent"  style="font-size: 18px;color:#3376BB;font-weight: bold">Special Request</h3>
+                        <textarea class="special_request_text" name="special_request" row="3" placeholder="....">{$Think.session.adminBooking_service_requestsAjax.special_request}</textarea>
+                    </div>
+
+
+                    <div class="layui-col-md8" style="padding: 20px;font-weight: bold;font-size:14px;text-align: center">
+                        <button class="layui-btn nav-submit" lay-submit  >Next</button>
+                    </div>
+
+                </form>
+
+
+
+            </div>
+
+
+        </div>
+
+
+
+
+
+        <div class="layui-footer">
+            <!-- 底部固定区域 -->
+            © layui.com - 底部固定区域
+        </div>
+    </div>
+    {include file='public/foot_js' /}
+    <script>
+        //JavaScript代码区域
+        var layer = layui.layer;
+        var form = layui.form;
+        var laydate = layui.laydate;
+        var adminBooking_passenger_detailsAjax = <?=json_encode(session('adminBooking_passenger_detailsAjax'));?>;
+
+        $('.hotel-date').each(function(a){
+            laydate.render({
+                elem: this
+                ,type: 'date'
+                ,format: 'dd-MM-yyyy'
+            });
+
+        });
+        $('.hotel-time').each(function(a){
+            laydate.render({
+                elem: this
+                ,type: 'time'
+                ,format: 'HH:mm'
+            });
+
+        });
+
+       $('#clear').click(function(){
+           $.get('/admin_booking/clear_service_requestsAjax',function(){
+               location.href="/admin_booking/service_requests";
+           });
+       });
+
+        //接機
+        form.on('checkbox(hotel_transfer)', function(data){
+            if(data.elem.checked){
+                $('#hotel_transfer_info').show();
+            }else{
+                $('#hotel_transfer_info').hide();
+            }
+        });
+
+        var disabledHotelTransfer = <?=$disabledHotelTransfer?json_encode($disabledHotelTransfer):json_encode([]);?>; //选用了的用户
+        var arrHotelTransfer = [];
+        for(var itt in adminBooking_passenger_detailsAjax.temp_id){
+            var ar = []
+            ar['name'] = adminBooking_passenger_detailsAjax.lname[itt]+' '+adminBooking_passenger_detailsAjax.fname[itt]+'|'+adminBooking_passenger_detailsAjax.age_cat[itt];
+            ar['value'] = adminBooking_passenger_detailsAjax.temp_id[itt];
+            for(var iij in disabledHotelTransfer){
+                if(disabledHotelTransfer[iij] == adminBooking_passenger_detailsAjax.temp_id[itt]){
+                    ar['disabled'] = 'disabled';
+                }
+            }
+            arrHotelTransfer.push(ar);
+        }
+        layui.formSelects.data('hotel_transfer_tour_pax', 'local', {
+            arr: arrHotelTransfer
+        });
+
+
+        $('#add_btn-hotel-transfer').click(function(){
+            var hotel_transfer_date = $('#hotel_transfer_date').val();
+            var hotel_transfer_flight = $('#hotel_transfer_flight').val();
+            var hotel_transfer_time = $('#hotel_transfer_time').val();
+            var service_requests_select_hotel = $('#service_requests_select_hotel').val();
+            var hotel_transfer_tour_pax = layui.formSelects.value('hotel_transfer_tour_pax', 'val');
+            var hotel_transfer_tour_pax_name = [];
+
+//            alert(service_requests_select_hotel);
+            if(hotel_transfer_date=='' || hotel_transfer_date==null || hotel_transfer_date=='null'){
+                $('.top_text').html('<span class="message error" style="color: red">Please select hotel transfer date !</span>');return;
+            }
+            if(hotel_transfer_flight=='' || hotel_transfer_flight==null || hotel_transfer_flight=='null'){
+                $('.top_text').html('<span class="message error" style="color: red">Please enter flight no!</span>');return;
+            }
+            if(hotel_transfer_time=='' || hotel_transfer_time==null || hotel_transfer_time=='null'){
+                $('.top_text').html('<span class="message error" style="color: red">Please enter time for hotel transfer !</span>');return;
+            }
+            if(service_requests_select_hotel=='' || service_requests_select_hotel==null || service_requests_select_hotel=='null'){
+                $('.top_text').html('<span class="message error" style="color: red">Please select airport for pickup !</span>');return;
+            }
+            if(hotel_transfer_tour_pax=='' || hotel_transfer_tour_pax==null || hotel_transfer_tour_pax=='null'){
+                $('.top_text').html('<span class="message error" style="color: red">Please select passenger for transfer !</span>');return;
+            }
+
+            var iij = $('.hotelTransferDiv').length?$('.hotelTransferDiv').length+1:1;
+
+            var h = '<div class="hotelTransferDiv">';
+            h += '<hr>';
+            h += '<table class="service_request_table" cellspacing="0" style="width: 700px;text-align: center;"><tbody>';
+            h += '<tr>';
+            h += '<th width="5%">'+iij+'</th><th width="15%">Date</th><th width="15%">Flight</th><th width="10%">Time</th><th width="20%" class="airport">Airport</th><th  width="35%" class="pax">Transfer Passenger x'+hotel_transfer_tour_pax.length+'</th>';
+            h += '</tr><tr>';
+            h += '<td>&nbsp;</td>';
+            h += '<td class="date">'+hotel_transfer_date+'</td><td class="flight">'+hotel_transfer_flight+'</td>';
+            h += '<td class="time">'+hotel_transfer_time+'</td><td class="airport">'+service_requests_select_hotel+'</td>';
+            h += '<td class="last"><ul>';
+            for(var it in hotel_transfer_tour_pax){
+                for(var ij in adminBooking_passenger_detailsAjax.temp_id){
+                    if(hotel_transfer_tour_pax[it]==adminBooking_passenger_detailsAjax.temp_id[ij]){
+                        h += '<li data-tmpid="'+adminBooking_passenger_detailsAjax.temp_id[ij]+'">'+adminBooking_passenger_detailsAjax.lname[ij]+' '+adminBooking_passenger_detailsAjax.fname[ij]+'|'+adminBooking_passenger_detailsAjax.age_cat[ij]+'.</li>';
+                        disabledHotelTransfer.push(hotel_transfer_tour_pax[it]);
+                        hotel_transfer_tour_pax_name.push(adminBooking_passenger_detailsAjax.lname[ij]+' '+adminBooking_passenger_detailsAjax.fname[ij]+'|'+adminBooking_passenger_detailsAjax.age_cat[ij]);
+                    }
+                }
+            }
+            h += '</ul></td></tr></tbody></table>';
+            h += '<span style="color:#005702;">Transfer charge applies </span>';
+            h += '<span style="color:#005702;" class="hotel_transfer_charge1">'+hotel_transfer_tour_pax.length+'</span>';
+            h += '<span style="color:#005702;"> Passenger/s</span>';
+            h += '<input type="hidden" name="hotel_transfer_date[]" value="'+hotel_transfer_date+'" >';
+            h += '<input type="hidden" name="hotel_transfer_flight[]" value="'+hotel_transfer_flight+'" >';
+            h += '<input type="hidden" name="hotel_transfer_time[]" value="'+hotel_transfer_time+'" >';
+            h += '<input type="hidden" name="service_requests_select_hotel[]" value="'+service_requests_select_hotel+'" >';
+            h += '<input type="hidden" name="hotel_transfer_tour_pax[]" value="'+hotel_transfer_tour_pax.join(',')+'" >';
+            h += '<input type="hidden" name="hotel_transfer_tour_pax_name[]" value="'+hotel_transfer_tour_pax_name.join(',')+'" >';
+            h += '</div>';
+            $('#hotel_transfer_pax').append(h);
+
+            var arr = [];
+            for(var itt in adminBooking_passenger_detailsAjax.temp_id){
+                var ar = []
+                ar['name'] = adminBooking_passenger_detailsAjax.lname[itt]+' '+adminBooking_passenger_detailsAjax.fname[itt]+'|'+adminBooking_passenger_detailsAjax.age_cat[itt];
+                ar['value'] = adminBooking_passenger_detailsAjax.temp_id[itt];
+                for(var iij in disabledHotelTransfer){
+                    if(disabledHotelTransfer[iij] == adminBooking_passenger_detailsAjax.temp_id[itt]){
+                        ar['disabled'] = 'disabled';
+                    }
+                }
+                arr.push(ar);
+            }
+            layui.formSelects.data('hotel_transfer_tour_pax', 'local', {
+                arr: arr
+            });
+
+        });
+
+
+       //送機
+        form.on('checkbox(airport_transfer)', function(data){
+            if(data.elem.checked){
+                $('#airport_transfer_info').show();
+            }else{
+                $('#airport_transfer_info').hide();
+            }
+        });
+
+        var disabledAirportTransfer = <?=$disabledAirportTransfer?json_encode($disabledAirportTransfer):json_encode([]);?>; //选用了的用户
+        var arrAirportTransfer = [];
+        for(var itt in adminBooking_passenger_detailsAjax.temp_id){
+            var ar = []
+            ar['name'] = adminBooking_passenger_detailsAjax.lname[itt]+' '+adminBooking_passenger_detailsAjax.fname[itt]+'|'+adminBooking_passenger_detailsAjax.age_cat[itt];
+            ar['value'] = adminBooking_passenger_detailsAjax.temp_id[itt];
+            for(var iij in disabledAirportTransfer){
+                if(disabledAirportTransfer[iij] == adminBooking_passenger_detailsAjax.temp_id[itt]){
+                    ar['disabled'] = 'disabled';
+                }
+            }
+            arrAirportTransfer.push(ar);
+        }
+        layui.formSelects.data('airport_transfer_tour_pax', 'local', {
+            arr: arrAirportTransfer
+        });
+
+        $('#add_btn-airport-transfer').click(function(){
+            var airport_transfer_date = $('#airport_transfer_date').val();
+            var airport_transfer_flight = $('#airport_transfer_flight').val();
+            var airport_transfer_time = $('#airport_transfer_time').val();
+            var service_requests_select_airport = $('#service_requests_select_airport').val();
+            var airport_transfer_tour_pax = layui.formSelects.value('airport_transfer_tour_pax', 'val');
+            var airport_transfer_tour_pax_name = [];
+
+//            alert(service_requests_select_hotel);
+            if(airport_transfer_date=='' || airport_transfer_date==null || airport_transfer_date=='null'){
+                $('.top_text').html('<span class="message error" style="color: red">Please select airport transfer date !</span>');return;
+            }
+            if(airport_transfer_flight=='' || airport_transfer_flight==null || airport_transfer_flight=='null'){
+                $('.top_text').html('<span class="message error" style="color: red">Please select a airport transfer flight !</span>');return;
+            }
+            if(airport_transfer_time=='' || airport_transfer_time==null || airport_transfer_time=='null'){
+                $('.top_text').html('<span class="message error" style="color: red">Please select a airport transfer time !</span>');return;
+            }
+            if(service_requests_select_airport=='' || service_requests_select_airport==null || service_requests_select_airport=='null'){
+                $('.top_text').html('<span class="message error" style="color: red">Please select a airport transfer airport !</span>');return;
+            }
+            if(airport_transfer_tour_pax=='' || airport_transfer_tour_pax==null || airport_transfer_tour_pax=='null'){
+                $('.top_text').html('<span class="message error" style="color: red">Please select airport transfer passenger !</span>');return;
+            }
+
+            var iij = $('.airportTransferDiv').length?$('.airportTransferDiv').length+1:1;
+
+            var h = '<div class="airportTransferDiv">';
+            h += '<hr>';
+            h += '<table class="service_request_table" cellspacing="0" style="width: 700px;text-align: center;"><tbody>';
+            h += '<tr>';
+            h += '<th width="5%">'+iij+'</th><th width="15%">Date</th><th width="15%">Flight</th><th width="10%">Time</th><th width="20%" class="airport">Airport</th><th  width="35%" class="pax">Transfer Passenger x'+airport_transfer_tour_pax.length+'</th>';
+            h += '</tr><tr>';
+            h += '<td>&nbsp;</td>';
+            h += '<td class="date">'+airport_transfer_date+'</td><td class="flight">'+airport_transfer_flight+'</td>';
+            h += '<td class="time">'+airport_transfer_time+'</td><td class="airport">'+service_requests_select_airport+'</td>';
+            h += '<td class="last"><ul>';
+            for(var it in airport_transfer_tour_pax){
+                for(var ij in adminBooking_passenger_detailsAjax.temp_id){
+                    if(airport_transfer_tour_pax[it]==adminBooking_passenger_detailsAjax.temp_id[ij]){
+                        h += '<li data-tmpid="'+adminBooking_passenger_detailsAjax.temp_id[ij]+'">'+adminBooking_passenger_detailsAjax.lname[ij]+' '+adminBooking_passenger_detailsAjax.fname[ij]+'|'+adminBooking_passenger_detailsAjax.age_cat[ij]+'.</li>';
+                        disabledAirportTransfer.push(airport_transfer_tour_pax[it]);
+                        airport_transfer_tour_pax_name.push(adminBooking_passenger_detailsAjax.lname[ij]+' '+adminBooking_passenger_detailsAjax.fname[ij]+'|'+adminBooking_passenger_detailsAjax.age_cat[ij]);
+                    }
+                }
+            }
+            h += '</ul></td></tr></tbody></table>';
+            h += '<span style="color:#005702;">Transfer charge applies </span>';
+            h += '<span style="color:#005702;" class="hotel_transfer_charge1">'+airport_transfer_tour_pax.length+'</span>';
+            h += '<span style="color:#005702;"> Passenger/s</span>';
+            h += '<input type="hidden" name="airport_transfer_date[]" value="'+airport_transfer_date+'" >';
+            h += '<input type="hidden" name="airport_transfer_flight[]" value="'+airport_transfer_flight+'" >';
+            h += '<input type="hidden" name="airport_transfer_time[]" value="'+airport_transfer_time+'" >';
+            h += '<input type="hidden" name="service_requests_select_airport[]" value="'+service_requests_select_airport+'" >';
+            h += '<input type="hidden" name="airport_transfer_tour_pax[]" value="'+airport_transfer_tour_pax.join(',')+'" >';
+            h += '<input type="hidden" name="airport_transfer_tour_pax_name[]" value="'+airport_transfer_tour_pax_name.join(',')+'" >';
+            h += '</div>';
+            $('#airport_transfer_pax').append(h);
+
+            var arr = [];
+            for(var itt in adminBooking_passenger_detailsAjax.temp_id){
+                var ar = []
+                ar['name'] = adminBooking_passenger_detailsAjax.lname[itt]+' '+adminBooking_passenger_detailsAjax.fname[itt]+'|'+adminBooking_passenger_detailsAjax.age_cat[itt];
+                ar['value'] = adminBooking_passenger_detailsAjax.temp_id[itt];
+                for(var iij in disabledAirportTransfer){
+                    if(disabledAirportTransfer[iij] == adminBooking_passenger_detailsAjax.temp_id[itt]){
+                        ar['disabled'] = 'disabled';
+                    }
+                }
+                arr.push(ar);
+            }
+            layui.formSelects.data('airport_transfer_tour_pax', 'local', {
+                arr: arr
+            });
+
+        });
+
+        // pre Accommodation
+        form.on('checkbox(pre_accommodation)', function(data){
+            if(data.elem.checked){
+                $('#pre_accommodation_info').show();
+            }else{
+                $('#pre_accommodation_info').hide();
+            }
+        });
+        var disabledPreAccommodation = <?=$disabledPreAccommodation?json_encode($disabledPreAccommodation):json_encode([]);?>; //选用了的用户
+        var arrPreAccommodation = [];
+        for(var itt in adminBooking_passenger_detailsAjax.temp_id){
+            var ar = []
+            ar['name'] = adminBooking_passenger_detailsAjax.lname[itt]+' '+adminBooking_passenger_detailsAjax.fname[itt]+'|'+adminBooking_passenger_detailsAjax.age_cat[itt];
+            ar['value'] = adminBooking_passenger_detailsAjax.temp_id[itt];
+            for(var iij in disabledPreAccommodation){
+                if(disabledPreAccommodation[iij] == adminBooking_passenger_detailsAjax.temp_id[itt]){
+                    ar['disabled'] = 'disabled';
+                }
+            }
+            arrPreAccommodation.push(ar);
+        }
+        layui.formSelects.data('pre_accommodation_pax', 'local', {
+            arr: arrPreAccommodation
+        });
+
+        $('#add_btn_pre_accommodation').click(function(){
+            var pre_accommodation_nights = $('#pre_accommodation_nights').val();
+            var pre_accommodation_room_type = $('#pre_accommodation_room_type').val();
+            var pre_accommodation_pax = layui.formSelects.value('pre_accommodation_pax', 'val');
+            var pre_accommodation_pax_name = [];
+
+            if(pre_accommodation_nights=='' || pre_accommodation_nights==null || pre_accommodation_nights=='null'){
+                $('.top_text').html('<span class="message error" style="color: red">Please select number of nights accommodation !</span>');return;
+            }
+            if(pre_accommodation_room_type=='' || pre_accommodation_room_type==null || pre_accommodation_room_type=='null'){
+                $('.top_text').html('<span class="message error" style="color: red">Please select preferred room type !</span>');return;
+            }
+            if(pre_accommodation_pax=='' || pre_accommodation_pax==null || pre_accommodation_pax=='null'){
+                $('.top_text').html('<span class="message error" style="color: red">Please select passenger for accommodation!</span>');return;
+            }
+
+            var iij = $('.preTourAccommodationDiv').length?$('.preTourAccommodationDiv').length+1:1;
+
+            var h = '<div class="preTourAccommodationDiv"><hr>';
+            h += '<table class="service_request_table" cellspacing="0" style="text-align: center;width: 700px">';
+            h += '<tbody><tr>';
+            h += '<th width="10%">'+iij+'</th><th width="20%">Nights</th><th width="20%">Room Type</th><th width="50%">Passengers x '+pre_accommodation_pax.length+'</th></tr>';
+            h += '<tr>';
+            h += '<td>&nbsp;</td><td>'+pre_accommodation_nights+'</td><td>'+pre_accommodation_room_type+'</td><td>';
+            for(var it in pre_accommodation_pax){
+                for(var ij in adminBooking_passenger_detailsAjax.temp_id){
+                    if(pre_accommodation_pax[it]==adminBooking_passenger_detailsAjax.temp_id[ij]){
+                        h += '<li data-tmpid="'+adminBooking_passenger_detailsAjax.temp_id[ij]+'">'+adminBooking_passenger_detailsAjax.lname[ij]+' '+adminBooking_passenger_detailsAjax.fname[ij]+'|'+adminBooking_passenger_detailsAjax.age_cat[ij]+'.</li>';
+                        disabledPreAccommodation.push(pre_accommodation_pax[it]);
+                        pre_accommodation_pax_name.push(adminBooking_passenger_detailsAjax.lname[ij]+' '+adminBooking_passenger_detailsAjax.fname[ij]+'|'+adminBooking_passenger_detailsAjax.age_cat[ij]);
+                    }
+                }
+            }
+            h += '</td></tr></tbody></table>';
+            h += '<input type="hidden" name="pre_accommodation_nights[]" value="'+pre_accommodation_nights+'" >';
+            h += '<input type="hidden" name="pre_accommodation_room_type[]" value="'+pre_accommodation_room_type+'" >';
+            h += '<input type="hidden" name="pre_accommodation_pax[]" value="'+pre_accommodation_pax.join(',')+'" >';
+            h += '<input type="hidden" name="pre_accommodation_pax_name[]" value="'+pre_accommodation_pax_name.join(',')+'" >';
+            h += '</div>';
+
+            var arr = [];
+            for(var itt in adminBooking_passenger_detailsAjax.temp_id){
+                var ar = []
+                ar['name'] = adminBooking_passenger_detailsAjax.lname[itt]+' '+adminBooking_passenger_detailsAjax.fname[itt]+'|'+adminBooking_passenger_detailsAjax.age_cat[itt];
+                ar['value'] = adminBooking_passenger_detailsAjax.temp_id[itt];
+                for(var iij in disabledPreAccommodation){
+                    if(disabledPreAccommodation[iij] == adminBooking_passenger_detailsAjax.temp_id[itt]){
+                        ar['disabled'] = 'disabled';
+                    }
+                }
+                arr.push(ar);
+            }
+            layui.formSelects.data('pre_accommodation_pax', 'local', {
+                arr: arr
+            });
+
+            $('#pre_accommodation_pax').append(h);
+
+        });
+
+
+
+        //Post Accommodation
+        form.on('checkbox(post_accommodation)', function(data){
+            if(data.elem.checked){
+                $('#post_accommodation_info').show();
+            }else{
+                $('#post_accommodation_info').hide();
+            }
+        });
+        var disabledPostAccommodation = <?=$disabledPostAccommodation?json_encode($disabledPostAccommodation):json_encode([]);?>; //选用了的用户
+        var arrPostAccommodation = [];
+        for(var itt in adminBooking_passenger_detailsAjax.temp_id){
+            var ar = []
+            ar['name'] = adminBooking_passenger_detailsAjax.lname[itt]+' '+adminBooking_passenger_detailsAjax.fname[itt]+'|'+adminBooking_passenger_detailsAjax.age_cat[itt];
+            ar['value'] = adminBooking_passenger_detailsAjax.temp_id[itt];
+            for(var iij in disabledPostAccommodation){
+                if(disabledPostAccommodation[iij] == adminBooking_passenger_detailsAjax.temp_id[itt]){
+                    ar['disabled'] = 'disabled';
+                }
+            }
+            arrPostAccommodation.push(ar);
+        }
+        layui.formSelects.data('post_accommodation_pax', 'local', {
+            arr: arrPostAccommodation
+        });
+
+        $('#add_btn_post_accommodation').click(function(){
+            var post_accommodation_nights = $('#post_accommodation_nights').val();
+            var post_accommodation_room_type = $('#post_accommodation_room_type').val();
+            var post_accommodation_pax = layui.formSelects.value('post_accommodation_pax', 'val');
+            var post_accommodation_pax_name = [];
+
+            if(post_accommodation_nights=='' || post_accommodation_nights==null || post_accommodation_nights=='null'){
+                $('.top_text').html('<span class="message error" style="color: red">Please select number of nights accommodation !</span>');return;
+            }
+            if(post_accommodation_room_type=='' || post_accommodation_room_type==null || post_accommodation_room_type=='null'){
+                $('.top_text').html('<span class="message error" style="color: red">Please select preferred room type !</span>');return;
+            }
+            if(post_accommodation_pax=='' || post_accommodation_pax==null || post_accommodation_pax=='null'){
+                $('.top_text').html('<span class="message error" style="color: red">Please select passenger for accommodation!</span>');return;
+            }
+
+            var iij = $('.postTourAccommodationDiv').length?$('.postTourAccommodationDiv').length+1:1;
+
+            var h = '<div class="postTourAccommodationDiv"><hr>';
+            h += '<table class="service_request_table" cellspacing="0" style="text-align: center;width: 700px">';
+            h += '<tbody><tr>';
+            h += '<th width="10%">'+iij+'</th><th width="20%">Nights</th><th width="20%">Room Type</th><th width="50%">Passengers x '+post_accommodation_pax.length+'</th></tr>';
+            h += '<tr>';
+            h += '<td>&nbsp;</td><td>'+post_accommodation_nights+'</td><td>'+post_accommodation_room_type+'</td><td>';
+            for(var it in post_accommodation_pax){
+                for(var ij in adminBooking_passenger_detailsAjax.temp_id){
+                    if(post_accommodation_pax[it]==adminBooking_passenger_detailsAjax.temp_id[ij]){
+                        h += '<li data-tmpid="'+adminBooking_passenger_detailsAjax.temp_id[ij]+'">'+adminBooking_passenger_detailsAjax.lname[ij]+' '+adminBooking_passenger_detailsAjax.fname[ij]+'|'+adminBooking_passenger_detailsAjax.age_cat[ij]+'.</li>';
+                        disabledPostAccommodation.push(post_accommodation_pax[it]);
+                        post_accommodation_pax_name.push(adminBooking_passenger_detailsAjax.lname[ij]+' '+adminBooking_passenger_detailsAjax.fname[ij]+'|'+adminBooking_passenger_detailsAjax.age_cat[ij]);
+                    }
+                }
+            }
+            h += '</td></tr></tbody></table>';
+            h += '<input type="hidden" name="post_accommodation_nights[]" value="'+post_accommodation_nights+'" >';
+            h += '<input type="hidden" name="post_accommodation_room_type[]" value="'+post_accommodation_room_type+'" >';
+            h += '<input type="hidden" name="post_accommodation_pax[]" value="'+post_accommodation_pax.join(',')+'" >';
+            h += '<input type="hidden" name="post_accommodation_pax_name[]" value="'+post_accommodation_pax_name.join(',')+'" >';
+            h += '</div>';
+
+            var arr = [];
+            for(var itt in adminBooking_passenger_detailsAjax.temp_id){
+                var ar = []
+                ar['name'] = adminBooking_passenger_detailsAjax.lname[itt]+' '+adminBooking_passenger_detailsAjax.fname[itt]+'|'+adminBooking_passenger_detailsAjax.age_cat[itt];
+                ar['value'] = adminBooking_passenger_detailsAjax.temp_id[itt];
+                for(var iij in disabledPostAccommodation){
+                    if(disabledPostAccommodation[iij] == adminBooking_passenger_detailsAjax.temp_id[itt]){
+                        ar['disabled'] = 'disabled';
+                    }
+                }
+                arr.push(ar);
+            }
+            layui.formSelects.data('post_accommodation_pax', 'local', {
+                arr: arr
+            });
+
+            $('#post_accommodation_pax').append(h);
+
+        });
+
+
+
+        function add(){
+            $.ajax({
+                type: "POST",
+                url: '/admin_booking/service_requestsAjax',
+                data:  $('#form1').serializeArray(),
+                success: function(data){
+                    //console.log(data);
+                    if(data.code!=200){
+                        layer.msg(data.msg);
+                        return false;
+                    }else if(data.code==200) {
+                        layer.msg('操作成功',{time:2000,end : function(layero, index){
+                            location.href="/admin_booking/booking_summary";
+                        }
+                        });
+                    }
+                },
+                error:function(XMLHttpRequest, textStatus, errorThrown){
+                    layer.msg('验证失败')
+                }
+            });
+            return false;
+        }
+
+
+    </script>
+
+</body>
+</html>

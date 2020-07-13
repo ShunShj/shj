@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {include file='public/head' /}
+    <title>language-manage-add</title>
+
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+
+    <div class="layui-header">
+        {include file='public/header' /}
+    </div>
+
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll">
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            {include file='public/left_menu_booknexus' /}
+        </div>
+    </div>
+
+    <div class="layui-body">
+
+        <!-- 内容主体区域 -->
+        <div style="padding: 15px;">
+            <div class='layui-form-item'>
+		   		<span class="layui-breadcrumb" lay-separator="-">
+					<a>{$language_tag.index_public_homepage}</a>
+                    <a>B2B</a>
+                    <a>Tour</a>
+                    <a>Tour Type</a>
+                    <a><cite>Edit Tour Type</cite></a>
+				</span>
+            </div>
+            <br/>
+            <br/>
+            <div class="layui-row">
+                <form class="layui-form layui-col-md4" onSubmit="return tour_type_edit()">
+                    <div class="layui-form-item">
+                        <label class="layui-form-label input-required">类型名称：</label>
+                        <div class="layui-input-block">
+                            <input id="tour_type_name" name="tour_type_name" required="" lay-verify="required" placeholder="类型名称" autocomplete="off" class="layui-input" type="text" value="{$tour_type_result.tour_type_name}">
+                        </div>
+                    </div>
+                    <br/>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label input-required">{$language_tag.index_public_type}：</label>
+                        <div class="layui-input-block">
+                            <select name="pid" id="pid" lay-filter="required" lay-search>
+                                <option value="0">{$language_tag.index_product_showRouteTypeEdit_first_level}</option>
+                                {foreach $cateList as $vl}
+                                <option value="{$vl.tour_type_id}" {if condition="$vl.tour_type_id eq $tour_type_result['pid']"}selected='selected'{/if}>{$vl.tour_type_name}</option>
+                                {/foreach}
+                            </select>
+                        </div>
+                    </div>
+                    <br/>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">中文名称：</label>
+                        <div class="layui-input-block">
+                            <input id="cn_name" name="cn_name" placeholder="中文名称" autocomplete="off" class="layui-input" type="text" value="{$tour_type_result.cn_name}">
+                        </div>
+                    </div>
+                    <br/>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">系统类型</label>
+                        <div class="layui-input-block">
+
+                            {if condition="$tour_type_result.system_type == 'Commission'"}
+                            <input type="checkbox"  name="system_type" title="Commission" value="Commission" checked>
+                            {elseif condition="$tour_type_result.system_type == 'Commission,Tour'"/}
+                            <input type="checkbox"  name="system_type" title="Commission" value="Commission" checked>
+                            {else /}
+                            <input type="checkbox"  name="system_type" title="Commission" value="Commission">
+                            {/if}
+
+                            {if condition="$tour_type_result.system_type == 'Tour'"}
+                            <input type="checkbox"  name="system_type" title="Tour" value="Tour" checked>
+                            {elseif condition="$tour_type_result.system_type == 'Commission,Tour'"/}
+                            <input type="checkbox"  name="system_type" title="Tour" value="Tour" checked>
+                            {else /}
+                            <input type="checkbox"  name="system_type" title="Tour" value="Tour">
+                            {/if}
+
+                        </div>
+                    </div>
+                    <br/>
+
+                    <div class="layui-form-item">
+                        <label class="layui-form-label input-required">{$language_tag.index_public_company}:</label>
+                        <div class="layui-input-block">
+                            <select {$Think.session.user.company_id!=1?'disabled':''} name="choose_company_id" id="choose_company_id" lay-verify="required" >
+                                <option value="0">{$language_tag.index_source_showSupplier_choose_company}</option>
+                                {foreach name='company_result'  item='vo'}
+                                <option value="{$vo.company_id}" {if condition="$vo.company_id eq $Think.session.user.company_id"}selected='selected'{/if}>{$MultilingualAll['company-company_name-'.$vo.company_id.'-'.$Think.session.user.language_id][0]['translate']|default=$vo.company_name}</option>
+                                {/foreach}
+                            </select>
+                        </div>
+                    </div>
+                    <br/>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">{$language_tag.index_public_status}：</label>
+
+                        <div class="layui-input-block">
+                            <select name="status" id="status" lay-filter="required" >
+                                <option value="1">{$language_tag.index_public_show}</option>
+                                <option value="0" {if condition="$tour_type_result.status eq 0"} selected {/if}>{$language_tag.index_public_disabled}</option>
+                            </select>
+                        </div>
+                    </div>
+                    <br/>
+                    <div class="layui-form-item">
+                        <div class="layui-input-block">
+                            <input type="hidden" id="tour_type_id" value="{$tour_type_result.tour_type_id}">
+                            <button class="layui-btn nav-submit" lay-submit="" lay-filter="formDemo" id="route_type_add_button">{$language_tag.index_public_submit}</button>
+                            <a href="#" onClick="javascript :history.back(-1);"><button type="button" class="layui-btn layui-btn-primary">{$language_tag.index_public_back}</button></a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="layui-footer">
+        <!-- 底部固定区域 -->
+        © layui.com - 底部固定区域
+    </div>
+</div>
+{include file='public/foot_js' /}
+<script>
+    function tour_type_edit(){
+
+        obj = document.getElementsByName("system_type");
+        var str = '';
+        for(k in obj){
+            if(obj[k].checked)
+                str = str+obj[k].value+",";
+        }
+        str=str.substring(0,str.length-1);
+
+        var tour_type_id = $("#tour_type_id").val();
+        var tour_type_name = $("#tour_type_name").val();
+        var pid = $("#pid").val();
+        var status = $("#status").val();
+        var choose_company_id = $("#choose_company_id").val();
+        var cn_name = $("#cn_name").val();
+
+        $.ajax({
+            type: "POST",
+            url: '/booknexus_tour/editTourTypeAjax',
+            data: {
+                tour_type_id:tour_type_id,
+                tour_type_name:tour_type_name,
+                pid:pid,
+                status:status,
+                choose_company_id:choose_company_id,
+                cn_name:cn_name,
+                system_type:str,
+            },
+            success: function(data){
+                //console.log(data);
+                if(data.code!=200){
+                    layer.msg(data.msg);
+                    return false;
+                }else if(data.code==200) {
+                    layer.msg('操作成功',{time:1,end : function(layero, index){
+                            //location.href="/product/showRouteTypeManage?status=1&&pid="+route_type_pid;
+                            layer.load(2);
+                            history.back(-1);
+                        }
+                    });
+                }
+            },
+            error:function(XMLHttpRequest, textStatus, errorThrown){
+                layer.msg('验证失败')
+            }
+        });
+        return false;
+
+    }
+</script>
+</body>
+</html>

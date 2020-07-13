@@ -1,0 +1,367 @@
+
+
+$(function () {
+    $("button.word-export").click(function() {
+        var child = document.getElementById("iframe").contentWindow;
+        var pdfHtml=child.document.getElementById("container");
+        pdfHtml.style.background = "#FFFFFF";
+        html2canvas(pdfHtml, {
+            allowTaint: true,
+            taintTest: false,
+            scale: '2',
+            dpi: '192',
+            onrendered:function(canvas) {
+                var contentWidth = canvas.width;
+                var contentHeight = canvas.height;
+
+                //一页pdf显示html页面生成的canvas高度;
+                var pageHeight = contentWidth / 592.28 * 841.89;
+                //未生成pdf的html页面高度
+                var leftHeight = contentHeight;
+                //页面偏移
+                var position = 0;
+                //a4纸的尺寸[595.28,841.89]，html页面生成的canvas在pdf中图片的宽高
+                var imgWidth = 595.28;
+                var imgHeight = 592.28/contentWidth * contentHeight;
+
+                var pageData = canvas.toDataURL('image/jpeg', 1.0);
+
+                var pdf = new jsPDF('', 'pt', 'a4');
+
+                //有两个高度需要区分，一个是html页面的实际高度，和生成pdf的页面高度(841.89)
+                //当内容未超过pdf一页显示的范围，无需分页
+                if (leftHeight < pageHeight) {
+                    pdf.addImage(pageData, 'JPEG', 0, 0, imgWidth, imgHeight );
+                } else {
+                    while(leftHeight > 0) {
+                        pdf.addImage(pageData, 'JPEG', 0, position, imgWidth, imgHeight)
+                        leftHeight -= pageHeight;
+                        position -= 841.89;
+                        //避免添加空白页
+                        if(leftHeight > 0) {
+                            pdf.addPage();
+                        }
+                    }
+                }
+                pdf.save("游客行程单.pdf");
+            }
+        })
+    })
+})
+
+/*var company_order_number=$("#number").val();
+$.ajax({
+    type: "post",
+    url: "/branchcompany/getCompanyOrderCustomerJouneryMenuAjax",
+    data: {company_order_number: company_order_number},
+    dataType: "json",
+    success: function (result) {
+        layer.closeAll('loading');
+        var datas=result.data;
+
+        /!*行程单*!/
+        $("#company_order_name").html(datas.company_order_name);
+        $("#company_order_number").html(datas.company_order_number);
+        $("#begin_time").html(date('Y-m-d',datas.begin_time));
+        $("#end_time").html(date('Y-m-d',datas.end_time));
+        $("#begin_city").html(datas.begin_city);
+        $("#remark").html(datas.remark);
+
+        /!*行程*!/
+        var html='';
+        for(var i=0;i<datas.team_product_jounery.length;i++){
+            var newRouteEach=[];
+            if(datas.team_product_jounery[i].eat_mark&&datas.team_product_jounery[i].eat_mark!=''){
+                newRouteEach=datas.team_product_jounery[i].eat_mark.split(",");
+            }
+            html+='<tr>' +
+                '<td rowspan="3">'+datas.team_product_jounery[i].jounery_time+'</td>' +
+                '<td rowspan="3">'+isFieldName(datas.team_product_jounery[i].route_journey_content)+'</td>'+
+                '<td>'+routeEach('1',newRouteEach,isFieldName(datas.team_product_jounery[i].route_journey_breakfast))+'</td>'+
+                '<td rowspan="3">'+isFieldName(datas.team_product_jounery[i].route_journey_stay)+'</td>' +
+                '<td rowspan="3">'+isFieldName(datas.team_product_jounery[i].route_journey_remark)+'</td>' +
+                '</tr>' +
+                '<tr>' +
+                '<td>'+routeEach('2',newRouteEach,isFieldName(datas.team_product_jounery[i].route_journey_lunch))+'</td>' +
+                '</tr>' +
+                '<tr>' +
+                '<td>'+routeEach('3',newRouteEach,isFieldName(datas.team_product_jounery[i].route_journey_dinner))+'</td>' +
+                '</tr>';
+        }
+        $("#team_product_journey").html(html);
+
+        /!*客人名单*!/
+        var customersHtml='';
+        if(datas.customer_info && datas.customer_info.length>0){
+            var newCustomer=[];
+            for(var i=0;i<datas.customer_info.length;i++){
+                customersHtml+='<tr>' +
+                    '<td>'+isFieldName(datas.customer_info[i].company_order_customer_id)+'</td>' +
+                    '<td>'+isFieldName(datas.customer_info[i].customer_first_name)+'</td>' +
+                    '<td>'+isFieldName(datas.customer_info[i].customer_last_name)+'</td>' +
+                    '<td>'+gender(datas.customer_info[i].gender)+'</td>' +
+                    '<td>'+isFieldName(datas.customer_info[i].country_name)+'</td>' +
+                    '<td>'+isFieldName(datas.customer_info[i].passport_number)+'</td>' +
+                    /!*if(datas.customer_info[i].room_code!=null){
+                        var count=0;
+                        for(var c=i;c<datas.customer_info.length;c++){
+                            if(datas.customer_info[c].room_code==datas.customer_info[i].room_code){
+                                if(newCustomer.indexOf(datas.customer_info[i].room_code)<0){
+                                    newCustomer.push(datas.customer_info[i].room_code)
+                                    datas.customer_info[i].index=1;
+                                }
+                                count++;
+                            }
+                        }
+                        if(datas.customer_info[i].index&&datas.customer_info[i].index==1){
+                            customersHtml+='<td rowspan="'+count+'">'+roomType(datas.customer_info[i].room_type)+'</td>';
+                        }
+                    }else{
+                        customersHtml+='<td>'+roomType(datas.customer_info[i].room_type)+'</td>';
+                    }
+                customersHtml+='<td>'+noDate(datas.customer_info[i].customer_type,datas.customer_info[i].check_in_time.substr(5,5))+'</td>' +
+                    '<td>'+noDate(datas.customer_info[i].customer_type,datas.customer_info[i].check_on_time.substr(5,5))+'</td>' +*!/
+                    '</tr>'
+            }
+            $("#customer_info").html(customersHtml);
+        }
+        /!*住宿信息*!/
+        var informationHtml='';
+        if(datas.customer_info && datas.customer_info.length>0){
+            var newCustomer=[];
+            for(var i=0;i<datas.customer_info.length;i++){
+                informationHtml+='<tr>' +
+                    '<td>'+isFieldName(datas.customer_info[i].customer_first_name)+'</td>' +
+                    '<td>'+isFieldName(datas.customer_info[i].customer_last_name)+'</td>';
+                    if(datas.customer_info[i].room_code!=null){
+                        var count=0;
+                        for(var c=i;c<datas.customer_info.length;c++){
+                            if(datas.customer_info[c].room_code==datas.customer_info[i].room_code){
+                                if(newCustomer.indexOf(datas.customer_info[i].room_code)<0){
+                                    newCustomer.push(datas.customer_info[i].room_code)
+                                    datas.customer_info[i].index=1;
+                                }
+                                count++;
+                            }
+                        }
+                        if(datas.customer_info[i].index&&datas.customer_info[i].index==1){
+                            informationHtml+='<td rowspan="'+count+'">'+roomType(datas.customer_info[i].room_type)+'</td>';
+                        }
+                    }else{
+                        informationHtml+='<td>'+roomType(datas.customer_info[i].room_type)+'</td>';
+                    }
+                    informationHtml+='<td>'+noDate(datas.customer_info[i].customer_type,datas.customer_info[i].check_in_time.substr(5,5))+'</td>' +
+                        '<td>'+noDate(datas.customer_info[i].customer_type,datas.customer_info[i].check_on_time.substr(5,5))+'</td>' +
+                        '</tr>'
+            }
+            $("#information").html(informationHtml);
+        }
+
+        /!*接送机*!/
+        var flightHtml='';
+        if(datas.flight_info && datas.flight_info.length>0){
+            for(var i=0;i<datas.flight_info.length;i++){
+                flightHtml+='<tr>' +
+                            '<td>'+isFieldName(datas.flight_info[i][0].flight_code)+'</td>' +
+                            '<td>'+isFieldName(datas.flight_info[i][0].flight_time)+'</td>' +
+                            '<td>'+isFieldName(datas.flight_info[i][0].start_place)+'</td>' +
+                            '<td>'+isFieldName(datas.flight_info[i][0].end_place)+'</td>' +
+                            '<td>'+isTime(datas.flight_info[i][0].flight_begin_time)+'/'+isTime(datas.flight_info[i][0].flight_end_time)+'</td>';
+                            var newFlight=datas.flight_info[i];
+                            var childHtml='';
+                            var remarkHtml='';
+                            if(newFlight&&newFlight.length>0){
+                                for(var j=0;j<newFlight.length;j++){
+                                    childHtml+='<span>'+newFlight[j].company_order_customer_id+newFlight[j].customer_first_name+newFlight[j].customer_last_name+',</span>';
+                                    if(newFlight[j].remark&&newFlight[j].remark!=''){
+                                        remarkHtml+='<span>'+isFieldName(newFlight[j].remark)+',</span>';
+                                    }
+                                }
+                            }
+                flightHtml+='<td>'+childHtml+'</td>' +
+                            '<td>'+remarkHtml+'</td>' +
+                            '</tr>';
+            }
+            $("#flight_info——————").html(flightHtml);
+        }
+
+        /!*自费项目*!/
+        var sourceHtml='';
+        if(datas.own_expense_info && datas.own_expense_info.length>0){
+            for(var i=0;i<datas.own_expense_info.length;i++){
+                sourceHtml+='<tr>' +
+                    '<td>'+isFieldName(datas.own_expense_info[i].source_name)+'</td>' +
+                    '<td>'+isFieldName(datas.own_expense_info[i].price_currency_name)+'</td>' +
+                    '<td>'+isFieldName(datas.own_expense_info[i].source_price)+'</td>';
+                    var fCustomer_info=datas.own_expense_info[i].customer_info;
+                    var childHtml='';
+                    if(fCustomer_info&&fCustomer_info.length>0){
+                        for(var j=0;j<fCustomer_info.length;j++){
+                            childHtml+='<span>'+fCustomer_info[j].company_order_customer_id+isFieldName(fCustomer_info[j].customer_name)+',</span>';
+                        }
+                    }
+                    sourceHtml+='<td>'+childHtml+'</td></tr>';
+            }
+            $("#own_expense_info").html(sourceHtml);
+        }
+
+        var specialHtml='';
+        if(datas.customer_info && datas.customer_info.length>0){
+            var newCustomer=[];
+            for(var i=0;i<datas.customer_info.length;i++){
+                if(datas.customer_info[i].special_claim!=null) {
+                    if(datas.customer_info[i].special_claim!=""){
+                        specialHtml += '<tr>' +
+                            '<td>' + isFieldName(datas.customer_info[i].customer_first_name) + '</td>' +
+                            '<td>' + isFieldName(datas.customer_info[i].customer_last_name) + '</td>' +
+                            '<td>' + isFieldName(datas.customer_info[i].special_claim) + '</td>' +
+                            '</tr>';
+                    }
+                }
+            }
+            $("#special_claim").html(specialHtml);
+        }
+
+        /!*last--three*!/
+        var receiptHtml='';
+        var getTpl =$("#demo").html();
+        laytpl(getTpl).render(datas.return_receipt, function(html){
+            $("#return_receipt").html(html);
+        });
+        $(".page-filedset>div").css("margin-left","15px");
+        $(".page-filedset").each(function (index,item) {
+            $(item).find("legend").prepend(index+"、");
+        })
+        /!*导出文档*!/
+        $("table td,table th").css({"border":"1px solid #e6e6e6","text-align":"left","padding":"10px","line-height":"22px","color":"#666","font-size":"14px"});
+        $(".page-filedset legend").css({"font-weight":"400","color":"#666","font-size":"20px"});
+        $(".content-bg").css("margin","15px 0px 10px");
+        $(".content-bg table").css({"width":"100%","border-collapse":"collapse"});
+        $(".content-bg table thead tr").css("background","#f2f2f2");
+        $("#company_order_name").css({"width":"100%","text-align":"left","margin-left":"30px","font-size":"18px"});
+        $(".content-bg .new-label").css({"display":"inline-block","padding":"9px 15px","width":"120px","font-weight":"400","line-height":"22px","text-align":"right","font-size":"14px"});
+        $(".content-bg .layui-input-block").css("margin-left","0px");
+        $(".infomation-span-list span").css({"display":"inline-block","width":"200px","line-height":"24px"});
+        $(".infomation-list-line>div").css("line-height","24px");
+        $("button.word-export").click(function(event) {
+            $(".content-bg table").css({"width":"850px","border-collapse":"collapse"});
+            $(".eats").html("用&nbsp;餐");
+            $("#infomation-table").wordExport("游客行程单");
+            $(".content-bg table").css({"width":"100%","border-collapse":"collapse"});
+            $(".eats").html("用餐");
+        });
+    }
+})
+/!*行程用餐*!/
+function routeEach(nums,routeEach,lunch) {
+    /!*if(routeEach.length>0&&lunch){*!/
+    if(routeEach.length>0){
+        var count=0;
+        for(var i in routeEach){
+            if(routeEach[i]==nums){
+                count=1;
+            }
+        }
+        if(count==0){
+            return "-";
+        }else{
+            for(var c=0;c<routeEach.length;c++){
+                console.log(routeEach[c])
+                if(routeEach[c]==nums){
+                    return routeEach[c]=='1'?'早餐':routeEach[c]=='2'?'午餐':routeEach[c]=='3'?'晚餐':'-';
+                }
+            }
+        }
+    }else{
+        return "-";
+    }
+}
+/!*function routeEach(nums,routeEach,lunch) {
+    if(routeEach.length>0&&lunch){
+        for(var c=0;c<routeEach.length;c++){
+            if(routeEach[c]==nums){
+                return routeEach[c]=='1'?'早餐:'+lunch:routeEach[c]=='2'?'午餐:'+lunch:routeEach[c]=='3'?'晚餐:'+lunch:'-';
+            }
+        }
+    }else{
+        return "-";
+    }
+}*!/
+
+/!*游客类型*!/
+function customerType(type) {
+    if(type && type!=null){
+        return type==1?'成人':type==2?'占床儿童':type==3?'不占床儿童':type==4?'老人':'-'
+    }else if(type==null){
+        return "占位";
+    }else{
+        return "-";
+    }
+}
+/!*性别*!/
+function gender(gender) {
+    return gender==1?'男':gender==2?'女':'-'
+}
+/!*证件类型*!/
+function cardType(cardType) {
+    return cardType==1?'护照':cardType==2?'身份证':'-'
+}
+
+function roomType(roomType) {
+    if(roomType && roomType!=null){
+        return roomType=='1'?'双人房':roomType=='2'?'大床房':roomType=='3'?'单人房':roomType=='4'?'加床':'-'
+    }else{
+        return "-";
+    }
+}
+
+/!*时间*!/
+function isTime(time,isYmd) {
+    if(time && time!=null){
+        if(time=='0'){
+            return "-";
+        }else{
+            if(isYmd=='isYmd'){
+                return date("Y-m-d",time)
+            }else{
+                return date("H:i",time)
+            }
+        }
+    }else{
+        return "-";
+    }
+}
+/!*判断是否是null或没有字段*!/
+function isFieldName(fieldName) {
+    if(fieldName&&fieldName!=''){
+        return fieldName;
+    }else{
+        return "-";
+    }
+}
+//占位不显示信息
+function noDate(type,date) {
+    if(type==null){
+        return "-"
+    }else{
+        if(date&&date!=''){
+            return date;
+        }else{
+            return "-";
+        }
+    }
+}*/
+
+function tips() {
+    layer.tips('提示文字：可上传doc、docx、pdf、xls、xlsx文件格式文件最大可上传5M。', '#tips', {
+        tips: [1, '#000'],
+        shade: [0.01, '#fff'],
+        shadeClose:true,
+        time:0
+    });
+}
+
+
+
+
+

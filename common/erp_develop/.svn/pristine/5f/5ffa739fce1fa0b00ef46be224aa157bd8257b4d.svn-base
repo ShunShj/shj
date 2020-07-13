@@ -1,0 +1,454 @@
+{include file='/book_tour/includes/header' /}
+{include file='/book_tour/includes/top_nav' /}
+
+
+<!--
+  This is view/booktour/room_config.php
+-->
+<section id="content">
+    <section id="booktour">
+        <article>
+            <h1><img src="<?php echo base_url('assets/images/service_requests.png'); ?>" width="700" alt="Service Requests"/></h1>
+            <h2 class="top_icn"><div class="top_icn_text">5</div><img src="<?php echo base_url('assets/images/service_requests_icn.png');?>" alt="Service Request - Step 5"/>
+                <div class="top_text">&nbsp;&nbsp;&nbsp;<span class="message success"></span></div>
+            </h2>
+
+            <div id="service_request">
+
+                <div id="transfer">
+                    <hr/>
+                    <h3 class="parent">Transfer Services <span class="reset" style="font-size:14px; font-weight:strong;"> CLEAR </span></h3>
+                    <hr/>
+                    <div id="hotel">
+                        <table width="700" cellspacing="0" border="0"> <!-- Is Hotel Tranfser -->
+                            <tr>
+                                <td class="h1">Hotel Transfer <br/>(接機)</td>
+                                <td class="text">Free service for flight arriving <?php echo $hotel_transfer;//This is showing the free service date,time and charge ?>
+                                    <?php if(isset($hotel_transfer_note) && $hotel_transfer_note != "") { echo '<br/><br/>Note: <span style="font-size: 12px;">'.$hotel_transfer_note.'</span>'; } ?>
+                                </td>
+
+                                <td class="input_label"><label>Yes</label></td>
+                                <td class="input_box"><input id="hotel_transfer" class="css-checkbox" type="checkbox" <?php if(session('h_info')['hotel_transfer_info']) { echo "checked"; }?>/>
+                                    <label for="hotel_transfer" name="hotel_transfer" class="css-label" id="hotel_transfer"></label>
+                                </td>
+                            </tr>
+                        </table>  <!-- End Is Hotel Transfer -->
+                    </div> <!-- end hotel -->
+                    <div id="hotel_transfer_info">
+                        <hr/>
+                        <input type="text" name="hotel_transfer_date" id="hotel_transfer_date" class="datepick" placeholder="Select Date" value="<?php echo session('tour_date'); ?>"/>
+                        <input type="hidden" id="tour_date" value="<?php echo session('tour_date'); ?>"/>
+                        <input type="hidden" name="hotel_transfer_from" id="hotel_transfer_from" class="time" placeholder="Arrival Time" value="<?php echo $hotel_transfer_from; ?>"/>
+                        <input type="hidden" name="hotel_transfer_to" id="hotel_transfer_to" class="time" placeholder="Arrival Time" value="<?php echo $hotel_transfer_to; ?>"/>
+                        <input type="text" name="hotel_transfer_flight" id="hotel_transfer_flight" class="flight" placeholder="Flight No." value="" maxlength="10"/>
+                        <input type="text" name="hotel_transfer_time" id="hotel_transfer_time" class="time" placeholder="Arrival Time" value=""/>
+                        <select id="service_requests_select_airport" class="hotel_transfer_airport" name="hotel_transfer_airport[]"> <!-- input -->
+                            <option value="">-- Select Airport --</option>
+                            <?php foreach($tourTransfer[1] as $k=>$v) { ?>
+                            <option value="<?php echo $v['b2b_tour_transfer_id']; ?>">
+                                <?php echo ucfirst($v['airport']); ?>
+                            </option>
+                            <?php }; ?>
+                        </select>
+                        <select title="Tour Passengers" class="room_pax_form_select" name="hotel_transfer_tour_pax" id="hotel_transfer_tour_pax" multiple="multiple"
+                        <?php if(session('hotel_transfer_info')) { echo "disable"; }?>>
+                        <?php
+                        $lname_arr      = session('passenger_info')['lname'];
+                        $fname_arr      = session('passenger_info')['fname'];
+                        $age_cat_arr = session('passenger_info')['age_cat'];
+                        for($i=0; $i<session('pax_num')['pax']; $i++)
+                        {
+                        // Set name
+
+                        $name = ucfirst($lname_arr[$i] . " " . $fname_arr[$i]);
+
+                        $age_cat = ucfirst($age_cat_arr[$i]);
+
+                        // Set pax number
+                        $a = $i + 1;
+                        echo '<option value="'.$name. '|'.$age_cat.'">';
+                        echo '<span>'.$a.'. </span> ';
+                        echo  $name. " (" . $age_cat . ")" ;
+                        echo '</option>';
+                        }
+                        ?>
+                        </select>
+                        <span class="pax-btn" <?php if(session('h_info')['hotel_transfer_info']) { echo "style='display:none;'"; }?>><i class="fa fa-plus" aria-hidden="true"></i></span><div id="errorMessageHotel"><?php echo session('message');?></div>
+                        <div id="hotel_transfer_pax">
+                            <?php if(session('h_info')['hotel_transfer_info']) {
+                            $hotel_transfer_info_arr = session('h_info')['hotel_transfer_info'];
+                            for($i=0; $i<count($hotel_transfer_info_arr); $i++)
+                            {
+
+                            // Set name
+                            $date      = $hotel_transfer_info_arr[$i]['date'];
+                            $flight    = $hotel_transfer_info_arr[$i]['flight'];
+                            $time      = $hotel_transfer_info_arr[$i]['time'];
+                            $airport   = $hotel_transfer_info_arr[$i]['airport'];
+                            $pax       = $hotel_transfer_info_arr[$i]['pax'];
+                            $charge    = $hotel_transfer_info_arr[$i]['charge'];
+                            $a         = $i + 1;
+                            $tourPax   = '';
+
+                            for($z=0; $z < count($hotel_transfer_info_arr[$i]['pax']); $z++)
+                            {
+                            // Get age cat
+                            $paxName = ucfirst($hotel_transfer_info_arr[$i]['pax'][$z]);
+
+                            $tourPax .= "<li id=" . $z . ">";
+                            $tourPax .=  $paxName;
+                            $tourPax .= "</li>";
+                            }
+                            //echo "Child with bed x ". session('room_type')[$i]['bed'];
+                            echo '<div id="hotelTransferDiv'.$a.'"><hr /><table id="service_request_table" cellspacing="0"><tr><th>'.$a.'</th><th>Date</th><th>Flight</th><th>Time</th><th class="airport">Airport</th><th class="pax">Transfer Passenger x '.count($pax).'</th></tr><tr><td>&nbsp;</td><td class="date">'.$date.'</td><td class="flight">'.$flight.'</td><td class="time">'.$time.'</td><td class="airport">'.$airport.'</td><td class="last"><ul>'.$tourPax.'</ul></td></tr></table><span style="color:#005702;">Hotel Transfer Charge for </span><span style="color:#005702;" class="hotel_transfer_charge'.$a.'">'.$charge.'</span><span style="color:#005702;"> Passenger/s</span></div>';
+                            }
+                            }
+                            ?>
+                        </div> <!-- end hotel transfer pax -->
+                    </div> <!-- end hotel transfer info -->
+                    <hr/>
+                    <div id="airport">
+                        <table width="700" cellspacing="0" border="0">
+                            <tr>
+                                <td class="h1">Airport Transfer <br/>(送機)</td>
+                                <td class="text">Free service for flight departure <?php echo $airport_transfer//This is showing the free service date,time and charge ?>
+                                    <?php if(isset($airport_transfer_note) && $airport_transfer_note != "") {  echo '<br/><br/>Note: <span style="font-size: 12px;">'.$airport_transfer_note.'</span>'; } ?>
+                                </td>
+                                <td class="input_label"><label>Yes</label></td>
+                                <td class="input_box"><input id="airport_transfer" class="css-checkbox" type="checkbox" <?php if(session('a_info')['airport_transfer_info']) { echo "checked"; }?>/>
+                                    <label for="airport_transfer" name="airport_transfer" class="css-label" id="airport_transfer"></label>
+                                </td>
+                            </tr>
+                        </table>
+                    </div> <!-- end airport -->
+                    <div id="airport_transfer_info">
+                        <hr/>
+                        <input type="text" name="airport_transfer_date" id="airport_transfer_date" class="datepick" placeholder="Select Date" value="<?php echo $tour_end_date; ?>"/>
+                        <input type="hidden" id="tour_end_date" value="<?php echo $tour_end_date; ?>"/>
+                        <input type="text" name="airport_transfer_flight" id="airport_transfer_flight" class="flight" placeholder="Flight No." value=""/>
+                        <input type="text" name="airport_transfer_time" id="airport_transfer_time" class="time" placeholder="Departure Time" value=""/>
+                        <input type="hidden" name="airport_transfer_from" id="airport_transfer_from" class="time" placeholder="Arrival Time" value="<?php echo $airport_transfer_from; ?>"/>
+                        <input type="hidden" name="airport_transfer_to" id="airport_transfer_to" class="time" placeholder="Arrival Time" value="<?php echo $airport_transfer_to; ?>"/>
+                        <select id="service_requests_select_airport" class="airport_transfer_airport" name="airport_transfer_airport[]"> <!-- input -->
+                            <option value="">-- Select Airport --</option>
+                            <?php foreach($tourTransfer[2] as $k=>$v) { ?>
+                            <option value="<?php echo $v['b2b_tour_transfer_id']; ?>">
+                                <?php echo ucfirst($v['airport']); ?>
+                            </option>
+                            <?php }; ?>
+                        </select>
+                        <select title="Tour Passengers" class="room_pax_form_select" id="airport_transfer_tour_pax" name="airport_transfer_tour_pax" multiple="multiple">
+                            <?php
+                            $lname_arr      = session('passenger_info')['lname'];
+                            $fname_arr      = session('passenger_info')['fname'];
+                            $age_cat_arr = session('passenger_info')['age_cat'];
+                            for($i=0; $i<session('pax_num')['pax']; $i++)
+                            {
+                            // Set name
+
+                            $name = ucfirst($lname_arr[$i] . " " . $fname_arr[$i]);
+
+                            $age_cat = ucfirst($age_cat_arr[$i]);
+
+                            // Set pax number
+                            $a = $i + 1;
+                            echo '<option value="'.$name. '|'.$age_cat.'">';
+                            echo '<span>'.$a.'. </span> ';
+                            echo  $name. " (" . $age_cat . ")" ;
+                            echo '</option>';
+                            }
+                            ?>
+                        </select>
+                        <span class="pax-btn" <?php if(session('a_info')['airport_transfer_info']) { echo "style='display:none;'"; }?>><i class="fa fa-plus" aria-hidden="true"></i></span><div id="errorMessageAirport"><?php echo session('message');?></div>
+                        <div id="airport_transfer_pax">
+                            <?php if(session('a_info')['airport_transfer_info']) {
+                            $airport_transfer_info_arr = session('a_info')['airport_transfer_info'];
+                            for($i=0; $i<count($airport_transfer_info_arr); $i++)
+                            {
+                            // Set name
+                            $date      = $airport_transfer_info_arr[$i]['date'];
+                            $flight    = $airport_transfer_info_arr[$i]['flight'];
+                            $time      = $airport_transfer_info_arr[$i]['time'];
+                            $airport   = $airport_transfer_info_arr[$i]['airport'];
+                            $pax       = $airport_transfer_info_arr[$i]['pax'];
+                            $charge    = $airport_transfer_info_arr[$i]['charge'];
+                            $a         = $i + 1;
+                            $tourPax   = '';
+
+                            for($z=0; $z < count($airport_transfer_info_arr[$i]['pax']); $z++)
+                            {
+                            // Get age cat
+                            $paxName = ucfirst($airport_transfer_info_arr[$i]['pax'][$z]);
+
+                            $tourPax .= "<li id=" . $z . ">";
+                            $tourPax .=  $paxName;
+                            $tourPax .= "</li>";
+                            }
+                            //echo "Child with bed x ". session('room_type')[$i]['bed'];
+                            echo '<div id="airportTransferDiv'.$a.'"><hr /><table id="service_request_table" cellspacing="0"><tr><th>'.$a.'</th><th>Date</th><th>Flight</th><th>Time</th><th class="airport">Airport</th><th class="pax">Transfer Passenger x '.count($pax).'</th></tr><tr><td>&nbsp;</td><td class="date">'.$date.'</td><td class="flight">'.$flight.'</td><td class="time">'.$time.'</td><td class="airport">'.$airport.'</td><td class="last"><ul>'.$tourPax.'</ul></td></tr></table><span style="color:#005702;">Airport Transfer Charge for </span><span style="color:#005702;" class="airport_transfer_charge'.$a.'">'.$charge.'</span><span style="color:#005702;"> Passenger/s</span></div>';
+                            }
+                            }
+                            ?>
+                        </div><!-- end airport transfer pax -->
+                    </div><!-- end airport transfer info -->
+                </div><!-- end transfer -->
+                <div id="accommodation">
+                    <hr/>
+                    <h3 class="parent">Pre/Post Tour Accommodation </h3>
+                    <hr/>
+                </div><!-- end accommodation -->
+                <div id="pre">
+                    <table width="700" cellspacing="0" border="0">
+                        <tr>
+                            <td class="h1">Pre Tour Accommodation</td>
+                            <td class="text">&nbsp;</td>
+                            <td class="input_label"><label>Yes</label></td>
+                            <td class="input_box"><input id="pre_accommodation" class="css-checkbox" type="checkbox" <?php if(session('pre_info')['pre_tour_accommodation_info']) { echo "checked"; }?>/>
+                                <label for="pre_accommodation" name="pre_accommodation" class="css-label" id="pre_accommodation"></label>
+                            </td>
+                        </tr>
+                    </table>
+                </div><!-- end pre -->
+                <div id="pre_accommodation_info">
+                    <hr/>
+                    <table width="700" cellspacing="0" border="0">
+                        </tr>
+                        <tr>
+                            <td width="50">
+                                <select title="Nights" class="room_type_form_select" id="pre_accommodation_nights" name="pre_accommodation_nights">
+                                    <option value="" selected>--Night/s--</option>
+                                    <?php
+                                      for($i=1; $i<6; $i++){
+                                        if($i == 1) {
+                                          $night = " Night";
+                                        } else {
+                                          $night = " Nights";
+                                        }
+                                      ?>
+                                    <option value="<?php echo $i; ?>">
+                                        <?php echo $i . $night; ?>
+                                    </option>
+                                    <?php }; ?>
+                                </select>
+                            </td>
+                            <td width="150">
+                                <select title="Hotel Rooms" class="room_type_form_select" id="pre_accommodation_room_type" name="pre_accommodation_room_type">
+                                    <option value="" selected>-- Room Type --</option>
+                                    <?php
+                                      foreach($all_rooms as $key => $room) { ?>
+                                    <option value="<?php echo $roomType[$all_rooms[$key]['room']][0]['translate']; ?>" >
+                                    <?php echo ucfirst($roomType[$all_rooms[$key]['room']][0]['translate']); ?>
+                                    </option>
+                                    <?php }; ?>
+                                </select>
+                            </td>
+                            <td width="200">
+                                <select title="Tour Passengers" class="room_pax_form_select" id="pre_accommodation_tour_pax" name="pre_accommodation_tour_pax" multiple="multiple">
+                                    <?php
+                                    $lname_arr      = session('passenger_info')['lname'];
+                                    $fname_arr      = session('passenger_info')['fname'];
+                                    $age_cat_arr = session('passenger_info')['age_cat'];
+                                    for($i=0; $i<session('pax_num')['pax']; $i++)
+                                    {
+                                    // Set name
+                                    $name = ucfirst($lname_arr[$i] . " " . $fname_arr[$i]);
+                                    $age_cat = ucfirst($age_cat_arr[$i]);
+
+                                    // Load pax into the list if they are not Infant
+                                    if($age_cat != 'Infant') {
+                                    // Set pax number
+                                    $a = $i + 1;
+                                    echo '<option value="'.$name. '|'.$age_cat.'">';
+                                    echo '<span>'.$a.'. </span> ';
+                                    echo  $name. " (" . $age_cat . ")" ;
+                                    echo '</option>';
+                                    }
+                                    }
+                                    ?>
+                                </select>
+                            </td>
+                            <td width="200">
+                                <span class="pax-btn" style="margin-left:0px; margin-top: 5px; <?php if(session('pre_info')['pre_tour_accommodation_info']) { echo "display:none;"; }?>"><i class="fa fa-plus" aria-hidden="true"></i></span><div id="errorMessagePre"><?php echo session('message');?></div>
+                            </td>
+                        </tr>
+                    </table>
+                    <div id="pre_accommodation_pax">
+                        <?php if(session('pre_info')['pre_tour_accommodation_info']) {
+                        $pre_tour_arr = session('pre_info')['pre_tour_accommodation_info'];
+                        for($i=0; $i<count($pre_tour_arr); $i++)
+                        {
+                        // Set name
+                        $nights      = $pre_tour_arr[$i]['nights'];
+                        $roomType    = $pre_tour_arr[$i]['room_type'];
+                        $pax         = $pre_tour_arr[$i]['pax'];
+                        $d           = $i + 1;
+                        $tourPax     = '';
+
+                        for($z=0; $z < count($pre_tour_arr[$i]['pax']); $z++)
+                        {
+                        // Get age cat
+                        $paxName = ucfirst($pre_tour_arr[$i]['pax'][$z]);
+
+                        $tourPax .= "<li id=" . $z . ">";
+                        $tourPax .=  $paxName;
+                        $tourPax .= "</li>";
+                        }
+                        //echo "Child with bed x ". session('room_type')[$i]['bed'];
+                        echo '<div id="preTourAccommodationDiv'.$d.'"><hr /><table id="service_request_table" cellspacing="0"><tr><th>'.$d.'</th><th>Nights</th><th>Room Type</th><th class="pax">Passengers x '.count($pax).'</th></tr><tr><td>&nbsp;</td><td class="nights">'.$nights.'</td><td class="room_type">'.$roomType.'</td><td class="last"><ul>'.$tourPax.'</ul></td></tr></table></div>';
+                        }
+                        }
+                        ?>
+                    </div><!-- end pre_accommodation_pax -->
+                </div><!-- end pre_accommodation_info -->
+                <hr/>
+                <div id="post">
+                    <table width="700" cellspacing="0" border="0">
+                        <tr>
+                            <td class="h1">Post Tour Accommodation</td>
+                            <td class="text">&nbsp;</td>
+                            <td class="input_label"><label>Yes</label></td>
+                            <td class="input_box">
+                                <input id="post_accommodation" class="css-checkbox" type="checkbox" <?php if(session('post_info')['post_tour_accommodation_info']) { echo "checked"; }?>/>
+                                <label for="post_accommodation" name="post_accommodation" class="css-label" id="post_accommodation"></label>
+                            </td>
+                        </tr>
+                    </table>
+                </div><!-- end post -->
+                <div id="post_accommodation_info">
+                    <hr/>
+                    <table width="700" cellspacing="0" border="0">
+                        </tr>
+                        <tr>
+                            <td width="50">
+                                <select title="Nights" class="room_type_form_select" id="post_accommodation_nights" name="pre_accommodation_nights">
+                                    <option value="" selected>--Night/s--</option>
+                                    <?php
+                                      for($i=1; $i<6; $i++){
+                                        if($i == 1) {
+                                          $night = " Night";
+                                        } else {
+                                          $night = " Nights";
+                                        }
+                                      ?>
+                                    <option value="<?php echo $i; ?>">
+                                        <?php echo $i . $night; ?>
+                                    </option>
+                                    <?php }; ?>
+                                </select>
+                            </td>
+                            <td width="150">
+                                <select title="Hotel Rooms" class="room_type_form_select" id="post_accommodation_room_type" name="post_accommodation_room_type">
+                                    <option value="" selected>-- Room Type --</option>
+                                    <?php
+                                    foreach($all_rooms as $key => $room) { ?>
+                                    <option value="<?php echo $roomType[$all_rooms[$key]['room']][0]['translate'] ?>" >
+                                    <?php echo ucfirst($roomType[$all_rooms[$key]['room']][0]['translate']); ?>
+                                    </option>
+                                    <?php }; ?>
+                                </select>
+                            </td>
+                            <td width="200">
+                                <select title="Tour Passengers" class="room_pax_form_select" id="post_accommodation_tour_pax" name="post_accommodation_tour_pax" multiple="multiple">
+                                    <?php
+                                    $lname_arr      = session('passenger_info')['lname'];
+                                    $fname_arr      = session('passenger_info')['fname'];
+                                    $age_cat_arr = session('passenger_info')['age_cat'];
+                                    for($i=0; $i<session('pax_num')['pax']; $i++)
+                                    {
+                                    // Set name
+                                    $name = ucfirst($lname_arr[$i] . " " . $fname_arr[$i]);
+                                    $age_cat = ucfirst($age_cat_arr[$i]);
+
+                                    // Load pax into the list if they are not Infant
+                                    if($age_cat != 'Infant') {
+                                    // Set pax number
+                                    $a = $i + 1;
+                                    echo '<option value="'.$name. '|'.$age_cat.'">';
+                                    echo '<span>'.$a.'. </span> ';
+                                    echo  $name. " (" . $age_cat . ")" ;
+                                    echo '</option>';
+                                    }
+                                    }
+                                    ?>
+                                </select>
+                            </td>
+                            <td width="200">
+                            <td width="200">
+                                <span class="pax-btn" style="margin-left:-27px; margin-top: 5px; <?php if(session('post_info')['post_tour_accommodation_info']) { echo "display:none;"; }?>"><i class="fa fa-plus" aria-hidden="true"></i></span><div id="errorMessagePost"><?php echo session('message');?></div>
+                            </td>
+                            </td>
+                        </tr>
+                    </table>
+                    <div id="post_accommodation_pax">
+                        <?php if(session('post_info')['post_tour_accommodation_info']) {
+                        $post_tour_arr = session('post_info')['post_tour_accommodation_info'];
+                        for($i=0; $i<count($post_tour_arr); $i++)
+                        {
+                        // Set name
+                        $nights      = $post_tour_arr[$i]['nights'];
+                        $roomType    = $post_tour_arr[$i]['room_type'];
+                        $pax         = $post_tour_arr[$i]['pax'];
+                        $d           = $i + 1;
+                        $tourPax     = '';
+
+                        for($z=0; $z < count($post_tour_arr[$i]['pax']); $z++)
+                        {
+                        // Get age cat
+                        $paxName = ucfirst($post_tour_arr[$i]['pax'][$z]);
+
+                        $tourPax .= "<li id=" . $z . ">";
+                        $tourPax .=  $paxName;
+                        $tourPax .= "</li>";
+                        }
+                        //echo "Child with bed x ". session('room_type')[$i]['bed'];
+                        echo '<div id="postTourAccommodationDiv'.$d.'"><hr /><table id="service_request_table" cellspacing="0"><tr><th>'.$d.'</th><th>Nights</th><th>Room Type</th><th class="pax">Passengers x '.count($pax).'</th></tr><tr><td>&nbsp;</td><td class="nights">'.$nights.'</td><td class="room_type">'.$roomType.'</td><td class="last"><ul>'.$tourPax.'</ul></td></tr></table></div>';
+                        }
+                        }
+                        ?>
+                    </div><!-- end post accommodation pax -->
+                </div> <!-- end post_accommodation_info -->
+                <div id="special_requests_text">
+                    <hr/>
+                    <h3 class="parent">Special Request</h3>
+                    <textarea class="special_request_text" name="special_request" row="3" placeholder="...."><?php if(session('special_requests')) { echo session('special_requests'); } ?></textarea>
+                </div> <!-- end special request text -->
+            </div><!-- end service request -->
+            <div id="page_nav">
+                <hr />
+                <p>
+                    <!--input type="submit" name="submit" value="back" class="page_nav_left"/-->
+                    <a href="<?php echo base_url('book_tour/room_config'); ?>" class="page_nav_left">Left</a>
+                    <input type="submit" name="submit" value="next" class="page_nav_right"/>
+                    <input type="hidden" name="back" value="room_config"/>
+                    <input type="hidden" name="next" value="service_requests"/>
+                    <input type="hidden" name="process" value="service_requests"/> <!-- this data is for form process in booktour contorller -->
+
+                </p>
+                <p>&nbsp;</p>
+                <p>&nbsp;</p>
+                <p>&nbsp;</p>
+                <p>&nbsp;</p>
+                <p>&nbsp;</p>
+                <p>&nbsp;</p>
+                <p>&nbsp;</p>
+                <p>&nbsp;</p>
+            </div><!-- end page nav -->
+        </article>
+    </section> <!-- end booktour -->
+</section> <!-- end content -->
+<br class="clear" />
+<link type="text/css" href="<?php echo base_url('assets/css/jquery.multiselect.css');?>" rel="stylesheet" />
+<link type="text/css" href="<?php echo base_url('assets/css/prettify.css');?>" rel="stylesheet" />
+<script type="text/javascript" src="<?php echo base_url('assets/js/jquery.maskedinput.min.js');?>"></script>
+<script type="text/javascript" src="<?php echo base_url('assets/js/jquery.multiselect.js');?>"></script>
+<script type="text/javascript" src="<?php echo base_url('assets/js/prettify.js');?>"></script>
+<script type="text/javascript" src="<?php echo base_url('assets/js/service-requests.js');?>"></script>
+
+
+
+
+
+
+
+{include file='/book_tour/aside_booking_summary' /}
+{include file='/book_tour/includes/footer' /}

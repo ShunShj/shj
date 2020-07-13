@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {include file='public/head' /}
+    <title>编辑{$supplierName}邮轮资源</title>
+
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+
+    <div class="layui-header">
+        {include file='public/header' /}
+    </div>
+
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll">
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            {include file='public/left_menu' /}
+        </div>
+    </div>
+
+    <div class="layui-body">
+
+        <!-- 内容主体区域 -->
+        <div style="padding: 15px;">
+            <div class='layui-form-item'>
+		   		<span class="layui-breadcrumb">
+					<a href="#">{$language_tag.index_nav_development}</a>
+					<a href="/develop/showImportingManage">{$language_tag.index_nav_importFunction}</a>
+              
+					<a href="#"><cite>{$language_tag.index_develop_showImporting_import_page}</cite></a>
+				</span>
+            </div>
+            <br/>
+            <br/>
+            <br/>
+            <form class="layui-form"  method='post' action='/develop/working'  enctype="multipart/form-data">
+
+                <div class="layui-form-item">
+                    <div class="layui-col-md6">
+                        {$language_tag.index_develop_showImporting_import_excel}<input type='radio' name='type' value='1' />{$language_tag.index_develop_showImporting_import_csv}<input type='radio' name='type' value='2'/>
+					   
+					    <table align="center" width="90%" border="0">
+					      <tr>
+					         <td><input type="file" name="inputExcel" id="inputExcel" lay-verify="required"></td>
+					         <td><input type="hidden" name='importing_id' id="importing_id" value="{$Think.get.importing_id}" ></td>
+					      </tr>
+					    </table>
+			
+                    </div>
+
+               
+
+
+
+
+				<br />
+				<br />	<br />	<br />
+                <div class="layui-form-item">
+                    <div class="layui-input-block">
+                        <button class="layui-btn" lay-submit="" lay-filter="formDemo" >{$language_tag.index_public_submit}</button>
+                 
+                        <a href='javascript:history.back(-1)'><button type="button" class="layui-btn layui-btn-primary">{$language_tag.index_public_back}</button></a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="layui-footer">
+        <!-- 底部固定区域 -->
+        © layui.com - 底部固定区域
+    </div>
+</div>
+{include file='public/foot_js' /}
+
+
+<script>
+    $(function(){
+//        $('#commercialAgent').select2({'width':'100%'});
+    });
+
+    function edit() {
+        $.ajax({
+            type: "POST",
+            url: '/source/editCruisesSourceAjax?id={$_GET["id"]}',
+            data:  $('#form1').serializeArray(),
+            success: function (data) {
+                if(data.code!=200){
+                    layer.msg(data.msg)
+                    return false;
+                }else if(data.code==200){
+                    layer.msg('success',{time:1,end : function(layero, index){
+                        history.back(-1);
+                    }
+                    });
+                }
+            },
+            error:function(XMLHttpRequest, textStatus, errorThrown){
+                //console.log(errorThrown)
+                layer.msg('{$language_tag.index_public_verificationFailure}')
+
+            }
+        });
+        return false;
+    }
+</script>
+
+</body>
+</html>

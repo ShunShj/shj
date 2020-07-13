@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {include file='public/head' /}
+    <title>currency-manage-edit</title>
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+
+    <div class="layui-header">
+        {include file='public/header' /}
+    </div>
+
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll">
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            {include file='public/left_menu' /}
+        </div>
+    </div>
+
+    <div class="layui-body">
+
+        <!-- 内容主体区域 -->
+        <div style="padding: 15px;">
+            <div class='layui-form-item'>
+		   		<span class="layui-breadcrumb" lay-separator="-">
+                   <a>{$language_tag.index_public_homepage}</a>
+					<a>{$language_tag.index_public_system}</a>
+					<a>{$language_tag.index_system_showCurrencyManage_currency_manage}</a>
+					<a><cite>{$language_tag.index_system_showCurrencyManage_info_currency}</cite></a>
+				</span>
+            </div>
+            <br/>
+            <br/>
+            {foreach $data as $k=>$v}
+                <div class="layui-row">
+                    <form class="layui-form all-detail layui-col-md4" onSubmit="return edit()">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">{$language_tag.index_system_showCurrencyManage_name}:：</label>
+                            <div class="layui-input-block">
+                                {$MultilingualAll['currency-currency_name-'.$v.currency_id.'-'.$Think.session.user.language_id][0]['translate']|default=$v.currency_name}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                <i class="iconfont icon-fanyifuwu"
+                                   style="position: absolute;font-size:30px;cursor:pointer;"
+                                       onclick="MultilingualSetting('edit_cr_name','currency','currency_name',{$_GET['id']})"></i>
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">{$language_tag.index_system_showCurrencyManage_symbol}：</label>
+                            <div class="layui-input-block">
+                                {$v.symbol}
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">{$language_tag.index_system_showCurrencyManage_unit}：</label>
+                            <div class="layui-input-block">
+                                {$v.unit}
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">{$language_tag.index_system_showCurrencyManage_create_time}：</label>
+                            <div class="layui-input-block">
+                                {$v.create_time|date='Y-m-d H:i:s',###}
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">{$language_tag.index_system_showCurrencyManage_update_time}：</label>
+                            <div class="layui-input-block">
+                                {if condition="$v.update_time neq ''"}
+                                {$v.update_time|date='Y-m-d H:i:s',###}
+                                {else/} {$language_tag.index_system_showCurrencyManage_no_update_time}
+                                {/if}
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">{$language_tag.index_public_status}：</label>
+                            <div class="layui-input-block">
+                                {if condition="$v.status eq 1"}{$language_tag.index_public_show}{else}{$language_tag.index_public_disabled}{/if}
+                            </div>
+                        </div>
+                        <br/>
+                        <div class="layui-form-item">
+                            <div class="layui-input-block">
+                                <a href='/system/showCurrencyManage'><button type="button" class="layui-btn layui-btn-primary">{$language_tag.index_public_back}</button></a>
+                                <input type="hidden" id="currency_id_hidden" name="currency_id" value="{$currency_id}">
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            {/foreach}
+        </div>
+    </div>
+
+    <div class="layui-footer">
+        <!-- 底部固定区域 -->
+        © layui.com - 底部固定区域
+    </div>
+</div>
+{include file='public/foot_js' /}
+<script src='__STATIC__/javascript/system/currency.js'></script>
+</body>
+</html>

@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {include file='public/head' /}
+    <title>{$language_tag.index_product_showRouteTypeManage_receiptTemplateInfo}</title>
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+
+    <div class="layui-header">
+        {include file='public/header' /}
+    </div>
+
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll">
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            {include file='public/left_menu' /}
+        </div>
+    </div>
+
+    <div class="layui-body">
+
+        <!-- 内容主体区域 -->
+        <div style="padding: 15px;">
+            <div class='layui-form-item'>
+		   		<span class="layui-breadcrumb" lay-separator="-">
+                    <a>{$language_tag.index_public_homepage}</a>
+					<a>{$language_tag.index_branchcompany_showCompanyOrderManage_addEdit_product}</a>
+					<a>{$language_tag.index_product_showRouteTemplateManage_receiptTemplate}</a>
+                    <a>{$language_tag.index_product_showRouteTypeManage_receiptTemplateInfo}</a>
+				</span>
+            </div>
+            <br/>
+            <br/>
+            <br/>
+            <form class="layui-form" id="form1" onSubmit="return edit()">
+
+                <div class="layui-form-item">
+                    <div class="layui-col-md9">
+                        <label class="layui-form-label">{$language_tag.index_product_showReturnReceiptManage_receiptName}：</label>
+                        <div class="layui-input-block">
+                            <input disabled type="text" value="{$ReturnReceiptList.return_receipt_name}" class="layui-input" required lay-verify="required" name="return_receipt_name">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <div class="layui-col-md9">
+                        <label class="layui-form-label">{$language_tag.index_public_status}：</label>
+                        <div class="layui-input-block">
+                            <select disabled id="status" name="status"  >
+                                <option value="1" {$ReturnReceiptList.status==1?'selected':''}>{$language_tag.index_public_show}</option>
+                                <option value="2" {$ReturnReceiptList.status==2?'selected':''}>{$language_tag.index_product_showTeamProductManage_stop_use}</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="layui-container" class="div_info">
+                    <?php $num = 0; ?>
+                    {foreach $ReturnReceiptInfoList as $ReturnReceiptInfoListV}
+                    <div class="layui-row">
+                        <div class="layui-col-md3">
+                            <div class="layui-input-block">
+                                <input disabled type="text" class="layui-input"  required lay-verify="required" placeholder="{$language_tag.index_product_showRouteTemplateManage_title}" name="title[{$num}]" value="{$ReturnReceiptInfoListV.title}" ><br>
+                                <input disabled type="text" class="layui-input"  required lay-verify="required" placeholder="{$language_tag.index_product_showRouteTemplateManage_sort}({$language_tag.index_product_showRouteTemplateManage_orderFromSort})" name="sorting[{$num}]" value="{$ReturnReceiptInfoListV.sorting}" >
+                            </div>
+                        </div>
+
+                        <div class="layui-col-md6" style="margin-left:10px ">
+                            <textarea disabled required lay-verify="required"  class="layui-textarea" name="content[{$num}]"  >{$ReturnReceiptInfoListV.content}</textarea>
+                        </div>
+                          <hr>
+                    </div>
+                    <?php $num++; ?>
+                    {/foreach}
+                </div>
+
+
+                <br><br><br>
+                <div class="layui-form-item">
+                    <div class="layui-input-block">
+                        <a href="javascript:history.back(-1)"><button type="button" class="layui-btn layui-btn-primary">{$language_tag.index_public_back}</button></a>
+                    </div>
+                </div>
+                <input type="hidden" id="del_return_receipt_info_id" name="del_return_receipt_info_id" value="" />
+            </form>
+        </div>
+    </div>
+
+
+    <div class="layui-footer">
+        <!-- 底部固定区域 -->
+        © layui.com - 底部固定区域
+    </div>
+</div>
+{include file='public/foot_js' /}
+
+
+<script>
+
+</script>
+
+</body>
+</html>

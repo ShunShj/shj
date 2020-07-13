@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<head>
+    {include file='public/head' /}
+    <title>language-manage-add</title>
+
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+
+    <div class="layui-header">
+        {include file='public/header' /}
+    </div>
+
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll">
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            {include file='public/left_menu_web' /}
+        </div>
+    </div>
+
+    <div class="layui-body">
+
+        <!-- 内容主体区域 -->
+        <div style="padding: 15px;">
+            <div class='layui-form-item'>
+		   		<span class="layui-breadcrumb" lay-separator="-">
+					<a>{$language_tag.index_public_homepage}</a>
+                    <a>管网管理</a>
+                    <a>管网支付列表</a>
+                    <a><cite>Paypal</cite></a>
+				</span>
+            </div>
+            <br/>
+            <br/>
+            <div class="layui-row">
+                <form class="layui-form layui-col-md4" id="form" onSubmit="return website_add()">
+                    <input type="hidden" value="1" name="pay_type">
+                    <input type="hidden" value="PayPal" name="pay_name">
+                    <input type="hidden" value="{$paypal_info.ota_website_pay_id}" name="ota_website_pay_id">
+                    <input type="hidden" value="1" name="status">
+                    <div class="layui-form-item">
+                        <label class="layui-form-label input-required">账号邮箱：</label>
+                        <div class="layui-input-block">
+                            <input id="website" name="pay_desc[business]" required="" lay-verify="required" placeholder="" autocomplete="off" class="layui-input" value="{$paypal_info.pay_desc.business}" type="text">
+                        </div>
+                    </div>
+                    <br/>
+                    <div class="layui-form-item">
+                        <div class="layui-input-block">
+                            <button class="layui-btn nav-submit" lay-submit="" lay-filter="formDemo" id="">{$language_tag.index_public_submit}</button>
+                            <a href="#" onClick="javascript :history.back(-1);"><button type="button" class="layui-btn layui-btn-primary">{$language_tag.index_public_back}</button></a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="layui-footer">
+        <!-- 底部固定区域 -->
+        © layui.com - 底部固定区域
+    </div>
+</div>
+{include file='public/foot_js' /}
+<script>
+    function website_add(){
+        $.ajax({
+            type: "POST",
+            url: '/ota_system/otaWebsitePayAjax',
+            data: $('#form').serializeArray(),
+            success: function(data){
+                //console.log(data);
+                if(data.code!=200){
+                    layer.msg(data.msg);
+                    return false;
+                }else if(data.code==200) {
+                    layer.msg('操作成功',{time:1,end : function(layero, index){
+                            location.href="/ota_system/showOtaWebsitePayManage";
+                        }
+                    });
+                }
+            },
+            error:function(XMLHttpRequest, textStatus, errorThrown){
+                layer.msg('验证失败')
+            }
+        });
+        return false;
+
+    }
+</script>
+</body>
+</html>

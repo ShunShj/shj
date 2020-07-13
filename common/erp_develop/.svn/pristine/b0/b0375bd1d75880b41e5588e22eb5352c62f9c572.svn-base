@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {include file='public/head' /}
+    <title>客户来源详情</title>
+
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+
+    <div class="layui-header">
+        {include file='public/header' /}
+    </div>
+
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll">
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            {include file='public/left_menu' /}
+        </div>
+    </div>
+
+    <div class="layui-body">
+
+        <!-- 内容主体区域 -->
+        <div style="padding: 15px;">
+            <div class='layui-form-item'>
+		   		<span class="layui-breadcrumb" lay-separator="-">
+                    <a>{$Think.lang.index_public_homepage}</a>
+                    <a>{$Think.lang.index_branchcompany_showBranchProductManage_branchManagement}</a>
+					<a>客户来源</a>
+					<a><cite>客户来源详情</cite></a>
+				</span>
+            </div>
+            <br/>
+            <br/>
+                <div class="layui-form-item">
+                    <div class="layui-col-md4">
+                        <label class="layui-form-label input-required">客户来源名称:</label>
+                        <div class="layui-input-block" style="padding-top: 10px;">
+                            {$result.customer_source_name}
+                        </div>
+                    </div>
+                </div>
+                <br>
+                <div class="layui-form-item">
+                    <div class="layui-col-md4">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">{$Think.lang.index_public_status}:</label>
+                            <div class="layui-input-block" style="padding-top: 10px;">
+                                {if condition="$result.status eq 1"}{$Think.lang.index_public_show}{else/}{$Think.lang.index_public_disabled}{/if}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <div class="layui-col-md4">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label input-required">{$Think.lang.index_public_company}:</label>
+                            <div class="layui-input-block" style="padding-top: 10px;">
+                               {$MultilingualAll['company-company_name-'.$result.company_id.'-'.$Think.session.user.language_id][0]['translate']|default=$result.company_name}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <br>
+                <div class="layui-form-item">
+                    <div class="all-button-center">
+                        <a href="javascript:history.back(-1)"><button type="button" class="layui-btn layui-btn-primary">{$Think.lang.index_public_back}</button></a>
+                    </div>
+                </div>
+
+        </div>
+    </div>
+
+    <div class="layui-footer">
+        <!-- 底部固定区域 -->
+        © layui.com - 底部固定区域
+    </div>
+</div>
+{include file='public/foot_js' /}
+
+</body>
+</html>

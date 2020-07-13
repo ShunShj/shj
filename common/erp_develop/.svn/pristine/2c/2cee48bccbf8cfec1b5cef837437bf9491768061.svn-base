@@ -1,0 +1,1510 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {include file='public/head' /}
+    <title>{$language_tag.index_product_ShowPlanTour_addingTeamProducts}</title>
+    <style>
+        .text_align {
+            text-align: right;
+            padding-right: 20px;
+            vertical-align:middle;
+            line-height: 38px;
+        }
+        .layui-btn+.layui-btn{
+            margin-left:0px;
+        }
+        .ke-inline{
+            display: inline-block;
+            padding: 9px 0!important;
+            line-height: 20px;
+        }
+    </style>
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+
+    <div class="layui-header">
+        {include file='public/header' /}
+    </div>
+
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll">
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            {include file='public/left_menu' /}
+        </div>
+    </div>
+
+    <div class="layui-body">
+
+        <!-- 内容主体区域 -->
+        <div style="padding: 15px;">
+            <div class='layui-row'>
+		   		<span class="layui-breadcrumb" lay-separator="-">
+                    <a>{$language_tag.index_public_homepage}</a>
+                    <a>{$language_tag.index_public_product}</a>
+					<a>{$language_tag.index_product_ShowPlanTour_resources_teamProduct}</a>
+                    <a><cite>{$language_tag.index_product_ShowPlanTour_addingTeamProducts}</cite></a>
+				</span>
+            </div>
+
+            <form class="layui-form" id="form1" onSubmit="return add()">
+                <div class="layui-row">
+                    <div class="all-button-right">
+                        <button class="layui-btn nav-submit" lay-submit="" lay-filter="formDemo" id="language_add_button">{$language_tag.index_public_submit}
+                        </button>
+                        <a href="/product/showPlanTourAdd" class="layui-btn layui-btn-primary">{$language_tag.index_product_showRouteTemplateManage_reload}</a> <!--javascript:location.reload()-->
+                        <a href="/product/ShowPlanTour">  <!--javascript:history.back(-1)-->
+                            <button type="button" class="layui-btn layui-btn-primary">{$language_tag.index_public_back}</button>
+                        </a>
+                    </div>
+                </div>
+                <div class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief">
+                    <ul class="layui-tab-title">
+                        <li class="layui-this">{$language_tag.index_product_ShowPlanTour_essentialInformation}</li>
+                        <li >{$language_tag.index_product_ShowPlanTour_departureDate}</li>
+                        <li>{$language_tag.index_product_ShowPlanTour_itineraryContent}</li>
+                        <li>{$language_tag.index_product_showRouteTemplateManage_resourceAllocation}</li>
+                        <li>{$language_tag.index_product_ShowPlanTour_productQuotation}</li>
+                    </ul>
+                    <div class="layui-tab-content">
+                        <!--基本信息-->
+                        <div class="layui-tab-item layui-show">
+                            <div class="title-bg">{$language_tag.index_product_ShowPlanTour_essentialInformation}</div>
+                            <div class="title-border">
+                                <div class="layui-row" >
+                                    <div class="layui-col-md2 text_align">{$language_tag.index_product_showRouteTemplateManage_route_template}:</div>
+                                    <div class="layui-col-md6">
+                                        <div class="layui-form-item">
+                                            <select lay-filter="route_template_id" name="route_template_id"  lay-search >
+                                                <option></option>
+                                                {foreach $RouteTemplateList as $RouteTemplateListV}
+                                                <option value="{$RouteTemplateListV.route_template_id}" {$_GET['route_template_id']==$RouteTemplateListV.route_template_id?'selected':''}>{$RouteTemplateListV.route_name}</option>
+                                                {/foreach}
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <!--<input type="hidden" name="route_template_id" value="{$_GET['route_template_id']}" />-->
+                                </div>
+
+                                 <div class="layui-row">
+                                    <div class="layui-col-md2 text_align input-required">{$language_tag.index_product_ShowPlanTour_regimentName}:</div>
+                                    <div class="layui-col-md6">
+                                        <div class="layui-form-item">
+                                            <input type="text" class="layui-input" required lay-verify="required" data-tabs="0" name="team_product_name" value="{$RouteTemplate.route_name}">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="layui-row">
+                                    <div class="layui-col-md2 text_align input-required">{$language_tag.index_product_showRouteTemplateManage_routeType}:</div>
+                                    <div class="layui-col-md6">
+                                        <div class="layui-form-item">
+                                            <select data-tabs="0" required lay-verify="required" disabled lay-search >
+                                                <option></option>
+                                                {foreach $cateList as $vl}
+                                                <option value="{$vl.route_type_id}" {$RouteTemplate.route_type_id==$vl.route_type_id?'selected':''}>{$vl.route_type_name}</option>
+                                                {/foreach}
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <input type="hidden"  name='route_type_id' value="{$RouteTemplate.route_type_id}" />
+                                </div>
+                                <div class="layui-row">
+                                    <div class="layui-col-md2 text_align input-required">{$language_tag.index_product_ShowPlanTour_visibleBranch}:</div>
+                                    <div class="layui-col-md6">
+                                        <div class="layui-form-item">
+                                            <select disabled id="use_company_id" data-tabs="0" class="use_company_id" xm-select="use_company_id" xm-select-search=""
+                                                    xm-select-search-type="dl">
+                                                <option></option>
+                                                {foreach $CompanyList as $vl}
+                                                {if $RouteTemplate.use_company_id=='*'}
+                                                <option value="{$vl.company_id}" {if condition="$vl.company_id eq 1"}  disabled{/if} selected>{$vl.company_name}</option>
+                                                {else /}
+                                                {if condition="$vl.company_id eq 1 or $vl.company_id eq $Think.session.user.company_id"}
+                                                <option value="{$vl.company_id}" selected disabled>{$vl.company_name}</option>
+                                                {else /}
+                                                <option value="{$vl.company_id}"  {in name="$vl.company_id" value="$RouteTemplate.use_company_id" }selected{/in}    >{$vl.company_name}</option>
+                                                {/if}
+                                                {/if}
+                                                {/foreach}
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <input type="hidden" name="use_company_id" value="{$RouteTemplate.use_company_id}" />
+                                </div>
+
+                                <div class="layui-row">
+                                    <div class="layui-col-md2 text_align input-required">{$language_tag.index_product_ShowPlanTour_methodOfSettlingAccounts}:</div>
+                                    <div class="layui-col-md6">
+                                        <div class="layui-form-item">
+                                            <select name="settlement_type" data-tabs="0" class="settlement_type" lay-verify="required">
+                                                <option value="1" {$RouteTemplate.settlement_type==1?"selected":""}>{$language_tag.index_product_ShowPlanTour_oneBitePrice}</option>
+                                                <option value="2" {$RouteTemplate.settlement_type==2?"selected":""}>{$language_tag.index_product_ShowPlanTour_trueSettlement}</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="layui-row">
+                                    <div class="layui-col-md2 text_align">{$language_tag.index_public_status}:</div>
+                                    <div class="layui-col-md6">
+                                        <div class="layui-form-item">
+                                            <select name="status" lay-verify="required">
+                                                <option value='1' selected>{$language_tag.index_public_show}</option>
+                                                <option value='0'  >{$language_tag.index_public_disabled}</option>
+                                            </select>
+                                            <!--<input type="checkbox" checked value="1" name="status" lay-skin="switch" lay-text="开启|{$language_tag.index_public_close}">-->
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="layui-row">
+                                    <div class="layui-col-md2 text_align">{$language_tag.index_product_ShowPlanTour_receptionCutOff}<div class="ke-inline layui-word-aux">({$language_tag.index_product_ShowPlanTour_beforeLeaving})</div>:</div>
+                                    <div class="layui-col-md6">
+                                        <div class="layui-form-item">
+                                            <input type="text" class="layui-input"  name="before_days" value="{$RouteTemplate.before_days}">
+                                        </div>
+                                    </div>
+                                    <div class="layui-col-md2"><div class="layui-form-mid layui-word-aux" style="margin-left:10px;">{$language_tag.index_product_ShowPlanTour_day}</div></div>
+                                </div>
+                                <div class="layui-row">
+                                    <div class="layui-col-md2 text_align input-required">{$language_tag.index_product_ShowPlanTour_plannedNumber}:</div>
+                                    <div class="layui-col-md6">
+                                        <div class="layui-form-item">
+                                            <input type="text" class="layui-input" required data-tabs="0" lay-verify="required|number"
+                                                   name="plan_custom_number" value="{$RouteTemplate.plan_custom_number}">
+                                        </div>
+                                    </div>
+                                    <div class="layui-col-md2"><div class="layui-form-mid layui-word-aux" style="margin-left:10px;">{$language_tag.index_product_ShowPlanTour_receivedVisitors}：0</div></div>
+                                </div>
+                                <div class="layui-row">
+                                    <div class="layui-col-md2 text_align input-required">{$language_tag.index_product_showRouteTemplateManage_routeUserName}:</div>
+                                    <div class="layui-col-md6">
+                                        <div class="layui-form-item">
+                                            <select required data-tabs="0" lay-verify="required" name="team_product_user_id" lay-search>
+                                                <option></option>
+                                                {foreach $UserList as $vl}
+                                                <option value="{$vl.user_id}" {if $_GET['route_template_id']}{$vl.user_id==$RouteTemplate.route_user_id?'selected':''}{else /}{$UserId==$vl.user_id?'selected':''}{/if}>{$vl.nickname}</option>
+                                                {/foreach}
+
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!--出团日期-->
+                        <div class="layui-tab-item ">
+                            <div class="title-bg">{$language_tag.index_product_ShowPlanTour_addRegimentData}</div>
+                            <div class="title-border">
+                                <div class="layui-row">
+                                    <div class="layui-col-md2 text_align">{$language_tag.index_product_ShowPlanTour_addADate}:</div>
+                                    <div class="layui-col-md6">
+                                        <div class="layui-form-item">
+                                            <div class="layui-input-inline">
+                                                <input type="text" id="add_date" value="" class="layui-input add_date">
+                                            </div>
+                                            <div class="layui-form-mid  layui-btn nav-add" id="add_a_date" > &nbsp;&nbsp;&nbsp; {$language_tag.index_product_ShowPlanTour_addThisDate} &nbsp;&nbsp;&nbsp;</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="layui-row">
+                                    <div class="layui-col-md2 text_align">{$language_tag.index_product_ShowPlanTour_addMultipleDates}:</div>
+                                    <div class="layui-col-md6">
+                                        <div class="layui-form-item">
+                                            <div class="layui-input-inline">
+                                                <input type="text" id="add_sdate" value="" class="layui-input add_date">
+                                            </div>
+                                            <div class="layui-form-mid layui-word-aux"> ~ </div>
+                                            <div class="layui-input-inline">
+                                                <input type="text" id="add_edate" value="" class="layui-input add_date">
+                                            </div>
+                                            <div class="layui-form-mid  layui-btn nav-add" id="add_all_date" > &nbsp;&nbsp;&nbsp; {$language_tag.index_product_ShowPlanTour_addTheseDates} &nbsp;&nbsp;&nbsp;</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="layui-row">
+                                    <div class="layui-col-md2 text_align">&nbsp;</div>
+                                    <div class="layui-col-md9">
+                                        <input type="checkbox" name="day" value="1" title="{$language_tag.index_product_ShowPlanTour_monday}" class="day" lay-skin="primary">
+                                        <input type="checkbox" name="day" value="2" title="{$language_tag.index_product_ShowPlanTour_tuesday}" class="day" lay-skin="primary">
+                                        <input type="checkbox" name="day" value="3" title="{$language_tag.index_product_ShowPlanTour_wednesday}" class="day" lay-skin="primary">
+                                        <input type="checkbox" name="day" value="4" title="{$language_tag.index_product_ShowPlanTour_thursday}" class="day" lay-skin="primary">
+                                        <input type="checkbox" name="day" value="5" title="{$language_tag.index_product_ShowPlanTour_friday}" class="day" lay-skin="primary">
+                                        <input type="checkbox" name="day" value="6" title="{$language_tag.index_product_ShowPlanTour_saturday}" class="day" lay-skin="primary">
+                                        <input type="checkbox" name="day" value="0" title="{$language_tag.index_product_ShowPlanTour_weekday}" class="day" lay-skin="primary">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="layui-row">
+                                <div class="layui-col-md12 plan-table-nont">
+                                    <table class="layui-table table-date title-none-plan">
+                                        <colgroup>
+                                            <col width="250">
+                                            <col width="100">
+                                        </colgroup>
+                                        <thead>
+                                            <tr>
+                                                <th>{$language_tag.index_product_ShowPlanTour_departureDate}</th>
+                                                <th>{$language_tag.index_source_operation}</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!--行程内容-->
+                        <div class="layui-tab-item ">
+                            <div class="layui-collapse" lay-accordion>
+                                <!--<div class="layui-colla-item">-->
+                                    <!--<h2 class="layui-colla-title">{$language_tag.index_public_flightInformation}</h2>-->
+                                    <!--<div class="layui-colla-content layui-show"  >-->
+                                        <!--<div><a class="layui-btn" id="add_transfer">{$language_tag.index_public_add}</a></div>-->
+                                        <!--<div class="d_transfer">-->
+                                        <!--</div>-->
+                                    <!--</div>-->
+                                <!--</div>-->
+
+                                <div class="layui-colla-item">
+                                    <h2 class="layui-colla-title">{$language_tag.index_product_showRouteTemplateManage_travelInformation}</h2>
+                                    <div class="layui-colla-content layui-show"  >
+                                        <div class="layui-row">
+                                            <!--<div><a class="layui-btn" id="add_journey">{$language_tag.index_public_add}</a></div>-->
+                                            <div class="layui-col-md2 text_align input-required">{$language_tag.index_product_showRouteTemplateManage_travelDays}:</div>
+                                            <div class="layui-col-md6">
+                                                <div class="layui-form-item">
+                                                    <input id="journey-days" data-tabs="2" lay-verify="required" max="30" type="text" class="layui-input"  name="" style="width: 150px" placeholder="{$language_tag.index_product_showRouteTemplateManage_placeHoderDays}" value="{$RouteTemplate.days}">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="d_journey">
+                                            <!--行程内容-->
+                                            {foreach $RouteJourney as $ky=>$RouteJourneyV}
+                                            <div id="day-journey-{$RouteJourneyV.the_days}" style="border: 1px solid #e8e6e6;padding: 10px;margin-top: 10px;">
+                                                <div class="layui-row">
+                                                    <div class="layui-col-md2">DAY {$RouteJourneyV.the_days}</div>
+                                                    <input type="hidden" name="journey_the_days" value="{$RouteJourneyV.the_days}" />
+                                                </div>
+
+                                                <div class="layui-row">
+                                                    <div class="layui-col-md2 text_align input-required">{$language_tag.index_product_ShowPlanTour_area}:</div>
+                                                    <div class="layui-col-md6">
+                                                        <div class="layui-form-item">
+                                                           <select data-tabs="2"  name="country_id[{$RouteJourneyV.the_days}]"  lay-search lay-verify="required" required>
+                                                               <option value="">{$language_tag.index_source_showSupplier_choose_own_zone}</option>
+                                                               {foreach name='CountryList'  item='vo'}
+                                                               <option value="{$vo.id}" {$vo.id==$RouteJourneyV.route_journey_zone?'selected':''}>{$vo.cpc_name}</option>
+                                                               {/foreach}
+                                                           </select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+
+
+                                                <div class="layui-row">
+                                                    <div class="layui-col-md2 text_align input-required">{$language_tag.index_public_travelTitle}:</div>
+                                                    <div class="layui-col-md6">
+                                                        <div class="layui-form-item">
+                                                            <input data-tabs="2"  type="text" class="layui-input"  name="journey_title[{$RouteJourneyV.the_days}]"  value="{$RouteJourneyV.route_journey_title}" lay-verify="required" required>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="layui-row">
+                                                    <div class="layui-col-md2 text_align input-required">{$language_tag.index_public_travelContent}:</div>
+                                                    <div class="layui-col-md6">
+                                                        <div class="layui-form-item">
+                                                            <textarea data-tabs="2"  class="layui-textarea" name="journey_content[{$RouteJourneyV.the_days}]" lay-verify="required" required>{$RouteJourneyV.route_journey_content}</textarea>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="layui-row">
+                                                    <div class="layui-col-md2 text_align">{$language_tag.index_public_traffic}</div>
+                                                    <div class="layui-col-md6">
+                                                        <div class="layui-form-item">
+                                                            <input type="text" class="layui-input"  name="journey_traffic[{$RouteJourneyV.the_days}]" value="{$RouteJourneyV.route_journey_traffic}">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="layui-row">
+                                                    <div class="layui-col-md2 text_align">{$language_tag.index_public_getAccommodation}</div>
+                                                    <div class="layui-col-md6">
+                                                        <div class="layui-form-item">
+                                                            <input type="text" class="layui-input"  name="journey_stay[{$RouteJourneyV.the_days}]" value="{$RouteJourneyV.route_journey_stay}">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="layui-row">
+                                                    <div class="layui-col-md2 text_align">{$language_tag.index_finance_showReceivableManage_dining}</div>
+                                                    <div class="layui-col-md6">
+                                                        <div class="layui-row">
+                                                            <div class="layui-form-item">
+                                                                <div class="layui-col-md2"><input type="checkbox" name="eat_mark[{$RouteJourneyV.the_days}][]" title="{$language_tag.index_public_breakfast}" lay-skin="primary" value="1" {in name="1" value="$RouteJourneyV.eat_mark"}checked{/in}></div>
+                                                                <div class="layui-col-md10"><input type="text" class="layui-input"  name="journey_breakfast[{$RouteJourneyV.the_days}]" value="{$RouteJourneyV.route_journey_breakfast}"></div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="layui-row">
+                                                            <div class="layui-form-item">
+                                                                <div class="layui-col-md2"><input type="checkbox" name="eat_mark[{$RouteJourneyV.the_days}][]" title="{$language_tag.index_public_lunch}" lay-skin="primary" value="2" {in name="2" value="$RouteJourneyV.eat_mark"}checked{/in}></div>
+                                                                <div class="layui-col-md10"><input type="text" class="layui-input"  name="journey_lunch[{$RouteJourneyV.the_days}]" value="{$RouteJourneyV.route_journey_lunch}"></div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="layui-row">
+                                                            <div class="layui-form-item">
+                                                                <div class="layui-col-md2"><input type="checkbox" name="eat_mark[{$RouteJourneyV.the_days}][]" title="{$language_tag.index_public_dinner}" lay-skin="primary" value="3" {in name="3" value="$RouteJourneyV.eat_mark"}checked{/in}></div>
+                                                                <div class="layui-col-md10"><input type="text" class="layui-input"  name="journey_dinner[{$RouteJourneyV.the_days}]" value="{$RouteJourneyV.route_journey_dinner}"></div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="layui-row">
+                                                    <div class="layui-col-md2 text_align">{$language_tag.index_finance_showReceivableManage_scenic_spot}</div>
+                                                    <div class="layui-col-md6">
+                                                        <div class="layui-form-item">
+                                                            <input type="text" class="layui-input"  name="journey_scenic_sport[{$RouteJourneyV.the_days}]" value="{$RouteJourneyV.route_journey_scenic_sport}">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="layui-row">
+                                                    <div class="layui-col-md2 text_align">{$language_tag.index_product_showRouteTemplateManage_travelImage}</div>
+                                                    <div class="layui-col-md8">
+                                                        <div class="layui-form-item">
+                                                            <button type="button" class="layui-btn nav-look" id="journey-picture-{$RouteJourneyV.the_days}">
+                                                                <i class="layui-icon">&#xe67c;</i>{$language_tag.index_product_showRouteTemplateManage_uploadImage}
+                                                            </button>
+                                                        </div>
+                                                        <div id="u-img-{$RouteJourneyV.the_days}" style="padding: 10px">
+                                                            <?php $route_journey_picture = $RouteJourneyV['route_journey_picture']?explode(',',$RouteJourneyV['route_journey_picture']):'';?>
+                                                            {foreach $route_journey_picture as $route_journey_pictureV}
+                                                            <div style="padding: 5px;width: 110px;float: left">
+                                                                <div>
+                                                                    <img src="{$route_journey_pictureV}" height="100" width="100">
+                                                                    <input type="hidden" value="{$route_journey_pictureV}" name="journey_picture[{$RouteJourneyV.the_days}][]">
+                                                                </div>
+                                                                <div><a class="layui-btn layui-btn-danger r-journey-img nav-edit">{$language_tag.index_public_del}</a></div>
+                                                            </div>
+                                                            {/foreach}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="layui-row">
+                                                    <div class="layui-col-md2 text_align">{$language_tag.index_public_mark}</div>
+                                                    <div class="layui-col-md6">
+                                                        <div class="layui-form-item">
+                                                            <textarea class="layui-textarea" name="journey_remark[{$RouteJourneyV.the_days}]" >{$RouteJourneyV.route_journey_remark}</textarea>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <h2 class="" style="position: relative; height: 42px; line-height: 42px; padding: 0 15px 0 35px; color: #333; background-color: #f2f2f2; cursor: pointer; font-size: 14px; overflow: hidden;">{$language_tag.index_public_flightInformation}</h2>
+                                                <div class="layui-colla-content layui-show"  >
+                                                    <div><a class="layui-btn add_transfer nav-add"   data-id="{$RouteJourneyV.the_days}">{$language_tag.index_public_add}</a></div>
+                                                    <div class="d_transfer_{$RouteJourneyV.the_days}">
+                                                        {foreach $RouteFlight as $ky=>$TeamProductFlightV}
+                                                        {if $RouteJourneyV.the_days==$TeamProductFlightV.the_days}
+                                                        <div  style="border: 1px solid #e8e6e6;padding: 10px;margin-top: 10px;">
+                                                            <div  class="layui-row">
+                                                                <div class="layui-col-md5">
+                                                                    <div class="layui-form-item">
+                                                                        <label class="layui-form-label">{$language_tag.index_public_flightNumber}:</label>
+                                                                        <div class="layui-input-block">
+                                                                            <input type="text" class="layui-input" name="flight_number[{$ky}]" value="{$TeamProductFlightV.flight_number}" lay-verify="required" />
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="layui-col-md5">
+                                                                    <div class="layui-form-item">
+                                                                        <label class="layui-form-label">{$language_tag.index_public_transportMachine}:</label>
+                                                                        <div class="layui-input-block">
+                                                                            <input type="radio" name="flight_type[{$ky}]" value="1" title="{$language_tag.index_public_meetAirport}"  {$TeamProductFlightV.flight_type==1?'checked':''} >
+                                                                            <input type="radio" name="flight_type[{$ky}]" value="2" title="{$language_tag.index_public_giveAirport}"  {$TeamProductFlightV.flight_type==2?'checked':''} >
+                                                                            <input type="radio" name="flight_type[{$ky}]" value="3" title="{$language_tag.index_public_changeAirport}"  {$TeamProductFlightV.flight_type==3?'checked':''} >
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="layui-row">
+                                                                <div class="layui-col-md5">
+                                                                    <div class="layui-form-item">
+                                                                        <label class="layui-form-label">{$language_tag.index_public_startPlace}:</label>
+                                                                        <div class="layui-input-block">
+                                                                            <input type="text" class="layui-input" name="fight_start_city[{$ky}]" value="{$TeamProductFlightV.start_city}" />
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="layui-col-md5">
+                                                                    <div class="layui-form-item">
+                                                                        <label class="layui-form-label">{$language_tag.index_product_showRouteTemplateManage_departureTime}:</label>
+                                                                        <div class="layui-input-block">
+                                                                            <input type="text" class="layui-input fight_time_{$ky}" name="fight_start_time[{$ky}]" placeholder="HH:mm" value="<?=date('H:i',$TeamProductFlightV['start_time'])?>"/>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="layui-row">
+                                                                <div class="layui-col-md5">
+                                                                    <div class="layui-form-item">
+                                                                        <label class="layui-form-label">{$language_tag.index_public_endPlace}:</label>
+                                                                        <div class="layui-input-block">
+                                                                            <input type="text" class="layui-input " name="fight_end_city[{$ky}]" value="{$TeamProductFlightV.end_city}"/>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="layui-col-md5">
+                                                                    <div class="layui-form-item">
+                                                                        <label class="layui-form-label">{$language_tag.index_public_endTime}:</label>
+                                                                        <div class="layui-input-block">
+                                                                            <input type="text" class="layui-input fight_time_{$ky}" name="fight_end_time[{$ky}]" placeholder="HH:mm"  value="<?=date('H:i',$TeamProductFlightV['end_time'])?>"/>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <input type="hidden" id="fight-the-days-{$ky}" name="fight_the_days[{$ky}]" value="{$TeamProductFlightV.the_days}">
+                                                            <input type="hidden" name="team_product_flight_id[{$ky}]" value="{$TeamProductFlightV.team_product_flight_id}" />
+                                                            <div><button type="button" class="layui-btn layui-btn-primary r_transfer nav-edit"  >{$language_tag.index_public_del}</button></div>
+                                                        </div>
+                                                        {/if}
+                                                        {/foreach}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            {/foreach}
+
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="layui-colla-item">
+                                    <h2 class="layui-colla-title">{$language_tag.index_public_receipt}</h2>
+                                    <div class="layui-colla-content ">
+                                        <div class="layui-row">
+                                            <div class="layui-col-md2 text_align">{$language_tag.index_product_showRouteTemplateManage_receiptTemplate}:</div>
+                                            <div class="layui-col-md6">
+                                                <div class="layui-form-item">
+                                                    <select id="ReturnReceipt" lay-filter='ReturnReceipt' lay-search>
+                                                        <option></option>
+                                                        {foreach $ReturnReceiptList as $vl}
+                                                        <option value="{$vl.return_receipt_id}">{$vl.return_receipt_name}</option>
+                                                        {/foreach}
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div id="layui-container" class="ReturnReceipt_info">
+                                            {foreach $RouteReturnReceipt as $ky=>$RouteReturnReceiptV}
+                                            <div class="layui-row">
+                                                <div class="layui-col-md3">
+                                                    <div class="layui-input-block">
+                                                        <input type="text" class="layui-input" required="" lay-verify="required" placeholder="{$language_tag.index_product_showRouteTemplateManage_title}" name="ReturnReceiptTitle[{$ky}]" value="{$RouteReturnReceiptV.title}"><br>
+                                                        <input type="text" class="layui-input" required="" lay-verify="required" placeholder="{$language_tag.index_product_showRouteTemplateManage_sort}({$language_tag.index_product_showRouteTemplateManage_orderFromSort})" name="ReturnReceiptSorting[{$ky}]" value="{$RouteReturnReceiptV.sorting}">
+                                                    </div>
+                                                </div>
+                                                <div class="layui-col-md6" style="margin-left:10px;margin-bottom:10px">
+                                                    <textarea required="" lay-verify="required" class="layui-textarea" name="ReturnReceiptContent[{$ky}]">{$RouteReturnReceiptV.content}</textarea>
+                                                </div>
+                                                <div class="layui-col-md2" style="margin-left:10px ">
+                                                    <a class="layui-btn del-return-receipt nav-edit">{$language_tag.index_public_del}</a>
+                                                </div>
+                                                <hr>
+                                            </div>
+                                            {/foreach}
+                                        </div>
+                                        <div class="layui-col-md-offset9">
+                                            <a class="layui-btn add-ReturnReceipt nav-add" style="margin-left:20px">{$language_tag.index_public_add}</a>
+                                        </div>
+
+
+                                    </div>
+                                </div>
+
+
+                            </div>
+                        </div>
+                        <!--资源配置-->
+                        <div class="layui-tab-item">
+                            <table class="layui-table" id="language-table">
+                                <thead>
+                                <tr>
+                                    <th>{$language_tag.index_product_showRouteTemplateManage_resourceProject}</th>
+                                    <th>{$language_tag.index_product_showRouteTemplateManage_resourceAllocation_status}</th>
+                                    <th>{$language_tag.index_source_operation}</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <th>{$language_tag.index_finance_showReceivableManage_hotel}</th>
+                                    <th class="th-holte">{$session_hotel? $language_tag.index_product_showRouteTemplateManage_setUp:$language_tag.index_product_showRouteTemplateManage_notSet}</th>
+                                    <th>
+                                        <a  href="/product/showPlanHotelAdd" target="_blank" class="layui-btn layui-btn-sm holteAdd table-save layui-btn-primary" {notempty name="session_hotel"}style="display: none"{/notempty}>{$language_tag.index_product_showRouteTemplateManage_allocationOfResources}</a>
+                                        <a href="/product/showPlanHotelUpdate" target="_blank"  class="layui-btn layui-btn-sm holte table-save layui-btn-primary" {empty name="session_hotel"}style="display: none"{/empty}>{$language_tag.index_product_showRouteTemplateManage_updateResources}</a>
+                                        <a href="javascript:delResources(2)"  class="layui-btn layui-btn-sm holte hover-edit layui-btn-primary" {empty name="session_hotel"}style="display: none"{/empty}>{$language_tag.index_product_showRouteTemplateManage_deleteResources}</a>
+                                    </th>
+                                </tr>
+                                <tr>
+                                    <th>{$language_tag.index_finance_showReceivableManage_dining}</th>
+                                    <th class="th-dining">{$session_dining? $language_tag.index_product_showRouteTemplateManage_setUp:$language_tag.index_product_showRouteTemplateManage_notSet}</th>
+                                    <th>
+                                        <a  href="/product/showPlanDiningAdd" target="_blank" class="layui-btn layui-btn-sm diningAdd table-save layui-btn-primary" {notempty name="session_dining"}style="display: none"{/notempty}>{$language_tag.index_product_showRouteTemplateManage_allocationOfResources}</a>
+                                        <a href="/product/showPlanDiningUpdate"  target="_blank"  class="layui-btn layui-btn-sm dining table-save layui-btn-primary" {empty name="session_dining"}style="display: none"{/empty}>{$language_tag.index_product_showRouteTemplateManage_updateResources}</a>
+                                        <a href="javascript:delResources(3)"  class="layui-btn layui-btn-sm dining hover-edit layui-btn-primary" {empty name="session_dining"}style="display: none"{/empty}>{$language_tag.index_product_showRouteTemplateManage_deleteResources}</a>
+                                    </th>
+                                </tr>
+                                <tr>
+                                    <th>{$language_tag.index_finance_showReceivableManage_flight}</th>
+                                    <th class="th-flight">{$session_flight? $language_tag.index_product_showRouteTemplateManage_setUp:$language_tag.index_product_showRouteTemplateManage_notSet}</th>
+                                    <th>
+                                        <a  href="/product/showPlanFlightAdd" target="_blank" class="layui-btn layui-btn-sm flightAdd table-save layui-btn-primary" {notempty name="session_flight"}style="display: none"{/notempty}>{$language_tag.index_product_showRouteTemplateManage_allocationOfResources}</a>
+                                        <a href="/product/showPlanFlightUpdate" target="_blank"  class="layui-btn layui-btn-sm flight table-save layui-btn-primary" {empty name="session_flight"}style="display: none"{/empty}>{$language_tag.index_product_showRouteTemplateManage_updateResources}</a>
+                                        <a href="javascript:delResources(4)"  class="layui-btn layui-btn-sm flight hover-edit layui-btn-primary" {empty name="session_flight"}style="display: none"{/empty}>{$language_tag.index_product_showRouteTemplateManage_deleteResources}</a>
+                                    </th>
+                                </tr>
+                                <tr>
+                                    <th>{$language_tag.index_finance_showReceivableManage_cruise}</th>
+                                    <th class="th-cruise">{$session_cruise? $language_tag.index_product_showRouteTemplateManage_setUp:$language_tag.index_product_showRouteTemplateManage_notSet}</th>
+                                    <th>
+                                        <a  href="/product/showPlanCruiseAdd" target="_blank" class="layui-btn layui-btn-sm cruiseAdd table-save layui-btn-primary" {notempty name="session_cruise"}style="display: none"{/notempty}>{$language_tag.index_product_showRouteTemplateManage_allocationOfResources}</a>
+                                        <a href="/product/showPlanCruiseUpdate" target="_blank"  class="layui-btn layui-btn-sm cruise table-save layui-btn-primary" {empty name="session_cruise"}style="display: none"{/empty}>{$language_tag.index_product_showRouteTemplateManage_updateResources}</a>
+                                        <a href="javascript:delResources(5)"  class="layui-btn layui-btn-sm cruise hover-edit layui-btn-primary" {empty name="session_cruise"}style="display: none"{/empty}>{$language_tag.index_product_showRouteTemplateManage_deleteResources}</a>
+                                    </th>
+                                </tr>
+                                <tr>
+                                    <th>{$language_tag.index_finance_showReceivableManage_visa}</th>
+                                    <th class="th-visa">{$session_visa? $language_tag.index_product_showRouteTemplateManage_setUp:$language_tag.index_product_showRouteTemplateManage_notSet}</th>
+                                    <th>
+                                        <a  href="/product/showPlanVisaAdd" target="_blank" class="layui-btn layui-btn-sm visaAdd table-save layui-btn-primary" {notempty name="session_visa"}style="display: none"{/notempty}>{$language_tag.index_product_showRouteTemplateManage_allocationOfResources}</a>
+                                        <a href="/product/showPlanVisaUpdate" target="_blank"  class="layui-btn layui-btn-sm visa table-save layui-btn-primary" {empty name="session_visa"}style="display: none"{/empty}>{$language_tag.index_product_showRouteTemplateManage_updateResources}</a>
+                                        <a href="javascript:delResources(6)"  class="layui-btn layui-btn-sm visa hover-edit layui-btn-primary" {empty name="session_visa"}style="display: none"{/empty}>{$language_tag.index_product_showRouteTemplateManage_deleteResources}</a>
+                                    </th>
+                                </tr>
+                                <tr>
+                                    <th>{$language_tag.index_finance_showReceivableManage_scenic_spot}</th>
+                                    <th class="th-ScenicSpot">{$session_scenic_spot? $language_tag.index_product_showRouteTemplateManage_setUp:$language_tag.index_product_showRouteTemplateManage_notSet}</th>
+                                    <th>
+                                        <a  href="/product/showPlanScenicSpotAdd" target="_blank" class="layui-btn layui-btn-sm ScenicSpotAdd table-save layui-btn-primary" {notempty name="session_scenic_spot"}style="display: none"{/notempty} >{$language_tag.index_product_showRouteTemplateManage_allocationOfResources}</a>
+                                        <a href="/product/showPlanScenicSpotUpdate" target="_blank"  class="layui-btn layui-btn-sm ScenicSpot table-save layui-btn-primary" {empty name="session_scenic_spot"}style="display: none"{/empty} >{$language_tag.index_product_showRouteTemplateManage_updateResources}</a>
+                                        <a href="javascript:delResources(7)"  class="layui-btn layui-btn-sm ScenicSpot hover-edit layui-btn-primary" {empty name="session_scenic_spot"}style="display: none"{/empty} >{$language_tag.index_product_showRouteTemplateManage_deleteResources}</a>
+                                    </th>
+                                </tr>
+                                <tr>
+                                    <th>{$language_tag.index_finance_showReceivableManage_vehicle}</th>
+                                    <th class="th-vehicle">{$session_vehicle? $language_tag.index_product_showRouteTemplateManage_setUp:$language_tag.index_product_showRouteTemplateManage_notSet}</th>
+                                    <th>
+                                        <a  href="/product/showPlanVehicleAdd" target="_blank" class="layui-btn layui-btn-sm vehicleAdd table-save layui-btn-primary" {notempty name="session_vehicle"}style="display: none"{/notempty} >{$language_tag.index_product_showRouteTemplateManage_allocationOfResources}</a>
+                                        <a href="/product/showPlanVehicleUpdate" target="_blank"  class="layui-btn layui-btn-sm vehicle table-save layui-btn-primary" {empty name="session_vehicle"}style="display: none"{/empty} >{$language_tag.index_product_showRouteTemplateManage_updateResources}</a>
+                                        <a href="javascript:delResources(8)"  class="layui-btn layui-btn-sm vehicle hover-edit layui-btn-primary" {empty name="session_vehicle"}style="display: none"{/empty} >{$language_tag.index_product_showRouteTemplateManage_deleteResources}</a>
+                                    </th>
+                                </tr>
+                                <tr>
+                                    <th>{$language_tag.index_finance_showReceivableManage_tourguide}</th>
+                                    <th class="th-tourGuide">{$session_tourGuide? $language_tag.index_product_showRouteTemplateManage_setUp:$language_tag.index_product_showRouteTemplateManage_notSet}</th>
+                                    <th>
+                                        <a  href="/product/showPlanTourGuideAdd" target="_blank" class="layui-btn layui-btn-sm tourGuideAdd table-save layui-btn-primary" {notempty name="session_tourGuide"}style="display: none"{/notempty}>{$language_tag.index_product_showRouteTemplateManage_allocationOfResources}</a>
+                                        <a href="/product/showPlanTourGuideUpdate" target="_blank"  class="layui-btn layui-btn-sm tourGuide table-save layui-btn-primary" {empty name="session_tourGuide"}style="display: none"{/empty}>{$language_tag.index_product_showRouteTemplateManage_updateResources}</a>
+                                        <a href="javascript:delResources(9)"  class="layui-btn layui-btn-sm tourGuide hover-edit layui-btn-primary" {empty name="session_tourGuide"}style="display: none"{/empty}>{$language_tag.index_product_showRouteTemplateManage_deleteResources}</a>
+                                    </th>
+                                </tr>
+                                <tr>
+                                    <th>{$language_tag.index_finance_showReceivableManage_singlesource}</th>
+                                    <th class="th-singleSource">{$session_singleSource? $language_tag.index_product_showRouteTemplateManage_setUp:$language_tag.index_product_showRouteTemplateManage_notSet}</th>
+                                    <th>
+                                        <a  href="/product/showPlanSingleSourceAdd" target="_blank" class="layui-btn layui-btn-sm singleSourceAdd table-save layui-btn-primary" {notempty name="session_singleSource"}style="display: none"{/notempty}>{$language_tag.index_product_showRouteTemplateManage_allocationOfResources}</a>
+                                        <a href="/product/showPlanSingleSourceUpdate" target="_blank"  class="layui-btn layui-btn-sm singleSource table-save layui-btn-primary" {empty name="session_singleSource"}style="display: none"{/empty}>{$language_tag.index_product_showRouteTemplateManage_updateResources}</a>
+                                        <a href="javascript:delResources(10)"  class="layui-btn layui-btn-sm singleSource hover-edit layui-btn-primary" {empty name="session_singleSource"}style="display: none"{/empty}>{$language_tag.index_product_showRouteTemplateManage_deleteResources}</a>
+                                    </th>
+                                </tr>
+
+                                <tr>
+                                    <th>{$language_tag.index_finance_showReceivableManage_ownexpense}</th>
+                                    <th class="th-Optional">{$session_Optional? $language_tag.index_product_showRouteTemplateManage_setUp:$language_tag.index_product_showRouteTemplateManage_notSet}</th>
+                                    <th>
+                                        <a  href="/product/showPlanOptionalAdd" target="_blank" class="layui-btn layui-btn-sm OptionalAdd table-save layui-btn-primary" {notempty name="session_Optional"}style="display: none"{/notempty}>{$language_tag.index_product_showRouteTemplateManage_allocationOfResources}</a>
+                                        <a href="/product/showPlanOptionalUpdate" target="_blank"  class="layui-btn layui-btn-sm Optional table-save layui-btn-primary" {empty name="session_Optional"}style="display: none"{/empty}>{$language_tag.index_product_showRouteTemplateManage_updateResources}</a>
+                                        <a href="javascript:delResources(11)"  class="layui-btn layui-btn-sm Optional hover-edit layui-btn-primary" {empty name="session_Optional"}style="display: none"{/empty}>{$language_tag.index_product_showRouteTemplateManage_deleteResources}</a>
+                                    </th>
+                                </tr>
+
+                                </tbody>
+                            </table>
+                        </div>
+                        <!-- 产品报价 -->
+                        <div class="layui-tab-item" id="ProductQuotation">
+
+                        </div>
+                    </div>
+                </div>
+
+            </form>
+        </div>
+    </div>
+
+    <!--航班模板-->
+    <div id="t_transfer" style="display: none">
+        <div  style="border: 1px solid #e8e6e6;padding: 10px;margin-top: 10px;">
+        <div  class="layui-row">
+            <div class="layui-col-md5">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">{$language_tag.index_public_flightNumber}:</label>
+                    <div class="layui-input-block">
+                        <input type="text" class="layui-input" name="flight_number[ii]" lay-verify="required" />
+                    </div>
+                </div>
+            </div>
+            <div class="layui-col-md5">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">{$language_tag.index_public_transportMachine}:</label>
+                    <div class="layui-input-block">
+                        <input type="radio" name="flight_type[ii]" value="1" title="{$language_tag.index_public_meetAirport}"  checked>
+                        <input type="radio" name="flight_type[ii]" value="2" title="{$language_tag.index_public_giveAirport}"  >
+                        <input type="radio" name="flight_type[ii]" value="3" title="{$language_tag.index_public_changeAirport}"  >
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="layui-row">
+            <div class="layui-col-md5">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">{$language_tag.index_public_startPlace}:</label>
+                    <div class="layui-input-block">
+                        <input type="text" class="layui-input" name="fight_start_city[ii]" />
+                    </div>
+                </div>
+            </div>
+            <div class="layui-col-md5">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">{$language_tag.index_product_showRouteTemplateManage_departureTime}:</label>
+                    <div class="layui-input-block">
+                        <input type="text" class="layui-input fight_time_ii" name="fight_start_time[ii]" placeholder="HH:mm" />
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="layui-row">
+            <div class="layui-col-md5">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">{$language_tag.index_public_endPlace}:</label>
+                    <div class="layui-input-block">
+                        <input type="text" class="layui-input " name="fight_end_city[ii]"/>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-col-md5">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">{$language_tag.index_public_endTime}:</label>
+                    <div class="layui-input-block">
+                        <input type="text" class="layui-input fight_time_ii" name="fight_end_time[ii]" placeholder="HH:mm" />
+                    </div>
+                </div>
+            </div>
+        </div>
+        <input type="hidden" id="fight-the-days-ii" name="fight_the_days[ii]">
+        <div><button type="button" class="layui-btn layui-btn-primary r_transfer nav-edit"  >{$language_tag.index_public_del}</button></div>
+        </div>
+    </div>
+
+<!--行程信息模板-->
+    <div id="t_journey" style="display: none">
+        <div id="day-journey-ii" style="border: 1px solid #e8e6e6;padding: 10px;margin-top: 10px;">
+            <div class="layui-row">
+                <div class="layui-col-md2">DAY ii</div>
+                <input type="hidden" name="journey_the_days[ii]" data-tabs="2" value="ii" />
+            </div>
+
+            <div class="layui-row">
+                <div class="layui-col-md2 text_align input-required">{$language_tag.index_public_zone}:</div>
+                <div class="layui-col-md6">
+                    <div class="layui-form-item">
+                        <select  name="country_id[ii]" data-tabs="2" lay-search lay-verify="required" required>
+                            <option value="">{$language_tag.index_source_showSupplier_choose_own_zone}</option>
+                            {foreach name='CountryList'  item='vo'}
+                            <option value="{$vo.id}" {$vo.id==$RouteJourneyV.route_journey_zone?'selected':''}>{$vo.cpc_name}</option>
+                            {/foreach}
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-row">
+                <div class="layui-col-md2 text_align input-required">{$language_tag.index_public_travelTitle}:</div>
+                <div class="layui-col-md6">
+                    <div class="layui-form-item">
+                        <input type="text" class="layui-input"  name="journey_title[ii]" data-tabs="2" lay-verify="required" required>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-row">
+                <div class="layui-col-md2 text_align input-required">{$language_tag.index_public_travelContent}:</div>
+                <div class="layui-col-md6">
+                    <div class="layui-form-item">
+                        <textarea class="layui-textarea" name="journey_content[ii]" data-tabs="2" lay-verify="required" required></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-row">
+                <div class="layui-col-md2 text_align">{$language_tag.index_public_traffic}:</div>
+                <div class="layui-col-md6">
+                    <div class="layui-form-item">
+                        <input type="text" class="layui-input"  name="journey_traffic[ii]">
+                    </div>
+                </div>
+            </div>
+            <div class="layui-row">
+                <div class="layui-col-md2 text_align">{$language_tag.index_public_getAccommodation}:</div>
+                <div class="layui-col-md6">
+                    <div class="layui-form-item">
+                        <input type="text" class="layui-input"  name="journey_stay[ii]">
+                    </div>
+                </div>
+            </div>
+            <div class="layui-row">
+                <div class="layui-col-md2 text_align">{$language_tag.index_finance_showReceivableManage_dining}:</div>
+                <div class="layui-col-md6">
+                    <div class="layui-row">
+                        <div class="layui-form-item">
+                            <div class="layui-col-md2"><input type="checkbox" name="eat_mark[ii][]" title="{$language_tag.index_public_breakfast}" lay-skin="primary" value="1" ></div>
+                            <div class="layui-col-md10"><input type="text" class="layui-input"  name="journey_breakfast[ii]"></div>
+                        </div>
+                    </div>
+                    <div class="layui-row">
+                        <div class="layui-form-item">
+                            <div class="layui-col-md2"><input type="checkbox" name="eat_mark[ii][]" title="{$language_tag.index_public_lunch}" lay-skin="primary" value="2"></div>
+                            <div class="layui-col-md10"><input type="text" class="layui-input"  name="journey_lunch[ii]"></div>
+                        </div>
+                    </div>
+                    <div class="layui-row">
+                        <div class="layui-form-item">
+                            <div class="layui-col-md2"><input type="checkbox" name="eat_mark[ii][]" title="{$language_tag.index_public_dinner}" lay-skin="primary" value="3" ></div>
+                            <div class="layui-col-md10"><input type="text" class="layui-input"  name="journey_dinner[ii]"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-row">
+                <div class="layui-col-md2 text_align">{$language_tag.index_finance_showReceivableManage_scenic_spot}:</div>
+                <div class="layui-col-md6">
+                    <div class="layui-form-item">
+                        <input type="text" class="layui-input"  name="journey_scenic_sport[ii]">
+                    </div>
+                </div>
+            </div>
+            <div class="layui-row">
+                <div class="layui-col-md2 text_align">{$language_tag.index_product_showRouteTemplateManage_travelImage}:</div>
+                <div class="layui-col-md8">
+                    <div class="layui-form-item">
+                        <button type="button" class="layui-btn nav-look" id="journey-picture-ii">
+                            <i class="layui-icon">&#xe67c;</i>{$language_tag.index_product_showRouteTemplateManage_uploadImage}
+                        </button>
+                    </div>
+                    <div id="u-img-ii" style="padding: 10px">
+
+                    </div>
+                </div>
+            </div>
+            <div class="layui-row">
+                <div class="layui-col-md2 text_align">{$language_tag.index_public_mark}:</div>
+                <div class="layui-col-md6">
+                    <div class="layui-form-item">
+                        <textarea class="layui-textarea" name="journey_remark[ii]"></textarea>
+                    </div>
+                </div>
+            </div>
+            <h2 class="" style="position: relative; height: 42px; line-height: 42px; padding: 0 15px 0 35px; color: #333; background-color: #f2f2f2; cursor: pointer; font-size: 14px; overflow: hidden;">{$language_tag.index_public_flightInformation}</h2>
+            <div class="layui-colla-content layui-show"  >
+                <div><a class="layui-btn add_transfer nav-add"   data-id="ii">{$language_tag.index_public_add}</a></div>
+                <div class="d_transfer_ii">
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!--回执单模板-->
+    <div style="display: none" id="t-return-receipt">
+        <div class="layui-row" >
+            <div class="layui-col-md2 text_align" style="line-height:32px">{$language_tag.index_product_showRouteTemplateManage_title}:<br><br>{$language_tag.index_product_showRouteTemplateManage_sort}:</div>
+            <div class="layui-col-md2">
+                <div class="layui-input-inline">
+                    <input type="text" class="layui-input"  required lay-verify="required" placeholder="{$language_tag.index_product_showRouteTemplateManage_title}" name="ReturnReceiptTitle[num]"><br>
+                    <input type="text" class="layui-input"  required lay-verify="required" placeholder="{$language_tag.index_product_showRouteTemplateManage_sort}({$language_tag.index_product_showRouteTemplateManage_orderFromSort})" name="ReturnReceiptSorting[num]">
+                </div>
+            </div>
+            <div class="layui-col-md5" style="margin-left:10px;margin-bottom:10px">
+                <textarea required lay-verify="required"  class="layui-textarea" name="ReturnReceiptContent[num]"></textarea>
+            </div>
+            <div  class="layui-col-md2" style="margin-left:10px ">
+                <a  class="layui-btn del-return-receipt nav-edit">{$language_tag.index_public_del}</a>
+            </div>
+            <hr>
+        </div>
+    </div>
+
+
+
+
+    <div class="layui-footer">
+        <!-- 底部固定区域 -->
+        © layui.com - 底部固定区域
+    </div>
+</div>
+
+<div id="route_template_id" style="display: none">
+
+<div class="layui-row layui-form" style="height: 400px;padding: 20px">
+    <div class="layui-col-md2 text_align">{$language_tag.index_product_showRouteTemplateManage_route_template}:</div>
+    <div class="layui-col-md6">
+        <div class="layui-form-item">
+            <select lay-filter="s_route_template_id"   lay-search >
+                <option></option>
+                {foreach $RouteTemplateList as $RouteTemplateListV}
+                <option value="{$RouteTemplateListV.route_template_id}" {$_GET['route_template_id']==$RouteTemplateListV.route_template_id?'selected':''}>{$RouteTemplateListV.route_name}</option>
+                {/foreach}
+            </select>
+        </div>
+    </div>
+</div>
+</div>
+
+{include file='public/foot_js' /}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.2/moment.min.js"></script>
+
+<script>
+    //配置完成酒店资源
+    function delHotel(){
+        $('.holte').hide();
+        $('.holteAdd').show();
+        $('.th-holte').html('{$language_tag.index_product_showRouteTemplateManage_notSet}');
+    }
+    //配置完成用餐资源
+    function delDining(){
+        $('.dining').hide();
+        $('.diningAdd').show();
+        $('.th-dining').html('{$language_tag.index_product_showRouteTemplateManage_notSet}');
+    }
+    //配置航班资源完成
+    function delFlight(){
+        $('.flight').hide();
+        $('.flightAdd').show();
+        $('.th-flight').html('{$language_tag.index_product_showRouteTemplateManage_notSet}');
+    }
+    //配置邮轮资源完成
+    function delCruise(){
+        $('.cruise').hide();
+        $('.cruiseAdd').show();
+        $('.th-cruise').html('{$language_tag.index_product_showRouteTemplateManage_notSet}');
+    }
+    //配置签证资源完成
+    function delVisa(){
+        $('.visa').hide();
+        $('.visaAdd').show();
+        $('.th-visa').html('{$language_tag.index_product_showRouteTemplateManage_notSet}');
+    }
+    //配置景点资源
+    function delScenicSpot(){
+        $('.ScenicSpot').hide();
+        $('.ScenicSpotAdd').show();
+        $('.th-ScenicSpot').html('{$language_tag.index_product_showRouteTemplateManage_notSet}');
+    }
+    //配置车辆
+    function delVehicle(){
+        $('.vehicle').hide();
+        $('.vehicleAdd').show();
+        $('.th-vehicle').html('{$language_tag.index_product_showRouteTemplateManage_notSet}');
+    }
+    //配置导游
+    function delTourGuide(){
+        $('.tourGuide').hide();
+        $('.tourGuideAdd').show();
+        $('.th-tourGuide').html('{$language_tag.index_product_showRouteTemplateManage_notSet}');
+    }
+    //配置单项资源
+    function delSingleSource(){
+        $('.singleSource').hide();
+        $('.singleSourceAdd').show();
+        $('.th-singleSource').html('{$language_tag.index_product_showRouteTemplateManage_notSet}');
+    }
+    //配置自费项目
+    function delOptional(){
+        $('.Optional').hide();
+        $('.OptionalAdd').show();
+        $('.th-Optional').html('{$language_tag.index_product_showRouteTemplateManage_notSet}');
+    }
+    planTable()
+    function planTable() {
+        $(".layui-table").each(function (index,item) {
+            if($(item).find("tbody tr").length===0){
+                $(item).find("tfoot").hide();
+                $(item).parents(".plan-table-nont").css("padding-bottom","50px").append("<div class='table-none' style='width:100%'>{$language_tag.index_public_noData}</div>");
+            }
+        })
+    }
+
+    var SourceDelId = 0;
+    function delResources(typ){
+        var st = {2:'{$language_tag.index_finance_showReceivableManage_hotel}',3:'{$language_tag.index_finance_showReceivableManage_dining}',4:'{$language_tag.index_finance_showReceivableManage_flight}',5:'{$language_tag.index_finance_showReceivableManage_cruise}',6:'{$language_tag.index_finance_showReceivableManage_visa}',7:'{$language_tag.index_finance_showReceivableManage_scenic_spot}',8:'{$language_tag.index_finance_showReceivableManage_vehicle}',9:'{$language_tag.index_finance_showReceivableManage_tourguide}',10:'{$language_tag.index_finance_showReceivableManage_singlesource}',11:"{$language_tag.index_finance_showReceivableManage_ownexpense}"};
+        layer.open({
+            type: 1,
+            skin:'my-skin'
+            ,title: false //不显示标题栏
+            ,closeBtn: false
+            ,area: '300px;'
+            ,shade: 0.8
+            ,id: 'LAY_layuipro' //设定一个id，防止重复弹出
+            ,btn: ['{$language_tag.index_public_ok}', '{$language_tag.index_public_cancel}']
+            ,btnAlign: 'c'
+            ,moveType: 1 //拖拽模式，0或者1
+            ,content: '<div style="padding: 50px; line-height: 22px; background-color: #393D49; color: #fff; font-weight: 300;">{$language_tag.index_product_showRouteTemplateManage_confirmDelete}'+st[typ]+'{$language_tag.index_product_showRouteTemplateManage_resources}？</div>'
+            ,success: function(layero){
+                var btn = layero.find('.layui-layer-btn');
+                btn.find('.layui-layer-btn0').on('click',function(){
+                    SourceDelId = typ;
+                    $.post('/product/SourceDel',{type:typ},function(a){
+                        switch(a){
+                            case '2':delHotel();break;
+                            case '3':delDining();break;
+                            case '4':delFlight();break;
+                            case '5':delCruise();break;
+                            case '6':delVisa();break;
+                            case '7':delScenicSpot();break;
+                            case '8':delVehicle();break;
+                            case '9':delTourGuide();break;
+                            case '10':delSingleSource();break;
+                            case '11':delOptional();break;
+                            default :break;
+                        }
+                        return;
+                    });
+                });
+            }
+        });
+    }
+    !function() {
+        var layer = layui.layer;
+        var form = layui.form;
+        var laydate = layui.laydate;
+        var upload = layui.upload;
+        var element = layui.element;
+        var formSelects = layui.formSelects;
+        var time_sum = 0;
+        var imgUp = <?=count($RouteJourney)?:0;?>;
+        var route_template_id = {$_GET['route_template_id']?$_GET['route_template_id']:0};
+        var s_route_template_id = 0;
+
+        //线路模板选择
+        if(route_template_id<=0){
+            layer.open({
+                type: 1
+                ,title: '选择线路模板' //不显示标题栏
+                ,closeBtn: false
+                ,area: '550px;'
+                ,shade: 0.8
+                ,id: 'LAY_layuipro' //设定一个id，防止重复弹出
+                ,btnAlign: 'c'
+                ,moveType: 1 //拖拽模式，0或者1
+                ,content:$('#route_template_id').html()
+                ,btn:['提交','取消']
+                ,success: function(layero) {
+                    var btn = layero.find('.layui-layer-btn');
+                    btn.find('.layui-layer-btn1').attr({
+                        href: '/product/ShowPlanTour'
+                    });
+                    btn.find('.layui-layer-btn0').on('click',function(){
+                        if(s_route_template_id>0){
+                             layer.load(2);
+                             location.href = '/product/showPlanTourAdd?route_template_id='+s_route_template_id;
+                        }else{
+                            layer.msg('请先选择线路模板');
+                            location.href = '/product/showPlanTourAdd';
+                        }
+
+                    });
+                }
+            });
+            form.render();
+        }
+
+
+
+
+        //图片上传默认绑定
+        for(var i=1;i<=imgUp;i++){
+            var uploadInst = upload.render({
+                elem: '#journey-picture-'+i //绑定元素
+                ,url: '/demo/uploadFile?day='+i, //上传接口
+                multiple:'true',
+                drag:'true'
+                ,acceptMime:'image/*'
+                ,accept:'images'
+                ,before: function(obj){ //obj参数包含的信息，跟 choose回调完全一致，可参见上文。
+                    layer.load(2); //上传loading
+                }
+                ,done: function(res){
+                    //上传完毕回调
+                    console.log(res);
+                    layer.closeAll('loading'); //关闭loading
+                    if(res.code == 200){
+                        var h = '<div style="padding: 5px;width: 110px;float: left"><div><img src="'+res.data+'" height="100" width="100" /><input type="hidden" value="'+res.data+'" name="journey_picture['+res.get.day+'][]" /></div><div><a class="layui-btn layui-btn-danger r-journey-img nav-edit">{$language_tag.index_public_del}</a></div></div>';
+                        $('#u-img-'+res.get.day).append(h);
+                    }
+                }
+                ,error: function(res){
+                    //请求异常回调
+                    console.log(res);
+                    layer.closeAll('loading'); //关闭loading
+                }
+            });
+        }
+
+        //航班日期绑定
+        var transfer_time_sum = <?=count($RouteFlight)?:0;?>;
+        for(var ij=0;ij<transfer_time_sum;ij++){
+            $('.fight_time_'+ij).each(function(){
+                laydate.render({
+                    elem: this
+                    ,trigger: 'click'
+                    ,type:'time'
+                    ,format: 'HH:mm'
+//              ,lang: 'en'
+                });
+            });
+        }
+
+
+
+        //线路模板监听
+        form.on('select(route_template_id)', function(data){
+            layer.load(2);
+            location.href = '/product/showPlanTourAdd?route_template_id='+data.value;
+        });
+        form.on('select(s_route_template_id)', function(data){
+            s_route_template_id = data.value;
+        });
+
+
+
+
+        //产品报价
+        function showProductQuotationHtml(){
+            var settlement_type = $('.settlement_type').val();
+            var use_company_id = formSelects.value('use_company_id');
+
+            layer.load(2);
+            $.post('/product/showProductQuotationHtml',{settlement_type:settlement_type,use_company_id:use_company_id,route_template_id:route_template_id},function(a){
+                layer.closeAll('loading');
+                $('#ProductQuotation').html(a);
+                form.render();
+
+            });
+        }
+
+
+        element.on('tab(docDemoTabBrief)', function(data){
+//          layer.msg('切到到了'+ data.index + '：' + this.innerHTML);
+
+            if(data.index==4){
+                showProductQuotationHtml();
+            }
+        });
+
+
+
+        //日期控件
+        lay('.add_date').each(function(){
+            laydate.render({
+                elem: this
+                ,trigger: 'click'
+//              ,lang: 'en'
+          });
+        });
+        //添加日期
+        $('#add_a_date').on('click',function(e){
+            e.preventDefault();
+            var dtime = $('#add_date').val();
+            if(dtime){
+                dtime = moment(dtime);
+                var dateStr = dtime.format("YYYY-MM-DD");
+                var html = ''
+                html += '<tr class="trmove"><td class="times">' + dateStr + '</td><td><input class="added_date" name="all_time_name['+time_sum+']" type="hidden" value="' + dateStr + '"><input type="button" class="layui-btn removetr-date layui-btn-sm nav-del layui-btn-primary" value="{$language_tag.index_public_del}" name="time_date"></td></tr>';
+                var isAdded = $('.trmove>td>.added_date[value="'+dateStr+'"]').length>0;
+                if (isAdded) {
+                    layer.msg('{$language_tag.index_product_ShowPlanTour_datesCannot_beRepeated}');
+                } else {
+                    $('.table-date').append(html);
+                    $('#add_date').val("");
+                    time_sum++;
+                }
+                tableNone()
+            }else{
+                layer.msg('{$language_tag.index_product_ShowPlanTour_pleaseSelectTheDate}!');
+            }
+        });
+
+        $('.table-date').delegate(".removetr-date","click",function () {
+            $(this).parent().parent().remove();
+            planTable();
+        });
+
+        //添加多个日期
+        $('#add_all_date').on('click',function(e){
+
+            e.preventDefault();
+            var dStime = $('#add_sdate').val();
+            var dEtime = $('#add_edate').val();
+            if(!dStime){
+                layer.msg('{$language_tag.index_product_ShowPlanTour_startData}!');return;
+            }
+            if(!dEtime){
+                layer.msg('{$language_tag.index_product_ShowPlanTour_endData}!');return;
+            }
+            dStime = moment(dStime);
+            dEtime = moment(dEtime);
+            if (dEtime.isBefore(dStime)) {
+                layer.msg('{$language_tag.index_product_ShowPlanTour_reselectDate}!');
+                return false;
+            }
+
+            var day = new Array();
+            var k = 0;
+            $("input[name='day']:checked").each(function () {
+                day[k] = $(this).val();
+                k++;
+            });
+            if(day.length==0){
+                day=["0", "1", "2", "3", "4", "5", "6"];
+            }
+            while (dStime.isSame(dEtime) || dStime.isBefore(dEtime)) {
+                var dayOfWeek=dStime.day();
+                if(inArray(dayOfWeek, day)) {
+                    startStr = dStime.format("YYYY-MM-DD");
+                    ht = '<tr class="trmove" ><td class="day times">' + startStr + '</td><td><input class="added_date" name="all_time_name['+time_sum+']" type="hidden" value=' + startStr + '><input type="button" class="layui-btn removetr-date layui-btn-sm nav-del layui-btn-primary" value="{$language_tag.index_public_del}" ></td></tr>';
+                    var isAdded = $('.trmove>td>.added_date[value="'+startStr+'"]').length>0;
+                    if (isAdded) {
+                    } else {
+                        $('.table-date').append(ht);
+                        time_sum++;
+                    }
+                }
+                dStime=dStime.add(1,"day");
+            }
+            tableNone()
+        });
+
+        //航班信息
+        var transfer_ii = <?=count($RouteFlight)?:0?>;
+        var sdays=<?=count($RouteJourney)?:1?>; //当前第几天
+        var is_days = <?=count($RouteJourney)?1:0?>;
+        //行程列表加载
+        $('#journey-days').on('blur',function(){
+            var journeyDays = $('#journey-days').val();
+            if(journeyDays==''){
+                return;
+            }
+            if(journeyDays>30){
+                journeyDays=30;
+                $('#journey-days').val(30);
+            }
+
+            if(journeyDays<sdays){
+                var r_days =sdays-journeyDays;
+                for(var ri=1;ri<=r_days;ri++){
+                    $('#day-journey-'+sdays).remove();
+                    sdays--;
+                }
+//                alert(sdays);
+                return;
+            }
+
+            if(is_days){
+                if(sdays<=0){
+                    sdays=1;
+                }else{
+                    sdays++;
+                }
+            }
+
+
+            for(var i=sdays;i<=journeyDays;i++){
+               var html = $('#t_journey').html();
+               for(var j=1;j<30;j++){
+                   html = html.replace('ii',i);
+               }
+              $('.d_journey').append(html);
+                form.render(); //重新渲染
+                //图片上传
+                var uploadInst = upload.render({
+                    elem: '#journey-picture-'+i //绑定元素
+                    ,url: '/demo/uploadFile?day='+i, //上传接口
+                    multiple:'true',
+                    drag:'true'
+                    ,acceptMime:'image/*'
+                    ,accept:'images'
+                    ,before: function(obj){ //obj参数包含的信息，跟 choose回调完全一致，可参见上文。
+                        layer.load(2); //上传loading
+                    }
+                    ,done: function(res){
+                        //上传完毕回调
+                        console.log(res);
+                        layer.closeAll('loading'); //关闭loading
+                        if(res.code == 200){
+                            var h = '<div style="padding: 5px;width: 110px;float: left"><div><img src="'+res.data+'" height="100" width="100" /><input type="hidden" value="'+res.data+'" name="journey_picture['+res.get.day+'][]" /></div><div><a class="layui-btn layui-btn-danger r-journey-img nav-edit">{$language_tag.index_public_del}</a></div></div>';
+                            $('#u-img-'+res.get.day).append(h);
+                        }
+                    }
+                    ,error: function(res){
+                        //请求异常回调
+                        console.log(res);
+                        layer.closeAll('loading'); //关闭loading
+                    }
+                });
+            }
+            sdays = i-1;
+            is_days=1;
+//            alert(sdays);
+        });
+        //行程中添加航班
+        $('.d_journey').delegate('.add_transfer','click',function(){
+            var day_id = $(this).data('id');
+//            alert(day_id);
+            var html = $('#t_transfer').html();
+            for(var j=1;j<20;j++){
+                html = html.replace('ii',transfer_ii);
+            }
+            $('.d_transfer_'+day_id).append(html);
+            $('#fight-the-days-'+transfer_ii).val(day_id);
+            //航班日期渲染
+            $('.fight_time_'+transfer_ii).each(function(){
+                laydate.render({
+                    elem: this
+                    ,trigger: 'click'
+                    ,type:'time'
+                    ,format: 'HH:mm'
+//              ,lang: 'en'
+                });
+            });
+            form.render();
+            transfer_ii++;
+        });
+        //删除图片
+        $('.d_journey').delegate('.r-journey-img','click',function(){
+            $(this).parent().parent().remove();
+        });
+        //航班删除
+        $('.d_journey').delegate('.r_transfer','click',function(){
+            $(this).parent().parent().remove();
+        });
+
+
+        var ReturnReceipt_num = <?=count($RouteReturnReceipt)?:0;?>;
+        //回执单选择
+        form.on('select(ReturnReceipt)', function(data){
+            console.log(data.elem); //得到select原始DOM对象
+            console.log(data.value); //得到被选中的值
+            console.log(data.othis); //得到美化后的DOM对象
+            var ReturnReceiptId =  data.value;
+            $.post('/product/showReturnReceiptAjax',{ReturnReceiptId:ReturnReceiptId},function(a){
+                 $('.ReturnReceipt_info').html('');
+                 if(a.code==200){
+                    for(x in a.data){
+                        var h = '<div class="layui-row" >';
+                        h+='<div class="layui-col-md2 text_align" style="line-height:32px">{$language_tag.index_product_showRouteTemplateManage_title}:<br><br>{$language_tag.index_product_showRouteTemplateManage_sort}:</div>';
+                        h+= '<div class="layui-col-md2">';
+                        h+= '<div class="layui-input-inline">';
+                        h+= '<input type="text" class="layui-input"  required lay-verify="required" placeholder="{$language_tag.index_product_showRouteTemplateManage_title}" name="ReturnReceiptTitle['+ReturnReceipt_num+']" value="'+a["data"][x]["title"]+'" ><br>';
+                        h+= '<input type="text" class="layui-input"  required lay-verify="required" placeholder="{$Thnk.lang.index_product_showRouteTemplateManage_sort}({$language_tag.index_product_showRouteTemplateManage_orderFromSort})" name="ReturnReceiptSorting['+ReturnReceipt_num+']" value="'+a["data"][x]["sorting"]+'" >';
+                        h+= '</div>';
+                        h+= '</div>';
+                        h+= '<div class="layui-col-md5" style="margin-left:10px;margin-bottom:10px">';
+                        h+= '<textarea required lay-verify="required"  class="layui-textarea" name="ReturnReceiptContent['+ReturnReceipt_num+']">'+a["data"][x]["content"]+'</textarea>';
+                        h+= '</div>';
+                        h+= '<div  class="layui-col-md2" style="margin-left:10px ">';
+                        h+= '<a  class="layui-btn del-return-receipt nav-edit">{$language_tag.index_public_del}</a>';
+                        h+= '</div>';
+                        h+= '<hr>';
+                        h+= '</div>';
+                        $('.ReturnReceipt_info').append(h);
+                        ReturnReceipt_num++;
+                    }
+                 }
+            },'json');
+
+        });
+        //添加回执单内容
+        $('.add-ReturnReceipt').on('click',function(){
+            var h = $('#t-return-receipt').html();
+            for(var ij=1;ij<=10;ij++){
+                h = h.replace('num',ReturnReceipt_num);
+            }
+            $('.ReturnReceipt_info').append(h);
+            ReturnReceipt_num++;
+        });
+        //删除回执单内容
+        $('.ReturnReceipt_info').delegate('.del-return-receipt','click',function(){
+            $(this).parent().parent().remove();
+        });
+
+    $("#language_add_button").click(function () {
+        var team_product_name=$("input[name='team_product_name']");
+        var route_type_id=$("select[name='route_type_id']");
+        var use_company_id=$("select[name='use_company_id']");
+        var settlement_type=$("input[name='settlement_type']");
+        var plan_custom_number=$("input[name='plan_custom_number']");
+        var team_product_user_id=$("select[name='team_product_user_id']");
+
+        var journeyDays=$("#journey-days").val();
+        if(team_product_name.val()==''){
+            var indexs=team_product_name.attr("data-tabs");
+            qie(indexs);
+        }else if(route_type_id.val()==''){
+            var indexs=route_type_id.attr("data-tabs");
+            qie(indexs);
+        }else if(use_company_id.val()==''){
+            var indexs=use_company_id.attr("data-tabs");
+            qie(indexs);
+        }else if(settlement_type.val()==''){
+            var indexs=settlement_type.attr("data-tabs");
+            qie(indexs);
+        }else if(plan_custom_number.val()==''){
+            var indexs=plan_custom_number.attr("data-tabs");
+            qie(indexs);
+        }else if(team_product_user_id.val()==''){
+            var indexs=team_product_user_id.attr("data-tabs");
+            qie(indexs);
+        }else if(journeyDays==''){
+            var indexs=$("#journey-days").attr("data-tabs");
+            qie(indexs);
+        }else{
+            for(var i=1;i<=journeyDays;i++){
+                var country_id=$("#day-journey-"+i).find('select[name="country_id['+i+']"]');
+                var journey_title=$("#day-journey-"+i).find('input[name="journey_title['+i+']"]');
+                var journey_content=$("#day-journey-"+i).find('textarea[name="journey_content['+i+']"]');
+                if(country_id.val()==''){
+                    var indexs=country_id.attr("data-tabs");
+                    qie(indexs);
+                }else if(journey_title.val()==''){
+                    var indexs=journey_title.attr("data-tabs");
+                    qie(indexs);
+                }else if(journey_content.val()==''){
+                    var indexs=journey_content.attr("data-tabs");
+                    qie(indexs);
+                }
+            }
+        }
+    })
+
+    }();
+
+    function qie(indexs){
+        $(".layui-tab-title li").eq(indexs).addClass("layui-this").siblings().removeClass("layui-this");
+        $(".layui-tab-content .layui-tab-item").eq(indexs).addClass("layui-show").siblings().removeClass("layui-show");
+    }
+
+    function add() {
+        var st = $('.layui-tab-title').find('.layui-this').html();
+       if(st!='{$language_tag.index_product_ShowPlanTour_productQuotation}'){
+           layer.msg('{$language_tag.index_product_ShowPlanTour_placeProductQuotation}！');
+       }else{
+           layer.load(2);
+           $.ajax({
+               type: "POST",
+               url: '/product/PlanTourAddAjax',
+               data: $('#form1').serializeArray(),
+               success: function (data) {
+                   layer.closeAll();
+                   if(data.code!=200){
+                       layer.msg(data.msg)
+                       return false;
+                   }else if(data.code==200){
+                       layer.msg('{$language_tag.index_public_success}',{time:1,end : function(layero, index){
+                           //history.back(-1);
+                           location.href = '/product/ShowPlanTour';
+                       }
+                       });
+                   }
+               },
+               error:function(XMLHttpRequest, textStatus, errorThrown){
+                   layer.closeAll();
+                   //console.log(errorThrown)
+                   layer.msg('{$language_tag.index_public_verificationFailure}');
+               }
+           });
+       }
+         return false;
+    }
+
+
+    function inArray(needle, haystack) {
+        var length = haystack.length;
+        for (var i = 0; i < length; i++) {
+            if (haystack[i] == needle) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    //配置完成酒店资源
+    function addHotel(){
+        $('.holte').show();
+        $('.holteAdd').hide();
+        $('.th-holte').html('{$language_tag.index_product_showRouteTemplateManage_setUp}');
+    }
+    //配置完成用餐资源
+    function addDining(){
+        $('.dining').show();
+        $('.diningAdd').hide();
+        $('.th-dining').html('{$language_tag.index_product_showRouteTemplateManage_setUp}');
+    }
+    //配置航班资源完成
+    function addFlight(){
+        $('.flight').show();
+        $('.flightAdd').hide();
+        $('.th-flight').html('{$language_tag.index_product_showRouteTemplateManage_setUp}');
+    }
+    //配置邮轮资源完成
+    function addCruise(){
+        $('.cruise').show();
+        $('.cruiseAdd').hide();
+        $('.th-cruise').html('{$language_tag.index_product_showRouteTemplateManage_setUp}');
+    }
+    //配置签证资源完成
+    function addVisa(){
+        $('.visa').show();
+        $('.visaAdd').hide();
+        $('.th-visa').html('{$language_tag.index_product_showRouteTemplateManage_setUp}');
+    }
+    //配置景点资源
+    function addScenicSpot(){
+        $('.ScenicSpot').show();
+        $('.ScenicSpotAdd').hide();
+        $('.th-ScenicSpot').html('{$language_tag.index_product_showRouteTemplateManage_setUp}');
+    }
+    //配置车辆
+    function addVehicle(){
+        $('.vehicle').show();
+        $('.vehicleAdd').hide();
+        $('.th-vehicle').html('{$language_tag.index_product_showRouteTemplateManage_setUp}');
+    }
+    //配置导游
+    function addTourGuide(){
+        $('.tourGuide').show();
+        $('.tourGuideAdd').hide();
+        $('.th-tourGuide').html('{$language_tag.index_product_showRouteTemplateManage_setUp}');
+    }
+    //配置单项资源
+    function addSingleSource(){
+        $('.singleSource').show();
+        $('.singleSourceAdd').hide();
+        $('.th-singleSource').html('{$language_tag.index_product_showRouteTemplateManage_setUp}');
+    }
+    // 配置自费项目
+    function addOptional(){
+        $('.Optional').show();
+        $('.OptionalAdd').hide();
+        $('.th-Optional').html('{$language_tag.index_product_showRouteTemplateManage_setUp}');
+     }
+
+
+</script>
+
+</body>
+</html>

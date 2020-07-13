@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {include file='public/head' /}
+    <title>language-manage</title>
+
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+    <div class="layui-header">
+        {include file='public/header' /}
+    </div>
+
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll">
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            {include file='public/left_menu' /}
+        </div>
+    </div>
+
+    <div class="layui-body layui-body-bg">
+
+        <!-- 内容主体区域 -->
+        <div style="padding: 15px 15px 0px;">
+            <div class="body-top">
+                <div class='layui-form-item'>
+                    <span class="layui-breadcrumb" lay-separator="-">
+                        <a>{$language_tag.index_public_homepage}</a>
+                        <a>{$language_tag.index_source_showSingleSourceManage_source_administrate}</a>
+                        <a><cite>{$language_tag.index_source_showSingleSourceManage_single_source_administrate}</cite></a>
+                    </span>
+                </div>
+                <div class='layui-block all-search-bg'>
+                    <form class="layui-form" method='get' action='/source/showSingleSourceManage'>
+                        <div class="layui-row">
+                            <div class="layui-col-md4">
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">{$language_tag.index_public_status}:</label>
+                                    <div class="layui-input-block">
+                                        <select id="" name="status">
+                                            <option value="0">-{$language_tag.index_source_showCruisesManage_search_status}-</option>
+                                            <option value="1" selected>{$language_tag.index_public_show}</option>
+                                            <option value="2" {if condition="$Think.get.status eq 2"}selected='selected' {/if}>{$language_tag.index_public_disabled}</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-col-md4">
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">{$language_tag.index_source_showSingleSourceManage_supplier_name}:</label>
+                                    <div class="layui-input-block">
+                                        <input type="text" id="" name="supplier_name"  value="{$Think.get.supplier_name}" placeholder="{$language_tag.index_source_showSingleSourceManage_supplier_name}" class="layui-input">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-row">
+                            <div class="layui-col-md4 layui-col-md-offset4">
+                                <div class='input-inline all-button-center pages-search-margin'>
+                                    <input type="hidden" name="single_source_id" value="10">
+                                    <button class="layui-btn nav-search" >{$language_tag.index_public_search}</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                    <!--<div class='layui-button-inline'>
+
+                        <a href='/source/showSingleSourceAdd'><button class="layui-btn nav-add">{$language_tag.index_source_showSingleSourceManage_add_source}</button></a>
+                        &lt;!&ndash;<a href='/source/showSingleSourceSource'><button class="layui-btn nav-look">查看全部单项资源</button></a>&ndash;&gt;
+
+                        &lt;!&ndash;<a href='/source/showSupplierAdd?supplier_type_id=10'><button class="layui-btn nav-add">添加供应商</button></a>&ndash;&gt;
+                        <a href='/source/showSingleSourceSource'><button class="layui-btn nav-look">{$language_tag.index_source_showSingleSourceManage_look_all_source}</button></a>
+
+                    </div>-->
+                </div>
+            </div>
+            <div class="content-bg">
+                <span style="{:action('index/auth/check_auth',['role_id'=>'217'])}"><a href='/source/showSingleSourceAdd'><button class="layui-btn nav-add layui-btn-sm">{$language_tag.index_source_showSingleSourceManage_add_source}</button></a></span>
+                <span style="{:action('index/auth/check_auth',['role_id'=>'215'])}"><a href='/source/showSingleSourceSource'><button class="layui-btn nav-look layui-btn-sm">{$language_tag.index_source_showSingleSourceManage_look_all_source}</button></a></span>
+                <hr>
+                <div class="table-nont user-manage company-pageHeight">
+                    <table class="layui-table" id="language-table">
+                        <thead>
+                        <tr>
+                            <th>{$language_tag.index_source_showSingleSourceManage_id}</th>
+                            <th>{$language_tag.index_source_showSingleSourceManage_supplier_name}</th>
+                            <th>{$language_tag.index_public_status}</th>
+                            <th>{$language_tag.index_source_showSingleSourceManage_single_source}</th>
+                            <!--<th class="layui-table-width">{$language_tag.index_source_operation}</th>-->
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {foreach name="data" item="vo" }
+                        <tr>
+                            <th>{$vo.supplier_id}</th>
+                            <th>{$MultilingualAll['supplier-supplier_name-'.$vo.supplier_id.'-'.$Think.session.user.language_id][0]['translate']|default=$vo.supplier_name}</th>
+                            <th>{if condition="$vo.status eq 1"}{$language_tag.index_public_show}{else/}{$language_tag.index_public_disabled}{/if}</th>
+                            <th><span style="{:action('index/auth/check_auth',['role_id'=>'216'])}"><a href='/source/showSingleSourceSource?id={$vo.supplier_id}'><button class="layui-btn layui-btn-sm hover-edit layui-btn-primary">{$language_tag.index_source_showSingleSourceManage_source}</button></a></span></th>
+                            <!--<th><a href='/source/showSupplierEdit?supplier_id={$vo.supplier_id}'><button class="layui-btn layui-btn-sm hover-edit layui-btn-primary">{$language_tag.index_public_update}</button></a> <a href='/source/showSupplierInfo?supplier_id={$vo.supplier_id}'><button class="layui-btn layui-btn-sm hover-details layui-btn-primary">{$language_tag.index_public_info}</button></a></th>-->
+                        </tr>
+                        {/foreach}
+                        </tbody>
+                    </table>
+                </div>
+                <div class="listButtom">
+                    {include file='public/page' /}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="layui-footer">
+        <!-- 底部固定区域 -->
+        © layui.com - 底部固定区域
+    </div>
+</div>
+{include file='public/foot_js' /}
+<script src='__STATIC__/javascript/system/source.js'></script>
+
+</body>
+</html>

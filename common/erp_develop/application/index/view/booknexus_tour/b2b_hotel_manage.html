@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {include file='public/head' /}
+    <title>旅游产品分类列表</title>
+    <link href="__STATIC__/css/product.css" rel="stylesheet">
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+    <div class="layui-header">
+        {include file='public/header' /}
+    </div>
+
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll">
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            {include file='public/left_menu_booknexus' /}
+        </div>
+    </div>
+
+    <div class="layui-body layui-body-bg">
+
+        <!-- 内容主体区域 -->
+        <div style="padding: 15px 15px 0px;">
+            <div class="body-top">
+                <div class='layui-form-item'>
+                    <span class="layui-breadcrumb" lay-separator="-">
+                        <a>{$language_tag.index_public_homepage}</a>
+                        <a>b2bHotel</a>
+                        <a><cite>b2bHotelManage</cite></a>
+                    </span>
+                </div>
+
+                <div class='layui-block all-search-bg'>
+                    <form class="layui-form" method='get' action='/booknexus_tour/showB2BHotelManage'>
+                        <div class="layui-row">
+                            <div class="layui-col-md4">
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">{$language_tag.index_public_status}:</label>
+                                    <div class="layui-input-block">
+                                        <select name="status">
+                                            <option value="1" {$_GET['status']=='1'?'selected':''} }>{$language_tag.index_public_show}</option>
+                                            <option value="2" {$_GET['status']=='2'?'selected':''}>{$language_tag.index_public_disabled}</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-col-md4">
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">Hotel Name:</label>
+                                    <div class="layui-input-block">
+                                        <input type="text" id="" name="hotel_name_en" autocomplete="off"  placeholder="{$language_tag.index_public_placeHolder}" class="layui-input" value="{$_GET['hotel_name_en']}" >
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="layui-col-md4">
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">Hotel Name Chinese:</label>
+                                    <div class="layui-input-block">
+                                        <input class="layui-input" type="text" name="hotel_name_cn" value="{$_GET['hotel_name_cn']}" placeholder="{$language_tag.index_public_placeHolder}" />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="layui-col-md4">
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">Address cn:</label>
+                                    <div class="layui-input-block">
+                                        <input class="layui-input" type="text" name="address_cn" value="{$_GET['address_cn']}" placeholder="{$language_tag.index_public_placeHolder}" />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="layui-col-md4">
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">Address en:</label>
+                                    <div class="layui-input-block">
+                                        <input class="layui-input" type="text" name="address_en" value="{$_GET['address_en']}" placeholder="{$language_tag.index_public_placeHolder}" />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="layui-col-md4">
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">City:</label>
+                                    <div class="layui-input-block">
+                                        <select data-tabs="1" name="country_id"  lay-search>
+                                            <option value="">{$language_tag.index_source_showFlightSourceManage_start_place}</option>
+                                            {foreach $CountryList as $vo}
+                                            <option value="{$vo.id}" {$_GET['country_id'] == $vo.id ? 'selected' : ''}>{$vo.cpc_name}</option>
+                                            {/foreach}
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="layui-row">
+                            <div class="layui-col-md4 layui-col-md-offset4">
+                                <div class='input-inline all-button-center pages-search-margin'>
+                                    <button class="layui-btn nav-search" >{$language_tag.index_public_search}</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+            </div>
+            <div class="content-bg">
+                <a href='/booknexus_tour/showB2BHotelAdd'><button class="layui-btn nav-add layui-btn-sm">{$language_tag.index_source_showSupplierManage_add_supplier}</button></a>
+                <hr>
+                <div class="table-nont user-manage newBg-pageHeight">
+                    <table class="layui-table layui-form" id="language-table">
+                        <thead>
+                        <tr>
+                            <th>{$language_tag.index_source_showSupplierManage_id}</th>
+                            <th>Hotel Name</th>
+                            <th>Hotel Name Chinese</th>
+                            <th>Address cn</th>
+                            <th>Address en</th>
+                            <th>City</th>
+                            <th>{$language_tag.index_public_status}</th>
+                            <th>{$language_tag.index_source_operation}</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {foreach $data as $v}
+                        <tr>
+                            <th class="b2b_hotel_id">{$v.b2b_hotel_id}</th>
+                            <td>{$v.hotel_name_en}</td>
+                            <td>{$v.hotel_name_cn}</td>
+                            <td>{$v.address_cn}</td>
+                            <td>{$v.address_en}</td>
+                            <td>{$v.city_name}</td>
+                            <th>
+                                {if condition="in_array('173',$auth_id) OR $Think.session.user.role_id eq 1"}<input type="checkbox" {if condition="$v.status eq 1"}checked=""{else/}{/if} name="open" lay-skin="switch" lay-filter="switchTest" lay-text="{$language_tag.index_public_show}|{$language_tag.index_public_disabled}">{else/}{if condition="$v.status eq 1"}{$language_tag.index_public_show}{else}{$language_tag.index_public_disabled}{/if}{/if}
+                            </th>
+                            <td>
+                                <span style="{:action('index/auth/check_auth',['role_id'=>'226'])}"><a href='/booknexus_tour/showB2BHotelUpdate?b2b_hotel_id={$v.b2b_hotel_id}'><button class="layui-btn layui-btn-sm hover-edit layui-btn-primary">{$language_tag.index_public_update}</button></a></span>
+                                {if condition="$v.status eq 1"}
+                                <span><a class="layui-btn layui-btn-sm hover-edit layui-btn-primary del-operations" data-tit="{$v.hotel_name_cn}" data-b2b_hotel_id="{$v.b2b_hotel_id}" >{$language_tag.index_public_del}</a></span>
+                                {/if}
+                            </td>
+                        </tr>
+                        {/foreach}
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="listButtom">
+                    {include file='public/page' /}
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <div class="layui-footer">
+        <!-- 底部固定区域 -->
+        © layui.com - 底部固定区域
+    </div>
+</div>
+
+
+
+
+{include file='public/foot_js' /}
+<script src='__STATIC__/javascript/product/all.js'></script>
+<script src='__STATIC__/javascript/product/company_order.js'></script>
+<script>
+    var layer = layui.layer;
+
+    var form = layui.form;
+    form.on('switch(switchTest)', function(data){
+        var table_id = $(data.elem).parents("tr").children(".b2b_hotel_id").html();
+        var table_id_name = "b2b_hotel_id";
+        var table_name = "b2b_hotel";
+        if(this.checked == true){
+            var status = 1;
+        }else{
+            var status = 2;
+        }
+
+        $.ajax({
+            type: "POST",
+            url: '/index/changeStatus',
+            data: {
+                table_id:table_id,
+                table_id_name:table_id_name,
+                table_name:table_name,
+                status:status,
+            },
+            success: function(data){
+                //console.log(data);
+                if(data.code!=200){
+                    layer.msg(data.msg);
+                    return false;
+                }else if(data.code==200) {
+                    layer.msg('操作成功',{time:1,end : function(layero, index){
+                            location.reload();
+                        }
+                    });
+                }
+            },
+            error:function(XMLHttpRequest, textStatus, errorThrown){
+                layer.msg('验证失败')
+            }
+        });
+    });
+
+
+</script>
+<script>
+    !function() {
+        var layer = layui.layer;
+        $('.del-operations').on('click',function(){
+            var tit = $(this).data('tit');
+            var b2b_hotel_id = $(this).data('b2b_hotel_id');
+
+            layer.confirm('确定要删除<font style="color: red">'+tit+'</font>么？', {icon:3, title:'提示'}, function(index){
+
+                layer.load(2);
+                $.post('/booknexus_tour/updateB2BHotelAjax',{b2b_hotel_id:b2b_hotel_id, status:2},function(a){
+                    layer.closeAll();
+                    location.reload();
+                });
+
+                layer.close(index);
+            });
+        });
+
+
+
+    }();
+</script>
+
+
+</body>
+</html>

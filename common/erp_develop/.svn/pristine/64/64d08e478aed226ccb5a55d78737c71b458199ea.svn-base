@@ -1,0 +1,100 @@
+
+
+var laytpl=layui.laytpl;
+
+
+$(function () {
+    $("#distributor-table").find("tfoot").show();
+    $("#create").click(function () {
+        $("#hidden_sale_over").find('input[type="checkbox"]').each(function(index, item) {
+            if(item.checked===true){
+                $("#input_sale_over").val("1");
+            }else{
+                $("#input_sale_over").val("");
+            }
+        })
+        var bill_template_id=$("#bill_template_id").val();
+        var distributor_id=$("#distributor_id").val();
+        var branch_product_number = $('#branch_product_number').val();
+        
+  
+        var company_order_create_from_time=$("#company_order_create_from_time").val();
+        var company_order_create_to_time=$("#company_order_create_to_time").val();
+        var company_order_begin_time=$("#company_order_begin_time").val();
+        var company_order_end_time=$("#company_order_end_time").val();
+        var hidden_sale_over=$("#input_sale_over").val();
+        var branch_product_number=$("#branch_product_number").val();
+        var templateContent;
+        $("#bill_template_id").find('option').each(function(index, item) {
+            if(item.value==bill_template_id){
+                templateContent=$(item).html();
+            }
+        })
+        layer.load();
+        $.ajax({
+            type: "post",
+            url: "/branchcompany/getDistributorTemplateAjax",
+            data: {
+                bill_template_id: bill_template_id,
+                distributor_id:distributor_id,
+                company_order_create_from_time:company_order_create_from_time,
+                company_order_create_to_time:company_order_create_to_time,
+                company_order_begin_time:company_order_begin_time,
+                company_order_end_time:company_order_end_time,
+                hidden_sale_over:hidden_sale_over,
+                branch_product_number:branch_product_number
+            },
+            dataType: "json",
+            success: function (result) {
+            	
+                layer.closeAll('loading');
+                var datas=result.data;
+                $("table .tr-none").removeClass("tr-none");
+                if(datas.bill_template_title_pic&&datas.bill_template_title_pic!=null){
+                    $("#title_pic").html("<img crossorigin='anonymous' src='"+datas.bill_template_title_pic+"' style='width:100%;max-width: 100%;height: 100px;'>");
+                }
+                if(datas.bill_template_foot_pic&&datas.bill_template_foot_pic!=null){
+                    $("#foot_pic").html("<img crossorigin='anonymous' src='"+datas.bill_template_foot_pic+"' style='width:100%;max-width: 100%;height: 100px;'>");
+                }
+                $("#date_one").html(company_order_create_from_time);
+                $("#date_two").html(company_order_create_to_time);
+                $("#date_three").html(company_order_begin_time);
+                $("#date_four").html(company_order_end_time);
+                $("#taitou").html(templateContent);
+
+
+                //账单数据
+                if(datas.bill_data) {
+                    var getTpl=$("#demo").html();
+                    laytpl(getTpl).render(datas.bill_data,function(html){
+                        $("#bill-tbody").html(html);
+                    });
+                }
+                //货币信息
+                var tfootGetTpl=$("#tfoot").html();
+                laytpl(tfootGetTpl).render(datas,function(html){
+                    $(".tfoot").remove();
+                    $("#bill-tfoot").prepend(html);
+                });
+
+                $("table tbody td div").css({"word-wrap":"break-word"});
+                $("table .tfoot_bold").css("font-weight","bold");
+                $("table td,table th").css({"border":"1px solid #e6e6e6"});
+
+
+                $("#table-list tbody tr").each(function(index,item){
+                    if($(item).find("td").length===0){
+                        $(item).remove();
+                    }
+                });
+                tableNone();
+            }
+        })
+    })
+})
+
+function acc() {
+    //$("table tbody td div").css("width","60px");
+    Print('#distributor-table');
+    //$("table tbody td div").css("width","auto");
+}

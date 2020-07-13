@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {include file='public/head' /}
+    <title>language-manage</title>
+    <link href="__STATIC__/css/source.css" rel="stylesheet">
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+    <div class="layui-header">
+        {include file='public/header' /}
+    </div>
+
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll">
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            {include file='public/left_menu' /}
+        </div>
+    </div>
+
+    <div class="layui-body">
+
+        <!-- 内容主体区域 -->
+        <div class="agent-source" style="padding: 15px;">
+            <div class='layui-form-item'>
+			<span class="layui-breadcrumb" lay-separator="-">
+                <a>{$language_tag.index_public_homepage}</a>
+				<a>{$language_tag.index_source_showSupplierManage_supplier_administrate}</a>
+                <a>{$language_tag.index_source_showAgentManage_manage_agent}</a>
+				<a><cite>{$language_tag.index_source_showAgentSource_agent_content_set}</cite></a>
+			</span>
+            </div>
+
+            <div class="layui-tab" lay-filter="test">
+                <ul class="layui-tab-title">
+                    <li><a href='/source/showCompanyHotelSource?status=1'>{$language_tag.index_finance_showReceivableManage_hotel}</a></li>
+                    <li><a href='/source/showCompanyDiningSource?status=1'>{$language_tag.index_finance_showReceivableManage_dining}</a></li>
+                    <li><a href='/source/showCompanyFlightSource?status=1'>{$language_tag.index_finance_showReceivableManage_flight}</a></li>
+                    <li><a href='/source/showCompanyCruiseSource?status=1'>{$language_tag.index_finance_showReceivableManage_cruise}</a></li>
+                    <li><a href='/source/showCompanyVisaSource?status=1'>{$language_tag.index_finance_showReceivableManage_visa}</a></li>
+                    <li><a href='/source/showCompanyScenicSpotSource?status=1'>{$language_tag.index_finance_showReceivableManage_scenic_spot}</a></li>
+                    <li><a href='/source/showCompanyVehicleSource?status=1'>{$language_tag.index_finance_showReceivableManage_vehicle}</a></li>
+                    <li><a href='/source/showCompanyTourGuideSource?status=1'>{$language_tag.index_finance_showReceivableManage_tourguide}</a></li>
+                    <li><a href='/source/showCompanySingleSourceSource?status=1'>{$language_tag.index_finance_showReceivableManage_singlesource}</a></li>
+                    <li class="layui-this"><a href='/source/showCompanyOwnExpenseSource?status=1'>{$language_tag.index_finance_showReceivableManage_ownexpense}</a></li>
+                    <li><a href='/source/showCompanyShoppingSource?status=1'>购物店</a></li>
+                </ul>
+                <div class="layui-tab-content">
+                    <div class="layui-tab-item">
+                    </div>
+                    <div class="layui-tab-item">
+                    </div>
+                    <div class="layui-tab-item">
+                    </div>
+                    <div class="layui-tab-item">
+                    </div>
+                    <div class="layui-tab-item">
+                    </div>
+                    <div class="layui-tab-item">
+                    </div>
+                    <div class="layui-tab-item">
+                    </div>
+                    <div class="layui-tab-item">
+                    </div>
+                    <div class="layui-tab-item">
+                    </div>
+                    <div class="layui-tab-item layui-show">
+                        <span><a href='/source/showOwnExpenseAdd?id={$supplier_id}'><button class="layui-btn nav-add">{$language_tag.index_source_showOwnExpenseManage_add_source}</button></a></span>
+                        <div class="table-nont">
+                            <table class="layui-table">
+                            <thead>
+                            <tr>
+                                <th>{$language_tag.index_source_showOwnExpenseManage_id}</th>
+                                <th>{$language_tag.index_source_showOwnExpenseManage_supplier_name}</th>
+                                <th>{$language_tag.index_source_showOwnExpenseSource_own_expense_name}</th>
+                                <th>{$language_tag.index_product_showRouteTemplateManage_resources_costPrice}</th>
+                                <th>{$language_tag.index_branchcompany_showBranchProductManage_settlementPrice}</th>
+                                <th>{$language_tag.index_public_status}</th>
+                                <th class="layui-table-width">{$language_tag.index_source_operation}</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {foreach name="data" item="vo" }
+                            <tr>
+                                <th>{$vo.own_expense_id}</th>
+                                <th>{$MultilingualAll['supplier-supplier_name-'.$vo.supplier_id.'-'.$Think.session.user.language_id][0]['translate']|default=$vo.supplier_name}</th>
+                                <th>{$MultilingualAll['own_expense-own_expense_name-'.$vo.own_expense_id.'-'.$Think.session.user.language_id][0]['translate']|default=$vo.own_expense_name}</th>
+                                <th>{$vo.normal_price}</th>
+                                <th>{$vo.normal_settlement_price}</th>
+                                <th>{if condition="$vo.status eq 1"}{$language_tag.index_public_show}{else/}{$language_tag.index_public_disabled}{/if}</th>
+                                <th>
+                                    {if condition="$vo.company_id eq $Think.session.user.company_id"}
+                                    <span style="{:action('index/auth/check_auth',['role_id'=>'223'])}"><a href='/source/showOwnExpenseEdit?own_expense_id={$vo.own_expense_id}'><button class="layui-btn layui-btn-sm hover-edit layui-btn-primary">{$language_tag.index_public_update}</button></a></span>
+                                    {/if}
+                                    <span style="{:action('index/auth/check_auth',['role_id'=>'224'])}"><a href='/source/showOwnExpenseInfo?own_expense_id={$vo.own_expense_id}'><button class="layui-btn layui-btn-sm hover-details layui-btn-primary">{$language_tag.index_public_info}</button></a></span>
+                                    <!--<a href='/source/showOwnExpenseEditLanguage?source_number={$vo.source_number}'><button class="layui-btn layui-btn-sm hover-polylingual layui-btn-primary">{$language_tag.index_public_language}</button></a>-->
+                                </th>
+                            </tr>
+                            {/foreach}
+                            </tbody>
+
+                        </table>
+                        </div>
+                        <div class="listButtom">
+                            {include file='public/page' /}
+                        </div>
+                    </div>
+                    <div class="layui-tab-item">
+                    </div>
+                </div>
+            </div>
+
+            <!--<div class="layui-form-item">-->
+                <!--<div class="layui-input-block agent-save">-->
+                    <!--<a href='/source/showAgentManage'><button type="button" class="layui-btn layui-btn-primary">{$language_tag.index_public_back}</button></a>-->
+                <!--</div>-->
+            <!--</div>-->
+        </div>
+    </div>
+
+    <div class="layui-footer">
+        <!-- 底部固定区域 -->
+        © layui.com - 底部固定区域
+    </div>
+</div>
+{include file='public/foot_js' /}
+<script src='__STATIC__/javascript/system/source.js'>
+</script>
+</body>
+</html>
+

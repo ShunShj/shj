@@ -1,0 +1,215 @@
+.control-top .layui-col-md3>div{
+    /*background:#fff;*/
+    height: 83px;
+    text-align: left;
+    padding:10px 0px 0px;
+    font-size:14px;
+    border-radius: 3px;
+    position: relative;
+    -webkit-box-shadow: #ccc 0px 0px 5px;
+    -moz-box-shadow: #ccc 0px 0px 5px;
+    box-shadow: #ccc 0px 0px 5px;
+}
+.control-top .layui-col-md3>div a{
+    color:#fff;
+}
+.control-top .layui-col-md3>div div{
+    height:32px;
+    margin-left:20px;
+    font-size:13px;
+    font-weight: bold;
+}
+.control-top .layui-col-md3>div:hover{
+    cursor: pointer;
+    transform: translateY(-2%);
+    -webkit-transition: all .4s;
+    -webkit-box-shadow: #666 0px 0px 6px;
+    -moz-box-shadow: #666 0px 0px 6px;
+    box-shadow: #666 0px 0px 6px;
+}
+.control-top .layui-col-md3>div h4{
+    overflow: hidden;
+    clear: both;
+    font-size:18px;
+    font-weight:600;
+    height:51px;
+    line-height: 51px;
+    text-align: right;
+    padding-right:10px;
+}
+.bg-one-img h4{
+    background: url("../../static/image/index/renshu.png") no-repeat 8px center;
+    background-size: 22px 20px;
+}
+.bg-img-edu h4{
+    background: url("../../static/image/index/edu.png") no-repeat 8px center;
+    background-size: 28px 26px;
+}
+.bg-img-ying h4{
+    background: url("../../static/image/index/querenshoukuan.png") no-repeat 8px center;
+    background-size: 24px 22px;
+}
+.bg-img-yishou h4{
+    background: url("../../static/image/index/shoukuan.png") no-repeat 8px center;
+    background-size: 28px 26px;
+}
+.bg-img-tuan h4{
+    background: url("../../static/image/index/tuan.png") no-repeat 8px center;
+    background-size: 30px 28px;
+}
+.bg-one{
+    background-color:#65D2D5;
+}
+.bg-one h4{
+    background-color: #93DDE0 ;
+}
+.bg-two{
+    background-color:#9BAFEC;
+}
+.bg-two h4{
+    background-color: #B7C6EF;
+}
+.bg-three{
+    background-color:#FBBB98;
+}
+.bg-three h4{
+    background-color: #F7CEB7;
+}
+.bg-four{
+    background-color:#FB93A1;
+}
+.bg-four h4{
+    background-color: #F7B3BD;
+}
+.control-chart-one .control-oneChart-left>div,.control-chart-one .control-oneChart-right>div{
+    background:#fff;
+    margin-top:5px;
+    padding:15px;
+    border-radius: 3px;
+    -webkit-box-shadow: #ccc 0px 0px 5px;
+    -moz-box-shadow: #ccc 0px 0px 5px;
+    box-shadow: #ccc 0px 0px 5px;
+}
+.control-chart-one .control-oneChart-right>.contorl-boards{
+    padding:0px 0px 15px;
+    height:402px;
+}
+.contorl-boards-title{
+    line-height: 52px;
+    text-align: left;
+    padding-left:25px;
+    background:#FAFAFA;
+}
+.contorl-boards-box{
+    padding:10px 10px 0px;
+}
+.contorl-boards-box>div{
+    border-bottom: 1px dashed #ddd;
+    line-height: 44px;
+    padding: 0px 20px;
+}
+#contorl-boards-box2{
+    height:345px;
+}
+.contorl-boards-list{
+    height:28%;
+    text-align: left;
+    font-size:15px;
+    line-height: 100px!important;
+    /*background: #eee;*/
+    border-radius: 5px;
+    margin: 10px 0px;
+}
+.contorl-boards-list span{
+    display: inline-block;
+    width:50px;
+    height: 50px;
+    margin-right:15px;
+    border-radius: 50%;
+    vertical-align: middle;
+    font-size:16px;
+}
+.contorl-boards-list i{
+    font-style: normal;
+    font-size:16px;
+    font-weight: bold;
+}
+.list-bg-one{
+    background: #65D2D5 url("../../static/image/index/daishenpi.png") no-repeat center /35px;
+}
+.list-bg-two{
+    background: #9BAFEC url("../../static/image/index/shenqing.png") no-repeat center /35px;
+}
+.list-bg-three{
+    background: #FBBB98 url("../../static/image/index/yishenpiliebiao-.png") no-repeat center /35px;
+}
+.contorl-last-scroll>div>a{
+    display: block;
+    overflow: hidden;
+}
+.contorl-last-scroll>div>a:hover{
+    color:#0a6cd6;
+    cursor: pointer;
+}
+.control-last .control-last-list{
+    margin:5px 0px;
+}
+.control-last-list>div{
+    height:415px;
+    overflow: hidden;
+    background:#fff;
+    border-radius: 3px;
+    padding: 0px 0px 15px;
+    -webkit-box-shadow: #ccc 0px 0px 5px;
+    -moz-box-shadow: #ccc 0px 0px 5px;
+    box-shadow: #ccc 0px 0px 5px;
+}
+.contorl-last-scroll{
+    height:365px;
+    overflow: auto;
+}
+.control-last-list .contorl-boards-box{
+    padding: 10px 0px 0px;
+}
+.contorl-last-scroll .clear:hover{
+    background: rgba(165,221,255,.2);
+}
+.contorl-last-scroll .clear>a div:nth-child(2){
+    margin-left:18px;
+}
+.contorl-last-scroll::-webkit-scrollbar {
+    width: 12px;
+    height: 1px;
+}
+.contorl-last-scroll::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    background: rgba(151,168,190,.4);
+}
+.contorl-last-scroll::-webkit-scrollbar-track {
+    border-radius: 10px;
+    background: #f1f2f7;
+}
+.contorl-boards-title .layui-icon{
+    font-size:20px;
+    font-weight: bold;
+    padding-right:10px;
+    cursor: pointer;
+}
+.index-none{
+    text-align: center;
+    padding: 20px 0px;
+    color: #8D8D8D;
+    font-size: 16px;
+    border:none!important;
+}
+
+.index-one-button,.one-button button:hover{
+    background: #65D2D5;
+    color: #fff!important;
+    border-left:none;
+}
+.index-two-button,.two-button button:hover{
+    background: #9BAFEC;
+    color: #fff!important;
+    border-left:none;
+}

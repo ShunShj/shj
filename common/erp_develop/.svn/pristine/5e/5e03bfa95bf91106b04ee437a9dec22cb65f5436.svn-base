@@ -1,0 +1,1363 @@
+//JavaScript代码区域 
+
+   layer = layui.layer
+   form = layui.form;
+   
+   function setCookie(name,value)
+   {
+   var Days = 30;
+   var exp = new Date();
+   exp.setTime(exp.getTime() + Days*24*60*60*1000);
+   document.cookie = name + "="+ escape (value) + ";expires=" + exp.toGMTString();
+   }
+   
+   function getCookie(name)
+   {
+   var arr,reg=new RegExp("(^| )"+name+"=([^;]*)(;|$)");
+   if(arr=document.cookie.match(reg))
+   return unescape(arr[2]);
+   else
+   return null;
+   }
+   function delCookie(name)
+   {
+   var exp = new Date();
+   exp.setTime(exp.getTime() - 1);
+   var cval=getCookie(name);
+   if(cval!=null)
+   document.cookie= name + "="+cval+";expires="+exp.toGMTString();
+   }
+//公共开始
+ //部门下拉框
+   form.on('select(system_company_id)', function(data){
+   	//先 清空
+   	$('#department_id').html("<option value=''>请选择</option>");
+   	var  value = data.value
+   	data = {company_id:value}
+       $.ajax({
+           type: "post",
+           url: "/system/getDepartmentByCompanyId",
+           data: data,
+           dataType: "json",
+           success: function(data){
+           	
+           	if(data.code!=200){
+           		layer.msg(data.msg)
+           		return false;
+           	}else if(data.code==200){
+           		if(data.data.length>0){
+               		$('#department_id').html("");
+               		$('#department_id').append("<option value=''>请选择</option>")
+               		$('#job_id').html("<option value=''>请选择</option>");
+               		$.each(data.data,function(index,key){
+               			
+               			$('#department_id').append("<option value='"+key.department_id+"'>"+key.department_name+"</option>")
+               			
+               		})        			
+           		}
+
+           		form.render('select');
+           	}
+          },
+          	error:function(XMLHttpRequest, textStatus, errorThrown){
+       	   layer.msg('验证失败')
+          }
+       });	
+   	
+   });
+   //职位下拉框
+   form.on('select(system_department_id)', function(data){
+   	
+   	//先 清空
+   	$('#job_id').html("<option value=''>请选择</option>");
+   	var  value = data.value
+   	data = {department_id:value}
+       $.ajax({
+           type: "post",
+           url: "/system/getjobByDepartmentId",
+           data: data,
+           dataType: "json",
+           success: function(data){
+           
+           	if(data.code!=200){
+           		layer.msg(data.msg)
+           		return false;
+           	}else if(data.code==200){
+           		if(data.data.length>0){
+               		$('#job_id').html("");
+               		$('#job_id').append("<option value=''>请选择</option>")
+               		$.each(data.data,function(index,key){
+               			
+               			$('#job_id').append("<option value='"+key.job_id+"'>"+key.job_name+"</option>")
+               			
+               		})        			
+           		}
+
+           		form.render('select');
+           	}
+          },
+          error:function(XMLHttpRequest, textStatus, errorThrown){
+       	   layer.msg('验证失败')
+          }
+       });	
+   	
+   });   
+   
+//公共结束   
+
+//国家JS开始
+ //国家-sp1
+
+   // form.on('select(country_name_d1)', function(data){
+	//    if(data.value==0 && data.value !=''){
+	// 	   $('#country_name_zdy_d1_show').show(500);
+   //         $("#country_name_zdy_d1").attr("lay-verify","required");
+	//    }else{
+	// 	   $('#country_name_zdy_d1_show').hide(500);
+   //         $("#country_name_zdy_d1").removeAttr("lay-verify");
+	//    }
+   // });
+
+//添加国家
+function countryAdd(){
+
+   var country_name_d1 = $("#country_name_d1").val();
+   var country_name = $("#country_name_zdy_d1").val();
+
+   // if(country_name_d1>0){
+	//    country_name = country_name_d1;
+   // }else{
+	//    country_name  = country_name_zdy_d1;
+   // }
+   var country_code = $("#country_code").val();
+
+   $.ajax({
+	   type: "POST",
+	   url: '/system/addCountryAjax',
+	   data: {
+		   spl:1,
+		   level:1,
+		   pid:0,
+		   country_name:country_name,
+		   country_code:country_code
+	   },
+	   success: function(data){
+		   // console.log(data);
+		   if(data.code!=200){
+			   layer.msg(data.msg);
+			   return false;
+		   }else if(data.code==200) {
+			   layer.msg('操作成功',{time:1,end : function(layero, index){
+					   //location.href='/system/showCountryManage';
+                       layer.load(2);
+                       history.back(-1);
+				   }
+			   });
+		   }
+	   },
+	   error:function(XMLHttpRequest, textStatus, errorThrown){
+		   layer.msg('验证失败')
+	   }
+   });
+   return false;
+}
+
+//添加城市
+function countryCityAdd(){
+    var country_city_name = $("#country_city_name").val();
+    var country_id_d2 = $("#country_name_d2").val();
+
+    $.ajax({
+        type: "POST",
+        url: '/system/addCountryAjax',
+        data: {
+            level:2,
+            pid:country_id_d2,
+            country_name:country_city_name
+        },
+        success: function(data){
+            // console.log(data);
+            if(data.code!=200){
+                layer.msg(data.msg);
+                return false;
+            }else if(data.code==200) {
+                layer.msg('操作成功',{time:1,end : function(layero, index){
+                        //location.href='/system/showCountryManage';
+                        layer.load(2);
+                        history.back(-1);
+                    }
+                });
+            }
+        },
+        error:function(XMLHttpRequest, textStatus, errorThrown){
+            layer.msg('验证失败')
+        }
+    });
+    return false;
+}
+
+//添加地区
+function countryZoneAdd() {
+    var country_id_d3 = $("#country_city_name_d3").val();
+    var country_name = $("#country_zone_name").val();
+    var currency_id = $("#currency_id_d3").val();
+    var language_id = $("#language_id_d3").val();
+    var timezone = $("#country_time_zone").val();
+
+    $.ajax({
+        type: "POST",
+        url: '/system/addCountryAjax',
+        data: {
+            level:3,
+            pid:country_id_d3,
+            country_name:country_name,
+            currency_id:currency_id,
+            language_id:language_id,
+            timezone:timezone
+        },
+        success: function(data){
+            console.log(data);
+            if(data.code!=200){
+                layer.msg(data.msg);
+                return false;
+            }else if(data.code==200) {
+                layer.msg('操作成功',{time:1,end : function(layero, index){
+                        //location.href='/system/showCountryManage';
+                        layer.load(2);
+                        history.back(-1);
+                    }
+                });
+            }
+        },
+        error:function(XMLHttpRequest, textStatus, errorThrown){
+            layer.msg('验证失败')
+        }
+    });
+    return false;
+}
+
+//编辑国家
+function country_edit(){
+
+	var country_id_hidden = $("#country_id_hidden").val();
+	var level = $("#edit_ct_level").val();
+	var country_code =$("#edit_ct_code").val();
+    var country_name =$("#edit_ct_country_name").val();
+	var currency_id = $("#edit_ct_currency_name").val();
+	var language_id = $("#edit_ct_language_name").val();
+	var timezone = $("#edit_ct_timezone").val();
+	var status = $("#edit_ct_status").val();
+	var country_id = $('#country_id').val();
+	var province_id = $('#province_id').val();
+	if(level==1){
+        $.ajax({
+            type: "POST",
+            url: '/system/showCountryEdit',
+            data: {
+                country_id:country_id_hidden,
+                level:level,
+                country_code:country_code,
+                country_name:country_name,
+                status:status
+            },
+            success: function(data){
+                // console.log(data);
+                if(data.code!=200){
+                    layer.msg(data.msg);
+                    return false;
+                }else if(data.code==200) {
+                    layer.msg('操作成功',{time:1,end : function(layero, index){
+                            //location.href='/system/showCountryManage';
+                            layer.load(2);
+                            history.back(-1);
+                        }
+                    });
+                }
+            },
+            error:function(XMLHttpRequest, textStatus, errorThrown){
+                layer.msg('验证失败')
+            }
+        });
+        return false;
+	}else if(level==2){
+        $.ajax({
+            type: "POST",
+            url: '/system/showCountryEdit2',
+            data: {
+                country_id:country_id_hidden,
+                level:level,
+                country_name:country_name,
+                status:status,
+                pid:country_id
+            },
+            success: function(data){
+                // console.log(data);
+                if(data.code!=200){
+                    layer.msg(data.msg);
+                    return false;
+                }else if(data.code==200) {
+                    layer.msg('操作成功',{time:1,end : function(layero, index){
+                            //location.href='/system/showCountryManage';
+                            layer.load(2);
+                            history.back(-1);
+                        }
+                    });
+                }
+            },
+            error:function(XMLHttpRequest, textStatus, errorThrown){
+                layer.msg('验证失败')
+            }
+        });
+        return false;
+	}else if(level==3) {
+        $.ajax({
+            type: "POST",
+            url: '/system/showCountryEdit3',
+            data: {
+                country_id: country_id_hidden,
+                level: level,
+                country_name: country_name,
+                currency_id: currency_id,
+                language_id: language_id,
+                timezone: timezone,
+                status: status,
+                province_id:province_id
+            },
+            success: function (data) {
+                // console.log(data);
+                if(data.code!=200){
+                    layer.msg(data.msg);
+                    return false;
+                }else if(data.code==200) {
+                    layer.msg('操作成功',{time:1,end : function(layero, index){
+                            //location.href='/system/showCountryManage';
+                            layer.load(2);
+                            history.back(-1);
+                        }
+                    });
+                }
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                layer.msg('验证失败')
+            }
+        });
+        return false;
+    }
+}
+//显示国家详情
+var level = $("#country_level_hidden").val();
+
+if(level==1){
+	$('#country').hide();
+    $('#city').hide();
+}else if(level==2){
+    $('#city').hide();
+
+}else if(level ==3){
+	$('#country').hide();
+}
+function country_edit_language(){
+	
+	//获取有几个input框
+	var l = $('.edit_country_language').length;
+	var c = $('.edit_country_language');
+	var data2 = [];
+
+	for(var i =0;i<l;i++){
+	
+		var data_params = {"lang_id":c.eq(i).attr('lang_id'),"country_language_id":c.eq(i).attr('country_language_id'),"country_id": $('#country_id').val(),"country_name":c.eq(i).val()}
+
+		data2.push(data_params);
+		
+	}
+
+
+    $.ajax({
+        type: "POST",
+        url: '/system/countryEditLanguageAjax',
+
+        datatype: 'json',
+        contentType: 'application/json;charset=utf-8',
+        //data:JSON.stringify(data2)
+        data:JSON.stringify(data2)       
+        , 
+
+        success: function (data) {
+            // console.log(data);
+            if(data.code!=200){
+                layer.msg(data.msg);
+                return false;
+            }else if(data.code==200) {
+                layer.msg('操作成功',{time:1,end : function(layero, index){
+                        //location.href='/system/showCountryManage';
+                        layer.load(2);
+                        history.back(-1);
+                    }
+                });
+            }
+        },
+        error: function (XMLHttpRequest, textStatus, errorThrown) {
+            layer.msg('验证失败')
+        }
+    });
+	
+	
+	
+	return false;
+}
+
+//国家JS结束   
+   
+   
+
+//公司 JS开始
+function companyAdd(){
+
+	var company_name = $("input[name='company_name']").val();
+	var country_id = $("#country_id").val();
+	var linkman =$("input[name='linkman']").val();
+	var phone = $("input[name='phone']").val();
+	var currency_id = $("#currency_id").val();
+	var language_id = $("#language_id").val();
+	var timezone = $("input[name='timezone']").val();
+    var is_supplier = $("#is_supplier").val();
+    var address  = $('#address').val();
+
+    var booking_identification = $('#booking_identification').val();
+	var data = {
+	    company_name:company_name,
+        country_id:country_id,
+        linkman:linkman,phone:phone,
+        currency_id:currency_id,
+        language_id:language_id,
+        timezone:timezone,
+        is_supplier:is_supplier,
+        booking_identification:booking_identification,
+        address:address
+	};
+    $.ajax({
+        type: "post",
+        url: "/system/addCompanyAjax",
+        data: data,
+        dataType: "json",
+        success: function(data){
+ 		
+        	if(data.code!=200){
+        		layer.msg(data.msg)
+        		return false;
+        	}else if(data.code==200){
+        		layer.msg('操作成功',{time:1,end : function(layero, index){
+        			    //location.href='/system/showCompanyManage'
+                        layer.load(2);
+                        history.back(-1);
+        				}
+        		}); 
+        	}
+       },
+       error:function(XMLHttpRequest, textStatus, errorThrown){
+    	   //console.log(errorThrown)
+    	   layer.msg('验证失败')
+    	   
+       }
+    });
+	return false;
+}
+
+function companyEdit(){
+	
+    var company_id = $('#company_id').val();
+    var company_name = $("input[name='company_name']").val();
+    var country_id = $("#country_id").val();
+    var linkman =$("input[name='linkman']").val();
+    var phone = $("input[name='phone']").val();
+    var currency_id = $("#currency_id").val();
+    var language_id = $("#language_id").val();
+    var timezone = $("input[name='timezone']").val();
+    var status= $("#status").val();
+    var is_supplier = $("#is_supplier").val();
+    var booking_identification = $('#booking_identification').val();
+    var address  = $('#address').val();
+    var data = {
+        company_name:company_name,
+        country_id:country_id,
+        linkman:linkman,
+        phone:phone,
+        currency_id:currency_id,
+        language_id:language_id,
+        timezone:timezone,
+        company_id:company_id,
+        status:status,
+        is_supplier:is_supplier,
+        booking_identification:booking_identification,
+        address:address
+    };
+    $.ajax({
+        type: "post",
+        url: "/system/editCompanyAjax",
+        data: data,
+        dataType: "json",
+        success: function(data){
+
+            if(data.code!=200){
+                layer.msg(data.msg)
+                return false;
+            }else if(data.code==200){
+                layer.msg('操作成功',{time:1,end : function(layero, index){
+                        //location.href='/system/showCompanyManage'
+                        layer.load(2);
+                        history.back(-1);
+                        }
+                });
+            }
+       },
+       error:function(XMLHttpRequest, textStatus, errorThrown){
+           layer.msg('验证失败')
+       }
+    });
+	return false;
+}
+//公司 JS结束
+
+//部门JS开始
+
+function departmentAdd(){
+
+	var department_name = $("input[name='department_name']").val();
+    var choose_company_id=$("#choose_company_id").val();
+	var linkman =$("input[name='linkman']").val()
+	var phone = $("input[name='phone']").val()
+
+	var data = {
+	    department_name:department_name,
+        linkman:linkman,phone:phone,
+        choose_company_id:choose_company_id
+	};
+    $.ajax({
+        type: "post",
+        url: "/system/addDepartmentAjax",
+        data: data,
+        dataType: "json",
+        success: function(data){
+
+        	if(data.code!=200){
+        		layer.msg(data.msg)
+        		return false;
+        	}else if(data.code==200){
+        		layer.msg('操作成功',{time:1,end : function(layero, index){
+        			    //location.href='/system/showDepartmentManage'
+                        layer.load(2);
+                        history.back(-1);
+        				}
+        		}); 
+        	}
+       },
+       error:function(XMLHttpRequest, textStatus, errorThrown){
+    	   //console.log(errorThrown)
+    	   layer.msg('验证失败')
+    	   
+       }
+    });
+	return false;
+}
+
+function departmentEdit(){
+	
+		var department_id = $('#department_id').val();
+		var department_name = $("input[name='department_name']").val();
+		var linkman =$("input[name='linkman']").val();
+		var phone = $("input[name='phone']").val();
+		var status= $("#status").val();
+    	var choose_company_id=$("#choose_company_id").val();
+		var data = {department_id:department_id,department_name:department_name,
+			linkman:linkman,phone:phone,status:status, choose_company_id:choose_company_id
+		
+		
+		}
+		
+	    $.ajax({
+	        type: "post",
+	        url: "/system/editDepartmentAjax",
+	        data: data,
+	        dataType: "json",
+	        success: function(data){
+	 
+	        	if(data.code!=200){
+	        		layer.msg(data.msg)
+	        		return false;
+	        	}else if(data.code==200){
+	        		layer.msg('操作成功',{time:1,end : function(layero, index){
+	        			    //location.href='/system/showDepartmentManage'
+                            layer.load(2);
+                            history.back(-1);
+	        				}
+	        		}); 
+	        	}
+	       },
+	       error:function(XMLHttpRequest, textStatus, errorThrown){
+	    	   layer.msg('验证失败')
+	       }
+	    });
+	
+	return false;
+}
+//部门JS结束
+
+
+//职位开始
+
+
+function jobAdd(){
+	
+
+	var job_name = $("input[name='job_name']").val();;
+	var department_id =$("#department_id").val();
+    var choose_company_id=$("#job_company_id").val();
+
+	var data = {job_name:job_name,
+		department_id:department_id,
+        choose_company_id:choose_company_id
+	}
+    $.ajax({
+        type: "post",
+        url: "/system/addJobAjax",
+        data: data,
+        dataType: "json",
+        success: function(data){
+ 
+        	if(data.code!=200){
+        		layer.msg(data.msg)
+        		return false;
+        	}else if(data.code==200){
+        		layer.msg('操作成功',{time:1,end : function(layero, index){
+        			    //location.href='/system/showJobManage'
+                        layer.load(2);
+                        history.back(-1);
+        				}
+        		}); 
+        	}
+       },
+       error:function(XMLHttpRequest, textStatus, errorThrown){
+    	   //console.log(errorThrown)
+    	   layer.msg('验证失败')
+    	   
+       }
+    });
+	return false;
+}
+
+function jobEdit(){
+	
+		var job_id = $('#job_id').val();
+		var job_name = $("input[name='job_name']").val();		
+		var department_id =$("#department_id").val();
+		var status =$("#status").val();
+    	var choose_company_id=$("#choose_company_id").val();
+		var data = {job_name:job_name,
+			department_id:department_id,
+			job_id:job_id,status:status, choose_company_id:choose_company_id
+
+        }
+	    $.ajax({
+	        type: "post",
+	        url: "/system/editJobAjax",
+	        data: data,
+	        dataType: "json",
+	        success: function(data){
+	 
+	        	if(data.code!=200){
+	        		layer.msg(data.msg)
+	        		return false;
+	        	}else if(data.code==200){
+	        		layer.msg('操作成功',{time:1,end : function(layero, index){
+	        			    //location.href='/system/showJobManage'
+                            layer.load(2);
+                            history.back(-1);
+	        				}
+	        		}); 
+	        	}
+	       },
+	       error:function(XMLHttpRequest, textStatus, errorThrown){
+	    	   layer.msg('验证失败')
+	       }
+	    });
+	
+	return false;
+}
+//职位结束
+
+
+//用户开始
+function userAdd(){
+	
+
+
+
+	var company_id =$("#company_id").val()
+	var department_id =$("#department_id").val()
+    var role_id =$("#role_id").val()
+    var departemnt_id =$("#department_id").val()
+	var job_name =$("#job_name").val()
+	var username = $("input[name='username']").val();	
+	var password = $("input[name='password']").val();
+	var nickname = $("input[name='nickname']").val();	
+	var phone = $("input[name='phone']").val();
+	var email = $("input[name='email']").val();
+	
+	
+	//开始验证邮箱
+	
+	  var reg = /^\w+((-\w+)|(\.\w+))*\@[A-Za-z0-9]+((\.|-)[A-Za-z0-9]+)*\.[A-Za-z0-9]+$/;
+	    if(!reg.test(email))
+	    {
+	    	//layer.msg('邮箱格式不对/email is error')
+	       // return false;
+	    }
+	  //再判断 邮箱后缀是否包含联谊内部的邮箱
+	    
+	 
+	var email_check = email.substring(email.indexOf('@'));     
+
+	//开始循环 验证是否匹配
+	var lianyi_email = $('.lianyi_email');
+	
+	
+	var email_check_true = 0;
+	for(var i =0;i<lianyi_email.length;i++){
+		
+		
+		if(email_check == lianyi_email.eq(i).val()){
+			email_check_true = 1;
+			break;
+			
+		}
+	}
+	if(email_check_true == 0){
+		//layer.msg("邮箱的后缀请用公司相关的，具体可看邮箱下面的例子/The suffix of mailbox please use company related, can see mailbox bottom view")
+		//return false;
+	} 
+	    
+	var language_id = $("#language_id").val();
+	var data = {company_id:company_id,department_id:department_id,role_id:role_id,job_name:job_name,
+				username:username,password:password,nickname:nickname,phone:phone,department_id:department_id,
+				email:email,language_id:language_id
+	
+
+	
+	
+	}
+	
+	
+	
+    $.ajax({
+        type: "post",
+        url: "/system/addUserAjax",
+        
+        data: data,
+        dataType: "json",
+        success: function(data){
+ 
+        	if(data.code!=200){
+        		layer.msg(data.msg)
+        		return false;
+        	}else if(data.code==200){
+        		layer.msg('操作成功',{time:1,end : function(layero, index){
+        			    //location.href='/system/showUserManage'
+                        layer.load(2);
+                        history.back(-1);
+        				}
+        		}); 
+        	}
+       },
+       error:function(XMLHttpRequest, textStatus, errorThrown){
+    	   //console.log(errorThrown)
+    	   layer.msg('验证失败')
+    	   
+       }
+    });
+	return false;
+}
+
+function userEdit(){
+	
+	var company_id =$("#company_id").val()
+	var department_id =$("#department_id").val()
+	var job_name =$("#job_name").val()
+	var username = $("input[name='username']").val();	
+	
+	var nickname = $("input[name='nickname']").val();	
+	var phone = $("input[name='phone']").val();
+	var email = $("input[name='email']").val();
+	//开始验证邮箱
+	
+	  var reg = /^\w+((-\w+)|(\.\w+))*\@[A-Za-z0-9]+((\.|-)[A-Za-z0-9]+)*\.[A-Za-z0-9]+$/;
+	    if(!reg.test(email))
+	    {
+	    	//layer.msg('邮箱格式不对/email is error')
+	        //return false;
+	    }
+	  //再判断 邮箱后缀是否包含联谊内部的邮箱
+	    
+	 
+	var email_check = email.substring(email.indexOf('@'));     
+
+	//开始循环 验证是否匹配
+	var lianyi_email = $('.lianyi_email');
+	
+	
+	var email_check_true = 0;
+	for(var i =0;i<lianyi_email.length;i++){
+		console.log(lianyi_email.eq(i))
+		
+		if(email_check == lianyi_email.eq(i).val()){
+			email_check_true = 1;
+			break;
+			
+		}
+	}
+	if(email_check_true == 0){
+		//layer.msg("邮箱的后缀请用公司相关的，具体可看邮箱下面的例子/The suffix of mailbox please use company related, can see mailbox bottom view")
+		//return false;
+	} 	
+	
+	
+	var language_id = $("#language_id").val();
+	var user_id = $('#user_id').val();
+	var status = $('#status').val();
+	var role_id = $('#role_id').val();
+	var data = {company_id:company_id,department_id:department_id,job_name:job_name,
+				username:username,nickname:nickname,phone:phone,
+				email:email,language_id:language_id,user_id:user_id,
+				status:status,role_id:role_id
+	}
+	    $.ajax({
+	        type: "post",
+	        url: "/system/editUserAjax",
+	        data: data,
+	        dataType: "json",
+	        success: function(data){
+	 		
+	        	if(data.code!=200){
+	        		layer.msg(data.msg)
+	        		return false;
+	        	}else if(data.code==200){
+	        		if(user_id!=$('#language_id').val()){
+		        		delCookie('think_var');
+		        		
+		               	if(language_id ==1){
+		               		setCookie('think_var','zh-cn')
+		               	}else if(language_id ==2){
+		               		setCookie('think_var','zh-hk');
+		               	}else if(language_id ==3){
+		               		setCookie('think_var','fr-fr');
+		               	}else if(language_id ==4){
+		               		setCookie('think_var','ru-ru');
+		               	}else if(language_id ==7){
+		               		
+		               		setCookie('think_var','en-us');
+		               	}else{
+		               		setCookie('think_var','zh-cn');
+		               	}
+
+	        		}
+
+	        		
+	        		
+	        		layer.msg('操作成功',{time:1,end : function(layero, index){
+	        			    //location.href='/system/showUserManage'
+                            layer.load(2);
+                            history.back(-1);
+	        			}
+	        		});
+	        	}
+	       },
+	       error:function(XMLHttpRequest, textStatus, errorThrown){
+	    	   layer.msg('验证失败')
+	       }
+	    });
+	
+	return false;
+}
+
+
+//用户结束
+
+//重置密码开始
+	function ChangePassword(t){
+	
+	
+		$('#send_email_downcount').html(t+' s')
+		var timer = setInterval(function(){
+			console.log(t)
+			t=t-1;
+			$('#send_email_downcount').html(t+' s')
+			if(t==0){
+				clearInterval(timer);
+				$('#send_email_downcount').hide();
+				$('#snedEmailByChangePassword').show();
+			}
+		},1000)
+		
+		
+	}
+	/**
+	 * 发送邮件
+	 */
+	$('#snedEmailByChangePassword').click(function(){
+	    $.ajax({
+	        type: "post",
+	        url: "/system/sendEmailByPassword",
+	        
+	        dataType: "json",
+	        success: function(data){
+	        	
+	        	if(data.code!=200){
+	        		layer.msg(data.msg)
+	        		return false;
+	        	}else if(data.code==200){
+	        		$('#snedEmailByChangePassword').hide();
+	        		$('#send_email_downcount').show(500);
+	        		ChangePassword(5)
+	        	}
+	       },
+	       error:function(XMLHttpRequest, textStatus, errorThrown){
+	    	   layer.msg('验证失败')
+	       }
+	    });		
+		
+		
+		
+		
+	})
+	/**
+	 * 重置密码
+	 */
+	function updatePassword(){
+		var password = $('#password').val();
+		var password2 = $('#password2').val();
+		var code = $('#verify_code').val();
+
+		if(password  != password2){
+			layer.msg('密码不一致');
+			return false;
+		}
+		var prge= /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[^]{6,}$/;
+        if(!prge.test(password)){
+
+    		layer.msg('密码必须6位以上并且包含大小写数字/The password must be more than 6 digits and contain upper and lower case digits');
+			return false;
+
+        }
+		
+    	
+	    $.ajax({
+	        type: "post",
+	        url: "/publicshow/ChangePasswordAjax",
+	        data:{password:password},
+	        dataType: "json",
+	        success: function(data){
+	        	console.log(data)
+	        	if(data == 1){
+	        		layer.msg('操作成功',{time:1,end : function(layero, index){
+        			    location.href='/login/loginOut'
+        				}
+	        		});
+
+	        	}else{
+	        		layer.msg(data);
+	        		return false;
+	        	}
+
+	       },
+	       error:function(XMLHttpRequest, textStatus, errorThrown){
+	    	   layer.msg('验证失败')
+	       }
+	    });			
+		return false;
+	}
+
+//重置密码结束
+	
+/***
+ * 提交权限
+ */
+function authConfigAdd(){
+	var input = $("input[name='auth_config']");
+	var auth_id='';
+	var role_id = $('#role_id').val();
+	$.each(input,function(index,key){
+		if($(this).is(':checked')){
+			auth_id+=','+$(this).val();
+		}
+	});
+	//删除最左边的逗号
+	auth_id = auth_id.substring(1);
+	    var data={
+			auth_id:auth_id,
+			role_id:role_id,
+
+        };
+    $.ajax({
+        type: "post",
+        url: "/system/authRoleEditAjax",
+        data:data,
+        dataType: "json",
+        success: function(data){
+  
+        	if(data.code != 200){
+        		layer.msg(data.msg);
+        		return false;
+        	}else{
+        		layer.msg('操作成功',{time:1,end : function(layero, index){
+    			    //location.href='/system/showRoleManage'
+                        layer.load(2);
+                        history.back(-1);
+    				}
+        		});
+        	}
+
+       },
+       error:function(XMLHttpRequest, textStatus, errorThrown){
+    	   
+    	
+    	   layer.msg('验证失败')
+       }
+    });		
+	return false;
+	
+	
+}
+
+
+//添加账单模版
+function billtemplateAdd(){
+
+    var bill_template_title = $("#bill_template_title").val();
+    var bill_template_title_pic=$("#u-img1").find("img").attr("src");
+    var bill_template_foot_pic=$("#u-img").find("img").attr("src");
+    var choose_company_id=$("#choose_company_id").val();
+    var status = $("#status").val();
+    var data={
+            bill_template_title:bill_template_title,
+            bill_template_title_pic:bill_template_title_pic,
+            bill_template_foot_pic:bill_template_foot_pic,
+        	choose_company_id:choose_company_id,
+        	status:status
+        }
+    $.ajax({
+        type: "POST",
+        url: '/system/addBillTemplateAjax',
+        data: data,
+        dataType: "json",
+        success: function(data){
+            if(data.code!=200){
+                layer.msg(data.msg);
+                return false;
+            }else if(data.code==200) {
+                layer.msg('success',{time:1,end : function(layero, index){
+                        //location.href='/system/showBillTemplateManage';
+                        layer.load(2);
+                        history.back(-1);
+                    }
+                });
+            }
+        },
+        error:function(XMLHttpRequest, textStatus, errorThrown){
+            layer.msg('验证失败')
+        }
+    });
+    return false;
+}
+//修改账单模版
+function billtemplateEdit(){
+    var bill_template_id = $("#bill_template_id_hidden").val();
+    var bill_template_title = $("#edit_bill_template_title").val();
+    var bill_template_title_pic=$("#u-img1").find("img").attr("src");
+    var bill_template_foot_pic=$("#u-img").find("img").attr("src");
+    var status = $('#edit_status').val();
+    var choose_company_id=$("#choose_company_id").val();
+    var data={
+        bill_template_id:bill_template_id,
+        bill_template_title:bill_template_title,
+        bill_template_title_pic:bill_template_title_pic,
+        bill_template_foot_pic:bill_template_foot_pic,
+        choose_company_id:choose_company_id,
+        status:status
+    }
+    $.ajax({
+        type: "POST",
+        url: '/system/editBillTemplateAjax',
+        data: data,
+        dataType: "json",
+        success: function(data){
+            if(data.code!=200){
+                layer.msg(data.msg);
+                return false;
+            }else if(data.code==200) {
+                layer.msg('操作成功',{time:1,end : function(layero, index){
+                         //location.href='/system/showBillTemplateManage';
+                        layer.load(2);
+                        history.back(-1);
+                    }
+                });
+            }
+        },
+        error:function(XMLHttpRequest, textStatus, errorThrown){
+            layer.msg('验证失败')
+        }
+    });
+    return false;
+}
+//删除
+function billDel(obj) {
+    var bill_template_id = $(obj).siblings(".bill_template_id").val();
+    $.ajax({
+        type: "POST",
+        url: '/system/editBillTemplateAjax',
+        data: {
+            "bill_template_id":bill_template_id,
+            "status":0
+        },
+        success: function(data){
+
+            $(obj).parents("tbody").remove();
+        }
+    });
+
+    return false;
+}
+//添加税点
+function taxAdd(){
+
+    var choose_company_id=$('#choose_company_id').val();
+    var tx_cd=$("#tx_cd").val();
+    var gst_rate=$("#gst_rate").val();
+    var pst_rate = $("#pst_rate").val();
+    var hst_rate=$("#hst_rate").val();
+	var otx=$("#otx").val();
+    var note=$("#note").val();  
+
+    var data={
+    		choose_company_id:choose_company_id,
+            tx_cd:tx_cd,
+            gst_rate:gst_rate,
+            pst_rate:pst_rate,
+            hst_rate:hst_rate,
+            note:note,
+			otx:otx,
+        	status:1
+        }
+
+    $.ajax({
+        type: "POST",
+        url: '/system/addTaxAjax',
+        data: data,
+        dataType: "json",
+        success: function(data){
+            if(data.code!=200){
+                layer.msg(data.msg);
+                return false;
+            }else if(data.code==200) {
+                layer.msg('success',{time:1,end : function(layero, index){
+                        //location.href='/system/showTaxManage';
+                        layer.load(2);
+                        history.back(-1);
+                    }
+                });
+            }
+        },
+        error:function(XMLHttpRequest, textStatus, errorThrown){
+            layer.msg('验证失败')
+        }
+    });
+    return false;
+}
+//修改税点
+function taxEdit(){
+    var choose_company_id=$("#choose_company_id").val();
+    var tx_cd=$("#tx_cd").val();
+    var gst_rate=$("#gst_rate").val();
+    var pst_rate = $("#pst_rate").val();
+    var hst_rate=$("#hst_rate").val();
+	var otx=$("#otx").val();
+    var note=$("#note").val();  
+    var status =$("#status").val();  
+    var tax_id = $('#tax_id').val();
+    var data={
+			choose_company_id:choose_company_id,
+            tx_cd:tx_cd,
+            gst_rate:gst_rate,
+            pst_rate:pst_rate,
+            hst_rate:hst_rate,
+			otx:otx,
+            note:note,
+        	status:status,
+        	tax_id:tax_id
+        }
+    $.ajax({
+        type: "POST",
+        url: '/system/editTaxAjax',
+        data: data,
+        dataType: "json",
+        success: function(data){
+            if(data.code!=200){
+                layer.msg(data.msg);
+                return false;
+            }else if(data.code==200) {
+                layer.msg('操作成功',{time:1,end : function(layero, index){
+                        //location.href='/system/showTaxManage';
+                        layer.load(2);
+                        history.back(-1);
+                    }
+                });
+            }
+        },
+        error:function(XMLHttpRequest, textStatus, errorThrown){
+            layer.msg('验证失败')
+        }
+    });
+    return false;
+}
+
+//修改汇率
+//var new_arr=[];
+//$('input').bind('input propertychange', function() {
+//    var currency_id=$(this).parents('tr').children("td").attr('data-value');
+//    var index=$(this).parent("td").index();
+//    var opposite_currency_id=$("table th").eq(index).attr('data-value');
+//    var currency_proportion=$(this).val();
+//    var currency_proportion_id = $(this).attr("currency_attr");
+//     proportion_time=$('#proportion_time').val();
+//
+//    new_arr.push({opposite_currency_id:opposite_currency_id,currency_id:currency_id,currency_proportion:currency_proportion,
+//		currency_proportion_id:currency_proportion_id});
+//
+//});
+//修改汇率
+function currencyproportionEdit() {
+	var currency_proportion_result = $('#currency_proportion_result').children('tr');
+	var currency_proportion_currency= $('#currency_proportion_currency').children('tr');
+	var proportion_time = $('#proportion_time').val();
+	currency_proportion_array = [];
+	for(var i=0;i<currency_proportion_result.length;i++){
+		//首先获得第一行的货币种类
+		var currency_id = currency_proportion_result.eq(i).find('td').eq(0).attr('data-value');
+		//获取横过来的比率
+	
+		var currency_proportion_result_td = currency_proportion_result.eq(i).children('td')
+	
+		for(var j=0;j<currency_proportion_result_td.length;j++){
+			if(j>0){
+				var currency_proportion = currency_proportion_result_td.eq(j).find('input').eq(0).val();
+				var currency_proportion_currency_id = currency_proportion_currency.find('th').eq(j).attr('data-value');
+		
+				currency_proportion_array.push({currency_id:currency_id,currency_proportion:currency_proportion,currency_proportion_currency_id:currency_proportion_currency_id});
+			}
+
+		}
+		
+	}
+	
+
+	var i=0;
+    $("table td input").each(function(index,item){
+		if($(item).val()==''){
+			i++;
+		}
+    });
+	if(i>0){
+        layer.msg("汇率不能为空，请补充！！");
+	}else {
+        $.ajax({
+            type: "POST",
+            url: '/system/editCurrencyProportionAjax',
+            dataType: "json",
+            data: {
+                currency_proportion_arr: JSON.stringify(currency_proportion_array),
+                proportion_time: proportion_time
+
+            },
+            success: function (data) {
+                
+                if (data.code != 200) {
+                    layer.msg(data.msg);
+                    return false;
+                } else if (data.code == 200) {
+                    layer.msg('操作成功', {
+                        time: 1, end: function (layero, index) {
+                            location.reload();
+                        }
+                    });
+                }
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                layer.msg('修改失败')
+            }
+        });
+    }
+
+}
+$('#currency_proportion_edit').click(function(){
+	var t = $('#proportion_time').val();
+	
+	location.href="/system/showCurrencyProportionEdit?t="+t;
+	
+	
+});
+
+
+//修改标签
+function tagEdit(){
+
+    $.ajax({
+        type: "POST",
+        url: '/system/editTagAjax',
+        data: $('#form1').serializeArray(),
+        success: function(data){
+            if(data.code!=200){
+                layer.msg(data.msg);
+                return false;
+            }else if(data.code==200) {
+                layer.msg('操作成功',{time:1,end : function(layero, index){
+                        //location.href='/system/showTagManage?status=1';
+                        layer.load(2);
+                        history.back(-1);
+                    }
+                });
+            }
+        },
+        error:function(XMLHttpRequest, textStatus, errorThrown){
+            layer.msg('验证失败')
+        }
+    });
+    return false;
+}
+
+//添加标签
+function tagAdd(){
+
+    $.ajax({
+        type: "POST",
+        url: '/system/addTagAjax',
+        data: $('#form1').serializeArray(),
+        success: function(data){
+            if(data.code!=200){
+                layer.msg(data.msg);
+                return false;
+            }else if(data.code==200) {
+                layer.msg('操作成功',{time:1,end : function(layero, index){
+                        //location.href='/system/showTagManage?status=1';
+                        layer.load(2);
+                        history.back(-1);
+                    }
+                });
+            }
+        },
+        error:function(XMLHttpRequest, textStatus, errorThrown){
+            layer.msg('验证失败')
+        }
+    });
+    return false;
+}
+
+
+

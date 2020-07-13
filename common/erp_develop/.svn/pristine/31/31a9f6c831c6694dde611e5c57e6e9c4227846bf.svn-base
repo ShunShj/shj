@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<head>
+    {include file='public/head' /}
+    <title>layout 后台大布局 - Layui</title>
+
+    <style>
+        .nav {
+            display: inline-block;
+            position: relative;
+            height: 54px;
+            font-size: 15px;
+        }
+
+        .nav > * {
+            display: inline-block;
+        }
+
+        .nav > .t {
+            position: absolute;
+            top: 0;
+            background: rgb(208, 210, 211);
+            /* Skew */
+            -webkit-transform: skew(30deg);
+            -moz-transform: skew(30deg);
+            -o-transform: skew(30deg);
+            transform: skew(30deg);
+        }
+
+        .nav > .b {
+            position: absolute;
+            bottom: 0;
+            background: rgb(208, 210, 211);
+            /* Skew */
+            -webkit-transform: skew(-30deg);
+            -moz-transform: skew(-30deg);
+            -o-transform: skew(-30deg);
+            transform: skew(-30deg);
+        }
+
+        .tab .nav>.t,.tab .nav>.b{
+            -webkit-transform: none;
+            -moz-transform: none;
+            -o-transform: none;
+            transform: none;
+        }
+
+
+        .nav > a {
+            /*position:absolute;
+            top:0;*/
+            margin-left: 13px;
+            vertical-align: middle;
+            text-align: center;
+            text-decoration: none;
+            cursor: default;
+            font-weight: bold;
+            color: #77787b !important;
+        }
+
+        .nav.hover>a{
+            color: #ffffff !important;
+        }
+
+        .nav.hover > span {
+            background-color: #3376ba;
+            cursor: pointer;
+        }
+
+        .nav.done_step.hover>span{
+            background-color: #3376ba;
+        }
+
+        .nav.hover > a {
+            cursor: pointer;
+        }
+
+        .ab_position {
+            position: absolute;
+        }
+
+        .nav > .first_mark {
+            position: absolute;
+            top: 0;
+            z-index: 1;
+            width: 16px;
+            height: 100%;
+            background-color: #ffffff;
+            left: -8px;
+        }
+
+        .nav.done_step>a,.nav.active_step>a{
+            color: #ffffff !important;
+        }
+
+        .nav.done_step>.t,.nav.done_step>.b{
+            background-color: #767780;
+        }
+
+        .nav.active_step>.t,.nav.active_step>.b{
+            background-color: #3376ba;
+        }
+
+        .tab_border{
+            height: 2px;
+            background-color: #767780;
+            margin-left: 8px;
+            margin-top: -4px;
+        }
+
+    </style>
+
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+    <div class="layui-header">
+        {include file='public/header' /}
+    </div>
+
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll">
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            {include file='public/left_menu_booknexus' /}
+        </div>
+    </div>
+
+    <div class="layui-body">
+
+        <!-- 内容主体区域 -->
+        <div style="padding: 15px 15px 0px;">
+            <div class='layui-row'>
+		   		<span class="layui-breadcrumb" lay-separator="-">
+                    <a>首页</a>
+                    <a>B2B</a>
+					<a>创建产品</a>
+				</span>
+            </div>
+            <br>
+            {include file='booknexus_tour/menu' /}
+            <form class="layui-form" id="form1" onSubmit="return add()">
+                <!--<div class="layui-row layui-col-space12" style="padding: 10px">-->
+                    <!--<div class="layui-col-md12">-->
+                        <!--<div class="layui-form-item">-->
+                            <!--<label class="layui-form-label ">START DATE (DD-MM-YYYY):</label>-->
+                            <!--<div class="layui-input-block layui-form">-->
+                                <!--<input class="layui-input" value="" id="sDate">-->
+                            <!--</div>-->
+                        <!--</div>-->
+                    <!--</div>-->
+                    <!--<div class="layui-col-md12">-->
+                        <!--<div class="layui-form-item">-->
+                            <!--<label class="layui-form-label ">END DATE (DD-MM-YYYY):</label>-->
+                            <!--<div class="layui-input-block layui-form">-->
+                                <!--<input class="layui-input" value="" id="eDate">-->
+                            <!--</div>-->
+                        <!--</div>-->
+                    <!--</div>-->
+                    <!--<div class="layui-col-md12">-->
+                        <!--<div class="layui-form-item">-->
+                            <!--<label class="layui-form-label ">WEEK:</label>-->
+                            <!--<div class="layui-input-block layui-form">-->
+                                <!--<input title="SELECT ALL"  type="checkbox" class="select_all_week" name="select_all_week" value="1" lay-filter="all_checkbox_id">-->
+                                <!--<input title="MON"  type="checkbox" class="dates_week" name="dates_week[]" value="Mon">-->
+                                <!--<input title="TUE"  type="checkbox" class="dates_week" name="dates_week[]" value="Tue">-->
+                                <!--<input title="WED"  type="checkbox" class="dates_week" name="dates_week[]" value="Wed">-->
+                                <!--<input title="THU"  type="checkbox" class="dates_week" name="dates_week[]" value="Thu">-->
+                                <!--<input title="FRI"  type="checkbox" class="dates_week" name="dates_week[]" value="Fri">-->
+                                <!--<input title="SAT"  type="checkbox" class="dates_week" name="dates_week[]" value="Sat">-->
+                                <!--<input title="SUN"  type="checkbox" class="dates_week" name="dates_week[]" value="Sun">-->
+                            <!--</div>-->
+                        <!--</div>-->
+                    <!--</div>-->
+                    <!--<div class="layui-col-md12">-->
+                        <!--<div class="layui-form-item">-->
+                            <!--<label class="layui-form-label ">SEASON TYPE:</label>-->
+                            <!--<div class="layui-input-block layui-form">-->
+                               <!--<select class="layui-select">-->
+                                   <!--<option value="0">-->
+                                       <!--All&nbsp;Season-->
+                                   <!--</option>-->
+                                   <!--<option value="1">-->
+                                       <!--Low&nbsp;Season-->
+                                   <!--</option>-->
+                                   <!--<option value="2">-->
+                                       <!--Shoulder&nbsp;Season-->
+                                   <!--</option>-->
+                                   <!--<option value="3">-->
+                                       <!--High&nbsp;Season-->
+                                   <!--</option>-->
+                               <!--</select>-->
+                            <!--</div>-->
+                        <!--</div>-->
+                    <!--</div>-->
+                    <!--<div class="layui-col-md12">-->
+                        <!--<div class="layui-form-item">-->
+                            <!--<label class="layui-form-label ">OFFICE CONTACT:</label>-->
+                            <!--<div class="layui-input-block layui-form">-->
+                             <!--<select class="layui-select">-->
+                                 <!--<option value="">&#45;&#45; Select Office Contact &#45;&#45;</option>-->
+                             <!--</select>-->
+                            <!--</div>-->
+                        <!--</div>-->
+                    <!--</div>-->
+                <!--</div>-->
+                <br>
+                <br>
+                <div class="layui-col-md12" style="font-weight: bold;font-size:14px">Added Dates</div>
+                <div class="layui-col-md12">
+                <table class="layui-table layui-form">
+                    <tr>
+                        <th width="15%">Supplier Tour date/arrival Date</th>
+                        <th width="15%">Tour date/departure Date</th>
+                        <th width="20%">Session Type</th>
+                        <th width="20%">Office Contact</th>
+                        <th width="20%">Note</th>
+                        <th width="5%">Action</th>
+                    </tr>
+                    {empty name='$Think.session.addTourDatesForm' }
+                        {foreach $dateOj as $k=>$v}
+                            <tr>
+                                <td>{$v}
+                                <input type="hidden" value="{$v}" name="date[{$k}][arrival_date]" />
+                                </td>
+                                <td>
+                                    <input class="layui-input" value="{$v}" name="date[{$k}][departure_date]" />
+                                </td>
+                                <td><select class="layui-select" name="date[{$k}][session_type]">
+                                    <option value="0">All&nbsp;Season</option>
+                                    <option value="1">Low&nbsp;Season</option>
+                                    <option value="2">Shoulder&nbsp;Season</option>
+                                    <option value="3">High&nbsp;Season</option>
+                                </select></td>
+                                <td>
+                                    <select class="layui-select" name="date[{$k}][office_contact]">
+                                        <option value="">-- Select Office Contact --</option>
+                                    </select>
+                                </td>
+                                <td><input class="layui-input" name="date[{$k}][note]" /></td>
+                                <td><a class="layui-btn layui-btn-sm Remove layui-btn-primary">Remove</a></td>
+                            </tr>
+                        {/foreach}
+                    {else /}
+                    {foreach $Think.session.addTourDatesForm.date as $k=>$v}
+                        <tr>
+                            <td>{$v.arrival_date}
+                                <input type="hidden" value="{$v.arrival_date}" name="[{$k}][arrival_date]" />
+                            </td>
+                            <td>
+                                <input class="layui-input" value="{$v.departure_date}" name="date[{$k}][departure_date]" />
+                            </td>
+                            <td><select class="layui-select" name="date[{$k}][session_type]">
+                                <option value="0">All&nbsp;Season</option>
+                                <option value="1">Low&nbsp;Season</option>
+                                <option value="2">Shoulder&nbsp;Season</option>
+                                <option value="3">High&nbsp;Season</option>
+                            </select></td>
+                            <td>
+                                <select class="layui-select" name="date[{$k}][office_contact]">
+                                    <option value="">-- Select Office Contact --</option>
+                                </select>
+                            </td>
+                            <td><input class="layui-input" name="date[{$k}][note]" value="{$v.note}" /></td>
+                            <td><a class="layui-btn layui-btn-sm Remove layui-btn-primary">Remove</a></td>
+                        </tr>
+                    {/foreach}
+                    {/empty}
+
+                </table>
+                </div>
+
+                <div class="layui-col-md8" style="font-weight: bold;font-size:14px;text-align: center">
+                    <button type="submit" class="layui-btn layui-btn-sm layui-btn-primary" >Save & Next</button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+
+    <div class="layui-footer">
+        <!-- 底部固定区域 -->
+        © layui.com - 底部固定区域
+    </div>
+</div>
+{include file='public/foot_js' /}
+<script>
+    //JavaScript代码区域
+    var layer = layui.layer;
+    var form = layui.form;
+    var laydate = layui.laydate;
+
+    laydate.render({
+        elem: '#sDate'
+    });
+    laydate.render({
+        elem: '#eDate'
+    });
+
+    //全选
+    form.on('checkbox(all_checkbox_id)', function(data){
+
+        var child = $('.dates_week');
+        child.each(function(index, item){
+            item.checked = data.elem.checked;
+        });
+        form.render('checkbox');
+    });
+
+    $('.Remove').click(function(){
+        $(this).parents('tr').remove();
+    });
+
+    function add(){
+        $.ajax({
+            type: "POST",
+            url: '/booknexus_tour/addTourDatesFormAjax',
+            data:  $('#form1').serializeArray(),
+            success: function(data){
+                //console.log(data);
+                if(data.code!=200){
+                    layer.msg(data.msg);
+                    return false;
+                }else if(data.code==200) {
+                    layer.msg('操作成功',{time:2000,end : function(layero, index){
+                        location.href="/booknexus_tour/addTourItineraryForm";
+                    }
+                    });
+                }
+            },
+            error:function(XMLHttpRequest, textStatus, errorThrown){
+                layer.msg('验证失败')
+            }
+        });
+        return false;
+    }
+
+
+</script>
+
+</body>
+</html>

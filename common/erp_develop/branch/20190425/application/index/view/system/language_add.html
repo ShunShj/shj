@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+	{include file='public/head' /}
+  	<title>language-manage-add</title>
+ 
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+	
+	<div class="layui-header">
+	{include file='public/header' /}
+	</div>
+  
+	 <div class="layui-side layui-bg-black">
+	   <div class="layui-side-scroll">
+	     <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+		{include file='public/left_menu' /}
+	   </div>
+	 </div>
+  
+	<div class="layui-body">
+	 
+		<!-- 内容主体区域 -->
+		<div style="padding: 15px;">
+			<div class='layui-form-item'>
+		   		<span class="layui-breadcrumb" lay-separator="-">
+					<a>{$Think.lang.index_public_homepage}</a>
+					<a>{$Think.lang.index_public_system}</a>
+					<a>{$Think.lang.index_system_showLanguageManage_language_manage}</a>
+					<a><cite>{$Think.lang.index_system_showLanguageManage_add_language}</cite></a>
+				</span>
+			</div>
+			<br/>
+			<br/>
+			<div class="layui-row">
+				<form class="layui-form layui-col-md4" onSubmit="return add()">
+					<div class="layui-form-item">
+						<label class="layui-form-label input-required">{$Think.lang.index_system_showLanguageManage_name}：</label>
+						<div class="layui-input-block">
+							<input id="add_lg_name" name="name" required="" lay-verify="required" placeholder="{$Think.lang.index_system_showLanguageManage_input_name}" autocomplete="off" class="layui-input" type="text">
+						</div>
+					</div>
+					<div class="layui-form-item">
+						<label class="layui-form-label">{$Think.lang.index_public_status}：</label>
+						<div class="layui-input-block">
+							<select name="status" id="add_lg_status" lay-filter="required" >
+								<option value="2">{$Think.lang.index_public_disabled}</option>
+								<option value="1" selected="">{$Think.lang.index_public_show}</option>
+							</select>
+						</div>
+					</div>
+					<br/>
+					<div class="layui-form-item">
+						<div class="layui-input-block">
+							<button class="layui-btn nav-submit" lay-submit="" lay-filter="formDemo" id="language_add_button">{$Think.lang.index_public_submit}</button>
+							<a href='/system/showLanguageManage'><button type="button" class="layui-btn layui-btn-primary">{$Think.lang.index_public_back}</button></a>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+  
+  <div class="layui-footer">
+    <!-- 底部固定区域 -->
+    © layui.com - 底部固定区域
+  </div>
+</div>
+{include file='public/foot_js' /}
+<script src='__STATIC__/javascript/system/language.js'></script>
+</body>
+</html>

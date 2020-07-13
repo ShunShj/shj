@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+<head>
+	{include file='public/head' /}
+  	<title>账单模版</title>
+ 
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+  <div class="layui-header">
+	{include file='public/header' /}
+  </div>
+  
+  <div class="layui-side layui-bg-black">
+    <div class="layui-side-scroll">
+      <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+		{include file='public/left_menu' /}
+    </div>
+  </div>
+  
+  <div class="layui-body">
+  
+    <!-- 内容主体区域 -->
+    <div style="padding: 15px 15px 0px;">
+		<div class="body-top">
+			<div class='layui-form-item'>
+			<span class="layui-breadcrumb" lay-separator="-">
+				<a>首页</a>
+				<a>系统设置</a>
+				<a><cite>账单模版</cite></a>
+			</span>
+			</div>
+			<br/>
+			<div class='layui-block input-inline' >
+				<form method='get' action='/system/showBillTemplateManage'>
+					<div class='layui-input-inline'>
+						<div class="layui-form">
+							<select id="" name="status">
+								<option value="">-{$Think.lang.index_source_showCruisesManage_search_status}-</option>
+								<option value="1" selected>启用</option>
+								<option value="0" {if condition="$Think.get.status eq '0'"}selected='selected' {/if}>禁用</option>
+							</select>
+						</div>
+					</div>
+					<div class='layui-input-inline'>
+						<input type="text" id="" name="bill_template_title" value="{$Think.get.bill_template_title}"  placeholder="账单标题" class="layui-input">
+					</div>
+					<!--<div class='layui-input-inline'>-->
+					<!--<input type="text" id="" name=""  placeholder="电话、联系人、操作人" class="layui-input">-->
+					<!--</div>-->
+					<div class='layui-button-inline layui-search-inline'>
+						<button class="layui-btn nav-search" >搜索</button>
+					</div>
+				</form>
+				<div class="layui-button-inline">
+					<span style="{:action('index/auth/check_auth',['role_id'=>'294'])}"><a href='/system/showBillTemplateAdd'><button class="layui-btn nav-add">新增模版</button></a></span>
+				</div>
+			</div>
+			<hr><br>
+		</div>
+		<div class="table-nont pageHeight">
+			<table class="layui-table" id="billtemplate-table">
+				<thead>
+				<tr>
+					<th>账单标题</th>
+					<th>头部图片</th>
+					<th>尾部图片</th>
+					<th>状态</th>
+					<th>操作</th>
+				</tr>
+				</thead>
+				{foreach name='data' item='vo'}
+				<tbody>
+				<tr>
+					<th>{$vo.bill_template_title}</th>
+					<th><img src="{$vo.bill_template_title_pic}" /></th>
+					<th><img src="{$vo.bill_template_foot_pic}" /></th>
+					<th>{if condition="$vo.status eq 1"}启用{else/}禁用{/if}</th>
+					<th>
+						<span style="{:action('index/auth/check_auth',['role_id'=>'295'])}"><a href='/system/showBillTemplateEdit?bill_template_id={$vo.bill_template_id}'><button class="layui-btn layui-btn-sm hover-edit layui-btn-primary">修改</button></a></span>
+						<span style="{:action('index/auth/check_auth',['role_id'=>'296'])}"><a href='/system/showBillTemplateInfo?bill_template_id={$vo.bill_template_id}'><button class="layui-btn layui-btn-sm hover-details layui-btn-primary">详情</button></a></span>
+						<!--<button class="layui-btn layui-btn-sm nav-del layui-btn-primary" onclick="billDel(this)">删除</button>-->
+						<input type="hidden" class="bill_template_id" value="{$vo.bill_template_id}" >
+					</th>
+				</tr>
+				</tbody>
+				{/foreach}
+			</table>
+		</div>
+		<div class="listButtom">
+			<!--加载分页-->
+			{include file='public/page' /}
+		</div>
+    </div>
+  </div>
+  
+  <div class="layui-footer">
+    <!-- 底部固定区域 -->
+    © layui.com - 底部固定区域
+  </div>
+
+</div>
+{include file='public/foot_js' /}
+<script src='__STATIC__/javascript/system/system.js'></script>
+<script>
+	//JavaScript代码区域
+	var layer = layui.layer
+</script>
+</body>
+</html>

@@ -1,0 +1,129 @@
+@charset "utf-8";
+/* CSS Document */
+
+
+
+/*
+Table Style - This is what you want
+------------------------------------------------------------------ 
+
+#select_tour table a:link {
+	color: #666;
+	font-weight: bold;
+	text-decoration:none;
+}
+#select_tour table a:visited {
+	color: #999999;
+	font-weight:bold;
+	text-decoration:none;
+}
+#select_tour table a:active,
+#select_tour table a:hover {
+	color: #bd5a35;
+	text-decoration:underline;
+}*/
+#select_tour table {
+	width:1225px;
+	font-family:Arial, Helvetica, sans-serif;
+	color:#666;
+	font-size:12px;
+	-moz-border-radius:3px;
+	-webkit-border-radius:3px;
+	border-radius:3px;
+
+}
+#select_tour table th {
+	padding:12px 10px 12px 10px;
+
+	border-bottom:1px dashed #58595b;
+
+	background-color: #ededed;
+	background: -webkit-gradient(linear, left top, left bottom, from(#ededed), to(#ebebeb));
+	background: -moz-linear-gradient(top,  #ededed,  #ebebeb);
+}
+#select_tour table th:first-child{
+	text-align: left;
+	padding-left:20px;
+}
+#select_tour table tr:first-child th:first-child{
+
+}
+#select_tour table tr:first-child th:last-child{
+	
+}
+#select_tour table tr{
+	text-align: center;
+	padding-left:20px;
+}
+#select_tour table tr td:first-child{
+	text-align: left;
+	padding-left:20px;
+	border-left: 0;
+}
+#select_tour table tr td {
+	padding:5px;
+	border-top: 1px dashed #ffffff;
+	border-bottom:1px dashed #58595b;
+	border-left: 1px solid #e0e0e0;
+	
+
+}
+#select_tour table tr.even td{
+	
+	
+}
+#select_tour table tr:last-child td{
+	border-bottom:0;
+}
+#select_tour table tr:last-child td:first-child{
+	-moz-border-radius-bottomleft:3px;
+	-webkit-border-bottom-left-radius:3px;
+	border-bottom-left-radius:3px;
+}
+#select_tour table tr:last-child td:last-child{
+	-moz-border-radius-bottomright:3px;
+	-webkit-border-bottom-right-radius:3px;
+	border-bottom-right-radius:3px;
+}
+#select_tour table tr:hover td{
+	background-color: #caf1ff;
+	background: -webkit-gradient(linear, left top, left bottom, from(#caf1ff), to(#caf1ff));
+	background: -moz-linear-gradient(top,  #caf1ff,  #caf1ff);	
+}
+#select_tour .country {
+	width: 35%;
+}
+#select_tour .duration {
+	width: 8%;
+}
+#select_tour .price {
+	width: 8%;	
+}
+
+
+#select_tour .view a {
+	color: #666;
+	background: #d1d3d4;
+	padding: 4px 35px;
+	-moz-border-radius:5px;
+	-webkit-border--radius:5px;
+	border-radius:5px;
+}
+#select_tour .view a:hover {
+	background: #6d6e71;
+	color: #fff;
+	text-decoration: none;
+}
+#select_tour .book a {
+	background: #3376bb;
+	color: #fff;
+	padding: 4px 35px;
+	-moz-border-radius:5px;
+	-webkit-border--radius:5px;
+	border-radius:5px;
+}
+#select_tour .book a:hover {
+	background: #ed1c24;
+	color: #fff;
+	text-decoration: none;
+}

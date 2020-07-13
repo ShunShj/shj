@@ -1,0 +1,259 @@
+.col_1 {
+    width: 8.33333333%; /* 1/12*/
+}
+
+.col_2 {
+    width: 16.66666667%; /* 2/12 */
+}
+
+.col_3 {
+    width: 25%; /* 3/12 */
+}
+
+.col_4 {
+    width: 33.33333333%; /* 4/12 */
+}
+
+.col_5 {
+    width: 41.66666667%; /* 5/12 */
+}
+
+.col_6 {
+    width: 50%; /* 6/12 */
+}
+
+.col_7 {
+    width: 58.33333333%; /* 7/12 */
+}
+
+.col_8 {
+    width: 66.66666667%; /* 8/12 */
+}
+
+.col_9 {
+    width: 75%; /* 9/12 */
+}
+
+.col_10 {
+    width: 83.33333333%; /* 10/12 */
+}
+
+.col_11 {
+    width: 91.66666667%; /* 11/12 */
+}
+
+.col_12 {
+    width: 100%; /* 12/12 */
+}
+
+.align_l{
+    text-align: left;
+}
+
+.align_r {
+    text-align: right;
+}
+
+.align_c {
+    text-align: center;
+}
+
+.clear {
+    clear: both;
+}
+
+.float_r {
+    float: right;
+}
+
+.float_l {
+    float: left;
+}
+
+.border_l {
+    border-left: 1px solid #8c8c8c;
+}
+
+.border_r {
+    border-right: 1px solid #8c8c8c;
+}
+
+.border_b {
+    border-bottom: 1px solid #8c8c8c;
+}
+
+#statement_wrapper{
+    padding: 10px 30px;
+}
+
+#statement_wrapper *{
+    box-sizing: border-box;
+}
+
+#statement_wrapper p{
+    margin: 0;
+    padding:0;
+}
+
+.statement_header {
+    color: #1b77bd;
+    font-size: 18px;
+    padding-right: 75px;
+}
+
+.statement_header #logo {
+    text-align: center;
+}
+
+.statement_header #logo img{
+    vertical-align: middle;
+    padding: 5px;
+}
+
+.statement_header #logo em {
+    font-size: 16px;
+    font-family: "Times New Roman", Times, serif;
+}
+
+.statement_header #company-info {
+    margin: 36px 10px 0px 10px;
+    padding-right: 10px;
+    border-right: 1px solid #1b77bd;
+    text-align: right;
+}
+
+/* FOr Firefox 2+ */
+body:last-child .statement_header #company-info, x:-moz-any-link {
+    margin: 32px 10px 0px 10px;
+}
+
+.banner {
+    margin: -20px 0 0 0;
+    padding-left: 40px;
+}
+
+.banner img{
+    width: 25px;
+    /*vertical-align: bottom;*/
+}
+
+.banner .title{
+    color: #1b75bb;
+    font-size: 40px;
+    font-family: "Times New Roman";
+    font-weight: bold;
+}
+
+hr.banner_border{
+    margin-top: -10px;
+    border:3px solid #1b75bb;
+}
+
+.content{
+    font-size: 18px;
+    padding: 20px 40px;
+}
+
+.content>table{
+    width: 100%;
+    border:1px solid #8c8c8c;
+    border-collapse: collapse;
+    border-spacing: 2px;
+}
+
+.agent_info{
+    margin-bottom: 20px;
+}
+
+.page_print{
+    display: none;
+}
+
+.content .agent_info td{
+    padding: 10px;
+    vertical-align: top;
+}
+
+
+.agent_info .address_name {
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.filed_label {
+    display: inline-block;
+    width: 150px;
+}
+
+.statement_info{
+    margin-bottom: 0px;
+}
+
+.statement_info thead th{
+    padding: 10px;
+    background-color: #cde1f0;
+    font-size: 20px;
+    border-right: 1px solid #8c8c8c;
+    border-bottom: 1px solid #8c8c8c;
+}
+
+.statement_info tbody td{
+    padding: 2px 10px;
+    vertical-align: top;
+    border-right: 1px solid #8c8c8c;
+}
+
+.summary_content{
+    padding: 0 40px 20px 40px;
+}
+
+.summary_info tbody td{
+    padding: 10px;
+}
+
+.summary_info .summary_bot{
+    background-color: #cee2f1;
+    font-weight: bold;
+    color: #3a3a3c;
+}
+
+.footer_content {
+    font-size: 20px;
+    padding: 0 50px;
+}
+
+.footer_content .margin_l {
+    margin-left: 10px;
+}
+
+.footer_content img{
+    padding: 5px;
+}
+
+.footer_separator{
+    border: 1px dashed #58595b;
+    margin-bottom: 20px;
+}
+
+.payment_header {
+    font-size: 24px;
+    margin: 13px 0;
+    font-weight: bold;
+    color: #3a3a3c;
+}
+
+.payment_title {
+    font-size: 22px;
+}
+
+.actions_wrapper{
+    margin:20px 0;
+    padding: 0 50px;
+}
+
+/*
+* For breaking a info table
+*/
+.page_wrapper:not(.first_page){
+    display: none;
+}

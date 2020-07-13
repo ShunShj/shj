@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {include file='public/head' /}
+    <title>回执单模板详情</title>
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+
+    <div class="layui-header">
+        {include file='public/header' /}
+    </div>
+
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll">
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            {include file='public/left_menu' /}
+        </div>
+    </div>
+
+    <div class="layui-body">
+
+        <!-- 内容主体区域 -->
+        <div style="padding: 15px;">
+            <div class='layui-form-item'>
+		   		<span class="layui-breadcrumb" lay-separator="-">
+                    <a>首页</a>
+					<a>产品</a>
+					<a>回执单模板</a>
+                    <a>回执单模板详情</a>
+				</span>
+            </div>
+            <br/>
+            <br/>
+            <br/>
+            <form class="layui-form" id="form1" onSubmit="return edit()">
+
+                <div class="layui-form-item">
+                    <div class="layui-col-md9">
+                        <label class="layui-form-label">回执单名称：</label>
+                        <div class="layui-input-block">
+                            <input disabled type="text" value="{$ReturnReceiptList.return_receipt_name}" class="layui-input" required lay-verify="required" name="return_receipt_name">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <div class="layui-col-md9">
+                        <label class="layui-form-label">状态：</label>
+                        <div class="layui-input-block">
+                            <select disabled id="status" name="status"  >
+                                <option value="1" {$ReturnReceiptList.status==1?'selected':''}>启用</option>
+                                <option value="2" {$ReturnReceiptList.status==2?'selected':''}>停用</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="layui-container" class="div_info">
+                    <?php $num = 0; ?>
+                    {foreach $ReturnReceiptInfoList as $ReturnReceiptInfoListV}
+                    <div class="layui-row">
+                        <div class="layui-col-md3">
+                            <div class="layui-input-block">
+                                <input disabled type="text" class="layui-input"  required lay-verify="required" placeholder="标题" name="title[{$num}]" value="{$ReturnReceiptInfoListV.title}" ><br>
+                                <input disabled type="text" class="layui-input"  required lay-verify="required" placeholder="排序(小到大排序)" name="sorting[{$num}]" value="{$ReturnReceiptInfoListV.sorting}" >
+                            </div>
+                        </div>
+
+                        <div class="layui-col-md6" style="margin-left:10px ">
+                            <textarea disabled required lay-verify="required"  class="layui-textarea" name="content[{$num}]"  >{$ReturnReceiptInfoListV.content}</textarea>
+                        </div>
+                          <hr>
+                    </div>
+                    <?php $num++; ?>
+                    {/foreach}
+                </div>
+
+
+                <br><br><br>
+                <div class="layui-form-item">
+                    <div class="layui-input-block">
+                        <a href="javascript:history.back(-1)"><button type="button" class="layui-btn layui-btn-primary">返回</button></a>
+                    </div>
+                </div>
+                <input type="hidden" id="del_return_receipt_info_id" name="del_return_receipt_info_id" value="" />
+            </form>
+        </div>
+    </div>
+
+
+    <div class="layui-footer">
+        <!-- 底部固定区域 -->
+        © layui.com - 底部固定区域
+    </div>
+</div>
+{include file='public/foot_js' /}
+
+
+<script>
+
+</script>
+
+</body>
+</html>

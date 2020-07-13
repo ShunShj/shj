@@ -1,0 +1,442 @@
+
+    {if ($settlement_type==1)}
+    <!--一口价-->
+    <div class="layui-row">
+        <div></div>
+        <div class="layui-col-md12">
+            <table class="layui-table">
+                <thead>
+                <tr>
+                    <th>{$Think.lang.index_product_ShowPlanTour_resources_teamProduct}</th>
+                    <th width="30%">{$Think.lang.index_product_showRouteTemplateManage_resources_currency}</th>
+                    <th class="input-required" width="30%"><i>*</i>{$Think.lang.index_product_showRouteTemplateManage_resources_quotedPrice}</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <!--<th>标准报价<br>(<a style="cursor: pointer;color: #130dec;" class="unify">统一修改为标准价格</a>)</th>-->
+                    <th>{$Think.lang.index_product_showRouteTemplateManage_resources_referenceQuotation}<br><a style="cursor: pointer;color: #130dec;font-size: 12px" class="unify">{$Think.lang.index_product_showRouteTemplateManage_resources_setUpAsReferenceQuotation}</a></th>
+                    <th>
+                        {$Think.lang.index_product_showRouteTemplateManage_RMB}
+                    </th>
+                    <th class="all-select">
+                        <input class="layui-input OneBitePrice-0" name="OneBitePrice[0]" value="{$allTotal}"  lay-verify="required|number"  />
+                        <input type="hidden" name="team_product_once_price_id[0]" value="{$TeamProductPrice[0][0]['team_product_once_price_id']}">
+                    </th>
+                </tr>
+                {foreach $use_company_id as $vl}
+                    <tr>
+                        <th>{$vl.name}</th>
+                        <th>{$Think.lang.index_product_showRouteTemplateManage_RMB}</th>
+                        <th>
+                            <input class="layui-input  OneBitePrice" name="OneBitePrice[{$vl.val}]" value="{$TeamProductPrice[$vl.val][0]['total_price']?:$allTotal}" lay-verify="required|number"/>
+                            <input type="hidden" name="team_product_once_price_id[{$vl.val}]" value="{$TeamProductPrice[$vl.val][0]['team_product_once_price_id']}">
+                        </th>
+                    </tr>
+                {/foreach}
+                <tbody>
+            </table>
+        </div>
+        {notempty name="$session_Optional"}
+        <div class="layui-col-md12">
+            <table class="layui-table">
+                <thead>
+                <tr>
+                    <th>{$Think.lang.index_finance_showReceivableManage_ownexpense}</th>
+                    <th width="30%">{$Think.lang.index_product_showRouteTemplateManage_resources_currency}</th>
+                    <th class="input-required" style="width: 30%"><i>*</i>{$Think.lang.index_product_showRouteTemplateManage_resources_quotedPrice}</th>
+                </tr>
+                </thead>
+                <tbody>
+                {foreach $session_Optional as $ky=>$session_OptionalV}
+                {foreach $session_OptionalV as $vl}
+                    <tr>
+                        <th>{$vl.own_expense_name}</th>
+                        <th>
+                            <select name="tourCurrency[11][{$vl.own_expense_id}]">
+                                {foreach $CurrencyList as $CurrencyListKy=>$CurrencyListVl}
+                                <option value="{$CurrencyListVl.currency_id}" {$CurrencyListVl.currency_id==$vl.currency?'selected':''}>{$CurrencyListVl.currency_name}</option>
+                                {/foreach}
+                            </select>
+                        </th>
+                        <th><input class="layui-input tourPrice-OwnExpense" name="tourPrice[11][{$vl.own_expense_id}]" value="{$vl.total}" lay-verify="required|number"></th>
+                    </tr>
+                {/foreach}
+                {/foreach}
+
+                </tbody>
+            </table>
+        </div>
+        {/notempty}
+    </div>
+
+    {else /}
+    <!--真实价格-->
+    <!--<div class="layui-row">-->
+        <!--<div class="layui-col-md2 text_align">币种:</div>-->
+        <!--<div class="layui-col-md6">-->
+            <!--<div class="layui-form-item">-->
+                <!--<select name="" >-->
+                    <!--<option value="1">人民币</option>-->
+                <!--</select>-->
+            <!--</div>-->
+        <!--</div>-->
+    <!--</div>-->
+    <div  class="layui-row">
+        <!--<div class="layui-col-md2 text_align">团费:</div>-->
+        <div class="layui-col-md12 table-nont">
+            <table class="layui-table plan-table">
+                <thead>
+                <tr>
+                    <th width="15%">{$Think.lang.index_public_type}</th>
+                    <th width="20%">{$Think.lang.index_public_supplier}</th>
+                    <th width="25%">{$Think.lang.index_product_ShowPlanTour_resourceName}</th>
+                    <th width="20%">{$Think.lang.index_product_showRouteTemplateManage_resources_currency}</th>
+                    <th width="20%">{$Think.lang.index_product_showRouteTemplateManage_resources_quotedPrice}</th>
+                </tr>
+                </thead>
+                <tbody>
+                <!--酒店-->
+                {notempty name='$session_hotel'}
+                {assign name='s1' value='1'}
+                {assign name='s2' value=''}
+                {foreach $session_hotel as $ky=>$session_hotelV}
+                {foreach $session_hotelV as $vl}
+                   <tr>
+                       {if ($s1==1)}<td rowspan="{$count_session_hotel}">{$Think.lang.index_finance_showReceivableManage_hotel}</td>{/if}
+                       {if ($s2 nheq $ky)}
+                       <td rowspan="<?=count($session_hotelV)?>">{$vl.supplier_name} {notempty name='$vl.agent_name'}({$vl.agent_name}){/notempty}</td>
+                       {/if}
+                       <td>{$vl.room_name}</td>
+                       <!--<td>{$CurrencyAr[$vl.currency][0]['currency_name']}</td>-->
+                       <td>
+                        <select name="tourCurrency[2][{$vl.hotel_id}]">
+                            {foreach $CurrencyList as $CurrencyListKy=>$CurrencyListVl}
+                                <option value="{$CurrencyListVl.currency_id}" {$CurrencyListVl.currency_id==$vl.currency?'selected':''}>{$CurrencyListVl.currency_name}</option>
+                            {/foreach}
+                            <option></option>
+                        </select>
+                       </td>
+                       <td><input class="layui-input tourPrice" name="tourPrice[2][{$vl.hotel_id}]" value="{$vl.total}" lay-verify="required|number"></td>
+                   </tr>
+                {assign name='s2' value='$ky'}
+                {assign name='s1' value='0'}
+                {/foreach}
+                {/foreach}
+                {/notempty}
+                <!--用餐-->
+                {notempty name='$session_dining'}
+                {assign name='s1' value='1'}
+                {assign name='s2' value=''}
+                {foreach $session_dining as $ky=>$session_diningV}
+                {foreach $session_diningV as $vl}
+                <tr>
+                    {if ($s1==1)}<td rowspan="{$count_session_dining}">{$Think.lang.index_finance_showReceivableManage_dining}</td>{/if}
+                    {if ($s2 nheq $ky)}
+                    <td rowspan="<?=count($session_diningV)?>">{$vl.supplier_name} {notempty name='$vl.agent_name'}({$vl.agent_name}){/notempty}</td>
+                    {/if}
+                    <td>{$vl.dining_name}</td>
+                    <!--<td>{$CurrencyAr[$vl.currency][0]['currency_name']}</td>-->
+                    <td>
+                        <select name="tourCurrency[3][{$vl.dining_id}]">
+                            {foreach $CurrencyList as $CurrencyListKy=>$CurrencyListVl}
+                            <option value="{$CurrencyListVl.currency_id}" {$CurrencyListVl.currency_id==$vl.currency?'selected':''}>{$CurrencyListVl.currency_name}</option>
+                            {/foreach}
+                            <option></option>
+                        </select>
+                    </td>
+                    <td><input class="layui-input tourPrice" name="tourPrice[3][{$vl.dining_id}]" value="{$vl.total}"  lay-verify="required|number"></td>
+                </tr>
+                {assign name='s2' value='$ky'}
+                {assign name='s1' value='0'}
+                {/foreach}
+                {/foreach}
+                {/notempty}
+                <!--航班-->
+                {notempty name='session_flight'}
+                {assign name='s1' value='1'}
+                {assign name='s2' value=''}
+                {foreach $session_flight as $ky=>$session_flightV}
+                {foreach $session_flightV as $vl}
+                <tr>
+                    {if ($s1==1)}<td rowspan="{$count_session_flight}">{$Think.lang.index_finance_showReceivableManage_flight}</td>{/if}
+                    {if ($s2 nheq $ky)}
+                    <td rowspan="<?=count($session_flightV)?>">{$vl.supplier_name} {notempty name='$vl.agent_name'}({$vl.agent_name}){/notempty}</td>
+                    {/if}
+                    <td>{$vl.flight_number}</td>
+                    <!--<td>{$CurrencyAr[$vl.currency][0]['currency_name']}</td>-->
+                    <td>
+                        <select name="tourCurrency[4][{$vl.flight_id}]">
+                            {foreach $CurrencyList as $CurrencyListKy=>$CurrencyListVl}
+                            <option value="{$CurrencyListVl.currency_id}" {$CurrencyListVl.currency_id==$vl.currency?'selected':''}>{$CurrencyListVl.currency_name}</option>
+                            {/foreach}
+                            <option></option>
+                        </select>
+                    </td>
+                    <td><input class="layui-input tourPrice" name="tourPrice[4][{$vl.flight_id}]" value="{$vl.total}"  lay-verify="required|number"></td>
+                </tr>
+                {assign name='s2' value='$ky'}
+                {assign name='s1' value='0'}
+                {/foreach}
+                {/foreach}
+                {/notempty}
+                <!--邮轮-->
+                {notempty name='$session_cruise'}
+                {assign name='s1' value='1'}
+                {assign name='s2' value=''}
+                {foreach $session_cruise as $ky=>$session_cruiseV}
+                {foreach $session_cruiseV as $vl}
+                <tr>
+                    {if ($s1==1)}<td rowspan="{$count_session_cruise}">{$Think.lang.index_finance_showReceivableManage_cruise}</td>{/if}
+                    {if ($s2 nheq $ky)}
+                    <td rowspan="<?=count($session_cruiseV)?>">{$vl.supplier_name} {notempty name='$vl.agent_name'}({$vl.agent_name}){/notempty}</td>
+                    {/if}
+                    <td>{$vl.cruise_name}</td>
+                    <!--<td>{$CurrencyAr[$vl.currency][0]['currency_name']}</td>-->
+                    <td>
+                        <select name="tourCurrency[5][{$vl.cruise_id}]">
+                            {foreach $CurrencyList as $CurrencyListKy=>$CurrencyListVl}
+                            <option value="{$CurrencyListVl.currency_id}" {$CurrencyListVl.currency_id==$vl.currency?'selected':''}>{$CurrencyListVl.currency_name}</option>
+                            {/foreach}
+                            <option></option>
+                        </select>
+                    </td>
+                    <td><input class="layui-input tourPrice" name="tourPrice[5][{$vl.cruise_id}]" value="{$vl.total}" lay-verify="required|number"></td>
+                </tr>
+                {assign name='s2' value='$ky'}
+                {assign name='s1' value='0'}
+                {/foreach}
+                {/foreach}
+                {/notempty}
+                <!--签证-->
+                {notempty name='$session_visa'}
+                {assign name='s1' value='1'}
+                {assign name='s2' value=''}
+                {foreach $session_visa as $ky=>$session_visaV}
+                {foreach $session_visaV as $vl}
+                <tr>
+                    {if ($s1==1)}<td rowspan="{$count_session_visa}">{$Think.lang.index_finance_showReceivableManage_visa}</td>{/if}
+                    {if ($s2 nheq $ky)}
+                    <td rowspan="<?=count($session_visaV)?>">{$vl.supplier_name} {notempty name='$vl.agent_name'}({$vl.agent_name}){/notempty}</td>
+                    {/if}
+                    <td>{$vl.visa_name}</td>
+                    <!--<td>{$CurrencyAr[$vl.currency][0]['currency_name']}</td>-->
+                    <td>
+                        <select name="tourCurrency[6][{$vl.visa_id}]">
+                            {foreach $CurrencyList as $CurrencyListKy=>$CurrencyListVl}
+                            <option value="{$CurrencyListVl.currency_id}" {$CurrencyListVl.currency_id==$vl.currency?'selected':''}>{$CurrencyListVl.currency_name}</option>
+                            {/foreach}
+                            <option></option>
+                        </select>
+                    </td>
+                    <td><input class="layui-input tourPrice" name="tourPrice[6][{$vl.visa_id}]" value="{$vl.total}"  lay-verify="required|number"></td>
+                </tr>
+                {assign name='s2' value='$ky'}
+                {assign name='s1' value='0'}
+                {/foreach}
+                {/foreach}
+                {/notempty}
+                <!--景点-->
+                {notempty name='$session_scenic_spot'}
+                {assign name='s1' value='1'}
+                {assign name='s2' value=''}
+                {foreach $session_scenic_spot as $ky=>$session_scenic_spotV}
+                {foreach $session_scenic_spotV as $vl}
+                <tr>
+                    {if ($s1==1)}<td rowspan="{$count_session_scenic_spot}">{$Think.lang.index_finance_showReceivableManage_scenic_spot}</td>{/if}
+                    {if ($s2 nheq $ky)}
+                    <td rowspan="<?=count($session_scenic_spotV)?>">{$vl.supplier_name} {notempty name='$vl.agent_name'}({$vl.agent_name}){/notempty}</td>
+                    {/if}
+                    <td>{$vl.scenic_spot_name}</td>
+                    <!--<td>{$CurrencyAr[$vl.currency][0]['currency_name']}</td>-->
+                    <td>
+                        <select name="tourCurrency[7][{$vl.scenic_spot_id}]">
+                            {foreach $CurrencyList as $CurrencyListKy=>$CurrencyListVl}
+                            <option value="{$CurrencyListVl.currency_id}" {$CurrencyListVl.currency_id==$vl.currency?'selected':''}>{$CurrencyListVl.currency_name}</option>
+                            {/foreach}
+                            <option></option>
+                        </select>
+                    </td>
+                    <td><input class="layui-input tourPrice" name="tourPrice[7][{$vl.scenic_spot_id}]" value="{$vl.total}"  lay-verify="required|number"></td>
+                </tr>
+                {assign name='s2' value='$ky'}
+                {assign name='s1' value='0'}
+                {/foreach}
+                {/foreach}
+                {/notempty}
+                <!--车辆-->
+                {notempty name='$session_vehicle'}
+                {assign name='s1' value='1'}
+                {assign name='s2' value=''}
+                {foreach $session_vehicle as $ky=>$session_vehicleV}
+                {foreach $session_vehicleV as $vl}
+                <tr>
+                    {if ($s1==1)}<td rowspan="{$count_session_vehicle}">{$Think.lang.index_finance_showReceivableManage_vehicle}</td>{/if}
+                    {if ($s2 nheq $ky)}
+                    <td rowspan="<?=count($session_vehicleV)?>">{$vl.supplier_name} {notempty name='$vl.agent_name'}({$vl.agent_name}){/notempty}</td>
+                    {/if}
+                    <td>{$vl.vehicle_name}({$vl.vehicle_number})</td>
+                    <!--<td>{$CurrencyAr[$vl.currency][0]['currency_name']}</td>-->
+                    <td>
+                        <select name="tourCurrency[8][{$vl.vehicle_id}]">
+                            {foreach $CurrencyList as $CurrencyListKy=>$CurrencyListVl}
+                            <option value="{$CurrencyListVl.currency_id}" {$CurrencyListVl.currency_id==$vl.currency?'selected':''}>{$CurrencyListVl.currency_name}</option>
+                            {/foreach}
+                            <option></option>
+                        </select>
+                    </td>
+                    <td><input class="layui-input tourPrice" name="tourPrice[8][{$vl.vehicle_id}]" value="{$vl.total}" lay-verify="required|number"></td>
+                </tr>
+                {assign name='s2' value='$ky'}
+                {assign name='s1' value='0'}
+                {/foreach}
+                {/foreach}
+                {/notempty}
+                <!--导游-->
+                {notempty name='$session_tourGuide'}
+                {assign name='s1' value='1'}
+                {assign name='s2' value=''}
+                {foreach $session_tourGuide as $ky=>$session_tourGuideV}
+                {foreach $session_tourGuideV as $vl}
+                <tr>
+                    {if ($s1==1)}<td rowspan="{$count_session_tourGuide}">{$Think.lang.index_finance_showReceivableManage_tourguide}</td>{/if}
+                    {if ($s2 nheq $ky)}
+                    <td rowspan="<?=count($session_tourGuideV)?>">{$vl.supplier_name} {notempty name='$vl.agent_name'}({$vl.agent_name}){/notempty}</td>
+                    {/if}
+                    <td>{$vl.tour_guide_name}</td>
+                    <!--<td>{$CurrencyAr[$vl.currency][0]['currency_name']}</td>-->
+                    <td>
+                        <select name="tourCurrency[9][{$vl.tour_guide_id}]">
+                            {foreach $CurrencyList as $CurrencyListKy=>$CurrencyListVl}
+                            <option value="{$CurrencyListVl.currency_id}" {$CurrencyListVl.currency_id==$vl.currency?'selected':''}>{$CurrencyListVl.currency_name}</option>
+                            {/foreach}
+                            <option></option>
+                        </select>
+                    </td>
+                    <td><input class="layui-input tourPrice" name="tourPrice[9][{$vl.tour_guide_id}]" value="{$vl.total}" lay-verify="required|number"></td>
+                </tr>
+                {assign name='s2' value='$ky'}
+                {assign name='s1' value='0'}
+                {/foreach}
+                {/foreach}
+                {/notempty}
+
+                <!--单项资源-->
+                {notempty name='$session_singleSource'}
+                {assign name='s1' value='1'}
+                {assign name='s2' value=''}
+                {foreach $session_singleSource as $ky=>$session_singleSourceV}
+                {foreach $session_singleSourceV as $vl}
+                <tr>
+                    {if ($s1==1)}<td rowspan="{$count_session_singleSource}">{$Think.lang.index_finance_showReceivableManage_singlesource}</td>{/if}
+                    {if ($s2 nheq $ky)}
+                    <td rowspan="<?=count($session_singleSourceV)?>">{$vl.supplier_name} {notempty name='$vl.agent_name'}({$vl.agent_name}){/notempty}</td>
+                    {/if}
+                    <td>{$vl.single_source_name}</td>
+                    <!--<td>{$CurrencyAr[$vl.currency][0]['currency_name']}</td>-->
+                    <td>
+                        <select name="tourCurrency[10][{$vl.single_source_id}]">
+                            {foreach $CurrencyList as $CurrencyListKy=>$CurrencyListVl}
+                            <option value="{$CurrencyListVl.currency_id}" {$CurrencyListVl.currency_id==$vl.currency?'selected':''}>{$CurrencyListVl.currency_name}</option>
+                            {/foreach}
+                            <option></option>
+                        </select>
+                    </td>
+                    <td><input class="layui-input tourPrice" name="tourPrice[10][{$vl.single_source_id}]" value="{$vl.total}" lay-verify="required|number"></td>
+                </tr>
+                {assign name='s2' value='$ky'}
+                {assign name='s1' value='0'}
+                {/foreach}
+                {/foreach}
+                {/notempty}
+                <!--<tr>-->
+                    <!--<td colspan="4">总计</td>-->
+                    <!--<td class="tourPrice-total">{$allTotal}</td>-->
+                <!--</tr>-->
+
+                </tbody>
+
+            </table>
+        </div>
+    </div>
+
+    {notempty name='$session_Optional'}
+    <div  class="layui-row">
+        <!--<div class="layui-col-md2 text_align">自费项目</div>-->
+        <div class="layui-col-md12 table-nont">
+            <table class="layui-table">
+                <thead>
+                <tr>
+                    <th width="15%">{$Think.lang.index_public_type}</th>
+                    <th width="20%">{$Think.lang.index_public_supplier}</th>
+                    <th width="25%">{$Think.lang.index_product_ShowPlanTour_resourceName}</th>
+                    <th width="20%">{$Think.lang.index_product_showRouteTemplateManage_resources_currency}</th>
+                    <th width="20%">{$Think.lang.index_product_showRouteTemplateManage_resources_quotedPrice}</th>
+                </tr>
+                </thead>
+                <tbody>
+                    {assign name='s1' value='1'}
+                    {assign name='s2' value=''}
+                    {foreach $session_Optional as $ky=>$session_OptionalV}
+                    {foreach $session_OptionalV as $vl}
+                    <tr>
+                        {if ($s1==1)}<td rowspan="{$count_session_Optional}">{$Think.lang.index_finance_showReceivableManage_ownexpense}</td>{/if}
+                        {if ($s2 nheq $ky)}
+                        <td rowspan="<?=count($session_OptionalV)?>">{$vl.supplier_name} {notempty name='$vl.agent_name'}({$vl.agent_name}){/notempty}</td>
+                        {/if}
+                        <td>{$vl.own_expense_name}</td>
+                        <!--<td>{$CurrencyAr[$vl.currency][0]['currency_name']}</td>-->
+                        <td>
+                            <select name="tourCurrency[11][{$vl.own_expense_id}]">
+                                {foreach $CurrencyList as $CurrencyListKy=>$CurrencyListVl}
+                                <option value="{$CurrencyListVl.currency_id}" {$CurrencyListVl.currency_id==$vl.currency?'selected':''}>{$CurrencyListVl.currency_name}</option>
+                                {/foreach}
+                                <option></option>
+                            </select>
+                        </td>
+                        <td><input class="layui-input tourPrice-OwnExpense" name="tourPrice[11][{$vl.own_expense_id}]" value="{$vl.total}" lay-verify="required|number"></td>
+                    </tr>
+                    {assign name='s2' value='$ky'}
+                    {assign name='s1' value='0'}
+                    {/foreach}
+                    {/foreach}
+                    <!--<tr>-->
+                        <!--<td colspan="4">总计</td>-->
+                        <!--<td class="tourPrice-OwnExpense-total">{$session_singleSource_OwnExpense_total}</td>-->
+                    <!--</tr>-->
+                </tbody>
+                </table>
+        </div>
+    </div>
+    {/notempty}
+    {/if}
+
+    <script>
+        !function() {
+            $('.tourPrice').on("blur",function () {
+                var total = 0;
+                $('.tourPrice').each(function(){
+                    var v = parseFloat($(this).val());
+                    total = total+v;
+                });
+                $('.tourPrice-total').html(total.toFixed(2));
+            });
+
+            $('.tourPrice-OwnExpense').on('blur',function(){
+                var total = 0;
+                $('.tourPrice-OwnExpense').each(function(){
+                    var v = parseFloat($(this).val());
+                    total = total+v;
+                });
+                $('.tourPrice-OwnExpense-total').html(total.toFixed(2));
+            });
+
+            $('.unify').on('click',function(){
+                var n = $('.OneBitePrice-0').val();
+                $('.OneBitePrice').each(function(){
+                    $(this).val(n);
+                });
+            });
+
+        }();
+    </script>

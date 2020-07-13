@@ -1,0 +1,35 @@
+
+$(function () {
+    //代理
+    $.ajax({
+        type: "post",
+        url: "/distributor/getDistributorAjax",
+        data:"",
+        dataType: "json",
+        success: function (result) {
+            if(result.code==200) {
+                var distributors=result.data;
+                agentA=distributors;
+                var agentHtml='';
+                agentHtml+='<option value=""></option>';
+                for(var i=0;i<distributors.length;i++){
+                    agentHtml+='<option value="'+distributors[i].distributor_id+'">'+distributors[i].distributor_name+'</option>';
+                }
+                $("#distributor_name").html(agentHtml);
+                form.render();
+            }else if(result.code!=200){
+                return false;
+            }
+        }
+    });
+})
+
+
+//客户来源
+function clientsource(type) {
+    return type==1?'toronto star':type==2?'fairchild radio':type==3?'repeat client':type==4?'nexus web':type==5?'singtao newspaper':'';
+}
+//代理类别
+function associate_type(type) {
+    return type==1?'assembled':type==2?'not assembled':'';
+}

@@ -1,0 +1,168 @@
+<?xml version="1.0"?>
+
+<faq>
+	<category>
+		<title>Tour Information</title>
+		<question>
+			<subject>Determining Tour Commission</subject>
+			<answer>Simply click "Commission" on the navigation bar and the latest Nexus Holidays Commission Table will be displayed.</answer>
+		</question>
+		<question>
+			<subject>Downloading Tour Flyers</subject>
+			<answer>There are two ways to download our latest Tour Flyers.
+				&#60;ol&#62;
+					&#60;li&#62;Click "Book Tour" on the navigation bar. Find your specific tour, and click the "View" button.&#60;/li&#62;
+					&#60;li&#62;Go to our Offical Website, www.nexusholidays.com.au, then click "All Tours" on the navigation bar. Find your specific tour and click its name to download.&#60;/li&#62;
+				&#60;/ol&#62;
+			</answer>
+		</question>
+		<question>
+			<subject>Determining Available Tour Dates</subject>
+			<answer>Save time and money by checking our online booking system for date availability. Checking dates that are free is identical to the first step of booking a tour. Click "Book Tour" on the navigation bar. Find your specific tour, and click "Book". Click the "Select a tour date" field, and you will see a simple calendar pop up. The available dates will be shown and can be selected.</answer>
+		</question>
+	</category>
+	
+	<category>
+		<title>Booking Procedure</title>
+		<question>
+			<subject>Before Booking a Tour</subject>
+			<answer>When your client/s are committed to booking, and agree to all the tour's terms and conditions, you need to collect a copy of the client/s' passport and a copy of their PR (if applicable). When tour related information and requests, eg. transfer information etc., are also obtained, the tour can be booked online.</answer>
+		</question>
+		<question>
+			<subject>Step 1. Booking a Tour</subject>
+			<answer>Click "Book Tour" on the navigation bar. Find the client/s' tour, and click "Book".</answer>
+		</question>
+		<question>
+			<subject>Step 2. Selecting the Tour Date and Language</subject>
+			<answer>Click the "Select a tour date" field, and you will see a simple calendar pop up. Available dates are shown in the calender. Please click the client/s' requested date. Then, click on the "Select a tour language" field, and click the requested language. Click "Next" to go to the next step.</answer>
+		</question>
+		<question>
+			<subject>Step 3. Adding Passengers to the Booking</subject>
+			<answer>Input the total number of passenger/s into the "Add Passenger/s" field, and then click the "+" button. As you see the passenger/s details field appear, input them all accordingly. Click "Next" to go to the next step.&#60;br /&#62;&#60;br /&#62;
+			&#60;b&#62;Please note:&#60;/b&#62;&#60;br /&#62;
+			Passenger Citizenship stands for the client's passport type or AU/NZ PR holding, and Ethnicity stands for Chinese descent or not.&#60;br /&#62;
+			As Nexus Holidays does not request agents to upload the client/s passport copy, it is the agents responsibility to ensure all passenger details are correct as per passport. Nexus Holidays is strictly not accountable for any errors and reserves the right to charge accordingly for any errors incurred.&#60;br /&#62;&#60;br /&#62;
+			&#60;b&#62;Tips:&#60;/b&#62;&#60;br /&#62;
+			If you need to add more passenger/s, input the number into the "Add Passenger/s" field, and click "+" button again. You will see more fields appear.&#60;br /&#62;
+			To cancel passenger/s, click "x" button which appears on the right side of each passenger record.</answer>
+		</question>
+		<question>
+			<subject>Step 4. Passenger Room Allocation</subject>
+			<answer>Rooms must be allocated one by one. To allocate rooms, click the dropdown box to select your room type, and then select the passenger/s that are to be allocated to this room . Click the "+" button to confirm this arrangement. Once all the passengers have been allocated to their respective rooms, the room configuration details will appear below. Click "Next" to go to the next step.&#60;br /&#62;&#60;br /&#62;
+			&#60;b&#62;Tips:&#60;/b&#62;&#60;br /&#62;
+			To cancel the room allocations, click "CLEAR" which is next to the "+" button. All room configurations will be cleared and reset.</answer>
+		</question>
+		<question>
+			<subject>Step 5. Transfer Service, Pre/Post Accommodation Service and Special Requests</subject>
+			<answer>&#60;b&#62;Transfer Service:&#60;/b&#62;&#60;br /&#62;
+			Click "Yes" if any of the passenger/s require airport and/or hotel transfers and input all the required details accordingly (Date, Flight No., Arrival Time, Airport). Please also check the passengers that require the transfers and don't forget to click "+" to add this service to the booking.&#60;br /&#62;&#60;br /&#62;
+			&#60;b&#62;Pre/Post Accommodation Service:&#60;/b&#62;&#60;br /&#62;
+			If passenger/s need to book pre/post-accommodation, check the "Yes" box and input all the required details accordingly (Nights, Room Type and Passengers). Don't forget to click "+" to add this request to the booking.&#60;br /&#62;&#60;br /&#62;
+			&#60;b&#62;Special Requests:&#60;/b&#62;&#60;br /&#62;
+			If the customers have any additional requests, please input them into the "Special Request" box.(All Special Requests will be displayed on the booking voucher meaning passengers will be able to see their requests).&#60;br /&#62;&#60;br /&#62;
+			Click "Next" to go to the next step.&#60;br /&#62;&#60;br /&#62;
+			&#60;b&#62;Tips:&#60;/b&#62;&#60;br /&#62;
+			Multiple entries can be arranged for each service. For example, if passenger A needs hotel transfer with flight number QF127 and passenger B needs hotel transfer with flight number CX162, simply arrange each transfer and click "+" to process. Each arrangement will be displayed on below.&#60;br /&#62;
+			To cancel the current configuration, click "CLEAR" button to reset.</answer>
+		</question>
+		<question>
+			<subject>Step 6. Emergency Contacts, Agent Reference Numbers, Agent Consultants</subject>
+			<answer>Please input either the customer's emergency contact details in the field or your own agent contact details.&#60;br /&#62;
+			If the customer is aware and confirms understanding of the terms and conditions, please check the box to accept.&#60;br /&#62;
+			Your own agent reference number can be filled in the "My Reference No." field, which will allow you to easily link your booking with the clients. Your name can also be input in to the "My Consultant Name" field so you can identify which bookings you have made.&#60;br /&#62;
+			To complete the booking process, click "Submit", and your booking will be sent to the Nexus Operations team for further processing.</answer>
+		</question>
+		<question>
+			<subject>Booking Summary</subject>
+			<answer>From Step 2, a Booking Summary will be displayed on the right side of the page. All updated tour information from previous steps will be shown in this section. If any details are incorrect or missing, you can click the "Back" button to add or amend these details.</answer>
+		</question>
+		<question>
+			<subject>Booking Submission</subject>
+			<answer>Once your booking has been submitted, a final booking summary will be displayed on the screen and an email will be sent to you for confirmation. Simply print this page for the client to keep as a record.</answer>
+		</question>
+	</category>
+
+	<category>
+		<title>Booking Management</title>
+		<question>
+			<subject>Booking Review</subject>
+			<answer>Click "My Bookings" on the navigation bar. A list will appear showing all your bookings in order by the date the booking was created.</answer>
+		</question>
+		<question>
+			<subject>Booking Search</subject>
+			<answer>Once you have made a number of bookings, these bookings will be listed over several pages. Searching your booking with our online search function will boost your efficiency as long as you have all the details for the booking with you. The search function is displayed above the booking list after you click "My Bookings" on the navigation bar. Search fields include My Reference No., Pax Name, Tour Departure Date, and Booking Status. Input the details in one or more of these fields and click "Search". Your results will then be displayed.</answer>
+		</question>
+		<question>
+			<subject>Booking Amendments</subject>
+			<answer>In order to keep the system's data consistent, amendment functions are restricted. Kindly email us for any booking modifications.</answer>
+		</question>
+		<question>
+			<subject>Booking Cancellations</subject>
+			<answer>Due to user restrictions, booking cancellations must be formally made in writing to Nexus Holidays. Please email us to cancel any reservations.</answer>
+		</question>
+		<question>
+			<subject>View Booking Voucher</subject>
+			<answer>Search for your booking within the booking list and head to "Manage" section under the sub-menu section. Alternatively, click the "Booking ID" number. Your screen page will then load the booking voucher.</answer>
+		</question>
+		<question>
+			<subject>Print Booking Voucher</subject>
+			<answer>There are several ways to print the booking voucher while it is being viewed.&#60;br /&#62;&#60;br /&#62;
+			&#60;b&#62;Print:&#60;/b&#62;&#60;br /&#62;
+			&#60;ol&#62;
+				&#60;li&#62;Scroll down to the end of the voucher, and click the "Print" button. Select your preferred printer and change any preferences. Then click "Print" as per normal.&#60;/li&#62;
+				&#60;li&#62;Press "Ctrl" and "P" on your keyboard at the same time. Select your preferred printer and change any preferences. Then click "Print" as per normal.&#60;/li&#62;
+			&#60;/ol&#62;&#60;br /&#62;
+			&#60;b&#62;Save as PDF:&#60;/b&#62;&#60;br /&#62;
+			&#60;ol&#62;
+				&#60;li&#62;Open the booking voucher using your Google Chrome browser and click "Print" or press "Ctrl" and "P" to open the print dialogue window. Under the Destination section, click the "Change" button where a window will pop up. In the new window under Local Destinations, please select "Save as PDF". Change any preferences and click "Save" to save to your specific disk location.&#60;/li&#62;
+				&#60;li&#62;Scroll down to the end of voucher, and click the "PDF" button. Select the disk location you would like to save to, and click "OK".&#60;/li&#62;
+			&#60;/ol&#62;&#60;br /&#62;
+			&#60;b&#62;Tips:&#60;/b&#62;&#60;br /&#62;
+			We recommend the "Save as PDF" function in the Google Chrome browser, as our PDF files require Chinese character support packages. Some browsers may not have this support, hence, Google Chrome must be used to save and/or send your booking vouchers.&#60;br /&#62;
+			Alternatively, software to convert files to PDF can be used if your browser does not have a pre-installed PDF function. Some examples include &#60;a href="http://www.cutepdf.com/products/cutepdf/Writer.asp" target="_blank"&#62;Cute PDF Writer&#60;/a&#62; or &#60;a href="http://www.bullzip.com/products/pdf/info.php" target="_blank"&#62;Bullzip PDF Printer&#60;/a&#62;. Please download this software from the internet and install as instructed to begin use.
+			</answer>
+		</question>
+		<question>
+			<subject>View Booking Status</subject>
+			<answer>The booking status is displayed on the booking list. The booking summary also shows the status when you click "View" under the "Manage" sub-section.</answer>
+		</question>
+		<question>
+			<subject>Booking Status</subject>
+			<answer>
+				&#60;ul&#62;
+					&#60;li&#62;Confirmed: Nexus Holidays has received and confirmed your booking. Please wait for final hotel confirmation and tour guide details.&#60;/li&#62;
+					&#60;li&#62;Final: Nexus Holidays has received your booking and all details including hotel accommodation and tour guide contacts have been confirmed.&#60;/li&#62;
+					&#60;li&#62;Submitted: Nexus Holidays has received your booking. However, please wait for passenger confirmation from our team.&#60;/li&#62;
+				&#60;/ul&#62;
+			</answer>
+		</question>
+		<question>
+			<subject>Booking Invoice</subject>
+			<answer>Invoices are made available and will be uploaded to the system within 3 working days after the booking is made. The nett price and invoice number will be displayed on the booking list when the invoice has been uploaded. You can download the individual booking invoice by clicking on the invoice number.</answer>
+		</question>
+	</category>
+
+	<category>
+		<title>General</title>
+		<question>
+			<subject>Company Details</subject>
+			<answer>You can change your company details at any time by logging on to the Nexus Holidays Online Booking System. Please be mindful and keep all your information up to date.&#60;br /&#62;
+			To update your information, head to the top right hand corner of the website. You will see "Welcome" and "Your Username" and "Logout".&#60;br /&#62;
+			Click "Your Username" in red, and all your Company Information will be displayed. Amend your details accordingly, scroll to the bottom and click "Update". Double check to make sure the update is successful.&#60;br /&#62;
+			&#60;b&#62;Note:&#60;/b&#62; Input fields that have a "red" star beside them are mandatory and must be filled in.</answer>
+		</question>
+		<question>
+			<subject>Changing your Password</subject>
+			<answer>Changing your password is very similar to updating your company details. To change your password, head to the top right hand corner of the website. You will see "Welcome" and "Your Username" and "Logout".&#60;br /&#62;
+			Click "Your Username" in red, and all your Company Information will be displayed. Scroll down to the "Password" field and change your password accordingly. Click "Update" to save any changes.</answer>
+		</question>
+		<question>
+			<subject>Updates and News</subject>
+			<answer>From now on, you won't need to struggle to find any updates or the latest commission table from Nexus Holidays! When you log in to the Nexus Holidays Booking System, click on "Latest News" in the navigation bar. All the latest updates and information will be announced here. The list of updates are shown on the right hand side and the content will appear on the left hand side of the system.</answer>
+		</question>
+		<question>
+			<subject>Further Questions</subject>
+			<answer>Nexus Holidays will always be your friend and your back-end support. The team welcomes all your enquiries and questions so please do not hesitate to contact us at any time. Our phone number is located at the top right hand side of the online booking system pages.</answer>
+		</question>
+	</category>
+</faq>

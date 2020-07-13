@@ -1,0 +1,75 @@
+<div class="layui-row">
+    <div>
+        {foreach $OperationsType as $v}
+        <input lay-filter="radio-operations_type" type="radio" name="sex" value="{$v.id}" title="{$v.name}" {$v.id==$operations_type_id?'checked':''} />
+        {/foreach}
+    </div>
+
+    <div class="layui-col-md12">
+         <table class="layui-table">
+            <thead>
+            <tr>
+                <th width="5%">{$language_tag.index_public_finish}</th>
+                <th width="5%">{$language_tag.index_product_showRouteTemplateManage_sort}</th>
+                <th width="10%">{$language_tag.index_index_incident}</th>
+                <th width="10%">{$language_tag.index_index_email_template}</th>
+                <th width="5%">{$language_tag.index_public_send}</th>
+                <th width="10%">{$language_tag.index_index_remind_date}</th>
+                <th width="10%">{$language_tag.index_index_remind_object}</th>
+                <th width="20%">{$language_tag.index_product_showRouteTemplateManage_resources_enclosure}</th>
+                <th width="8%">{$language_tag.index_operations_OperationsListAjax_attachment_uploading}</th>
+                <th width="20%">{$language_tag.index_public_mark}</th>
+            </tr>
+            </thead>
+            <tbody>
+            {foreach $CompanyOrderOperations as $kl=>$vl}
+            <tr data-info="{$vl.id}">
+                <td><input  type="checkbox" lay-filter="company_order_operations_status" lay-skin="primary"  value="{$vl.id}" {$vl.status==2?'checked':''} /></td>
+                <td>{$kl+1}</td>
+                <td>{$vl.operation_name}</td>
+                <td>
+                    {if $vl.is_email_sent==1}
+                        <select lay-filter="operations-email_template_id" data-info="{$vl.id}" lay-search>
+                            <option>{$language_tag.index_public_select}</option>
+                            {foreach $OperationsEmailGr as $OperationsEmailGr_v}
+                            <option value="{$OperationsEmailGr_v.id}" {$OperationsEmailGr_v.id==$vl.email_template_id?'selected':''}>{$OperationsEmailGr_v.name}</option>
+                            {/foreach}
+                        </select>
+                    {/if}
+                </td>
+                <td>
+                    {if $vl.is_email_sent==1}
+                        <a class="layui-btn layui-btn-sm layui-btn-primary dispatch-operationsEmail" data-info="{$vl.id}" >{$language_tag.index_public_send}</a>
+                    {/if}
+                </td>
+                <td>{$vl.remind_at}</td>
+                <td>
+                    <select lay-filter="operations-user_id" lay-search data-info="{$vl.id}">
+                        <option>{$language_tag.index_public_select}</option>
+                        {foreach $UserList as $UserList_v}
+                        <option value="{$UserList_v.user_id}" {$UserList_v.user_id==$vl.remind_to?'selected':''}>{$UserList_v.nickname}</option>
+                        {/foreach}
+                    </select>
+                </td>
+                <td style="position: relative">
+                    <div id="upload-{$vl.id}" style="position: absolute; width: 100%; height: 100%; top: 0px;left: 0px; padding-left: 5px;text-align: left">
+                        {foreach $vl.attachments as $attachmentsV}
+                        <div><a href="{$attachmentsV.savepath}" target="_blank">{$attachmentsV.name}</a>&nbsp;<a class="layui-btn layui-btn-xs layui-btn-primary del-attachments" data-info="{$attachmentsV.id}">{$language_tag.index_public_del}</a></div>
+                        {/foreach}
+                    </div>
+                </td>
+                <td>
+                    <div class="layui-upload-drag upload" data-info="{$vl.id}"   >
+                        <i class="layui-icon"></i>
+                        <p>upload</p>
+                    </div>
+                </td>
+
+                <td><textarea class="layui-textarea  operations-remark" data-info="{$vl.id}">{$vl.remark}</textarea></td>
+            </tr>
+            {/foreach}
+            </tbody>
+        </table>
+    </div>
+    <input type="hidden" id="ii-company_order_id" value="{$company_order_id}" />
+</div>

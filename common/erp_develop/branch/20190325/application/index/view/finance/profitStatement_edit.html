@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    {include file='public/head' /}
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>财务管理-利润表</title>
+    <style>
+        .tr-none{
+            display: none;
+        }
+    </style>
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+    <div class="layui-header">
+        {include file='public/header' /}
+    </div>
+
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll">
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            {include file='public/left_menu' /}
+        </div>
+    </div>
+
+    <div class="layui-body layui-body-bg">
+        <div style="padding: 15px 15px 0px;">
+            <div class="body-top">
+                <div class='layui-form-item'>
+                    <span class="layui-breadcrumb" lay-separator="-">
+                        <a>首页</a>
+                        <a>利润表</a>
+                        <a><cite>修改</cite></a>
+                    </span>
+                </div>
+            </div>
+            <div class="content-bg page-filedset">
+                <fieldset class="layui-elem-field layui-field-title">
+                    <legend>利润表 - 分公司</legend>
+                </fieldset>
+                <br>
+                <form id="form1" class="layui-form"  onSubmit="return add()">
+                    <input type="hidden" value="{$BranchProfit.profit_statement_id}" name="profit_statement_id" />
+                    <div id="page-content" style="width: 100%;margin:0px auto">
+                        <table class="layui-table" id="table-list" style="width:100%;margin-bottom:20px;border-collapse: collapse;border:none">
+                            <thead>
+                            <tr align="left" class="tr-none" style="background:#fff;border:none;">
+                                <th colspan="5"><img src="__STATIC__/image/login/login-logo.png" style="width:100%" id="aa"></th>
+                            </tr>
+                            <tr align="left" style="background:#f2f2f2">
+                                <th colspan="2" rowspan="2" style="width:20%"></th>
+                                <th colspan="3">{$Think.session.user.company_name} ({$Currency[0]['unit']})</th>
+                            </tr>
+                            <tr align="left" style="background:#f2f2f2">
+                                <th>预计</th>
+                                <th>{$year}年{$month}月</th>
+                                <th width="200">累计</th>
+                            </tr>
+                            </thead>
+                            <tbody style="border:1px solid #e6e6e6">
+                            <tr>
+                                <td colspan="2" rowspan="1">员工人数</td>
+                                <td>{$BranchProfitForecast.number_of_staff|default='---'}</td>
+                                <td style="width: 27%;"><input class="layui-input input-text" type="text" name="number_of_staff" value="{$BranchProfit.number_of_staff}" /></td>
+                                <td id="l-number_of_staff">{$accumulatedProfitsOfBranchCompanies.number_of_staff|default=0}</td>
+                            </tr>
+                            <tr>
+                                <td colspan="2" rowspan="1">收客人数</td>
+                                <td>{$BranchProfitForecast.number_of_guests_received|default='---'}</td>
+                                <td>{$BranchProfit.number_of_guests_received}
+                                <input class="layui-input" type="hidden" name="number_of_guests_received" value="{$BranchProfit.number_of_guests_received}" />
+                                </td>
+                                <td id="l-number_of_guests_received">{$accumulatedProfitsOfBranchCompanies.number_of_guests_received|default=0}</td>
+                            </tr>
+                            <tr>
+                                <td colspan="2" rowspan="1">订单金额</td>
+                                <td>{$BranchProfitForecast.order_amount|default='---'}</td>
+                                <td>{$BranchProfit.order_amount}
+                                <input class="layui-input" type="hidden" name="order_amount" value="{$BranchProfit.order_amount}"  />
+                                </td>
+                                <td id="l-order_amount">{$accumulatedProfitsOfBranchCompanies.order_amount|default=0}</td>
+                            </tr>
+                            <tr>
+                                <td colspan="2" rowspan="1">主营业务收入</td>
+                                <td>{$BranchProfitForecast.main_operating_income|default='---'}</td>
+                                <td><font id="f-main_operating_income">{$BranchProfit.main_operating_income|default=0}</font>
+                                    <input class="layui-input input-text" type="hidden" name="main_operating_income" value="{$BranchProfit.main_operating_income}"  />
+                                </td>
+                                <td id="l-main_operating_income">{$accumulatedProfitsOfBranchCompanies.main_operating_income|default=0}</td>
+                            </tr>
+                            <tr>
+                                <td colspan="1" rowspan="2" style="width: 20px;"></td>
+                                <td>外部收入</td>
+                                <td>{$BranchProfitForecast.external_income|default='---'}</td>
+                                <td><input class="layui-input input-text" type="text" name="external_income" value="{$BranchProfit.external_income}"  /></td>
+                                <td id="l-external_income">{$accumulatedProfitsOfBranchCompanies.external_income|default=0}</td>
+                            </tr>
+                            <tr>
+                                <td>内部结算收入</td>
+                                <td>{$BranchProfitForecast.internal_settlement_income|default='---'}</td>
+                                <td><input class="layui-input input-text" type="text" name="internal_settlement_income" value="{$BranchProfit.internal_settlement_income}"  /></td>
+                                <td id="l-internal_settlement_income">{$accumulatedProfitsOfBranchCompanies.internal_settlement_income|default=0}</td>
+                            </tr>
+
+                            <tr>
+                                <td colspan="2" rowspan="1">主营业务成本</td>
+                                <td>{$BranchProfitForecast.main_business_cost|default='---'}</td>
+                                <td><font id="f-main_business_cost">{$BranchProfit.main_business_cost|default=0}</font>
+                                <input class="layui-input input-text"  type="hidden" value="{$BranchProfit.main_business_cost}" name="main_business_cost"  />
+                                </td>
+                                <td id="l-main_business_cost">{$accumulatedProfitsOfBranchCompanies.main_business_cost|default=0}</td>
+                            </tr>
+                            <tr>
+                                <td colspan="1" rowspan="2" style="width: 20px;"></td>
+                                <td>外部成本</td>
+                                <td>{$BranchProfitForecast.external_cost|default='---'}</td>
+                                <td><input class="layui-input input-text" type="text" name="external_cost" value="{$BranchProfit.external_cost}"/></td>
+                                <td id="l-external_cost">{$accumulatedProfitsOfBranchCompanies.external_cost|default=0}</td>
+                            </tr>
+                            <tr>
+                                <td>内部结算成本</td>
+                                <td>{$BranchProfitForecast.internal_settlement_cost|default='---'}</td>
+                                <td><input class="layui-input input-text" type="text" name="internal_settlement_cost" value="{$BranchProfit.internal_settlement_cost}"/></td>
+                                <td id="l-internal_settlement_cost">{$accumulatedProfitsOfBranchCompanies.internal_settlement_cost|default=0}</td>
+                            </tr>
+
+                            <tr>
+                                <td colspan="2" rowspan="1">毛利</td>
+                                <td>{$BranchProfitForecast.gross_profit|default='---'}</td>
+                                <td>
+                                    <font id="f-gross_profit">{$BranchProfit.gross_profit|default=0}</font>
+                                    <input class="layui-input input-text" type="hidden" name="gross_profit" value="{$BranchProfit.gross_profit}"/></td>
+                                <td id="l-gross_profit">{$accumulatedProfitsOfBranchCompanies.gross_profit|default=0}</td>
+                            </tr>
+                            <tr>
+                                <td colspan="2" rowspan="1">毛利率</td>
+                                <td>{$BranchProfitForecast.ratio_of_margin|default='---'}</td>
+                                <td>
+                                    <font id="f-ratio_of_margin">{$BranchProfit.ratio_of_margin|default=0}</font>
+                                    <input class="layui-input input-text" type="hidden" name="ratio_of_margin" value="{$BranchProfit.ratio_of_margin}"/>
+                                </td>
+                                <td id="l-ratio_of_margin">{$accumulatedProfitsOfBranchCompanies.ratio_of_margin|default=0}</td>
+                            </tr>
+                            <tr>
+                                <td colspan="2" rowspan="1">营业税金及附加</td>
+                                <td>{$BranchProfitForecast.operating_taxes_and_attachments|default='---'}</td>
+                                <td>
+                                    <input class="layui-input input-text" type="text" name="operating_taxes_and_attachments" value="{$BranchProfit.operating_taxes_and_attachments}" />
+                                </td>
+                                <td id="l-operating_taxes_and_attachments">{$accumulatedProfitsOfBranchCompanies.operating_taxes_and_attachments|default=0}</td>
+                            </tr>
+                            <tr>
+                                <td colspan="2" rowspan="1">销售费用</td>
+                                <td>{$BranchProfitForecast.selling_expenses|default='---'}</td>
+                                <td><font id="f-selling_expenses">{$BranchProfit.selling_expenses|default=0}</font>
+                                <input class="layui-input input-text" type="hidden" name="selling_expenses" value="{$BranchProfit.selling_expenses}" />
+                                </td>
+                                <td id="l-selling_expenses">{$accumulatedProfitsOfBranchCompanies.selling_expenses|default=0}</td>
+                            </tr>
+
+                            <tr>
+                                <td colspan="1" rowspan="2" style="width: 20px;"></td>
+                                <td>佣金</td>
+                                <td>{$BranchProfitForecast.commission|default='---'}</td>
+                                <td>
+                                <input class="layui-input input-text" type="text" name="commission" value="{$BranchProfit.commission}">
+                                </td>
+                                <td id="l-commission">{$accumulatedProfitsOfBranchCompanies.commission|default=0}</td>
+                            </tr>
+                            <tr>
+                                <td>其他</td>
+                                <td>{$BranchProfitForecast.other|default='---'}</td>
+                                <td>
+                                    <input class="layui-input input-text" type="text" name="other" value="{$BranchProfit.other}">
+                                </td>
+                                <td id="l-other">{$accumulatedProfitsOfBranchCompanies.other|default=0}</td>
+                            </tr>
+                            <tr>
+                                <td colspan="2" rowspan="1">管理费用</td>
+                                <td>{$BranchProfitForecast.overhead_expenses|default='---'}</td>
+                                <td><font id="f-overhead_expenses">{$BranchProfit.overhead_expenses|default=0}</font>
+                                    <input class="layui-input input-text" type="hidden" name="overhead_expenses" value="{$BranchProfit.overhead_expenses}">
+                                </td>
+                                <td id="l-overhead_expenses">{$accumulatedProfitsOfBranchCompanies.overhead_expenses|default=0}</td>
+                            </tr>
+
+                            <tr>
+                                <td colspan="1" rowspan="4" style="width: 20px;"></td>
+                                <td>工资</td>
+                                <td>{$BranchProfitForecast.salary|default='---'}</td>
+                                <td>
+                                    <input class="layui-input input-text" type="text" name="salary" value="{$BranchProfit.salary}">
+                                </td>
+                                <td id="l-salary">{$accumulatedProfitsOfBranchCompanies.salary|default=0}</td>
+                            </tr>
+                            <tr>
+                                <td>房租</td>
+                                <td>{$BranchProfitForecast.chummage|default='---'}</td>
+                                <td>
+                                    <input class="layui-input input-text" type="text" name="chummage" value="{$BranchProfit.chummage}">
+                                </td>
+                                <td id="l-chummage">{$accumulatedProfitsOfBranchCompanies.chummage|default=0}</td>
+                            </tr>
+                            <tr>
+                                <td>水电</td>
+                                <td>{$BranchProfitForecast.hydroelectricity|default='---'}</td>
+                                <td>
+                                    <input class="layui-input input-text" type="text" name="hydroelectricity" value="{$BranchProfit.hydroelectricity}">
+                                </td>
+                                <td id="l-hydroelectricity">{$accumulatedProfitsOfBranchCompanies.hydroelectricity|default=0}</td>
+                            </tr>
+                            <tr>
+                                <td>办公</td>
+                                <td>{$BranchProfitForecast.handle_official_business|default='---'}</td>
+                                <td>
+                                    <input class="layui-input input-text" type="text" name="handle_official_business" value="{$BranchProfit.handle_official_business}">
+                                </td>
+                                <td id="l-handle_official_business">{$accumulatedProfitsOfBranchCompanies.handle_official_business|default=0}</td>
+                            </tr>
+                            <tr>
+                                <td colspan="2" rowspan="1">财务费用</td>
+                                <td>{$BranchProfitForecast.cost_of_financing|default='---'}</td>
+                                <td><font id="f-cost_of_financing">{$BranchProfit.cost_of_financing|default=0}</font>
+                                    <input class="layui-input input-text" type="hidden" name="cost_of_financing" value="{$BranchProfit.cost_of_financing}">
+                                </td>
+                                <td id="l-cost_of_financing">{$accumulatedProfitsOfBranchCompanies.cost_of_financing|default=0}</td>
+                            </tr>
+
+                            <tr>
+                                <td colspan="1" rowspan="3" style="width: 20px;"></td>
+                                <td>利息</td>
+                                <td>{$BranchProfitForecast.interest|default='---'}</td>
+                                <td>
+                                    <input class="layui-input input-text" type="text" name="interest" value="{$BranchProfit.interest}">
+                                </td>
+                                <td id="l-interest">{$accumulatedProfitsOfBranchCompanies.interest|default=0}</td>
+                            </tr>
+                            <tr>
+                                <td>汇兑损益</td>
+                                <td>{$BranchProfitForecast.exchange_gain_or_loss|default='---'}</td>
+                                <td>
+                                    <input class="layui-input input-text" type="text" name="exchange_gain_or_loss" value="{$BranchProfit.exchange_gain_or_loss}">
+                                </td>
+                                <td id="l-exchange_gain_or_loss">{$accumulatedProfitsOfBranchCompanies.exchange_gain_or_loss|default=0}</td>
+                            </tr>
+                            <tr>
+                                <td>手续费</td>
+                                <td>{$BranchProfitForecast.poundage|default='---'}</td>
+                                <td>
+                                    <input class="layui-input input-text" type="text" name="poundage" value="{$BranchProfit.poundage}">
+                                </td>
+                                <td id="l-poundage">{$accumulatedProfitsOfBranchCompanies.poundage|default=0}</td>
+                            </tr>
+                            <tr>
+                                <td colspan="2" rowspan="1">营业外收入</td>
+                                <td>{$BranchProfitForecast.nonbusiness_income|default='---'}</td>
+                                <td>
+                                    <input class="layui-input input-text" type="text" name="nonbusiness_income" value="{$BranchProfit.nonbusiness_income}">
+                                </td>
+                                <td id="l-nonbusiness_income">{$accumulatedProfitsOfBranchCompanies.nonbusiness_income|default=0}</td>
+                            </tr>
+                            <tr>
+                                <td colspan="2" rowspan="1">营业外支出</td>
+                                <td>{$BranchProfitForecast.non_business_expenditure|default='---'}</td>
+                                <td>
+                                    <input class="layui-input input-text" type="text" name="non_business_expenditure" value="{$BranchProfit.non_business_expenditure}">
+                                </td>
+                                <td id="l-non_business_expenditure">{$accumulatedProfitsOfBranchCompanies.non_business_expenditure|default=0}</td>
+                            </tr>
+                            <tr>
+                                <td colspan="2" rowspan="1">利润总额</td>
+                                <td>{$BranchProfitForecast.total_profit|default='---'}</td>
+                                <td><font id="f-total_profit">{$BranchProfit.total_profit|default=0}</font>
+                                    <input class="layui-input input-text" type="hidden" name="total_profit" value="{$BranchProfit.total_profit}">
+                                </td>
+                                <td id="l-total_profit">{$accumulatedProfitsOfBranchCompanies.total_profit|default=0}</td>
+                            </tr>
+                            <tr>
+                                <td colspan="2" rowspan="1">所得税</td>
+                                <td>{$BranchProfitForecast.income_tax|default='---'}</td>
+                                <td>
+                                    <input class="layui-input input-text" type="text" name="income_tax" value="{$BranchProfit.income_tax}">
+                                </td>
+                                <td id="l-income_tax">{$accumulatedProfitsOfBranchCompanies.income_tax|default=0}</td>
+                            </tr>
+                            <tr>
+                                <td colspan="2" rowspan="1">净利润</td>
+                                <td>{$BranchProfitForecast.net_margin|default='---'}</td>
+                                <td><font id="f-net_margin">{$BranchProfit.net_margin|default=0}</font>
+                                    <input class="layui-input input-text" type="hidden" name="net_margin" value="{$BranchProfit.net_margin}">
+                                </td>
+                                <td id="l-net_margin">{$accumulatedProfitsOfBranchCompanies.net_margin|default=0}</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="all-button-center">
+                        <div class="">
+                            <button type="submit" class="layui-btn nav-submit layui-number-inline">保存</button>
+                            <!--<button class="layui-btn layui-btn-primary layui-number-inline">返回</button>-->
+                            <a class="layui-btn layui-btn-primary layui-number-inline" href="javascript:history.back(-1)">返回</a>
+                        </div>
+                    </div>
+                    <br>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="layui-footer">
+        <!-- 底部固定区域 -->
+        © layui.com - 底部固定区域
+    </div>
+    <script id="demo" type="text/html">
+
+    </script>
+</div>
+{include file='public/foot_js' /}
+<script>
+    var ary = new Object()
+    ary.number_of_staff = {$BranchProfit.number_of_staff|default=0};
+    ary.number_of_guests_received = {$BranchProfit.number_of_guests_received|default=0};
+    ary. order_amount = {$BranchProfit.order_amount|default=0};
+    ary.main_operating_income = {$BranchProfit.main_operating_income|default=0};
+    ary.external_income = {$BranchProfit.external_income|default=0};
+    ary.internal_settlement_income = {$BranchProfit.internal_settlement_income|default=0};
+    ary.internal_settlement_cost = {$BranchProfit.internal_settlement_cost|default=0};
+    ary.main_business_cost = {$BranchProfit.main_business_cost|default=0};
+    ary.external_cost = {$BranchProfit.external_cost|default=0};
+    ary.gross_profit = {$BranchProfit.gross_profit|default=0};
+    ary.ratio_of_margin = {$BranchProfit.ratio_of_margin|default=0};
+    ary.operating_taxes_and_attachments = {$BranchProfit.operating_taxes_and_attachments|default=0};
+    ary.selling_expenses = {$BranchProfit.selling_expenses|default=0};
+    ary.commission = {$BranchProfit.commission|default=0};
+    ary.other = {$BranchProfit.other|default=0};
+    ary.overhead_expenses = {$BranchProfit.overhead_expenses|default=0};
+    ary.salary = {$BranchProfit.salary|default=0};
+    ary.chummage = {$BranchProfit.chummage|default=0};
+    ary.hydroelectricity = {$BranchProfit.hydroelectricity|default=0};
+    ary.handle_official_business = {$BranchProfit.handle_official_business|default=0};
+    ary.cost_of_financing = {$BranchProfit.cost_of_financing|default=0};
+    ary.interest = {$BranchProfit.interest|default=0};
+    ary.exchange_gain_or_loss = {$BranchProfit.exchange_gain_or_loss|default=0};
+    ary.poundage = {$BranchProfit.poundage|default=0};
+    ary.nonbusiness_income = {$BranchProfit.nonbusiness_income|default=0};
+    ary.non_business_expenditure = {$BranchProfit.non_business_expenditure|default=0};
+    ary.total_profit = {$BranchProfit.total_profit|default=0};
+    ary.income_tax = {$BranchProfit.income_tax|default=0};
+    ary.net_margin = {$BranchProfit.net_margin|default=0};
+    ary.is_predict = {$BranchProfit.is_predict|default=0};
+
+
+    $(function () {
+        var layer = layui.layer;
+
+        $("table th").css("font-weight","bold");
+        $("table td,table th").css({"border":"1px solid #e6e6e6","text-align":"center","padding":"10px","line-height":"30px","color":"#666","font-size":"14px"});
+        $("table thead tr:eq(0) th").css("border","none");
+
+
+        $("#table-list tbody tr").each(function(index,item){
+            if($(item).find("td").length==0){
+                $(item).remove();
+            }
+        });
+
+
+        $('.input-text').on('blur',function(){
+            var _name = $(this).attr('name');
+
+//            console.log(_name);
+            var _nv = $(this).val().replace(/(^\s*)|(\s*$)/g, "")?$(this).val().replace(/(^\s*)|(\s*$)/g, ""):0;
+            if(_name!='number_of_staff'){
+                _nv = parseFloat(_nv).toFixed(2);
+                $(this).val(_nv);
+            }
+
+            var _lj =  $('#l-'+_name).html().replace(/(^\s*)|(\s*$)/g, "").replace(/(^\s*)|(\s*$)/g, "")?$('#l-'+_name).html().replace(/(^\s*)|(\s*$)/g, ""):0;
+            var _nlj =  parseFloat(_lj)-parseFloat(ary[_name])+parseFloat(_nv);
+            $('#l-'+_name).html(_nlj.toFixed(2));
+
+            //员工人数
+            if(_name=='number_of_staff'){
+                $('#l-'+_name).html(_nv);
+            }
+
+            //主营业务收入
+            if(_name=='external_income' || _name=='internal_settlement_income'){
+                js_main_operating_income();
+                JsMainOperatingIncome();
+            }
+            //主营业务成本
+            if(_name=='external_cost' || _name=='internal_settlement_cost'){
+                js_main_business_cost();
+                JsCumulativeCostOfMainBusiness();
+            }
+            //销售费用
+            if(_name=='commission' || _name=='other'){
+                js_selling_expenses();
+                JsCumulativeSalesExpenses();
+            }
+            //管理费用
+            if(_name=='salary' || _name=='chummage' || _name=='hydroelectricity' || _name=='handle_official_business'){
+                js_overhead_expenses();
+                JsManagementCostAccumulation();
+            }
+            //财务费用
+            if(_name=='interest' || _name=='exchange_gain_or_loss' || _name=='poundage'){
+                js_cost_of_financing();
+                JsFinancialCostAccumulation();
+            }
+
+            js_total_profit(); //利润总额
+            js_net_margin(); //净利润
+
+            JsTotalProfitAccumulation(); //利润总额累计
+            ary[_name]=_nv;
+        });
+
+    });
+
+    //净利润累计
+    function JsNetProfitAccumulation(){
+        var ltotal_profit = $('#l-total_profit').html().replace(/(^\s*)|(\s*$)/g, "")?$('#l-total_profit').html().replace(/(^\s*)|(\s*$)/g, ""):0;
+        var lincome_tax = $('#l-income_tax').html().replace(/(^\s*)|(\s*$)/g, "")?$('#l-income_tax').html().replace(/(^\s*)|(\s*$)/g, ""):0;
+        var n = parseFloat(ltotal_profit)-parseFloat(lincome_tax);
+        $('#l-net_margin').html(n);
+    }
+
+
+    //利润总额累计
+    function JsTotalProfitAccumulation(){
+        var lmain_operating_income = $('#l-main_operating_income').html().replace(/(^\s*)|(\s*$)/g, "")?$('#l-main_operating_income').html().replace(/(^\s*)|(\s*$)/g, ""):0;
+        var lmain_business_cost = $('#l-main_business_cost').html().replace(/(^\s*)|(\s*$)/g, "")?$('#l-main_business_cost').html().replace(/(^\s*)|(\s*$)/g, ""):0;
+        var loperating_taxes_and_attachments = $('#l-operating_taxes_and_attachments').html().replace(/(^\s*)|(\s*$)/g, "")?$('#l-operating_taxes_and_attachments').html().replace(/(^\s*)|(\s*$)/g, ""):0;
+        var lselling_expenses = $('#l-selling_expenses').html().replace(/(^\s*)|(\s*$)/g, "")?$('#l-selling_expenses').html().replace(/(^\s*)|(\s*$)/g, ""):0;
+        var loverhead_expenses = $('#l-overhead_expenses').html().replace(/(^\s*)|(\s*$)/g, "")?$('#l-overhead_expenses').html().replace(/(^\s*)|(\s*$)/g, ""):0;
+        var lcost_of_financing = $('#l-cost_of_financing').html().replace(/(^\s*)|(\s*$)/g, "")?$('#l-cost_of_financing').html().replace(/(^\s*)|(\s*$)/g, ""):0;
+        var lnonbusiness_income = $('#l-nonbusiness_income').html().replace(/(^\s*)|(\s*$)/g, "")?$('#l-nonbusiness_income').html().replace(/(^\s*)|(\s*$)/g, ""):0;
+        var lnon_business_expenditure = $('#l-non_business_expenditure').html().replace(/(^\s*)|(\s*$)/g, "")?$('#l-non_business_expenditure').html().replace(/(^\s*)|(\s*$)/g, ""):0;
+
+        var ltotal_profit = parseFloat(lmain_operating_income)-parseFloat(lmain_business_cost)-parseFloat(loperating_taxes_and_attachments)-parseFloat(lselling_expenses)-parseFloat(loverhead_expenses)-parseFloat(lcost_of_financing)-parseFloat(lnonbusiness_income)-parseFloat(lnon_business_expenditure);
+        $('#l-total_profit').html(ltotal_profit.toFixed(2));
+
+    }
+
+
+    //财务费用累计
+    function JsFinancialCostAccumulation(){
+        var lcost_of_financing = $('#l-cost_of_financing').html().replace(/(^\s*)|(\s*$)/g, "")?$('#l-cost_of_financing').html().replace(/(^\s*)|(\s*$)/g, ""):0;
+        var interest = $("input[name='interest']").val().replace(/(^\s*)|(\s*$)/g, "")?$("input[name='interest']").val().replace(/(^\s*)|(\s*$)/g, ""):0;
+        var exchange_gain_or_loss = $("input[name='exchange_gain_or_loss']").val().replace(/(^\s*)|(\s*$)/g, "")?$("input[name='exchange_gain_or_loss']").val().replace(/(^\s*)|(\s*$)/g, ""):0;
+        var poundage = $("input[name='poundage']").val().replace(/(^\s*)|(\s*$)/g, "")?$("input[name='poundage']").val().replace(/(^\s*)|(\s*$)/g, ""):0;
+
+        var n_lcost_of_financing = parseFloat(lcost_of_financing)-parseFloat(ary['interest'])-parseFloat(ary['exchange_gain_or_loss'])-parseFloat(ary['poundage'])+parseFloat(interest)+parseFloat(exchange_gain_or_loss)+parseFloat(poundage);
+        $('#l-cost_of_financing').html(n_lcost_of_financing.toFixed(2));
+
+    }
+
+    //管理费用累计
+    function JsManagementCostAccumulation(){
+        var loverhead_expenses = $('#l-overhead_expenses').html().replace(/(^\s*)|(\s*$)/g, "")?$('#l-overhead_expenses').html().replace(/(^\s*)|(\s*$)/g, ""):0;
+        var salary = $("input[name='salary']").val().replace(/(^\s*)|(\s*$)/g, "")?$("input[name='salary']").val().replace(/(^\s*)|(\s*$)/g, ""):0;
+        var chummage = $("input[name='chummage']").val().replace(/(^\s*)|(\s*$)/g, "")?$("input[name='chummage']").val().replace(/(^\s*)|(\s*$)/g, ""):0;
+        var hydroelectricity = $("input[name='hydroelectricity']").val().replace(/(^\s*)|(\s*$)/g, "")?$("input[name='hydroelectricity']").val().replace(/(^\s*)|(\s*$)/g, ""):0;
+        var handle_official_business = $("input[name='handle_official_business']").val().replace(/(^\s*)|(\s*$)/g, "")?$("input[name='handle_official_business']").val().replace(/(^\s*)|(\s*$)/g, ""):0;
+
+        var n_loverhead_expenses = parseFloat(loverhead_expenses)-parseFloat(ary['salary'])-parseFloat(ary['chummage'])-parseFloat(ary['hydroelectricity'])-parseFloat(ary['handle_official_business'])+parseFloat(salary)+parseFloat(chummage)+parseFloat(hydroelectricity)+parseFloat(handle_official_business);
+        $('#l-overhead_expenses').html(n_loverhead_expenses.toFixed(2));
+    }
+
+    //销售费用累计
+    function JsCumulativeSalesExpenses(){
+        var lselling_expenses = $('#l-selling_expenses').html().replace(/(^\s*)|(\s*$)/g, "")?$('#l-selling_expenses').html().replace(/(^\s*)|(\s*$)/g, ""):0;
+        var commission  = $("input[name='commission']").val().replace(/(^\s*)|(\s*$)/g, "")?$("input[name='commission']").val().replace(/(^\s*)|(\s*$)/g, ""):0;
+        var other  = $("input[name='other']").val().replace(/(^\s*)|(\s*$)/g, "")?$("input[name='other']").val().replace(/(^\s*)|(\s*$)/g, ""):0;
+
+        var n_lselling_expenses = parseFloat(lselling_expenses)-parseFloat(ary['commission'])-parseFloat(ary['other'])+parseFloat(commission)+parseFloat(other);
+        $('l-selling_expenses').html(n_lselling_expenses.toFixed(2));
+    }
+
+    //主营业务累计成本
+    function JsCumulativeCostOfMainBusiness(){
+        var lmain_business_cost = $('#l-main_business_cost').html().replace(/(^\s*)|(\s*$)/g, "")?$('#l-main_business_cost').html().replace(/(^\s*)|(\s*$)/g, ""):0;
+        var external_cost = $("input[name='external_cost']").val().replace(/(^\s*)|(\s*$)/g, "")?$("input[name='external_cost']").val().replace(/(^\s*)|(\s*$)/g, ""):0;
+        var internal_settlement_cost = $("input[name='internal_settlement_cost']").val().replace(/(^\s*)|(\s*$)/g, "")?$("input[name='internal_settlement_cost']").val().replace(/(^\s*)|(\s*$)/g, ""):0;
+
+        var n_lmain_business_cost = parseFloat(lmain_business_cost)-parseFloat(ary['external_cost'])-parseFloat(ary['internal_settlement_cost'])+parseFloat(external_cost)+parseFloat(internal_settlement_cost);
+        $('#l-main_operating_income').html(n_lmain_business_cost.toFixed(2));
+    }
+
+
+    //主营业务累计收入
+    function JsMainOperatingIncome(){
+        var lmain_operating_income = $('#l-main_operating_income').html();
+        var external_income = $("input[name='external_income']").val().replace(/(^\s*)|(\s*$)/g, "")?$("input[name='external_income']").val().replace(/(^\s*)|(\s*$)/g, ""):0;
+        var internal_settlement_income = $("input[name='internal_settlement_income']").val().replace(/(^\s*)|(\s*$)/g, "")?$("input[name='internal_settlement_income']").val().replace(/(^\s*)|(\s*$)/g, ""):0;
+
+        var n_lmain_operating_income = parseFloat(lmain_operating_income)-parseFloat(ary['external_income'])-parseFloat(ary['internal_settlement_income'])+parseFloat(external_income)+parseFloat(internal_settlement_income);
+        $('#l-main_operating_income').html(n_lmain_operating_income.toFixed(2));
+    }
+
+    //毛利
+    function js_gross_profit(){
+        var i_main_operating_income =  $("input[name='main_operating_income']").val().replace(/(^\s*)|(\s*$)/g, "")?$("input[name='main_operating_income']").val().replace(/(^\s*)|(\s*$)/g, ""):0;
+        var i_main_business_cost = $("input[name='main_business_cost']").val().replace(/(^\s*)|(\s*$)/g, "")?$("input[name='main_business_cost']").val().replace(/(^\s*)|(\s*$)/g, ""):0;
+        var i_gross_profit = parseFloat(i_main_operating_income)-parseFloat(i_main_business_cost);
+        $('input[name="gross_profit"]').val(i_gross_profit.toFixed(2));
+        $('#f-gross_profit').html(i_gross_profit.toFixed(2));
+    }
+
+    //毛利率
+    function js_ratio_of_margin(){
+        var i_main_operating_income =  $("input[name='main_operating_income']").val().replace(/(^\s*)|(\s*$)/g, "")?$("input[name='main_operating_income']").val().replace(/(^\s*)|(\s*$)/g, ""):0;
+        var i_main_business_cost = $("input[name='main_business_cost']").val().replace(/(^\s*)|(\s*$)/g, "")?$("input[name='main_business_cost']").val().replace(/(^\s*)|(\s*$)/g, ""):0;
+        var i_ratio_of_margin = parseFloat(i_main_business_cost)/parseFloat(i_main_operating_income);
+        $('input[name="ratio_of_margin"]').val(i_ratio_of_margin.toFixed(4));
+        $('#f-ratio_of_margin').html(i_ratio_of_margin.toFixed(4));
+    }
+
+    //主营业务收入
+    function js_main_operating_income(){
+//        var _main_operating_income = $('#f-main_operating_income').html().replace(/(^\s*)|(\s*$)/g, "")?$('#f-main_operating_income').html().replace(/(^\s*)|(\s*$)/g, ""):0;
+//        var _external_income = $("input[name='external_income']").val().replace(/(^\s*)|(\s*$)/g, "")?$("input[name='external_income']").val().replace(/(^\s*)|(\s*$)/g, ""):0;
+//        var _internal_settlement_income = $("input[name='internal_settlement_income']").val().replace(/(^\s*)|(\s*$)/g, "")?$("input[name='internal_settlement_income']").val().replace(/(^\s*)|(\s*$)/g, ""):0;
+//        var n_main_operating_income = parseFloat(_external_income)+parseFloat(_internal_settlement_income);
+//        if(n_main_operating_income>_main_operating_income){
+//            layer.msg('外部收入+内部结算收入大于主营业务收入');
+//            return 1;
+//        }
+//        if(n_main_operating_income<_main_operating_income){
+//            layer.msg('外部收入+内部结算收入小于主营业务收入');
+//            return 1;
+//        }
+
+        var _external_income = $("input[name='external_income']").val().replace(/(^\s*)|(\s*$)/g, "")?$("input[name='external_income']").val().replace(/(^\s*)|(\s*$)/g, ""):0;
+        var _internal_settlement_income = $("input[name='internal_settlement_income']").val().replace(/(^\s*)|(\s*$)/g, "")?$("input[name='internal_settlement_income']").val().replace(/(^\s*)|(\s*$)/g, ""):0;
+        var n_main_operating_income = parseFloat(_external_income)+parseFloat(_internal_settlement_income);
+        $('#f-main_operating_income').html(n_main_operating_income.toFixed(2));
+        $("input[name='main_operating_income']").val(n_main_operating_income.toFixed(2));
+        //毛利
+        js_gross_profit();
+        //毛利率
+        js_ratio_of_margin();
+    }
+
+    //主营业务成本
+    function js_main_business_cost(){
+//        var _main_business_cost = $('#f-main_business_cost').html().replace(/(^\s*)|(\s*$)/g, "")?$('#f-main_business_cost').html().replace(/(^\s*)|(\s*$)/g, ""):0;
+//        var _external_cost = $("input[name='external_cost']").val().replace(/(^\s*)|(\s*$)/g, "")?$("input[name='external_cost']").val().replace(/(^\s*)|(\s*$)/g, ""):0;
+//        var _internal_settlement_cost = $("input[name='internal_settlement_cost']").val().replace(/(^\s*)|(\s*$)/g, "")?$("input[name='internal_settlement_cost']").val().replace(/(^\s*)|(\s*$)/g, ""):0;
+//        var n_main_business_cost = parseFloat(_external_cost)+parseFloat(_internal_settlement_cost);
+//        if(n_main_business_cost>_main_business_cost){
+//            layer.msg('外部成本+内部结算成本大于主营业务成本');
+//            return 1;
+//        }
+//        if(n_main_business_cost<_main_business_cost){
+//            layer.msg('外部成本+内部结算成本小于主营业务成本');
+//            return 1;
+//        }
+
+        var _external_cost = $("input[name='external_cost']").val().replace(/(^\s*)|(\s*$)/g, "")?$("input[name='external_cost']").val().replace(/(^\s*)|(\s*$)/g, ""):0;
+        var _internal_settlement_cost = $("input[name='internal_settlement_cost']").val().replace(/(^\s*)|(\s*$)/g, "")?$("input[name='internal_settlement_cost']").val().replace(/(^\s*)|(\s*$)/g, ""):0;
+        var n_main_business_cost = parseFloat(_external_cost)+parseFloat(_internal_settlement_cost);
+        $('#f-main_business_cost').html(n_main_business_cost.toFixed(2));
+        $("input[name='main_business_cost']").val(n_main_business_cost.toFixed(2));
+        //毛利
+        js_gross_profit();
+        //毛利率
+        js_ratio_of_margin();
+    }
+
+    //销售费用
+    function js_selling_expenses(){
+        var _selling_expenses = $('#f-selling_expenses').html().replace(/(^\s*)|(\s*$)/g, "")?$('#f-selling_expenses').html().replace(/(^\s*)|(\s*$)/g, ""):0;
+        var _commission = $("input[name='commission']").val().replace(/(^\s*)|(\s*$)/g, "")?$("input[name='commission']").val().replace(/(^\s*)|(\s*$)/g, ""):0;
+        var _other = $("input[name='other']").val().replace(/(^\s*)|(\s*$)/g, "")?$("input[name='other']").val().replace(/(^\s*)|(\s*$)/g, ""):0;
+
+        var n_selling_expenses = parseFloat(_commission)+parseFloat(_other);
+        $('#f-selling_expenses').html(n_selling_expenses.toFixed(2));
+    }
+
+    //管理费用
+    function js_overhead_expenses(){
+        var _overhead_expenses = $('#f-overhead_expenses').html().replace(/(^\s*)|(\s*$)/g, "")?$('#f-overhead_expenses').html().replace(/(^\s*)|(\s*$)/g, ""):0;
+        var _salary = $("input[name='salary']").val().replace(/(^\s*)|(\s*$)/g, "")?$("input[name='salary']").val().replace(/(^\s*)|(\s*$)/g, ""):0;
+        var _chummage = $("input[name='chummage']").val().replace(/(^\s*)|(\s*$)/g, "")?$("input[name='chummage']").val().replace(/(^\s*)|(\s*$)/g, ""):0;
+        var _hydroelectricity = $("input[name='hydroelectricity']").val().replace(/(^\s*)|(\s*$)/g, "")?$("input[name='hydroelectricity']").val().replace(/(^\s*)|(\s*$)/g, ""):0;
+        var _handle_official_business = $("input[name='handle_official_business']").val().replace(/(^\s*)|(\s*$)/g, "")?$("input[name='handle_official_business']").val().replace(/(^\s*)|(\s*$)/g, ""):0;
+
+        var n_overhead_expenses = parseFloat(_salary)+parseFloat(_chummage)+parseFloat(_hydroelectricity)+parseFloat(_handle_official_business);
+        $('#f-overhead_expenses').html(n_overhead_expenses.toFixed(2));
+    }
+
+    //财务费用
+    function js_cost_of_financing(){
+        var _cost_of_financing = $('#f-cost_of_financing').html().replace(/(^\s*)|(\s*$)/g, "")?$('#f-cost_of_financing').html().replace(/(^\s*)|(\s*$)/g, ""):0;
+        var _interest = $("input[name='interest']").val().replace(/(^\s*)|(\s*$)/g, "")?$("input[name='interest']").val().replace(/(^\s*)|(\s*$)/g, ""):0;
+        var _exchange_gain_or_loss = $("input[name='exchange_gain_or_loss']").val().replace(/(^\s*)|(\s*$)/g, "")?$("input[name='exchange_gain_or_loss']").val().replace(/(^\s*)|(\s*$)/g, ""):0;
+        var _poundage = $("input[name='poundage']").val().replace(/(^\s*)|(\s*$)/g, "")?$("input[name='poundage']").val().replace(/(^\s*)|(\s*$)/g, ""):0;
+
+        var n_cost_of_financing = parseFloat(_interest)+parseFloat(_exchange_gain_or_loss)+parseFloat(_poundage);
+        $('#f-cost_of_financing').html(n_cost_of_financing.toFixed(2));
+    }
+
+    //利润总额  主营业务收入-主营业务成本-营业税金及附加-销售费用-管理费用-财务费用+营业外收入-营业外支出
+    function js_total_profit(){
+        var _total_profit = $('#f-total_profit').html().replace(/(^\s*)|(\s*$)/g, "")?$('#f-total_profit').html().replace(/(^\s*)|(\s*$)/g, ""):0;
+        var _main_operating_income = $('#f-main_operating_income').html().replace(/(^\s*)|(\s*$)/g, "")?$('#f-main_operating_income').html().replace(/(^\s*)|(\s*$)/g, ""):0;
+        var _main_business_cost = $('#f-main_business_cost').html().replace(/(^\s*)|(\s*$)/g, "")?$('#f-main_business_cost').html().replace(/(^\s*)|(\s*$)/g, ""):0;
+        var _operating_taxes_and_attachments = $("input[name='operating_taxes_and_attachments']").val().replace(/(^\s*)|(\s*$)/g, "")?$("input[name='operating_taxes_and_attachments']").val().replace(/(^\s*)|(\s*$)/g, ""):0;
+        var _selling_expenses = $('#f-selling_expenses').html().replace(/(^\s*)|(\s*$)/g, "")?$('#f-selling_expenses').html().replace(/(^\s*)|(\s*$)/g, ""):0;
+        var _overhead_expenses =  $('#f-overhead_expenses').html().replace(/(^\s*)|(\s*$)/g, "")?$('#f-overhead_expenses').html().replace(/(^\s*)|(\s*$)/g, ""):0;
+        var _cost_of_financing = $('#f-cost_of_financing').html().replace(/(^\s*)|(\s*$)/g, "")?$('#f-cost_of_financing').html().replace(/(^\s*)|(\s*$)/g, ""):0;
+        var _nonbusiness_income = $("input[name='nonbusiness_income']").val().replace(/(^\s*)|(\s*$)/g, "")?$("input[name='nonbusiness_income']").val().replace(/(^\s*)|(\s*$)/g, ""):0;
+        var _non_business_expenditure = $("input[name='non_business_expenditure']").val().replace(/(^\s*)|(\s*$)/g, "")?$("input[name='non_business_expenditure']").val().replace(/(^\s*)|(\s*$)/g, ""):0;
+
+        var n_total_profit = parseFloat(_main_operating_income)-parseFloat(_main_business_cost)-parseFloat(_operating_taxes_and_attachments)-parseFloat(_selling_expenses)-parseFloat(_overhead_expenses)-parseFloat(_cost_of_financing)+parseFloat(_nonbusiness_income)-parseFloat(_non_business_expenditure);
+        $('#f-total_profit').html(n_total_profit.toFixed(2));
+    }
+
+    //净利润 利润总额-所得税
+    function js_net_margin(){
+        var _total_profit = $('#f-total_profit').html().replace(/(^\s*)|(\s*$)/g, "")?$('#f-total_profit').html().replace(/(^\s*)|(\s*$)/g, ""):0;
+        var _income_tax = $("input[name='income_tax']").val().replace(/(^\s*)|(\s*$)/g, "")?$("input[name='income_tax']").val().replace(/(^\s*)|(\s*$)/g, ""):0;
+
+        var n_net_margin = parseFloat(_total_profit)-parseFloat(_income_tax);
+
+        $('#f-net_margin').html(n_net_margin.toFixed(2));
+    }
+
+    function add(){
+        layer.load(2);
+        $.ajax({
+            type: "POST",
+            url: '/finance/editProfitStatementAjax?year_month={$year_month}',
+            data: $('#form1').serializeArray(),
+            success: function (data) {
+                layer.closeAll();
+                if(data.code!=200){
+                    layer.msg(data.msg)
+                    return false;
+                }else if(data.code==200){
+                    layer.msg('操作成功',{time:1,end : function(layero, index){
+                        window.history.go(-1);
+                    }
+                    });
+                }
+            },
+            error:function(XMLHttpRequest, textStatus, errorThrown){
+                //console.log(errorThrown)
+                layer.closeAll();
+                layer.msg('验证失败')
+            }
+        });
+
+        return false;
+    }
+
+</script>
+
+
+</body>
+</html>

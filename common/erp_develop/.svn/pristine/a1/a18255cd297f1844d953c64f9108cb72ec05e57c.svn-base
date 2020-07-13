@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {include file='public/head' /}
+    <title>{$language_tag.index_product_visitor_checkIn}-{$language_tag.index_finance_showReceivableManage_dining}</title>
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+
+    <div class="layui-header">
+        {include file='public/header' /}
+    </div>
+
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll">
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            {include file='public/left_menu' /}
+        </div>
+    </div>
+
+    <div class="layui-body">
+
+        <!-- 内容主体区域 -->
+        <div style="padding: 15px;">
+            <div class='layui-form-item'>
+		   		<span class="layui-breadcrumb" lay-separator="-">
+                    <a>{$language_tag.index_public_homepage}</a>
+                    <a>{$language_tag.index_public_product}</a>
+                    <a>{$language_tag.index_product_showRouteTemplateManage_route_template}</a>
+					<a>{$_GET['template_id']?$language_tag.index_public_update:$language_tag.index_public_add}{$language_tag.index_product_showRouteTemplateManage_route_template}</a>
+                    <a><cite>{$language_tag.index_product_showRouteTemplateManage_resources_resourcesDining}</cite></a>
+				</span>
+            </div>
+            <div style="font-weight:bold;font-size: 20px;">{$language_tag.index_product_showRouteTemplateManage_resourceAllocation}-{$language_tag.index_finance_showReceivableManage_dining}
+                <br><br><a href="/source/showDiningAdd" target="" class="layui-btn">{$language_tag.index_source_showOwnExpenseManage_add_source}</a>
+            </div>
+
+            <br/>
+            <br/>
+            <br/>
+            <form class="layui-form" id="form1" onSubmit="return add()">
+                <div class="table-nont">
+                    <table  class="layui-table" id="t-dining">
+                        <thead>
+                        <tr>
+                            <th>{$language_tag.index_product_showRouteTemplateManage_resource_resourceSupplier}</th>
+                            <!--<th>地接社</th>-->
+                            <th>{$language_tag.index_finance_showReceivableManage_dining}</th>
+                            <th>{$language_tag.index_product_showRouteTemplateManage_resources_mealMark}({$language_tag.index_product_showRouteTemplateManage_resources_people})</th>
+                            <th>{$language_tag.index_product_showRouteTemplateManage_resource_whatDay}</th>
+                            <th>{$language_tag.index_product_showRouteTemplateManage_resource_number}</th>
+                            <th width="10%">{$language_tag.index_product_showRouteTemplateManage_resources_costPrice}</th>
+                            <th width="10%">{$language_tag.index_product_showRouteTemplateManage_resources_settlementPrice}</th>
+                            <th>{$language_tag.index_product_showRouteTemplateManage_resources_currency}</th>
+                            <th>{$language_tag.index_product_showRouteTemplateManage_resources_quotedPrice}</th>
+                            <th class="template-edit">{$language_tag.index_source_operation}</th>
+                        </tr>
+                        </thead>
+                    </table>
+                </div>
+
+                <br><br><br>
+                <div class="layui-form-item">
+                    <div class="">
+                        <a class="layui-btn nav-add" id="add-dining">{$language_tag.index_public_add}</a>
+                        <button class="layui-btn nav-submit" lay-submit="" lay-filter="formDemo" id="language_add_button">{$language_tag.index_public_submit}</button>
+                        <a href="javascript:location.reload()" class="layui-btn layui-btn-primary">{$language_tag.index_product_showRouteTemplateManage_reload}</a>
+                        <a href="javascript:window.close()"><button type="button" class="layui-btn layui-btn-primary">{$language_tag.index_public_back}</button></a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!--用餐配置模板-->
+    <table style="display: none" id="add_div">
+        <tr>
+            <th>
+                <select name="supplier_id[ii]" lay-filter="supplier_id" class="supplier_id" required lay-verify="required" lay-search >
+                    <option></option>
+                    {foreach $SupplierList as $vl}
+                    <option value="{$vl.supplier_id}">{$vl.supplier_name}</option>
+                    {/foreach}
+                </select>
+            </th>
+            <!--<th>-->
+            <!--<select name="agent_id[ii]" class="agent_id" lay-filter="agent_id" lay-search>-->
+            <!--<option></option>-->
+            <!--</select>-->
+            <!--</th>-->
+            <th>
+                <select name="dining_name[ii]" class="dining_name" lay-filter="dining_name" required lay-verify="required" lay-search>
+                    <option></option>
+                </select>
+                <input name="dining_id[ii]" class="dining_id" type="hidden">
+            </th>
+            <th>
+                <select readonly  name="standard_type[ii]" class="standard_type" lay-filter="standard_type" required lay-verify="required" lay-search>
+                    <option value="1">{$language_tag.index_product_showRouteTemplateManage_resources_people}</option>
+                    <!--<option value="2">{$language_tag.index_product_showRouteTemplateManage_resources_table}</option>-->
+                </select>
+            </th>
+            <th>
+                <input class="layui-input the_day" name="the_day[ii]" value="" type="number" required />
+            </th>
+            <th>
+                <input class="layui-input quantity"  name="quantity[ii]"  type="number" required lay-verify="required|number" >
+            </th>
+            <th class="th_cost_price"></th>
+            <input class="cost_price" name="cost_price[ii]" type="hidden" />
+            <th class="th_unit_price"></th>
+            <input class="layui-input unit_price"  name="unit_price[ii]" type="hidden">
+            <th>
+                <select name="currency[ii]" class="currency">
+                    <option value="0"></option>
+                    {foreach $CurrencyList as $v }
+                    <option value="{$v.currency_id}">{$MultilingualAll['currency-currency_name-'.$v.currency_id.'-'.$Think.session.user.language_id][0]['translate']|default=$v.currency_name}</option>
+                    {/foreach}
+                </select>
+            </th>
+            <input class="symbol" name="symbol[ii]" type="hidden" />
+             <th><input class="layui-input total"  name="total[ii]" required lay-verify="required|number"></th>
+            <th><a class="layui-btn r-dining layui-btn-sm hover-edit layui-btn-primary" >{$language_tag.index_public_del}</a></th>
+        </tr>
+    </table>
+    <div class="layui-footer">
+        <!-- 底部固定区域 -->
+        © layui.com - 底部固定区域
+    </div>
+</div>
+{include file='public/foot_js' /}
+
+
+<script>
+    var CurrencyJson = <?=json_encode($CurrencyJson)?>;
+
+    !function() {
+        var layer = layui.layer;
+        var form = layui.form;
+        var laydate = layui.laydate;
+        var num = 0;
+
+        //添加用餐
+        $('#add-dining').on('click',function(){
+            tableNone()
+            var html = $('#add_div').html();
+            for(var ij=1;ij<15;ij++){
+                html = html.replace('ii',num);
+            }
+            $('#t-dining').append(html);
+            num++;
+            form.render();
+        });
+        //删除
+        $('#t-dining').delegate('.r-dining','click',function(){
+            $(this).parent().parent().remove();
+            table()
+        });
+
+        var tr;
+        //供应商获取用餐信息
+        form.on('select(supplier_id)', function(data){
+            tr = $(this).parent().parent().parent().parent();
+            if(data.value){
+                layer.load(2);
+                $.post('/product/getDiningAjax',{supplier_id:data.value},function(a){
+                    if(a.code==200){
+                        //地接社
+                        tr.find('.agent_id').html('');
+                        var html = '<option></option>';
+                        if(a.LocalTravelAgencyAr){
+                            for(var x in a['LocalTravelAgencyAr'])
+                                html += '<option value="'+a['LocalTravelAgencyAr'][x]['supplier_id']+'">'+a['LocalTravelAgencyAr'][x]['supplier_name']+'</option>';
+                        }
+                        tr.find('.agent_id').html(html);
+                        //用餐
+                        tr.find('.dining_name').html('');
+                        var html2 = '<option></option>';
+                        if(a.diningData){
+                            for(var x in a['diningData']){
+                                html2 += '<option value="'+a['diningData'][x]['dining_id']+'">'+a['diningData'][x]['dining_name']+'</option>';
+                            }
+                        }
+                        tr.find('.dining_name').html(html2);
+                    }else{
+                        tr.find('.agent_id').html('');
+                        tr.find('.dining_name').html('');
+                    }
+                    form.render();
+                    layer.closeAll('loading'); //关闭loading
+                },'json');
+            }else{
+                tr.find('.agent_id').html('');
+                tr.find('.dining_name').html('');
+                form.render();
+            }
+        });
+
+        //地接社
+        form.on('select(agent_id)', function(data) {
+            tr = $(this).parent().parent().parent().parent();
+            var supplier_id = tr.find('.supplier_id').val();
+            if(data.value){
+                layer.load(2);
+                $.post('/product/getDiningAgentAjax',{agent_id:data.value,supplier_id:supplier_id},function(a){
+                    tr.find('.dining_name').html('');
+                    if(a.code==200){
+                        var html = '<option></option>';
+                        if(a.diningData){
+                            for(var x in a['diningData']){
+                                html += '<option value="'+a['diningData'][x]['dining_id']+'">'+a['diningData'][x]['dining_name']+'</option>';
+                            }
+                        }
+                        tr.find('.dining_name').html(html);
+                    }
+                    form.render();
+                    layer.closeAll('loading'); //关闭loading
+                },'json');
+            }else{
+                tr.find('.dining_name').html('');
+                layer.load(2);
+                $.post('/product/getDiningAjax',{supplier_id:supplier_id},function(a){
+                    if(a.code==200){
+                        //房型
+                        tr.find('.dining_name').html('');
+                        var html2 = '<option></option>';
+                        if(a.diningData){
+                            for(var x in a['diningData']){
+                                html2 += '<option value="'+a['diningData'][x]['dining_id']+'">'+a['diningData'][x]['dining_name']+'</option>';
+                            }
+                        }
+                        tr.find('.dining_name').html(html2);
+                    }else{
+                        tr.find('.agent_id').html('');
+                        tr.find('.dining_name').html('');
+                    }
+                    form.render();
+                    layer.closeAll('loading'); //关闭loading
+                },'json');
+            }
+        });
+
+        //用餐详情
+        form.on('select(dining_name)', function(data) {
+            tr = $(this).parent().parent().parent().parent();
+            if(data.value){
+                layer.load(2);
+                tr.find('.quantity').val(0);
+                tr.find('.total').val(0);
+                tr.find('.standard_type').val(1);
+                tr.find('.dining_id').val(0);
+                tr.find('.currency').val(0);
+
+                tr.find('.cost_price').val(0);
+                tr.find('.unit_price').val(0);
+                tr.find('.th_cost_price').html('');
+                tr.find('.th_unit_price').html('');
+                tr.find('.symbol').val('');
+
+
+                $.post('/product/getDiningInfo',{dining_id:data.value},function(a){
+                    if(a.code==200){
+                        tr.find('.quantity').val(1);
+                        tr.find('.unit_price').val(a.diningData.normal_settlement_price);
+                        tr.find('.total').val(a.diningData.normal_settlement_price);
+                        tr.find('.standard_type').val(a.diningData.standard_type);
+                        tr.find('.dining_id').val(a.diningData.dining_id);
+                        tr.find('.currency').val(a.diningData.payment_currency_type);
+
+                        tr.find('.cost_price').val(a.diningData.normal_price);
+                        tr.find('.unit_price').val(a.diningData.normal_settlement_price);
+                        tr.find('.th_cost_price').html(CurrencyJson[a.diningData.payment_currency_type][0]['symbol']+a.diningData.normal_price);
+                        tr.find('.th_unit_price').html(CurrencyJson[a.diningData.payment_currency_type][0]['symbol']+a.diningData.normal_settlement_price);
+                        tr.find('.symbol').val(CurrencyJson[a.diningData.payment_currency_type][0]['symbol']);
+
+                    }
+                    form.render();
+                    layer.closeAll('loading'); //关闭loading
+                },'json');
+            }
+        });
+
+        //数量计算总价
+        $('#t-dining').delegate('.quantity','blur',function(){
+            tr = $(this).parent().parent();
+            var quantity =   tr.find('.quantity').val()?tr.find('.quantity').val():0;
+            var unit_price = tr.find('.unit_price').val()?tr.find('.unit_price').val():0;
+            var t = quantity*unit_price;
+            tr.find('.total').val(t);
+
+            var cost_price = tr.find('.cost_price').val()?tr.find('.cost_price').val():0;
+            var unit_price = tr.find('.unit_price').val()?tr.find('.unit_price').val():0;
+            var t_cost_price = quantity*cost_price;
+            var t_unit_price = quantity*unit_price;
+            var symbol = tr.find('.symbol').val();
+            tr.find('.th_cost_price').html(symbol+t_cost_price);
+            tr.find('.th_unit_price').html(symbol+t_unit_price);
+
+        });
+
+        //单价计算总价
+        $('#t-dining').delegate('.unit_price','blur',function(){
+            tr = $(this).parent().parent();
+            var quantity =   tr.find('.quantity').val()?tr.find('.quantity').val():0;
+            var unit_price = tr.find('.unit_price').val()?tr.find('.unit_price').val():0;
+            var t = quantity*unit_price;
+            tr.find('.total').val(t);
+        });
+
+
+    }();
+
+
+    function add() {
+        layer.load(2);
+        $.ajax({
+            type: "POST",
+            url: '/product/NsessionTemplateDiningAjax',
+            data: $('#form1').serializeArray(),
+            success: function (data) {
+                layer.closeAll();
+                if(data.code!=200){
+                    layer.msg(data.msg)
+                    return false;
+                }else if(data.code==200){
+                    layer.msg('{$language_tag.index_public_success}',{time:1,end : function(layero, index){
+                        opener.addDining();
+                        window.close();
+                    }
+                    });
+                }
+            },
+            error:function(XMLHttpRequest, textStatus, errorThrown){
+                layer.closeAll();
+                //console.log(errorThrown)
+                layer.msg('{$language_tag.index_public_verificationFailure}')
+
+            }
+        });
+        return false;
+    }
+</script>
+
+
+<script>
+    // opener.addHotel();
+</script>
+
+</body>
+</html>
+

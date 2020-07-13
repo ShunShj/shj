@@ -1,0 +1,1496 @@
+//JavaScript代码区域
+
+layer = layui.layer
+form = layui.form;
+
+
+//资源开始
+//添加供应商
+function supplierAdd(){
+    var supplier_type_id = $("#supplier_type_id").val();
+    var country_id = $("#country_id").val();
+    var supplier_name = $("#supplier_name").val();
+    var supplier_level = $("#supplier_level").val();
+    var supplier_linkman = $("#supplier_linkman").val();
+    var supplier_address = $("#supplier_address").val();
+    var supplier_zip_code = $("#supplier_zip_code").val();
+    var supplier_phone = $("#supplier_phone").val();
+    var supplier_website = $("#supplier_website").val();
+    var supplier_fax = $("#supplier_fax").val();
+    var supplier_email = $("#supplier_email").val();
+    var supplier_remark = $("#supplier_remark").val();
+    var supplier_status = $("#supplier_status").val();
+    var choose_company_id = $("#choose_company_id").val();
+  
+    $.ajax({
+        type: "POST",
+        url: '/source/addSupplierAjax',
+        data: {
+            supplier_type_id:supplier_type_id,
+            supplier_name:supplier_name,
+            country_id:country_id,
+            level_name:supplier_level,
+            linkman:supplier_linkman,
+            address:supplier_address,
+            zip_code:supplier_zip_code,
+            phone:supplier_phone,
+            website:supplier_website,
+            fax:supplier_fax,
+            email:supplier_email,
+            remark:supplier_remark,
+            status:supplier_status,
+            choose_company_id:choose_company_id
+        },
+        success: function(data){
+            // console.log(data);
+            if(data.code!=200){
+                layer.msg(data.msg);
+                return false;
+            }else if(data.code==200) {
+                layer.load(2);
+                location.href='/source/showSupplierManage';
+            }
+        },
+        error:function(XMLHttpRequest, textStatus, errorThrown){
+            layer.msg('验证失败')
+        }
+    });
+    return false;
+}
+
+//修改供应商
+function supplierEdit(){
+    var supplier_id = $("#supplier_id_hidden").val();
+    var supplier_type_id = $("#edit_supplier_type_id").val();
+    var country_id = $("#edit_country_id").val();
+    var supplier_name = $("#edit_supplier_name").val();
+    var supplier_level = $("#edit_supplier_level").val();
+    var supplier_linkman = $("#edit_supplier_linkman").val();
+    var supplier_address = $("#edit_supplier_address").val();
+    var supplier_zip_code = $("#edit_supplier_zip_code").val();
+    var supplier_phone = $("#edit_supplier_phone").val();
+    var supplier_website = $("#edit_supplier_website").val();
+    var supplier_fax = $("#edit_supplier_fax").val();
+    var supplier_email = $("#edit_supplier_email").val();
+    var supplier_remark = $("#edit_supplier_remark").val();
+    var supplier_status = $("#edit_supplier_status").val();
+    var choose_company_id=$("#choose_company_id").val();
+
+
+    $.ajax({
+        type: "POST",
+        url: '/source/editSupplierAjax',
+        data: {
+            supplier_id:supplier_id,
+            supplier_type_id:supplier_type_id,
+            supplier_name:supplier_name,
+            country_id:country_id,
+            level_name:supplier_level,
+            linkman:supplier_linkman,
+            address:supplier_address,
+            zip_code:supplier_zip_code,
+            phone:supplier_phone,
+            website:supplier_website,
+            fax:supplier_fax,
+            email:supplier_email,
+            remark:supplier_remark,
+            status:supplier_status,
+            choose_company_id:choose_company_id
+        },
+        success: function(data){
+            // console.log(data);
+            if(data.code!=200){
+                layer.msg(data.msg);
+                return false;
+            }else if(data.code==200) {
+                layer.load(2);
+                history.back(-1);
+            }
+        },
+        error:function(XMLHttpRequest, textStatus, errorThrown){
+            layer.msg('验证失败')
+        }
+    });
+    return false;
+}
+//修改供应商多语言
+function country_edit_language(){
+	//获取有几个input框
+	var l = $('.edit_language').length;
+	var c = $('.edit_language');
+	var data2 = [];
+
+	for(var i =0;i<l;i++){
+	
+		var data_params = {"lang_id":c.eq(i).attr('lang_id'),"supplier_language_id":c.eq(i).attr('supplier_language_id'),"supplier_number": $('#supplier_number').val(),"supplier_name":c.eq(i).val()}
+
+		data2.push(data_params);
+		
+	}
+
+
+
+    $.ajax({
+        type: "POST",
+        url: '/source/supplierEditLanguageAjax',
+
+        datatype: 'json',
+        contentType: 'application/json;charset=utf-8',
+        //data:JSON.stringify(data2)
+        data:JSON.stringify(data2)       
+        , 
+
+        success: function (data) {
+            // console.log(data);
+            if(data.code!=200){
+                layer.msg(data.msg);
+                return false;
+            }else if(data.code==200) {
+                layer.msg('操作成功',{time:1,end : function(layero, index){
+                        location.href='/source/showSupplierManage';
+                    }
+                });
+            }
+        },
+        error: function (XMLHttpRequest, textStatus, errorThrown) {
+            layer.msg('验证失败')
+        }
+    });
+	
+	
+	
+	return false;	
+	
+
+	
+}
+//地接
+function agentEdd(Obj,num){
+    if(num==2){
+        //修改酒店
+        var room_name=$(Obj).closest("tr").find("input[class='layui-input room_name']").val();
+        var hotel_id=$(Obj).closest("tr").find("input[class='hotel_id']").val();
+        var supplier_id=$(Obj).closest("tr").find("input[class='supplier_id']").val();
+
+        var normal_settlement_price=$(Obj).closest("tr").find("input[class='layui-input hotel1']").val();
+        var adult_settlement_price=$(Obj).closest("tr").find("input[class='layui-input hotel2']").val();
+        var child_bed_settlement_price=$(Obj).closest("tr").find("input[class='layui-input hotel3']").val();
+        var old_settlement_price=$(Obj).closest("tr").find("input[class='layui-input hotel4']").val();
+        var child_settlement_price=$(Obj).closest("tr").find("input[class='layui-input hotel5']").val();
+        var single_settlement_price=$(Obj).closest("tr").find("input[class='layui-input hotel6']").val();
+
+        $.ajax({
+            type: "POST",
+            url: '/source/editAgentHotelAjax',
+            data: {
+                room_name:room_name,
+                hotel_id:hotel_id,
+                normal_settlement_price:normal_settlement_price,
+                adult_settlement_price:adult_settlement_price,
+                child_bed_settlement_price:child_bed_settlement_price,
+                old_settlement_price:old_settlement_price,
+                child_settlement_price:child_settlement_price,
+                single_settlement_price:single_settlement_price
+            },
+            success: function(data){
+                // console.log(data);
+                if(data.code!=200){
+                    layer.msg(data.msg);
+                    return false;
+                }else if(data.code==200) {
+                    layer.msg('操作成功',{time:1,end : function(layero, index){
+                            location.href='/source/showAgentSource?supplier_id='+supplier_id;
+                        }
+                    });
+                }
+            },
+            error:function(XMLHttpRequest, textStatus, errorThrown){
+                layer.msg('验证失败')
+            }
+        });
+        return false;
+    }else if(num == 3){
+        //修改用餐
+        var dining_name=$(Obj).closest("tr").find("input[class='layui-input dining_name']").val();
+        var dining_id=$(Obj).closest("tr").find("input[class='dining_id']").val();
+        var supplier_id=$(Obj).closest("tr").find("input[class='supplier_id']").val();
+
+        var normal_settlement_price=$(Obj).closest("tr").find("input[class='layui-input dining']").val();
+
+        $.ajax({
+            type: "POST",
+            url: '/source/editAgentDiningAjax',
+            data: {
+                dining_name:dining_name,
+                dining_id:dining_id,
+                normal_settlement_price:normal_settlement_price
+            },
+            success: function(data){
+                // console.log(data);
+                if(data.code!=200){
+                    layer.msg(data.msg);
+                    return false;
+                }else if(data.code==200) {
+                    layer.msg('操作成功',{time:1,end : function(layero, index){
+                            location.href='/source/showAgentSource?supplier_id='+supplier_id;
+                        }
+                    });
+                }
+            },
+            error:function(XMLHttpRequest, textStatus, errorThrown){
+                layer.msg('验证失败')
+            }
+        });
+        return false;
+    }else if(num == 4){
+        //修改航班
+        var flight_name=$(Obj).closest("tr").find("input[class='layui-input flight_name']").val();
+        var flight_id=$(Obj).closest("tr").find("input[class='flight_id']").val();
+        var supplier_id=$(Obj).closest("tr").find("input[class='supplier_id']").val();
+
+        var normal_settlement_price=$(Obj).closest("tr").find("input[class='layui-input flight']").val();
+
+        $.ajax({
+            type: "POST",
+            url: '/source/editAgentFlightAjax',
+            data: {
+                flight_name:flight_name,
+                flight_id:flight_id,
+                normal_settlement_price:normal_settlement_price
+            },
+            success: function(data){
+                // console.log(data);
+                if(data.code!=200){
+                    layer.msg(data.msg);
+                    return false;
+                }else if(data.code==200) {
+                    layer.msg('操作成功',{time:1,end : function(layero, index){
+                            location.href='/source/showAgentSource?supplier_id='+supplier_id;
+                        }
+                    });
+                }
+            },
+            error:function(XMLHttpRequest, textStatus, errorThrown){
+                layer.msg('验证失败')
+            }
+        });
+        return false;
+    }else if(num==5){
+        //修改邮轮
+        var room_name=$(Obj).closest("tr").find("input[class='layui-input cruise_room_name']").val();
+        var cruise_id=$(Obj).closest("tr").find("input[class='cruise_id']").val();
+        var supplier_id=$(Obj).closest("tr").find("input[class='supplier_id']").val();
+
+        var normal_settlement_price=$(Obj).closest("tr").find("input[class='layui-input cruise']").val();
+
+        $.ajax({
+            type: "POST",
+            url: '/source/editAgentCruiseAjax',
+            data: {
+                room_name:room_name,
+                cruise_id:cruise_id,
+                normal_settlement_price:normal_settlement_price
+            },
+            success: function(data){
+                // console.log(data);
+                if(data.code!=200){
+                    layer.msg(data.msg);
+                    return false;
+                }else if(data.code==200) {
+                    layer.msg('操作成功',{time:1,end : function(layero, index){
+                            location.href='/source/showAgentSource?supplier_id='+supplier_id;
+                        }
+                    });
+                }
+            },
+            error:function(XMLHttpRequest, textStatus, errorThrown){
+                layer.msg('验证失败')
+            }
+        });
+        return false;
+    }else if(num==6){
+        //修改签证
+        var visa_name=$(Obj).closest("tr").find("input[class='layui-input visa_name']").val();
+        var visa_id=$(Obj).closest("tr").find("input[class='visa_id']").val();
+        var supplier_id=$(Obj).closest("tr").find("input[class='supplier_id']").val();
+
+        var normal_settlement_price=$(Obj).closest("tr").find("input[class='layui-input visa']").val();
+
+        $.ajax({
+            type: "POST",
+            url: '/source/editAgentVisaAjax',
+            data: {
+                visa_name:visa_name,
+                visa_id:visa_id,
+                normal_settlement_price:normal_settlement_price
+            },
+            success: function(data){
+                // console.log(data);
+                if(data.code!=200){
+                    layer.msg(data.msg);
+                    return false;
+                }else if(data.code==200) {
+                    layer.msg('操作成功',{time:1,end : function(layero, index){
+                            location.href='/source/showAgentSource?supplier_id='+supplier_id;
+                        }
+                    });
+                }
+            },
+            error:function(XMLHttpRequest, textStatus, errorThrown){
+                layer.msg('验证失败')
+            }
+        });
+        return false;
+    }else if(num==7){
+        //修改景点
+        var scenic_spot_name=$(Obj).closest("tr").find("input[class='layui-input scenic_spot_name']").val();
+        var scenic_spot_id=$(Obj).closest("tr").find("input[class='scenic_spot_id']").val();
+        var supplier_id=$(Obj).closest("tr").find("input[class='supplier_id']").val();
+
+        var normal_settlement_price=$(Obj).closest("tr").find("input[class='layui-input scenic_spot']").val();
+
+        $.ajax({
+            type: "POST",
+            url: '/source/editAgentScenicSpotAjax',
+            data: {
+                scenic_spot_name:scenic_spot_name,
+                scenic_spot_id:scenic_spot_id,
+                normal_settlement_price:normal_settlement_price
+            },
+            success: function(data){
+                // console.log(data);
+                if(data.code!=200){
+                    layer.msg(data.msg);
+                    return false;
+                }else if(data.code==200) {
+                    layer.msg('操作成功',{time:1,end : function(layero, index){
+                            location.href='/source/showAgentSource?supplier_id='+supplier_id;
+                        }
+                    });
+                }
+            },
+            error:function(XMLHttpRequest, textStatus, errorThrown){
+                layer.msg('验证失败')
+            }
+        });
+        return false;
+    }else if(num==8){
+        //修改车辆
+        var vehicle_name=$(Obj).closest("tr").find("input[class='layui-input vehicle_name']").val();
+        var vehicle_id=$(Obj).closest("tr").find("input[class='vehicle_id']").val();
+        var supplier_id=$(Obj).closest("tr").find("input[class='supplier_id']").val();
+
+        var normal_settlement_price=$(Obj).closest("tr").find("input[class='layui-input vehicle']").val();
+
+        $.ajax({
+            type: "POST",
+            url: '/source/editAgentVehicleSpotAjax',
+            data: {
+                vehicle_name:vehicle_name,
+                vehicle_id:vehicle_id,
+                normal_settlement_price:normal_settlement_price
+            },
+            success: function(data){
+                // console.log(data);
+                if(data.code!=200){
+                    layer.msg(data.msg);
+                    return false;
+                }else if(data.code==200) {
+                    layer.msg('操作成功',{time:1,end : function(layero, index){
+                            location.href='/source/showAgentSource?supplier_id='+supplier_id;
+                        }
+                    });
+                }
+            },
+            error:function(XMLHttpRequest, textStatus, errorThrown){
+                layer.msg('验证失败')
+            }
+        });
+        return false;
+    }else if(num==9){
+        //修改导游
+        var tour_guide_name=$(Obj).closest("tr").find("input[class='layui-input tour_guide_name']").val();
+        var tour_guide_id=$(Obj).closest("tr").find("input[class='tour_guide_id']").val();
+        var supplier_id=$(Obj).closest("tr").find("input[class='supplier_id']").val();
+
+        var normal_settlement_price=$(Obj).closest("tr").find("input[class='layui-input tour_guide']").val();
+
+        $.ajax({
+            type: "POST",
+            url: '/source/editAgentTourGuideAjax',
+            data: {
+                tour_guide_name:tour_guide_name,
+                tour_guide_id:tour_guide_id,
+                normal_settlement_price:normal_settlement_price
+            },
+            success: function(data){
+                // console.log(data);
+                if(data.code!=200){
+                    layer.msg(data.msg);
+                    return false;
+                }else if(data.code==200) {
+                    layer.msg('操作成功',{time:1,end : function(layero, index){
+                            location.href='/source/showAgentSource?supplier_id='+supplier_id;
+                        }
+                    });
+                }
+            },
+            error:function(XMLHttpRequest, textStatus, errorThrown){
+                layer.msg('验证失败')
+            }
+        });
+        return false;
+    }else if(num==10){
+        //修改单项资源
+        var single_source_name=$(Obj).closest("tr").find("input[class='layui-input single_source_name']").val();
+        var single_source_id=$(Obj).closest("tr").find("input[class='single_source_id']").val();
+        var supplier_id=$(Obj).closest("tr").find("input[class='supplier_id']").val();
+
+        var normal_settlement_price=$(Obj).closest("tr").find("input[class='layui-input single_source']").val();
+
+        $.ajax({
+            type: "POST",
+            url: '/source/editAgentSingleSourceAjax',
+            data: {
+                single_source_name:single_source_name,
+                single_source_id:single_source_id,
+                normal_settlement_price:normal_settlement_price
+            },
+            success: function(data){
+                // console.log(data);
+                if(data.code!=200){
+                    layer.msg(data.msg);
+                    return false;
+                }else if(data.code==200) {
+                    layer.msg('操作成功',{time:1,end : function(layero, index){
+                            location.href='/source/showAgentSource?supplier_id='+supplier_id;
+                        }
+                    });
+                }
+            },
+            error:function(XMLHttpRequest, textStatus, errorThrown){
+                layer.msg('验证失败')
+            }
+        });
+        return false;
+    }else if(num==11){
+        //修改导游
+        var own_expense_name=$(Obj).closest("tr").find("input[class='layui-input own_expense_name']").val();
+        var own_expense_id=$(Obj).closest("tr").find("input[class='own_expense_id']").val();
+        var supplier_id=$(Obj).closest("tr").find("input[class='supplier_id']").val();
+
+        var normal_settlement_price=$(Obj).closest("tr").find("input[class='layui-input own_expense']").val();
+
+        $.ajax({
+            type: "POST",
+            url: '/source/editAgentOwnExpenseAjax',
+            data: {
+                own_expense_name:own_expense_name,
+                own_expense_id:own_expense_id,
+                normal_settlement_price:normal_settlement_price
+            },
+            success: function(data){
+                // console.log(data);
+                if(data.code!=200){
+                    layer.msg(data.msg);
+                    return false;
+                }else if(data.code==200) {
+                    layer.msg('操作成功',{time:1,end : function(layero, index){
+                            location.href='/source/showAgentSource?supplier_id='+supplier_id;
+                        }
+                    });
+                }
+            },
+            error:function(XMLHttpRequest, textStatus, errorThrown){
+                layer.msg('验证失败')
+            }
+        });
+        return false;
+    }
+}
+
+//酒店
+function hotelAdd(){
+    var supplier_id = $("#hotel_supplier_id").val();
+    var status = $("#hotel_status").val();
+    var agent_id = $("#hotel_agent_id").val();
+    var level_name = $("#hotel_level_name").val();
+    var room_name = $("#hotel_room_name").val();
+    var room_type = $("#hotel_room_type").val();
+    var guest_number = $("#hotel_guest_number").val();
+    var free_wifi = $("#hotel_free_wifi").val();
+    var room_area = $("#hotel_room_area").val();
+    var floor = $("#hotel_floor").val();
+    var is_add_bed = $("#hotel_is_add_bed").val();
+    var smoke_treatment = $("#hotel_smoke_treatment").val();
+    //支付币种
+    var normal_price = $("#hotel_normal_price").val();
+    var normal_settlement_price = $("#hotel_normal_settlement_price").val();
+    // var normal_retail_price = $("#hotel_normal_retail_price").val();
+    // var adult_price = $("#hotel_adult_price").val();
+    // var adult_settlement_price = $("#hotel_adult_settlement_price").val();
+    // var adult_retail_price = $("#hotel_adult_retail_price").val();
+    // var child_bed_price = $("#hotel_child_bed_price").val();
+    // var child_bed_settlement_price = $("#hotel_child_bed_settlement_price").val();
+    // var child_bed_retail_price = $("#hotel_child_bed_retail_price").val();
+    // var old_price = $("#hotel_old_price").val();
+    // var old_settlement_price = $("#hotel_old_settlement_price").val();
+    // var old_retail_price = $("#hotel_old_retail_price").val();
+    // var child_price = $("#hotel_child_price").val();
+    // var child_settlement_price = $("#hotel_child_settlement_price").val();
+    // var child_retail_price = $("#hotel_child_retail_price").val();
+    // var single_price = $("#hotel_single_price").val();
+    // var single_settlement_price = $("#hotel_single_settlement_price").val();
+    // var single_retail_price = $("#hotel_single_retail_price").val();
+    // var remark = $("#hotel_remark").val();
+    var choose_company_id = $("#choose_company_id").val();
+     var payment_currency_type = $("#payment_currency_type").val();
+
+    $.ajax({
+        type: "POST",
+        url: '/source/addHotelAjax',
+        data: {
+            supplier_id:supplier_id,
+            status:status,
+            agent_id:agent_id,
+            level_name:level_name,
+            room_name:room_name,
+            room_type:room_type,
+            guest_number:guest_number,
+            free_wifi:free_wifi,
+            room_area:room_area,
+            floor:floor,
+            is_add_bed:is_add_bed,
+            smoke_treatment:smoke_treatment,
+            normal_price:normal_price,
+            normal_settlement_price:normal_settlement_price,
+            // remark:remark,
+            choose_company_id:choose_company_id,
+            payment_currency_type:payment_currency_type
+        },
+        success: function(data){
+            // console.log(data);
+            if(data.code!=200){
+                // if($("#payment_currency_type").val()==''){
+                //     layer.msg('请选择货币', {icon: 1});
+                // }
+                layer.msg(data.msg);
+                return false;
+            }else if(data.code==200) {
+                layer.msg('操作成功',{time:1,end : function(layero, index){
+                        history.back(-1);
+                    }
+                });
+            }
+        },
+        error:function(XMLHttpRequest, textStatus, errorThrown){
+            layer.msg('验证失败')
+        }
+    });
+    return false;
+}
+
+
+
+//编辑酒店 
+function hotelEdit(){
+    var hotel_id = $("#hotel_hidden_hotel_id").val();
+    var supplier_id = $("#edit_hotel_supplier_id").val();
+    var status = $("#edit_hotel_status").val();
+    var agent_id = $("#edit_hotel_agent_id").val();
+    var level_name = $("#edit_hotel_level_name").val();
+    var room_name = $("#edit_hotel_room_name").val();
+    var room_type = $("#hotel_room_type").val();
+    var guest_number = $("#edit_hotel_guest_number").val();
+    var free_wifi = $("#edit_hotel_free_wifi").val();
+    var room_area = $("#edit_hotel_room_area").val();
+    var floor = $("#edit_hotel_floor").val();
+    var is_add_bed = $("#edit_hotel_is_add_bed").val();
+    var smoke_treatment = $("#edit_hotel_smoke_treatment").val();
+    //支付币种
+    var normal_price = $("#edit_hotel_normal_price").val();
+    var normal_settlement_price = $("#edit_hotel_normal_settlement_price").val();
+    // var normal_retail_price = $("#edit_hotel_normal_retail_price").val();
+    // var adult_price = $("#edit_hotel_adult_price").val();
+    // var adult_settlement_price = $("#edit_hotel_adult_settlement_price").val();
+    // var adult_retail_price = $("#edit_hotel_adult_retail_price").val();
+    // var child_bed_price = $("#edit_hotel_child_bed_price").val();
+    // var child_bed_settlement_price = $("#edit_hotel_child_bed_settlement_price").val();
+    // var child_bed_retail_price = $("#edit_hotel_child_bed_retail_price").val();
+    // var old_price = $("#edit_hotel_old_price").val();
+    // var old_settlement_price = $("#edit_hotel_old_settlement_price").val();
+    // var old_retail_price = $("#edit_hotel_old_retail_price").val();
+    // var child_price = $("#edit_hotel_child_price").val();
+    // var child_settlement_price = $("#edit_hotel_child_settlement_price").val();
+    // var child_retail_price = $("#edit_hotel_child_retail_price").val();
+    // var single_price = $("#edit_hotel_single_price").val();
+    // var single_settlement_price = $("#edit_hotel_single_settlement_price").val();
+    // var single_retail_price = $("#edit_hotel_single_retail_price").val();
+    // var remark = $("#edit_hotel_remark").val();
+    var choose_company_id=$("#choose_company_id").val();
+    var payment_currency_type = $("#payment_currency_type").val();
+
+    $.ajax({
+        type: "POST",
+        url: '/source/editHotelAjax',
+        data: {
+            hotel_id:hotel_id,
+            supplier_id:supplier_id,
+            status:status,
+            agent_id:agent_id,
+            level_name:level_name,
+            room_name:room_name,
+            room_type:room_type,
+            guest_number:guest_number,
+            free_wifi:free_wifi,
+            room_area:room_area,
+            floor:floor,
+            is_add_bed:is_add_bed,
+            smoke_treatment:smoke_treatment,
+            normal_price:normal_price,
+            normal_settlement_price:normal_settlement_price,
+            // normal_retail_price:normal_retail_price,
+            // adult_price:adult_price,
+            // adult_settlement_price:adult_settlement_price,
+            // adult_retail_price:adult_retail_price,
+            // child_bed_price:child_bed_price,
+            // child_bed_settlement_price:child_bed_settlement_price,
+            // child_bed_retail_price:child_bed_retail_price,
+            // old_price:old_price,
+            // old_settlement_price:old_settlement_price,
+            // old_retail_price:old_retail_price,
+            // child_price:child_price,
+            // child_settlement_price:child_settlement_price,
+            // child_retail_price:child_retail_price,
+            // single_price:single_price,
+            // single_settlement_price:single_settlement_price,
+            // single_retail_price:single_retail_price,
+            // remark:remark,
+            choose_company_id:choose_company_id,
+            payment_currency_type:payment_currency_type
+        },
+        success: function(data){
+            // console.log(data);
+            if(data.code!=200){
+                layer.msg(data.msg);
+                return false;
+            }else if(data.code==200) {
+                layer.msg('操作成功',{time:1,end : function(layero, index){
+                        history.back(-1);
+                    }
+                });
+            }
+        },
+        error:function(XMLHttpRequest, textStatus, errorThrown){
+            layer.msg('验证失败')
+        }
+    });
+    return false;
+}
+//修改酒店多语言
+function hotel_edit_language(){
+	//获取有几个input框
+	var l = $('.edit_language').length;
+	var c = $('.edit_language');
+	var data2 = [];
+
+	for(var i =0;i<l;i++){
+	
+		var data_params = {"lang_id":c.eq(i).attr('lang_id'),"hotel_language_id":c.eq(i).attr('hotel_language_id'),"source_number": $('#source_number').val(),"room_name":c.eq(i).val()}
+
+		data2.push(data_params);
+		
+	}
+
+
+
+    $.ajax({
+        type: "POST",
+        url: '/source/hotelEditLanguageAjax',
+
+        datatype: 'json',
+        contentType: 'application/json;charset=utf-8',
+        //data:JSON.stringify(data2)
+        data:JSON.stringify(data2)       
+        , 
+
+        success: function (data) {
+            // console.log(data);
+            if(data.code!=200){
+                layer.msg(data.msg);
+                return false;
+            }else if(data.code==200) {
+                layer.msg('操作成功',{time:1,end : function(layero, index){
+                        history.back(-1);
+                    }
+                });
+            }
+        },
+        error: function (XMLHttpRequest, textStatus, errorThrown) {
+            layer.msg('验证失败')
+        }
+    });
+	
+	
+	
+	return false;	
+	
+
+	
+}
+//添加用餐
+function diningAdd(){
+    var supplier_id = $("#dining_supplier_id").val();
+    var status = $("#dining_status").val();
+    var agent_id = $("#dining_agent_id").val();
+    var level_name = $("#dining_level_name").val();
+    var dining_name = $("#dining_name").val();
+    var standard_type = $("#dining_standard_type").val();
+    //支付币种
+    var normal_price = $("#dining_normal_price").val();
+    var normal_settlement_price = $("#dining_normal_settlement_price").val();
+    // var normal_retail_price = $("#dining_normal_retail_price").val();
+    // var adult_price = $("#dining_adult_price").val();
+    // var adult_settlement_price = $("#dining_adult_settlement_price").val();
+    // var adult_retail_price = $("#dining_adult_retail_price").val();
+    // var child_bed_price = $("#dining_child_bed_price").val();
+    // var child_bed_settlement_price = $("#dining_child_bed_settlement_price").val();
+    // var child_bed_retail_price = $("#dining_child_bed_retail_price").val();
+    // var old_price = $("#dining_old_price").val();
+    // var old_settlement_price = $("#dining_old_settlement_price").val();
+    // var old_retail_price = $("#dining_old_retail_price").val();
+    // var child_price = $("#dining_child_price").val();
+    // var child_settlement_price = $("#dining_child_settlement_price").val();
+    // var child_retail_price = $("#dining_child_retail_price").val();
+    // var single_price = $("#dining_single_price").val();
+    // var single_settlement_price = $("#dining_single_settlement_price").val();
+    // var single_retail_price = $("#dining_single_retail_price").val();
+    // var remark = $("#dining_remark").val();
+    var choose_company_id=$("#choose_company_id").val();
+    var payment_currency_type=$("#payment_currency_type").val();
+
+    $.ajax({
+        type: "POST",
+        url: '/source/addDiningAjax',
+        data: {
+            supplier_id:supplier_id,
+            status:status,
+            agent_id:agent_id,
+            level_name:level_name,
+            dining_name:dining_name,
+            standard_type:standard_type,
+            normal_price:normal_price,
+            normal_settlement_price:normal_settlement_price,
+            // normal_retail_price:normal_retail_price,
+            // adult_price:adult_price,
+            // adult_settlement_price:adult_settlement_price,
+            // adult_retail_price:adult_retail_price,
+            // child_bed_price:child_bed_price,
+            // child_bed_settlement_price:child_bed_settlement_price,
+            // child_bed_retail_price:child_bed_retail_price,
+            // old_price:old_price,
+            // old_settlement_price:old_settlement_price,
+            // old_retail_price:old_retail_price,
+            // child_price:child_price,
+            // child_settlement_price:child_settlement_price,
+            // child_retail_price:child_retail_price,
+            // single_price:single_price,
+            // single_settlement_price:single_settlement_price,
+            // single_retail_price:single_retail_price,
+            choose_company_id:choose_company_id,
+            payment_currency_type:payment_currency_type
+            // remark:remark
+        },
+        success: function(data){
+            // console.log(data);
+            if(data.code!=200){
+                layer.msg(data.msg);
+                return false;
+            }else if(data.code==200) {
+                layer.msg('操作成功',{time:1,end : function(layero, index){
+                        history.back(-1);
+                    }
+                });
+            }
+        },
+        error:function(XMLHttpRequest, textStatus, errorThrown){
+            layer.msg('验证失败')
+        }
+    });
+    return false;
+}
+
+//修改用餐
+function diningEdit(){
+    var dining_id = $("#dining_hidden_dining_id").val();
+    var supplier_id = $("#edit_dining_supplier_id").val();
+    var status = $("#edit_dining_status").val();
+    var agent_id = $("#edit_dining_agent_id").val();
+    var level_name = $("#edit_dining_level_name").val();
+    var dining_name = $("#edit_dining_name").val();
+    var standard_type = $("#edit_dining_standard_type").val();
+    //支付币种
+    var normal_price = $("#edit_dining_normal_price").val();
+    var normal_settlement_price = $("#edit_dining_normal_settlement_price").val();
+    // var normal_retail_price = $("#edit_dining_normal_retail_price").val();
+    // var adult_price = $("#edit_dining_adult_price").val();
+    // var adult_settlement_price = $("#edit_dining_adult_settlement_price").val();
+    // var adult_retail_price = $("#edit_dining_adult_retail_price").val();
+    // var child_bed_price = $("#edit_dining_child_bed_price").val();
+    // var child_bed_settlement_price = $("#edit_dining_child_bed_settlement_price").val();
+    // var child_bed_retail_price = $("#edit_dining_child_bed_retail_price").val();
+    // var old_price = $("#edit_dining_old_price").val();
+    // var old_settlement_price = $("#edit_dining_old_settlement_price").val();
+    // var old_retail_price = $("#edit_dining_old_retail_price").val();
+    // var child_price = $("#edit_dining_child_price").val();
+    // var child_settlement_price = $("#edit_dining_child_settlement_price").val();
+    // var child_retail_price = $("#edit_dining_child_retail_price").val();
+    // var single_price = $("#edit_dining_single_price").val();
+    // var single_settlement_price = $("#edit_dining_single_settlement_price").val();
+    // var single_retail_price = $("#edit_dining_single_retail_price").val();
+    // var remark = $("#edit_dining_remark").val();
+    var payment_currency_type=$("#payment_currency_type").val();
+    var choose_company_id=$("#choose_company_id").val();
+
+    $.ajax({
+        type: "POST",
+        url: '/source/editDiningAjax',
+        data: {
+            dining_id:dining_id,
+            supplier_id:supplier_id,
+            status:status,
+            agent_id:agent_id,
+            level_name:level_name,
+            dining_name:dining_name,
+            standard_type:standard_type,
+            normal_price:normal_price,
+            normal_settlement_price:normal_settlement_price,
+            // normal_retail_price:normal_retail_price,
+            // adult_price:adult_price,
+            // adult_settlement_price:adult_settlement_price,
+            // adult_retail_price:adult_retail_price,
+            // child_bed_price:child_bed_price,
+            // child_bed_settlement_price:child_bed_settlement_price,
+            // child_bed_retail_price:child_bed_retail_price,
+            // old_price:old_price,
+            // old_settlement_price:old_settlement_price,
+            // old_retail_price:old_retail_price,
+            // child_price:child_price,
+            // child_settlement_price:child_settlement_price,
+            // child_retail_price:child_retail_price,
+            // single_price:single_price,
+            // single_settlement_price:single_settlement_price,
+            // single_retail_price:single_retail_price,
+            payment_currency_type:payment_currency_type,
+            // remark:remark,
+            choose_company_id:choose_company_id
+        },
+        success: function(data){
+            // console.log(data);
+            if(data.code!=200){
+                layer.msg(data.msg);
+                return false;
+            }else if(data.code==200) {
+                layer.msg('操作成功',{time:1,end : function(layero, index){
+                        history.back(-1);
+                    }
+                });
+            }
+        },
+        error:function(XMLHttpRequest, textStatus, errorThrown){
+            layer.msg('验证失败')
+        }
+    });
+    return false;
+}
+
+//修改用餐多语言
+function dining_edit_language(){
+	//获取有几个input框
+	var l = $('.edit_language').length;
+	var c = $('.edit_language');
+	var data2 = [];
+
+	for(var i =0;i<l;i++){
+	
+		var data_params = {"lang_id":c.eq(i).attr('lang_id'),"dining_language_id":c.eq(i).attr('dining_language_id'),"source_number": $('#source_number').val(),"dining_name":c.eq(i).val()}
+
+		data2.push(data_params);
+		
+	}
+
+
+
+    $.ajax({
+        type: "POST",
+        url: '/source/diningEditLanguageAjax',
+
+        datatype: 'json',
+        contentType: 'application/json;charset=utf-8',
+        //data:JSON.stringify(data2)
+        data:JSON.stringify(data2)       
+        , 
+
+        success: function (data) {
+            // console.log(data);
+            if(data.code!=200){
+                layer.msg(data.msg);
+                return false;
+            }else if(data.code==200) {
+                layer.msg('操作成功',{time:1,end : function(layero, index){
+                        history.back(-1);
+                    }
+                });
+            }
+        },
+        error: function (XMLHttpRequest, textStatus, errorThrown) {
+            layer.msg('验证失败')
+        }
+    });
+	
+	
+	
+	return false;	
+	
+
+	
+}
+//添加航班
+function flightAdd(){
+    var supplier_id = $("#flight_supplier_id").val();
+    var status = $("#flight_status").val();
+    var agent_id = $("#flight_agent_id").val();
+    var flight_number = $("#flight_number").val();
+    var airplane_type_name = $("#airplane_type_name").val();
+    var shipping_space = $("#flight_shipping_space").val();
+    var begin_country_id = $("#flight_begin_country_id").val();
+    var end_country_id = $("#flight_end_country_id").val();
+    //支付币种
+    var normal_price = $("#flight_normal_price").val();
+    var normal_settlement_price = $("#flight_normal_settlement_price").val();
+    // var normal_retail_price = $("#flight_normal_retail_price").val();
+    // var adult_price = $("#flight_adult_price").val();
+    // var adult_settlement_price = $("#flight_adult_settlement_price").val();
+    // var adult_retail_price = $("#flight_adult_retail_price").val();
+    // var child_bed_price = $("#flight_child_bed_price").val();
+    // var child_bed_settlement_price = $("#flight_child_bed_settlement_price").val();
+    // var child_bed_retail_price = $("#flight_child_bed_retail_price").val();
+    // var old_price = $("#flight_old_price").val();
+    // var old_settlement_price = $("#flight_old_settlement_price").val();
+    // var old_retail_price = $("#flight_old_retail_price").val();
+    // var child_price = $("#flight_child_price").val();
+    // var child_settlement_price = $("#flight_child_settlement_price").val();
+    // var child_retail_price = $("#flight_child_retail_price").val();
+    // var single_price = $("#flight_single_price").val();
+    // var single_settlement_price = $("#flight_single_settlement_price").val();
+    // var single_retail_price = $("#flight_single_retail_price").val();
+    // var remark = $("#flight_remark").val();
+    var payment_currency_type=$("#payment_currency_type").val();
+    var choose_company_id=$("#choose_company_id").val();
+
+    $.ajax({
+        type: "POST",
+        url: '/source/addFlightAjax',
+        data: {
+            supplier_id:supplier_id,
+            status:status,
+            agent_id:agent_id,
+            flight_number:flight_number,
+            airplane_type_name:airplane_type_name,
+            shipping_space:shipping_space,
+            begin_country_id:begin_country_id,
+            end_country_id:end_country_id,
+            normal_price:normal_price,
+            normal_settlement_price:normal_settlement_price,
+            // normal_retail_price:normal_retail_price,
+            // adult_price:adult_price,
+            // adult_settlement_price:adult_settlement_price,
+            // adult_retail_price:adult_retail_price,
+            // child_bed_price:child_bed_price,
+            // child_bed_settlement_price:child_bed_settlement_price,
+            // child_bed_retail_price:child_bed_retail_price,
+            // old_price:old_price,
+            // old_settlement_price:old_settlement_price,
+            // old_retail_price:old_retail_price,
+            // child_price:child_price,
+            // child_settlement_price:child_settlement_price,
+            // child_retail_price:child_retail_price,
+            // single_price:single_price,
+            // single_settlement_price:single_settlement_price,
+            // single_retail_price:single_retail_price,
+            // remark:remark,
+            payment_currency_type:payment_currency_type,
+            choose_company_id:choose_company_id
+        },
+        success: function(data){
+            // console.log(data);
+            if(data.code!=200){
+                layer.msg(data.msg);
+                return false;
+            }else if(data.code==200) {
+                layer.msg('操作成功',{time:1,end : function(layero, index){
+                        history.back(-1);
+                    }
+                });
+            }
+        },
+        error:function(XMLHttpRequest, textStatus, errorThrown){
+            layer.msg('验证失败')
+        }
+    });
+    return false;
+}
+
+//修改航班
+function flightEdit(){
+    var flight_id = $("#flight_hidden_flight_id").val();
+    var supplier_id = $("#edit_flight_supplier_id").val();
+    var status = $("#edit_flight_status").val();
+    var agent_id = $("#edit_flight_agent_id").val();
+    var flight_number = $("#flight_number").val();
+    var airplane_type_name = $("#edit_airplane_type_name").val();
+    var shipping_space = $("#edit_flight_shipping_space").val();
+    var begin_country_id = $("#edit_flight_begin_country_id").val();
+    var end_country_id = $("#edit_flight_end_country_id").val();
+    //支付币种
+    var normal_price = $("#edit_flight_normal_price").val();
+    var normal_settlement_price = $("#edit_flight_normal_settlement_price").val();
+   // var normal_retail_price = $("#edit_flight_normal_retail_price").val();
+    // var adult_price = $("#edit_flight_adult_price").val();
+    // var adult_settlement_price = $("#edit_flight_adult_settlement_price").val();
+    // var adult_retail_price = $("#edit_flight_adult_retail_price").val();
+    // var child_bed_price = $("#edit_flight_child_bed_price").val();
+    // var child_bed_settlement_price = $("#edit_flight_child_bed_settlement_price").val();
+    // var child_bed_retail_price = $("#edit_flight_child_bed_retail_price").val();
+    // var old_price = $("#edit_flight_old_price").val();
+    // var old_settlement_price = $("#edit_flight_old_settlement_price").val();
+    // var old_retail_price = $("#edit_flight_old_retail_price").val();
+    // var child_price = $("#edit_flight_child_price").val();
+    // var child_settlement_price = $("#edit_flight_child_settlement_price").val();
+    // var child_retail_price = $("#edit_flight_child_retail_price").val();
+    // var single_price = $("#edit_flight_single_price").val();
+    // var single_settlement_price = $("#edit_flight_single_settlement_price").val();
+    // var single_retail_price = $("#edit_flight_single_retail_price").val();
+    // var remark = $("#edit_flight_remark").val();
+    var payment_currency_type=$("#payment_currency_type").val();
+    var choose_company_id=$("#choose_company_id").val();
+
+    $.ajax({
+        type: "POST",
+        url: '/source/editFlightAjax',
+        data: {
+            flight_id:flight_id,
+            supplier_id:supplier_id,
+            status:status,
+            agent_id:agent_id,
+            flight_number:flight_number,
+            airplane_type_name:airplane_type_name,
+            shipping_space:shipping_space,
+            begin_country_id:begin_country_id,
+            end_country_id:end_country_id,
+            normal_price:normal_price,
+            normal_settlement_price:normal_settlement_price,
+            // normal_retail_price:normal_retail_price,
+            // adult_price:adult_price,
+            // adult_settlement_price:adult_settlement_price,
+            // adult_retail_price:adult_retail_price,
+            // child_bed_price:child_bed_price,
+            // child_bed_settlement_price:child_bed_settlement_price,
+            // child_bed_retail_price:child_bed_retail_price,
+            // old_price:old_price,
+            // old_settlement_price:old_settlement_price,
+            // old_retail_price:old_retail_price,
+            // child_price:child_price,
+            // child_settlement_price:child_settlement_price,
+            // child_retail_price:child_retail_price,
+            // single_price:single_price,
+            // single_settlement_price:single_settlement_price,
+            // single_retail_price:single_retail_price,
+            payment_currency_type:payment_currency_type,
+            // remark:remark,
+            choose_company_id:choose_company_id
+        },
+        success: function(data){
+            // console.log(data);
+            if(data.code!=200){
+                layer.msg(data.msg);
+                return false;
+            }else if(data.code==200) {
+                layer.msg('操作成功',{time:1,end : function(layero, index){
+                        history.back(-1);
+                    }
+                });
+            }
+        },
+        error:function(XMLHttpRequest, textStatus, errorThrown){
+            layer.msg('验证失败')
+        }
+    });
+    return false;
+}
+
+//修改航班多语言
+function flight_edit_language(){
+	//获取有几个input框
+	var l = $('.edit_language').length;
+	var c = $('.edit_language');
+	var data2 = [];
+
+	for(var i =0;i<l;i++){
+	
+		var data_params = {"lang_id":c.eq(i).attr('lang_id'),"flight_language_id":c.eq(i).attr('flight_language_id'),"source_number": $('#source_number').val(),"airplane_type_name":c.eq(i).val()}
+
+		data2.push(data_params);
+		
+	}
+
+
+
+    $.ajax({
+        type: "POST",
+        url: '/source/flightEditLanguageAjax',
+
+        datatype: 'json',
+        contentType: 'application/json;charset=utf-8',
+        //data:JSON.stringify(data2)
+        data:JSON.stringify(data2)       
+        , 
+
+        success: function (data) {
+            // console.log(data);
+            if(data.code!=200){
+                layer.msg(data.msg);
+                return false;
+            }else if(data.code==200) {
+                layer.msg('操作成功',{time:1,end : function(layero, index){
+                        history.back(-1);
+                    }
+                });
+            }
+        },
+        error: function (XMLHttpRequest, textStatus, errorThrown) {
+            layer.msg('验证失败')
+        }
+    });
+	
+	
+	
+	return false;	
+	
+
+	
+}
+//添加单项资源
+function single_source_Add(){
+    var supplier_id = $("#single_source_supplier_id").val();
+    var status = $("#single_source_status").val();
+    var agent_id = $("#single_source_agent_id").val();
+    // if(agent_id==1){
+    //     var supplier_type = 1;
+    //     var belong_supplier_id = supplier_id;
+    // }else{
+    //     var supplier_type = 2; 
+    //     var belong_supplier_id = agent_id;
+    // }
+
+    var single_source_name = $("#single_source_name").val();
+    var is_own_expense = $("#single_source_own_expense").val();
+    //支付币种
+    var normal_price = $("#single_source_normal_price").val();
+    var normal_settlement_price = $("#single_source_normal_settlement_price").val();
+    // var remark = $("#single_source_remark").val();
+    var choose_company_id=$("#choose_company_id").val();
+    var payment_currency_type=$("#payment_currency_type").val();
+ 
+    $.ajax({
+        type: "POST",
+        url: '/source/addSingleSourceAjax',
+        data: {
+            supplier_id:supplier_id,
+            status:status,
+            agent_id:agent_id,
+            // supplier_type:supplier_type,
+            // belong_supplier_id:belong_supplier_id,
+            single_source_name:single_source_name,
+            is_own_expense:is_own_expense,
+            normal_price:normal_price,
+            normal_settlement_price:normal_settlement_price,
+            // remark:remark,
+            choose_company_id:choose_company_id,
+            payment_currency_type:payment_currency_type,
+        },
+        success: function(data){
+            console.log(data);
+            if(data.code!=200){
+                layer.msg(data.msg);
+                return false;
+            }else if(data.code==200) {
+                layer.msg('操作成功',{time:1,end : function(layero, index){
+                        history.back(-1);
+                    }
+                });
+            }
+        },
+        error:function(XMLHttpRequest, textStatus, errorThrown){
+            layer.msg('验证失败')
+        }
+    });
+    return false;
+}
+
+//修改单项资源
+function single_source_Edit(){
+    var single_source_id = $("#single_source_hidden_single_source_id").val();
+    var supplier_id = $("#edit_single_source_supplier_id").val();
+    var status = $("#edit_single_source_status").val();
+    var agent_id = $("#edit_single_source_agent_id").val();
+    // if(agent_id==1){
+    //     var supplier_type = 1;
+    //     var belong_supplier_id = supplier_id;
+    // }else{
+    //     var supplier_type = 2; 
+    //     var belong_supplier_id = agent_id;
+    // }
+    var single_source_name = $("#edit_single_source_name").val();
+    var is_own_expense = $("#edit_single_source_own_expense").val();
+    //支付币种
+    var normal_price = $("#edit_single_source_normal_price").val();
+    var normal_settlement_price = $("#single_source_normal_settlement_price").val();
+    									
+    // var remark = $("#edit_single_source_remark").val();
+    var choose_company_id=$("#choose_company_id").val();
+    var payment_currency_type=$("#payment_currency_type").val();
+
+    $.ajax({
+        type: "POST",
+        url: '/source/editSingleSourceAjax',
+        data: {
+            single_source_id:single_source_id,
+            supplier_id:supplier_id,
+            status:status,
+             agent_id:agent_id,
+            // supplier_type:supplier_type,
+            // belong_supplier_id:belong_supplier_id,
+            single_source_name:single_source_name,
+            is_own_expense:is_own_expense,
+            normal_price:normal_price,
+            normal_settlement_price:normal_settlement_price,
+            // remark:remark,
+            choose_company_id:choose_company_id,
+            payment_currency_type:payment_currency_type,
+        },
+        success: function(data){
+            // console.log(data);
+            if(data.code!=200){
+                layer.msg(data.msg);
+                return false;
+            }else if(data.code==200) {
+                layer.msg('操作成功',{time:1,end : function(layero, index){
+                        history.back(-1);
+                    }
+                });
+            }
+        },
+        error:function(XMLHttpRequest, textStatus, errorThrown){
+            layer.msg('验证失败')
+        }
+    });
+    return false;
+}
+//修改单项资源多语言
+function single_source_edit_language(){
+	//获取有几个input框
+	var l = $('.edit_language').length;
+	var c = $('.edit_language');
+	var data2 = [];
+
+	for(var i =0;i<l;i++){
+	
+		var data_params = {"lang_id":c.eq(i).attr('lang_id'),"single_source_language_id":c.eq(i).attr('single_source_language_id'),"source_number": $('#source_number').val(),"single_source_name":c.eq(i).val()}
+
+		data2.push(data_params);
+		
+	}
+
+
+    $.ajax({
+        type: "POST",
+        url: '/source/singleSourceEditLanguageAjax',
+
+        datatype: 'json',
+        contentType: 'application/json;charset=utf-8',
+        //data:JSON.stringify(data2)
+        data:JSON.stringify(data2)       
+        , 
+
+        success: function (data) {
+            // console.log(data);
+            if(data.code!=200){
+                layer.msg(data.msg);
+                return false;
+            }else if(data.code==200) {
+                layer.msg('操作成功',{time:1,end : function(layero, index){
+                        location.href='/source/showSingleSourceSource';
+                    }
+                });
+            }
+        },
+        error: function (XMLHttpRequest, textStatus, errorThrown) {
+            layer.msg('验证失败')
+        }
+    });
+	
+	
+	
+	return false;	
+	
+
+	
+}	
+//添加自费资源
+function own_expense_Add(){
+    var supplier_id = $("#own_expense_supplier_id").val();
+    var status = $("#own_expense_status").val();
+    var agent_id = $("#own_expense_agent_id").val();
+    var own_expense_name = $("#own_expense_name").val();
+    //支付币种
+    var normal_price = $("#own_expense_normal_price").val();
+    var normal_settlement_price = $("#own_expense_normal_settlement_price").val();
+    // var remark = $("#own_expense_remark").val();
+    var choose_company_id = $("#choose_company_id").val();
+    var payment_currency_type=$("#payment_currency_type").val();
+
+    $.ajax({
+        type: "POST",
+        url: '/source/addOwnExpenseAjax',
+        data: {
+            supplier_id:supplier_id,
+            status:status,
+            agent_id:agent_id,
+            own_expense_name:own_expense_name,
+            normal_price:normal_price,
+            normal_settlement_price:normal_settlement_price,
+            // remark:remark,
+            choose_company_id:choose_company_id,
+            payment_currency_type:payment_currency_type,
+        },
+        success: function(data){
+            console.log(data);
+            if(data.code!=200){
+                layer.msg(data.msg);
+                return false;
+            }else if(data.code==200) {
+                layer.msg('操作成功',{time:1,end : function(layero, index){
+                        history.back(-1);
+                    }
+                });
+            }
+        },
+        error:function(XMLHttpRequest, textStatus, errorThrown){
+            layer.msg('验证失败')
+        }
+    });
+    return false;
+}
+//修改自费资源
+function own_expense_Edit(){
+    var own_expense_id = $("#own_expense_hidden_own_expense_id").val();
+    var supplier_id = $("#edit_own_expense_supplier_id").val();
+    var status = $("#edit_own_expense_status").val();
+    var agent_id = $("#edit_own_expense_agent_id").val();
+    var own_expense_name = $("#edit_own_expense_name").val();
+    //支付币种
+    var normal_price = $("#edit_own_expense_normal_price").val();
+    var normal_settlement_price = $("#own_expense_normal_settlement_price").val();
+
+    // var remark = $("#edit_own_expense_remark").val();
+    var choose_company_id=$("#choose_company_id").val();
+    var payment_currency_type=$("#payment_currency_type").val();
+
+    $.ajax({
+
+        type: "POST",
+        url: '/source/editOwnExpenseAjax',
+        data: {
+            own_expense_id:own_expense_id,
+            supplier_id:supplier_id,
+            status:status,
+            agent_id:agent_id,
+            // supplier_type:supplier_type,
+            // belong_supplier_id:belong_supplier_id,
+            own_expense_name:own_expense_name,
+            normal_price:normal_price,
+            normal_settlement_price:normal_settlement_price,
+            // remark:remark,
+            choose_company_id:choose_company_id,
+            payment_currency_type:payment_currency_type,
+        },
+        success: function(data){
+            // console.log(data);
+            if(data.code!=200){
+                layer.msg(data.msg);
+                return false;
+            }else if(data.code==200) {
+                layer.msg('操作成功',{time:1,end : function(layero, index){
+                        history.back(-1);
+                    }
+                });
+            }
+        },
+        error:function(XMLHttpRequest, textStatus, errorThrown){
+            layer.msg('验证失败')
+        }
+    });
+    return false;
+}
+//修改自费项目多语言
+function own_expense_edit_language(){
+	//获取有几个input框
+	var l = $('.edit_language').length;
+	var c = $('.edit_language');
+	var data2 = [];
+
+	for(var i =0;i<l;i++){
+	
+		var data_params = {"lang_id":c.eq(i).attr('lang_id'),"own_expense_language_id":c.eq(i).attr('own_expense_language_id'),"source_number": $('#source_number').val(),"own_expense_name":c.eq(i).val()}
+
+		data2.push(data_params);
+		
+	}
+
+
+    $.ajax({
+        type: "POST",
+        url: '/source/ownExpenseEditLanguageAjax',
+
+        datatype: 'json',
+        contentType: 'application/json;charset=utf-8',
+        //data:JSON.stringify(data2)
+        data:JSON.stringify(data2)       
+        , 
+
+        success: function (data) {
+            // console.log(data);
+            if(data.code!=200){
+                layer.msg(data.msg);
+                return false;
+            }else if(data.code==200) {
+                layer.msg('操作成功',{time:1,end : function(layero, index){
+                        location.href='/source/showOwnExpenseSource';
+                    }
+                });
+            }
+        },
+        error: function (XMLHttpRequest, textStatus, errorThrown) {
+            layer.msg('验证失败')
+        }
+    });
+	
+	
+	
+	return false;	
+	
+
+	
+}
+//资源结束

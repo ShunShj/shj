@@ -1,0 +1,569 @@
+
+
+var form = layui.form;
+var laydate = layui.laydate;
+var laytpl=layui.laytpl;
+
+var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+var visitorList=[];//添加游客数组
+var flightList=[];
+var iszhanwei=2;//是否是占位
+var flightNum=0;//航班信息个数
+var Country=[];//国家
+var customer='';//添加游客序号
+var passports=0;//游客护照重复记录
+var edit='';//记录修改还是新增
+var allhuzhao=[];//从父页面获取已添加的护照信息
+
+
+
+$(function () {
+    //判断客户管理中是否有护照号
+    $("#passport").blur(function () {
+        var passport=$(this).val();
+        if(edit==''){
+            for(var i=0;i<allhuzhao.length;i++){
+                if(allhuzhao[i]==passport){
+                    passports=1;
+                    layer.msg("已添加过此护照的游客信息，请去修改或重新输入！");
+                }
+            }
+        }
+        if(passports==0){
+            $.ajax({
+                type: "post",
+                url: "/customer/getCustomerAjax",
+                data:{
+                    customer_id:'',
+                    status:'',
+                    customer_name:'',
+                    phone:'',
+                    card_type:'',
+                    card_number:'',
+                    passport_number:passport
+                },
+                dataType: "json",
+                success: function (result) {
+                    if(result.code==200) {
+                        var list=result.data;
+                        if(list.length>0){
+                            $("#customerType").val(list[0].customer_type);//类型id
+                            $("#cardType").val(list[0].card_type);//证件类型
+                            $("#cardNumber").val(list[0].card_number);//证件号码
+                            $("#lastName").val(list[0].customer_last_name);//名
+                            $("#middleName").val(list[0].middle_name);//中间名
+                            $("#firstName").val(list[0].customer_first_name);//姓
+                            $("#gender").val(list[0].gender);//性别
+                            $("#birthday").val(date('Y-m-d',list[0].birthday));//生日
+                            $("#countryId").val(popCountry(list[0].country_id));//国籍id
+                            $("#language").val(language(list[0].country_id));//语言id
+                            $("#issuingDate").val(date('Y-m-d',list[0].issuing_date));//签发日期
+                            $("#validity").val(date('Y-m-d',list[0].term_of_validity));//有效期
+                            $("#visitorEmail").val(list[0].email);//邮箱
+                            $("#visitorPhone").val(list[0].phone);//手机
+                            $("#emergencyContact").val(list[0].emergency_contact);//紧急联系人
+                            $("#emergencyCall").val(list[0].emergency_call);//紧急联系电话
+                            $("#visitorAddress").val(list[0].address);//地址
+                        }
+                        form.render();
+                        console.log(list)
+                    }else if(result.code!=200){
+                        return false;
+                    }
+                }
+            });
+        }
+
+    });
+
+    //国籍
+    popCountry();
+    //语言
+    language();
+    //房号
+    roomCode();
+
+    //添加游客确定
+    form.on('submit(ok)', function(data){
+        layer.load(2);
+        var portList=data.field;
+        console.log(portList);
+        var numbers=$("#hideNumber").val();
+        var passport_number=$("#passport").val();//护照
+        var customer_type=$("#customerType").val();//类型id
+        var card_type=$("#cardType").val();//证件类型
+        var card_number=$("#cardNumber").val();//证件号码
+        var customer_last_name=$("#lastName").val();//名
+        var middle_name=$("#middleName").val();//中间名
+        var customer_first_name=$("#firstName").val();//姓
+        var gender=$("#gender").val();//性别
+        var birthday=$("#birthday").val();//生日
+        var country_id=$("#countryId").val();//国籍id
+        var country_name=cunrry(country_id,'one');//国籍name
+        var language_id=$("#language").val();//语言id
+        var language_name=cunrry(language_id,'two');//语言name
+        var issuing_date=$("#issuingDate").val();//签发日期
+        var term_of_validity=$("#validity").val();//有效期
+        var email=$("#visitorEmail").val();//邮箱
+        var phone=$("#visitorPhone").val();//手机
+        var emergency_contact=$("#emergencyContact").val();//紧急联系人
+        var emergency_call=$("#emergencyCall").val();//紧急联系电话
+        var address=$("#visitorAddress").val();//地址
+
+        var room_code=$("#roomCode").val();//房号
+        var room_type=$("#roomType").val();//房型
+        var check_in=$("#checkIn").val();//入住
+        var check_on=$("#checkOn").val();//退房
+        var check_in_hotel='';//提前入住酒店
+        var check_on_hotel='';//延后入住酒店
+        //入住酒店
+        var tiOne=$("#tiOne").val();
+        var tiTwo=$("#tiTwo").val();
+        var tiThree=$("#tiThree").val();
+        var tiFour=$("#tiFour").val();
+        var tiFive=$("#tiFive").val();
+        //退房酒店
+        var yanOne=$("#yanOne").val();
+        var yanTwo=$("#yanTwo").val();
+        var yanThree=$("#yanThree").val();
+        var yanFour=$("#yanFour").val();
+        var yanFive=$("#yanFive").val();
+
+        if(check_in<0){
+            if(check_in==-1){
+                check_in_hotel=tiOne;
+            }else if(check_in==-2){
+                check_in_hotel=tiOne+','+tiTwo;
+            }else if(check_in==-3){
+                check_in_hotel=tiOne+','+tiTwo+','+tiThree;
+            }else if(check_in==-4){
+                check_in_hotel=tiOne+','+tiTwo+','+tiThree+','+tiFour;
+            }else if(check_in==-5){
+                check_in_hotel=tiOne+','+tiTwo+','+tiThree+','+tiFour+','+tiFive;
+            }
+        }
+        if(check_on>0){
+            if(check_on==+1){
+                check_on_hotel=yanOne;
+            }else if(check_on==+2){
+                check_on_hotel=yanOne+','+yanTwo;
+            }else if(check_on==+3){
+                check_on_hotel=yanOne+','+yanTwo+','+yanThree;
+            }else if(check_on==+4){
+                check_on_hotel=yanOne+','+yanTwo+','+yanThree+','+yanFour;
+            }else if(check_on==+5){
+                check_on_hotel=yanOne+','+yanTwo+','+yanThree+','+yanFour+','+yanFive;
+            }
+        }
+
+        var list=$("#flightList_add .customer-flight-list").length;
+        $("#flightList_add .customer-flight-list").each(function (index,item) {
+            var j=$(item).attr("data-num");
+            var flight_code=$("#flightCode"+j).val();//航班
+            var start_place=$("#startPlace"+j).val();//出发地
+            var end_place=$("#endPlace"+j).val();//目的地
+            var flight_begin_time=$("#flightBeginTime"+j).val();//起飞时间
+            var flight_end_time=$("#flightEndTime"+j).val();//落地时间
+            var flight_type='';//接送机
+            var messageAirports='messageAirport'+j;
+            for(var d in portList){
+                if(d==messageAirports){
+                    flight_type=portList[d];
+                }
+            }/*end--接送机*/
+            var remark=$("#visitorRemark"+j).val();//备注
+            flightList.push({flight_code:flight_code,start_place:start_place,end_place:end_place,flight_begin_time:flight_begin_time,flight_end_time:flight_end_time,flight_type:flight_type,remark:remark})
+        })
+
+        if(iszhanwei==2){
+            /*visitorList.push({
+                passport_number:passport_number,card_type:card_type,card_number:card_number,customer_last_name:customer_last_name,middle_name:middle_name,
+                birthday:birthday,country_name:country_name,language_id:language_id,language_name:language_name,customer_type:customer_type,
+                customer_first_name:customer_first_name,gender:gender,country_id:country_id,issuing_date:issuing_date,term_of_validity:term_of_validity,
+                email:email,phone:phone,emergency_contact:emergency_contact,emergency_call:emergency_call,address:address,room_code:room_code,room_type:room_type,
+                check_in:check_in,check_on:check_on,check_in_hotel:check_in_hotel,check_on_hotel:check_on_hotel,customer_flight:flightList
+            })*/
+            if(numbers!=''){//修改
+                $.ajax({
+                    type: "post",
+                    url: "/companyorder/updateCompanyOrderCustomerByCompanyOrderCustomerIdAjax",
+                    data:{
+                        company_order_number:(parent.window.location.search).split("=")[1],company_order_customer_id:numbers,
+                        passport_number:passport_number,card_type:card_type,card_number:card_number,customer_last_name:customer_last_name,middle_name:middle_name,
+                        birthday:birthday,country_name:country_name,language_id:language_id,language_name:language_name,customer_type:customer_type,
+                        customer_first_name:customer_first_name,gender:gender,country_id:country_id,issuing_date:issuing_date,term_of_validity:term_of_validity,
+                        email:email,phone:phone,emergency_contact:emergency_contact,emergency_call:emergency_call,address:address,room_code:room_code,room_type:room_type,
+                        check_in:check_in,check_on:check_on,check_in_hotel:check_in_hotel,check_on_hotel:check_on_hotel,customer_flight:JSON.stringify(flightList)
+                    },
+                    dataType: "json",
+                    success: function (result) {
+                        if(result.code==200) {
+                            var list=result.data;
+                            parent.GetValue(list);//向父页面传值
+                            parent.layer.close(index);
+                            layer.close('loading');
+                            //parent.location.href='/branchcompany/companyOrderManage?company_order_number='+(parent.window.location.search).split("=")[1];
+                            form.render();
+                        }else if(result.code!=200){
+                            //layer.msg("请填写必填项");
+                            return false;
+                        }
+                    }
+                })
+            }else{//新增
+                $.ajax({
+                    type: "post",
+                    url: "/companyorder/addCompanyOrderCustomerAjax",
+                    data:{
+                        company_order_number:(parent.window.location.search).split("=")[1],
+                        passport_number:passport_number,card_type:card_type,card_number:card_number,customer_last_name:customer_last_name,middle_name:middle_name,
+                        birthday:birthday,language_id:language_id,customer_type:customer_type,
+                        customer_first_name:customer_first_name,gender:gender,country_id:country_id,issuing_date:issuing_date,term_of_validity:term_of_validity,
+                        email:email,phone:phone,emergency_contact:emergency_contact,emergency_call:emergency_call,address:address,room_code:room_code,room_type:room_type,
+                        check_in:check_in,check_on:check_on,check_in_hotel:check_in_hotel,check_on_hotel:check_on_hotel,customer_flight:JSON.stringify(flightList)
+                    },
+                    dataType: "json",
+                    success: function (result) {
+                        if(result.code==200) {
+                            var list=result.data;
+                            parent.GetValue(list);//向父页面传值
+                            parent.layer.close(index);
+                            layer.close('loading');
+                            //parent.location.href='/branchcompany/companyOrderManage?company_order_number='+(parent.window.location.search).split("=")[1];
+                            form.render();
+                        }else if(result.code!=200){
+                            return false;
+                        }
+                    }
+                });
+            }
+        }else{
+            var zhanNumbers=$("#zhanNumbers").val();
+            $.ajax({
+                type: "post",
+                url: "/companyorder/addCompanyOrderCustomerOccupyAjax",
+                data:{
+                    company_order_number:(parent.window.location.search).split("=")[1],
+                    occupy_count:zhanNumbers
+                },
+                dataType: "json",
+                success: function (result) {
+                    if(result.code==200) {
+                        parent.GetValue(list);//向父页面传值
+                        parent.layer.close(index);
+                        layer.close('loading');
+                    }else if(result.code!=200){
+                        return false;
+                    }
+                }
+            });
+        }
+    });
+
+    $(".visitorCancel").click(function () {
+        parent.layer.close(index);
+    })
+    form.render();
+})
+
+
+//获取父页面的值
+function child(isEdit,d,huzhao) {
+    allhuzhao=huzhao;
+    if(isEdit=='edit'){
+        edit=isEdit;
+        $("#hideNumber").val(d);
+        $.ajax({
+            type: "post",
+            url: "/companyorder/getCompanyOrderCustomerAjax",
+            data:{
+                company_order_number:(parent.window.location.search).split("=")[1],
+                company_order_customer_id:d
+            },
+            dataType: "json",
+            success: function (result) {
+                if(result.code==200) {
+                    parent.layer.closeAll('loading');
+                    var list=result.data[0];
+                    console.log(result)
+                    $("#passport").val(list.passport_number);//护照
+                    $("#customerType").val(list.customer_type);//类型id
+                    $("#cardType").val(list.card_type);//证件类型
+                    $("#cardNumber").val(list.card_number);//证件号码
+                    $("#lastName").val(list.customer_last_name);//名
+                    $("#middleName").val(list.middle_name);//中间名
+                    $("#firstName").val(list.customer_first_name);//姓
+                    $("#gender").val(list.gender);//性别
+                    if(list.birthday&&list.birthday!=null){
+                        $("#birthday").val(list.birthday);//生日
+                    }
+                    $("#countryId").val(popCountry(list.country_id));//国籍id
+                    $("#language").val(language(list.language_id));//语言id
+                    if(list.issuing_date!=null){
+                        $("#issuingDate").val(date('Y-m-d',list.issuing_date));//签发日期
+                    }
+                    if(list.term_of_validity!=null){
+                        $("#validity").val(date('Y-m-d',list.term_of_validity));//有效期
+                    }
+
+                    $("#visitorEmail").val(list.email);//邮箱
+                    $("#visitorPhone").val(list.phone);//手机
+                    $("#emergencyContact").val(list.emergency_contact);//紧急联系人
+                    $("#emergencyCall").val(list.emergency_call);//紧急联系电话
+                    $("#visitorAddress").val(list.address);//地址
+
+                    $("#roomCode").val(list.room_code);//房号
+                    $("#roomType").val(list.room_type);//房型
+                    $("#checkIn").val(list.check_in);//入住
+                    $("#checkOn").val(list.check_on);//退房
+                    var check_in_hotel=list.check_in_hotel.split(",");//提前入住酒店
+                    var check_on_hotel=list.check_on_hotel.split(",");//延后入住酒店
+                    checkIn(list.check_in);
+                    checkOn(list.check_on);
+                    //入住酒店
+                    $("#tiOne").val(check_in_hotel[0]);
+                    $("#tiTwo").val(check_in_hotel[1]);
+                    $("#tiThree").val(check_in_hotel[2]);
+                    $("#tiFour").val(check_in_hotel[3]);
+                    $("#tiFive").val(check_in_hotel[4]);
+                    //退房酒店
+                    $("#yanOne").val(check_on_hotel[0]);
+                    $("#yanTwo").val(check_on_hotel[1]);
+                    $("#yanThree").val(check_on_hotel[2]);
+                    $("#yanFour").val(check_on_hotel[3]);
+                    $("#yanFive").val(check_on_hotel[4]);
+                    //航班
+                    flightNum=list.flight_info.length;
+                    flightAdd(list.flight_info);
+                    form.render();
+                }else if(result.code!=200){
+                    return false;
+                }
+            }
+        });
+    }
+    parent.layer.close('loading');
+}
+//房号
+function roomCode(obj) {
+    //房号
+    var roomHtml='';
+    for(var i=1;i<=100;i++){
+        roomHtml+='<option value="'+i+'">'+i+'</option>';
+    }
+    $("#roomCode").append(roomHtml);
+    form.render();
+}
+
+//添加航班
+function flightAdd(obj) {
+    var flight;
+    if(obj!=undefined){
+        for(var y=0;y<obj.length;y++){
+            obj[y].num=y+1;
+        }
+        flight=obj;
+    }else{
+        flightNum++;
+        if(isNaN(flightNum)==false){
+            flight=flightNum.toString();
+        }else{
+            flight=flightNum;
+        }
+    }
+    var gettpl=$("#visitor_flight_add").html();
+    laytpl(gettpl).render(flight, function(html){
+        if(obj!=undefined){
+            $("#flightList_add").html(html);
+        }else{
+            $("#flightList_add").append(html);
+        }
+    });
+    lay('.sales-dates').each(function(){
+        laydate.render({
+            elem: this
+            ,type:'datetime'
+            ,trigger: 'click'
+            ,done: function(value, date){
+                console.log(date)
+            }
+        });
+    });
+    lay('.sales-date').each(function(){
+        laydate.render({
+            elem: this
+            ,trigger: 'click'
+            ,done: function(value, date){
+                console.log(date)
+            }
+        });
+    });
+    form.render();
+}
+//接送机
+form.on('checkbox(messageAirport)',function (data) {
+    $(data.elem).siblings("input[type='checkbox']").each(function (index,item) {
+        if($(item).val()!=data.value){
+            item.checked=false;
+            form.render();
+        }
+    })
+});
+//是否占位
+form.on('radio(zhanwei)',function (data) {
+    if(data.value=='1'){
+        var yesHtml=$("#yesHtml").html();
+        $("#yesNo").html(yesHtml);
+        iszhanwei=1;
+    }else{
+        var noHtml=$("#noHtml").html();
+        $("#yesNo").html(noHtml);
+        $(".input-required i").remove();
+        $(".input-required").prepend("<i>*</i>");
+        iszhanwei=2;
+        flightAdd()
+    }
+    form.render();
+});
+
+//提前入住
+form.on('select(check_in)',function (data) {
+    checkIn(data.value)
+});
+function checkIn(obj) {
+    var newObj='';
+    if(obj!=0){
+        newObj=obj.substr(1);
+    }
+    if(newObj>0){
+        if(newObj==1){
+            $("#tiOne").parents(".isHide").css("display","block");
+            $("#tiTwo,#tiThree,#tiFour,#tiFive").parents(".isHide").css("display","none");
+        }else if(newObj==2){
+            $("#tiTwo,#tiOne").parents(".isHide").css("display","block");
+            $("#tiThree,#tiFour,#tiFive").parents(".isHide").css("display","none");
+        }else if(newObj==3){
+            $("#tiOne,#tiTwo,#tiThree").parents(".isHide").css("display","block");
+            $("#tiFour,#tiFive").parents(".isHide").css("display","none");
+        }else if(newObj==4){
+            $("#tiOne,#tiTwo,#tiThree,#tiFour").parents(".isHide").css("display","block");
+            $("#tiFive").parents(".isHide").css("display","none");
+        }else if(newObj==5){
+            $("#tiOne,#tiTwo,#tiThree,#tiFour,#tiFive").parents(".isHide").css("display","block");
+        }
+        form.render();
+    }else{
+        $("#tiOne,#tiTwo,#tiThree,#tiFour,#tiFive").parents(".isHide").css("display","none");
+    }
+}
+//延后退房
+form.on('select(check_on)',function (data) {
+    checkOn(data.value)
+});
+function checkOn(obj) {
+    var newObj='';
+    if(obj!=0){
+        newObj=obj.substr(1);
+    }
+    if(newObj>0){
+        if(newObj==1){
+            $("#yanOne").parents(".isHide").css("display","block");
+            $("#yanTwo,#yanThree,#yanFour,#yanFive").parents(".isHide").css("display","none");
+        }else if(newObj==2){
+            $("#yanOne,#yanTwo").parents(".isHide").css("display","block");
+            $("#yanThree,#yanFour,#yanFive").parents(".isHide").css("display","none");
+        }else if(newObj==3){
+            $("#yanOne,#yanTwo,#yanThree").parents(".isHide").css("display","block");
+            $("#yanFour,#yanFive").parents(".isHide").css("display","none");
+        }else if(newObj==4){
+            $("#yanOne,#yanTwo,#yanThree,#yanFour").parents(".isHide").css("display","block");
+            $("#yanFive").parents(".isHide").css("display","none");
+        }else if(newObj==5){
+            $("#yanOne,#yanTwo,#yanThree,#yanFour,#yanFive").parents(".isHide").css("display","block");
+        }
+        form.render();
+    }else{
+        $("#yanOne,#yanTwo,#yanThree,#yanFour,#yanFive").parents(".isHide").css("display","none");
+    }
+}
+//删除航班
+function flightListClose(obj) {
+    $(obj).parent().remove();
+}
+
+
+//国籍
+function cunrry(obj,country) {
+    for(var i=0;i<Country.length;i++){
+        if(country=='one'){
+            if(obj==Country[i].country_id){
+                return Country[i].country_name;
+            }
+        }else{
+            if(obj==Country[i].language_id){
+                return Country[i].language_name;
+            }
+        }
+
+    }
+}
+//获取国家
+function popCountry(obj) {
+    $.ajax({
+        type: "post",
+        url: "/system/getCountryAjax",
+        data:{
+            status:1,
+            level:1
+        },
+        dataType: "json",
+        success: function (result) {
+            if(result.code==200) {
+                var list=result.data;
+                Country=list;
+                var countryHtml='';
+                //var languageHtml='';
+                console.log(list)
+                for(var j=0;j<list.length;j++){
+                    if(obj==list[j].country_id){
+                        countryHtml+='<option value="'+list[j].country_id+'" selected>'+list[j].country_name+'</option>';
+                    }else{
+                        countryHtml+='<option value="'+list[j].country_id+'">'+list[j].country_name+'</option>';
+                    }
+                }
+                $("#countryId").append(countryHtml);
+                form.render();
+            }else if(result.code!=200){
+                return false;
+            }
+        }
+    });
+}
+
+//语言
+function language(obj) {
+    $.ajax({
+        type: "post",
+        url: "/system/getLanguageAjax",
+        data:'',
+        dataType: "json",
+        success: function (result) {
+            if(result.code==200) {
+                var list=result.data;
+                var languageHtml='';
+                console.log(list);
+                for(var j=0;j<list.length;j++){
+                    if(obj==list[j].language_id){
+                        languageHtml+='<option value="'+list[j].language_id+'" selected>'+list[j].language_name+'</option>';
+                    }else {
+                        languageHtml+='<option value="'+list[j].language_id+'">'+list[j].language_name+'</option>';
+                    }
+                }
+                $("#language").append(languageHtml);
+                form.render();
+            }else if(result.code!=200){
+                return false;
+            }
+        }
+    });
+}

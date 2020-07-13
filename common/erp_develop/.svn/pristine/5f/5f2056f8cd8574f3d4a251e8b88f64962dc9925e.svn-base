@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+<head>
+	{include file='public/head' /}
+	<title>dining-manage-add</title>
+
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+
+	<div class="layui-header">
+		{include file='public/header' /}
+	</div>
+
+	<div class="layui-side layui-bg-black">
+		<div class="layui-side-scroll">
+			<!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+			{include file='public/left_menu_booknexus' /}
+		</div>
+	</div>
+
+	<div class="layui-body">
+
+		<!-- 内容主体区域 -->
+		<div style="padding: 15px;">
+			<div class='layui-form-item'>
+		   		<span class="layui-breadcrumb" lay-separator="-">
+					<a>{$language_tag.index_public_homepage}</a>
+					<a>{$language_tag.index_source_showHotelSource_source_administrate}</a>
+					<a>{$language_tag.index_source_showHotelManage_source_administrate}</a>
+					<a>{$language_tag.index_source_showHotelSource_hotel_source}</a>
+					<a><cite>{$language_tag.index_source_showHotelSource_add_hotel}</cite></a>
+				</span>
+			</div>
+			<form class="layui-form" id="form1" onSubmit="return add()">
+				<div class="layui-row layui-col-space10">
+					<div class="layui-col-md10">
+						<div class="layui-form-item">
+							<label class="layui-form-label input-required">Hotel Name:</label>
+							<div class="layui-input-block layui-form">
+								<input class="layui-input" type="text" value="{$info.supplier_name_en}" name="supplier_name_en"  lay-verify="required"/>
+							</div>
+						</div>
+					</div>
+
+					<div class="layui-col-md10">
+						<div class="layui-form-item">
+							<label class="layui-form-label input-required">Hotel Name Chinese:</label>
+							<div class="layui-input-block layui-form">
+								<input class="layui-input" type="text" value="{$info.supplier_name}" name="supplier_name"  lay-verify="required"/>
+							</div>
+						</div>
+					</div>
+
+					<div class="layui-col-md10">
+						<div class="layui-form-item">
+							<label class="layui-form-label input-required">Address cn:</label>
+							<div class="layui-input-block layui-form">
+								<input class="layui-input" type="text" value="{$info.address}" name="address"  lay-verify="required"/>
+							</div>
+						</div>
+					</div>
+
+					<div class="layui-col-md10">
+						<div class="layui-form-item">
+							<label class="layui-form-label input-required">Address en:</label>
+							<div class="layui-input-block layui-form">
+								<input class="layui-input" type="text" value="{$info.address_en}" name="address_en"  lay-verify="required"/>
+							</div>
+						</div>
+					</div>
+
+
+					<div class="layui-col-md10">
+						<div class="layui-form-item">
+							<label class="layui-form-label input-required">{$language_tag.index_source_showSupplierManage_zone}:</label>
+							<div class="layui-input-block layui-form">
+								<select data-tabs="1" name="country_id"  lay-search>
+									<option value="">{$language_tag.index_source_showFlightSourceManage_start_place}</option>
+									{foreach $CountryList as $vo}
+									<option value="{$vo.id}" {if condition="$vo.id eq $info.country_id"} selected{/if}>{$vo.cpc_name}</option>
+									{/foreach}
+								</select>
+							</div>
+						</div>
+					</div>
+
+					<div class="layui-col-md10">
+						<div class="layui-input-block all-button-center">
+							<button class="layui-btn nav-submit" lay-submit="" lay-filter="formDemo" >提交</button>
+							<input type="hidden" name="supplier_id" value="{$info.supplier_id}">
+							<a href="/booknexus_tour/showB2BHotelManage?status=1"><button type="button" class="layui-btn layui-btn-primary">取消</button></a>
+						</div>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+
+	<div class="layui-footer">
+		<!-- 底部固定区域 -->
+		© layui.com - 底部固定区域
+	</div>
+</div>
+{include file='public/foot_js' /}
+<script>
+
+	!function() {
+		var layer = layui.layer;
+		var form = layui.form;
+		var laydate = layui.laydate;
+
+	}();
+
+
+	function add() {
+		layer.load(2);
+		$.ajax({
+			type: "POST",
+			url: '/booknexus_tour/updateB2BHotelAjax',
+			data: $('#form1').serializeArray(),
+			success: function (data) {
+				layer.closeAll();
+				if(data.code!=200){
+					layer.msg(data.msg)
+					return false;
+				}else if(data.code==200){
+					layer.msg('{$language_tag.index_public_success}',{time:1,end : function(layero, index){
+							history.back(-1);
+						}
+					});
+				}
+			},
+			error:function(XMLHttpRequest, textStatus, errorThrown){
+				layer.closeAll();
+				//console.log(errorThrown)
+				layer.msg('{$language_tag.index_public_verificationFailure}')
+
+			}
+		});
+		return false;
+	}
+</script>
+
+
+</body>
+</html>

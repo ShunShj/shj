@@ -1,0 +1,12 @@
+<div style="width: 800px;height: 350px">
+    <div style="width: 780px;padding: 10px;height: 480px">
+        <div style='width: 420px;float: left;border: 10px solid #b9b9b9'><img src="{$Theme.list_diagram}" style="width: 420px" /></div>
+        <div style="width: 300px;float: left;margin-left: 20px">
+            <p style="font-size: 16px;font-weight: bold">{$Theme.title}</p>
+            <p style="font-size: 12px">{$Theme.describe}</p>
+            <p style="font-size: 16px;font-weight: bold">包含模块：</p>
+            <p style="font-size: 12px">{$Theme.include_module}</p>
+        </div>
+    </div>
+
+</div>

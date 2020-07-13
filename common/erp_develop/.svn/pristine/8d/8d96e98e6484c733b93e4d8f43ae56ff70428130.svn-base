@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    {include file='public/head' /}
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>无标题文档</title>
+</head>
+<body class="layui-layout-body">
+<div class="layui-container">
+    <div class="layui-row">
+        <div class="layui-col-md11 layui-col-md-offset1">
+            <div class="layui-form-item">
+                <div class="layui-form-label">导出操作</div>
+                <div class="layui-form-block">
+                    <button type="button" class="layui-btn layui-btn-primary" onclick="exportApiDemo('/branchcompany/getBranchProductAjax')">导出接口数据</button>
+                </div>
+            </div>
+            <!--<div class="layui-form">
+                <div class="layui-form-item">
+                    <div class="layui-form-label">导入操作</div>
+                    <div class="layui-form-block">
+                        <input type="file" class="layui-btn layui-btn-primary" id="LAY-excel-import-excel" multiple="multiple">
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form">
+                <div class="layui-form-item">
+                    <div class="layui-form-label">导入内容</div>
+                    <div id="message">
+
+                    </div>
+                </div>
+            </div>-->
+        </div>
+    </div>
+</div>
+{include file='public/foot_js' /}
+<script type="text/javascript" src="__STATIC__/layui/layui.js"></script>
+<script type="text/javascript">
+    layui.config({
+        base: '__STATIC__/javascript/layui_exts/',
+    }).extend({
+        excel: 'excel',
+    });
+</script>
+<script>
+    var aa=[];
+    var bb=[];
+    layui.use(['jquery', 'layer', 'excel', 'laytpl', 'element', 'code','upload'], function(){
+        var $ = layui.jquery;
+        var layer = layui.layer;
+        var excel = layui.excel;
+        var laytpl = layui.laytpl;
+        var element = layui.element;
+        var upload=layui.upload;
+        //导入
+        $(function(){
+            // 处理读取文件
+            var uploadExcel = function(files) {
+                try {
+                    excel.importExcel(files, {
+                        // 读取数据的同时梳理数据
+                        fields: {
+                            'id': 'A'
+                            ,'username': 'B'
+                            ,'experience': 'C'
+                            ,'sex': 'D'
+                            ,'score': 'E'
+                            ,'city': 'F'
+                            ,'classify': 'G'
+                            ,'wealth': 'H'
+                            ,'sign': 'I'
+                        }
+                    }, function(data) {
+                        	/*layer.open({
+                            title: '文件转换结果'
+                            ,area: ['800px', '400px']
+                            ,tipsMore: true
+                            ,content: laytpl($('#LAY-excel-export-ans').html()).render({data: data, files: files})
+                            ,success: function() {
+                                element.render('tab');
+                                layui.code({
+                                });
+                            }
+                        });*/
+                        /*laytpl($('#LAY-excel-export-ans').html()).render({data: data, files: files}, function(html){
+                            $("#message").html(html);
+                        });*/
+
+                        if(files.length==1){
+                            aa=data[0].名单;
+                            bb=data[0].航班;
+                            console.log(aa);
+                            console.log(bb);
+                            for(var i=0;i<aa.length;i++){
+                                aa[i].flight=[];
+                                for(var j=0;j<bb.length;j++){
+                                    if(aa[i].id==bb[j].id){
+                                        aa[i].flight.push({id:bb[j].id,flightCode:bb[j].username,startDi:bb[j].experience,endDi:bb[j].sex,startTime:bb[j].score,endTime:bb[j].city,transport:bb[j].classify,remark:bb[j].wealth});
+                                    }
+                                }
+                            }
+                            console.log(aa)
+                        }else{
+                            layer.alert('请至少上传一个文件且只能上传一个文件');
+                        }
+
+                    });
+                } catch (e) {
+                    layer.alert(e.message);
+                }
+            };
+            // 监听上传文件的事件number
+            $('#LAY-excel-import-excel').change(function(e) {
+                upload.render({multiple:false});
+                var files = e.target.files;
+                e.currentTarget.multiple=false;
+                console.log(e);
+                uploadExcel(files);
+            });
+            // 文件拖拽
+            $('body').ondragover = function(e) {
+                e.preventDefault();
+            }
+            $('body').ondrop = function(e) {
+                e.preventDefault();
+                var files = ev.dataTransfer.files;
+                uploadExcel(files);
+            }
+        });
+    });
+    //导出接口数据
+    function exportApiDemo(url) {
+        layui.use(['jquery', 'excel', 'layer'], function() {
+            var $ = layui.jquery;
+            var layer = layui.layer;
+            var excel = layui.excel;
+
+
+            $.ajax({
+                url: url
+                ,dataType: 'json'
+                ,success: function(res) {
+                    var data = res.data;
+                    console.log(data)
+                    //如果后端给的数据顺序和映射关系不对，执行梳理函数后导出
+                    data = excel.filterExportData(data, {
+                        id: 'branch_product_id',
+                        branch_product_number: 'branch_product_number'
+                        ,branch_product_name: 'branch_product_name',
+                        create_user_name:'create_user_name'
+                    });//梳理数据
+                    data.unshift({ id: 'ID',branch_product_number: "编号", branch_product_name: "所属分公司",create_user_name:'{$language_tag.index_finance_showReceivableManage_create_user_name}'});
+
+                    var timestart = Date.now();
+                    excel.exportExcel({
+                        sheet1: data
+                    }, '导出接口数据.xlsx', 'xlsx');
+                }
+                ,error: function() {
+                    layer.alert('获取数据失败，请检查是否部署在本地服务器环境下');
+                }
+            });
+        });
+    }
+</script>
+</body>
+
+<script type="text/html" id="LAY-excel-export-ans">
+    {{# layui.each(d.data, function(index, item){ }}
+    <blockquote class="layui-elem-quote">{{d.files[index].name}}</blockquote>
+    <div class="layui-tab">
+        <ul class="layui-tab-title">
+            {{# layui.each(item, function(sheetname, content) { }}
+            <li>{{sheetname}}</li>
+            {{# }); }}
+        </ul>
+        <div class="layui-tab-content">
+            {{# layui.each(item, function(sheetname, content) { }}
+            <div class="layui-tab-item"><pre class="layui-code">{{JSON.stringify(content, null, 2)}}</pre></div>
+            {{# }); }}
+        </div>
+    </div>
+    {{# }) }}
+</script>
+</html>

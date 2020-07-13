@@ -1,0 +1,138 @@
+      <ul class="layui-nav layui-nav-tree" id="left-nav" lay-filter="test">
+          <li class="layui-nav-item"><a href="/"><i class="iconfont img-homepage_fill"></i>控制面板</a></li>
+        <li {if condition="$controller_name eq 'source'"} class="layui-nav-item layui-nav-itemed"{else/} class="layui-nav-item" {/if}>
+          <a class="" href="javascript:void(0)"><i class="iconfont img-task_fill"></i>资源管理</a>
+          <dl class="layui-nav-child">
+
+              <dd {in name="function_name" value="showsuppliermanage,showsuppliermanage,showsupplieradd,showsupplieredit,showsupplierinfo" } class="layui-this"{/in}><a href="/source/showSupplierManage?status=1">供应商</a></dd>
+              <dd {in name="function_name" value="showagentmanage,showagentsource,showagentadd,showagentedit,showagentinfo" } class="layui-this"{/in}><a href="/source/showAgentManage?status=1">地接社</a></dd> 
+              <!--<dd {in name="function_name" value="showagencymanage,showagencyadd,showagencyedit,showagencyinfo"} class="layui-this"{/in}><a href="/source/showAgencyManage?status=1">地接社</a></dd>-->
+              <dd {in name="function_name" value="showhotelmanage,showhotelsource,showhoteladd,showhoteledit,showhotelinfo" } class="layui-this"{/in}><a href="/source/showHotelManage?status=1">酒店</a></dd>
+              <dd {in name="function_name" value="showdiningmanage,showdiningsource,showdiningadd,showdiningedit,showdininginfo" } class="layui-this"{/in}><a href="/source/showDiningManage?status=1">用餐</a></dd>
+              <dd {in name="function_name" value="showflightmanage,showflightsource,showflightadd,showflightedit,showflightinfo" } class="layui-this"{/in}><a href="/source/showFlightManage?status=1">航班</a></dd>
+
+            <dd {in name="function_name" value="showcruisesmanage,showcruisessourcemanage,showcruisessourceadd,showcruisessourceedit,showcruisessourceinfo" } class="layui-this"{/in}><a href="/source/showCruisesManage">邮轮</a></dd>
+            <dd {in name="function_name" value="showvisamanage,showvisasourcemanage,showvisasourceadd,showvisasourceedit,showvisasourceinfo" } class="layui-this"{/in}><a href="/source/showVisaManage">签证</a></dd>
+            <dd {in name="function_name" value="showscenicspotmanage,showscenicspotsourcemanage,showscenicspotsourceadd,showscenicspotsourceedit,showscenicspotsourceinfo" } class="layui-this"{/in}><a href="/source/showScenicSpotManage">景点</a></dd>
+            <dd {in name="function_name" value="showvehiclemanage,showvehiclesourcemanage,showvehiclesourceadd,showvehiclesourceedit,showvehiclesourceinfo" } class="layui-this"{/in}><a href="/source/showVehicleManage">车辆</a></dd>
+            <dd {in name="function_name" value="showtourguidemanage,showtourguidesourcemanage,showtourguidesourcemanage,showtourguidesourceedit,showtourguidesourceinfo" } class="layui-this"{/in}><a href="/source/showTourGuideManage">导游</a></dd>
+
+              <dd {in name="function_name" value="showsinglesourcemanage,showsinglesourcesource,showsinglesourceadd,showsinglesourceedit,showsinglesourceinfo" } class="layui-this"{/in}><a href="/source/showSingleSourceManage">单项资源</a></dd>
+              <dd {in name="function_name" value="showownexpensemanage,showownexpensesource,showownexpenseadd,showownexpenseedit,showownexpenseinfo" } class="layui-this"{/in}><a href="/source/showOwnExpenseManage">自费项目</a></dd>
+          </dl>
+        </li>
+
+        <li {if condition="$controller_name eq 'product'"} class="layui-nav-item layui-nav-itemed"{else/} class="layui-nav-item" {/if}>
+        <a class="" href="javascript:void(0)"><i class="iconfont img-manage_fill"></i>产品管理</a>
+        <dl class="layui-nav-child">
+            <dd {in name="function_name" value="showroutetemplatemanage,showroutetemplatemanage,showroutetemplatadd,showroutetemplateedit,showroutetemplateinfo" } class="layui-this"{/in}><a href="/product/showRouteTemplateManage">线路模板</a></dd>
+            <dd {in name="function_name" value="showplantour,showplantouradd,showplantourupdate,planreceivablebranch,plansupplierspayable,planbooking,planbookinginfo" } class="layui-this"{/in}><a href="/product/ShowPlanTour">团队产品</a></dd>
+
+            <dd {in name="function_name" value="showroutetypemanage,showroutetypemanage,showroutetypeadd,showroutetypeedit,showroutetypeinfo" } class="layui-this"{/in}><a href="/product/showRouteTypeManage?status=1&pid=0">线路类型</a></dd>
+            <dd {in name="$function_name" value="showreturnreceiptmanage,showreturnreceiptadd,showreturnreceiptedit,showreturnreceiptinfo" } class="layui-this"{/in}><a href="/product/showReturnReceiptManage">回执单模板</a></dd>
+
+        </dl>
+
+        </li>
+
+        <li {if condition="$controller_name eq 'branchcompany'" or "$function_name eq 'showcompanyordermanage'"} class="layui-nav-item layui-nav-itemed"{else/} class="layui-nav-item" {/if}>
+        <a class="" href="javascript:void(0)"><i class="iconfont fen-icon img-2fengongsi"></i>分公司管理</a>
+        <dl class="layui-nav-child">
+            <dd {in name="function_name" value="showbranchproductmanage,showbranchproductmanage,showbranchproductadd,showbranchproductedit,showbranchproductinfo"} class="layui-this" {/in} ><a href="/branchcompany/showBranchProductManage">分公司产品</a></dd>
+          	<dd {in name="function_name" value="showbranchproducttypemanage"} class="layui-this" {/in} ><a href="/branchcompany/showBranchProductTypeManage">分公司产品类型</a></dd>
+          	<dd {in name="function_name" value="showcompanyordermanage,companyordermanage,showcompanyordercustomerguidereceipt"} class="layui-this" {/in} ><a href="/branchcompany/showCompanyOrderManage">订单管理</a></dd>
+
+            <dd {in name="function_name" value="showcustomermanage,showcustomeradd,showcustomerinfo,showcustomeredit"} class="layui-this" {/in} ><a href="/branchcompany/showCustomerManage">客户管理</a></dd>
+            <dd {in name="function_name" value="showdistributormanage,showdistributoradd,showdistributorinfo,showdistributoredit"} class="layui-this" {/in} ><a href="/branchcompany/showDistributorManage">渠道管理</a></dd>
+
+        </dl>
+
+        </li>
+        <!--<li {if condition="$controller_name eq 'sale'"} class="layui-nav-item layui-nav-itemed"{else/} class="layui-nav-item" {/if}>-->
+        <!--<a class="" href="javascript:void(0)">b2b管理</a>-->
+        <!--<dl class="layui-nav-child">-->
+          <!---->
+        <!---->
+        <!--</dl>-->
+
+        <!--</li>-->
+
+        <li {if condition="$controller_name eq 'finance'"} class="layui-nav-item layui-nav-itemed"{else/} class="layui-nav-item" {/if}>
+          <a class="" href="javascript:void(0)"><i class="iconfont img-financial_fill"></i>财务管理</a>
+          <dl class="layui-nav-child">
+              <dd {in name="function_name" value="showreceivablemanage,showreceivableallmanage" } class="layui-this"{/in}><a href="/finance/showReceivableManage">应收财务</a></dd>
+              <!--<dd {in name="function_name" value="showReceivableAllManage"} class="layui-this" {/in} ><a href="/finance/showReceivableAllManage">应收财务-批量</a></dd>-->
+              <dd {in name="function_name" value="showmustpaymanage,showmustpayallmanage" } class="layui-this"{/in}><a href="/finance/showMustPayManage">应付财务</a></dd>
+              <!--<dd {in name="function_name" value="showMustPayAllManage"} class="layui-this" {/in} ><a href="/finance/showMustPayAllManage">应付财务-批量</a></dd>-->
+              <dd {in name="function_name" value="showagentexpensemanage,showagentexpenseadd" } class="layui-this"{/in}><a href="/finance/showAgentExpenseManage">地接报账</a></dd>
+              <dd {in name="function_name" value="costsharinglist,costsharinginfo,establishmentofascaleofassessments,addcostsharing,upcostsharing" } class="layui-this"{/in}><a href="/finance/CostSharingList">费用分摊</a></dd>
+              <dd {in name="function_name" value="salesreportproducts,salesreportagent" } class="layui-this"{/in}><a href="/finance/SalesReportProducts">销售报表</a></dd>
+              <!--<dd {in name="function_name" value="costsheet,codedetail"}  class="layui-this"{/in}><a href="/finance/costSheet">成本报表</a></dd>-->
+              <dd {in name="function_name" value="grossprofitstatistics"}  class="layui-this"{/in} ><a href="/finance/grossProfitStatistics">发团毛利统计</a></dd>
+              <dd {in name="function_name" value="profitstatement,editprofitstatement"}  class="layui-this"{/in} ><a href="/finance/profitStatement">利润表</a></dd>
+              <dd {in name="function_name" value="balancesheet,editbalancesheet"}  class="layui-this"{/in} ><a href="/finance/balanceSheet">资产负债表</a></dd>
+          </dl>
+
+        </li>
+        <li {if condition="$controller_name eq 'develop'"} class="layui-nav-item layui-nav-itemed"{else/} class="layui-nav-item" {/if}>
+          <a class="" href="javascript:void(0)"><i class="iconfont img-dynamic_fill"></i>开发管理 </a>
+          <dl class="layui-nav-child">
+              <dd {in name="function_name" value="showdeveloplemanage,showimportingmanage"} class="layui-this" {/in} ><a href="/develop/showImportingManage">导入功能</a></dd>
+          </dl>
+
+        </li>
+
+          <li {if condition="$controller_name eq 'examineandapprove'"} class="layui-nav-item layui-nav-itemed"{else/} class="layui-nav-item" {/if}>
+          <a class="" href="javascript:void(0)"><i class="iconfont img-dynamic_fill"></i>审批管理</a>
+          <dl class="layui-nav-child">
+              <dd {in name="function_name" value="tobeapprovedbyme"} class="layui-this" {/in} ><a href="/examine_and_approve/toBeApprovedByMe">审批</a></dd>
+          </dl>
+
+          </li>
+
+          <li {if condition="$controller_name eq 'system'"} class="layui-nav-item layui-nav-itemed"{else/} class="layui-nav-item" {/if}>
+          <a class="" href="javascript:void(0)"><i class="iconfont img-setup_fill"></i>系统设置</a>
+          <dl class="layui-nav-child">
+              <dd {in name="function_name" value="showcurrencymanage,showcurrencymanage,showcurrencyadd,showcurrencyedit,showcurrencyinfo" } class="layui-this"{/in}><a href="/system/showCurrencyManage">货币管理</a></dd>
+              <dd {in name="function_name" value="showlanguagemanage,showlanguagemanage,showlanguageadd,showlanguageedit,showlanguageinfo" } class="layui-this"{/in}><a href="/system/showLanguageManage">语言管理</a></dd>
+              <dd {in name="function_name" value="showcountrymanage,showcountrymanage,showcountrystateadd,showcountrycityadd,showcountryzoneadd,showcountryeditmanage,showcountryinfo" } class="layui-this"{/in}><a href="/system/showCountryManage">区域管理</a></dd>
+
+              <dd {in name="function_name" value="showcompanymanage,showcompanymanage,showcompanyadd,showcompanyedit,showcompanyinfo" } class="layui-this"{/in}><a href="/system/showCompanyManage">公司管理</a></dd>
+              <dd {in name="function_name" value="showdepartmentmanage,showdepartmentmanage,showdepartmentadd,showdepartmentedit,showdepartmentinfo" } class="layui-this"{/in}><a href="/system/showDepartmentManage">部门管理</a></dd>
+             <!--  
+				<dd {in name="function_name" value="showjobmanage,showjobmanage,showjobadd,showjobedit,showjobinfo" } class="layui-this"{/in}><a href="/system/showJobManage">职位管理</a></dd>
+			-->	
+              <dd {in name="function_name" value="showusermanage,showusermanage,showuseradd,showuseredit,showuserinfo" } class="layui-this"{/in}><a href="/system/showUserManage">用户管理</a></dd>
+              <dd {in name="function_name" value="showrolemanage,showrolemanage,showroleadd,showroleedit,showroleinfo" } class="layui-this"{/in}><a href="/system/showRoleManage">角色管理</a></dd>
+              <dd {in name="function_name" value="showauthmanage,showauthmanage,showauthadd,showauthedit,showauthinfo" } class="layui-this"{/in}><a href="/system/showAuthManage">权限管理</a></dd>
+              <dd {in name="function_name" value="showbilltemplatemanage,，showbilltemplateadd，showbilltemplateedit,showbilltemplateinfo" } class="layui-this"{/in}><a href="/system/showBillTemplateManage">账单管理</a></dd>
+              <dd {in name="function_name" value="showtaxmanage" } class="layui-this"{/in}><a href="/system/showTaxManage">税点管理</a></dd>
+              <dd {in name="function_name" value="showcurrencyproportionmanage,，showcurrencyproportionedit" } class="layui-this"{/in}><a href="/system/showCurrencyProportionManage">汇率管理</a></dd>
+              <!--<dd><a href="#">邮件模版</a></dd>-->
+              <!--<dd><a href="#">账单模版</a></dd>-->
+              <!--<dd><a href="#">税点</a></dd>-->
+
+          </dl>
+          </li>
+
+          <li {if condition="$controller_name eq 'remindermanagement'"} class="layui-nav-item layui-nav-itemed"{else/} class="layui-nav-item" {/if}>
+          <a class="" href="javascript:void(0)"><i class="iconfont img-dynamic_fill"></i>提醒管理 </a>
+          <dl class="layui-nav-child">
+              <dd {in name="function_name" value="systemremindersettings"} class="layui-this" {/in} ><a href="/reminderManagement/SystemReminderSettings">系统提醒设置</a></dd>
+              <dd {in name="function_name" value="allinstationletter"} class="layui-this" {/in} ><a href="/reminderManagement/allInStationLetter">全部系统消息</a></dd>
+          </dl>
+
+          </li>
+
+        <!--  
+        <li {if condition="$controller_name eq 'language'"} class="layui-nav-item layui-nav-itemed"{else/} class="layui-nav-item" {/if}>
+          <a class="" href="javascript:void(0)">多语管理</a>
+          <dl class="layui-nav-child">
+
+              <dd {in name="function_name" value="showReceivableManage"} class="layui-this" {/in} ><a href="/finance/showReceivableManage">应收财务</a></dd>
+
+          </dl>
+
+        </li>  
+        -->      
+      </ul>

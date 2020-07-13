@@ -1,0 +1,645 @@
+{include file='/book_tour/includes/header' /}
+{include file='/book_tour/includes/top_nav' /}
+
+<!--
+	This is view/booktour/select_tour.php
+-->
+<script>
+    /*$(function() {
+     $( "#dialog-modal" ).dialog({
+     height: 185,
+     width: 300,
+     color: "#ccc",
+     modal: true
+     });
+     });*/
+    //    $(function () {
+    //        $("#dialog-message").dialog({
+    //            modal: true,
+    //            height: 385,
+    //            width: 550,
+    //            buttons: {
+    //                Ok: function () {
+    //                    $(this).dialog("close");
+    //                }
+    //            }
+    //        });
+    //    });
+</script>
+<link rel="stylesheet" href="/assets/css/jquery.modal.css" type="text/css" media="screen" />
+<style>
+    /*div#dialog-modal {*/
+    /*font-size: 12px;*/
+    /*padding: 5px;*/
+    /*width: 300px;*/
+    /*}*/
+
+    .disable-link {
+        opacity: .8;
+        color: rgb(160, 155, 155);
+    }
+
+    span.disabled-book-link {
+        background: #3376bb;
+        color: #fff;
+        padding: 4px 35px;
+        -moz-border-radius: 5px;
+        -webkit-border--radius: 5px;
+        border-radius: 5px;
+        opacity: .8;
+    }
+
+    #select_tour {
+        background: transparent;
+        border: none;
+    }
+
+    #select_tour .ui-widget-header {
+        background: transparent;
+        border: none;
+        border-bottom: 1px solid #c0c0c0;
+        -moz-border-radius: 0px;
+        -webkit-border-radius: 0px;
+        border-radius: 0px;
+    }
+
+    #select_tour .ui-tabs-nav .ui-state-default {
+        background: #3376bb;
+        border: none;
+        -moz-border-bottom-colors: none;
+        -moz-border-left-colors: none;
+        -moz-border-right-colors: none;
+        -moz-border-top-colors: none;
+    }
+
+    #select_tour .ui-tabs-nav a {
+        height: 50px;
+        font-size: 15px;
+        font-weight: bold;
+        line-height: 50px;
+    }
+
+    #select_tour .ui-tabs-nav .ui-state-active {
+        background: none;
+        border: none;
+        border-radius: 5px 5px 0 0;
+    }
+
+    #select_tour .ui-tabs-nav .ui-state-default a {
+        color: #fff;
+    }
+
+    #select_tour .ui-tabs-nav .ui-state-active a {
+        color: #fff;
+        /*background-color: #ff0000;*/
+        border-radius: 5px 5px 0 0;
+    }
+
+    #select_tour.ui-tabs .ui-tabs-panel{
+        padding: 10px 0;
+    }
+
+    a:focus {
+        outline: none;
+    }
+
+    .light-table-filter {
+        padding: 5px;
+        margin: 0 0 0 5px;
+        width: 370px;
+    }
+
+    .filter-tours {
+        background-color: #ededed;
+        padding: 5px;
+        margin: 0 0 10px 0;
+    }
+
+    .filter-tours > b {
+        margin-left: 13px;
+    }
+
+    .order-flyer-btn {
+        padding: 8px 10px;
+        display: inline-block;
+        font-size:18px;
+        font-weight: 600;
+        background-color: #3376ba;
+        border: 1px solid #378cd4;
+        border-radius: 7px;
+        -moz-border-radius: 7px;
+        color: #FFF;
+        cursor: pointer;
+        margin-left: 5px;
+    }
+    .order-flyer-btn:hover{
+        background-color: #ec1c24;
+        border: 1px solid #f91c24;
+    }
+
+    .orderFlyers {
+        position: absolute;
+        /*width: 350px;*/
+        /*height: 125px;*/
+        /*left: 800px;*/
+        left: 80%;
+        margin: 8px 0 0 0px;
+        /*background-color: #3376bb;*/
+        padding: 5px;
+        font-size: 16px;
+        color: #fff;
+    }
+    .orderFlyers ul{
+        padding-left:20px;
+        list-style-type: square;
+    }
+
+    .order-content,.promotion-meterials {
+        margin: 10px 0 10px 15px;
+    }
+    .order-content li,.promotion-meterials li,.orderFlyers li {
+        padding: 5px 0 5px 0;
+    }
+    .promotion-meterials {
+        list-style-type: none;
+        margin-left: 0px;
+    }
+    #promotion-content hr {
+        margin: 5px 0 5px 0;
+    }
+
+    #order-content {
+        max-height: 600px;
+        overflow: auto;
+        overflow-x:hidden;
+    }
+
+    ul.order-content {
+        list-style-type: square;
+    }
+
+    .modal a.close-modal {
+        position: absolute;
+        top: -12.5px;
+        right: -12.5px;
+        display: block;
+        width: 30px;
+        height: 30px;
+        text-indent: -9999px;
+        background: url(<?php echo base_url('assets/css/close.png'); ?>) no-repeat 0 0;
+    }
+
+    #orderBtn,#submitOrderPosterBtn {
+        padding: 5px;
+        margin: 15px 0 5px 0;
+        width: 50%;
+        cursor: pointer;
+        background-color: #0085d0;
+        border: 1px solid #0085d0;
+        color: #FFF;
+        position: relative;
+        left: 25%;
+    }
+
+    a#orderFlyerBtn,a#orderPosterBtn {
+        text-decoration: none;
+        color: #fff;
+        /*padding: 5px 55px 5px 55px;*/
+    }
+
+    .nexus-color {
+        color: #0085d0;
+    }
+    #promotion-content hr {
+        border: 1px solid #0085d0;
+    }
+    #dialog-content {
+        font-family: Sans-Serif;
+    }
+
+    table.poster-meterials tr th {
+        padding: 10px 0 0 0;
+        float: left;
+    }
+    table.poster-meterials tr td {
+        font-weight: bold;
+        padding: 5px 5px 0px 5px;
+        height:185px;
+    }
+    table.poster-meterials tr td input {
+        text-align: center;
+    }
+    table.poster-meterials tr td img{
+        height: 130px;
+        padding: 5px;
+    }
+    #dialog-poster-form p{
+        background-color: #0085d0;
+        color: #fff;
+        padding: 5px;
+    }
+    .tr-bottom {
+        padding: 0px;
+        position: absolute;
+    }
+
+    #select_tour {
+        margin-top: 20px;
+        background: transparent;
+        border: none;
+    }
+
+    #select_tour ul {
+        background: transparent;
+        border: none;
+        border-bottom: 1px solid #c0c0c0;
+    }
+
+    #select_tour li {
+        border: none;
+
+    }
+
+    #select_tour ul a {
+        width: 120px;
+        height: 50px;
+        font-size: 15px;
+        font-weight: bold;
+        line-height: 50px;
+        color: #fff;
+        border-radius: 5px 5px 0 0;
+    }
+
+    #select_tour ul li.ui-tabs-active a{
+        height: 57px;
+        margin-top: -7px;
+    }
+
+    a:focus {
+        outline: none;
+    }
+</style>
+<link rel="stylesheet" href="<?php echo base_url('assets/css/commission.css'); ?>">
+<div id="dialog-order-form" title="Flyer Order Form" class="modal">
+    <div id="dialog-content">
+        <div id="order-content">Please select a flyer to order !</div>
+
+        <div id="promotion-content"><hr/>
+            <button id="orderBtn" type="submit">Submit Order</button>
+        </div>
+    </div>
+    <a href="#close-modal" rel="modal:close" class="close-modal">Close</a>
+</div>
+
+<div id="dialog-poster-form" title="Poster Order Form" class="modal poster-modal" style="width:700px">
+    <div id="dialog-content">
+        <p><span class=""><strong>Free Posters Order Here !</strong></span></p>
+        <table border="0" class="poster-meterials">
+            <tr><th colspan="5"><span class="nexus-color"><strong>Outbound</strong></span></th></tr>
+            <tr>
+                <td><img src="<?php echo base_url('assets/images/poster_china.jpg'); ?>"><br/><span class="tr-bottom"><input type="checkbox" name="poster" class="materials" value="Tour Posters - China"/> CHINA</span></td>
+                <td><img src="<?php echo base_url('assets/images/poster_china_noshopping.jpg'); ?>"><br/><span class="tr-bottom"><input type="checkbox" name="poster" class="materials" value="Tour Posters - China no shopping"/>CHINA <br/>(non-shopping)</span></td>
+                <td><img src="<?php echo base_url('assets/images/poster_asia.jpg'); ?>"><br/><span class="tr-bottom"><input type="checkbox" name="poster" class="materials" value="Tour Posters - Asia"/> ASIA</span></td>
+                <td><img src="<?php echo base_url('assets/images/poster_nz.jpg'); ?>"><br/><span class="tr-bottom"><input type="checkbox" name="poster" class="materials" value="Tour Posters - New Zealand"/> NEW ZEALAND</span></td>
+                <td><img src="<?php echo base_url('assets/images/poster_europe.jpg'); ?>"><br/><span class="tr-bottom"><input type="checkbox" name="poster" class="materials" value="Tour Posters - Europe"/> EUROPE&Africa</span></td>
+            </tr>
+            <tr>
+                <td><img src="<?php echo base_url('assets/images/poster_usa.jpg'); ?>"><br/><span class="tr-bottom"><input type="checkbox" name="poster" class="materials" value="Tour Posters - America"/> AMERICA</span></td>
+                <td><img src="<?php echo base_url('assets/images/poster_canada.jpg'); ?>"><br/><span class="tr-bottom"><input type="checkbox" name="poster" class="materials" value="Tour Posters - Canada"/> CANADA</span></td>
+            </tr>
+            <tr><th colspan="5"><span class="nexus-color"><strong>Inbound</strong></span></th></tr>
+            <tr>
+                <td><img src="<?php echo base_url('assets/images/poster_tas.jpg'); ?>"><br/><span class="tr-bottom"><input type="checkbox" name="poster" class="materials" value="Tour Posters - Tasmania"/> TASMANIA</span></td>
+                <td><img src="<?php echo base_url('assets/images/poster_perth.jpg'); ?>"><br/><span class="tr-bottom"><input type="checkbox" name="poster" class="materials" value="Tour Posters - Perth"/> PERTH</span></td>
+                <td><img src="<?php echo base_url('assets/images/poster_adelaide.jpg'); ?>"><br/><span class="tr-bottom"><input type="checkbox" name="poster" class="materials" value="Tour Posters - Adelaide"/> ADELAIDE</span></td>
+                <td colspan="2"><img src="<?php echo base_url('assets/images/poster_uluru.jpg'); ?>"><br/><span class="tr-bottom"><input type="checkbox" name="poster" class="materials" value="Tour Posters - Uluru"/> ULURU</span></td>
+            </tr>
+        </table>
+        <button id="submitOrderPosterBtn" type="submit">Submit Order</button>
+
+    </div>
+    <a href="#close-modal" rel="modal:close" class="close-modal">Close</a>
+</div>
+
+<!--<div id="dialog-message" title="IMPORTANT ANNOUNCEMENT">-->
+<!--span class="ui-icon ui-icon-circle-check" style="float: left; margin: 0 7px 50px 0; font-size:12px;"></span-->
+<!--    <span class="ui-icon ui-icon-info" style="float: left; margin: 0 7px 100px 0;"></span>-->
+<!---->
+<!--    <p>為配合中國旅遊法，2014年出發的所有中國特價團，均需在報名時預付自費和小費。請在Special Request中註明。-->
+<!---->
+<!--    <p>-->
+<!--        In line with the Chinese Tourism Legal Regulations, tipping and compulsory programme fees for all 2014 China-->
+<!--        Budget Tours will need to be pre-paid and collected at the time of booking. Please indicate in Special-->
+<!--        Request.</p>-->
+<!---->
+<!--    <p>&nbsp;</p>-->
+<!--    <span class="ui-icon ui-icon-info" style="float: left; margin: 0 7px 100px 0;"></span>-->
+<!---->
+<!--    <p>所有持澳洲或新西蘭PR的客人參團時必須攜帶PR件，否則將被禁止參團。</p>-->
+<!---->
+<!--    <p>For all Australian and NZ Permanent Residents, it is mandatory to have your permanent residency documentation on-->
+<!--        you at all times. Travellers will not be able to join Nexus Holidays' China Budget Tours should they not have-->
+<!--        valid documentation.</p>-->
+<!---->
+<!---->
+<!--</div>-->
+
+<div class="orderFlyers">
+    <p style="margin-left: -50px;">
+        <a class="order-flyer-btn" id="orderPosterBtn" rel="modal:open" href="#dialog-poster-form">Order Posters</a>
+        <a class="order-flyer-btn" id="orderFlyerBtn" rel="modal:open" href="#dialog-order-form">Order Flyers</a>
+    </p>
+
+</div>
+
+<?php
+//process content for each tabs
+$outbound_content = "";
+$outbound_content_2016 = "";
+$inbound_content = "";
+$en_content = "";
+$beauty_content = '';
+
+//if there is not sorting in database, use this one
+usort($all_tours, function ($tourA, $tourB) {
+    if ($tourA['tour_tab'] == $tourB['tour_tab']) {
+        if ($tourA["tour_type2"] == $tourB["tour_type2"]) {
+            return $tourA["sort"] < $tourB["sort"] ? -1 : 1;
+        }
+    } else {
+        return $tourA["tour_tab"] < $tourB["tour_tab"] ? -1 : 1;
+    }
+});
+
+$currentType = "";
+foreach ($all_tours as $tour) {
+    if ($tour['status'] != 1) {
+     continue;
+    }
+$matchType = $tour["tour_type2"];
+
+if ($currentType !== $tour['tour_tab']."_".$matchType) {
+$currentType = $tour['tour_tab']."_".$matchType;
+$nameArray=array();
+
+foreach($type_arr as $typeModel){
+if($typeModel['tour_type_id']==$matchType){
+$nameArray[]=$typeModel['tour_type_name'];
+$nameArray[]=$typeModel['cn_name'];
+break;
+}
+}
+$content = "<tr class='td_title'>" .
+    '<td colspan="15" class="top_category">' .
+        '<span class="news_title">' .
+            '<font color="red">' . implode(" ",$nameArray) . '</font></span>' .
+        "</td>" .
+    "</tr>";
+$content_type = $content;
+} else {
+$content = "";
+$content_type = "";
+}
+
+$content .= "<tr class='even'>";
+    $has_available_date = $tour['is_date'];
+    $cssText = $has_available_date ? "news_title" : "news_title disable-link";
+    $linkText = $tour['tour_name'];
+    $tourPrice = $tour['adult_nett_cn']?:'N/A';
+    $isBocTour = false;
+
+    if ($has_available_date) {
+    $linkText = ($isBocTour) ? '<a href="' . base_url('supplier/make_booking/' . $tourCode) . '">' . $tour['tour_name'] . '</a>' : '<a href="' . base_url('book_tour/select_date?btb_tour_id=' . $tour['btb_tour_id']) . '">' . $tour['tour_name'] . '</a>';
+    }
+    $content .= '<td><span class="' . $cssText . '">' . $linkText . '</span></td>';
+
+    $content .= '<td><span class="news_title">' . $tour['length_days'].'/'.$tour['length_nights'] . '</span>' .
+        '</td>' .
+    '<td><span class="news_title">' . $tourPrice . '</span></td>' .
+    '<td><span class="news_title">' . $tour['frequency'] . '</span>' .
+        '</td>' .
+    '<td>' .
+        '<span class="news_title">' . $tour['start_city'].'/'.$tour['end_city'] . '</span>' .
+        '</td>' .
+    '<td><span class="view"><a href="' . $tour['pdf_flyer'] . '"
+                               target="_new">View</a></span></td>';
+
+    $bookText = '<span class="disabled-book-link">Book</span>';
+
+    if ($has_available_date) {
+    $bookText = ($isBocTour) ? '<a href="' . base_url('supplier/make_booking/' . $tourCode) . '">Book</a></span></td>' : '<a href="' . base_url('book_tour/select_date?btb_tour_id=' . $tour['btb_tour_id']) . '">Book</a></span></td>';
+    }
+    $content .= '<td><span class="book">' . $bookText . '</span></td>';
+    $content .= '<td><input type="checkbox" name="orderflyer" class="orderFlyer" value="'.$tour['tour_name'].'"/></td>';
+    $content .= '</tr>';
+$key = '';
+
+//var_dump($tabs);exit;
+
+foreach ($tabs as $index => $t) {
+    if (isset($t['commission_id']) && $t['commission_id'] !== 0) {
+        if ($tour["tour_tab"] == $t["commission_id"]) {
+            $key = $index;
+        }
+    }
+}
+//$key = array_search($tour["tour_tab"],array_column($tabs,'commission_id'));
+if(isset($tabs[$key]['tourContent'])) {
+$tabs[$key]['tourContent'] .= $content;
+} else {
+$tabs[$key]['tourContent'] = "";
+$tabs[$key]['tourContent'] .= $content;
+}
+
+}
+
+?>
+
+<?php //var_dump($tabs);exit;?>
+
+
+<section id="content">
+
+    <section id="booktour">
+        <article>
+            <h1><img src="<?php echo base_url('assets/images/select_tour_a.png'); ?>" width="700" alt="Select Tour"/>
+            </h1>
+
+            <h2 class="top_icn">
+                <div class="top_icn_text">1</div>
+                <img src="<?php echo base_url('assets/images/select_tour_icn.png'); ?>" alt="Select Tour - Step 1"/>
+                <div class="top_text" style="margin-left: 45px;">Click Book to process.</div>
+            </h2>
+
+            <input type="search" class="light-table-filter" data-table="order-table" placeholder="Please enter keywords here">
+
+            <div id="select_tour"><!-- sidebar -->
+                <link rel="stylesheet" href="<?php echo base_url('assets/css/select_tour_style.css'); ?>"
+                      type="text/css" media="screen"/>
+                <ul class="commission-table">
+                    <?php foreach ($tabs as $tab) {
+
+                        echo "<li class='color-".$tab['color']."-li'><a href='#" . $tab['commission_id'] . "'>" . $tab['name'] . "</a></li>";
+                    }
+                    ?>
+                </ul>
+                <?php
+                $tabId = '';
+                    foreach ($tabs as $tab) {
+                    echo "<div id='".$tab['commission_id']."'>";
+                echo "<table width='100%' cellspacing='0' class='order-table'>";
+                    if($tab['commission_id'] != $tabId) {
+                    echo "<thead>";
+                    echo "<tr>";
+                        echo "<th class='country'>Country & Tour</th>";
+                        echo "<th class='duration'>Duration</th>";
+                        echo "<th class='price'>Price From</th>";
+                        echo "<th class='freq'>Frequency</th>";
+                        echo "<th class='city'>Start/End City</th>";
+                        echo "<th class='flyer'>Flyer</th>";
+                        echo "<th class='action'>Action</th>";
+                        echo "<th class='order'>Order Flyer</th>";
+                        echo "</tr>";
+                    echo "</thead>";
+                    }
+                    echo "<tbody>";
+                    echo (isset($tab['tourContent']))?$tab['tourContent']:"";
+                    echo "</tbody>";
+                    echo "</table>";
+                $tabId = $tab['commission_id'];
+                echo "</div>";
+            } ?>
+            <!-- End en tours -->
+            </div>
+            <div id="block"></div>
+            <!-- end select_tour -->
+        </article>
+    </section>
+    <!-- end booktour section -->
+
+
+</section><!-- end content -->
+
+<script src="/assets/js/jquery.modal.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="/assets/js/filtertable.js" type="text/javascript" charset="utf-8"></script>
+
+<script>
+
+    $(function(){
+        var flyerArr = [];
+        $( "#select_tour" ).tabs();
+
+        $('#orderBtn').click(function(e){
+            e.preventDefault();
+            $('input.materials').each(function(){
+                if ($(this).is(":checked")) {
+                    flyerArr.push($(this).val());
+                }
+            });
+            $("div#order-content").html("<center><img src='<?php echo base_url("assets/css/spinner.gif"); ?>' /></center>");
+            $("div#promotion-content").css("display", "none");
+            $(".close-modal").css("display", "none");
+            $.post("<?php echo base_url('booktour/order_flyer/2'); ?>", {
+                flyerArr: flyerArr
+            }).done(function (data) {
+                if (data) {
+                    $( ".close-modal" ).trigger( "click" );
+                    alert("Your order has been submitted !");
+                    location.reload(true);
+                } else {
+                    $( ".close-modal" ).trigger( "click" );
+                    alert("Submit Fail !");
+                }
+
+            }, "json");
+
+        });
+
+        $('#submitOrderPosterBtn').click(function(e){
+            e.preventDefault();
+            var isChecked = false;
+            var posterArr = [];
+            $('input.materials').each(function(){
+                if ($(this).is(":checked")) {
+                    posterArr.push($(this).val());
+                    isChecked = true;
+                }
+            });
+            if (isChecked) {
+                $("div#dialog-content").html("<center><img src='<?php echo base_url("assets/css/spinner.gif"); ?>' /></center>");
+                $(".close-modal").css("display", "none");
+                $.post("<?php echo base_url('booktour/order_flyer/1'); ?>", {
+                    flyerArr: posterArr
+                }).done(function(data){
+                    if(data) {
+                        $( ".close-modal" ).trigger( "click" );
+                        alert("Your order has been submitted !");
+                        location.reload(true);
+                    } else {
+                        $( ".close-modal" ).trigger( "click" );
+                        alert("Submit Fail !");
+                    }
+                });
+            } else {
+                alert("Please select an poster !");
+                return false;
+            }
+        });
+
+        $('#orderFlyerBtn').click(function(){
+            flyerArr = [];
+            $("div#promotion-content").css("display", "block");
+            $(".close-modal").css("display", "true");
+
+            var isChecked = false;
+            var orderContent = '<p class="nexus-color"><img style="vertical-align: middle;" src="<?php echo base_url('assets/images/flyer_order.png');?>" /> <b>You have selected the following flyers</b></p><ul class="order-content">';
+            $('input.orderFlyer').each(function(){
+                if ($(this).is(":checked")) {
+                    console.log($(this).val());
+                    isChecked = true;
+                    orderContent +=  '<li>'+$(this).val()+'</li>';
+                    flyerArr.push($(this).val());
+                }
+            });
+            orderContent += '</ul>';
+
+            if (isChecked) {
+                $("div#order-content").html(orderContent);
+                //$( "#dialog-order-form" ).dialog( "open" );
+            } else {
+                alert("Please check at least one flyer for the order !");
+                return false;
+            }
+
+        });
+
+        var action = 0;
+
+        $(".light-table-filter").keyup('on',function(){
+
+            var textSize = $(this).val().length;
+            var divId = $("ul.commission-table li.ui-tabs-active").attr("aria-controls");
+
+            if (! textSize) {
+                // Show all tabs
+                $('.commission-table').show();
+                // Remove clone tr.new-data elements
+                $(".order-table tbody tr.new-data").remove();
+                action = 0;
+            } else {
+                if (action == 0) {
+                    // Hide all tabs
+                    $('.commission-table').hide();
+                    // Merge tables into one
+                    $(".order-table > tbody tr").not('div#'+divId+' table > tbody tr').clone().addClass("new-data").prependTo("div#"+divId+" table > tbody:last");
+                    action = 1;
+                }
+            }
+
+        });
+
+
+    });
+</script>
+
+{include file='/book_tour/includes/footer' /}

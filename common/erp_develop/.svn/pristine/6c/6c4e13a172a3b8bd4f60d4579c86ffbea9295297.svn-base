@@ -1,0 +1,196 @@
+
+/*团队产品--一级搜索条件样式*/
+.product-form{
+    position: relative;
+}
+.product-form .layui-input-inline{
+    margin-bottom:5px;
+}
+.product-form .layui-search-inline .nav-search{
+    margin-top:-5px;
+    position: absolute;
+    right:125px;
+    bottom:5px;
+}
+.product-form .layui-button-inline{
+    position:absolute ;
+    right:65px;
+    bottom:0px;
+}
+.product-form .plan-tour-data{
+    width:370px;
+}
+.product-form .plan-tour-data input{
+    display: inline-block;
+    width: 180px;
+}
+.product-form .plan-margin{
+    bottom:5px;
+}
+.plan-margin button{
+    width: 120px;
+}
+
+/*订单管理*/
+#language-table .nav-cancel{
+    width: 70px!important;
+}
+
+
+.layui-tab-brief>.layui-tab-more li.layui-this:after, .layui-tab-brief>.layui-tab-title .layui-this:after{
+    border-bottom:2px solid #2866B9!important;
+}
+/*游客信息*/
+.lay-visitor-message{display: none}
+.flightMessage{
+    position: relative;
+}
+.layui-flight-add,.layui-flight-edit{
+    position: absolute;
+    right:0px;
+    bottom:0px;
+}
+.customer-flight-list>div{
+    margin-right: 25px;
+}
+.layui-flight-add div,.layui-flight-edit div{
+    margin-left: 110px;
+}
+#flightList,#flightList_edit{
+    margin:0px 20px;
+}
+#flightList .customer-flight-list:first-child hr,#flightList_edit .customer-flight-list:first-child hr{
+    display: none;
+}
+.layui-layer-tips .layui-layer-content{
+    padding:0px 25px 0px 0px!important;
+}
+.layui-layer-content .layui-table{
+    margin:0px 0px 0px;
+}
+.layui-layer-tips .layui-layer-setwin{
+    right: 5px!important;
+    top: 5px!important;
+}
+.customer-flight-list{
+    position: relative;
+}
+.flight-list-close{
+    position: absolute;
+    right:0px;
+    top:10px;
+    font-size: 22px;
+    color: #2866B9;
+    cursor: pointer;
+}
+#flightList .customer-flight-list:first-child .flight-list-close{
+    top:0px;
+    display: none;
+}
+
+
+/*产品*/
+td.table-product{
+    color: #5897fb;
+    text-decoration: underline;
+}
+.layui-layer-dialog .layui-layer-btn a{
+    height: 34px;
+    line-height: 34px;
+    padding: 0 18px;
+    white-space: nowrap;
+    text-align: center;
+    font-size: 14px;
+
+}
+.productVisitor .layui-form-checkbox{
+    margin:10px;
+}
+.visitorListTips{
+    padding:20px;
+}
+.visitorBottom{
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    margin-left: -72px;
+}
+.checkboxList span{
+    width: 105px;
+    margin-bottom:10px;
+}
+.top-right-table{
+    margin:0px;
+}
+.top-right-table td{
+    line-height: 24px;
+}
+.checkboxList .listWidth{
+    display: inline-block;
+    width: 32%!important;
+}
+
+
+
+#table-product td .layui-input{
+    width: 98%;
+    position: absolute;
+    left: 1%;
+    top:0px;
+    margin:4px 0px;
+}
+.productAdd{
+    width:1100px;
+    margin-left:-550px;
+}
+.product-other{
+    line-height: 36px;
+}
+
+
+/*销售收款*/
+.saleForm{
+    margin-right:30px;
+}
+.layui-price tfoot td{
+    padding:15px 0px;
+    font-weight: bold;
+    font-size:16px;
+}
+.all-button{
+    margin-top:55px;
+}
+.all-button{
+    margin-top:55px;
+}
+.put_button{
+    position: absolute;
+    left:0px;
+    bottom:15px;
+    width: 100%;
+    text-align: center;
+}
+.receipt_message>.fl{
+    width: 50%;
+}
+.bill_tourist_title span{
+    display: inline-block;
+    height:28px;
+    line-height: 28px;
+    margin-right:25px;
+}
+#receipt_box{
+    display: block;
+}
+#receipt_box>div{
+    margin-top:20px;
+    line-height: 26px;
+}
+#receipt_box .layui-table{
+    margin:0px;
+}
+
+/*成本*/
+td.table-input-none .layui-disabled{
+    cursor:default!important;
+}

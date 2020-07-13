@@ -1,0 +1,248 @@
+{if condition="($function_name eq 'showbookinglist') or  ($function_name eq 'showclientpaymentlist') or ($function_name eq 'showaccountpaymentlist') or ($function_name eq 'showcostlist')"}
+	<!--<script src='__STATIC__/javascript/product/all.js'></script>-->
+	<script src='__STATIC__/javascript/data.js'></script>
+	<!--<script src='__STATIC__/javascript/product/company_order.js'></script>-->
+	<script type="text/javascript" src="__STATIC__/layui/layui.js"></script>
+{else/}
+	<script src="__STATIC__/layui/layui.all.js"></script>
+{/if}
+
+
+<!--<script type="text/javascript" src="__STATIC__/javascript/public/help.js"></script>-->
+<script src='__STATIC__/javascript/public/formSelects-v4.js'></script>
+
+<script type="text/javascript" src="__STATIC__/ueditor/ueditor.config.js"></script>
+<script type="text/javascript" src="__STATIC__/ueditor/ueditor.all.min.js"></script>
+<script type="text/javascript" src="__STATIC__/ueditor/lang/zh-cn/zh-cn.js"></script>
+
+<script>
+    var InStationLetterStime = {$InStationLetterStime};
+
+    !function(){
+//        var layer = layui.layer ;
+
+
+        var function_name = "{$function_name}";
+
+		if (function_name != 'showbookinglist' || function_name != 'showclientpaymentlist' || function_name != 'showaccountpaymentlist' || function_name != 'showcostlist')
+		{
+			var laydate = layui.laydate;
+			var laypage = layui.laypage;
+
+			//执行一个laypage实例
+			laypage.render({
+				elem: 'page' //注意，这里的 test1 是 ID，不用加 # 号
+				,count: {$count?:0} //数据总数，从服务端得到
+				,curr: {$_GET['page']?:0} //获取起始页
+				,limit:1
+				,layout: ['count', 'prev', 'page', 'next', 'skip']
+				,jump: function(obj, first){
+					if(!first){
+//                    layer.msg('第'+ obj.curr +'页');
+						var ul = location.search;
+						ul=delQueStr(ul,'page');
+						if(ul){
+							location.href =  ul+"&page="+obj.curr;
+						}else{
+							location.href =  "?page="+obj.curr;
+						}
+
+					}
+				}
+			});
+		}
+
+        $('#left-nav').find('.layui-nav-item').on('click',function(){
+             if($(this).hasClass('layui-nav-itemed')){
+                 $('#left-nav').find('.layui-nav-item').removeClass('layui-nav-itemed');
+                 $(this).addClass('layui-nav-itemed');
+            }else{
+                 $('#left-nav').find('.layui-nav-item').removeClass('layui-nav-itemed');
+             }
+
+        });
+
+
+        setInterval(function(){
+            $.get('/reminderManagement/getInStationLetterAjax?InStationLetterStime='+InStationLetterStime+'&bool=1',function(data){
+                if(data.data.length>0){
+                    InStationLetterStime = data.InStationLetterStime;
+                    var system_message_quantity = $('.system-message-quantity').html();
+                    var n = parseInt(system_message_quantity)+parseInt(data.data.length);
+                    $('.system-message-quantity').html(n);
+                    $('.f-tips-system-message').html(n);
+                    for(var i in data.data){
+                        var html = "<li onclick='Aurl(this)' style='color: #000; padding: 10px;cursor: pointer' data-href='"+data.data[i]['url']+"' data-id='"+data.data[i]['in_station_letter_id']+"' class='aUrl'>"+data.data[i]['content']+"</li><hr>";
+                        $('.tips-system-message-div').prepend(html);
+                    }
+
+                }
+            });
+        },30000);
+
+        $('.tips-system-message').on('click',function(){
+            var html = $('#tips-system-message-js').html();
+            layer.tips(html, '.tips-system-message', {
+                tips: [3, '#fff'],
+                padding:'0',
+                tipsMore: false,
+                area: ['450px', 'auto'],
+                shade: [0.01, '#fff'],
+                shadeClose:true,
+                time:0
+            });
+
+        });
+
+
+    }();
+
+    function multilingualSettingVisitorMessBackOpenClose(){
+        layer.close(open);
+    }
+
+    /**
+     * 多语言设置
+     * id 控件元素ID
+     * original_table_name 原始表名
+     * original_table_field_name 原表字段名
+     * original_table_id 原表名所对应的主键ID
+     * */
+    function MultilingualSetting(id,original_table_name,original_table_field_name,original_table_id){
+//        $.post('/language/multilingualSetting',{'original_table_name':original_table_name,'original_table_field_name':original_table_field_name,'original_table_id':original_table_id});
+
+        open = layer.open({
+            title:'',
+            type: 2,
+            area: ['65%','600px'],
+            content: ['/language/multilingualSetting?original_table_name='+original_table_name+'&original_table_field_name='+original_table_field_name+'&original_table_id='+original_table_id] //这里content是一个URL，如果你不想让iframe出现滚动条，你还可以content: ['http://sentsin.com', 'no']
+        });
+    }
+
+
+    //阅读系统消息
+    function Aurl(obj){
+        var idd = $(obj).attr("data-id");
+        var url = $(obj).attr('data-href');
+
+        $.post('/reminderManagement/readInStationLetterAjax',{'in_station_letter_id':idd},function(){
+            location.href = url;
+        });
+
+    }
+
+    function delQueStr(url, ref) //删除参数值
+    {
+        var str = "";
+
+        if (url.indexOf('?') != -1)
+            str = url.substr(url.indexOf('?') + 1);
+        else
+            return url;
+        var arr = "";
+        var returnurl = "";
+        var setparam = "";
+        if (str.indexOf('&') != -1) {
+            arr = str.split('&');
+            for (i in arr) {
+                if (arr[i].split('=')[0] != ref) {
+                    returnurl = returnurl + arr[i].split('=')[0] + "=" + arr[i].split('=')[1] + "&";
+                }
+            }
+            return url.substr(0, url.indexOf('?')) + "?" + returnurl.substr(0, returnurl.length - 1);
+        }
+        else {
+            arr = str.split('=');
+            if (arr[0] == ref)
+                return url.substr(0, url.indexOf('?'));
+            else
+                return url;
+        }
+    }
+    userLanguage();
+    function userLanguage() {
+        var user_language_id=$("#user_language_id").val();
+        if(user_language_id>2){
+            $(".layui-form-label,.top-right-table td").css({"overflow":"hidden","white-space":"nowrap","text-overflow":"ellipsis"});
+            $(".layui-form-label").css("width","145px").siblings(".layui-input-block").css("margin-left","175px");
+            $("body .layui-side-scroll").css("width","260px");
+            tips($(".layui-form-label"));
+            tips($(".layui-table thead th"));
+            tips($(".top-right-table td"));
+        }
+    }
+
+    tips($(".layui-side-scroll dd a,.layui-side-scroll li em"),'left');
+    function tips(obj,cont) {
+        obj.hover(function () {
+            if($(this).html()!=''){
+                if(cont=='left'){
+                    $(this).attr("title",$(this).html());
+                }else{
+                    var html=$(this).html().replace("<i>*</i>","");
+                    /*layer.tips($(this).html(), this, {time: 0});*/
+                    $(this).attr("title",html);
+                }
+
+            }
+        }
+        /*,function () {
+                layer.closeAll();
+            }*/
+        )
+    }
+
+    /*table显示暂无数据*/
+    table()
+    function table() {
+        $(".layui-table").each(function (index,item) {
+            if($(item).find("tbody tr").length===0){
+                var width=$(item).parent(".table-nont").width()-2;
+                $(item).find("tfoot").hide();
+                $(item).parents(".table-nont").css("padding-bottom","50px").append("<div class='table-none' style='width: "+width+"px'>{$language_tag.index_public_noData}</div>");
+            }
+        })
+    }
+    function tableNone(){
+        $(".table-none").remove();
+        $(".plan-table-nont").css("padding-bottom","0px");
+        $(".table-nont").css("padding-bottom","0px");
+    }
+    /*layer.config({
+        skin:'my-skin'
+    })*/
+    /*label加星号*/
+    $(".input-required i").remove();
+    $(".input-required").prepend("<i>*</i>");
+    $(".table-input-none tr").hover(function () {
+        $(this).find(".layui-input,.layui-select,.layui-textarea").css("background","#f2f2f2");
+    },function () {
+        $(this).find(".layui-input,.layui-select,.layui-textarea").css("background","#fff");
+    });
+
+
+    height();
+    $(window).resize(function () {
+        height();
+    });
+    function height() {
+        var bodyTopH=$(".body-top").height();
+        var bodyH=$(".layui-body").height();
+        var tableH=$(".user-manage table").height();
+        var height=bodyH-bodyTopH-15-60;//右侧总高度-表格上面内容高度-最外层padding值-底部距离
+        var company=bodyH-bodyTopH-15-165;
+        var newBg=bodyH-bodyTopH-15-60-55;//右侧总高度-表格上面内容高度-最外层padding值-底部距离-表格上面的按钮//灰背景的
+        if(tableH>height||tableH>company||tableH>newBg){
+            $(".pageHeight").css("height",height);
+            $(".company-pageHeight").css("height",company);
+            $(".newBg-pageHeight").css("height",newBg);
+        }
+    }
+
+    /*日期选择*/
+    $(".layui-input-date").each(function(){
+      //  laydate.render({
+       //     elem: this,
+       // });
+    });
+</script>

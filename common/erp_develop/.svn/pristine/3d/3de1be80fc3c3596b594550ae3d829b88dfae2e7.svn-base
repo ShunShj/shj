@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {include file='public/head' /}
+    <title>{$language_tag.index_branchcompany_showBranchProductManage_branchProduct}</title>
+
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+    <div class="layui-header">
+        {include file='public/header' /}
+    </div>
+
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll">
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            {include file='public/left_menu' /}
+        </div>
+    </div>
+
+    <div class="layui-body layui-body-bg">
+
+        <!-- 内容主体区域 -->
+        <div style="padding: 15px 15px 0px;">
+            <div class="body-top">
+                <div class='layui-form-item'>
+                    <span class="layui-breadcrumb" lay-separator="-">
+                        <a>{$language_tag.index_public_homepage}</a>
+                        <a>{$language_tag.index_branchcompany_showBranchProductManage_branchManagement}</a>
+                        <a><cite>{$language_tag.index_branchcompany_showBranchProductManage_branchProduct}</cite></a>
+                    </span>
+                </div>
+                <div class='layui-block all-search-bg'>
+                    <form class="layui-form"  method='get' action='/branchcompany/showBranchProductManage'>
+                        <div class='layui-input-inline'>
+                            <div class="layui-form">
+                                <select name="status">
+                                    <option value="2" selected="">{$language_tag.index_public_status}</option>
+                                    <option value="1" {if condition="$Think.get.status eq 1"}selected='selected' {/if}>{$language_tag.index_public_show}</option>
+                                    <option value="0" {if condition="$Think.get.status eq 0"}selected='selected' {/if}>{$language_tag.index_public_disabled}</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class='layui-input-inline'>
+                            <div class="layui-form">
+                                <select name="branch_product_type_id">
+                                    <option value="0" selected="">{$language_tag.index_branchcompany_showBranchProductTypeManage_branchCompanyProductType}</option>
+                                    {foreach name='result'  item='vo'}
+                                    <option value="{$vo.branch_product_type_id}" {if condition="$Think.get.branch_product_type_id eq $vo.branch_product_type_id"}selected='selected'{/if} >{$vo.branch_product_type_name}</option>
+                                    {/foreach}
+                                </select>
+                            </div>
+                        </div>
+                        <div class='layui-input-inline'>
+                            <input type="text" name="branch_product_number" placeholder="{$language_tag.index_branchcompany_showBranchProductManage_productNumber}" class="layui-input" value="{$Think.get.branch_product_number}">
+                        </div>
+                        <div class='layui-input-inline'>
+                            <input type="text" name="branch_product_name" maxlength="300" value="{$Think.get.branch_product_name}" placeholder="{$language_tag.index_branchcompany_showBranchProductManage_productName}" class="layui-input">
+                        </div>
+                        <div class='layui-input-inline'>
+                            <input type="text" name="create_user_name" placeholder="{$language_tag.index_branchcompany_showBranchProductManage_userName}" class="layui-input" value="{$Think.get.create_user_name}">
+                        </div>
+
+                        <div class='layui-button-inline layui-search-inline'>
+                            <button class="layui-btn nav-search" >{$language_tag.index_public_search}</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="content-bg">
+                <span style="{:action('index/auth/check_auth',['role_id'=>'242'])}"><a href='/branchcompany/showBranchProductAdd'><button class="layui-btn nav-add layui-btn-sm">{$language_tag.index_branchcompany_showBranchProductManage_addProduct}</button></a></span>
+                <hr>
+                <div class="table-nont user-manage company-pageHeight">
+                    <table class="layui-table layui-form" id="">
+                        <thead>
+                        <tr>
+                            <th>{$language_tag.index_branchcompany_showBranchProductManage_branchProduct_number}</th>
+                            <th>{$language_tag.index_branchcompany_showBranchProductManage_branchProduct_name}</th>
+                            <th>{$language_tag.index_branchcompany_showBranchProductTypeManage_branchCompanyProductType}</th>
+                            <!--<th>{$language_tag.index_branchcompany_showBranchProductManage_startDate}</th>
+                            <th>{$language_tag.index_branchcompany_showBranchProductManage_endDate}</th>-->
+                            <!--<th>{$language_tag.index_branchcompany_showCompanyOrderManage_curreny}</th>
+                            <th>直客价</th>
+                            <th>代理价</th>-->
+                            <th>{$language_tag.index_branchcompany_showBranchProductManage_branchProduct_zum}</th>
+                            <th>{$language_tag.index_public_status}</th>
+                            <th>{$language_tag.index_branchcompany_showBranchProductManage_userName}</th>
+                            <th class="layui-table-width">{$language_tag.index_source_operation}</th>
+                        </tr>
+                        </thead>
+                        <tbody id="manage_tbody">
+                        {foreach name="data" item="vo"}
+                        <tr>
+                            <th class="branch_product_number">{$vo.branch_product_number}</th>
+                            <th>{$vo.branch_product_name}</th>
+                            <th>{$vo.branch_product_type_name ? $vo.branch_product_type_name : ($vo.branch_product_type_id == -1 ? "代售线路" : "")}</th>
+                            <th>{$vo.customer_count}</th>
+                            <th>
+                                <span style="{:action('index/auth/check_auth',['role_id'=>'243'])}"><input type="checkbox" {if condition="$vo.status eq 1"}checked=""{else/}{/if} name="open" lay-skin="switch" lay-filter="switchTest" lay-text="{$language_tag.index_public_show}|{$language_tag.index_public_disabled}"></span>
+                            </th>
+                            <th>{$vo.update_user_name}</th>
+                            <th>
+                                <a href='/branchcompany/showBranchProductAdd?branch_product_number={$vo.branch_product_number}'><button class="layui-btn layui-btn-sm hover-edit layui-btn-primary" >{$language_tag.index_public_update}</button></a>
+                                <a href='/branchcompany/showBranchProductInfo?branch_product_number={$vo.branch_product_number}'><button class="layui-btn layui-btn-sm hover-details layui-btn-primary">{$language_tag.index_public_info}</button></a>
+                            </th>
+                        </tr>
+                        {/foreach}
+                        </tbody>
+
+                    </table>
+                </div>
+                <div class="listButtom">
+                    <!--加载分页-->
+                    {include file='public/page' /}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="layui-footer">
+        <!-- 底部固定区域 -->
+        © layui.com - 底部固定区域
+    </div>
+    <script type="text/html">
+
+    </script>
+    <!--<script id="tbody_tr" type="text/html">-->
+        <!--{{#  layui.each(d, function(index, item){ }}-->
+            <!--<tr>-->
+                <!--<td class="layui-table-cell"><a href="/branchcompany/showBranchProductInfo?branch_product_number={{item.branch_product_number}}" class="number layui-table-link">{{item.branch_product_number}}</a></td>-->
+                <!--<td>{{item.branch_product_name}}</td>-->
+                <!--<td>{{item.branch_product_type_name}}</td>-->
+                <!--&lt;!&ndash;<td>{{date('Y-m-d',item.branch_product_begin_time)}}</td>-->
+                <!--<td>{{date('Y-m-d',item.branch_product_end_time)}}</td>&ndash;&gt;-->
+                <!--&lt;!&ndash;<td>{{item.price_currency_name}}</td>-->
+                <!--<td>{{item.customer_price}}</td>-->
+                <!--<td>{{item.distributor_price}}</td>&ndash;&gt;-->
+                <!--<td>{{item.customer_count}}</td>-->
+                <!--<td>{{item.status==1?'{$language_tag.index_public_show}':item.status==0?'{$language_tag.index_public_disabled}':''}}</td>-->
+                <!--<td>{{item.create_user_name}}</td>-->
+                <!--<td>-->
+                    <!--&lt;!&ndash;<a href=''><button class="layui-btn layui-btn-sm hover-details layui-btn-primary">订购</button></a>&ndash;&gt;-->
+                    <!--{{#  if(item.locked==0){ }}-->
+                    <!--&lt;!&ndash;<span style=""><button class="layui-btn layui-btn-sm nav-del layui-btn-primary" onclick="lock(this)">{$language_tag.index_public_lock}</button></span>&ndash;&gt;-->
+                    <!--&lt;!&ndash; <span style="{:action('index/auth/check_auth',['role_id'=>'243'])}"><a href='/branchcompany/showBranchProductAdd?branch_product_number={{item.branch_product_number}}'><button class="layui-btn layui-btn-sm hover-edit layui-btn-primary" >{$language_tag.index_public_update}</button></a></span>&ndash;&gt;-->
+                    <!--{{#  } }}-->
+                    <!--<span style="{:action('index/auth/check_auth',['role_id'=>'244'])}"><a href='/branchcompany/showBranchProductInfo?branch_product_number={{item.branch_product_number}}'><button class="layui-btn layui-btn-sm hover-edit layui-btn-primary">{$language_tag.index_public_info}</button></a></span>-->
+                    <!--{{#  if(item.status==1){ }}-->
+                        <!--<span><button class="layui-btn layui-btn-sm nav-del layui-btn-primary" onclick="delete_branch_product(this,0)">删除</button></span>-->
+                    <!--{{#  } else { }}-->
+                        <!--<span><button class="layui-btn layui-btn-sm nav-del layui-btn-primary" onclick="delete_branch_product(this,1)">启用</button></span>-->
+                    <!--{{#  } }}-->
+                <!--</td>-->
+            <!--</tr>-->
+        <!--{{#  }); }}-->
+    <!--</script>-->
+</div>
+{include file='public/foot_js' /}
+<!--<script src='__STATIC__/javascript/branchcompany/product_manage.js'></script>-->
+<script src='__STATIC__/javascript/data.js'></script>
+<script>
+    //JavaScript代码区域
+    var layer = layui.layer
+
+    var please = '{$language_tag.index_public_select}';
+    var form = layui.form;
+    form.on('switch(switchTest)', function(data){
+
+        var table_id = $(data.elem).parents("tr").children(".branch_product_number").html();
+        var table_id_name = "branch_product_number";
+        var table_name = "branch_product";
+        if(this.checked == true){
+            var status = 1;
+        }else{
+            var status = 0;
+        }
+
+        $.ajax({
+            type: "POST",
+            url: '/index/changeStatus',
+            data: {
+                table_id:table_id,
+                table_id_name:table_id_name,
+                table_name:table_name,
+                status:status,
+            },
+            success: function(data){
+                //console.log(data);
+                if(data.code!=200){
+                    layer.msg(data.msg);
+                    return false;
+                }else if(data.code==200) {
+                    layer.msg('操作成功',{time:1,end : function(layero, index){
+
+                        }
+                    });
+                }
+            },
+            error:function(XMLHttpRequest, textStatus, errorThrown){
+                layer.msg('验证失败')
+            }
+        });
+    });
+</script>
+</body>
+</html>

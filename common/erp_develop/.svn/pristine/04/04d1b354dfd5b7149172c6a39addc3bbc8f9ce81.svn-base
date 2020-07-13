@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {include file='public/head' /}
+    <title>{$language_tag.index_product_tourStatistics_routePersonCount}</title>
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+    <div>
+        <form method='get' action='/product/tourStatistics' class="layui-form">
+            <div class="layui-row" style="background-color: #2D93CA;padding: 20px 0">
+                <div class="layui-col-md4">
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">{$language_tag.index_product_showshowPlanTourGuideReceipt_date}：</label>
+                        <div class="layui-input-block">
+                            <div class="layui-input-inline date-width">
+                                <input type="text" name="s_time" placeholder="{$language_tag.index_product_ShowPlanTour_pleaseSelectTheDate}"  id="s_time" class="layui-input sales-date" value="{$_GET['s_time']}" />
+                            </div>
+                            <div class="date-and">-</div>
+                            <div class="layui-input-inline date-width">
+                                <input type="text" name="e_time" placeholder="{$language_tag.index_product_ShowPlanTour_pleaseSelectTheDate}"  id="e_time" class="layui-input sales-date" value="{$_GET['e_time']}" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="layui-col-md3">
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">{$language_tag.index_source_showSupplier_linkman}：</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="route_user" value="" class="layui-input" value="{$_GET['route_user']}" />
+                        </div>
+                    </div>
+                </div>
+
+                <div class="layui-col-md3">
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">{$language_tag.index_product_showRouteTemplateManage_routeType}：</label>
+                        <div class="layui-input-block">
+                            <select class="layui-select" name="route_type_id" >
+                                <option value="">-{$language_tag.index_public_select}-</option>
+                                {foreach $route_type as $v}
+                                <option value="{$v.route_type_id}" {$_GET['route_type_id']==$v.route_type_id?'selected':''} >{$v.route_type_name}</option>
+                                {/foreach}
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="layui-col-md2">
+                    <div class='input-inline all-button-center pages-search-margin'>
+                        <button class="layui-btn nav-search">{$language_tag.index_public_search}</button>
+                    </div>
+                </div>
+            </div>
+
+        </form>
+    </div>
+
+    <div class="content-bg">
+        <table class="layui-table layui-form">
+            <tr>
+                <td></td>
+                {foreach $company as $v}
+                <td>{$v.company_name}</td>
+                {/foreach}
+                <td>{$language_tag.index_product_showProductQuotationHtmlInfo_total}</td>
+            </tr>
+
+            {foreach $route_template as $route_template_k=>$route_template_v}
+            {foreach $route_template_v as $v }
+            <tr>
+                <td>{$v.route_name}({$v.nickname})</td>
+                {foreach $company as $company_v}
+                <td><?=count($NumberOfPassengersOnALine_G[$company_v['company_id'].'||'.$v['route_template_id']])?></td>
+                {/foreach}
+                <td><?=count($NumberOfPassengersOnALine_route_template_id[$v['route_template_id']])?></td>
+            </tr>
+            {/foreach}
+            <tr style="background-color: red">
+                <td>{$route_type_group[$route_template_k][0]['route_type_name']}</td>
+                {foreach $company as $company_v}
+                <td><?=count($NumberOfPassengersOnALine_companyId_routeTypeId[$company_v['company_id'].'||'.$route_template_k])?></td>
+                {/foreach}
+                <td><?=count($NumberOfPassengersOnALine_route_type_id[$route_template_k])?></td>
+            </tr>
+            {/foreach}
+
+        </table>
+    </div>
+
+
+</div>
+
+</body>
+
+{include file='public/foot_js' /}
+
+<script>
+    !function() {
+        var layer = layui.layer;
+        var form = layui.form;
+        var laydate = layui.laydate;
+        $('.sales-date').each(function(){
+            laydate.render({
+                elem: this
+                ,lang: 'zn'
+            });
+        });
+
+    }();
+</script>

@@ -1,0 +1,78 @@
+<!--
+	This is view/includes/top_nav.php
+-->
+<script>
+    $(function() {
+        //$( document ).tooltip();
+        $( "a#hotels" ).mouseover(function() {
+            $("div#hotel-pop-up").css("display","block");
+        });
+        $( "div#hotel-pop-up" ).mouseover(function() {
+            $("div#hotel-pop-up").css("display","block");
+        });
+        $( "div#hotel-pop-up" ).mouseout(function() {
+            $("div#hotel-pop-up").css("display","none");
+        });
+        $.ajax({
+            type: "POST",
+            url: $("input#hotel-login").val(),
+            dataType: "json",
+            async: false
+        }).done(function(data){
+            console.log(data);
+            if(data.status) {
+                $("div#hotel-pop-up p").html(
+                        "<p>username: " + data.data.username + "<br/> password: " + data.data.password +"</p>"
+                );
+            }
+        });
+    });
+</script>
+<style>
+    a#hotels label {
+        display: inline-block;
+        width: 5em;
+    }
+    div#hotel-pop-up {
+        display: none;
+        position: absolute;
+        z-index: 10;
+        width: 230px;
+        padding: 10px;
+        background: #eeeeee;
+        color: #000000;
+        border: 1px solid #1a1a1a;
+        font-size: 80%;
+        left: 450px;
+    }
+    /*.animation-img {*/
+    /*-webkit-animation: bounce 2s infinite ease-in-out;*/
+    /*}*/
+    /*@-webkit-keyframes bounce {*/
+    /*0%, 20%, 60%, 100%  { -webkit-transform: translateY(0); }*/
+    /*40%  { -webkit-transform: translateY(-5px); }*/
+    /*80% { -webkit-transform: translateY(-0px); }*/
+    /*}*/
+</style>
+<nav>
+    <div id="top_nav"> <!-- top nav -->
+        <ul>
+            <li class=""><a href="" title="News" class=""><span class="nav_icon"><img src="/assets/images/latestnews.png"/></span>Latest News</a></li>
+            <li class="active"><a href="/booktour/select_tour" title="Booing Form" class=""><span class="nav_icon"><img src="/assets/images/booktour.png"/></span>Book Tour</a></li>
+            <li class=""><a href="" title="Booking History" class=""><span class="nav_icon"><img src="/assets/images/managebooking.png" /></span>My Bookings</a></li>
+            <li class=""><a href="" title="Nexus Holidays Day Tour Availability" class="" target="_blank" ><span class="nav_icon"><img class="animation-img" src="/assets/images/bus.png" /></span>Day Tours</a></li>
+             <li class=""><a href="" title="Agent Commission Table" class=""><span class="nav_icon"><img src="/assets/images/commissiontable.png" /></span>Commission</a></li>
+            <li class=""><a href="" target="_blank" title="Official Website" class=""><span class="nav_icon"><img src="/assets/images/latestnews.png" /></span>Official Website</a></li>
+            <li class=""><a href="" title="Nexus Holidays Contact Information" class=""><span class="nav_icon"><img src="/assets/images/contactus.png" /></span>Contact</a></li>
+          </ul>
+    </div> <!-- end top nav -->
+    <div class="triangle-l"></div>
+    <div class="triangle-r"></div>
+    <div id="hotel-pop-up">
+        <input type="hidden" id="hotel-login" value="">
+        <h3>Your hotel login details: </h3>
+        <p>
+            Please contact us if you can't see hotel login details here.
+        </p>
+    </div>
+</nav>

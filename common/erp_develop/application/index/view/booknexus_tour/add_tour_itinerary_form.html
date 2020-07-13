@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<head>
+    {include file='public/head' /}
+    <title>layout 后台大布局 - Layui</title>
+
+    <style>
+        .nav {
+            display: inline-block;
+            position: relative;
+            height: 54px;
+            font-size: 15px;
+        }
+
+        .nav > * {
+            display: inline-block;
+        }
+
+        .nav > .t {
+            position: absolute;
+            top: 0;
+            background: rgb(208, 210, 211);
+            /* Skew */
+            -webkit-transform: skew(30deg);
+            -moz-transform: skew(30deg);
+            -o-transform: skew(30deg);
+            transform: skew(30deg);
+        }
+
+        .nav > .b {
+            position: absolute;
+            bottom: 0;
+            background: rgb(208, 210, 211);
+            /* Skew */
+            -webkit-transform: skew(-30deg);
+            -moz-transform: skew(-30deg);
+            -o-transform: skew(-30deg);
+            transform: skew(-30deg);
+        }
+
+        .tab .nav>.t,.tab .nav>.b{
+            -webkit-transform: none;
+            -moz-transform: none;
+            -o-transform: none;
+            transform: none;
+        }
+
+
+        .nav > a {
+            /*position:absolute;
+            top:0;*/
+            margin-left: 13px;
+            vertical-align: middle;
+            text-align: center;
+            text-decoration: none;
+            cursor: default;
+            font-weight: bold;
+            color: #77787b !important;
+        }
+
+        .nav.hover>a{
+            color: #ffffff !important;
+        }
+
+        .nav.hover > span {
+            background-color: #3376ba;
+            cursor: pointer;
+        }
+
+        .nav.done_step.hover>span{
+            background-color: #3376ba;
+        }
+
+        .nav.hover > a {
+            cursor: pointer;
+        }
+
+        .ab_position {
+            position: absolute;
+        }
+
+        .nav > .first_mark {
+            position: absolute;
+            top: 0;
+            z-index: 1;
+            width: 16px;
+            height: 100%;
+            background-color: #ffffff;
+            left: -8px;
+        }
+
+        .nav.done_step>a,.nav.active_step>a{
+            color: #ffffff !important;
+        }
+
+        .nav.done_step>.t,.nav.done_step>.b{
+            background-color: #767780;
+        }
+
+        .nav.active_step>.t,.nav.active_step>.b{
+            background-color: #3376ba;
+        }
+
+        .tab_border{
+            height: 2px;
+            background-color: #767780;
+            margin-left: 8px;
+            margin-top: -4px;
+        }
+
+    </style>
+
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+    <div class="layui-header">
+        {include file='public/header' /}
+    </div>
+
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll">
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            {include file='public/left_menu_booknexus' /}
+        </div>
+    </div>
+
+    <div class="layui-body">
+
+        <!-- 内容主体区域 -->
+        <div style="padding: 15px 15px 0px;">
+            <div class='layui-row'>
+		   		<span class="layui-breadcrumb" lay-separator="-">
+                    <a>首页</a>
+                    <a>B2B</a>
+					<a>创建产品</a>
+				</span>
+            </div>
+            <br>
+            {include file='booknexus_tour/menu' /}
+            <form class="layui-form" id="form1" onSubmit="return add()">
+                <div class="layui-col-md8" style="text-align: right;padding: 10px" >
+                    <a class="layui-btn layui-btn-sm layui-btn-primary" id="top-add">前置增加一天</a>
+                </div>
+                <div id="html">
+
+                    {empty name='$Think.session.addTourItineraryForm.itinerary'}
+                        {foreach $RouteJourney as $k=>$v}
+                            <div class="layui-row layui-col-space12 count-days" style="padding: 10px;border-bottom: 1px solid #ccc">
+                                <div class="layui-col-md8" style="font-weight: bold;font-size:14px">
+                                    Day&nbsp;<font class="font-days">{$k+1}</font>
+                                    <input class="the_day" type="hidden" name="itinerary[{$k}][the_day]" value="{$k+1}" />
+                                </div>
+                                <div class="layui-col-md8">
+                                    <div class="layui-form-item">
+                                        <label class="layui-form-label ">HOTEL CN:</label>
+                                        <div class="layui-input-block layui-form">
+                                            <input name="itinerary[{$k}][hotel_cn]" class="layui-input" value=""  >
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="layui-col-md8">
+                                    <div class="layui-form-item">
+                                        <label class="layui-form-label ">HOTEL EN:</label>
+                                        <div class="layui-input-block layui-form">
+                                            <input name="itinerary[{$k}][hotel_en]" class="layui-input" value=""  >
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="layui-col-md8">
+                                    <div class="layui-form-item">
+                                        <label class="layui-form-label ">INFO CN:</label>
+                                        <div class="layui-input-block layui-form">
+                                            <textarea name="itinerary[{$k}][info_cn]" id="infoCn-{$k}" >{$v.route_journey_content}</textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="layui-col-md8">
+                                    <div class="layui-form-item">
+                                        <label class="layui-form-label ">INFO EN:</label>
+                                        <div class="layui-input-block layui-form">
+                                            <textarea name="itinerary[{$k}][info_en]" id="infoEn-{$k}" >{$v.route_journey_scenic_sport}</textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        {/foreach}
+                    {else /}
+                        {foreach $Think.session.addTourItineraryForm.itinerary as $k=>$v}
+                            <div class="layui-row layui-col-space12 count-days" style="padding: 10px;border-bottom: 1px solid #ccc">
+                                <div class="layui-col-md8" style="font-weight: bold;font-size:14px">
+                                    Day&nbsp;<font class="font-days">{$v.the_day}</font>
+                                    <input class="the_day" type="hidden" name="itinerary[{$k}][the_day]" value="{$v.the_day}" />
+                                </div>
+                                <div class="layui-col-md8">
+                                    <div class="layui-form-item">
+                                        <label class="layui-form-label ">HOTEL CN:</label>
+                                        <div class="layui-input-block layui-form">
+                                            <input name="itinerary[{$k}][hotel_cn]" class="layui-input" value="{$v.hotel_cn}"  >
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="layui-col-md8">
+                                    <div class="layui-form-item">
+                                        <label class="layui-form-label ">HOTEL EN:</label>
+                                        <div class="layui-input-block layui-form">
+                                            <input name="itinerary[{$k}][hotel_en]" class="layui-input" value="{$v.hotel_en}"  >
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="layui-col-md8">
+                                    <div class="layui-form-item">
+                                        <label class="layui-form-label ">INFO CN:</label>
+                                        <div class="layui-input-block layui-form">
+                                            <textarea name="itinerary[{$k}][info_cn]" id="infoCn-{$k}" >{$v.info_cn}</textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="layui-col-md8">
+                                    <div class="layui-form-item">
+                                        <label class="layui-form-label ">INFO EN:</label>
+                                        <div class="layui-input-block layui-form">
+                                            <textarea name="itinerary[{$k}][info_en]" id="infoEn-{$k}" >{$v.info_en}</textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        {/foreach}
+
+                    {/empty}
+
+                </div>
+
+
+                <div class="layui-col-md8" style="text-align: right;padding: 10px" >
+                    <a class="layui-btn layui-btn-sm layui-btn-primary" id="back-add">后置增加一天</a>
+                </div>
+
+
+                <div class="layui-col-md8" style="margin-top: 20px;font-weight: bold;font-size:14px;text-align: center">
+                    <button type="submit" class="layui-btn layui-btn-sm layui-btn-primary" >Save & Next</button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+
+    <div class="layui-footer">
+        <!-- 底部固定区域 -->
+        © layui.com - 底部固定区域
+    </div>
+</div>
+
+
+
+<div id="hinnd-div" style="display: none">
+    <div class="layui-row layui-col-space12 count-days" style="padding: 10px;border-bottom: 1px solid #ccc">
+        <div class="layui-col-md8" style="font-weight: bold;font-size:14px">
+             Day&nbsp;<font class="font-days"></font>
+            <input type="hidden" name="itinerary[ii][the_day]" class="the_day" />
+        </div>
+        <div class="layui-col-md8">
+            <div class="layui-form-item">
+                <label class="layui-form-label ">HOTEL CN:</label>
+                <div class="layui-input-block layui-form">
+                    <input name="itinerary[ii][hotel_cn]" class="layui-input"    >
+                </div>
+            </div>
+        </div>
+        <div class="layui-col-md8">
+            <div class="layui-form-item">
+                <label class="layui-form-label ">HOTEL EN:</label>
+                <div class="layui-input-block layui-form">
+                    <input name="itinerary[ii][hotel_en]" class="layui-input"  >
+                </div>
+            </div>
+        </div>
+        <div class="layui-col-md8">
+            <div class="layui-form-item">
+                <label class="layui-form-label ">INFO CN:</label>
+                <div class="layui-input-block layui-form">
+                    <textarea name="itinerary[ii][info_cn]" id="infoCn-ii" ></textarea>
+                </div>
+            </div>
+        </div>
+        <div class="layui-col-md8">
+            <div class="layui-form-item">
+                <label class="layui-form-label ">INFO EN:</label>
+                <div class="layui-input-block layui-form">
+                    <textarea name="itinerary[ii][info_en]" id="infoEn-ii" ></textarea>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+{include file='public/foot_js' /}
+<script>
+    //JavaScript代码区域
+    var layer = layui.layer;
+    var form = layui.form;
+    var laydate = layui.laydate;
+
+    {empty name='$Think.session.addTourItineraryForm.itinerary'}
+        var len = {$RouteJourney|count};
+    {else /}
+        var len = {$Think.session.addTourItineraryForm.itinerary|count};
+    {/empty}
+
+    $('#top-add').click(function(){
+        var html = $('#hinnd-div').html();
+        for(var ji=1;ji<20;ji++){
+            html = html.replace('ii',len);
+        }
+
+        $('#html').prepend(html);
+
+        UE.getEditor('infoCn-'+len,{
+            initialFrameWidth:800,
+            initialFrameHeight:300
+        });
+
+        UE.getEditor('infoEn-'+len,{
+            initialFrameWidth:800,
+            initialFrameHeight:300
+        });
+
+        var fd=1;
+        var hd=1;
+        $('#html').find('.font-days').each(function(){
+            $(this).html(fd);
+            fd++;
+        });
+        $('#html').find('.the_day').each(function(){
+            $(this).val(hd);
+            hd++;
+        });
+        len++;
+    });
+
+    $('#back-add').click(function(){
+        var html = $('#hinnd-div').html();
+        for(var ji=1;ji<20;ji++){
+            html = html.replace('ii',len);
+        }
+
+        $('#html').append(html);
+
+        UE.getEditor('infoCn-'+len,{
+            initialFrameWidth:800,
+            initialFrameHeight:300
+        });
+
+        UE.getEditor('infoEn-'+len,{
+            initialFrameWidth:800,
+            initialFrameHeight:300
+        });
+
+        var fd2=1;
+        var hd2=1;
+        $('#html').find('.font-days').each(function(){
+            $(this).html(fd2);
+            fd2++;
+        });
+        $('#html').find('.the_day').each(function(){
+            $(this).val(hd2);
+            hd2++;
+        });
+
+        len++;
+
+    });
+
+
+
+
+
+
+
+    for(var j=0;j<len;j++){
+        UE.getEditor('infoCn-'+j,{
+            initialFrameWidth:800,
+            initialFrameHeight:300
+        });
+
+        UE.getEditor('infoEn-'+j,{
+            initialFrameWidth:800,
+            initialFrameHeight:300
+        });
+    }
+
+    function add(){
+        $.ajax({
+            type: "POST",
+            url: '/booknexus_tour/addTourItineraryFormAjax',
+            data:  $('#form1').serializeArray(),
+            success: function(data){
+                //console.log(data);
+                if(data.code!=200){
+                    layer.msg(data.msg);
+                    return false;
+                }else if(data.code==200) {
+                    layer.msg('操作成功',{time:2000,end : function(layero, index){
+                        location.href="/booknexus_tour/addTourRoomForm";
+                    }
+                    });
+                }
+            },
+            error:function(XMLHttpRequest, textStatus, errorThrown){
+                layer.msg('验证失败')
+            }
+        });
+        return false;
+    }
+
+
+</script>
+
+</body>
+</html>

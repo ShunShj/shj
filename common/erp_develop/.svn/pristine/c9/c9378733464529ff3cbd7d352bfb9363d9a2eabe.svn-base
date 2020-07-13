@@ -1,0 +1,53 @@
+<ul class="layui-nav layui-nav-tree" id="left-nav" lay-filter="test">
+    <li {if condition="$controller_name eq 'adminbooking'"} class="layui-nav-item layui-nav-itemed"{else/} class="layui-nav-item" {/if}>
+    <a class="" href="javascript:void(0)"><i class="iconfont img-task_fill"></i><em>BOOKING</em></a>
+    <dl class="layui-nav-child">
+        <dd {in name="function_name" value="index"} class="layui-this"{/in}><a href="/admin_booking/index">View Booking</a></dd>
+
+    </dl>
+    </li>
+
+    <li {if condition="$controller_name eq 'booknexustour'"} class="layui-nav-item layui-nav-itemed"{else/} class="layui-nav-item" {/if}>
+    <a class="" href="javascript:void(0)"><i class="iconfont img-task_fill"></i><em>Tour</em></a>
+    <dl class="layui-nav-child">
+        <dd {in name="function_name" value="createtourform,addtourdatesform,addtouritineraryform,addtourroomform,addtourtransferform,addtourcommissionform,addtouroptionsform,addtoursettingform"} class="layui-this"{/in}><a href="/booknexus_tour/createTourForm">Create Tour</a></dd>
+        <dd {in name="function_name" value="index"} class="layui-this"{/in}><a href="/booknexus_tour/index">View Tour</a></dd>
+        <dd {in name="function_name" value="showtourtypemanage,showtourtypeadd,showtourtypeedit"} class="layui-this"{/in}><a href="/booknexus_tour/showTourTypeManage?status=1&pid=0">Tour Type</a></dd>
+        <dd {in name="function_name" value="showcommissionmanage,showcommissionadd,showcommissionedit"} class="layui-this"{/in}><a href="/booknexus_tour/showCommissionManage?status=1">Commission Table</a></dd>
+        <dd {in name="function_name" value="showb2bhotelmanage,showb2bhoteladd"} class="layui-this" {/in}><a href="/booknexus_tour/showB2BHotelManage?status=1">酒店</a></dd>
+    </dl>
+    </li>
+
+    <li {if condition="$controller_name eq 'distributor' "} class="layui-nav-item layui-nav-itemed"{else/} class="layui-nav-item" {/if}>
+    <a class="" href="javascript:void(0)"><i class="layui-icon layui-icon-website"></i><em>代理管理</em></a>
+    <dl class="layui-nav-child">
+        <dd {in name="function_name" value="showdistributormanage,showdistributoradd,showdistributoredit,showdistributorinfo,showdistributortemplatemanage"} class="layui-this" {/in}><a href="/distributor/showDistributorManage?status=1">代理管理</a></dd>
+        <dd {in name="function_name" value="showdistributortypemanage,showdistributortypeadd,showdistributortypeedit"} class="layui-this" {/in}><a href="/distributor/showDistributorTypeManage?status=1">代理类别管理</a></dd>
+    </dl>
+    </li>
+
+    <li {if condition="$controller_name eq 'accounting' "} class="layui-nav-item layui-nav-itemed"{else/} class="layui-nav-item" {/if}>
+    <a class="" href="javascript:void(0)"><i class="layui-icon layui-icon-website"></i><em>ACCOUNTING</em></a>
+    <dl class="layui-nav-child">
+        <dd {in name="function_name" value="showdistributormanage,showdistributoradd,showdistributoredit"} class="layui-this" {/in}><a href="/accounting/showDepositPaymentManage?status=1">Deposit & Payment</a></dd>
+        <dd {in name="function_name" value="showaccounttourcodemanage,showaccountcodemanage,showaccountcodeadd,showaccountcodeedit"} class="layui-this" {/in}><a href="/accounting/showAccountTourCodeManage?status=1">AccountCode</a></dd>
+    </dl>
+    </li>
+
+
+    <li {if condition="$controller_name eq 'bookproduct' "} class="layui-nav-item layui-nav-itemed"{else/} class="layui-nav-item" {/if}>
+        <a class="" href="javascript:void(0)"><i class="layui-icon layui-icon-website"></i><em>PRODUCT</em></a>
+        <dl class="layui-nav-child">
+            <dd {in name="function_name" value="showproductsmanage,showproductsadd,showproductsedit"}
+                class="layui-this" {/in}><a href="/book_product/showProductsManage?status=1">Products</a></dd>
+        </dl>
+    </li>
+
+    <li {if condition="$controller_name eq 'booknews' "} class="layui-nav-item layui-nav-itemed"{else/} class="layui-nav-item" {/if}>
+    <a class="" href="javascript:void(0)"><i class="layui-icon layui-icon-website"></i><em>News</em></a>
+    <dl class="layui-nav-child">
+        <dd {in name="function_name" value="shownewsmanage,shownewsadd,shownewsedit"}
+            class="layui-this" {/in}><a href="/book_news/showNewsManage?status=1">News</a></dd>
+    </dl>
+    </li>
+</ul>

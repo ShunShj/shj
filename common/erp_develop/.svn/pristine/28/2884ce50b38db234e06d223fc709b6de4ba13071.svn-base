@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {include file='public/head' /}
+    <title>{$language_tag.index_product_ShowPlanTour_resources_teamProduct}-{$language_tag.index_product_PlanBooking_order}</title>
+
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+    <div class="layui-header">
+        {include file='public/header' /}
+    </div>
+
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll">
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            {include file='public/left_menu' /}
+        </div>
+    </div>
+
+    <div class="layui-body">
+
+        <!-- 内容主体区域 -->
+        <div style="padding: 15px;">
+            <div class='layui-form-item'>
+			<span class="layui-breadcrumb" lay-separator="-">
+                <a>{$language_tag.index_public_homepage}</a>
+                <a>{$language_tag.index_public_product}</a>
+				<a>{$language_tag.index_product_ShowPlanTour_resources_teamProduct}</a>
+                <a><cite>{$language_tag.index_product_PlanBooking_order}</cite></a>
+			</span>
+            </div>
+            <br/>
+            <div class='layui-form-item'>
+                <div class='layui-col-md9'>
+                <font style="font-size: 20px;font-weight: bold">{$language_tag.index_product_PlanBooking_teamOrder}({$_GET['number']})</font>&nbsp;&nbsp;&nbsp;
+                    <!--总数：{}-->
+                </div>
+            </div>
+            <br/>
+
+            <form action="/product/PlanBooking " method="get" >
+                <input type="hidden" name="plan_id" value="{$_GET['plan_id']}" />
+                <input type="hidden" name="number" value="{$_GET['number']}" />
+                <div class='layui-input-inline'>
+                    <input type="text"   name="search_booking" value="{$_GET['search_booking']}"  placeholder="{$language_tag.index_product_PlanBooking_orderNumber}" class="layui-input">
+                </div>
+                <div  class='layui-input-inline layui-form'>
+                    <select name="search_company_id" lay-search   >
+                        <option value="">{$language_tag.index_product_PlanBooking_orderSource}</option>
+                        {foreach $Company as $v}
+                        {if $v.company_id!=1}
+                        <option value="{$v.company_id}" {$_GET['search_company_id']==$v.company_id?'selected':''}>{$v.company_name}</option>
+                        {/if}
+                        {/foreach}
+                    </select>
+                </div>
+                <!--<div class='layui-input-inline'>-->
+                    <!--<input type="text"   name="search_visitor" value="{$_GET['search_visitor']}"  placeholder="游客" class="layui-input">-->
+                <!--</div>-->
+                <div class='layui-input-inline'>
+                    <input type="text"   name="search_founder" value="{$_GET['search_founder']}"  placeholder="{$language_tag.index_product_PlanBooking_orderCreator}" class="layui-input">
+                </div>
+
+                <div class='layui-input-inline'>
+                    <button class="layui-btn nav-search">{$language_tag.index_public_search}</button>
+                    <!--<a href="/product/showshowPlanTourGuideReceipt?number={$_GET['number']}" class="layui-btn nav-add">{$language_tag.index_product_ShowPlanTour_guideBack}</a>-->
+                    <a class="layui-btn fentuan nav-edit">{$language_tag.index_product_PlanBooking_subgroup}</a>
+                    <a class="layui-btn nav-add" href="{$plan_tour_manage}">{$language_tag.index_public_history_back}</a>
+                    <!--<a href="/product/clearPlanBooking" class="layui-btn layui-btn-primary">清除</a>-->
+                </div>
+            </form>
+            <div class="table-nont">
+                <table  class="layui-table layui-form" id="language-table">
+                    <thead>
+                    <tr>
+                        <td><input type="checkbox" lay-skin="primary" lay-filter="CheckboxAll"></td>
+                        <td>{$language_tag.index_product_PlanBooking_orderNumber}</td>
+                         <td>{$language_tag.index_public_company_order_status}</td>
+                        <td>{$language_tag.index_product_PlanBooking_orderSource}</td>
+                         <td>{$language_tag.index_product_PlanBooking_number}</td>
+                        <td>{$language_tag.index_branchcompany_showDistributorManage_lastOperateTime}</td>
+                        <td>{$language_tag.index_product_PlanBooking_orderCreator}</td>
+                        <!--<td>{$language_tag.index_public_status}</td>-->
+                        <td>{$language_tag.index_source_operation}</td>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {foreach $order as $v}
+                    <tr>
+                        <td><input class="checkbox_id" type="checkbox" lay-skin="primary" value="{$v.company_order_number}" ></td>
+                        <td>{$v.company_order_number}</td>
+                        <td>
+                        	<select lay-filter='book_queding' id='book_queding'>
+						                        	
+                        		<option value='1' {if condition='$v.company_order_status eq 1'}selected{/if}>{$language_tag.index_branchcompany_showCompanyOrderManage_addEdit_unconfirmed}</option>
+                        		<option value='2' {if condition='$v.company_order_status eq 2'}selected{/if}>{$language_tag.index_branchcompany_showCompanyOrderManage_addEdit_confirmed}</option>
+                        		<option value='3' {if condition='$v.company_order_status eq 3'}selected{/if}>{$language_tag.index_public_cancel}	</option>
+                        	
+                        	</select>
+                        	
+                        		
+          
+                        </td>
+                        <td>{$v.company_name}</td>
+                        <td>{$v.people_number|default=0}</td>
+                        <td><?=date('Y-m-d H:i:s',$v['create_time']) ?></td>
+                        <td>{$v.create_user_name}</td>
+                        <!--<td>开启/取消/确认</td>-->
+                        <td><a href="/product/PlanBookingInfo?bookingId={$v.company_order_number}&plan_id={$_GET['plan_id']}&number={$_GET['number']}"  class="layui-btn hover-details layui-btn-sm layui-btn-primary" >{$language_tag.index_public_info}</a></td>
+                    </tr>
+                    {/foreach}
+
+
+
+
+                    </tbody>
+                </table>
+            </div>
+
+
+            </div>
+
+        </div>
+    </div>
+
+    <div class="layui-footer">
+        <!-- 底部固定区域 -->
+        © layui.com - 底部固定区域
+    </div>
+</div>
+{include file='public/foot_js' /}
+
+<script id="T-FenTuan" type="text/html">
+<form id="F-FenTuan"  class='layui-form'>
+    <input name="old_team_product_id" value="{$_GET['plan_id']}" type="hidden" />
+    <div class="table-nont">
+        <table class="layui-table" style="width:80%;margin: 10px auto">
+            <thead><tr><th>{$language_tag.index_product_PlanBooking_orderNumber}</th></tr></thead>
+            <tbody>
+            <tr>
+                <td>
+                    {{# for(var i = 0, len = d.booking.length; i < len; i++){ }}
+                    {{# if(i>0){ }},{{# } }}
+                    {{d['booking'][i]}}
+                    <input type="hidden" name="bookingId[]" value="{{d['booking'][i]}}"  />
+                    {{# } }}
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+
+    <div style="height: 150px">
+    <div style="width:80%;margin: 10px auto;font-weight: bold">
+        {$language_tag.index_product_PlanBooking_moveToTeam}:
+    </div>
+    <div class="layui-row" style="width:80%;margin: 10px auto">
+        <div class=" layui-col-md7">
+            <input type="radio" name="r-fentuan" value="1" title="{$language_tag.index_product_PlanBooking_subgroup}（{$language_tag.index_product_PlanBooking_copyAndAdd}）" checked>
+        </div>
+    </div>
+    <div style="width:80%;margin: 10px auto">
+        <div class=" layui-col-md4">
+            <input type="radio" name="r-fentuan" value="2" title="{$language_tag.index_product_PlanBooking_moveTeam}">
+        </div>
+        <div class="layui-col-md5">
+            <select name="n_team_product_id">
+                <option></option>
+                {{# for(var i = 0, len = d.OtherRegimentNumber.length; i < len; i++){ }}
+                    <option value="{{d['OtherRegimentNumber'][i].team_product_id}}">{{d['OtherRegimentNumber'][i].team_product_number}}</option>
+                {{# } }}
+            </select>
+        </div>
+    </div>
+    </div>
+    <div style="text-align: center;margin-bottom: 10px">
+        <a class="layui-btn layui-btn-primary cancel layui-btn-primary">{$language_tag.index_public_cancel}</a>&nbsp;&nbsp;&nbsp; <a class="layui-btn layui-btn-normal confirm nav-submit">{$language_tag.index_public_ok}</a>
+    </div>
+</form>
+</script>
+
+
+<script>
+    //JavaScript代码区域
+    !function(){
+        var layer = layui.layer ;
+        var form = layui.form;
+        var laydate = layui.laydate;
+        var table=layui.table;
+        var laytpl=layui.laytpl;
+        var team_product_id = {$_GET['plan_id']};
+
+        form.on('checkbox(CheckboxAll)', function(data){
+            var child = $(data.elem).parents('thead').siblings("tbody").find('td input[type="checkbox"]');
+            child.each(function(index, item){
+                item.checked = data.elem.checked;
+            });
+            form.render('checkbox');
+        });
+
+        $('.fentuan').on('click',function(){
+            var newQ = new Array();
+            $('.checkbox_id').each(function(index,item){
+                if (item.checked == true) {
+                    newQ.push(item.value);
+                }
+            });
+            if(newQ.length<=0){
+                layer.msg('{$language_tag.index_product_PlanBooking_placeSelect}');
+                return;
+            }
+
+            layer.load(2);
+            $.post('/product/PlanSubgroupAjax',{'newQ':newQ,'team_product_id':team_product_id},function(a){
+                layer.closeAll('loading'); //关闭loading
+                if(a.code==400){
+                    layer.msg('{$language_tag.index_product_PlanBooking_placeSelect}');
+                    return;
+                }
+
+                var html = $('#T-FenTuan').html();
+                laytpl(html).render(a.data, function(htmll){
+                    layer.open({
+                        title:'',
+                        type: 1,
+                        area: ['50%','500px'],
+                        content: htmll //这里content是一个普通的String
+                    });
+                });
+                form.render();
+
+                //取消
+                $('.cancel').on('click',function(){
+                    layer.closeAll();
+                });
+
+                //确认
+                $('.confirm').on('click',function(){
+                    layer.load(2);
+                    $.post('/product/ConfirmPlanSubgroupAjax',$('#F-FenTuan').serializeArray(),function(a){
+                        layer.closeAll('loading'); //关闭loading
+                        if(a.code==400){
+                            layer.msg('{$language_tag.index_public_verificationFailures}');
+                        }else{
+                            layer.msg('{$language_tag.index_public_success}',{time:1});
+                            layer.closeAll();
+                        }
+                        return;
+                    },'json');
+                });
+
+
+            },'json');
+        });
+        
+
+        
+        form.on('select(book_queding)', function(data){
+            //这里监听所有checkbox
+        　		//我是用来实现checkbox单选效果
+    	      layer.load(5, {
+                    shade: [0.5,'gray'],
+         
+                });
+        	var value = data.value;
+           	var company_order_number = data.othis.parents("td").prev().html();
+          
+	        $.ajax({
+	            type: "POST",
+	            url: '/companyorder/updateCompanyOrderStatusByCompanyOrderNumberAjax',
+	            data: {
+	            	company_order_status:value,
+	            	company_order_number:company_order_number
+	            	
+	            },
+	            success: function (data) {
+	            	  layer.closeAll();
+	            },
+	            error:function(XMLHttpRequest, textStatus, errorThrown){
+	                //console.log(errorThrown)
+	                 layer.close(loadIndex);
+	                layer.msg('{$language_tag.index_public_verificationFailure}')
+
+	            }
+	        });
+            
+            
+        });
+    }();
+
+</script>
+</body>
+</html>
+
+<script>
+
+
+</script>

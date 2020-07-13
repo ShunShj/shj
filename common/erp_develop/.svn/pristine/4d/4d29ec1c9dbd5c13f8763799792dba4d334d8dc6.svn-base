@@ -1,0 +1,42 @@
+<?php
+
+/**
+ * 助手函数类，主要就是解决一些公用的函数所用
+ */
+
+namespace app\common\help;
+
+
+
+/**
+ * Description of Helper
+ *
+ * @author 胡
+ */
+class Contents {
+	private $_lianyi_email;
+	/**
+	 * 分页显示数量
+	 */
+	CONST PAGE_SIZE = 20;
+	
+	/*
+	CONST LIANYI_EMAIL = [
+		['email'=>'@nexusholidays.com'],
+		['email'=>'@nexusshanghai.com'],
+	
+			
+	];
+	*/
+	
+	public static function getNexusEmail(){
+		$email = [
+				['email'=>'@nexusholidays.com'],
+				['email'=>'@nexusshanghai.com'],
+		];
+		return $email;
+		
+		
+	}
+
+}

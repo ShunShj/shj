@@ -1,0 +1,75 @@
+<div class="layui-row">
+    <div>
+        {foreach $OperationsType as $v}
+        <input lay-filter="radio-operations_type" type="radio" name="sex" value="{$v.id}" title="{$v.name}" {$v.id==$operations_type_id?'checked':''} />
+        {/foreach}
+    </div>
+
+    <div class="layui-col-md12">
+         <table class="layui-table">
+            <thead>
+            <tr>
+                <th width="5%">完成</th>
+                <th width="5%">排序</th>
+                <th width="10%">事件</th>
+                <th width="10%">邮件模板</th>
+                <th width="5%">发送</th>
+                <th width="10%">提醒日期</th>
+                <th width="10%">提醒对象</th>
+                <th width="20%">附件</th>
+                <th width="8%">附件上传</th>
+                <th width="20%">备注</th>
+            </tr>
+            </thead>
+            <tbody>
+            {foreach $CompanyOrderOperations as $kl=>$vl}
+            <tr data-info="{$vl.id}">
+                <td><input  type="checkbox" lay-filter="company_order_operations_status" lay-skin="primary"  value="{$vl.id}" {$vl.status==2?'checked':''} /></td>
+                <td>{$kl+1}</td>
+                <td>{$vl.operation_name}</td>
+                <td>
+                    {if $vl.is_email_sent==1}
+                        <select lay-filter="operations-email_template_id" data-info="{$vl.id}" lay-search>
+                            <option>请选择</option>
+                            {foreach $OperationsEmailGr[$vl.operation_id] as $OperationsEmailGr_v}
+                            <option value="{$OperationsEmailGr_v.id}" {$OperationsEmailGr_v.id==$vl.email_template_id?'selected':''}>{$OperationsEmailGr_v.name}</option>
+                            {/foreach}
+                        </select>
+                    {/if}
+                </td>
+                <td>
+                    {if $vl.is_email_sent==1}
+                        <a class="layui-btn layui-btn-sm layui-btn-primary dispatch-operationsEmail" data-info="{$vl.id}" >发送</a>
+                    {/if}
+                </td>
+                <td>{$vl.remind_at}</td>
+                <td>
+                    <select lay-filter="operations-user_id" lay-search data-info="{$vl.id}">
+                        <option>请选择</option>
+                        {foreach $UserList as $UserList_v}
+                        <option value="{$UserList_v.user_id}" {$UserList_v.user_id==$vl.remind_to?'selected':''}>{$UserList_v.nickname}</option>
+                        {/foreach}
+                    </select>
+                </td>
+                <td style="position: relative">
+                    <div id="upload-{$vl.id}" style="position: absolute; width: 100%; height: 100%; top: 0px;left: 0px; padding-left: 5px;text-align: left">
+                        {foreach $vl.attachments as $attachmentsV}
+                        <div><a href="{$attachmentsV.savepath}" target="_blank">{$attachmentsV.name}</a>&nbsp;<a class="layui-btn layui-btn-xs layui-btn-primary del-attachments" data-info="{$attachmentsV.id}">删除</a></div>
+                        {/foreach}
+                    </div>
+                </td>
+                <td>
+                    <div class="layui-upload-drag upload" data-info="{$vl.id}"   >
+                        <i class="layui-icon"></i>
+                        <p>点击上传，或将文件拖拽到此处</p>
+                    </div>
+                </td>
+
+                <td><textarea class="layui-textarea  operations-remark" data-info="{$vl.id}">{$vl.remark}</textarea></td>
+            </tr>
+            {/foreach}
+            </tbody>
+        </table>
+    </div>
+    <input type="hidden" id="ii-company_order_id" value="{$company_order_id}" />
+</div>

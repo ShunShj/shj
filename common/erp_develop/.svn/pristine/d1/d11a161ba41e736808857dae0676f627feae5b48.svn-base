@@ -1,0 +1,178 @@
+//JavaScript代码区域
+
+   layer = layui.layer
+   form = layui.form;
+  
+  
+//添加控制器权限
+function AuthControllerAdd(){
+
+	var controller_name = $('#controller_name').val();
+	var function_name = $("#function_name").val();
+	var controller_explain = $('#controller_explain').val();
+	var function_explain = $("#function_explain").val();
+	var data = {
+		controller_name:controller_name,
+		function_name:function_name,
+		controller_explain:controller_explain,
+		function_explain:function_explain,
+		pid:0,
+		level:1
+	};
+
+	$.ajax({
+		type: "post",
+		url: "/system/addAuthAjax",
+		data: data,
+		dataType: "json",
+		success: function(data){
+
+			if(data.code!=200){
+				layer.msg(data.msg)
+				return false;
+			}else if(data.code==200){
+				layer.msg('操作成功',{time:1,end : function(layero, index){
+					//location.href='/system/showAuthManage'
+						layer.load(2);
+						history.back(-1);
+				}});
+			}
+	   },
+	   error:function(XMLHttpRequest, textStatus, errorThrown){
+		   layer.msg('验证失败')
+	   }
+	});
+	
+	return false;
+}
+//添加按钮权限
+function AuthButtonAdd(){
+	
+
+		
+		var button_name = $('#button_name').val();
+		var pid = $("#pid").val();
+		var button_explain = $('#button_explain').val();
+		var data = {
+			button_name:button_name,
+			button_explain:button_explain,
+			pid:pid,
+			level:2
+		}
+
+	    $.ajax({
+	        type: "post",
+	        url: "/system/addAuthAjax",
+	        data: data,
+	        dataType: "json",
+	        success: function(data){
+	 
+	        	if(data.code!=200){
+	        		layer.msg(data.msg)
+	        		return false;
+	        	}else if(data.code==200){
+	        		layer.msg('操作成功',{time:1,end : function(layero, index){
+	        			    //location.href='/system/showAuthManage'
+							layer.load(2);
+							history.back(-1);
+	        				}
+	        		}); 
+	        	}
+	       },
+	       error:function(XMLHttpRequest, textStatus, errorThrown){
+	    	   layer.msg('验证失败')
+	       }
+	    });
+	
+	return false;
+}
+//编辑权限
+function AuthControllerEdit(){
+	
+		var auth_id = $('#auth_id').val();
+		var controller_name = $("#controller_name").val();
+		var function_name = $("#function_name").val();
+		var controller_explain = $("#controller_explain").val();
+		var function_explain = $("#function_explain").val();		
+		var status= $("#auth_status").val();
+
+		var data = {
+			auth_id:auth_id,
+			controller_name:controller_name,
+			function_name:function_name,
+			controller_explain:controller_explain,
+			function_explain:function_explain,
+			status:status,
+			level:1
+		}
+		
+	
+	    $.ajax({
+	        type: "post",
+	        url: "/system/editAuthAjax",
+	        data: data,
+	        dataType: "json",
+	        success: function(data){
+	 
+	        	if(data.code!=200){
+	        		layer.msg(data.msg)
+	        		return false;
+	        	}else if(data.code==200){
+	        		layer.msg('操作成功',{time:1,end : function(layero, index){
+	        			    //location.href='/system/showAuthManage'
+							layer.load(2);
+							history.back(-1);
+	        				}
+	        		}); 
+	        	}
+	       },
+	       error:function(XMLHttpRequest, textStatus, errorThrown){
+	    	   layer.msg('验证失败')
+	       }
+	    });
+	
+	return false;
+}
+//编辑权限
+function AuthButtonEdit(){
+	
+		var auth_id = $('#auth_id').val();
+		var button_name = $("#button_name").val();
+		var button_explain = $("#button_explain").val();
+		var status= $("#auth_status").val();
+
+		var data = {
+			auth_id:auth_id,
+			button_name:button_name,
+			button_explain:button_explain,
+			status:status,
+			level:2
+		}
+		
+	
+	    $.ajax({
+	        type: "post",
+	        url: "/system/editAuthAjax",
+	        data: data,
+	        dataType: "json",
+	        success: function(data){
+	 
+	        	if(data.code!=200){
+	        		layer.msg(data.msg)
+	        		return false;
+	        	}else if(data.code==200){
+	        		layer.msg('操作成功',{time:1,end : function(layero, index){
+	        			    //location.href='/system/showAuthManage'
+							layer.load(2);
+							history.back(-1);
+	        				}
+	        		}); 
+	        	}
+	       },
+	       error:function(XMLHttpRequest, textStatus, errorThrown){
+	    	   layer.msg('验证失败')
+	       }
+	    });
+	
+	return false;
+}

@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {include file='public/head' /}
+    <title>{$language_tag.index_nav_gross_profit_statistics}</title>
+    <link href="__STATIC__/css/product.css" rel="stylesheet">
+    <style>
+        .layui-body{
+            overflow: hidden;
+        }
+        .layui-body .layui-table-main{
+            overflow: auto;
+            height:350px;
+            margin-top:10px;
+            border-top:1px solid #e6e6e6;
+        }
+        .layui-body table{
+            margin:0px;
+        }
+        @media screen and (min-width:1680px){
+            .layui-body .layui-table-main{
+                height:580px;
+            }
+        }
+    </style>
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+    <div class="layui-header">
+        {include file='public/header' /}
+    </div>
+
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll">
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            {include file='public/left_menu' /}
+        </div>
+    </div>
+
+    <div class="layui-body layui-body-bg">
+
+        <!-- 内容主体区域 -->
+        <div style="padding: 15px 15px 0px;">
+            <div class="body-top">
+                <div class='layui-form-item'>
+                    <span class="layui-breadcrumb" lay-separator="-">
+                        <a>{$language_tag.index_public_homepage}</a>
+                        <a>{$language_tag.index_public_finance}</a>
+                        <a><cite>{$language_tag.index_nav_gross_profit_statistics}</cite></a>
+                    </span>
+                </div>
+                <div class='layui-block all-search-bg'>
+                    <form class="layui-form" action="/finance/grossProfitStatistics" method="get" >
+                        <div class="layui-row">
+                            <div class="layui-col-md4">
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">{$language_tag.index_product_ShowPlanTour_departureDate}:</label>
+                                    <div class="layui-input-block">
+                                        <div class="layui-input-inline date-width">
+                                            <input type="text" value="{$_GET['sDate']}" name="sDate" id="sDate" placeholder="{$language_tag.index_product_ShowPlanTour_pleaseSelectTheDate}" autocomplete="off" class="layui-input sales-date">
+                                        </div>
+                                        <div class="date-and">-</div>
+                                        <div class="layui-input-inline date-width">
+                                            <input type="text" value="{$_GET['eDate']}" name="eDate" id="eDate" placeholder="{$language_tag.index_product_ShowPlanTour_pleaseSelectTheDate}" autocomplete="off" class="layui-input sales-date">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-col-md4">
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">{$language_tag.index_product_showRouteTemplateManage_routeType}:</label>
+                                    <div class="layui-input-block">
+                                        <select  name="route_type_id">
+                                            <option value=""></option>
+                                            <optgroup label="{$language_tag.index_finance_showAgentExpenseManage_update_chinese_group}">
+                                                {foreach $RouteType[1] as $v}
+                                                <option value="{$v.route_type_id}" {$_GET['route_type_id']==$v.route_type_id?'selected':''}>{$v.route_type_name}</option>
+                                                {/foreach}
+                                            </optgroup>
+                                            <optgroup label="{$language_tag.index_finance_showAgentExpenseManage_update_foreigners_group}">
+                                                {foreach $RouteType[2] as $v}
+                                                <option value="{$v.route_type_id}" {$_GET['route_type_id']==$v.route_type_id?'selected':''}>{$v.route_type_name}</option>
+                                                {/foreach}
+                                            </optgroup>
+                                            <optgroup label="{$language_tag.index_finance_showAgentExpenseManage_other}">
+                                                {foreach $RouteType[3] as $v}
+                                                <option value="{$v.route_type_id}" {$_GET['route_type_id']==$v.route_type_id?'selected':''}>{$v.route_type_name}</option>
+                                                {/foreach}
+                                            </optgroup>
+
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-col-md4">
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">{$language_tag.index_product_ShowPlanTour_productNumber}:</label>
+                                    <div class="layui-input-block">
+                                        <input type="text"   name="team_product_number" value="{$_GET['team_product_number']}"  placeholder="" class="layui-input">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-row">
+                            <div class="layui-col-md4">
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">{$language_tag.index_branchcompany_showBranchProductManage_productName}:</label>
+                                    <div class="layui-input-block">
+                                        <input type="text"   name="team_product_name" value="{$_GET['team_product_name']}"  placeholder="" class="layui-input">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-col-md4">
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">{$language_tag.index_finance_showReceivableManage_create_user_name}:</label>
+                                    <div class="layui-input-block">
+                                        <input type="text"   name="nickname" value="{$_GET['nickname']}"  placeholder="" class="layui-input">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-col-md4">
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">{$language_tag.index_public_company}:</label>
+                                    <div class="layui-input-block">
+                                        <select name="company_id">
+                                            <option value=""></option>
+                                            {foreach $Company as $v}
+                                            {if $v.company_id<>1}
+                                            <option value="{$v.company_id}" {$v.company_id==$_GET['company_id']?'selected':''}>{$v.company_name}</option>
+                                            {/if}
+                                            {/foreach}
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="layui-row">
+                            <div class="layui-col-md4 layui-col-md-offset4">
+                                <div class='input-inline all-button-center pages-search-margin'>
+                                    <button class="layui-btn nav-search">{$language_tag.index_public_search}</button>
+                                </div>
+                            </div>
+                        </div>
+
+
+                    </form>
+
+                </div>
+            </div>
+            <div class="content-bg">
+                <div  class="table-nont user-manage newBg-pageHeight" style="display: block;">
+                    <table class="layui-table layui-form" id="language-table" style="table-layout:fixed;">
+                        <thead>
+                        <tr>
+                            <th width="150">{$language_tag.index_product_ShowPlanTour_productNumber}</th>
+                            <th width="250">{$language_tag.index_branchcompany_showBranchProductManage_productName}</th>
+                            <th width="100">{$language_tag.index_product_showRouteTemplateManage_routeType}</th>
+                            <th width="100">{$language_tag.index_product_visitor_goTime}</th>
+                            <th width="80">{$language_tag.index_product_PlanBooking_number}</th>
+                            <th width="100">{$language_tag.index_public_company}</th>
+                            <th width="100">{$language_tag.index_finance_showReceivableManage_create_user_name}</th>
+                            <th width="100">{$language_tag.index_finance_showReceivableManage_currency_name}</th>
+                            <th width="100">{$language_tag.index_finance_showMustPayManage_cope_money}</th>
+                            <th width="100">{$language_tag.index_finance_showMustPayManage_true_receipt}</th>
+                            <th width="100">{$language_tag.index_finance_showReceivableManage_receivable_money}</th>
+                            <th width="100">{$language_tag.index_finance_showReceivableManage_true_receipt}</th>
+                            <th width="100">{$language_tag.index_product_profitStatement_anticipated_profit}</th>
+                            <th width="100">{$language_tag.index_product_profitStatement_actual_profit}</th>
+                            <th width="80">{$language_tag.index_source_operation}</th>
+                        </tr>
+                        </thead>
+
+                        <tbody>
+                        {foreach  name='data' item='vo'}
+                        <tr>
+                            <th width="150">{$vo.team_product_number}</th>
+                            <th>{$vo.team_product_name}</th>
+                            <th>{$vo.route_type_name}</th>
+                            <th><?=date('Y-m-d',$vo['begin_time']);?></th>
+                            <th>{$vo.number_of_people}</th>
+                            <th>{$vo.company_name}</th>
+                            <th>{$vo.nickname}</th>
+                            <th>{$vo.currency_name}</th>
+                            <th>{$vo.cope_money|default=0}</th>
+                            <th>{$vo.cope_receivable_money|default=0}</th>
+                            <th>{$vo.receivable_money|default=0}</th>
+                            <th>{$vo.payment_money|default=0}</th>
+                            <th>{$vo.receivable_money-$vo.cope_money}</th>
+                            <th>{$vo.payment_money-$vo.cope_receivable_money}</th>
+                            <th><span style="{:action('index/auth/check_auth',['role_id'=>'264'])}"><a href="/finance/grossProfitStatisticsDetail?number={$vo.team_product_number}" class="layui-btn layui-btn-sm hover-edit layui-btn-primary">{$language_tag.index_finance_CostSharingList_add_detail}</a></span></th>
+                        </tr>
+                        {/foreach}
+                        </tbody>
+
+                    </table>
+                </div>
+            </div>
+            <div class="listButtom">
+                <!--加载分页-->
+                {include file='public/page' /}
+            </div>
+        </div>
+    </div>
+
+    <div class="layui-footer">
+        <!-- 底部固定区域 -->
+        © layui.com - 底部固定区域
+    </div>
+</div>
+{include file='public/foot_js' /}
+
+
+
+<script>
+    //JavaScript代码区域
+    !function(){
+        var layer = layui.layer ;
+        var form = layui.form;
+        var laydate = layui.laydate;
+        var table=layui.table;
+        var laytpl=layui.laytpl;
+
+        //常规用法
+        laydate.render({
+            elem: '#sDate'
+            ,lang: 'zn'
+        });
+        laydate.render({
+            elem: '#eDate'
+            ,lang: 'zn'
+        });
+
+    }();
+
+</script>
+</body>
+</html>

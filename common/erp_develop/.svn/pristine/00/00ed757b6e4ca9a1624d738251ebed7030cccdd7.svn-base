@@ -1,0 +1,148 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<link rel="stylesheet" href="__STATIC__/css/formSelects-v4.css">
+<link rel="stylesheet" href="__STATIC__/layui/css/layui.css">
+<link rel="stylesheet" href="__STATIC__/css/public.css">
+<link rel="stylesheet" href="__STATIC__/layui/icon/iconfont.css">
+<link rel="stylesheet" href="__STATIC__/layui/multilingual/iconfont.css">
+<link href="__STATIC__/css/product.css" rel="stylesheet">
+<!--公共CSS样式-->
+<!--  <link rel="stylesheet" href="__STATIC__/css/public_style.css"> -->
+<script src='__STATIC__/javascript/public/jquery-2.1.1.min.js'></script>
+
+<form id="form1" class="layui-form" style="height: 500px;padding: 20px 130px 20px 20px" onSubmit="return add()">
+    <div class="layui-row" >
+        <div class="layui-form-item">
+            <label class="layui-form-label text_align">From:</label>
+            <div class="layui-input-block">
+                <input type="" name="from_email" value="{$fromEmail}" class="layui-input" id="form_email" />
+            </div>
+        </div>
+    </div>
+    <div class="layui-row" >
+        <div class="layui-form-item">
+            <label class="layui-form-label text_align input-required">To:</label>
+            <div class="layui-input-block">
+                <input type="" name="to_email" value="{$toEmail}" class="layui-input" id="to_email" />
+            </div>
+        </div>
+    </div>
+    <div class="layui-row" >
+        <div class="layui-form-item">
+            <label class="layui-form-label text_align input-required">Subject:</label>
+            <div class="layui-input-block">
+                <input type="" name="subject" value="{$OperationsEmailTemplates.name}" class="layui-input" />
+            </div>
+        </div>
+    </div>
+    <div class="layui-row" >
+        <div class="layui-form-item">
+            <label class="layui-form-label text_align input-required">Content:</label>
+            <div class="layui-input-block">
+                <textarea class="layui-textarea"  name="content">{$OperationsEmailTemplates.content}</textarea>
+            </div>
+        </div>
+    </div>
+    <div class="layui-row" >
+        <div class="layui-form-item">
+            <label class="layui-form-label text_align">Attachment:</label>
+            <div class="layui-input-block">
+                <div class="layui-upload">
+                    <button type="button" class="layui-btn nav-add layui-btn-sm" id="test2">{$language_tag.index_operations_OperationsListAjax_attachment_uploading}</button>
+                    <blockquote class="layui-elem-quote layui-quote-nm" style="margin-top: 10px;">
+                        {$language_tag.index_product_showRouteTemplateManage_resources_enclosure}：
+                        <div class="layui-upload-list" id="demo2"></div>
+                    </blockquote>
+                </div>
+            </div>
+        </div>
+    </div>
+    <br>
+    <div class="all-button-center">
+        <button class="layui-btn nav-submit" lay-submit="" lay-filter="formDemo" id="language_add_button">{$language_tag.index_public_send}</button>
+        <input type="button" class="layui-btn layui-btn-primary" value="{$language_tag.index_public_cancel}" onclick="col()"/>
+    </div>
+
+</form>
+<script src="__STATIC__/layui/layui.all.js"></script>
+
+<script src='__STATIC__/javascript/public/formSelects-v4.js'></script>
+<script>
+    $(".input-required i").remove();
+    $(".input-required").prepend("<i>*</i>");
+    var laydate = layui.laydate;
+    var upload = layui.upload;
+    upload.render({
+        elem: '#test2'
+        ,url: '/operations/emailAttachment/'
+        ,accept: 'file'
+        ,multiple: true
+        ,before: function(obj){ //obj参数包含的信息，跟 choose回调完全一致，可参见上文。
+            layer.load(2); //上传loading
+        }
+        ,done: function(res){
+            console.log(res);
+            if(res.code == 200){
+                var h = '<div>'+res.image_name+'<input type="hidden" name="email_attachment[]" value="'+res.data+'" >&nbsp;&nbsp;&nbsp;<a class="layui-btn layui-btn-xs btn-del del_email_attachment">{$language_tag.index_public_del}</a></div>';
+                $('#demo2').append(h);
+                $('.del_email_attachment').on('click',function(){
+                    $(this).parent().remove();
+                });
+            }
+            layer.closeAll('loading'); //关闭loading
+        }
+        ,error: function(res){
+            //请求异常回调
+            console.log(res);
+            layer.closeAll('loading'); //关闭loading
+        }
+    });
+    var urls;
+
+    if(parent.$("iframe").attr("src").split("=")[1]=='find'){
+        urls='/system/sendEmailAjax';
+        $("#form_email").val(parent.$("#ifemail").val());
+        $("#to_email").val(parent.$("#emailHide").val())
+    }else{
+        urls='/operations/send_operations_email';
+    }
+    function add() {
+            var forms=$('#form1').serializeArray();
+            layer.load(2);
+            /*if($("#form_email").val==''){
+                forms[0].value='';
+            }else{
+
+            }*/
+            $.ajax({
+                type: "POST",
+                url: urls,
+                data: forms,
+                success: function (data) {
+                    layer.closeAll();
+                    if(data.code!=200){
+                        layer.msg('发送失败！'+ data.msg);
+                        return false;
+                    }else if(data.code==200){
+                        layer.msg('{$language_tag.index_public_success}',{time:1,end : function(layero, index){
+
+                        }});
+                        }
+                    parent.close_emali();
+                    },
+                    error:function(XMLHttpRequest, textStatus, errorThrown){
+                        //console.log(errorThrown)
+                        layer.closeAll();
+                        layer.msg('{$language_tag.index_public_verificationFailure}');
+                        parent.close_emali();
+                    }
+                });
+            return false;
+    }
+
+
+
+    function col(){
+        parent.close_emali();
+    }
+</script>

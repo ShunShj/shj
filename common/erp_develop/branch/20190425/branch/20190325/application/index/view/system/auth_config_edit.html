@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+	{include file='public/head' /}
+  	<title>country-manage-add</title>
+
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+
+	<div class="layui-header">
+	{include file='public/header' /}
+	</div>
+
+	 <div class="layui-side layui-bg-black">
+	   <div class="layui-side-scroll">
+	     <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+		{include file='public/left_menu' /}
+	   </div>
+	 </div>
+
+	<div class="layui-body">
+
+		<!-- 内容主体区域 -->
+		<div style="padding: 15px;">
+			<div class='layui-form-item'>
+		   		<span class="layui-breadcrumb">
+					<a href="#">{$Think.lang.index_public_system}</a>
+					<a href="#">{$Think.lang.index_system_showRoleManage_role_manage}</a>
+					<a href="#"><cite>{$Think.lang.index_system_showRoleManage_edit_auth}</cite></a>
+				</span>
+			</div>
+			<br/>
+			<fieldset class="layui-elem-field">
+				<legend>{$Think.lang.index_system_showRoleManage_edit_auth}</legend>
+				<br/>
+				<div class="layui-field-box">
+					<form class="layui-form" onSubmit="return authConfigAdd()">
+
+
+					{volist name='result' id='v'}
+						<div class="layui-form-item">
+						  <label class="layui-form-label" style='width:200px;text-align:left;'>{$v.controller_explain}-{$v.function_explain}</label>
+						  <div class="layui-input-block">
+						    <input type="checkbox"  {php}if(is_numeric(array_search($v['auth_id'],array_column($role_auth,'auth_id')))){echo "checked='checked'";} {/php} name="auth_config" value='{$v.auth_id}' lay-skin="primary" >
+						
+						  </div>
+						</div>
+						<hr />
+						
+						<div class="layui-form-item">
+						  <div class="layui-input-block">
+						  	{volist name='v.children_button_info' id='vv'}
+						    	<input type="checkbox" {php}if(is_numeric(array_search($vv['auth_id'],array_column($role_auth,'auth_id')))){echo "checked='checked'";} {/php} name="auth_config" value='{$vv.auth_id}' lay-skin="primary" title="{$vv.button_explain}">
+							{/volist}
+						  </div>
+						</div>
+					{/volist}  
+					  	
+						<div class="layui-form-item">
+							<div class="layui-input-block">
+								<button class="layui-btn nav-add" lay-submit="" lay-filter="formDemo" id="currency_add_sp3_button">{$Think.lang.index_system_showRoleManage_now_add}</button>
+								<a href="javascript:history.back(-1)"><button type="button" class="layui-btn layui-btn-primary nav-back">{$Think.lang.index_public_back}</button></a>
+								<input type='hidden' value='{$Think.get.role_id}' id='role_id' />
+							</div>
+						</div>
+					</form>
+				</div>
+			</fieldset>
+		</div>
+	</div>
+
+  <div class="layui-footer">
+    <!-- 底部固定区域 -->
+    © layui.com - 底部固定区域
+  </div>
+</div>
+{include file='public/foot_js' /}
+<script src='__STATIC__/javascript/system/system.js'></script>
+</body>
+</html>

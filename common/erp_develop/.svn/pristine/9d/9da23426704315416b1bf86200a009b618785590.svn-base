@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<head>
+    {include file='public/head' /}
+    <title>layout 后台大布局 - Layui</title>
+
+    <style>
+        .nav {
+            display: inline-block;
+            position: relative;
+            height: 54px;
+            font-size: 15px;
+        }
+
+        .nav > * {
+            display: inline-block;
+        }
+
+        .nav > .t {
+            position: absolute;
+            top: 0;
+            background: rgb(208, 210, 211);
+            /* Skew */
+            -webkit-transform: skew(30deg);
+            -moz-transform: skew(30deg);
+            -o-transform: skew(30deg);
+            transform: skew(30deg);
+        }
+
+        .nav > .b {
+            position: absolute;
+            bottom: 0;
+            background: rgb(208, 210, 211);
+            /* Skew */
+            -webkit-transform: skew(-30deg);
+            -moz-transform: skew(-30deg);
+            -o-transform: skew(-30deg);
+            transform: skew(-30deg);
+        }
+
+        .tab .nav>.t,.tab .nav>.b{
+            -webkit-transform: none;
+            -moz-transform: none;
+            -o-transform: none;
+            transform: none;
+        }
+
+
+        .nav > a {
+            /*position:absolute;
+            top:0;*/
+            margin-left: 13px;
+            vertical-align: middle;
+            text-align: center;
+            text-decoration: none;
+            cursor: default;
+            font-weight: bold;
+            color: #77787b !important;
+        }
+
+        .nav.hover>a{
+            color: #ffffff !important;
+        }
+
+        .nav.hover > span {
+            background-color: #3376ba;
+            cursor: pointer;
+        }
+
+        .nav.done_step.hover>span{
+            background-color: #3376ba;
+        }
+
+        .nav.hover > a {
+            cursor: pointer;
+        }
+
+        .ab_position {
+            position: absolute;
+        }
+
+        .nav > .first_mark {
+            position: absolute;
+            top: 0;
+            z-index: 1;
+            width: 16px;
+            height: 100%;
+            background-color: #ffffff;
+            left: -8px;
+        }
+
+        .nav.done_step>a,.nav.active_step>a{
+            color: #ffffff !important;
+        }
+
+        .nav.done_step>.t,.nav.done_step>.b{
+            background-color: #767780;
+        }
+
+        .nav.active_step>.t,.nav.active_step>.b{
+            background-color: #3376ba;
+        }
+
+        .tab_border{
+            height: 2px;
+            background-color: #767780;
+            margin-left: 8px;
+            margin-top: -4px;
+        }
+
+    </style>
+
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+    <div class="layui-header">
+        {include file='public/header' /}
+    </div>
+
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll">
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            {include file='public/left_menu_booknexus' /}
+        </div>
+    </div>
+
+    <div class="layui-body">
+
+        <!-- 内容主体区域 -->
+        <div style="padding: 15px 15px 0px;">
+            <div class='layui-row'>
+		   		<span class="layui-breadcrumb" lay-separator="-">
+                    <a>首页</a>
+                    <a>B2B</a>
+					<a>创建产品</a>
+				</span>
+            </div>
+            <br>
+            {include file='booknexus_tour/update_menu' /}
+
+            <div class="layui-row layui-col-space12" style="padding: 20px 10px">
+                <div class="layui-col-md8">
+                    <div class="layui-form-item">
+                        <label class="layui-form-label ">CN TITLE:</label>
+                        <div class="layui-input-block layui-form">
+                            <input class="layui-input rdd" id="add-CnTitle" />
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-col-md8">
+                    <div class="layui-form-item">
+                        <label class="layui-form-label ">EN TITLE:</label>
+                        <div class="layui-input-block layui-form">
+                            <input class="layui-input  rdd" id="add-Entitle" />
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-col-md8">
+                    <div class="layui-form-item">
+                        <label class="layui-form-label ">PRICE:</label>
+                        <div class="layui-input-block layui-form">
+                            <input class="layui-input  rdd" id="add-Price"><br> (10 = $5 Adult price, 8 = $8 Child price)
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-col-md8">
+                    <div class="layui-form-item">
+                        <label class="layui-form-label ">COST:</label>
+                        <div class="layui-input-block layui-form">
+                            <input class="layui-input  rdd" id="add-Cose" /><br> (5 = $5 Adult cost, 4 = $4 Child cost)
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-col-md8">
+                    <div class="layui-form-item">
+                        <label class="layui-form-label ">Supplier:</label>
+                        <div class="layui-input-block layui-form">
+                           <select class="layui-select rdd" id="add-Supplier">
+                               <option></option>
+                               {foreach $supplier as $vv}
+                                    <option value="{$vv.b2b_hotel_id}">{$vv.hotel_name_en} | {$vv.hotel_name_cn}</option>
+                               {/foreach}
+                           </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-col-md8">
+                    <div class="layui-form-item">
+                        <label class="layui-form-label ">Commission Precentage:</label>
+                        <div class="layui-input-block layui-form">
+                            <input class="layui-input  rdd" id="add-CommissionPrecentage" /><br>(0.4 = 40% Commission, leave blank if not applied)
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-col-md8">
+                    <div class="layui-form-item">
+                        <label class="layui-form-label ">Commission Fixed Rate:</label>
+                        <div class="layui-input-block layui-form">
+                            <input class="layui-input  rdd" id="add-CommissionFixedRate" /><br> (2 = $2 dollars fixed commission, leave blank if not applied)
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-col-md8">
+                    <div class="layui-form-item">
+                        <label class="layui-form-label ">CN NOTE:</label>
+                        <div class="layui-input-block layui-form">
+                            <textarea class="layui-textarea rdd" id="add-CnNote"></textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-col-md8">
+                    <div class="layui-form-item">
+                        <label class="layui-form-label ">EN NOTE:</label>
+                        <div class="layui-input-block layui-form">
+                            <textarea class="layui-textarea rdd" id="add-EnNote"></textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-col-md8">
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">PAY BY:</label>
+                        <div class="layui-input-block layui-form">
+                            <select class="layui-select rdd"id="add-PayBy">
+                                <option value="1">Nexus</option>
+                                <option value="2">Driver</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-col-md8">
+                    <div class="layui-form-item">
+                        <label class="layui-form-label input-required">TYPE:</label>
+                        <div class="layui-input-block layui-form">
+                            <select class="layui-select rdd" lay-verify="required" id="add-Type">
+                                <option value="1">Package</option>
+                                <option value="2">Itenarary</option>
+                                <option value="3">Sales Item</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-col-md8">
+                    <div class="layui-form-item">
+                        <label class="layui-form-label input-required">STATUS:</label>
+                        <div class="layui-input-block layui-form">
+                            <select class="layui-select rdd" lay-verify="required" id="add-Status">
+                                <option value="1">Enable</option>
+                                <option value="2">Disable</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-col-md8"  style="text-align: center">
+                    <a class="layui-btn layui-btn-sm layui-btn-primary add-Option">Add Option</a>
+                </div>
+            </div>
+
+            <br>
+            <div class="layui-row layui-col-space12" style="padding: 10px;font-size: 14px;font-weight: bold">Added Options</div>
+            <br><br>
+            <div class="layui-row layui-col-space12" style="padding: 20px 10px">
+                <form class="layui-form" id="form1" onSubmit="return add()">
+
+                    <div class="layui-row layui-col-space12" id="sel-Options">
+                            <?php $kk=0;?>
+                            {foreach $TourOptions as $k=>$v}
+                                <div  class="layui-row layui-col-space8 d-Option" style="border-bottom: 1px solid #000;margin-bottom: 20px">
+                                    <input type="hidden" name="options[{$kk}][b2b_tour_options_id]" value="{$v.b2b_tour_options_id}" />
+                                    <div class="layui-col-md8">
+                                        <div class="layui-form-item">
+                                            <label class="layui-form-label ">CN TITLE:</label>
+                                            <div class="layui-input-block layui-form">
+                                                <input class="layui-input" disabled id="CnTitle-{$kk}" name="options[{$kk}][cn_title]" value="{$v.cn_title}" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="layui-col-md8">
+                                        <div class="layui-form-item">
+                                            <label class="layui-form-label ">EN TITLE:</label>
+                                            <div class="layui-input-block layui-form">
+                                                <input class="layui-input " disabled id="Entitle-{$kk}" name="options[{$kk}][en_title]" value="{$v.en_title}" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="layui-col-md8">
+                                        <div class="layui-form-item">
+                                            <label class="layui-form-label ">PRICE:</label>
+                                            <div class="layui-input-block layui-form">
+                                                <input class="layui-input " disabled id="Price-{$kk}" name="options[{$kk}][price]" value="{$v.price}" ><br> (10 = $5 Adult price, 8 = $8 Child price)
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="layui-col-md8">
+                                        <div class="layui-form-item">
+                                            <label class="layui-form-label ">COST:</label>
+                                            <div class="layui-input-block layui-form">
+                                                <input class="layui-input " disabled id="Cose-{$kk}" name="options[{$kk}][cost]" value="{$v.cost}" /><br> (5 = $5 Adult cost, 4 = $4 Child cost)
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="layui-col-md8">
+                                        <div class="layui-form-item">
+                                            <label class="layui-form-label ">Supplier:</label>
+                                            <div class="layui-input-block layui-form">
+                                                <select class="layui-select" disabled id="Supplier-{$kk}" name="options[{$kk}][supplier]" value="{$v.supplier}" >
+                                                    <option></option>
+                                                    {foreach $supplier as $vv}
+                                                    <option value="{$vv.b2b_hotel_id}" {$vv.b2b_hotel_id==$v.supplier?'selected':''}>{$vv.hotel_name_en} | {$vv.hotel_name_cn}</option>
+                                                    {/foreach}
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="layui-col-md8">
+                                        <div class="layui-form-item">
+                                            <label class="layui-form-label ">Commission Precentage:</label>
+                                            <div class="layui-input-block layui-form">
+                                                <input class="layui-input " disabled id="CommissionPrecentage-{$kk}" name="options[{$kk}][commission_precentage]" value="{$v.commission_precentage}" /><br>(0.4 = 40% Commission, leave blank if not applied)
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="layui-col-md8">
+                                        <div class="layui-form-item">
+                                            <label class="layui-form-label ">Commission Fixed Rate:</label>
+                                            <div class="layui-input-block layui-form">
+                                                <input class="layui-input " disabled id="CommissionFixedRate-{$kk}" name="options[{$kk}][commission_fixed_rate]" value="{$v.commission_fixed_rate}"  /><br> (2 = $2 dollars fixed commission, leave blank if not applied)
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="layui-col-md8">
+                                        <div class="layui-form-item">
+                                            <label class="layui-form-label ">CN NOTE:</label>
+                                            <div class="layui-input-block layui-form">
+                                                <textarea class="layui-textarea" disabled id="CnNote-{$kk}" name="options[{$kk}][cn_note]">{$v.cn_note}</textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="layui-col-md8">
+                                        <div class="layui-form-item">
+                                            <label class="layui-form-label ">EN NOTE:</label>
+                                            <div class="layui-input-block layui-form">
+                                                <textarea class="layui-textarea" disabled id="EnNote-{$kk}" name="options[{$kk}][en_note]">{$v.en_note}</textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="layui-col-md8">
+                                        <div class="layui-form-item">
+                                            <label class="layui-form-label ">PAY BY:</label>
+                                            <div class="layui-input-block layui-form">
+                                                <select class="layui-select" disabled id="PayBy-{$kk}" name="options[{$kk}][pay_by]" >
+                                                    <option value="1" {$v.pay_by==1?'selected':''}>Nexus</option>
+                                                    <option value="2" {$v.pay_by==2?'selected':''}>Driver</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="layui-col-md8">
+                                        <div class="layui-form-item">
+                                            <label class="layui-form-label input-required">TYPE:</label>
+                                            <div class="layui-input-block layui-form">
+                                                <select class="layui-select" disabled id="Type-{$kk}" lay-verify="required" name="options[{$kk}][type]" >
+                                                    <option value="1" {$v.type==1?'selected':''}>Package</option>
+                                                    <option value="2" {$v.type==2?'selected':''}>Itenarary</option>
+                                                    <option value="3" {$v.type==3?'selected':''}>Sales Item</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="layui-col-md8">
+                                        <div class="layui-form-item">
+                                            <label class="layui-form-label input-required">STATUS:</label>
+                                            <div class="layui-input-block layui-form">
+                                                <select class="layui-select" disabled id="Status-{$kk}" lay-verify="required" name="options[{$kk}][status]" >
+                                                    <option value="1" {$v.status==1?'selected':''}>Enable</option>
+                                                    <option value="2" {$v.status==2?'selected':''}>Disable</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="layui-col-md8">
+                                        <div class="layui-form-item">
+                                            <label class="layui-form-label "></label>
+                                            <div class="layui-input-block layui-form">
+                                                <a  class="layui-btn layui-btn-sm layui-btn-primary romove">Romove</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                        <?php $kk++;?>
+                            {/foreach}
+
+                    </div>
+
+                    <div class="layui-col-md8" style="padding: 20px;font-weight: bold;font-size:14px;text-align: center">
+                        <button   class="layui-btn nav-submit" >Save & Next</button>
+                    </div>
+
+                </form>
+            </div>
+
+
+        </div>
+
+
+       <div id="hinnd-div" style="display: none">
+           <div  class="layui-row layui-col-space8 d-Option" style="border-bottom: 1px solid #000;margin-bottom: 20px">
+               <div class="layui-col-md8">
+                   <div class="layui-form-item">
+                       <label class="layui-form-label ">CN TITLE:</label>
+                       <div class="layui-input-block layui-form">
+                           <input class="layui-input" disabled id="CnTitle-ii" name="options[ii][cn_title]" />
+                       </div>
+                   </div>
+               </div>
+               <div class="layui-col-md8">
+                   <div class="layui-form-item">
+                       <label class="layui-form-label ">EN TITLE:</label>
+                       <div class="layui-input-block layui-form">
+                           <input class="layui-input " disabled id="Entitle-ii" name="options[ii][en_title]" />
+                       </div>
+                   </div>
+               </div>
+               <div class="layui-col-md8">
+                   <div class="layui-form-item">
+                       <label class="layui-form-label ">PRICE:</label>
+                       <div class="layui-input-block layui-form">
+                           <input class="layui-input " disabled id="Price-ii" name="options[ii][price]"><br> (10 = $5 Adult price, 8 = $8 Child price)
+                       </div>
+                   </div>
+               </div>
+               <div class="layui-col-md8">
+                   <div class="layui-form-item">
+                       <label class="layui-form-label ">COST:</label>
+                       <div class="layui-input-block layui-form">
+                           <input class="layui-input " disabled id="Cose-ii" name="options[ii][cost]" /><br> (5 = $5 Adult cost, 4 = $4 Child cost)
+                       </div>
+                   </div>
+               </div>
+               <div class="layui-col-md8">
+                   <div class="layui-form-item">
+                       <label class="layui-form-label ">Supplier:</label>
+                       <div class="layui-input-block layui-form">
+                           <select class="layui-select" disabled id="Supplier-ii" name="options[ii][supplier]">
+                               <option></option>
+                               {foreach $supplier as $vv}
+                               <option value="{$vv.b2b_hotel_id}">{$vv.hotel_name_en} | {$vv.hotel_name_cn}</option>
+                               {/foreach}
+                           </select>
+                       </div>
+                   </div>
+               </div>
+               <div class="layui-col-md8">
+                   <div class="layui-form-item">
+                       <label class="layui-form-label ">Commission Precentage:</label>
+                       <div class="layui-input-block layui-form">
+                           <input class="layui-input " disabled id="CommissionPrecentage-ii" name="options[ii][commission_precentage]" /><br>(0.4 = 40% Commission, leave blank if not applied)
+                       </div>
+                   </div>
+               </div>
+               <div class="layui-col-md8">
+                   <div class="layui-form-item">
+                       <label class="layui-form-label ">Commission Fixed Rate:</label>
+                       <div class="layui-input-block layui-form">
+                           <input class="layui-input " disabled id="CommissionFixedRate-ii" name="options[ii][commission_fixed_rate]" /><br> (2 = $2 dollars fixed commission, leave blank if not applied)
+                       </div>
+                   </div>
+               </div>
+               <div class="layui-col-md8">
+                   <div class="layui-form-item">
+                       <label class="layui-form-label ">CN NOTE:</label>
+                       <div class="layui-input-block layui-form">
+                           <textarea class="layui-textarea" disabled id="CnNote-ii" name="options[ii][cn_note]"></textarea>
+                       </div>
+                   </div>
+               </div>
+               <div class="layui-col-md8">
+                   <div class="layui-form-item">
+                       <label class="layui-form-label ">EN NOTE:</label>
+                       <div class="layui-input-block layui-form">
+                           <textarea class="layui-textarea" disabled id="EnNote-ii" name="options[ii][en_note]"></textarea>
+                       </div>
+                   </div>
+               </div>
+               <div class="layui-col-md8">
+                   <div class="layui-form-item">
+                       <label class="layui-form-label ">PAY BY:</label>
+                       <div class="layui-input-block layui-form">
+                           <select class="layui-select" disabled id="PayBy-ii" name="options[ii][pay_by]">
+                               <option value="1" {$v.pay_by==1?'selected':''}>Nexus</option>
+                               <option value="2" {$v.pay_by==2?'selected':''}>Driver</option>
+                           </select>
+                       </div>
+                   </div>
+               </div>
+               <div class="layui-col-md8">
+                   <div class="layui-form-item">
+                       <label class="layui-form-label input-required">TYPE:</label>
+                       <div class="layui-input-block layui-form">
+                           <select class="layui-select" disabled id="Type-ii" lay-verify="required" name="options[ii][type]">
+                               <option value="1" {$v.type==1?'selected':''}>Package</option>
+                               <option value="2" {$v.type==2?'selected':''}>Itenarary</option>
+                               <option value="3" {$v.type==3?'selected':''}>Sales Item</option>
+                           </select>
+                       </div>
+                   </div>
+               </div>
+               <div class="layui-col-md8">
+                   <div class="layui-form-item">
+                       <label class="layui-form-label input-required">STATUS:</label>
+                       <div class="layui-input-block layui-form">
+                           <select class="layui-select" disabled id="Status-ii" lay-verify="required" name="options[ii][status]">
+                               <option value="1">Enable</option>
+                               <option value="2">Disable</option>
+                           </select>
+                       </div>
+                   </div>
+               </div>
+               <div class="layui-col-md8">
+                   <div class="layui-form-item">
+                       <label class="layui-form-label input-required"></label>
+                       <div class="layui-input-block layui-form">
+                           <a  class="layui-btn layui-btn-sm layui-btn-primary romove">Romove</a>
+                       </div>
+                   </div>
+               </div>
+           </div>
+       </div>
+
+
+
+
+        <div class="layui-footer">
+            <!-- 底部固定区域 -->
+            © layui.com - 底部固定区域
+        </div>
+    </div>
+    {include file='public/foot_js' /}
+    <script>
+        //JavaScript代码区域
+        var layer = layui.layer;
+        var form = layui.form;
+        var laydate = layui.laydate;
+        var ii ={$TourOptions|count};
+
+
+        $('.add-Option').click(function(){
+            var CnTitle = $('#add-CnTitle').val();
+            var Entitle = $('#add-Entitle').val();
+            var Price = $('#add-Price').val();
+            var Cose = $('#add-Cose').val();
+            var Supplier = $('#add-Supplier').val();
+            var CommissionPrecentage = $('#add-CommissionPrecentage').val();
+            var CommissionFixedRate = $('#add-CommissionFixedRate').val();
+            var CnNote = $('#add-CnNote').val();
+            var EnNote = $('#add-EnNote').val();
+            var PayBy = $('#add-PayBy').val();
+            var Type = $('#add-Type').val();
+            if (Type == '') {
+                layer.msg('Type is empty');
+                return false;
+            }
+            var Status = $('#add-Status').val();
+            if (Status == '') {
+                layer.msg('Status is empty');
+                return false;
+            }
+
+            var html = $('#hinnd-div').html();
+            console.log(html);
+            for(var ij=0;ij<30;ij++){
+                html = html.replace('ii',ii);
+            }
+            $('#sel-Options').append(html);
+
+
+
+            $('#CnTitle-'+ii).val(CnTitle);
+            $('#Entitle-'+ii).val(Entitle);
+            $('#Price-'+ii).val(Price);
+            $('#Cose-'+ii).val(Cose);
+            $('#Supplier-'+ii).val(Supplier);
+            $('#CommissionPrecentage-'+ii).val(CommissionPrecentage);
+            $('#CommissionFixedRate-'+ii).val(CommissionFixedRate);
+            $('#CnNote-'+ii).val(CnNote);
+            $('#EnNote-'+ii).val(EnNote);
+            $('#PayBy-'+ii).val(PayBy);
+            $('#Type-'+ii).val(Type);
+            $('#Status-'+ii).val(Status);
+
+            $('.rdd').val('');
+            Status = $('#add-Status').val(1);
+            form.render();
+            ii++;
+            $('.romove').click(function(){
+                $(this).parents('.d-Option').remove();
+            });
+
+        });
+
+
+
+        function add(){
+            $.ajax({
+                type: "POST",
+                url: '/booknexus_tour/updateB2bTourOptionsAjax?btb_tour_id={$_GET["btb_tour_id"]}',
+                data:  $('#form1').serializeArray(),
+                success: function(data){
+                    //console.log(data);
+                    if(data.code!=200){
+                        layer.msg(data.msg);
+                        return false;
+                    }else if(data.code==200) {
+                        layer.msg('操作成功',{time:2000,end : function(layero, index){
+                            location.reload();
+                        }
+                        });
+                    }
+                },
+                error:function(XMLHttpRequest, textStatus, errorThrown){
+                    layer.msg('验证失败')
+                }
+            });
+            return false;
+        }
+
+
+    </script>
+
+</body>
+</html>

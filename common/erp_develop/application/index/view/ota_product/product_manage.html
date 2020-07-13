@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {include file='public/head' /}
+    <title>旅游产品</title>
+    <link href="__STATIC__/css/product.css" rel="stylesheet">
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+    <div class="layui-header">
+        {include file='public/header' /}
+    </div>
+
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll">
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            {include file='public/left_menu_web' /}
+        </div>
+    </div>
+
+    <div class="layui-body layui-body-bg">
+
+        <!-- 内容主体区域 -->
+        <div style="padding: 15px 15px 0px;">
+            <div class="body-top">
+                <div class='layui-form-item'>
+                    <span class="layui-breadcrumb" lay-separator="-">
+                        <a>首页</a>
+                        <a>旅游产品</a>
+                        <a><cite>旅游产品</cite></a>
+                    </span>
+                </div>
+
+                <div class='layui-block all-search-bg'>
+                    <form class="layui-form" method='get' action='/ota_product/products'>
+                        <div class="layui-row">
+                            <div class="layui-col-md4">
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">{$language_tag.index_public_status}:</label>
+                                    <div class="layui-input-block">
+                                        <select name="status">
+                                            <option value="1" {$_GET['status']=='1'?'selected':''} }>{$language_tag.index_public_show}</option>
+                                            <option value="0" {$_GET['status']=='0'?'selected':''}>{$language_tag.index_public_disabled}</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-col-md4">
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">标题:</label>
+                                    <div class="layui-input-block">
+                                        <input type="text" id="" name="title" autocomplete="off"  placeholder="{$language_tag.index_public_placeHolder}" class="layui-input" value="{$_GET['title']}" >
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="layui-col-md4">
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">{$language_tag.index_system_showCompanyManage_create_user}:</label>
+                                    <div class="layui-input-block">
+                                        <input class="layui-input" type="text" name="create_username" value="{$_GET['create_username']}" placeholder="{$language_tag.index_public_placeHolder}" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="layui-row">
+                            <div class="layui-col-md4 layui-col-md-offset4">
+                                <div class='input-inline all-button-center pages-search-margin'>
+                                    <button class="layui-btn nav-search" >{$language_tag.index_public_search}</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+            </div>
+            <div class="content-bg">
+                <a href='/ota_product/addProduct/'><button class="layui-btn nav-add layui-btn-sm">创建产品</button></a>
+                <hr>
+                <div class="table-nont user-manage newBg-pageHeight">
+                    <table class="layui-table layui-form" id="language-table">
+                        <thead>
+                        <tr>
+
+                            <th>标题</th>
+                            <th>浏览量</th>
+                            <th>产品排序号</th>
+                            <th>{$language_tag.index_public_status}</th>
+                            <th>{$language_tag.index_source_operation}</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {foreach $data as $v}
+                        <tr>
+                            <td class="ota_product_id" hidden="hidden">{$v.ota_product_id}</td>
+                            <td>{$v.title}</td>
+                            <td>{$v.pviews}</td>
+                            <!--<td>{$v.create_time|date="Y-m-d",###}</td>-->
+                            <td>{$v.sorting}</td>
+                            <td>
+                                {if condition="in_array('178',$auth_id) OR $Think.session.user.role_id eq 1"}<input type="checkbox" {if condition="$v.status eq 1"}checked=""{else/}{/if} name="open" lay-skin="switch" lay-filter="switchTest" lay-text="{$language_tag.index_public_show}|{$language_tag.index_public_disabled}">{else/}{if condition="$v.status eq 1"}{$language_tag.index_public_show}{else}{$language_tag.index_public_disabled}{/if}{/if}
+                            </td>
+                            <td>
+                                <span style="{:action('index/auth/check_auth',['role_id'=>'226'])}"><a href='/ota_product/editProduct?uuid={$v.uuid}'><button class="layui-btn layui-btn-sm hover-edit layui-btn-primary">{$language_tag.index_public_update}</button></a></span>
+
+                                {if condition="$v.status eq 1"}
+                                <span><a class="layui-btn layui-btn-sm hover-edit layui-btn-primary del-operations" data-tit="{$v.title}" data-uuid="{$v.uuid}" >{$language_tag.index_public_del}</a></span>
+                                {/if}
+
+                            </td>
+                        </tr>
+                        {/foreach}
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="listButtom">
+                    {include file='public/page' /}
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <div class="layui-footer">
+        <!-- 底部固定区域 -->
+        © layui.com - 底部固定区域
+    </div>
+</div>
+
+
+
+
+{include file='public/foot_js' /}
+<script src='__STATIC__/javascript/product/all.js'></script>
+<script src='__STATIC__/javascript/product/company_order.js'></script>
+<script>
+    var layer = layui.layer;
+
+    var form = layui.form;
+    form.on('switch(switchTest)', function(data){
+        var table_id = $(data.elem).parents("tr").children(".ota_product_id").html();
+        var table_id_name = "ota_product_id";
+        var table_name = "ota_product";
+        if(this.checked == true){
+            var status = 1;
+        }else{
+            var status = 0;
+        }
+
+        $.ajax({
+            type: "POST",
+            url: '/index/changeStatus',
+            data: {
+                table_id:table_id,
+                table_id_name:table_id_name,
+                table_name:table_name,
+                status:status,
+            },
+            success: function(data){
+                //console.log(data);
+                if(data.code!=200){
+                    layer.msg(data.msg);
+                    return false;
+                }else if(data.code==200) {
+                    layer.msg('操作成功',{time:1,end : function(layero, index){
+
+                        }
+                    });
+                }
+            },
+            error:function(XMLHttpRequest, textStatus, errorThrown){
+                layer.msg('验证失败')
+            }
+        });
+    });
+
+
+</script>
+<script>
+    !function() {
+        var layer = layui.layer;
+        var form = layui.form;
+        var laydate = layui.laydate;
+        var uuid;
+        $('.del-operations').on('click',function(){
+            var tit = $(this).data('tit');
+            uuid = $(this).data('uuid');
+
+            layer.confirm('确定要删除<font style="color: red">'+tit+'</font>么？', {icon:3, title:'提示'}, function(index){
+                layer.load(2);
+                $.post('/ota_product/delProductAjax',{uuid:uuid},function(a){
+                    layer.closeAll();
+                    location.reload();
+                });
+
+                layer.close(index);
+            });
+        });
+    }();
+</script>
+
+
+</body>
+</html>

@@ -1,0 +1,91 @@
+;!function(){
+	  var layer = layui.layer
+	  ,form = layui.form;
+	  
+	  
+	}();
+var check = 1;
+//$('#login-button').click(function (event) {
+//	event.preventDefault();
+//	$('form').fadeOut(500);
+//	$('.wrapper').addClass('form-success');
+//});
+
+//检测登陆
+$('#login_check').click(function(event){
+	var username = $('#username').val();
+	var password = $('#password').val();
+	var yzm = $('#yzm').val();
+	var data = {username:username, password:password};
+    layer.load(0, {
+        shade: [0.6,'#fff'] //0.6透明度的白色背景
+    });
+    if(check == 2){
+        if(yzm.length<3){
+        	layer.msg('请填写验证码/please set verify code')
+        	return false;
+        }   	
+        
+        var data = {username:username, password:password,yzm:yzm};
+    }
+
+    
+    $.ajax({
+        type: "post",
+        url: "/login/checkLogin",
+        data: data,
+        dataType: "json",
+        success: function(data){
+        	layer.close(layer.index); 
+        	if(data.code!=200){
+        		$('#yzm_img').attr('src','/publicshow/showYzm?tm='+Math.random())
+        		
+        		$('#yzm_show').show()
+        		check = 2
+        		layer.msg(data.msg)
+        		return false;
+        	}else if(data.code==200){
+        		event.preventDefault();
+        		$('.wrapper').addClass('form-success');
+        		setTimeout(function(){
+        			location.href='/'
+        		},500)
+        	}
+       },
+       error:function(XMLHttpRequest, textStatus, errorThrown){
+    	   layer.msg('验证失败')
+       }
+    });
+
+})
+
+$(function () {
+    height()
+    $(window).resize(function () {
+        height()
+    });
+    var count=0;
+    var img=$(".imgList>.addWidth");
+    for(var i=0;i<img.length;i++){
+        //img.eq(i).css({"-webkit-animation-duration":(40+(i*10))+"s","animation-duration":(40+(i*10))+"s"});
+        img.eq(i).css({"-webkit-animation-duration":"50s","animation-duration":"50s"});
+    }
+    /*$(".htmleaf-container").mousemove(function(e){
+        var w=$(this).width()/2;
+        for(var i=0;i<img.length;i++){
+        	var num=((e.pageX-800)/100).toFixed(2);
+            if(num>0){
+                //img.eq(i).css("transform","translate3d("+(-1*num)*10+"px,0%,0px)");
+                img.eq(i).css("animation-timing-function","ease");
+			}else{
+                //img.eq(i).css("transform","translate3d("+-1*num+"px,0%,0px)");
+                img.eq(i).css("animation-timing-function","");
+			}
+        }
+    })*/
+})
+
+function height() {
+	var bodyHeight=document.documentElement.clientHeight;
+    $("body").css("height",bodyHeight)
+}

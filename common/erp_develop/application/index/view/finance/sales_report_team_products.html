@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    {include file='public/head' /}
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>{$language_tag.index_public_finance}-{$language_tag.index_nav_salesReport}</title>
+    <style>
+        #page-content th,#page-content td{
+            text-align: center;
+            line-height: 30px;
+            padding:10px;
+        }
+        #page-content th{
+            font-weight: bold;
+        }
+        .tr-none{
+            display: none;
+        }
+    </style>
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+    <div class="layui-header">
+        {include file='public/header' /}
+    </div>
+
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll">
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            {include file='public/left_menu' /}
+        </div>
+    </div>
+
+    <div class="layui-body layui-body-bg">
+        <div style="padding: 15px 15px 0px;">
+            <div class="body-top">
+                <div class='layui-form-item'>
+                    <span class="layui-breadcrumb" lay-separator="-">
+                        <a>{$language_tag.index_public_homepage}</a>
+                        <a>{$language_tag.index_public_finance}</a>
+                        <a><cite>{$language_tag.index_nav_salesReport}</cite></a>
+                    </span>
+                </div>
+            </div>
+            <br>
+            <div class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief">
+                <ul class="layui-tab-title">
+                    <li ><a href="/finance/SalesReportProducts">{$language_tag.index_branchcompany_showCompanyOrderManage_addEdit_product}Product</a></li>
+                    <li  class="layui-this" >团队产品</li>
+                    <li ><a href="/finance/SalesReportAgent">{$language_tag.index_system_showCompanyManage_create_user}Agent</a></li>
+                </ul>
+                <br/>
+                <div class='layui-block all-search-bg'>
+                    <form class="layui-form" action="/finance/SalesReportTeamProducts" method="get" >
+                        <div class="layui-row">
+                            <div class="layui-col-md4">
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label input-required">{$language_tag.index_public_time}:</label>
+                                    <div class="layui-input-block">
+                                        <div class="layui-input-inline date-width">
+                                            <input type="text" name="startDate" id="branch_product_begin_time" placeholder="" class="layui-input layui-input-date sales-date" value="{$Think.get.startDate}">
+                                        </div>
+                                        <div class="date-and">-</div>
+                                        <div class="layui-input-inline date-width">
+                                            <input type="text" name="endDate" id="branch_product_end_time" placeholder="" class="layui-input layui-input-date sales-date" value="{$Think.get.endDate}">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {if condition="$Think.session.user.company_id == 1"}
+                            <div class="layui-col-md4">
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">{$language_tag.index_public_company}:</label>
+                                    <div class="layui-input-block">
+                                         <select name="company_id">
+                                             <option></option>
+                                             {foreach $companyList as $v}
+                                             <option value="{$v.company_id}" {if condition="$Think.get.company_id eq $v.company_id"}selected='selected' {/if}>{$v.company_name}</option>
+                                             {/foreach}
+                                         </select>
+                                    </div>
+                                </div>
+                            </div>
+                            {/if}
+                            <div class="layui-col-md4">
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">团队产品编号:</label>
+                                    <div class="layui-input-block">
+                                        <input type="text" name="team_product_number"  placeholder="" class="layui-input" value="{$Think.get.team_product_number}">
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="layui-form-item">
+                            <div class="all-button-center">
+                                <button class="layui-btn nav-search">{$language_tag.index_public_search}</button>
+                            </div>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+
+            <div class="content-bg">
+                <p style="text-align: right"><a class="layui-btn">{$language_tag.index_public_put}</a></p>
+                <hr>
+                <div class="table-nont user-manage newBg-pageHeight">
+                    <table class="layui-table" id="">
+                        <thead>
+                        <tr>
+                            <th>{$language_tag.index_public_company}</th>
+                            <th>团队产品编号</th>
+                            <th>{$language_tag.index_finance_SalesReportProducts_order_total_number}</th>
+                            <th>{$language_tag.index_finance_SalesReportProducts_one_order_receive_visitors}</th>
+                            <th>{$language_tag.index_finance_SalesReportProducts_collect_guest_number}</th>
+                            <th>{$language_tag.index_finance_SalesReportProducts_total_sales}</th>
+                            <th>{$language_tag.index_finance_SalesReportProducts_one_order_sale}</th>
+                            <th>{$language_tag.index_finance_SalesReportProducts_one_order_guest_price}</th>
+                            <th>{$language_tag.index_finance_SalesReportProducts_received_total}</th>
+                            <th>{$language_tag.index_finance_SalesReportProducts_uncollected_total}</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {foreach name="data" item="vo"}
+                        <tr>
+                            <th>{$vo.company_name}</th>
+                            <th>{$vo.team_product_number}</th>
+                            <th>{$vo.product_order_total}</th>
+                            <th>{$vo.average_customer_total}</th>
+                            <th>{$vo.customer_total}</th>
+                            <th>{$vo.sale_total_price}</th>
+                            <th>{$vo.average_sale_price}</th>
+                            <th>{$vo.average_sale_customer_price}</th>
+                            <th>{$vo.finance_receivable}</th>
+                            <th>{$vo.miss_sale_receivable}</th>
+                        </tr>
+                        {/foreach}
+                        </tbody>
+
+                    </table>
+
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+    <div class="layui-footer">
+        <!-- 底部固定区域 -->
+        © layui.com - 底部固定区域
+    </div>
+    <script id="demo" type="text/html">
+
+    </script>
+</div>
+{include file='public/foot_js' /}
+<script type="text/javascript" src="__STATIC__/javascript/product/all.js"></script>
+<script type="text/javascript" src="__STATIC__/javascript/finance/tableExport.min.js"></script>
+<script>
+    layui.use(['layer', 'form','laydate'], function(){
+        var layer = layui.layer
+                ,laydate=layui.laydate
+                ,form = layui.form;
+
+
+        laydate.render({
+            elem: '#tableMonths'
+            ,type: 'month'
+        });//月份选择
+
+        $("#table-list tbody tr").each(function(index,item){
+            if($(item).find("td").length==0){
+                $(item).remove();
+            }
+        })
+    });
+    function upload() {
+        $('#table-list').tableExport({
+            fileName: '{$language_tag.index_examineAndApprove_toBeApprovedByMe_group_balance_sheet}{$year_month}',
+            type: 'excel',
+            escape:'true'
+        });
+    }
+</script>
+
+
+</body>
+</html>

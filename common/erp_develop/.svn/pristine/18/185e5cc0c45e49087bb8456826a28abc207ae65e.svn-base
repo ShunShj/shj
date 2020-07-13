@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {include file='public/head' /}
+    <title>网站-主题</title>
+    <link href="__STATIC__/css/product.css" rel="stylesheet">
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+    <div class="layui-header">
+        {include file='public/header' /}
+    </div>
+
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll">
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            {include file='public/left_menu_web' /}
+        </div>
+    </div>
+
+    <div class="layui-body layui-body-bg">
+
+        <!-- 内容主体区域 -->
+        <div style="padding: 15px 15px 0px;">
+            <div class="body-top">
+                <div class='layui-form-item'>
+                    <span class="layui-breadcrumb" lay-separator="-">
+                        <a>首页</a>
+                        <a>网站</a>
+                        <a><cite>主题</cite></a>
+                    </span>
+                </div>
+            </div>
+
+            <div style="line-height: 40px;font-size: 18px">
+                已选择的主题： <font id="f-theme">{$getSiteThemes.ota_theme_title}</font>
+            </div>
+            <hr>
+            <div style="font-size: 14px">可选的主题：</div>
+            <div class="layui-row">
+                {foreach $Theme as $v}
+                <div class="layui-col-md4" style="text-align: center">
+                    <div style="width: 250px;margin: 10px auto;border: 10px solid #b9b9b9;">
+                        <img src="{$v.list_diagram}" style="width: 250px" />
+                        <div style="position: absolute;top:30px;text-align: center;width: 250px;font-size: 20px;color: #000;font-width:bold">{$v.title}</div>
+                    </div>
+
+                    <div>
+                        <a class="layui-btn layui-btn-primary on-info" data-info="{$v.ota_theme_id}">详情</a>&nbsp;&nbsp;<a class="layui-btn layui-btn-normal on-select" data-info="{$v.ota_theme_id}" data-info2="{$v.title}">选择</a>
+                    </div>
+                </div>
+                {/foreach}
+
+            </div>
+
+        </div>
+    </div>
+    <div class="layui-footer">
+        <!-- 底部固定区域 -->
+        © layui.com - 底部固定区域
+    </div>
+</div>
+
+
+
+
+{include file='public/foot_js' /}
+<script src='__STATIC__/javascript/product/all.js'></script>
+<script src='__STATIC__/javascript/product/company_order.js'></script>
+
+<script>
+    !function() {
+        var layer = layui.layer;
+        var form = layui.form;
+        var laydate = layui.laydate;
+
+        var ota_theme_id = {$getSiteThemes['ota_site_theme_id']?$getSiteThemes['ota_site_theme_id']:0};
+        var ota_theme_title  = '{$getSiteThemes["ota_theme_title"]?$getSiteThemes["ota_theme_title"]:''}';
+        var ota_site_theme_id= {$getSiteThemes['ota_site_theme_id']?$getSiteThemes['ota_site_theme_id']:0};
+
+        $('.on-select').on('click',function(){
+            ota_theme_id = $(this).data('info');
+            ota_theme_title = $(this).data('info2');
+            layer.load(1);
+            $.post('/ota_theme/up_web_theme/',{ota_site_theme_id:ota_site_theme_id,ota_theme_id:ota_theme_id},function(a){
+                $('#f-theme').html(ota_theme_title);
+                if(ota_site_theme_id<=0){
+                    ota_site_theme_id = a;
+                }
+                layer.closeAll();
+            });
+        });
+
+        $('.on-info').on('click',function(){
+            ota_theme_id = $(this).data('info');
+            layer.open({
+                title: ''
+                ,content: '/ota_theme/theme_info?ota_theme_id='+ota_theme_id,
+                type: 2
+                , area: ['820px', '520px']
+                , shadeClose: true,
+                scrollbar: false,
+            });
+
+        });
+
+
+
+    }();
+</script>
+
+
+</body>
+</html>

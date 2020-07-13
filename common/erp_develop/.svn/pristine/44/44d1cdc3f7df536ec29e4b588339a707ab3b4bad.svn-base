@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {include file='public/head' /}
+    <title>代理详情</title>
+
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+
+    <div class="layui-header">
+        {include file='public/header' /}
+    </div>
+
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll">
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            {include file='public/left_menu_booknexus' /}
+        </div>
+    </div>
+
+    <div class="layui-body">
+
+        <!-- 内容主体区域 -->
+        <div style="padding: 15px;">
+            <div class='layui-form-item'>
+		   		<span class="layui-breadcrumb" lay-separator="-">
+                    <a>{$language_tag.index_public_homepage}</a>
+                    <a>B2B</a>
+					<a>{$language_tag.index_branchcompany_showDistributorManage_channelManagement}</a>
+					<a><cite>{$language_tag.index_branchcompany_showDistributorManage_channelInfo}</cite></a>
+				</span>
+            </div>
+            <br/>
+            <br/>
+            <form class="layui-form layui-row all-detail" id="form1" onSubmit="return edit()">
+
+                <div class="layui-form-item">
+                    <div class="layui-col-md4">
+                        <label class="layui-form-label input-required">{$language_tag.index_branchcompany_showDistributorManage_channelName}:</label>
+                        <div class="layui-input-block">
+                            {$distributorList.distributor_name}
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-col-md4">
+                        <label class="layui-form-label input-required">Company Code:</label>
+                        <div class="layui-input-block">
+                            {$distributorList.distributor_code}
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-col-md4">
+                        <label class="layui-form-label input-required">{$language_tag.index_branchcompany_showDistributorManage_associateType}:</label>
+                        <div class="layui-input-block">
+                            {$distributorList.distributor_type_name}
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-col-md4">
+                        <label class="layui-form-label">Company Name Chinese:</label>
+                        <div class="layui-input-block">
+                            {$distributorList.distributor_name_chinese}
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-col-md4">
+                        <label class="layui-form-label">Licence:</label>
+                        <div class="layui-input-block">
+                            {$distributorList.licence}
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-col-md4">
+                        <label class="layui-form-label">TCF:</label>
+                        <div class="layui-input-block">
+                            {$distributorList.tcf}
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-col-md4">
+                        <label class="layui-form-label">ABN:</label>
+                        <div class="layui-input-block">
+                            {$distributorList.abn}
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-col-md4">
+                        <label class="layui-form-label">Manager:</label>
+                        <div class="layui-input-block">
+                            {$distributorList.manager}
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-col-md4">
+                        <label class="layui-form-label">Accountant:</label>
+                        <div class="layui-input-block">
+                            {$distributorList.accountant}
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-col-md4">
+                        <label class="layui-form-label">Email1:</label>
+                        <div class="layui-input-block">
+                            {$distributorList.emailone}
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-col-md4">
+                        <label class="layui-form-label">Email2:</label>
+                        <div class="layui-input-block">
+                            {$distributorList.emailtwo}
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-col-md4">
+                        <label class="layui-form-label">Email3:</label>
+                        <div class="layui-input-block">
+                            {$distributorList.emailthree}
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-col-md4">
+                        <label class="layui-form-label">Phone:</label>
+                        <div class="layui-input-block">
+                            {$distributorList.phone}
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-col-md4">
+                        <label class="layui-form-label">Fax:</label>
+                        <div class="layui-input-block">
+                            {$distributorList.fax}
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-col-md4">
+                        <label class="layui-form-label">Emergency Contact:</label>
+                        <div class="layui-input-block">
+                            {$distributorList.emergency_contact}
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-col-md4">
+                        <label class="layui-form-label">Website:</label>
+                        <div class="layui-input-block">
+                            {$distributorList.website}
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-col-md4">
+                        <label class="layui-form-label">Logo:</label>
+                        <div id="u-img1" style="padding: 10px; margin-left: 100px">
+                            <div >
+                                <img src="{$distributorList.logo}" height="100" width="100">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-col-md4">
+                        <label class="layui-form-label">Address1:</label>
+                        <div class="layui-input-block">
+                            {$distributorList.addressone}
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-col-md4">
+                        <label class="layui-form-label">Address2:</label>
+                        <div class="layui-input-block">
+                            {$distributorList.addresstwo}
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-col-md4">
+                        <label class="layui-form-label">Suburb:</label>
+                        <div class="layui-input-block">
+                            {$distributorList.suburb}
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-col-md4">
+                        <label class="layui-form-label">State:</label>
+                        <div class="layui-input-block">
+                            {$distributorList.state}
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-col-md4">
+                        <label class="layui-form-label">Postcode:</label>
+                        <div class="layui-input-block">
+                            {$distributorList.postcode}
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-col-md4">
+                        <label class="layui-form-label">Country:</label>
+                        <div class="layui-input-block">
+                            {$distributorList.country}
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-col-md4">
+                        <label class="layui-form-label">BankName:</label>
+                        <div class="layui-input-block">
+                            {$distributorList.bankname}
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-col-md4">
+                        <label class="layui-form-label">BSB:</label>
+                        <div class="layui-input-block">
+                            {$distributorList.bsb}
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-col-md4">
+                        <label class="layui-form-label">Account Number:</label>
+                        <div class="layui-input-block">
+                            {$distributorList.account_number}
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-col-md4">
+                        <label class="layui-form-label">Account Name:</label>
+                        <div class="layui-input-block">
+                            {$distributorList.account_name}
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-col-md4">
+                        <label class="layui-form-label">Swift Code:</label>
+                        <div class="layui-input-block">
+                            {$distributorList.swift_code}
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-col-md4">
+                        <label class="layui-form-label">Username:</label>
+                        <div class="layui-input-block">
+                            {$distributorList.username}
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-col-md4">
+                        <label class="layui-form-label">Password:</label>
+                        <div class="layui-input-block">
+
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-col-md4">
+                        <label class="layui-form-label">Is Commission:</label>
+                        <div class="layui-input-block all-select">
+                            <select disabled name="status"  >
+                                <option value="1" {$distributorList.is_commission==1?'selected':''}>是</option>
+                                <option value="0" {$distributorList.is_commission==0?'selected':''}>否</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-col-md4">
+                        <label class="layui-form-label">Is Latest Mews:</label>
+                        <div class="layui-input-block all-select">
+                            <select disabled name="status"  >
+                                <option value="1" {$distributorList.is_latest_news==1?'selected':''}>是</option>
+                                <option value="0" {$distributorList.is_latest_news==0?'selected':''}>否</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-col-md4">
+                        <label class="layui-form-label">{$language_tag.index_public_status}:</label>
+                        <div class="layui-input-block all-select">
+                            <select disabled name="status"  >
+                                <option value="1" {$distributorList.status==1?'selected':''}>{$language_tag.index_public_show}</option>
+                                <option value="0" {$distributorList.status==2?'selected':''}>{$language_tag.index_public_disabled}</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <br>
+                <div class="layui-form-item">
+                    <div class="layui-input-block">
+                        <a href="javascript:history.back(-1)"><button type="button" class="layui-btn layui-btn-primary">{$language_tag.index_public_back}</button></a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="layui-footer">
+        <!-- 底部固定区域 -->
+        © layui.com - 底部固定区域
+    </div>
+</div>
+{include file='public/foot_js' /}
+
+
+<script>
+
+
+</script>
+
+</body>
+</html>

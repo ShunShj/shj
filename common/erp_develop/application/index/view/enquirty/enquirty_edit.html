@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {include file='public/head' /}
+    <title>网站-需求制定</title>
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+
+    <div class="layui-header">
+        {include file='public/header' /}
+        <link rel="stylesheet" href="__STATIC__/bootstrap-wysihtml5/bootstrap-wysihtml5.css">
+    </div>
+
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll">
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            {include file='public/left_menu_web' /}
+        </div>
+    </div>
+
+    <div class="layui-body">
+
+        <!-- 内容主体区域 -->
+        <div style="padding: 15px;">
+            <div class='layui-form-item'>
+		   		<span class="layui-breadcrumb" lay-separator="-">
+                    <a>首页</a>
+                    <a>网站</a>
+                    <a><cite>修改需求定制</cite></a>
+				</span>
+            </div>
+
+            <br/>
+            <br/>
+            <br/>
+            <form class="layui-form" id="form1" onSubmit="return add()">
+                <div class="layui-row layui-col-space10">
+
+                    <div class="layui-row">
+                        <div class="layui-col-md6">
+                            <div class="layui-form-item">
+                                <label class="layui-form-label input-required">出游目的地:</label>
+                                <div class="layui-input-block layui-form">
+                                    <input class="layui-input" value="{$Enquirty.travel_destinations}" name="travel_destinations" lay-verify="required">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="layui-col-md6">
+                            <div class="layui-form-item">
+                                <label class="layui-form-label input-required">出发日期:</label>
+                                <div class="layui-input-block layui-form">
+                                    <input class="layui-input" value="{$Enquirty.departure_date|date='Y-m-d',###}" name="departure_date" id="departure_date"  lay-verify="required" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="layui-row">
+                        <div class="layui-col-md12">
+                            <div class="layui-form-item">
+                                <label class="layui-form-label ">预计人数:</label>
+                                <div class="layui-input-block">
+                                    <div class="layui-input-inline date-width" style="width: 22%;height: 38px">
+                                        <input style="text-align: right;padding-right: 10px" type="text" value="{$Enquirty.estimated_number_adults}" name="estimated_number_adults" placeholder="" autocomplete="off" id="begin_create_time" class="layui-input sales-date" lay-key="100001">
+                                        <span style="position: relative;top: -28px;left: 10px;height: 0px">成人</span>
+                                    </div>
+                                    <div class="date-and">&nbsp;</div>
+                                    <div class="layui-input-inline date-width" style="width: 22%;height: 38px">
+                                        <input style="text-align: right;padding-right: 10px" type="text" value="{$Enquirty.estimated_number_children}" name="estimated_number_children" placeholder="" autocomplete="off" id="end_create_time" class="layui-input sales-date" lay-key="100002">
+                                        <span style="position: relative;top: -28px;left: 10px;height: 0px">儿童</span>
+                                    </div>
+                                    <div class="date-and">&nbsp;</div>
+                                    <div class="layui-input-inline date-width" style="width: 22%;height: 38px">
+                                        <input style="text-align: right;padding-right: 10px" type="text" value="{$Enquirty.estimated_number_bed_free_children}" name="estimated_number_bed_free_children" placeholder="" autocomplete="off" id="end_create_time" class="layui-input sales-date" lay-key="100002">
+                                        <span style="position: relative;top: -28px;left: 10px;height: 0px">儿童不占床</span>
+                                    </div>
+                                    <div class="date-and">&nbsp;</div>
+                                    <div class="layui-input-inline date-width" style="width: 22%;height: 38px">
+                                        <input style="text-align: right;padding-right: 10px" type="text" value="{$Enquirty.estimated_number_the_elderly}" name="estimated_number_the_elderly" placeholder="" autocomplete="off" id="end_create_time" class="layui-input sales-date" lay-key="100002">
+                                        <span style="position: relative;top: -28px;left: 10px;height: 0px">老人</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="layui-row" >
+                        <div class="layui-col-md6">
+                            <div class="layui-form-item">
+                                <label class="layui-form-label input-required">行程天数:</label>
+                                <div class="layui-input-block layui-form">
+                                    <input class="layui-input" value="{$Enquirty.travel_days}" name="travel_days"   lay-verify="required" />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="layui-col-md6">
+                            <div class="layui-form-item">
+                                <label class="layui-form-label input-required">住宿标准:</label>
+                                <div class="layui-input-block layui-form">
+                                    <select class="layui-select" name="accommodation_standard">
+                                        {for start="1" end="6"}
+                                        <option value="{$i}" {$i==$Enquirty.accommodation_standard?'selected':''}>{$i}星</option>
+                                        {/for}
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="layui-row">
+                        <div class="layui-col-md6">
+                            <div class="layui-form-item">
+                                <label class="layui-form-label input-required">联系人姓名:</label>
+                                <div class="layui-input-block layui-form">
+                                    <input class="layui-input" value="{$Enquirty.contect_name}" name="contect_name"   lay-verify="required" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-col-md6">
+                            <div class="layui-form-item">
+                                <label class="layui-form-label input-required">联系电话:</label>
+                                <div class="layui-input-block layui-form">
+                                    <input class="layui-input" value="{$Enquirty.tel}" name="tel"   lay-verify="required" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="layui-row">
+                        <div class="layui-col-md6">
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">电子邮件:</label>
+                                <div class="layui-input-block layui-form">
+                                    <input class="layui-input" name="email" value="{$Enquirty.email}"  />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-col-md6">
+                            <div class="layui-form-item">
+                                <label class="layui-form-label input-required">语言:</label>
+                                <div class="layui-input-block layui-form">
+                                    <select class="layui-select" name="language_id" lay-search>
+                                        <option></option>
+                                        {foreach $language as $v}
+                                        <option value="{$v.language_id}" {$v.language_id==$Enquirty.language_id?'selected':''}>{$v.language_name}</option>
+                                        {/foreach}
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="layui-row">
+                        <div class="layui-col-md6">
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">其他需求:</label>
+                                <div class="layui-input-block">
+                                    <textarea id="text-content" name="remark"  class="layui-textarea" >{$Enquirty.remark}</textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-input-block all-button-center">
+                        <button class="layui-btn nav-submit" lay-submit="" lay-filter="formDemo" id="addBut">提交</button>
+                        <a href="/enquirty/index"><button type="button" class="layui-btn layui-btn-primary">取消</button></a>
+                    </div>
+                </div>
+
+            </form>
+        </div>
+    </div>
+
+
+    <div class="layui-footer">
+        <!-- 底部固定区域 -->
+        © layui.com - 底部固定区域
+    </div>
+</div>
+{include file='public/foot_js' /}
+<script>
+
+    !function() {
+        var layer = layui.layer;
+        var form = layui.form;
+        var laydate = layui.laydate;
+
+        laydate.render({
+            elem: '#departure_date'
+            //,type: 'date' //默认，可不填
+        });
+
+
+    }();
+
+
+    function add() {
+        layer.load(2);
+        $.ajax({
+            type: "POST",
+            url: "/enquirty/editEnquirtyAjax?enquiry_id={$_GET['enquiry_id']}",
+            data: $('#form1').serializeArray(),
+            success: function (data) {
+                layer.closeAll();
+                if(data.code!=200){
+                    layer.msg(data.msg)
+                    return false;
+                }else if(data.code==200){
+                    layer.msg('{$language_tag.index_public_success}',{time:1,end : function(layero, index){
+                        location.href = '/enquirty/index';
+                    }
+                    });
+                }
+            },
+            error:function(XMLHttpRequest, textStatus, errorThrown){
+                layer.closeAll();
+                //console.log(errorThrown)
+                layer.msg('{$language_tag.index_public_verificationFailure}')
+
+            }
+        });
+        return false;
+    }
+</script>
+
+
+<script>
+    // opener.addHotel();
+</script>
+
+</body>
+</html>
+

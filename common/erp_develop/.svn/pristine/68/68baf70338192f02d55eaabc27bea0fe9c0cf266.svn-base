@@ -1,0 +1,201 @@
+.sales-total {
+border-right: 1px solid #ccc; 
+text-align: right; 
+font-weight: bold;
+font-size: 16px;
+}
+#admin_invoice_table {
+width: 100%;
+}
+span.paid { 
+color: #009900;
+}
+span.unpaid { 
+color: #0033CC;
+}
+span.overdue { 
+color: #FF0000;
+}
+span.cancelled {
+color: #ccc;
+}
+span.paid,
+span.unpaid,
+span.overdue {
+font-weight: 900;
+}
+table#admin_invoice_table tr td{
+padding: 5px 10px 5px 10px; 
+}
+#admin_invoice_table tbody tr:hover {
+background: #E0F5FF;
+/*cursor: pointer;*/
+}
+
+#admin_invoice_table tbody tr:last-child:hover {
+background: #FFFFFF;
+cursor: default;
+}
+#admin_invoice_table thead th:hover {
+cursor: default;
+}
+.search-field {
+
+  padding: 0px 10px 0px 10px;
+  margin-bottom: 20px;
+  color: #606060;
+  font-weight: 600px;
+}
+
+.search-field-select {
+width: 180px;
+padding: 5px;
+margin: 5px;
+}
+
+.search-date-select {
+width: 150px;
+padding: 5px;
+margin: 5px;
+}
+
+.search-field-input{
+width: 150px;
+padding: 5px;
+margin: 5px;
+}
+.search-agent-input{
+width: 300px;
+padding: 5px;
+margin: 5px;
+}
+#tourname.search-field-input {
+width: 280px;
+}
+
+.search-field ul {
+padding-left: 0px;
+}
+
+.search-field ul li{
+display: inline-block;
+}
+
+.search-field li span {
+margin-left: 10px;
+}
+
+.search-field h3 {
+
+}
+
+.search-btn { 
+width: 100px;
+margin-left: 10px;
+}
+
+.module {
+margin-left: 210px;
+width: 88%;
+}
+div#dialog-form input, div#dialog-form select, div#dialog-form textarea {
+width: 520px;
+margin-bottom: 10px;
+}
+
+div#unpaid-invoice input { 
+width: 200px;
+}
+div#unpaid-invoice table { 
+width: 780px;
+border-spacing: 0px;
+border-collapse: separate;
+}
+div#unpaid-invoice table tr td{ 
+border: 1px solid #ccc;
+cellspacing: 0;
+}
+div.instruction, div.invoice_no_sid { 
+	float: right;
+	margin-right: 15px;
+	width: 30%;
+	border: 1px dotted #6B6B47;
+	color: #6B6B47;
+	margin-bottom: 10px;
+}
+div.invoice_no_sid { 
+	/*position: relative;*/
+	clear: right;
+}
+div.invoice_no_sid table { 
+	width: 300px;
+	text-align: center;
+	padding-bottom: 10px;
+
+}
+.instruction h3, .invoice_no_sid h3 { 
+	background: #6B6B47;
+	color: #FFF;
+	height: 20px;
+	text-align: center;
+	padding-top: 5px;
+	margin-top: 0;
+}
+.instruction ol li { 
+	line-height: 1.5em;
+}
+div#msg_div { 
+	width: 100%;
+	font-size: 16px;
+	padding-top: 5px;
+	text-align: center;
+	font-weight: bold;
+	height: 30px;
+	color: #FFF;
+}
+.error_div { 
+	background-color: red;
+}
+.success_div { 
+	background-color: green;
+}
+.warnning_div { 
+	background-color: #E68A00;
+}
+
+a.fn_href { 
+	text-decoration: none;
+	color: #000;
+}
+.fn_href:hover{ 
+	color: red;
+}
+a img { 
+padding: 2px;
+}
+.ui-progressbar {
+    position: relative;
+}
+.progress-label {
+	position: absolute;
+	left: 40%;
+	top: 4px;
+	font-weight: bold;
+	/*text-shadow: 1px 1px 0 #fff;*/
+	color: #003366;
+}
+.different_amount { 
+	background-color: #F5D2A2;
+}
+span.icon{
+	display:inline-block;
+	width:20px;
+	height:20px;
+	padding-right:5px;
+}
+table.pdf-version tr:nth-child(even) {background: #CCC;}
+table.pdf-version tr:nth-child(odd) {background: #000;}
+table.pdf-version th { color: #FFF;}
+table.pdf-version td { padding: 2px;border-spacing: 0px;}
+table.pdf-version { color: #FF0000; width: 170px;}
+table.pdf-version h3 { padding: 0px;}

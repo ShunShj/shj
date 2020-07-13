@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {include file='public/head' /}
+    <title>{$language_tag.index_product_showRouteTypeManage_addReceiptTemplate}</title>
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+
+    <div class="layui-header">
+        {include file='public/header' /}
+    </div>
+
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll">
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            {include file='public/left_menu' /}
+        </div>
+    </div>
+
+    <div class="layui-body">
+
+        <!-- 内容主体区域 -->
+        <div style="padding: 15px;">
+            <div class='layui-form-item'>
+		   		<span class="layui-breadcrumb" lay-separator="-">
+                    <a>{$language_tag.index_public_homepage}</a>
+                    <a>{$language_tag.index_public_product}</a>
+					<a>{$language_tag.index_product_showRouteTemplateManage_receiptTemplate}</a>
+                    <a><cite>{$language_tag.index_product_showRouteTypeManage_addReceiptTemplate}</cite></a>
+				</span>
+            </div>
+            <br/>
+            <br/>
+            <form class="layui-form" id="form1" onSubmit="return add()">
+
+                <div class="layui-form-item">
+                    <div class="layui-col-md9">
+                        <label class="layui-form-label input-required">{$language_tag.index_product_showReturnReceiptManage_receiptName}：</label>
+                        <div class="layui-input-block">
+                             <input type="text" class="layui-input" required lay-verify="required" name="return_receipt_name">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <div class="layui-col-md9">
+                        <label class="layui-form-label">{$language_tag.index_public_status}：</label>
+                        <div class="layui-input-block">
+                            <select id="status" name="status"  >
+                                <option value="1">{$language_tag.index_public_show}</option>
+                                <option value="2">{$language_tag.index_public_disabled}</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="layui-container" class="div_info">
+                    <div class="layui-row">
+                        <div class="layui-col-md3">
+                            <label class="layui-form-label" style="line-height:19px"><div class="input-required">{$language_tag.index_product_showRouteTemplateManage_title}:</div><br><br><div class="input-required">{$language_tag.index_product_showRouteTemplateManage_sort}:</div></label>
+                            <div class="layui-input-block">
+                                <input type="text" class="layui-input"  required lay-verify="required" placeholder="{$language_tag.index_product_showRouteTemplateManage_title}" name="title[0]" ><br>
+                                <input type="number" class="layui-input"  required lay-verify="required" placeholder="{$language_tag.index_product_showRouteTemplateManage_sort}({$language_tag.index_product_showRouteTemplateManage_orderFromSort})" name="sorting[0]" >
+                            </div>
+                        </div>
+
+                        <div class="layui-col-md6" style="margin-left:10px;margin-bottom: 10px">
+                            <textarea  lay-verify="required"  class="layui-textarea" name="content[0]" placeholder="{$language_tag.index_product_showRouteTypeManage_content}"></textarea>
+                        </div>
+
+                        <div  class="layui-col-md2" style="margin-left:10px ">
+                            <a  class="layui-btn del nav-edit">{$language_tag.index_public_del}</a>
+                        </div>
+                        <hr>
+                    </div>
+
+                </div>
+                <div class="layui-col-md-offset9">
+                    <a class="layui-btn add nav-add" style="margin-left:20px">{$language_tag.index_public_add}</a>
+                </div>
+
+                <br><br><br>
+                    <div class="layui-form-item">
+                        <div class="layui-input-block">
+                            <button class="layui-btn nav-submit" lay-submit="" lay-filter="formDemo" id="language_add_button">{$language_tag.index_public_submit}</button>
+                            <a href="javascript:history.back(-1)"><button type="button" class="layui-btn layui-btn-primary">{$language_tag.index_public_back}</button></a>
+                        </div>
+                    </div>
+            </form>
+        </div>
+    </div>
+
+    <div style="display: none" id="add_div">
+        <div class="layui-row" >
+            <div class="layui-col-md3">
+                <label class="layui-form-label" style="line-height:19px"><div class="input-required">{$language_tag.index_product_showRouteTemplateManage_title}:</div><br><br><div class="input-required">{$language_tag.index_product_showRouteTemplateManage_sort}:</div></label>
+                <div class="layui-input-block">
+                    <input type="text" class="layui-input title"  required lay-verify="required" placeholder="{$language_tag.index_product_showRouteTemplateManage_title}" name="title[num]"><br>
+                    <input type="text" class="layui-input"  required lay-verify="required" placeholder="{$language_tag.index_product_showRouteTemplateManage_sort}({$language_tag.index_product_showRouteTemplateManage_orderFromSort})" name="sorting[num]">
+                </div>
+            </div>
+            <div class="layui-col-md6" style="margin-left:10px;margin-bottom: 10px">
+                <textarea   class="layui-textarea" name="content[num]"></textarea>
+            </div>
+            <div  class="layui-col-md2" style="margin-left:10px ">
+                <a  class="layui-btn nav-edit del">{$language_tag.index_public_del}</a>
+            </div>
+            <hr>
+        </div>
+    </div>
+    <div class="layui-footer">
+        <!-- 底部固定区域 -->
+        © layui.com - 底部固定区域
+    </div>
+</div>
+{include file='public/foot_js' /}
+
+
+<script>
+    var num = 1;
+    $(function(){
+        $('.del').on('click',function(){
+            var o = $(this).parent().parent();
+            o.remove();
+        });
+
+        $('.add').on('click',function(){
+           var html = $('#add_div').html();
+           for(var ii =1; ii<5; ii++){
+               html = html.replace('num',num);
+           }
+           $('.div_info').append(html);
+
+            $('.del').on('click',function(){
+                var o = $(this).parent().parent();
+                o.remove();
+            });
+
+           num++;
+        });
+
+    });
+
+    function add() {
+
+        if($('#layui-container').children('div').length==0){
+            layer.msg('$language_tag.index_product_showRouteTypeManage_msg',{time:1000, });
+			return false;
+        }
+
+        $.ajax({
+            type: "POST",
+            url: '/product/addShowReturnReceiptAjax',
+            data: $('#form1').serializeArray(),
+            success: function (data) {
+                if(data.code!=200){
+                    layer.msg(data.msg)
+                    return false;
+                }else if(data.code==200){
+                    layer.msg('{$language_tag.index_public_success}',{time:1,end : function(layero, index){
+                        history.back(-1);
+                    }
+                    });
+                }
+            },
+            error:function(XMLHttpRequest, textStatus, errorThrown){
+                //console.log(errorThrown)
+                layer.msg('{$language_tag.index_public_verificationFailure}')
+
+            }
+        });
+        return false;
+    }
+</script>
+
+</body>
+</html>

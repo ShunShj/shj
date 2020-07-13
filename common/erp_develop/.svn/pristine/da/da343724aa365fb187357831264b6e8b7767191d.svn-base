@@ -1,0 +1,84 @@
+//JavaScript代码区域
+
+   layer = layui.layer
+   form = layui.form;
+  
+  
+	//修改角色
+function RoleAdd(){
+	
+	
+		var role_id = $('#role_id').val();
+		var role_name = $("#role_add_name").val();
+
+		var data = {role_id:role_id,
+					role_name:role_name,
+	
+		
+		
+		}
+		
+	
+	    $.ajax({
+	        type: "post",
+	        url: "/system/addRoleAjax",
+	        data: data,
+	        dataType: "json",
+	        success: function(data){
+	 
+	        	if(data.code!=200){
+	        		layer.msg(data.msg)
+	        		return false;
+	        	}else if(data.code==200){
+	        		layer.msg('操作成功',{time:1,end : function(layero, index){
+	        			    location.href='/system/showRoleManage'
+	        				}
+	        		}); 
+	        	}
+	       },
+	       error:function(XMLHttpRequest, textStatus, errorThrown){
+	    	   layer.msg('验证失败')
+	       }
+	    });
+	
+	return false;
+}
+//编辑角色
+function roleEdit(){
+		
+		var role_id = $('#role_id').val();
+		var role_name = $("#edit_role_name").val();
+
+		var status= $("#edit_role_status").val()	
+		var data = {role_id:role_id,
+					role_name:role_name,
+					status:status
+		
+		
+		}
+		
+	
+	    $.ajax({
+	        type: "post",
+	        url: "/system/editRoleAjax",
+	        data: data,
+	        dataType: "json",
+	        success: function(data){
+	 
+	        	if(data.code!=200){
+	        		layer.msg(data.msg)
+	        		return false;
+	        	}else if(data.code==200){
+	        		layer.msg('操作成功',{time:1,end : function(layero, index){
+	        			    location.href='/system/showRoleManage'
+	        				}
+	        		}); 
+	        	}
+	       },
+	       error:function(XMLHttpRequest, textStatus, errorThrown){
+	    	   layer.msg('验证失败')
+	       }
+	    });
+	
+	return false;
+}

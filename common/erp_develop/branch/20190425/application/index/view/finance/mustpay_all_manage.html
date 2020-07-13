@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {include file='public/head' /}
+    <title>批量应付</title>
+    <link href="__STATIC__/css/finance.css" rel="stylesheet">
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+    <div class="layui-header">
+        {include file='public/header' /}
+    </div>
+
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll">
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            {include file='public/left_menu' /}
+        </div>
+    </div>
+
+    <div class="layui-body">
+
+        <!-- 内容主体区域 -->
+        <div style="padding: 15px;">
+            <div class='layui-form-item'>
+                <span class="layui-breadcrumb" lay-separator="-">
+                   <a>{$Think.lang.index_public_homepage}</a>
+                    <a>{$Think.lang.index_public_finance}</a>
+                    <a>{$Think.lang.index_finance_showMustpayAllManage_total}</a>
+                    <a><cite>{$Think.lang.index_finance_showMustpayAllManage_manage}</cite></a>
+                </span>
+            </div>
+            <br>
+            <div class="table-nont">
+                <table class="layui-table layui-form">
+                    <thead>
+                    <tr>
+                        <th>{$Think.lang.index_finance_showMustpayAllManage_payment_type_number}</th>
+                        <th>{$Think.lang.index_finance_showMustpayAllManage_payment_type}</th>
+                        <th class="input-required">{$Think.lang.index_finance_showMustpayAllManage_currency}</th>
+                        <th class="input-required">{$Think.lang.index_finance_showMustpayAllManage_receivable_voucher}</th>
+                        <th class="input-required">{$Think.lang.index_finance_showMustpayAllManage_voucher_time}</th>
+                        <!-- <th>应付总计</th> -->
+                        <th class="input-required">{$Think.lang.index_finance_showMustpayAllManage_money}</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>{$Think.lang.index_finance_showMustpayAllManage_auto}</td>
+                        <td>
+                            <select name="allMustpayWay" id='payment_type'>
+                                <option value="1">Cash</option>
+                                <option value="2">Check</option>
+                                <option value="3">Debit Card</option>
+                                <option value="4">Credit Card(MC)</option>
+                                <option value="5">Credit Card(VS)</option>
+                                <option value="6">Credit Card(AX)</option>
+                                <option value="7">Credit Deposit</option>
+                                <option value="8">OTHERS</option>
+                            </select>
+                        </td>
+                        <td>
+
+
+                            <select name="allMustpayCurrency" id='currency_id'>
+                                {foreach name='currency_result' item='v'}
+                                <option value="{$v.currency_id}">{$v.currency_name}</option>
+                                {/foreach}
+
+                            </select>
+                        </td>
+                        <td><input type="text"  id="invoice_number" name="receivable_voucher" placeholder="{$Think.lang.index_finance_showMustpayAllManage_receivable_voucher}" class="layui-input"></td>
+                        <td><input type="text" id="invoice_time" name="voucher_time" placeholder="{$Think.lang.index_finance_showMustpayAllManage_time}" class="layui-input layui-input-date"></td>
+                        <!--  <td id='cope_money'>{$cope_count}</td>-->
+                        <td><input type="text" id="allMustpayMoney" placeholder="{$Think.lang.index_finance_showMustpayAllManage_number}"  class="layui-input" ></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <br><hr><br><br>
+            <form class="layui-form" method='get' action='/finance/showMustpayAllManage'>
+                        <div class='layui-input-inline'>
+                            <input type="text" id="" name="team_product_number"  placeholder="{$Think.lang.index_finance_showMustPayManage_team_product_number}"  value="{$Think.get.team_product_number}"  class="layui-input">
+                        </div>
+                        <div class='layui-input-inline'>
+                            <input type="text" id="" name="cope_number"  placeholder="{$Think.lang.index_finance_showMustPayManage_cope_number}"  value="{$Think.get.cope_number}"  class="layui-input">
+                        </div>
+                        <div class='layui-input-inline'>
+                            <input type="text" id="" name="supplier_name"  placeholder="{$Think.lang.index_finance_showMustPayManage_supplier_name}"  value="{$Think.get.supplier_name}"  class="layui-input">
+                        </div>
+                        <div class='layui-input-inline'>
+                            <input type="text" id="" name="product_name"  placeholder="{$Think.lang.index_finance_showMustPayManage_product_name}"  value="{$Think.get.product_name}"  class="layui-input">
+                        </div>
+
+
+                    <button class="layui-btn nav-search" >{$Think.lang.index_public_search}</button>
+            </form>
+            <div class="table-nont">
+                <table class="layui-table layui-form table-product-poper">
+                    <thead>
+                    <tr>
+                        <th><input type="checkbox" name="receivableCheckboxAll" lay-skin="primary" lay-filter="mustpayCheckboxAll" ></th>
+                       	<th width="120px">{$Think.lang.index_finance_showMustPayManage_team_product_number} </th>
+                        <th width="120px">{$Think.lang.index_finance_showMustPayManage_cope_number}</th>
+						<th width="120px">{$Think.lang.index_finance_showMustPayManage_receivable_object_name}</th>
+
+
+
+                        <th width="120px">{$Think.lang.index_finance_showMustPayManage_product_name}</th>
+
+                        <th>{$Think.lang.index_finance_showMustPayManage_currency_name}</th>
+                        <th>{$Think.lang.index_finance_showMustPayManage_cope_money}</th>
+                        <th>{$Think.lang.index_finance_showMustPayManage_unpaid}</th>
+                        <th>{$Think.lang.index_finance_showMustpayAllManage_true_receipt_allocation}</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+            		{foreach name='cope_data_result' item='cdr'}
+            			{if condition="($Think.get.supplier_name == '') or ($cdr.receivable_object_name == $Think.get.supplier_name)"}
+		                    <tr class='cope_info'>
+		                    	
+								<td><input lay-filter="filter" type="checkbox" name="copeCheckbox" disabled class='cope_checkbox' lay-skin="primary" ></td> 
+		 						<td>{$cdr.team_product_number}</td>
+		                        <td>{$cdr.cope_number}</td>
+								<td>{$cdr.receivable_object_name}</td>
+		                        <!--
+								<td>{$cdr.invoice_number}</td>
+		                        <td>{if condition="$cdr.invoice_time neq ''"} {$cdr.invoice_time|date='Y-m-d',###}{/if}</td>
+		                         -->
+								<td>
+									{$cdr.product_name}
+		
+		
+		                        </td>
+		                        <td>
+		
+		                            <select name="allMustpayCurrency" disabled>
+		                            	{foreach name='currency_result' item='vv'}
+		                                <option value="{$vv.currency_id}" {if condition='$v.currency_id eq $vv.currency_id'}selected{/if}>{$vv.currency_name}</option>
+										{/foreach}
+		                            </select>
+		
+		                        </td>
+		                         <td><input type="text" name="allMustpayTotal" value="{$cdr.cope_money}" class="layui-input total" disabled  ></td>
+		                        <td><input type="text" name="allMustpayTotal" value="{$cdr.need_cope_money}" class="layui-input total" disabled  ></td>
+		                        <td><input type="text" name="allMustpayAllot" disabled placeholder="" class="layui-input cope_count" value="0" ></td>
+		                    </tr>
+						{/if}
+					{/foreach}
+
+                    </tbody>
+                </table>
+            </div>
+
+            <br><br>
+            <div class="layui-row">
+                <div class="layui-form-button" style="text-align: center">
+                    
+                        <a class="layui-btn nav-submit" lay-submit="" id='cope_submit' lay-filter="mustpayAllSubmit">{$Think.lang.index_finance_showMustPayManage_sure}</a>
+                    
+                    <a href="javascript:history.back(-1)">
+                        <button type="button" class="layui-btn layui-btn-primary">{$Think.lang.index_finance_showMustPayManage_cancel}</button>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="layui-footer">
+        <!-- 底部固定区域 -->
+        © layui.com - 底部固定区域
+    </div>
+</div>
+{include file='public/foot_js' /}
+<script src='__STATIC__/javascript/product/all.js'></script>
+<script src='__STATIC__/javascript/finance/mustpay.js'></script>
+</body>
+</html>

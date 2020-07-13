@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {include file='public/head' /}
+    <title>language-manage</title>
+
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+    <div class="layui-header">
+        {include file='public/header' /}
+    </div>
+
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll">
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            {include file='public/left_menu' /}
+        </div>
+    </div>
+
+    <div class="layui-body">
+
+        <!-- 内容主体区域 -->
+        <div style="padding: 15px;">
+            <div class='layui-form-item'>
+                <span class="layui-breadcrumb" lay-separator="-">
+                    <a>首页</a>
+                    <a>系统设置</a>
+                    <a><cite>线路类型</cite></a>
+                </span>
+            </div>
+            <br/><br/>
+            <div class='layui-block input-inline'>
+                <form method='get' action='/system/showRouteTypeManage'>
+                    <div class='layui-input-inline'>
+                        <div class="layui-form">
+                            <select id="" name="status">
+                                <option value="0" selected="">状态</option>
+                                <option value="1" {if condition="$Think.get.status eq 1"}selected='selected' {/if}>启用</option>
+                                <option value="2" {if condition="$Think.get.status eq 2"}selected='selected' {/if}>禁用</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class='layui-input-inline'>
+                        <input type="text" id="" name="route_type_name" value="{$Think.get.route_type_name}"  placeholder="名称" class="layui-input">
+                    </div>
+                    <div class='layui-input-inline'>
+                        <div class="layui-form">
+                            <select id="" name="type">
+                                <option value="0" selected="">类型</option>
+                                <option value="1" {if condition="$Think.get.type eq 1"}selected='selected' {/if}>华人团</option>
+                                <option value="2" {if condition="$Think.get.type eq 2"}selected='selected' {/if}>老外团</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class='layui-button-inline layui-number-inline'>
+                        <input type="hidden" name="supplier_type_id" value="4">
+                        <button class="layui-btn nav-search" >搜索</button>
+                    </div>
+                </form>
+                <div class='layui-button-inline'>
+                    <a href='/system/showRouteTypeAdd'><button class="layui-btn nav-add">添加线路类型</button></a>
+                </div>
+            </div>
+            <hr><br>
+            <div class="table-nont">
+                <table class="layui-table" id="language-table">
+                    <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>线路类型名称</th>
+                        <th>线路类型</th>
+                        <th>状态</th>
+                        <th class="layui-table-width">操作</th>
+                    </tr>
+                    </thead>
+
+                    <tbody>
+                    {foreach name="data" item="vo" }
+                    <tr>
+                        <th>{$vo.route_type_id}</th>
+                        <th>{$vo.route_type_name}</th>
+                        <th>{if condition="$vo.type eq 1"}华人团{else/}老外团{/if}</th>
+                        <th>{if condition="$vo.status eq 1"}启用{else/}禁用{/if}</th>
+                        <th><a href='/system/showRouteTypeEdit?route_type_id={$vo.route_type_id}'><button class="layui-btn layui-btn-sm hover-edit layui-btn-primary">修改</button></a> <a href='/system/showRouteTypeInfo?route_type_id={$vo.route_type_id}'><button class="layui-btn layui-btn-sm hover-details layui-btn-primary">详情</button></a></th>
+                    </tr>
+                    {/foreach}
+                    </tbody>
+
+                </table>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<div class="layui-footer">
+    <!-- 底部固定区域 -->
+    © layui.com - 底部固定区域
+</div>
+</div>
+{include file='public/foot_js' /}
+<script src='__STATIC__/javascript/system/source.js'></script>
+
+</body>
+</html>

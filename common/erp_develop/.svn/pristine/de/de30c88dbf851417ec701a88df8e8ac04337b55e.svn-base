@@ -1,0 +1,56 @@
+/*弹窗*/
+var layer = layui.layer ;
+var form = layui.form;
+var element=layui.element;
+var laydate=layui.laydate;
+var table=layui.table;
+var laytpl=layui.laytpl;
+
+
+/*日期选择*/
+$(".layui-input-date").each(function(){
+    laydate.render({
+        elem: this,
+    });
+});
+
+$(".layui-tab-url li").click(function () {
+    var list=$(this).html();
+    if(list==="基本信息"){
+        localStorage.setItem("list","基本信息");
+    }else if(list==="游客信息"){
+        localStorage.setItem("list","游客信息");
+    }else if(list==="产品"){
+        localStorage.setItem("list","产品");
+    }else if(list==="成本"){
+        localStorage.setItem("list","成本");
+    }else if(list==="应收/报价"){
+        localStorage.setItem("list","应收/报价");
+    }else if(list==="销售收款"){
+        localStorage.setItem("list","销售收款");
+    }
+
+})
+
+// $("input[name='orderGroup']").click(function(){
+//     alert(123);
+// });
+
+/*弹窗*/
+function visitorList() {
+    var gettpl = $('#visitorListTips').html();
+    laytpl(gettpl).render('0', function(html){
+        layer.confirm(html, {
+            skin:'my-skin',
+            btn: ['确定','取消'] //按钮
+            ,title:'游客选择'
+            ,btnAlign: 'c' //按钮居中
+            ,area: ['450px','380px']
+            ,shadeClose:true,
+            scrollbar: false
+        }, function(){
+            layer.msg('游客选择成功', {time:1,icon: 1});
+        });
+    });
+    form.render();
+}

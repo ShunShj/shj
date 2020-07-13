@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {include file='public/head' /}
+    <title>{$language_tag.index_nav_approvalManagement}-{$language_tag.index_nav_examineAnd_approve}</title>
+    <style>
+        .aa>tbody>tr>td{
+            border: 1px solid #ddd;
+        }
+        .bb>tbody>tr>td:first-child,.cc>tbody>tr>td:first-child {
+            border-right: 1px solid #ddd;
+        }
+        .cc{
+            border-bottom:1px solid #ddd;
+            width:100%;
+        }
+        .cc:last-child{
+            border:none;
+        }
+        .cc>tbody>tr>td:first-child{
+            width:200px;
+        }
+    </style>
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+
+    <div class="layui-header">
+        {include file='public/header' /}
+    </div>
+
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll">
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            {include file='public/left_menu' /}
+        </div>
+    </div>
+
+    <div class="layui-body">
+
+        <!-- 内容主体区域 -->
+        <div style="padding: 15px;">
+            <div class='layui-form-item'>
+		   		<span class="layui-breadcrumb">
+					<a href="#">{$language_tag.index_public_homepage}</a>
+					<a href="#">{$language_tag.index_nav_approvalManagement}</a>
+                    <a href="#">{$language_tag.index_nav_examineAnd_approve}</a>
+					<a href="#"><cite>{$language_tag.index_index_pendingMyApproval}</cite></a>
+				</span>
+            </div>
+            <br/>
+            <ul class="layui-tab-title">
+                <li class="layui-this">{$language_tag.index_index_pendingMyApproval}</li>
+                <li><a href="/examine_and_approve/iPostFinanceApprove">{$language_tag.index_index_iStartedIt}</a></li>
+                <li><a href="/examine_and_approve/financeApproveOver">{$language_tag.index_index_approved}</a></li>
+            </ul>
+            <br>
+
+              <form class="layui-form" method="get" action="/examine_and_approve/financeApproveByMe" >
+                <div class="layui-row">
+                
+                
+                    <div class="layui-col-md4">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">{$language_tag.index_examineAndApprove_financeApproveByMe_applicationTime}</label>
+                            <div class="layui-input-block">
+                                <input type="text" class='layui-input all_time_name' name="create_time" value="{$_GET['create_time']}" class="layui-input"  />
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="layui-col-md4">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">{$language_tag.index_examineAndApprove_financeApproveByMe_order_number}</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="company_order_number" value="{$_GET['company_order_number']}" class="layui-input"  />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="layui-col-md4">
+                        <div class="layui-form-item">
+                            <div class="layui-input-block">
+                                <button class="layui-btn nav-search">{$language_tag.index_public_search}</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </form>
+
+            <div class="layui-tab-content">
+                <table class="layui-table" >
+                    <thead>
+                    <tr>
+                    	<th>{$language_tag.index_examineAndApprove_financeApproveByMe_id}</th>
+                        <th>团队产品ID</th>
+                        <th>明细</th>
+                        <th>{$language_tag.index_public_type}</th>
+						<th>发起人</th>
+                        <th>{$language_tag.index_source_operation}</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {foreach name='result' item='v'}
+                    <tr>
+                    	<td>{$v.statement_approve_id}</td>
+                        <td>{$v.team_product_id}</td>
+                        <td>
+							 <button data-method="offset" data-type="auto" type='{$v.type}' team_product_id='{$v.team_product_id}'   class="layui-btn layui-btn-normal ckmx">查看</button>
+                        </td>
+                        <td>{$v.fee_type_name}
+                        	{if condition='$v.type eq 1'}
+                        	
+                        		应收供应商
+                        	{elseif condition='$v.type eq 2'}	
+                        		应收分公司
+                        	{elseif condition='$v.type eq 3'}	
+                        		应收直客/代理
+                        	{elseif condition='$v.type eq 4'}	
+                        		应付供应商
+                        	{elseif condition='$v.type eq 5'}	
+                        		应付分公司
+                        	{/if}
+                        </td>
+						<td>{$v.create_user_name}</td>
+                        <td>
+                            <span style="{:action('index/auth/check_auth',['role_id'=>'303'])}"><a class="layui-btn layui-btn-sm layui-btn-primary tongguo" data-info="{$v.statement_approve_id}" >{$language_tag.index_branchcompany_showCompanyOrderManage_adopt}</a></span>
+                            <span style="{:action('index/auth/check_auth',['role_id'=>'304'])}"><a class="layui-btn layui-btn-sm layui-btn-primary butongguo" data-info="{$v.statement_approve_id}" >{$language_tag.index_examineAndApprove_toBeApprovedByMe_no_pass}</a></span>
+                        </td>
+                    </tr>
+                    {/foreach}
+                    </tbody>
+
+                </table>
+            </div>
+
+
+    </div>
+<div class="layui-layer layui-layer-page" id="layui-layer3" type="page" times="1" showtime="0" contype="string" style="z-index: 19891015; width: 800px; height:600px;top: 100.5px; left: 368px;display:none;overflow:auto">
+	<div class="layui-layer-title" style="cursor: move;">信息</div>
+	<div id="layerDemoauto1" class="layui-layer-content">
+		
+	</div>
+	<div id="layerDemoauto2" class="layui-layer-content">
+		
+	</div>
+	<span class="layui-layer-setwin">
+		<a class="layui-layer-ico layui-layer-close layui-layer-close1" href="javascript:;"></a>
+	</span>
+
+	<span class="layui-layer-resize"></span>
+</div>
+    <div class="layui-footer">
+        <!-- 底部固定区域 -->
+        © layui.com - 底部固定区域
+    </div>
+</div>
+{include file='public/foot_js' /}
+<script src='__STATIC__/javascript/system/language.js'></script>
+
+
+    <script id="T-shengpi" type="text/html">
+        <form id="F-shengpi" >
+            <div style="margin-left: 20px;font-size: 18px;font-weight: bold">{$language_tag.index_examineAndApprove_iChecked_approval_opinion}</div>
+            <div style="padding: 10px" >
+                <textarea class="layui-textarea approval_opinion" name="approval_opinion"></textarea>
+            </div>
+            <div style="text-align: center;margin-bottom: 10px">
+                <a class="layui-btn layui-btn-primary cancel">{$language_tag.index_public_cancel}</a>&nbsp;&nbsp;&nbsp; <a class="layui-btn layui-btn-normal confirm">{$language_tag.index_public_ok}</a>
+            </div>
+        </form>
+    </script>
+
+
+<script>
+    !function() {
+        var layer = layui.layer;
+        var form = layui.form;
+        var laydate = layui.laydate;
+        var table = layui.table;
+        var laytpl = layui.laytpl;
+     
+        laydate.render({
+            elem: '.all_time_name'
+            ,lang: 'zn'
+        });
+        $('.tongguo').on('click',function(){
+        	console.log(1)
+            statement_approve_id = $(this).data('info');
+            $('.approval_opinion').val('');
+            var h = $('#T-shengpi').html();
+            layer.open({
+                title: "{$language_tag.index_examineAndApprove_financeApproveByMe_approved}"
+                ,type: 1
+                ,content: h
+                ,area:['30%','250px']
+            });
+
+            //取消
+            $('.cancel').on('click',function(){
+                layer.closeAll();
+            });
+
+            //确认
+            $('.confirm').on('click',function(){
+                layer.load(2);
+        		$.ajax({
+        			  type: "POST",
+        			  url: "/product/postStatementApproveAjax",
+        			  data: {
+        				  statement_approve_id:statement_approve_id,
+        				  approve_result:1,
+        				  approve_opinion:$('.approval_opinion').val()
+
+        			  },
+        			  success: function(data){
+                          if(data.code==400){
+                              layer.msg('{$language_tag.index_public_verificationFailure}');
+                              layer.closeAll();
+                              location.reload();
+                          }else{
+                              layer.msg('{$language_tag.index_public_success}',{time:1});
+                              layer.closeAll();
+                              location.reload();
+                          }
+        			  },
+        			  error:function(XMLHttpRequest, textStatus, errorThrown){
+        			      layer.msg('{$language_tag.index_public_verificationFailure}')
+        			  }
+        			});
+                
+                
+
+            });
+
+        });
+
+       
+
+        $('.butongguo').on('click',function(){
+        	statement_approve_id = $(this).data('info');
+        	
+        	
+     
+            $('.approval_opinion').val('');
+            var h = $('#T-shengpi').html();
+            layer.open({
+                title: "{$language_tag.index_examineAndApprove_financeApproveByMe_failApproved}"
+                ,type: 1
+                ,content: h
+                ,area:['30%','250px']
+            });
+
+            //取消
+            $('.cancel').on('click',function(){
+                layer.closeAll();
+            });
+
+            //确认
+            $('.confirm').on('click',function(){
+                layer.load(2);
+        		$.ajax({
+      			  type: "POST",
+      			  url: "/product/postStatementApproveAjax",
+      			  data: {
+      				  statement_approve_id:statement_approve_id,
+      				  approve_result:2,
+      				  approve_opinion:$('.approval_opinion').val()
+
+      			  },
+      			  success: function(data){
+                        if(data.code==400){
+                            layer.msg('{$language_tag.index_public_verificationFailure}');
+                        }else{
+                            layer.msg('{$language_tag.index_public_success}',{time:1});
+                            layer.closeAll();
+                            location.reload();
+                        }
+      			  },
+      			  error:function(XMLHttpRequest, textStatus, errorThrown){
+      			      layer.msg('{$language_tag.index_public_verificationFailure}')
+      			  }
+      			});
+            });
+
+        });
+
+
+        $('.ckmx').click(function(){
+        	var type = $(this).attr('type')
+        	var team_product_id = $(this).attr('team_product_id')
+        	$('#layui-layer3').show(500)
+        	//假设等于1 那么就是获取应收供应商
+        	if(type==1){
+        		$.ajax({ //获取审批前的数据
+        			  type: "POST",
+        			  url: "/product/getTeamProductReceivableSupplierAjax",
+        			  data: {
+        				  team_product_id:team_product_id,
+        	
+
+        			  },
+        			  success: function(data){
+                          if(data.code==400){
+                              layer.msg('{$language_tag.index_public_verificationFailure}');
+                          }else{
+							var data = eval(data)
+							var html="审批前";
+							 html+="<table class='layui-table'>"+
+							"<thead>"+
+                            "<tr style='text-align: center'>"+
+                                "<td  width='14%'>类型</td>"+
+                                "<td  width='15%'>供应商</td>"+
+                                "<td width='10%'>应收编号</td>"+
+                                "<td width='10%'>名称</td>"+
+                             
+                                "<td width='10%'>单价</td>"+
+                                "<td width='10%'>数量</td>"+
+                                "<td width='10%'>总价</td>"+
+                            "</tr>"+
+                            "</thead>"+
+                            "<tbody id='tb'>";
+							$.each(data.data,function(i,val){
+								var supplier_type_name = getSupplierName(val.source_type_id)
+								
+								
+								
+								html+= "<tr style='text-align: center'>"+               
+								"<td class='layui-form type'>"+supplier_type_name+"</td>"+
+                                "<td class='layui-form supplier'>"+val.supplier_name+"</td>"+
+                                
+                                "<td>"+val.receivable_number+"</td>"+
+                                "<td>"+val.product_name+"</td>"+
+                             
+                                "<td>"+val.price+val.currency_unit+"</td>"+
+                                "<td>"+val.unit+"</td>"+
+                                "<td>"+val.receivable_money+val.currency_unit+"</td>"+
+           
+
+                            	"</tr>";
+								
+								
+							})
+			                 html+="</tbody>"+
+		                        "</table>"
+		                     $('#layerDemoauto1').html(html)   
+                          }
+        			  },
+        			  error:function(XMLHttpRequest, textStatus, errorThrown){
+        			      layer.msg('{$language_tag.index_public_verificationFailure}')
+        			  }
+        			});
+        		
+        		$.ajax({ //获取审批后的数据
+      			  type: "POST",
+      			  url: "/product/getStatementApproveAjax",
+      			  data: {
+      				  team_product_id:team_product_id,
+      				  type:1
+
+      			  },
+      			  success: function(data){
+      			
+                        if(data.code==400){
+                            layer.msg('{$language_tag.index_public_verificationFailure}');
+                        }else{
+							var data = eval(data)
+							console.log(data)
+							var html="审批后";
+							 html+="<table class='layui-table'>"+
+							"<thead>"+
+                          "<tr style='text-align: center'>"+
+                              "<td  width='14%'>类型</td>"+
+                              "<td  width='15%'>供应商</td>"+
+                              "<td width='10%'>应收编号</td>"+
+                              "<td width='10%'>名称</td>"+
+                            
+                              "<td width='10%'>单价</td>"+
+                              "<td width='10%'>数量</td>"+
+                              "<td width='10%'>总价</td>"+
+                          "</tr>"+
+                          "</thead>"+
+                          "<tbody id='tb'>";
+							$.each(data,function(i,val){
+								var supplier_type_name = getSupplierName(val.source_type_id)
+								if (typeof(val.receivable_number) == "undefined"){ 
+									val.receivable_number=''
+									}
+								html+= "<tr style='text-align: center'>"+               
+								"<td class='layui-form type'>"+supplier_type_name+"</td>"+
+                                "<td class='layui-form supplier'>"+val.supplier_name+"</td>"+
+                              
+                               "<td>"+val.receivable_number+"</td>"+
+                               "<td>"+val.product_name+"</td>"+
+                         
+                               "<td>"+val.price+val.currency_unit+"</td>"+
+                               "<td>"+val.unit+"</td>"+
+                               "<td>"+val.receivable_money+val.currency_unit+"</td>"+
+         
+
+                          	"</tr>";
+								
+								
+							})
+			                 html+="</tbody>"+
+		                        "</table>"
+		                     $('#layerDemoauto2').html(html)   
+                        }
+      			  },
+      			  error:function(XMLHttpRequest, textStatus, errorThrown){
+      			      layer.msg('{$language_tag.index_public_verificationFailure}')
+      			  }
+      			});
+        		
+    
+        	}
+        })
+
+        
+        $('.layui-layer-close1').click(function(){
+        	$('#layui-layer3').hide()
+        	
+        	
+        })
+    }();
+
+
+
+
+
+</script>
+
+</body>
+</html>

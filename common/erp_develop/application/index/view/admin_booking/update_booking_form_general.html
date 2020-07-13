@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<head>
+    {include file='public/head' /}
+    <title>layout 后台大布局 - Layui</title>
+
+    <link href="/static/css/select2.min.css" rel="stylesheet">
+
+
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+    <div class="layui-header">
+        {include file='public/header' /}
+    </div>
+
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll">
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            {include file='public/left_menu_booknexus' /}
+        </div>
+    </div>
+
+    <div class="layui-body">
+
+        <!-- 内容主体区域 -->
+        <div style="padding: 15px 15px 0px;">
+            <div class='layui-row'>
+		   		<span class="layui-breadcrumb" lay-separator="-">
+                    <a>首页</a>
+                    <a>B2B</a>
+					<a>编辑订单</a>
+				</span>
+            </div>
+            <br>
+            {include file='admin_booking/menu' /}
+            <form class="layui-form" id="form1" onSubmit="return add()">
+                <div class="layui-row layui-col-space8" style="padding: 10px">
+
+                    <div class="layui-col-md8">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label ">订单编号<br>booking id:</label>
+                            <div class="layui-input-block layui-form">
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-col-md8">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label ">行程单编号<br>voucher no:</label>
+                            <div class="layui-input-block layui-form">
+                                <input type="text" class="layui-input" name="">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-col-md8">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label ">代理商<br>agent:</label>
+                            <div class="layui-input-block layui-form">
+                                <select class="layui-select" name="">
+                                    <option></option>
+                                    {foreach $all_agent as $kk=>$vv}
+                                    <option value="{$vv.distributor_id}">{$vv.distributor_name} {$vv.distributor_name_chinese}</option>
+                                    {/foreach}
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-col-md8">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label ">代理商Id<br>agent reference id:</label>
+                            <div class="layui-input-block layui-form">
+                                 <input type="text" class="layui-input" name="">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-col-md8">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label ">代售产品编号<br>tour code:</label>
+                            <div class="layui-input-block layui-form">
+                                <input type="text" class="layui-input" name="">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-col-md8">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label ">产品名<br>tour name:</label>
+                            <div class="layui-input-block layui-form">
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-col-md8">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label ">出团日期<br>tour date:</label>
+                            <div class="layui-input-block layui-form">
+                                <input type="text" class="layui-input time" name="">
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="layui-col-md8">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label ">upload tour voucher（后台配置）:</label>
+                            <div class="layui-input-block layui-form">
+                                <input class="layui-input"  id="tour_voucher" name="" style="width: 400px;float: left" value="{$Think.session.createTourForm.en_pdf_flyer}">
+                                <button type="button" class="layui-btn" id="bt_tour_voucher"><i class="layui-icon"></i>上传文件</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="layui-col-md8">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label ">语言<br>language:</label>
+                            <div class="layui-input-block layui-form">
+                                <select class="layui-select" name="">
+                                    <option></option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-col-md8">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label ">Bus No:</label>
+                            <div class="layui-input-block layui-form">
+                                <input type="text" class="layui-input time" name="">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-col-md8">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label ">seat group:</label>
+                            <div class="layui-input-block layui-form">
+                                <input type="text" class="layui-input time" name="">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-col-md8">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label ">代理商联系人<br>Emergency Name:</label>
+                            <div class="layui-input-block layui-form">
+                                <input type="text" class="layui-input time" name="">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-col-md8">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label ">代理商联系电话<br>Emergency Phone:</label>
+                            <div class="layui-input-block layui-form">
+                                <input type="text" class="layui-input time" name="">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-col-md8">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label ">代理商邮箱<br>Emergency Email:</label>
+                            <div class="layui-input-block layui-form">
+                                <input type="text" class="layui-input time" name="">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="layui-col-md8">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label ">游客联系人<br>Lead Pax Mobile:</label>
+                            <div class="layui-input-block layui-form">
+                                <input type="text" class="layui-input time" name="">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-col-md8">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label ">Tour Guide</label>
+                            <div class="layui-input-block layui-form">
+                                <input type="text" class="layui-input time" name="">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-col-md8">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label ">Tour Contact</label>
+                            <div class="layui-input-block layui-form">
+                                <input type="text" class="layui-input time" name="">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-col-md8">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label ">Is Pre Paid Tip And Compulsory Program</label>
+                            <div class="layui-input-block layui-form">
+                                <select class="layui-select" name="">
+                                    <option value="1">Yes</option>
+                                    <option value="2">No</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-col-md8">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label ">特殊要求<br>SPECIAL REQUESTS (Display on tour vouchers)</label>
+                            <div class="layui-input-block layui-form">
+                                <textarea class="layui-textarea" name=""></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="layui-col-md8">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label ">处理状态<br>Office Status</label>
+                            <div class="layui-input-block layui-form">
+                                <select class="layui-select" name="">
+                                   <option></option>
+                                    {foreach $b2bOfficeStatus as $kt=>$vt}
+                                    <option value="{$kt}">{$vt}</option>
+                                    {/foreach}
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-col-md8">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label ">订单状态<br>Booking Status</label>
+                            <div class="layui-input-block layui-form">
+                                <select class="layui-select" name="">
+                                    <option></option>
+                                    {foreach $b2bBookingStatus as $kt=>$vt}
+                                    <option value="{$kt}">{$vt}</option>
+                                    {/foreach}
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-col-md8">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label ">付款状态<br>Payment Status</label>
+                            <div class="layui-input-block layui-form">
+                                <select class="layui-select" name="">
+                                    <option></option>
+                                    {foreach $b2bPayment as $kt=>$vt}
+                                    <option value="{$kt}">{$vt}</option>
+                                    {/foreach}
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="layui-col-md8">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label ">创建时间<br>Created At</label>
+                            <div class="layui-input-block layui-form">
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-col-md8">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label ">最后更新时间<br>Updated At</label>
+                            <div class="layui-input-block layui-form">
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-col-md8">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label ">创建人<br>Created Consultant</label>
+                            <div class="layui-input-block layui-form">
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-col-md8">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label ">备注<br>Remark (For internal use only)</label>
+                            <div class="layui-input-block layui-form">
+                                <textarea class="layui-textarea" name=""></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="layui-col-md8" style="font-weight: bold;font-size:14px;text-align: center">
+                        <button type="submit" class="layui-btn layui-btn-sm layui-btn-primary" >Update</button>
+                    </div>
+
+                    <!--input-required-->
+                </div>
+            </form>
+
+        </div>
+    </div>
+
+    <div class="layui-footer">
+        <!-- 底部固定区域 -->
+        © layui.com - 底部固定区域
+    </div>
+</div>
+{include file='public/foot_js' /}
+<script src='__STATIC__/javascript/public/select2.min.js'></script>
+<script>
+    //JavaScript代码区域
+    var layer = layui.layer;
+    var form = layui.form;
+    $('#form1').find('.select2').select2({width:'100%'});
+
+    var upload = layui.upload;
+    upload.render({
+        elem: '#pdf_flyer',
+        url:'/upload/uploadFileAll',
+        accept:'file',
+        size:20480,
+        before: function(obj){ //obj参数包含的信息，跟 choose回调完全一致，可参见上文。
+            layer.load(); //上传loading
+        },
+        done: function(res, index, upload){
+            layer.closeAll('loading'); //关闭loading
+            console.log(res);
+            if(res.code == 200){
+                //do something （比如将res返回的图片链接保存到表单的隐藏域）
+                $('#pdf_flyer_input').val(res.data);
+                layer.closeAll('loading'); //关闭loading
+            }
+        },error: function(index, upload){
+            layer.closeAll('loading'); //关闭loading
+        }
+    });
+
+
+
+
+
+    function add(){
+        $.ajax({
+            type: "POST",
+            url: '/booknexus_tour/createTourFormAjax',
+            data:  $('#form1').serializeArray(),
+            success: function(data){
+                //console.log(data);
+                if(data.code!=200){
+                    layer.msg(data.msg);
+                    return false;
+                }else if(data.code==200) {
+                    layer.msg('操作成功',{time:2000,end : function(layero, index){
+                        location.href="/booknexus_tour/addTourDatesForm";
+                    }
+                    });
+                }
+            },
+            error:function(XMLHttpRequest, textStatus, errorThrown){
+                layer.msg('验证失败')
+            }
+        });
+        return false;
+    }
+
+
+
+</script>
+
+</body>
+</html>

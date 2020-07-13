@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {include file='public/head' /}
+    <title>代理管理</title>
+
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+    <div class="layui-header">
+        {include file='public/header' /}
+    </div>
+
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll">
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            {include file='public/left_menu_booknexus' /}
+        </div>
+    </div>
+
+    <div class="layui-body layui-body-bg">
+
+        <!-- 内容主体区域 -->
+        <div style="padding: 15px;">
+            <div class="body-top">
+                <div class='layui-form-item'>
+                    <span class="layui-breadcrumb" lay-separator="-">
+                        <a>{$language_tag.index_public_homepage}</a>
+                        <a>B2B</a>
+                        <a><cite>{$language_tag.index_branchcompany_showDistributorManage_channelManagement}</cite></a>
+                    </span>
+                </div>
+                <div class='layui-block all-search-bg'>
+                    <form  action="/distributor/showDistributorManage" method="get" >
+                        <div class='layui-input-inline'>
+                            <div class="layui-form">
+                                <select name="status" lay-verify="required">
+                                    <option value="2" {if condition="$Think.get.status eq 2"}selected='selected' {/if}>-{$language_tag.index_source_showCruisesManage_search_status}-</option>
+                                    <option value="1" {if condition="$Think.get.status eq 1"}selected='selected' {/if}>{$language_tag.index_public_show}</option>
+                                    <option value="0" {if condition="$Think.get.status eq 0"}selected='selected' {/if}>{$language_tag.index_public_disabled}</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class='layui-input-inline'>
+                            <div class="layui-form">
+                                <select name="distributor_type" lay-verify="required">
+                                    <option value="0">代理类型</option>
+                                    {foreach name='result'  item='vo'}
+                                    <option value="{$vo.distributor_type_id}" {if condition="$vo.distributor_type_id eq $Think.get.distributor_type"}selected='selected'{/if}>{$vo.distributor_type_name}</option>
+                                    {/foreach}
+                                </select>
+                            </div>
+                        </div>
+                        <div class='layui-input-inline'>
+                            <input type="text" name="distributor_name" value="{$Think.get.distributor_name}" lay-verify="" placeholder="代理名称" autocomplete="off" class="layui-input">
+                        </div>
+
+                        <div class='layui-button-inline layui-search-inline'>
+                            <button class="layui-btn nav-search">{$language_tag.index_public_search}</button>
+                        </div>
+
+                    </form>
+                    <!--<div class='layui-button-inline'>
+                        <a href='/branchcompany/showDistributorAdd'><button class="layui-btn nav-add">添加渠道商</button></a>
+                    </div>-->
+                </div>
+            </div>
+
+            <div class="content-bg">
+                <span><a href='/distributor/showDistributorAdd'><button class="layui-btn nav-add layui-btn-sm">{$language_tag.index_branchcompany_showDistributorManage_addChannel}</button></a></span>
+                <hr>
+                <div class="table-nont user-manage company-pageHeight">
+                    <table class="layui-table layui-form" id="language-table">
+                        <thead>
+                        <tr>
+                            <th>{$language_tag.index_branchcompany_showDistributorManage_id}</th>
+                            <th>{$language_tag.index_branchcompany_showDistributorManage_channelName}</th>
+                            <th>代理商编号</th>
+                            <th>代理商类别</th>
+                            <th>{$language_tag.index_public_status}</th>
+                            <th>账户</th>
+                            <th>{$language_tag.index_branchcompany_showDistributorManage_operationUser}</th>
+                            <th class="layui-table-width">{$language_tag.index_source_operation}</th>
+                        </tr>
+                        </thead>
+
+                        {foreach name='data' item='vo'}
+                        <tr>
+                            <th class="distributor_id">{$vo.distributor_id}</th>
+                            <th>{$vo.distributor_name}</th>
+                            <th>{$vo.distributor_code}</th>
+                            <th>{$vo.distributor_type_name}</th>
+                            <th>
+                                {if condition="in_array('256',$auth_id) OR $Think.session.user.role_id eq 1"}<input type="checkbox" {if condition="$vo.status eq 1"}checked=""{else/}{/if} name="open" lay-skin="switch" lay-filter="switchTest" lay-text="{$language_tag.index_public_show}|{$language_tag.index_public_disabled}">{else/}{if condition="$vo.status eq 1"}{$language_tag.index_public_show}{else}{$language_tag.index_public_disabled}{/if}{/if}
+                            </th>
+                            <th>{$vo.update_user_name}</th>
+                            <th>{$vo.nickname}</th>
+                            <th>
+                                <span><a href='/distributor/showDistributorEdit?id={$vo.distributor_id}'><button class="layui-btn layui-btn-sm hover-edit layui-btn-primary">{$language_tag.index_public_update}</button></a></span>
+                                <span><a href='/distributor/showDistributorInfo?id={$vo.distributor_id}'><button class="layui-btn layui-btn-sm hover-details layui-btn-primary">{$language_tag.index_public_info}</button></a></span>
+                           		<span><a href='/distributor/showDistributorTemplateManage?id={$vo.distributor_id}'><button class="layui-btn layui-btn-sm hover-details layui-btn-primary">{$language_tag.index_branchcompany_showDistributorManage_bill}</button></a></span>
+                            </th>
+                        </tr>
+                        {/foreach}
+                     
+                        </tbody>
+
+                    </table>
+                </div>
+                <div class="listButtom">
+                    {include file='public/page' /}
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+
+    <div class="layui-footer">
+        <!-- 底部固定区域 -->
+        © layui.com - 底部固定区域
+    </div>
+</div>
+{include file='public/foot_js' /}
+<script>
+    var layer = layui.layer;
+
+    var form = layui.form;
+    form.on('switch(switchTest)', function(data){
+        var table_id = $(data.elem).parents("tr").children(".distributor_id").html();
+        var table_id_name = "distributor_id";
+        var table_name = "distributor";
+        if(this.checked == true){
+            var status = 1;
+        }else{
+            var status = 0;
+        }
+
+        $.ajax({
+            type: "POST",
+            url: '/index/changeStatus',
+            data: {
+                table_id:table_id,
+                table_id_name:table_id_name,
+                table_name:table_name,
+                status:status,
+            },
+            success: function(data){
+                //console.log(data);
+                if(data.code!=200){
+                    layer.msg(data.msg);
+                    return false;
+                }else if(data.code==200) {
+                    layer.msg('操作成功',{time:1,end : function(layero, index){
+
+                        }
+                    });
+                }
+            },
+            error:function(XMLHttpRequest, textStatus, errorThrown){
+                layer.msg('验证失败')
+            }
+        });
+    });
+
+
+</script>
+</body>
+</html>
+
+<script>
+
+
+</script>

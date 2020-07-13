@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {include file='public/head' /}
+    <title>language-manage-add</title>
+
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+
+    <div class="layui-header">
+        {include file='public/header' /}
+    </div>
+
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll">
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            {include file='public/left_menu' /}
+        </div>
+    </div>
+
+    <div class="layui-body">
+
+        <!-- 内容主体区域 -->
+        <div style="padding: 15px;">
+            <div class='layui-form-item'>
+		   		<span class="layui-breadcrumb" lay-separator="-">
+                    <a>{$language_tag.index_public_homepage}</a>
+					<a>{$language_tag.index_source_showSupplierManage_supplier_administrate}</a>
+					<a>{$language_tag.index_source_showAgentManage_manage_agent}</a>
+					<a><cite>{$language_tag.index_source_showAgentInfo_info_agent}</cite></a>
+				</span>
+            </div>
+            <br/>
+            <br/>
+            <form class="layui-form all-detail" onSubmit="">
+                <div class="layui-row layui-col-space10">
+                    <div class="layui-col-md4">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">{$language_tag.index_source_showSupplierManage_supplier_type}:</label>
+                            <div class="layui-input-block all-select">{$language_tag.index_source_agent}</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-row layui-col-space10">
+                    <div class="layui-col-md4">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">{$language_tag.index_source_showSupplierManage_supplier_name}:</label>
+                            <div class="layui-input-block">
+                                <th>{$MultilingualAll['supplier-supplier_name-'.$data.supplier_id.'-'.$Think.session.user.language_id][0]['translate']|default=$data.supplier_name}</th>
+                                <i class="iconfont icon-fanyifuwu"
+                                   style="width: 38px;height: 38px;font-size:30px;cursor:pointer;vertical-align: middle;"onclick="MultilingualSetting('edit_supplier_name','supplier','supplier_name',{$_GET['supplier_id']})"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-row layui-col-space10">
+                    <div class="layui-col-md4">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">{$language_tag.index_public_status}:</label>
+                            <div class="layui-input-block all-select">
+                                <select name="status" id='info_supplier_status' disabled lay-verify="required">
+                                    <option> </option>
+                                    <option value="1" {if condition="1 eq $data['status']"}selected="seleted"{/if}>{$language_tag.index_public_show}</option>
+                                    <option value="2" {if condition="2 eq $data['status']"}selected="seleted"{/if}>{$language_tag.index_public_disabled}</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-row layui-col-space10">
+                    <div class="layui-row layui-col-space10">
+                        <div class="layui-col-md4">
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">{$language_tag.index_source_showSupplier_country}:</label>
+                                <div class="layui-input-block all-select">
+                                    {$MultilingualAll['country-country_name-'.$data.country_id.'-'.$Think.session.user.language_id][0]['translate']|default=$country_s1_result.country_name}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-row layui-col-space10">
+                    <div class="layui-col-md4">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">{$language_tag.index_source_showSupplier_own_city}:</label>
+                            <div class="layui-input-block all-select">
+                                {$MultilingualAll['country-country_name-'.$data.province_id.'-'.$Think.session.user.language_id][0]['translate']|default=$country_s2_result.country_name}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-row layui-col-space10">
+                    <div class="layui-col-md4">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">{$language_tag.index_source_showSupplier_own_zone}:</label>
+                            <div class="layui-input-block all-select">
+                                {$MultilingualAll['country-country_name-'.$data.city_id.'-'.$Think.session.user.language_id][0]['translate']|default=$country_s3_result.country_name}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-row layui-col-space10">
+                    <div class="layui-col-md4">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">{$language_tag.index_source_showSupplier_level}:</label>
+                            <div class="layui-input-block">
+                                {$data.level_name}
+                                <i class="iconfont icon-fanyifuwu" style="width: 38px;height: 38px;font-size:30px;cursor:pointer;vertical-align: middle;"onclick="MultilingualSetting('edit_supplier_level_name','supplier','level_name',{$_GET['supplier_id']})"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-row layui-col-space10">
+                    <div class="layui-col-md4">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">{$language_tag.index_source_showSupplier_linkman}:</label>
+                            <div class="layui-input-block">
+                                {$data.linkman}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-row layui-col-space10">
+                    <div class="layui-col-md4">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">{$language_tag.index_source_showSupplier_address}:</label>
+                            <div class="layui-input-block">
+                                {$data.address}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-row layui-col-space10">
+                    <div class="layui-row layui-col-space10">
+                        <div class="layui-col-md4">
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">{$language_tag.index_source_showSupplier_phone}:</label>
+                                <div class="layui-input-block">
+                                    {$data.phone}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-row layui-col-space10">
+                    <div class="layui-col-md4">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">{$language_tag.index_source_showSupplier_email}:</label>
+                            <div class="layui-input-block">
+                                {$data.email}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-row layui-col-space10">
+                    <div class="layui-row layui-col-space10">
+                        <div class="layui-col-md4">
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">{$language_tag.index_source_showSupplier_website}:</label>
+                                <div class="layui-input-block">
+                                    {$data.website}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-row layui-col-space10">
+                    <div class="layui-col-md4">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">{$language_tag.index_source_showSupplier_zip_code}:</label>
+                            <div class="layui-input-block">
+                                {$data.zip_code}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-row layui-col-space10">
+                    <div class="layui-col-md4">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">{$language_tag.index_source_showSupplier_fax}:</label>
+                            <div class="layui-input-block">
+                                {$data.fax}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-row layui-col-space10">
+                    <div class="layui-col-md4">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">{$language_tag.index_public_company}:</label>
+                            <div class="layui-input-block">
+                                <th>{$MultilingualAll['company-company_name-'.$data.company_id.'-'.$Think.session.user.language_id][0]['translate']|default=$data.company_name}</th>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <br/>
+                <div class="layui-row layui-col-space10">
+                    <div class="layui-col-md4">
+                        <div class="layui-form-item">
+                            <div class="layui-input-block all-button-center">
+                                <a href='javascript:history.back(-1)'><button type="button" class="layui-btn layui-btn-primary">{$language_tag.index_public_back}</button></a>
+                                <input type="hidden" id="supplier_id_hidden" value="{$data.supplier_id}">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </form>
+        </div>
+    </div>
+
+    <div class="layui-footer">
+        <!-- 底部固定区域 -->
+        © layui.com - 底部固定区域
+    </div>
+</div>
+{include file='public/foot_js' /}
+<script src='__STATIC__/javascript/system/source.js'></script>
+</body>
+</html>

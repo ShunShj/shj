@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {include file='public/head' /}
+    <title>{$supplierName}景点资源编辑</title>
+
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+
+    <div class="layui-header">
+        {include file='public/header' /}
+    </div>
+
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll">
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            {include file='public/left_menu' /}
+        </div>
+    </div>
+
+    <div class="layui-body">
+
+        <!-- 内容主体区域 -->
+        <div style="padding: 15px;">
+            <div class='layui-form-item'>
+		   		<span class="layui-breadcrumb" lay-separator="-">
+					<a>{$language_tag.index_public_homepage}</a>
+                    <a>{$language_tag.index_source_showSupplierManage_supplier_administrate}</a>
+                    <a>{$language_tag.index_source_showScenicSpotManage_scenicspot_administrate}</a>
+                    <a>{$language_tag.index_source_showScenicSpotSourceManage_all_source}</a>
+                    <a><cite>{$language_tag.index_public_language}</cite></a>
+				</span>
+            </div>
+            <br/>
+            <br/>
+            <div class="layui-row">
+                <form class="layui-form layui-col-md4" id="form1" onSubmit="return edit_language()">
+                    {volist name='language_result' id='v'}
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">{$v.language_name}{$language_tag.index_source_showScenicSpotSourceManage_scenicspot_name}:</label>
+                        <div class="layui-input-block layui-form" >
+                            <input  class="layui-input edit_language" name="country_code" scenic_spot_language_id='{$v.language_info.scenic_spot_language_id}'  lang_id='{$v.language_id}' placeholder="{$language_tag.index_source_showFlightSourceManage_input_name}" autocomplete="off"  type="text" value="{$v.language_info.scenic_spot_name}">
+
+                        </div>
+                    </div>
+                    {/volist}
+                    <br>
+                    <input type='hidden' value="{$Think.get.source_number}" id='source_number' />
+                    <div class="layui-form-item">
+                        <div class="layui-input-block">
+                            <button class="layui-btn nav-submit" lay-submit="" lay-filter="formDemo" id="language_add_button">{$language_tag.index_public_submit}</button>
+                            <a href="javascript:history.back(-1)"><button type="button" class="layui-btn layui-btn-primary">{$language_tag.index_public_back}</button></a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="layui-footer">
+        <!-- 底部固定区域 -->
+        © layui.com - 底部固定区域
+    </div>
+</div>
+{include file='public/foot_js' /}
+
+
+<script>
+    $(function(){
+        var layer = layui.layer  ,form = layui.form;
+        //选择国家更新城市
+        form.on('select(nation)',function(data){
+            var cid = data.value;
+            $.ajax({
+                type: "POST",
+                url: '/source/getCityAjax',
+                data: {
+                    'cid': cid,
+                },
+                'dataType':'json',
+                success: function (a) {
+//                    console.log(a);
+                    var data = a.data;
+                    console.log(data);
+                    $('#country_id').html('');
+                    var h = "<option ></option>";
+                    for(i in data){
+                        h += "<option value='"+data[i]['country_id']+"'>"+data[i]['country_name']+"</option>";
+                    }
+                    $('#country_id').html(h);
+                    form.render();
+
+                },
+                error:function(XMLHttpRequest, textStatus, errorThrown){
+                    //console.log(errorThrown)
+                    layer.msg('验证失败')
+
+                }
+            });
+        });
+
+
+    });
+
+    function edit() {
+        $.ajax({
+            type: "POST",
+            url: '/source/editScenicSpotSourceAjax?id={$_GET["id"]}',
+            data: $('#form1').serializeArray(),
+            success: function (data) {
+                if(data.code!=200){
+                    layer.msg(data.msg)
+                    return false;
+                }else if(data.code==200){
+                    layer.msg('操作成功',{time:1,end : function(layero, index){
+                        history.back(-1);
+                    }
+                    });
+                }
+            },
+            error:function(XMLHttpRequest, textStatus, errorThrown){
+                //console.log(errorThrown)
+                layer.msg('验证失败');
+            }
+        });
+        return false;
+    }	
+//修改多语言
+function edit_language(){
+	//获取有几个input框
+	var l = $('.edit_language').length;
+	var c = $('.edit_language');
+	var data2 = [];
+
+	for(var i =0;i<l;i++){
+	
+		var data_params = {"lang_id":c.eq(i).attr('lang_id'),"scenic_spot_language_id":c.eq(i).attr('scenic_spot_language_id'),"source_number": $('#source_number').val(),"scenic_spot_name":c.eq(i).val()}
+
+		data2.push(data_params);
+		
+	}
+
+
+    $.ajax({
+        type: "POST",
+        url: '/source/scenicSpotEditLanguageAjax',
+
+        datatype: 'json',
+        contentType: 'application/json;charset=utf-8',
+        //data:JSON.stringify(data2)
+        data:JSON.stringify(data2)       
+        , 
+
+        success: function (data) {
+            // console.log(data);
+            if(data.code!=200){
+                layer.msg(data.msg);
+                return false;
+            }else if(data.code==200) {
+                layer.msg('操作成功',{time:1,end : function(layero, index){
+                        location.href='/source/showScenicSpotSourceManage';
+                    }
+                });
+            }
+        },
+        error: function (XMLHttpRequest, textStatus, errorThrown) {
+            layer.msg('验证失败')
+        }
+    });
+	
+	
+	
+	return false;	
+	
+
+	
+}
+	
+</script>
+
+</body>
+</html>

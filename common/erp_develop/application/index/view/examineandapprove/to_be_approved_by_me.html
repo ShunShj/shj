@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {include file='public/head' /}
+    <title>{$language_tag.index_nav_approvalManagement}-{$language_tag.index_nav_examineAnd_approve}</title>
+    <style>
+        .aa>tbody>tr>td{
+            border: 1px solid #ddd;
+        }
+        .bb>tbody>tr>td:first-child,.cc>tbody>tr>td:first-child {
+            border-right: 1px solid #ddd;
+        }
+        .cc{
+            border-bottom:1px solid #ddd;
+            width:100%;
+        }
+        .cc:last-child{
+            border:none;
+        }
+        .cc>tbody>tr>td:first-child{
+            width:200px;
+        }
+    </style>
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+
+    <div class="layui-header">
+        {include file='public/header' /}
+    </div>
+
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll">
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            {include file='public/left_menu' /}
+        </div>
+    </div>
+
+    <div class="layui-body">
+
+        <!-- 内容主体区域 -->
+        <div style="padding: 15px;">
+            <div class='layui-form-item'>
+		   		<span class="layui-breadcrumb">
+					<a href="#">{$language_tag.index_public_homepage}</a>
+					<a href="#">{$language_tag.index_nav_approvalManagement}</a>
+                    <a href="#">{$language_tag.index_nav_examineAnd_approve}</a>
+					<a href="#"><cite>{$language_tag.index_index_pendingMyApproval}</cite></a>
+				</span>
+            </div>
+            <br/>
+            <ul class="layui-tab-title">
+                <li class="layui-this">{$language_tag.index_index_pendingMyApproval}({$ExamineAndApprove|count})</li>
+                <li><a href="/examine_and_approve/iLaunched">{$language_tag.index_index_iStartedIt}({$iLaunched|count})</a></li>
+                <li><a href="/examine_and_approve/iChecked">{$language_tag.index_index_approved}({$iChecked|count})</a></li>
+            </ul>
+            <br>
+
+            <form class="layui-form" method="get" action="/examine_and_approve/toBeApprovedByMe" >
+                <div class="layui-row">
+                    <div class="layui-col-md4">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">{$language_tag.index_examineAndApprove_iChecked_approval_type}</label>
+                            <div class="layui-input-block">
+                                <select name="search_approval_type_id" lay-search>
+                                    <option></option>
+                                    {foreach $obtain_approval_type_list as $v}
+                                    <option value="{$v.approval_type_id}" {$_GET["search_approval_type_id"]==$v.approval_type_id?'selected':''}>{$v.apellation}</option>
+                                    {/foreach}
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="layui-col-md4">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">{$language_tag.index_examineAndApprove_iChecked_proposer}</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="search_user" value="{$_GET['search_user']}" class="layui-input"  />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="layui-col-md4">
+                        <div class="layui-form-item">
+                            <div class="layui-input-block">
+                                <button class="layui-btn nav-search">{$language_tag.index_public_search}</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </form>
+
+
+            <div class="layui-tab-content">
+                <table class="layui-table" >
+                    <thead>
+                    <tr>
+                        <th>{$language_tag.index_examineAndApprove_iChecked_approval_type}</th>
+                        <th>{$language_tag.index_examineAndApprove_iChecked_approval_content}</th>
+                        <th>{$language_tag.index_public_mark}</th>
+                        <th>{$language_tag.index_examineAndApprove_iChecked_proposer}</th>
+                        <th>{$language_tag.index_examineAndApprove_iChecked_apply_time}</th>
+                        <th>{$language_tag.index_source_operation}</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {foreach $ExamineAndApprove as $v}
+                    <tr>
+                        <td>{$v.apellation}</td>
+                        <td>
+                        {if $v.approval_type_id==12 || $v.approval_type_id==13}
+                            <a href="/product/showPlanTourAuditingInfo?plan_id={$v.pk_id}">{$language_tag.index_finance_showReceivableManage_look}</a>
+                        {/if}
+                        </td>
+                        <td>{$v.remarks}</td>
+                        <td>{$v.create_nickname}</td>
+                        <td>{$v.create_time|date='Y-m-d s:h:i',###}</td>
+                        <td>
+                            <a class="layui-btn layui-btn-sm layui-btn-primary tongguo" data-info="{$v.examine_and_approve_id}" >{$language_tag.index_branchcompany_showCompanyOrderManage_adopt}</a>
+                            <a class="layui-btn layui-btn-sm layui-btn-primary butongguo" data-info="{$v.examine_and_approve_id}" >{$language_tag.index_examineAndApprove_toBeApprovedByMe_no_pass}</a>
+                        </td>
+                    </tr>
+                    {/foreach}
+                    </tbody>
+
+                </table>
+            </div>
+
+
+    </div>
+
+    <div class="layui-footer">
+        <!-- 底部固定区域 -->
+        © layui.com - 底部固定区域
+    </div>
+</div>
+{include file='public/foot_js' /}
+<script src='__STATIC__/javascript/system/language.js'></script>
+
+
+    <script id="T-shengpi" type="text/html">
+        <form id="F-shengpi" >
+            <div style="margin-left: 20px;font-size: 18px;font-weight: bold">{$language_tag.index_examineAndApprove_iChecked_approval_opinion}</div>
+            <div style="padding: 10px" >
+                <textarea class="layui-textarea approval_opinion" name="approval_opinion"></textarea>
+            </div>
+            <div style="text-align: center;margin-bottom: 10px">
+                <a class="layui-btn layui-btn-primary cancel">{$language_tag.index_public_cancel}</a>&nbsp;&nbsp;&nbsp; <a class="layui-btn layui-btn-normal confirm">{$language_tag.index_public_ok}</a>
+            </div>
+        </form>
+    </script>
+
+
+<script>
+    !function() {
+        var layer = layui.layer;
+        var form = layui.form;
+        var laydate = layui.laydate;
+        var table = layui.table;
+        var laytpl = layui.laytpl;
+        var examine_and_approve_id = 0;
+        $('.tongguo').on('click',function(){
+            examine_and_approve_id = $(this).data('info');
+            $('.approval_opinion').val('');
+            var h = $('#T-shengpi').html();
+            layer.open({
+                title: "通过审核"
+                ,type: 1
+                ,content: h
+                ,area:['30%','250px']
+            });
+
+            //取消
+            $('.cancel').on('click',function(){
+                layer.closeAll();
+            });
+
+            //确认
+            $('.confirm').on('click',function(){
+                layer.load(2);
+                $.post('/examine_and_approve/examineAndApproveAjax?examine_and_approve_id='+examine_and_approve_id+'&status=2',$('#F-shengpi').serializeArray(),function(a){
+                    layer.closeAll('loading'); //关闭loading
+                    if(a.code==400){
+                        layer.msg('{$language_tag.index_public_verificationFailure}');
+                    }else{
+                        layer.msg('{$language_tag.index_public_success}',{time:1});
+                        layer.closeAll();
+                        location.reload();
+                    }
+                    return;
+                },'json');
+            });
+
+        });
+
+        });
+
+        $('.butongguo').on('click',function(){
+            examine_and_approve_id = $(this).data('info');
+            $('.approval_opinion').val('');
+            var h = $('#T-shengpi').html();
+            layer.open({
+                title: "不通过审核"
+                ,type: 1
+                ,content: h
+                ,area:['30%','250px']
+            });
+
+            //取消
+            $('.cancel').on('click',function(){
+                layer.closeAll();
+            });
+
+            //确认
+            $('.confirm').on('click',function(){
+                layer.load(2);
+                $.post('/examine_and_approve/examineAndApproveAjax?examine_and_approve_id='+examine_and_approve_id+'&status=3',$('#F-shengpi').serializeArray(),function(a){
+                    layer.closeAll('loading'); //关闭loading
+                    if(a.code==400){
+                        layer.msg('{$language_tag.index_public_verificationFailure}');
+                    }else{
+                        layer.msg('{$language_tag.index_public_success}',{time:1});
+                        layer.closeAll();
+                        location.reload();
+                    }
+                    return;
+                },'json');
+            });
+
+        });
+
+
+
+    }();
+
+
+
+
+
+</script>
+
+</body>
+</html>

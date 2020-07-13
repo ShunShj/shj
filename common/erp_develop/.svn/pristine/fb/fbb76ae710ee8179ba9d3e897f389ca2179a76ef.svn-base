@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+	{include file='public/head' /}
+  	<title></title>
+ 	<style>
+		#send_email_button{
+			float: left;
+			margin:0px 10px;
+			line-height:38px;
+			text-align: center;
+			padding:0px 15px;
+			border-radius: 3px;
+			color:#fff;
+			cursor: pointer;
+		}
+	</style>
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+	
+	<div class="layui-header">
+	{include file='public/header' /}
+	</div>
+  
+	 <div class="layui-side layui-bg-black">
+	   <div class="layui-side-scroll">
+	     <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+		{include file='public/left_menu' /}
+	   </div>
+	 </div>
+  
+	<div class="layui-body">
+	 
+		<!-- 内容主体区域 -->
+		<div style="padding: 15px;">
+			<div class='layui-form-item'>
+		   		<span class="layui-breadcrumb" lay-separator="-">
+					<a>{$language_tag.index_public_homepage}</a>
+					<a>{$language_tag.index_public_system}</a>
+					<a><cite>{$language_tag.index_public_update}{$language_tag.index_public_password}</cite></a>
+				
+				</span>
+			</div>
+		<form class="layui-form" method='post' onSubmit="return updatePassword()">
+
+       
+	        <!--<div class="layui-form-item">-->
+	        	<!--<label class="layui-form-label">-->
+	        	<!--</label>-->
+				<!--<div class="layui-input-block" id='send_email_downcount' style='display:none'></div>-->
+	        <!--</div>-->
+	                
+	        <!--<div class="layui-form-item">-->
+	          <!--<label class="layui-form-label">验证码：</label>-->
+	          <!--<div class="layui-input-inline">-->
+	            <!--<input name="code" id='code' lay-verify="required" placeholder="请输入验证码" autocomplete="off" class="layui-input" type="text">-->
+	          <!--</div>-->
+				<!--<div class="layui-input-block nav-edit" id='send_email_button' >-->
+					<!--<div  id='snedEmailByChangePassword'>发送邮件</div>-->
+				<!--</div >-->
+	          <!--<div class="layui-form-mid layui-word-aux">在您的个人邮箱中查看验证码</div>-->
+	        <!--</div>-->
+			<br>
+			<div class="layui-row">
+				<div class="layui-col-md3">
+					<div class="layui-form-item">
+						<label class="layui-form-label">{$language_tag.index_public_password}：</label>
+						<div class="layui-input-block">
+							<input id="password"  lay-verify="required" placeholder="{$language_tag.index_public_placeHolder}{$language_tag.index_public_password}" autocomplete="off"
+								   class="layui-input" type="password">
+						</div>
+					</div>
+					<div class="layui-form-item">
+						<label class="layui-form-label">{$language_tag.index_branchcompany_showCompanyOrderManage_addEdit_confirm}{$language_tag.index_public_password}：</label>
+						<div class="layui-input-block">
+							<input id="password2"  lay-verify="required" placeholder="{$language_tag.index_public_placeHolder}{$language_tag.index_public_password}" autocomplete="off"
+								   class="layui-input" type="password">
+						</div>
+					</div>
+					<div class="layui-form-item">
+						<div class="layui-input-block">
+							<button class="layui-btn nav-submit" lay-submit="" lay-filter="formDemo" >{$language_tag.index_branchcompany_showCompanyOrderManage_addEdit_submit}</button>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<input type='hidden' id='user_id' value="{$Think.session.user.user_id}" />
+			
+		</form>
+
+		</div>
+	</div>
+  
+  <div class="layui-footer">
+    <!-- 底部固定区域 -->
+   
+  </div>
+</div>
+{include file='public/foot_js' /}
+
+<script src='__STATIC__/javascript/system/system.js'></script>
+
+</body>
+</html>

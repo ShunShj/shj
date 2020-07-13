@@ -1,0 +1,145 @@
+//JavaScript代码区域
+
+layer = layui.layer
+form = layui.form;
+
+
+//资源开始
+//团队产品
+
+
+
+//添加线路类型
+function route_type_add(){
+
+    var route_type_name = $("#route_type_name").val();
+    var route_type_pid = $("#route_type_pid").val();
+    var route_type_status = $("#route_type_status").val();
+    var route_type_user_id = $("#route_type_user_id").val();
+    var route_type_company_id = $("#choose_company_id").val();
+    var route_type_code = $("#route_type_code").val();
+
+    $.ajax({
+        type: "POST",
+        url: '/product/addRouteTypeAjax',
+        data: {
+            route_type_name:route_type_name,
+            pid:route_type_pid,
+            route_type_user_id:route_type_user_id,
+            status:route_type_status,
+            choose_company_id:route_type_company_id,
+            route_type_code:route_type_code
+        },
+        success: function(data){
+            //console.log(data);
+            if(data.code!=200){
+                layer.msg(data.msg);
+                return false;
+            }else if(data.code==200) {
+                layer.msg('操作成功',{time:1,end : function(layero, index){
+                        location.href="/product/showRouteTypeManage?pid=0&status=1";
+                    }
+                });
+            }
+        },
+        error:function(XMLHttpRequest, textStatus, errorThrown){
+            layer.msg('验证失败')
+        }
+    });
+    return false;
+
+}
+
+//修改线路类型
+function route_type_edit(){
+
+    var route_type_id = $("#route_type_hidden_route_type_id").val();
+    var route_type_name = $("#edit_route_type_name").val();
+    var route_type_pid = $("#edit_route_type_pid").val();
+    var route_type_status = $("#edit_route_type_status").val();
+    var route_type_user_id = $("#route_type_user_id_edit").val();
+    var route_type_company_id = $("#choose_company_id").val();
+    var route_type_code = $("#route_type_code").val();
+    $.ajax({
+        type: "POST",
+        url: '/product/editRouteTypeAjax',
+        data: {
+            route_type_id:route_type_id,
+            route_type_name:route_type_name,
+            pid:route_type_pid,
+            route_type_user_id:route_type_user_id,
+            status:route_type_status,
+            choose_company_id:route_type_company_id,
+            route_type_code:route_type_code
+        },
+        success: function(data){
+            // console.log(data);
+            if(data.code!=200){
+                layer.msg(data.msg);
+                return false;
+            }else if(data.code==200) {
+                layer.msg('操作成功',{time:1,end : function(layero, index){
+                        location.href="/product/showRouteTypeManage?pid=0&status=1";
+                    }
+                });
+            }
+        },
+        error:function(XMLHttpRequest, textStatus, errorThrown){
+            layer.msg('验证失败')
+        }
+    });
+    return false;
+    //删除线路类型
+}
+
+// 线路添加酒店
+
+function agentEdd(Obj){ 
+   
+        //添加酒店
+        var supplier_name=$(Obj).closest("tr").find("select[class='supplier_id']").val();
+        var agent_id=$(Obj).closest("tr").find("select[class='agent_id']").val();
+        var supplier_id=$(Obj).closest("th").find("select[class='supplier_id']").val();
+
+        var unit_value_type=$(Obj).closest("tr").find("input[class='unit_value_type']").val();
+        var currency=$(Obj).closest("tr").find("input[class='currency']").val();
+        var room_name=$(Obj).closest("tr").find("select[class='room_name']").val();
+        var quantity=$(Obj).closest("tr").find("input[class='layui-input quantity']").val();
+        var single_price=$(Obj).closest("tr").find("input[class='layui-input sigle_price']").val();
+        var total_price=$(Obj).closest("tr").find("input[class='layui-input total_price']").val();
+        
+
+        $.ajax({
+            type: "POST",
+            url: 'product/addRouteHotelAjax',
+            data: {
+                supplier_name:supplier_name,
+                room_name:room_name,
+                agent_id:agent_id,
+                supplier_id:supplier_id,
+                unit_value_type:unit_value_type,
+                currency:currency,
+                quantity:quantity,
+                single_price:single_price,
+                total_price:total_price,
+            },
+            success: function(data){
+                // console.log(data);
+                if(data.code!=200){
+                    layer.msg(data.msg);
+                    return false;
+                }else if(data.code==200) {
+                    layer.msg('操作成功',{time:1,end : function(layero, index){
+                            location.href='product/showRouteTypeAdd';
+                        }
+                    });
+                }
+            },
+            error:function(XMLHttpRequest, textStatus, errorThrown){
+                layer.msg('验证失败')
+            }
+        });
+        return false;
+}
+//资源结束
+

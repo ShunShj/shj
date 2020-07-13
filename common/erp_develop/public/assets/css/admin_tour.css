@@ -1,0 +1,451 @@
+#myinfo_table textarea {
+    margin-left: 5px;
+    padding: 5px;
+    width: 380px;
+}
+
+/*.nav_wrapper {*/
+    /*margin: 0 0 50px 20px;*/
+/*}*/
+
+/*.admin_nav_step {*/
+    /*display: inline-block;*/
+    /*cursor: pointer;*/
+    /*width: 100px;*/
+    /*height: 50px;*/
+    /*-webkit-transform: skew(30deg);*/
+    /*-moz-transform: skew(30deg);*/
+    /*-o-transform: skew(30deg);*/
+    /*background: #cacb45;*/
+    /*line-height: 50px;*/
+    /*text-align: center;*/
+    /*padding: 0 10px;*/
+/*}*/
+
+
+/*.admin_nav_step.current_step{*/
+    /*background: #779dff;*/
+/*}*/
+
+/*.current_step .nav_step_text{*/
+    /*color: #814731;*/
+/*}*/
+
+/*.admin_nav_step.disable_nav {*/
+    /*opacity: .7;*/
+    /*cursor: text;*/
+/*}*/
+
+/*.nav_step_text {*/
+    /*font-size: 18px;*/
+    /*color: #535252;*/
+    /*display: inline-block;*/
+    /*-webkit-transform: skew(-30deg);*/
+    /*-moz-transform: skew(-30deg);*/
+    /*-o-transform: skew(-30deg);*/
+/*}*/
+
+/*.nav_wrapper a:hover,.nav_wrapper a:visited, .nav_wrapper a:link{*/
+    /*color: #535252;*/
+    /*text-decoration: none;*/
+/*}*/
+
+/*.disable_nav a{*/
+    /*cursor: text;*/
+/*}*/
+
+.next_link {
+    height: 33px;
+    padding: 0;
+    position: absolute;
+    right: 0px;
+    line-height: 33px;
+}
+
+.next_link input[type=submit] {
+    font-size: 16px;
+    padding: 2px 10px;
+    height: 26px;
+}
+
+.back_link {
+    height: 33px;
+    padding: 0;
+    position: absolute;
+    left: 15px;
+    line-height: 33px;
+}
+
+
+.back_link button,.next_link button {
+    cursor: pointer;
+    font-size: 16px;
+    padding: 2px 10px;
+    height: 26px;
+}
+
+#create_tour_form em {
+    color: red;
+}
+
+label.admin_form_error {
+    margin-left: 10px;
+    width: auto;
+    display: inline;
+    color: red;
+    font-style: italic;
+}
+
+#create_tour_form textarea.admin_form_error, #create_tour_form input.admin_form_error {
+    border: 1px dotted red;
+}
+
+#admin_add_tour_general {
+    width: 1000px;
+}
+
+#admin_add_tour_general section {
+    margin-left: 20px;
+}
+
+#admin_add_tour_general section label.displayfield {
+    display: inline-block;
+    min-width: 200px;
+}
+
+#admin_add_tour_general section input[type=text] {
+    width: 335px;
+}
+
+#admin_add_tour_general .checkbox_wrapper {
+    display: inline-block;
+    min-width: 100px;
+    height: 23px;
+    line-height: 23px;
+    font-size: 14px;
+    margin: 0px 5px 5px;
+    /*vertical-align: top;*/
+}
+
+#admin_add_tour_general .checkbox_wrapper input[type=checkbox] {
+    width: 17px;
+    height: 17px;
+    vertical-align: bottom;
+}
+
+#admin_add_tour_general .checkbox_wrapper label.admin_form_error {
+    float: right;
+}
+
+.inbound_check{
+    width: 16px;
+    height: 16px;
+    margin: 0px;
+    vertical-align: bottom;
+}
+
+#tour_language_section h3{
+    display: inline-block;
+}
+
+.ajax_message{
+    width: 200px;
+    line-height: 20px;
+    padding: 5px 0;
+    text-align: center;
+    box-sizing: border-box;
+    display: none;
+    position: absolute;
+    font-size: 16px;
+    -webkit-box-shadow: 0 0 3px 0px rgba(0,0,0,0.5);
+    box-shadow: 0 0 3px 0px rgba(0,0,0,0.5);
+    overflow: hidden;
+}
+
+.success_msg {
+    background-color: #9acd32;
+    /*color: #4158ff;*/
+}
+
+.error_msg {
+    background-color: #ff4500;
+    /*color: white;*/
+}
+
+.ajax_modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background: rgba(255, 255, 255, .8) url("../images/ajax-loader.gif") 50% 50% no-repeat;
+}
+
+body.ajax_loading {
+    overflow: hidden;
+}
+
+body.ajax_loading .ajax_modal {
+    display: block;
+}
+
+
+
+label.admin_form_error {
+    margin-left: 10px;
+    width: auto;
+    display: inline;
+    color: red;
+    font-style: italic;
+}
+
+form textarea.admin_form_error, form input.admin_form_error {
+    border: 1px dotted red;
+}
+
+#admin_add_tour_dates section {
+    margin-left: 20px;
+}
+
+#admin_add_tour_dates section#add_tour_dates label.displayfield {
+    display: inline-block;
+    width: 200px;
+}
+
+#admin_add_tour_dates section#add_tour_dates input[type=text] {
+    width: 230px;
+}
+
+#added_dates input[type=text],#existing_dates input[type=text] {
+    margin: 0;
+}
+
+#existing_dates select.status{
+    width: 70px;
+    margin: 2px;
+}
+
+#added_tour_dates_form {
+    width: 750px;
+}
+
+#added_tour_dates_form table td {
+    padding: 2px 5px;
+}
+
+.added_dates_column1 {
+    width: 11%;
+}
+
+.added_dates_column2 {
+    width: 25%;
+}
+
+.added_dates_column3 {
+    width: 20%;
+}
+
+.added_dates_column4 {
+    width: 35%;
+}
+
+.added_dates_column5 {
+    width: 9%;
+}
+
+.select_all_week, .dates_week {
+    width: 16px;
+    height: 16px;
+    margin: 0px 2px 0px 5px;
+    vertical-align: bottom;
+}
+
+.select_all_week {
+    margin: 0px 2px 0px 0px;
+}
+
+
+
+#admin_add_tour_itinerary section {
+    margin-left: 20px;
+}
+
+#admin_add_tour_itinerary section label.displayfield {
+    display: inline-block;
+    width: 200px;
+}
+
+#admin_add_tour_itinerary section input[type=text] {
+    width: 335px;
+}
+
+hr.section_separate {
+    width: 600px;
+    margin: 30px 0;
+    border: 4px double #586AA2;
+}
+
+
+#admin_add_tour_room section {
+    margin-left: 20px;
+}
+
+#admin_add_tour_room section label.displayfield {
+    display: inline-block;
+    width: 200px;
+}
+
+#admin_add_tour_room section input[type=text] {
+    width: 230px;
+    margin: 0;
+}
+
+#added_room_form {
+    width: 800px;
+}
+
+.room_info_wrapper input.readonly{
+    cursor: not-allowed;
+    background-color: #ccc;
+}
+
+.room_info_wrapper > p {
+    height: 26px;
+    line-height: 26px;
+}
+
+
+#admin_add_tour_transfer section {
+    margin-left: 20px;
+}
+
+#admin_add_tour_transfer section label.displayfield {
+    display: inline-block;
+    width: 200px;
+}
+
+#admin_add_tour_transfer section input[type=text] {
+    width: 230px;
+    margin: 0;
+}
+
+#admin_add_tour_transfer section select, #admin_add_tour_transfer section textarea{
+    width: auto;
+    margin: 0;
+}
+
+#admin_add_tour_transfer select, #admin_add_tour_transfer textarea {
+    margin: 0;
+}
+
+#added_tour_transfer_form {
+    width: 700px;
+}
+
+#added_transfer_fieldset>div{
+    width: 100%;
+}
+
+.float_left{
+    float: left;
+}
+
+
+
+#admin_add_tour_commission section {
+    margin-left: 20px;
+}
+
+#admin_add_tour_commission section label.displayfield {
+    display: inline-block;
+    width: 200px;
+}
+
+#admin_add_tour_commission section input[type=text]{
+    width: 230px;
+    margin: 0;
+}
+
+#admin_add_tour_commission section select, #admin_add_tour_commission section textarea {
+    width: auto;
+    margin: 0;
+}
+
+#admin_add_tour_commission select, #admin_add_tour_commission textarea {
+    margin: 0;
+}
+
+#admin_add_tour_options section {
+    margin-left: 20px;
+}
+
+#admin_add_tour_options section label.displayfield {
+    display: inline-block;
+    width: 200px;
+}
+
+#admin_add_tour_options section input[type=text] {
+    width: 230px;
+    float: none;
+    display: inline-block;
+}
+
+#added_options input[type=text], #existing_options input[type=text] {
+    margin: 0;
+}
+
+#added_tour_options_form {
+    width: 750px;
+}
+
+#added_tour_options_form select, #added_tour_options_form textarea {
+    float: none;
+    width: auto;
+    margin: 0;
+    display: inline-block;
+}
+
+.option_wrapper textarea {
+    margin: 0;
+}
+
+
+
+#add_tour_setting_form{
+    margin-bottom: 20px;
+    margin-left: 30px;
+    width: 600px;
+}
+
+table#setting_table {
+    width: 100%;
+    border-spacing: 0;
+    border-collapse: separate;
+}
+
+table#setting_table tr td.setting_title {
+    width: 450px;
+    padding: 5px;
+}
+table#setting_table tr td {
+    border-bottom: 1px dotted #ccc;
+    border-width: thin;
+}
+
+span.setting_body {
+    color: #686868;
+}
+
+.department_wrapper{
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+.department_checkbox{
+    margin: 0 4px;
+    vertical-align: bottom;
+    height: 15px;
+    width: 15px;
+}

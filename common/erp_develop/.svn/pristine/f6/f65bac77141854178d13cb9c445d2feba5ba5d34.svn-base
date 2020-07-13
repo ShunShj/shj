@@ -1,0 +1,81 @@
+//JavaScript代码区域
+;!function(){
+    var layer = layui.layer
+        ,form = layui.form;
+
+
+}();
+
+//添加语言
+function add() {
+    var add_name = $("#add_lg_name").val();
+    var add_status = $("#add_lg_status").val();
+
+    $.ajax({
+        type: "POST",
+        url: '/system/addLanguageAjax',
+        data: {
+            'language_name': add_name,
+            'status': add_status
+        },
+        success: function (data) {
+            if(data.code!=200){
+                layer.msg(data.msg)
+                return false;
+            }else if(data.code==200){
+                layer.msg('操作成功',{time:1,end : function(layero, index){
+                        location.href='/system/showLanguageManage'
+                    }
+                });
+            }
+        },
+        error:function(XMLHttpRequest, textStatus, errorThrown){
+            //console.log(errorThrown)
+            layer.msg('验证失败')
+
+        }
+    });
+    return false;
+}
+
+//返回到语言列
+$("#language_replay_button").click(function(){
+    history.back(-2);
+});
+
+//编辑语言
+function edit() {
+    var edit_name = $('#edit_lg_name').val();
+    var edit_status = $("#edit_lg_status").val();
+    var language_id = $("#language_id_hidden").val();
+
+    $.ajax({
+        type: "POST",
+        url: '/system/editLanguageAjax',
+        data: {
+            'language_name': edit_name,
+            'status': edit_status,
+            'language_id': language_id
+        },
+        success: function (data) {
+            if(data.code!=200){
+                layer.msg(data.msg);
+                return false;
+            }else if(data.code==200){
+                layer.msg('操作成功',{time:1,end : function(layero, index){
+                        location.href='/system/showlanguageManage';
+                    }
+                });
+            }
+        },error:function(XMLHttpRequest, textStatus, errorThrown){
+            layer.msg('验证失败');
+        }
+    });
+    return false;
+}
+
+
+//返回到语言列
+$("#language_replay_button").click(function(){
+    history.back(-1);
+});

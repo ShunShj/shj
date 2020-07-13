@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {include file='public/head' /}
+    <title>language-manage</title>
+
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+    <div class="layui-header">
+        {include file='public/header' /}
+    </div>
+
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll">
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            {include file='public/left_menu' /}
+        </div>
+    </div>
+
+    <div class="layui-body layui-body-bg">
+
+        <!-- 内容主体区域 -->
+        <div style="padding: 15px 15px 0px;">
+            <div class="body-top">
+                <div class='layui-form-item'>
+                    <span class="layui-breadcrumb" lay-separator="-">
+                        <a>{$Think.lang.index_public_homepage}</a>
+                        <a>{$Think.lang.index_public_product}</a>
+                        <a><cite>{$Think.lang.index_product_showRouteTemplateManage_routeType}</cite></a>
+                    </span>
+                </div>
+                <div class='layui-block all-search-bg'>
+                    <form class="layui-form" method='get' action='/product/showRouteTypeManage'>
+                        <div class="layui-row">
+                            <div class="layui-col-md4">
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">{$Think.lang.index_public_status}:</label>
+                                    <div class="layui-input-block">
+                                        <select id="" name="status">
+                                            <option value="0" selected="">-{$Think.lang.index_source_showCruisesManage_search_status}-</option>
+                                            <option value="1" {if condition="$Think.get.status eq 1"}selected='selected' {/if}>{$Think.lang.index_public_show}</option>
+                                            <option value="2" {if condition="$Think.get.status eq 2"}selected='selected' {/if}>{$Think.lang.index_public_disabled}</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-col-md4">
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">{$Think.lang.index_product_showRouteTypeManage_routeTypeName}:</label>
+                                    <div class="layui-input-block">
+                                        <input type="text" id="" name="route_type_name" value="{$Think.get.route_type_name}" autocomplete="off" placeholder="{$Think.lang.index_product_showRouteTypeManage_routeTypeName}" class="layui-input">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-col-md4">
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">{$Think.lang.index_public_type}:</label>
+                                    <div class="layui-input-block">
+                                        <select id="" name="type">
+                                            <option value="0" selected="">{$Think.lang.index_public_type}</option>
+                                            <option value="1" {if condition="$Think.get.type eq 1"}selected='selected' {/if}>{$Think.lang.index_product_showRouteTemplateManage_chineseGroup}</option>
+                                            <option value="2" {if condition="$Think.get.type eq 2"}selected='selected' {/if}>{$Think.lang.index_product_showRouteTemplateManage_foreignRegiment}</option>
+                                            <option value="3" {if condition="$Think.get.type eq 3"}selected='selected' {/if}>{$Think.lang.index_product_showRouteTemplateManage_other}</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-row">
+                            <div class="layui-col-md4 layui-col-md-offset4">
+                                <div class='input-inline all-button-center pages-search-margin'>
+                                    <input type="hidden" name="supplier_type_id" value="4">
+                                    <button class="layui-btn nav-search" >{$Think.lang.index_public_search}</button>
+                                </div>
+                            </div>
+                        </div>
+<!--                        <div class='layui-button-inline layui-number-inline'>
+                            <input type="hidden" name="supplier_type_id" value="4">
+                            <button class="layui-btn nav-search" >搜索</button>
+                        </div>-->
+                    </form>
+<!--                    <div class='layui-button-inline'>
+                        <a href='/product/showRouteTypeAdd'><button class="layui-btn nav-add">添加线路类型</button></a>
+                    </div>-->
+                </div>
+            </div>
+            <div class="content-bg">
+                <span style="{:action('index/auth/check_auth',['role_id'=>'236'])}"><a href='/product/showRouteTypeAdd'><button class="layui-btn nav-add layui-btn-sm">{$Think.lang.index_product_showRouteTypeManage_addRouteType}</button></a></span>
+                <hr>
+                <div class="table-nont user-manage newBg-pageHeight">
+                    <table class="layui-table" id="language-table">
+                        <thead>
+                        <tr>
+                            <th>{$Think.lang.index_product_showRouteTemplateManage_id}</th>
+                            <th>{$Think.lang.index_product_showRouteTypeManage_routeTypeName}</th>
+                            <th>{$Think.lang.index_product_showRouteTemplateManage_routeType}</th>
+                            <th>{$Think.lang.index_public_status}</th>
+                            <th class="layui-table-width">{$Think.lang.index_source_operation}</th>
+                        </tr>
+                        </thead>
+
+                        <tbody>
+                        {foreach name="data" item="vo" }
+                        <tr>
+                            <th>{$vo.route_type_id}</th>
+                            <th>{$vo.route_type_name}</th>
+                            <th>{if condition="$vo.type eq 1"}{$Think.lang.index_product_showRouteTemplateManage_chineseGroup}{elseif condition="$vo.type eq 3"}{$Think.lang.index_product_showRouteTemplateManage_other}{else/}{$Think.lang.index_product_showRouteTemplateManage_foreignRegiment}{/if}</th>
+                            <th>{if condition="$vo.status eq 1"}{$Think.lang.index_public_show}{else/}{$Think.lang.index_public_disabled}{/if}</th>
+                            <th><span style="{:action('index/auth/check_auth',['role_id'=>'237'])}"><a href='/product/showRouteTypeEdit?route_type_id={$vo.route_type_id}'><button class="layui-btn layui-btn-sm hover-edit layui-btn-primary">{$Think.lang.index_public_update}</button></a></span>
+                                <span style="{:action('index/auth/check_auth',['role_id'=>'238'])}"><a href='/product/showRouteTypeInfo?route_type_id={$vo.route_type_id}'><button class="layui-btn layui-btn-sm hover-details layui-btn-primary">{$Think.lang.index_public_info}</button></a></span></th>
+                        </tr>
+                        {/foreach}
+                        </tbody>
+
+                    </table>
+                </div>
+            </div>
+            <div class="listButtom">
+                {include file='public/page' /}
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="layui-footer">
+    <!-- 底部固定区域 -->
+    © layui.com - 底部固定区域
+</div>
+</div>
+{include file='public/foot_js' /}
+<script src='__STATIC__/javascript/system/source.js'></script>
+
+</body>
+</html>

@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    {include file='public/head' /}
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>财务管理-集团资产负债表</title>
+    <style>
+        #page-content th,#page-content td{
+            text-align: center;
+            line-height: 30px;
+            padding:10px;
+        }
+        #page-content th{
+            font-weight: bold;
+        }
+        .tr-none{
+            display: none;
+        }
+    </style>
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+    <div class="layui-header">
+        {include file='public/header' /}
+    </div>
+
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll">
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            {include file='public/left_menu' /}
+        </div>
+    </div>
+
+    <div class="layui-body layui-body-bg">
+        <div style="padding: 15px 15px 0px;">
+            <div class="body-top">
+                <div class='layui-form-item'>
+                    <span class="layui-breadcrumb" lay-separator="-">
+                        <a>首页</a>
+                        <a>财务管理</a>
+                        <a><cite>集团资产负债表</cite></a>
+                    </span>
+                </div>
+                <div class='layui-block all-search-bg'>
+                    <br/>
+                    <form class="layui-form" method='get'>
+
+                        <div class="layui-row">
+                            <div class="layui-col-md4">
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">选择分公司:</label>
+                                    <div class="layui-input-block">
+                                        <select name="company_id">
+                                            <option value=""></option>
+                                            {foreach $getCompany as $v}{
+                                            {if $v.company_id!=1}
+                                            <option value="{$v.company_id}" {$_GET['company_id']==$v.company_id?'selected':''}>{$v.company_name}</option>
+                                            {/if}
+                                            {/foreach}
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="layui-col-md4">
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">年月份:</label>
+                                    <div class="layui-input-block">
+                                        <input type="text" id="tableMonths" name="year_month" value="{$year_month}" placeholder="请选择年月" class="layui-input">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-col-md4">
+                                <div class='input-inline button-marginLeft'>
+                                    <button class="layui-btn nav-search" >搜索</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="content-bg">
+                <a class="layui-btn word-export layui-search-inline nav-add layui-btn-sm" onclick="upload()">下载</a>
+                {if $Think.session.user.company_id!=1}
+                <a href='/finance/editBalanceSheet?year_month={$year_month}' class="layui-btn nav-search layui-btn-sm">修改</a>
+                {/if}
+                <hr>
+                <div class="table-nont" id="page-content" style="width: 100%;margin:0px auto">
+                    <h3>币种：{$Currency[0]['unit']}</h3><br>
+                    <table class="layui-table" id="table-list" style="width:100%;margin-bottom:20px;border-collapse: collapse;border:none">
+
+                        <thead>
+                        <tr align="left" class="tr-none" style="background:#fff;border:none;">
+                            <th colspan="5"><img src="__STATIC__/image/login/login-logo.png" style="width:100%" id="aa"></th>
+                        </tr>
+
+                        <tr align="left" style="background:#f2f2f2">
+                            <th width="20%">资 产</th>
+                            {foreach $balanceSheet as $k=>$v}
+                            <th >{$companyList[$k][0]['company_name']}</th>
+                            {/foreach}
+                        </tr>
+                        </thead>
+                        <tbody style="border:1px solid #e6e6e6">
+                        <tr>
+                            <td>货币资金</td>
+                            {foreach $balanceSheet as $k=>$v}
+                            <th >{$v['monetary_resources']|number_format=2}</th>
+                            {/foreach}
+
+
+                        </tr>
+                        <tr>
+                            <td>短期投资</td>
+                            {foreach $balanceSheet as $k=>$v}
+                            <th >{$v['short_term_investment']|number_format=2}</th>
+                            {/foreach}
+
+                        </tr>
+                        <tr>
+                            <td>应收股利</td>
+                            {foreach $balanceSheet as $k=>$v}
+                            <th >{$v['dividends_receivable']|number_format=2}</th>
+                            {/foreach}
+
+                        </tr>
+                        <tr>
+                            <td>应收账款</td>
+                            {foreach $balanceSheet as $k=>$v}
+                            <th >{$v['accounts_receivable']|number_format=2}</th>
+                            {/foreach}
+
+                        </tr>
+                        <tr>
+                            <td>其他应收款</td>
+                            {foreach $balanceSheet as $k=>$v}
+                            <th >{$v['other_receivables']|number_format=2}</th>
+                            {/foreach}
+
+                        </tr>
+                        <tr>
+                            <td>预付账款</td>
+                            {foreach $balanceSheet as $k=>$v}
+                            <th >{$v['advance_payment']|number_format=2}</th>
+                            {/foreach}
+
+                        </tr>
+                        <tr>
+                            <td>待摊费用</td>
+                            {foreach $balanceSheet as $k=>$v}
+                            <th >{$v['deferred_expenses']|number_format=2}</th>
+                            {/foreach}
+
+                        </tr>
+                        <tr>
+                            <td>待处理流动资产净损失</td>
+                            {foreach $balanceSheet as $k=>$v}
+                            <th >{$v['net_loss_of_current_assets_to_be_processed']|number_format=2}</th>
+                            {/foreach}
+
+                        </tr>
+                        <tr>
+                            <td>一年内到期的长期债券投资</td>
+                            {foreach $balanceSheet as $k=>$v}
+                            <th >{$v['investments_in_longterm_bonds_maturing_in_one_year']|number_format=2}</th>
+                            {/foreach}
+
+                        </tr>
+                        <tr>
+                            <td>其他流动资产</td>
+                            {foreach $balanceSheet as $k=>$v}
+                            <th >{$v['other_current_assets']|number_format=2}</th>
+                            {/foreach}
+
+                        </tr>
+                        <tr>
+                            <td style="color: red">流动资产合计</td>
+                            {foreach $balanceSheet as $k=>$v}
+                            <th >{$v['total_current_assets']|number_format=2}</th>
+                            {/foreach}
+
+                        </tr>
+                        <tr>
+                            <td>长期股权投资</td>
+                            {foreach $balanceSheet as $k=>$v}
+                            <th >{$v['long_term_equity_investment']|number_format=2}</th>
+                            {/foreach}
+
+                        </tr>
+                        <tr>
+                            <td>长期债权投资</td>
+                            {foreach $balanceSheet as $k=>$v}
+                            <th >{$v['long_term_debt_investment']|number_format=2}</th>
+                            {/foreach}
+
+                        </tr>
+                        <tr>
+                            <td>减:长期投资减值准备</td>
+                            {foreach $balanceSheet as $k=>$v}
+                            <th >{$v['long_term_investment_impairment_provision']|number_format=2}</th>
+                            {/foreach}
+
+                        </tr>
+                        <tr>
+                            <td  style="color: red">长期投资净额</td>
+                            {foreach $balanceSheet as $k=>$v}
+                            <th >{$v['net_long_term_investment']|number_format=2}</th>
+                            {/foreach}
+
+                        </tr>
+                        <tr>
+                            <td>固定资产原价</td>
+                            {foreach $balanceSheet as $k=>$v}
+                            <th >{$v['original_value_of_fixed_assets']|number_format=2}</th>
+                            {/foreach}
+
+                        </tr>
+                        <tr>
+                            <td>减:累计折旧</td>
+                            {foreach $balanceSheet as $k=>$v}
+                            <th >{$v['accumulated_depreciation']|number_format=2}</th>
+                            {/foreach}
+
+                        </tr>
+                        <tr>
+                            <td  style="color: red">固定资产净值</td>
+                            {foreach $balanceSheet as $k=>$v}
+                            <th >{$v['fixed_assetsnet_value']|number_format=2}</th>
+                            {/foreach}
+
+                        </tr>
+                        <tr>
+                            <td>减:固定资产减值准备</td>
+                            {foreach $balanceSheet as $k=>$v}
+                            <th >{$v['Provision_for_impairment_of_fixed_assets']|number_format=2}</th>
+                            {/foreach}
+
+                        </tr>
+                        <tr>
+                            <td  style="color: red">固定资产净额</td>
+                            {foreach $balanceSheet as $k=>$v}
+                            <th >{$v['net_fixed_assets']|number_format=2}</th>
+                            {/foreach}
+
+                        </tr>
+                        <tr>
+                            <td>无形资产</td>
+                            {foreach $balanceSheet as $k=>$v}
+                            <th >{$v['immaterial_assets']|number_format=2}</th>
+                            {/foreach}
+
+                        </tr>
+                        <tr>
+                            <td>减:无形资产减值准备</td>
+                            {foreach $balanceSheet as $k=>$v}
+                            <th >{$v['provision_for_impairment_of_intangible_assets']|number_format=2}</th>
+                            {/foreach}
+
+                        </tr>
+                        <tr>
+                            <td  style="color: red">无形资产净额</td>
+                            {foreach $balanceSheet as $k=>$v}
+                            <th >{$v['net_intangible_assets']|number_format=2}</th>
+                            {/foreach}
+
+                        </tr>
+                        <tr>
+                            <td  style="color: red">非流动资产合计</td>
+                            {foreach $balanceSheet as $k=>$v}
+                            <th >{$v['total_noncurrent_assets']|number_format=2}</th>
+                            {/foreach}
+
+                        </tr>
+                        <tr>
+                            <td  style="color: red">资产总计</td>
+                            {foreach $balanceSheet as $k=>$v}
+                            <th >{$v['total_assets']|number_format=2}</th>
+                            {/foreach}
+
+                        </tr>
+                        <tr>
+                            <td>短期借款</td>
+                            {foreach $balanceSheet as $k=>$v}
+                            <th >{$v['overnight_money']|number_format=2}</th>
+                            {/foreach}
+
+                        </tr>
+                        <tr>
+                            <td>应付账款</td>
+                            {foreach $balanceSheet as $k=>$v}
+                            <th >{$v['payable_in_account']|number_format=2}</th>
+                            {/foreach}
+
+                        </tr>
+                        <tr>
+                            <td>预收账款</td>
+                            {foreach $balanceSheet as $k=>$v}
+                            <th >{$v['deposit_received']|number_format=2}</th>
+                            {/foreach}
+
+                        </tr>
+                        <tr>
+                            <td>应付职工薪酬</td>
+                            {foreach $balanceSheet as $k=>$v}
+                            <th >{$v['pay_payable_to_staff_and_workers']|number_format=2}</th>
+                            {/foreach}
+
+                        </tr>
+                        <tr>
+                            <td>应付股利</td>
+                            {foreach $balanceSheet as $k=>$v}
+                            <th >{$v['dividends_payable']|number_format=2}</th>
+                            {/foreach}
+
+                        </tr>
+                        <tr>
+                            <td>应交税费</td>
+                            {foreach $balanceSheet as $k=>$v}
+                            <th >{$v['due_taxes_and_fees']|number_format=2}</th>
+                            {/foreach}
+
+                        </tr>
+                        <tr>
+                            <td>其他应交款</td>
+                            {foreach $balanceSheet as $k=>$v}
+                            <th >{$v['other_accounts_payable']|number_format=2}</th>
+                            {/foreach}
+
+                        </tr><tr>
+                            <td>其他应付款</td>
+                            {foreach $balanceSheet as $k=>$v}
+                            <th >{$v['accounts_payable_others']|number_format=2}</th>
+                            {/foreach}
+
+                        </tr><tr>
+                            <td>一年内到期的长期负债</td>
+                            {foreach $balanceSheet as $k=>$v}
+                            <th >{$v['longterm_liabilities_due_within_one_year']|number_format=2}</th>
+                            {/foreach}
+
+                        </tr><tr>
+                            <td>其他流动负债</td>
+                            {foreach $balanceSheet as $k=>$v}
+                            <th >{$v['other_current_liabilities']|number_format=2}</th>
+                            {/foreach}
+
+                        </tr><tr>
+                            <td style="color: red">流动负债合计</td>
+                            {foreach $balanceSheet as $k=>$v}
+                            <th >{$v['total_current_liabilities']|number_format=2}</th>
+                            {/foreach}
+
+                        </tr><tr>
+                            <td>长期借款</td>
+                            {foreach $balanceSheet as $k=>$v}
+                            <th >{$v['money_borrowed_for_long_term']|number_format=2}</th>
+                            {/foreach}
+
+                        </tr><tr>
+                            <td>应付债券</td>
+                            {foreach $balanceSheet as $k=>$v}
+                            <th >{$v['bond_payable']|number_format=2}</th>
+                            {/foreach}
+
+                        </tr><tr>
+                            <td>长期应付款</td>
+                            {foreach $balanceSheet as $k=>$v}
+                            <th >{$v['long_term_accounts_payable']|number_format=2}</th>
+                            {/foreach}
+
+                        </tr><tr>
+                            <td>专项应付款</td>
+                            {foreach $balanceSheet as $k=>$v}
+                            <th >{$v['account_payable_special_funds']|number_format=2}</th>
+                            {/foreach}
+
+                        </tr><tr>
+                            <td>其他长期负债</td>
+                            {foreach $balanceSheet as $k=>$v}
+                            <th >{$v['other_long_term_liabilities']|number_format=2}</th>
+                            {/foreach}
+
+                        </tr><tr>
+                            <td  style="color: red">长期负债合计</td>
+                            {foreach $balanceSheet as $k=>$v}
+                            <th >{$v['total_long_term_liabilities']|number_format=2}</th>
+                            {/foreach}
+
+                        </tr><tr>
+                            <td style="color: red">负债合计</td>
+                            {foreach $balanceSheet as $k=>$v}
+                            <th >{$v['total_liabilities']|number_format=2}</th>
+                            {/foreach}
+
+                        </tr><tr>
+                            <td>实收资本(或股本)</td>
+                            {foreach $balanceSheet as $k=>$v}
+                            <th >{$v['paid_in_capital_or_share_capital']|number_format=2}</th>
+                            {/foreach}
+
+                        </tr><tr>
+                            <td>资本公积</td>
+                            {foreach $balanceSheet as $k=>$v}
+                            <th >{$v['capital_reserve']|number_format=2}</th>
+                            {/foreach}
+
+                        </tr><tr>
+                            <td>盈余公积</td>
+                            {foreach $balanceSheet as $k=>$v}
+                            <th >{$v['earned_surplus']|number_format=2}</th>
+                            {/foreach}
+
+                        </tr><tr>
+                            <td>未分配利润</td>
+                            {foreach $balanceSheet as $k=>$v}
+                            <th >{$v['undistributed_profit']|number_format=2}</th>
+                            {/foreach}
+
+                        </tr><tr>
+                            <td>外币报表折算差额</td>
+                            {foreach $balanceSheet as $k=>$v}
+                            <th >{$v['foreign_currency_statement_translation_difference']|number_format=2}</th>
+                            {/foreach}
+
+                        </tr><tr>
+                            <td  style="color: red">所有者权益(或股东权益)合计</td>
+                            {foreach $balanceSheet as $k=>$v}
+                            <th >{$v['total_owners_equity_or_shareholders_equity']|number_format=2}</th>
+                            {/foreach}
+
+                        </tr><tr>
+                            <td  style="color: red">负债及所有者权益(或股东权益)总计</td>
+                            {foreach $balanceSheet as $k=>$v}
+                            <th >{$v['total_liabilities_and_owners_equity_or_shareholders_equity']|number_format=2}</th>
+                            {/foreach}
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="layui-footer">
+        <!-- 底部固定区域 -->
+        © layui.com - 底部固定区域
+    </div>
+    <script id="demo" type="text/html">
+
+    </script>
+</div>
+{include file='public/foot_js' /}
+<script type="text/javascript" src="__STATIC__/javascript/product/all.js"></script>
+<script type="text/javascript" src="__STATIC__/javascript/finance/tableExport.min.js"></script>
+<script>
+    layui.use(['layer', 'form','laydate'], function(){
+        var layer = layui.layer
+                ,laydate=layui.laydate
+                ,form = layui.form;
+
+
+        laydate.render({
+            elem: '#tableMonths'
+            ,type: 'month'
+        });//月份选择
+
+        $("#table-list tbody tr").each(function(index,item){
+            if($(item).find("td").length==0){
+                $(item).remove();
+            }
+        })
+    });
+    function upload() {
+        $('#table-list').tableExport({
+            fileName: '集团资产负债表{$year_month}',
+            type: 'excel',
+            escape:'true'
+        });
+    }
+</script>
+
+
+</body>
+</html>

@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<head>
+    {include file='public/head' /}
+    <title>layout 后台大布局 - Layui</title>
+
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+    <div class="layui-header">
+        {include file='public/header' /}
+    </div>
+
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll">
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            {include file='public/left_menu_booknexus' /}
+        </div>
+    </div>
+
+    <div class="layui-body">
+
+        <!-- 内容主体区域 -->
+        <div style="padding: 15px 15px 0px;">
+            <div class="body-top">
+                <div class='layui-form-item'>
+			<span class="layui-breadcrumb" lay-separator="-">
+				<a>{$language_tag.index_public_homepage}</a>
+				<a>B2B</a>
+			  	<a><cite>产品列表</cite></a>
+			</span>
+                </div>
+                <br/>
+                <div class='layui-block input-inline' >
+                    <form  class="layui-form"  method='get' action='/booknexus_tour/index'>
+                        <div class="layui-row">
+                            <div class="layui-col-md4">
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">Tour Code:</label>
+                                    <div class="layui-input-block">
+                                        <input type="text"   name="tour_code" value="{$Think.get.tour_code}"  placeholder="Tour Code" class="layui-input">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-col-md4">
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">Tour Name:</label>
+                                    <div class="layui-input-block">
+                                        <input type="text"   name="tour_name" value="{$Think.get.tour_name}"  placeholder="Tour name" class="layui-input">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-col-md4">
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">Tour Status</label>
+                                    <div class="layui-input-block">
+                                        <select class="layui-input" id="search_status" name="status">
+                                            <option value="">All</option>
+                                            <option value="1" {if condition="$Think.get.status eq 1"}selected='selected' {/if}>On</option>
+                                            <option value="0" {if condition="$Think.get.status eq 2"}selected='selected' {/if}>Off</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="layui-row">
+                            <div class="layui-col-md4 layui-col-md-offset4">
+                                <div class='input-inline all-button-center pages-search-margin'>
+                                    <button class="layui-btn nav-search">{$language_tag.index_public_search}</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+
+                </div>
+                <hr><br>
+            </div>
+            <div class="table-nont user-manage pageHeight">
+                <table class="layui-table layui-form" >
+                    <thead>
+                    <tr>
+                        <th width=''>ID</th>
+                        <th width=''>Code</th>
+                        <th width=''>Name</th>
+                        <th width=''>Category</th>
+                        <th width=''>Days</th>
+                        <th width=''>Freq</th>
+                        <th width=''>Start</th>
+                        <th width=''>End</th>
+                        <th width=''>Sort</th>
+                        <th width=''>Status</th>
+                        <th width=''>Created</th>
+                        <th width=''>Action</th> 
+                    </tr>
+
+                    </thead>
+                    <tbody>
+                    {foreach name="data" item="vo"}
+                    <tr>
+                        <th class="btb_tour_id">{$vo.btb_tour_id}</th>
+                        <th>{$vo.tour_code}</th>
+                        <th>{$vo.tour_name_ch}<br>{$vo.tour_name}</th>
+                        <th>{$vo.tour_type_name}</th>
+                        <th>{$vo.length_days}</th>
+                        <th>{$vo.frequency}</th>
+                        <th>{$vo.start_city}</th>
+                        <th>{$vo.end_city}</th>
+                        <th><input class="layui-input sort" type="text" value="{$vo.sort}"  data-info="{$vo.btb_tour_id}" /></th>
+                        <th>{$vo.status == 1 ? 'Enable' : 'Disable'}</th>
+                        <th>{$vo.created_at|date='Y-m-d H:i:s',###}</th>
+                        <th>
+                            <a href='/booknexus_tour/updateTourForm?btb_tour_id={$vo.btb_tour_id}'><button class="layui-btn layui-btn-sm hover-edit layui-btn-primary" >{$language_tag.index_public_update}</button></a>
+                            <!--<a href='/branchcompany/showBranchProductInfo?branch_product_number={$vo.branch_product_number}'><button class="layui-btn layui-btn-sm hover-details layui-btn-primary">{$language_tag.index_public_info}</button></a>-->
+                        </th>
+                    </tr>
+                    {/foreach}
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="listButtom">
+                {include file='public/page' /}
+            </div>
+        </div>
+    </div>
+
+    <div class="layui-footer">
+        <!-- 底部固定区域 -->
+        © layui.com - 底部固定区域
+    </div>
+</div>
+{include file='public/foot_js' /}
+<script>
+    //JavaScript代码区域
+    var layer = layui.layer;
+    var form = layui.form;
+
+    $('.sort').blur(function(a){
+        console.log($(this).data('info'));
+        var sortt = $(this).val();
+        var btb_tour_id = $(this).data('info');
+        $.post('/booknexus_tour/updateB2bTourGeneralAjax',{btb_tour_id:btb_tour_id,sort:sortt},function(a){});
+    });
+
+
+</script>
+
+</body>
+</html>

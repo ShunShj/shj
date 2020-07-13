@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<head>
+    {include file='public/head' /}
+    <title>layout 后台大布局 - Layui</title>
+
+    <link href="/static/css/select2.min.css" rel="stylesheet">
+
+
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+    <div class="layui-header">
+        {include file='public/header' /}
+    </div>
+
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll">
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            {include file='public/left_menu_booknexus' /}
+        </div>
+    </div>
+
+    <div class="layui-body">
+
+        <!-- 内容主体区域 -->
+        <div style="padding: 15px 15px 0px;">
+            <div class='layui-row'>
+		   		<span class="layui-breadcrumb" lay-separator="-">
+                    <a>首页</a>
+                    <a>B2B</a>
+					<a>创建产品</a>
+				</span>
+            </div>
+            <br>
+            {include file='booknexus_tour/update_menu' /}
+            <form class="layui-form" id="form1" onSubmit="return add()">
+                <div class="layui-row layui-col-space8" style="padding: 10px">
+                    <div class="layui-col-md8" style="font-weight: bold;font-size:14px">Supplier</div>
+                    <div class="layui-col-md8">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label ">Supplier Tour:</label>
+                            <div class="layui-input-block layui-form">
+                                <select class="layui-inpuk" name="supplier_tour" lay-verify="required" lay-filter="supplier_tour" lay-search disabled >
+                                    <option></option>
+                                    {foreach $RouteTemplate as $v}
+                                    <option value="{$v.route_template_id}" {$TourForm.route_template_id==$v.route_template_id?'selected':''}>{$v.route_name}</option>
+                                    {/foreach}
+
+                                    <!--{foreach $BranchProductType as $v}-->
+                                    <!--{notempty name="$BranchProduct[$v['branch_product_type_id']]"}-->
+                                    <!--<optgroup label="{$v.branch_product_type_name}">-->
+                                    <!--{foreach $BranchProduct[$v['branch_product_type_id']] as $vl}-->
+                                    <!--<option value="{$vl['branch_product_id']}"  {$Think.session.createTourForm.supplier_tour==$vl['branch_product_id']?'selected':''}>{$vl['branch_product_name']}</option>-->
+                                    <!--{/foreach}-->
+                                    <!--</optgroup>-->
+                                    <!--{/notempty}-->
+                                    <!--{/foreach}-->
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="layui-col-md8" style="font-weight: bold;font-size:14px">Tour Type</div>
+                    <div class="layui-col-md8">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label ">IS INBOUND?:</label>
+                            <div class="layui-input-block layui-form">
+                                <input lay-skin="primary"  class="layui-checkbox" type="checkbox" value="1" name="is_inbound" {$TourForm.is_inbound==1?'checked':''} />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-col-md8">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label input-required">TOUR TYPE:</label>
+                            <div class="layui-input-block">
+                                <div class="layui-input-inline date-width">
+                                    <select class="layui-input" id="tour_type1" lay-verify="required" name="tour_type1" lay-filter="tour_type1" >
+                                        <option></option>
+                                        {foreach $tour_type[0] as $v}
+                                        <option value="{$v.tour_type_id}" {$TourForm.tour_type1==$v.tour_type_id?'selected':''}>{$v.tour_type_name}</option>
+                                        {/foreach}
+                                    </select>
+                                </div>
+                                <div class="layui-input-inline date-width" style="padding-left:5px">
+                                    <select class="layui-input" id="tour_type2" name="tour_type2">
+                                        <option></option>
+                                        {foreach $tour_type[$TourForm.tour_type1] as $v}
+                                        <option value="{$v.tour_type_id}" {$TourForm.tour_type2==$v.tour_type_id?'selected':''}>{$v.tour_type_name}</option>
+                                        {/foreach}
+
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--<div class="layui-col-md8">-->
+                    <!--<div class="layui-form-item">-->
+                    <!--<label class="layui-form-label ">LOCAL CATEGORY:</label>-->
+                    <!--<div class="layui-input-block layui-form">-->
+                    <!--<select class="layui-input" name="local_category"></select>-->
+                    <!--</div>-->
+                    <!--</div>-->
+                    <!--</div>-->
+                    <div class="layui-col-md8">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label ">TOUR TAB:</label>
+                            <div class="layui-input-block layui-form">
+                                <select class="layui-input" name="tour_tab">
+                                    <option></option>
+                                    {foreach $tab as $vv}
+                                    <option value="{$vv.commission_id}" {$vv.commission_id==$TourForm.tour_tab?'selected':''} >{$vv.name}</option>
+                                    {/foreach}
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="layui-col-md8" style="font-weight: bold;font-size:14px">Tour Info</div>
+                    <div class="layui-col-md8">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label input-required">TOUR CODE:</label>
+                            <div class="layui-input-block layui-form">
+                                <input class="layui-input" lay-verify="required" value="{$TourForm.tour_code}" name="tour_code">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-col-md8">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label input-required">TOUR NAME:</label>
+                            <div class="layui-input-block layui-form">
+                                <input class="layui-input" lay-verify="required" value="{$TourForm.tour_name}" name="tour_name" id="tour_name">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-col-md8">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label input-required">TOUR NAME CH:</label>
+                            <div class="layui-input-block layui-form">
+                                <input class="layui-input" lay-verify="required" value="{$TourForm.tour_name_ch}" name="tour_name_ch" id="tour_name_ch">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-col-md8">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label input-required">LENGTH DAYS:</label>
+                            <div class="layui-input-block layui-form">
+                                <input class="layui-input" lay-verify="required" value="{$TourForm.length_days}" name="length_days" id="length_days">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-col-md8">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label input-required">LENGTH NIGHTS:</label>
+                            <div class="layui-input-block layui-form">
+                                <input class="layui-input" lay-verify="required" value="{$TourForm.length_nights}" name="length_nights" id="length_nights">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-col-md8">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label input-required">FREQUENCY:</label>
+                            <div class="layui-input-block layui-form">
+                                <input class="layui-input" lay-verify="required" value="{$TourForm.frequency}" name="frequency">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-col-md8">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label input-required">START CITY:</label>
+                            <div class="layui-input-block layui-form">
+                                <input class="layui-input" lay-verify="required" value="{$TourForm.start_city}" name="start_city">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-col-md8">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label input-required">END CITY:</label>
+                            <div class="layui-input-block layui-form">
+                                <input class="layui-input" lay-verify="required" value="{$TourForm.end_city}" name="end_city">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-col-md8">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label input-required">DEPARTURE AIRPORT:</label>
+                            <div class="layui-input-block layui-form">
+                                <input class="layui-input" lay-verify="required" value="{$TourForm.departure_airport}" name="departure_airport">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-col-md8">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label input-required">ARRIVAL AIRPORT:</label>
+                            <div class="layui-input-block layui-form">
+                                <input class="layui-input" lay-verify="required" value="{$TourForm.arrival_airport}" name="arrival_airport">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-col-md8">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label input-required">COUNTRY:</label>
+                            <div class="layui-input-block layui-form">
+                                <input class="layui-input" lay-verify="required" value="{$TourForm.country}" name="country">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-col-md8">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label input-required">LAND ONLY:</label>
+                            <div class="layui-input-block layui-form" lay-verify="required" name="land_only">
+                                <select class="layui-input">
+                                    <option value="1" {$TourForm.land_only==1?'selected':''}>Yes</option>
+                                    <option value="2"  {$TourForm.land_only==2?'selected':''}>No</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-col-md8">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label ">MINIMUM PASSENGER:</label>
+                            <div class="layui-input-block layui-form">
+                                <input class="layui-input" value="{$TourForm.minimum_passenger}" name="minimum_passenger">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-col-md8">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label input-required">FLYER:</label>
+                            <div class="layui-input-block layui-form">
+                                <input class="layui-input" lay-verify="required" id="pdf_flyer_input" name="pdf_flyer" style="width: 400px;float: left" value="{$TourForm.pdf_flyer}">
+                                <button type="button" class="layui-btn" id="pdf_flyer"><i class="layui-icon"></i>上传文件</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-col-md8">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label ">ENGLISH TOUR BOOKING FORM:</label>
+                            <div class="layui-input-block layui-form">
+                                <input class="layui-input"  id="en_pdf_flyer_input" name="en_pdf_flyer" style="width: 400px;float: left" value="{$TourForm.en_pdf_flyer}">
+                                <button type="button" class="layui-btn" id="en_pdf_flyer"><i class="layui-icon"></i>上传文件</button>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="layui-col-md8">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label input-required">TERMS:</label>
+                            <div class="layui-input-block layui-form">
+                                <select class="layui-select" lay-verify="required" name="terms">
+                                    <option></option>
+                                    {foreach $ReturnReceipt[3] as $vv}
+                                    <option value="{$vv.return_receipt_id}" {$vv.return_receipt_id==$TourForm.terms?'selected':''}>{$vv.return_receipt_name}</option>
+                                    {/foreach}
+
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-col-md8" style="display: none">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label ">TERMS PREVIEW (Read Only):</label>
+                            <div class="layui-input-block layui-form">
+                                <textarea id="demo1" style="" name="terms_preview">{$Think.session.createTourForm.terms_preview}</textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="layui-col-md8" style="display: none">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label ">VOUCHER NOTICE:</label>
+                            <div class="layui-input-block layui-form">
+                                <select class="layui-select" name="voucher_notice">
+                                    <option></option>
+
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-col-md8" style="display: none">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label ">VOUCHER NOTICE PREVIEW (Read Only):</label>
+                            <div class="layui-input-block layui-form">
+                                <textarea id="demo2"  name="voucher_notice_preview">{$Think.session.createTourForm.voucher_notice_preview}</textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="layui-col-md8">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label ">BOOKING NOTICE:</label>
+                            <div class="layui-input-block layui-form">
+                                <select class="layui-select" name="booking_notice">
+                                    <option></option>
+                                    {foreach $ReturnReceipt[4] as $vv}
+                                    <option value="{$vv.return_receipt_id}"  {$vv.return_receipt_id==$TourForm.booking_notice?'selected':''}>{$vv.return_receipt_name}</option>
+                                    {/foreach}
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-col-md8"  style="display: none">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label ">BOOKING NOTICE PREVIEW (Read Only):</label>
+                            <div class="layui-input-block layui-form">
+                                <textarea id="demo3" style="" name="booking_notice_preview">{$Think.session.createTourForm.booking_notice_preview}</textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="layui-col-md8">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label input-required">STATUS:</label>
+                            <div class="layui-input-block layui-form">
+                                <select class="layui-select" lay-verify="required" name="status">
+                                    <option value="1" {$TourForm.status==1?'selected':''}>Enable</option>
+                                    <option value="2" {$TourForm.status==2?'selected':''}>Disable</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="layui-col-md8 input-required" style="font-weight: bold;font-size:14px">Tour Languages</div>
+                    <div class="layui-col-md8">
+                        <select class="layui-select select2"  lay-verify="required" multiple="multiple" lay-ignore  name="tour_languages[]">
+                            <option></option>
+                            {foreach $Language as $v}
+                            <option value="{$v.language_id}" <?php if(in_array($v['language_id'],explode(',',$TourForm['tour_languages']))){echo 'selected';}?> >{$v.language_name}</option>
+                            {/foreach}
+                        </select>
+                    </div>
+
+                    <div class="layui-col-md8" style="font-weight: bold;font-size:14px">Tour Age Group Setting</div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label input-required">INFANT (younger than):</label>
+                        <div class="layui-input-block layui-form">
+                            <input class="layui-input" name="infant" lay-verify="required" value="{$TourForm.infant}" />
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label input-required">CHILD (younger than):</label>
+                        <div class="layui-input-block layui-form">
+                            <input class="layui-input" name="child" lay-verify="required" value="{$TourForm.child}" />
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label input-required">CHILD WITHOUT BED (younger than):</label>
+                        <div class="layui-input-block layui-form">
+                            <input class="layui-input" name="child_without_bed" lay-verify="required" value="{$TourForm.child_without_bed}" />
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label input-required">SERVICE CHARGE AGE (younger than):</label>
+                        <div class="layui-input-block layui-form">
+                            <input class="layui-input" name="service_charge_age" lay-verify="required" value="{$TourForm.service_charge_age}" />
+                        </div>
+                    </div>
+
+                    <div class="layui-col-md8" style="font-weight: bold;font-size:14px;text-align: center">
+                        <button type="submit" class="layui-btn layui-btn-sm layui-btn-primary" >Save</button>
+                    </div>
+
+                    <!--input-required-->
+                </div>
+            </form>
+
+        </div>
+    </div>
+
+    <div class="layui-footer">
+        <!-- 底部固定区域 -->
+        © layui.com - 底部固定区域
+    </div>
+</div>
+{include file='public/foot_js' /}
+<script src='__STATIC__/javascript/public/select2.min.js'></script>
+<script>
+    //JavaScript代码区域
+    var layer = layui.layer;
+    var form = layui.form;
+    $('#form1').find('.select2').select2({width:'100%'});
+
+    form.on('select(supplier_tour)',function(data){
+        console.log(data);
+        layer.load();
+        $.post('/booknexus_tour/getRouteTemplate',{v:data.value},function(a){
+            layer.closeAll('loading'); //关闭loading
+            if(a.data){
+                $('#tour_name').val(a.data[0]['route_name']);
+                $('#tour_name_ch').val(a.data[0]['route_name']);
+
+                $('#length_days').val(a.data[0]['days']);
+                var nights = parseInt(a.data[0]['days'])-1;
+                nights = nights<0?'0':nights;
+                $('#length_nights').val(nights);
+
+            }
+        });
+
+    });
+
+    form.on('select(tour_type1)',function(data){
+        layer.load();
+        $.post('/booknexus_tour/setTourTypeAjax',{v:data.value},function(a){
+            layer.closeAll('loading'); //关闭loading
+            if(a.code==200){
+                var h = "<option></option>";
+                for(var it in a.data){
+                    h+= '<option value="'+ a.data[it]['tour_type_id']+'">'+a.data[it]['tour_type_name']+'</option>';
+                }
+                $('#tour_type2').html(h);
+                form.render();
+            }else{
+                $('#tour_type2').html("<option></option>");
+                form.render();
+            }
+
+        });
+    });
+
+
+    var upload = layui.upload;
+    upload.render({
+        elem: '#pdf_flyer',
+        url:'/upload/uploadFileAll',
+        accept:'file',
+        size:20480,
+        before: function(obj){ //obj参数包含的信息，跟 choose回调完全一致，可参见上文。
+            layer.load(); //上传loading
+        },
+        done: function(res, index, upload){
+            layer.closeAll('loading'); //关闭loading
+            console.log(res);
+            if(res.code == 200){
+                //do something （比如将res返回的图片链接保存到表单的隐藏域）
+                $('#pdf_flyer_input').val(res.data);
+                layer.closeAll('loading'); //关闭loading
+            }
+        },error: function(index, upload){
+            layer.closeAll('loading'); //关闭loading
+        }
+    });
+
+    upload.render({
+        elem: '#en_pdf_flyer',
+        url:'/upload/uploadFileAll',
+        accept:'file',
+        size:20480,
+        before: function(obj){ //obj参数包含的信息，跟 choose回调完全一致，可参见上文。
+            layer.load(); //上传loading
+        },
+        done: function(res, index, upload){
+            layer.closeAll('loading'); //关闭loading
+            console.log(res);
+            if(res.code == 200){
+                //do something （比如将res返回的图片链接保存到表单的隐藏域）
+                $('#en_pdf_flyer_input').val(res.data);
+                layer.closeAll('loading'); //关闭loading
+            }
+        },error: function(index, upload){
+            layer.closeAll('loading'); //关闭loading
+        }
+    });
+
+
+    var ue1 = UE.getEditor('demo1',{
+        toolbars: [
+            ['source', 'undo','redo'],
+        ],
+        zIndex:100,
+        initialFrameWidth:800,
+        initialFrameHeight:300
+    });
+    var ue2 = UE.getEditor('demo2',{
+        toolbars: [
+            ['source', 'undo','redo'],
+        ],
+        zIndex:100,
+        initialFrameWidth:800,
+        initialFrameHeight:300
+    });
+    var ue3 = UE.getEditor('demo3',{
+        toolbars: [
+            ['source', 'undo','redo'],
+        ],
+        zIndex:100,
+        initialFrameWidth:800,
+        initialFrameHeight:300
+    });
+
+    function add(){
+        layer.load();
+        $.ajax({
+            type: "POST",
+            url: '/booknexus_tour/updateB2bTourGeneralAjax?btb_tour_id={$_GET["btb_tour_id"]}',
+            data:  $('#form1').serializeArray(),
+            success: function(data){layer.closeAll('loading'); //关闭loading
+                //console.log(data);
+                if(data.code!=200){
+                    layer.msg(data.msg);
+                    return false;
+                }else if(data.code==200) {
+                    layer.msg('操作成功',{time:2000,end : function(layero, index){
+                        location.reload();
+                    }
+                    });
+                }
+            },
+            error:function(XMLHttpRequest, textStatus, errorThrown){layer.closeAll('loading'); //关闭loading
+                layer.msg('验证失败')
+            }
+        });
+        return false;
+    }
+
+
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+<head>
+	{include file='public/head' /}
+  	<title>layout 后台大布局 - Layui</title>
+ 
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+	
+	<div class="layui-header">
+	{include file='public/header' /}
+	</div>
+  
+	 <div class="layui-side layui-bg-black">
+	   <div class="layui-side-scroll">
+	     <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+		{include file='public/left_menu' /}
+	   </div>
+	 </div>
+  
+	<div class="layui-body">
+	 
+		<!-- 内容主体区域 -->
+		<div style="padding: 15px;">
+			<div class='layui-form-item'>
+		   		<span class="layui-breadcrumb" lay-separator="-">
+					<a>{$Think.lang.index_public_homepage}</a>
+					<a>{$Think.lang.index_public_system}</a>
+			  		<a>{$Think.lang.index_system_showCompanyManage_company_manage}</a>
+					<a><cite>{$Think.lang.index_system_showCountryManage_info_company}</cite></a>
+				</span>
+			</div>
+
+			<div class="layui-row">
+				<form class="layui-form all-detail layui-col-md4" onSubmit="return false;">
+					<div class="layui-form-item">
+						<label class="layui-form-label">{$Think.lang.index_system_showCompanyManage_name}：</label>
+						<div class="layui-input-block">
+							{$MultilingualAll['company-company_name-'.$data.company_id.'-'.$Think.session.user.language_id][0]['translate']|default=$data.company_name}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+							<i class="iconfont icon-fanyifuwu"
+							   style="position: absolute;font-size:30px;cursor:pointer;"
+								   onclick="MultilingualSetting('edit_company_name','company','company_name',{$data.company_id})"></i>
+						</div>
+					</div>
+					<div class="layui-form-item">
+						<label class="layui-form-label">{$Think.lang.index_system_showCompanyManage_country_zone}：</label>
+						<div class="layui-input-block">
+							{$data.country_name}
+						</div>
+					</div>
+					<div class="layui-form-item">
+						<label class="layui-form-label">{$Think.lang.index_system_showCompanyManage_linkman}：</label>
+						<div class="layui-input-block">
+							{$data.linkman}
+						</div>
+						<!--  <div class="layui-form-mid layui-word-aux">辅助文字</div>-->
+					</div>
+					<div class="layui-form-item">
+						<label class="layui-form-label">{$Think.lang.index_system_showCompanyManage_phone}：</label>
+						<div class="layui-input-block">
+							{$data.phone}
+						</div>
+						<!--  <div class="layui-form-mid layui-word-aux">辅助文字</div>-->
+					</div>
+					<div class="layui-form-item">
+						<label class="layui-form-label">{$Think.lang.index_system_showCompanyManage_currency}：</label>
+						<div class="layui-input-block">
+							{$data.currency_name}
+						</div>
+					</div>
+					<div class="layui-form-item">
+						<label class="layui-form-label">{$Think.lang.index_system_showCompanyManage_language}：</label>
+						<div class="layui-input-block">
+							{$data.language_name}
+						</div>
+					</div>
+					<div class="layui-form-item">
+						<label class="layui-form-label">{$Think.lang.index_system_showCompanyManage_timezone}：</label>
+						<div class="layui-input-block">
+							{$data.timezone}
+						</div>
+					</div>
+					<div class="layui-form-item">
+						<label class="layui-form-label">{$Think.lang.index_system_showCompanyManage_create_time}：</label>
+						<div class="layui-input-block">
+							{$data.create_time|date='Y-m-d H:i:s',###}
+						</div>
+					</div>
+					<div class="layui-form-item">
+						<label class="layui-form-label">{$Think.lang.index_system_showCompanyManage_create_user}：</label>
+						<div class="layui-input-block">
+							{$data.create_user_name}
+						</div>
+					</div>
+					<div class="layui-form-item">
+						<label class="layui-form-label">{$Think.lang.index_system_showCompanyManage_update_time}：</label>
+						<div class="layui-input-block">
+							{if condition="$data.update_time neq ''"}{$data.update_time|date='Y-m-d H:i:s',###} {else/}{$Think.lang.index_system_showCompanyManage_no_update_time}{/if}
+						</div>
+					</div>
+					<div class="layui-form-item">
+						<label class="layui-form-label">{$Think.lang.index_system_showCompanyManage_update_user}：</label>
+						<div class="layui-input-block">
+							{if condition="$data.update_user_name neq ''"}{$data.update_user_name} {else/}{$Think.lang.index_system_showCompanyManage_update_no_user}{/if}
+						</div>
+					</div>
+					<div class="layui-form-item">
+						<label class="layui-form-label">{$Think.lang.index_public_status}：</label>
+						<div class="layui-input-block">
+							{if condition="$data['status'] eq 1"}{$Think.lang.index_public_show}{else/}{$Think.lang.index_public_disabled}{/if}
+						</div>
+					</div>
+					<div class="layui-form-item">
+						<div class="layui-input-block">
+							<a href='/system/showCompanyManage'><button type="button" class="layui-btn layui-btn-primary">{$Think.lang.index_public_back}</button></a>
+						</div>
+					</div>
+				</form>
+			</div>
+
+		</div>
+	</div>
+  
+  <div class="layui-footer">
+    <!-- 底部固定区域 -->
+    © layui.com - 底部固定区域
+  </div>
+</div>
+{include file='public/foot_js' /}
+
+<script src='__STATIC__/javascript/system/company.js'></script>
+
+</body>
+</html>

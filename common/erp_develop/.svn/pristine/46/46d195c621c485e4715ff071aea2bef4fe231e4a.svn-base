@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+	{include file='public/head' /}
+  	<title>神油后台管理1.0</title>
+ 
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+	
+	<div class="layui-header">
+	{include file='public/header' /}
+	</div>
+  
+	 <div class="layui-side layui-bg-black">
+	   <div class="layui-side-scroll">
+	     <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+		{include file='public/left_menu' /}
+	   </div>
+	 </div>
+  
+	<div class="layui-body">
+	 
+		<!-- 内容主体区域 -->
+		<div style="padding: 15px;">
+			<div class='layui-form-item'>
+		   		<span class="layui-breadcrumb" lay-separator="-">
+					<a>{$language_tag.index_branchcompany_showBranchProductManage_branchManagement}</a>
+					<a>{$language_tag.index_branchcompany_showBranchProductTypeManage_branchCompanyProductType}</a>
+					<a><cite>{$language_tag.index_branchcompany_showBranchProductTypeManage_addBranchCompanyProductType}</cite></a>
+				</span>
+			</div>
+		<form class="layui-form"  onSubmit="return branch_product_type_add()" method='post'>
+	        <div class="layui-form-item class_1">
+	          <label class="layui-form-label">{$language_tag.index_branchcompany_showBranchProductTypeManage_branchCompanyProductTypeName}：</label>
+	          <div class="layui-input-block">
+	            <input name="branch_product_tye_name" id='branch_product_type_name'  lay-verify="required" placeholder="{$language_tag.index_branchcompany_showBranchProductTypeManage_branchCompanyProductTypeName}" autocomplete="off" class="layui-input" type="text">
+	          </div>
+	        </div>
+	        
+       
+	        <div class="layui-form-item">
+	          <div class="layui-input-block">
+	            <button class="layui-btn nav-submit" lay-submit="" lay-filter="formDemo" >{$language_tag.index_public_submit}</button>
+	             <a href="/branchcompany/showBranchProductTypeManage"><button type="button" class="layui-btn layui-btn-primary">{$language_tag.index_public_back}</button></a>
+	          </div>
+			</div>
+		</form>
+		</div>
+	</div>
+  
+  <div class="layui-footer">
+    <!-- 底部固定区域 -->
+    © layui.com - 底部固定区域
+  </div>
+</div>
+{include file='public/foot_js' /}
+
+<script src='__STATIC__/javascript/branchcompany/branch_product_type.js'></script>
+
+</body>
+</html>

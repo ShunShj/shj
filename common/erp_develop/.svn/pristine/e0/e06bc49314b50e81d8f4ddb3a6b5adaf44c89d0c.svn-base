@@ -1,0 +1,417 @@
+
+.fl{
+    float: left;
+}
+.fr{
+    float: right;
+}
+.clear{
+    clear: both;
+    overflow: hidden;
+}
+button{
+    cursor: pointer!important;
+}
+.red{
+    color:#f00;
+    font-size:13px;
+}
+.layui-body-bg{
+    background:#F4F4F4;
+}
+
+/*多选*/
+.layui-layer-dialog .layui-layer-btn a:first-child,.layui-form-checked[lay-skin=primary] i{
+    background-color: #2866B9!important;
+    border:1px solid #2866B9!important;
+}
+.layui-form-checkbox[lay-skin=primary] i:hover,.layui-form-checkbox[lay-skin=primary]:hover{
+    border:1px solid #2866B9;
+}
+/*单选*/
+.layui-form-radio>i:hover, .layui-form-radioed>i{
+    color:#2866B9;
+}
+/*下拉框选中颜色*/
+.layui-form-select dl dd.layui-this{
+    background-color:#2866B9;
+}
+/*下拉中操作鼠标经过颜色*/
+.xm-cz:hover{
+    color:#2866B9!important;
+}
+/*下拉中多选border颜色,及选中颜色*/
+.xm-form-checkbox > i,.xm-form-checkbox > i:hover{
+    border-color:#2866B9!important;
+}
+.xm-select-parent dl dd.xm-select-this i{
+    color:#2866B9;
+}
+/*下拉多选--选中值背景色*/
+.xm-select-parent .xm-select-title div.xm-select-label>span{
+    background:#2866B9;
+}
+div[xm-select-skin] .xm-select-title div.xm-select-label>span{
+    border-color:#2866B9;
+}
+/*选择时间默认颜色*/
+.layui-laydate li.layui-this{
+    background-color:#2866B9!important;
+}
+/*下拉框选中border颜色*/
+.xm-form-selected .xm-select, .xm-form-selected .xm-select:hover{
+    border-color:#2866B9!important;
+}
+/*日期选择默认颜色*/
+.layui-laydate td.layui-this{
+    background-color:#2866B9!important;
+}
+/*tab切换*/
+.layui-tab-brief>.layui-tab-more li.layui-this:after, .layui-tab-brief>.layui-tab-title .layui-this:after{
+    border-bottom: 2px solid #2866B9!important;
+}
+.layui-tab-brief>.layui-tab-title .layui-this{
+    color:#2866B9;
+}
+/*所有详情页*/
+.all-detail .layui-input-block{
+    line-height: 38px;
+}
+.all-detail .layui-form-item{
+    margin-bottom:0px;
+}
+.all-select input,.all-select textarea{
+    border:none;
+    background: none;
+    color:#333!important;
+    cursor: auto!important;
+    padding-left:0px;
+    resize:none
+}
+.all-select input:hover{
+    color:#333!important;
+    cursor: auto!important;
+}
+.all-select .layui-edge{
+    display: none;
+}
+
+
+
+/*导航*/
+.layui-side-scroll{
+    width:221px!important;
+}
+.layui-nav .layui-nav-item .head-top a{
+    color:#666;
+}
+.layui-bg-black,.layui-bg-black .layui-nav{
+    background-color: #414141!important;
+}
+.layui-nav .layui-nav-item a{
+    color:rgba(255,255,255,1);
+}
+.layui-nav>.layui-nav-item>a{
+    font-size:15px;
+}
+.layui-nav-tree .layui-this a{
+    background: #2866B9!important;
+}
+.layui-nav-tree .layui-nav-more{
+    border-top-color: rgba(255,255,255,1);
+}
+.layui-nav-tree .layui-nav-item a:hover{
+    background:#2C93CA!important;
+}
+.layui-nav-itemed>.layui-nav-child{
+    background:#6C6C6C!important;
+}
+.layui-nav-itemed>.layui-nav-child dd a{
+    padding-left:50px;
+}
+.layui-nav .layui-this:after,.layui-layout-left .layui-nav-bar,.layui-layout-right .layui-nav-bar, .layui-nav-tree .layui-nav-itemed:after{
+    background: #2866B9!important;
+}
+.layui-nav-tree .layui-nav-bar{
+    display: none!important;
+}
+.layui-layout-admin .layui-header{
+    background:#205AA4!important;
+}
+
+/*表格按钮*/
+table button{
+    width: 50px;
+    height:30px;
+    line-height: 30px;
+    padding:0px!important;
+}
+table .layui-table-width{
+    width:160px;
+}
+table button:hover{
+    border:1px solid #C9C9C9!important;
+    color: #fff!important;
+}
+/*表格暂无数据*/
+.table-none{
+    text-align: center;
+    padding:20px 0px;
+    color:#8D8D8D;
+    font-size:16px;
+    border:1px solid #e6e6e6;
+    margin-top:-10px;
+    border-top:none;
+    position: absolute;
+}
+/*按钮鼠标经过border颜色*/
+.layui-btn-primary:hover{
+    border:1px solid #2866B9;
+}
+/*按钮*/
+.nav-edit,.nav-add,.nav-look,.btn-del{
+    background:#2866B9;
+    color:#fff;
+}/*编辑----添加*//*查看*/
+.hover-edit:hover,.hover-add:hover,.hover-look:hover{
+    background:#2866B9;
+    color:#fff;
+    border:1px solid #2866B9;
+}/*编辑----添加*//*---鼠标经过*/
+.layui-btn-group .hover-day:hover{
+    background:#2866B9;
+    color:#fff;
+    border-left:none;
+}
+.hover-details:hover,.table-save:hover,.nav-del:hover{
+    background:#FF5700;
+    color:#fff;
+    border:1px solid #FF5700;
+}/*详情&查看*//*表格保存*/
+.nav-details,.nav-search,.nav-submit{
+    background:#FF5700!important;
+}/*搜索----提交*/
+.nav-polylingual,.hover-polylingual:hover{
+    background:#a3a2a2;
+}/*多语言*//*删除*/
+.nav-back,.nav-cancel,.nav-resetting{
+    /*background:#e4e7ea;
+    border:1px solid #e4e7ea;*/
+    border: 1px solid #C9C9C9;
+    background-color: #fff;
+    color: #555;
+}/*返回----取消----重置*/
+.nav-back:hover,.nav-cancel:hover,.nav-resetting:hover{
+    /*border:1px solid #2C93CA;*/
+    background:#e4e7ea;
+    color: #555!important;
+}/*返回----取消----重置鼠标经过*/
+.my-skin .layui-layer-btn a.layui-layer-btn0,.layui-layer-btn .layui-layer-btn0{
+     background:#FF5700!important;
+    border:1px solid #FF5700!important;
+}/*弹窗确定按钮*/
+
+/*按钮居中显示*/
+.all-button-center{
+    text-align: center;
+}
+.pages-search-margin{
+    margin-top:5px;
+}
+/*按钮居右显示*/
+.all-button-right{
+    text-align: right;
+    margin:10px 0px;
+}
+/*textarea高*/
+.layui-textarea{
+    min-height: 93px!important;
+}
+
+
+
+/*分页*/
+.layui-laypage .layui-laypage-curr .layui-laypage-em{
+    background:#2866B9;
+}
+/*面包屑导航*/
+.layui-breadcrumb a cite{
+    font-weight: bold!important;
+    font-size:16px;
+}
+.layui-breadcrumb a:hover{
+    color:#999!important;
+}
+/*一级页面条件查询输入框*/
+.input-inline form,.layui-button-inline{
+    display: inline-block;
+    margin-bottom: 5px;
+}
+.input-inline .layui-input-inline{
+    width: 180px;
+}
+.input-inline .layui-search-inline{
+    width: 92px;
+    margin:0px;
+}/*4字*/
+.input-inline .layui-number-inline{
+    width: 120px;
+    margin:0px;
+}/*6字*/
+.layui-search-inline button,.layui-number-inline button{
+    width: 100%;
+}
+.button-marginLeft{
+    margin-left:10px;
+}
+
+/*lable所有加宽*/
+.layui-form .layui-form-label{
+    width:120px;
+}
+.layui-form .layui-input-block{
+    margin-left:150px;
+}
+
+
+/*必填加*号*/
+.input-required i{
+    color:red!important;
+    padding-right: 8px;
+    font-size: 16px;
+    vertical-align: middle;
+    font-weight: bold;
+    font-style: normal;
+}
+
+/*表格中input不显示*/
+.table-input-none .layui-input,.table-input-none .layui-select,.table-input-none .layui-textarea{
+    border:none;
+    color:#333!important;
+    resize:none;
+    cursor: auto!important;
+}
+.table-input-none .layui-edge{
+    border:none!important;
+}
+/*表格最小宽度*/
+.user-manage{
+    overflow-x: auto;
+    border-top:1px solid #e6e6e6;
+    border-bottom:1px solid #e6e6e6;
+}
+.user-manage table{
+    min-width: 1315px;
+    margin:0px;
+}
+/*资源配置页操作宽度*/
+.template-edit{
+    width: 100px;
+}
+
+/*团队产品--线路模板标题统一*/
+.title-bg{
+    height: 42px;
+    line-height: 42px;
+    padding: 0 15px 0 25px;
+    background-color: #f2f2f2;
+    border:1px solid #e6e6e6;
+}
+.title-border{
+    border:1px solid #e6e6e6;
+    border-top:none;
+    padding-top:15px;
+    margin-bottom:15px;
+    padding-bottom:20px;
+}
+.title-none-plan{
+    margin-top:0px;
+}
+
+/*左侧导航阴影*/
+.layui-layout-admin .layui-side,.layui-layout-admin .layui-header{
+    -webkit-box-shadow: #333 0px 0px 5px;
+    -moz-box-shadow: #333 0px 0px 5px;
+    box-shadow: #333 0px 0px 5px;
+}
+
+
+/*面包屑导航背景颜色*/
+.all-search-bg,.content-bg{
+    background:#fff;
+    padding:20px 15px 15px;
+    margin-bottom:15px;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+    -webkit-box-shadow: #ccc 0px 0px 5px;
+    -moz-box-shadow: #ccc 0px 0px 5px;
+    box-shadow: #ccc 0px 0px 5px;
+}
+.content-bg{
+    padding:15px 15px!important;
+    margin:15px 0px 0px!important;
+}
+.content-bg table{
+    margin:0px;
+}
+
+/*日期范围*/
+.layui-form-item .date-width{
+    width:48%;
+    margin:0px;
+}
+.layui-form-item .date-and{
+    width: 4%;
+    float: left;
+    text-align: center;
+    line-height: 38px;
+}
+/*filedset标题字体大小*/
+.page-filedset legend{
+    font-weight: 400;
+    color: #666;
+}
+
+.infomation-span-list span{
+    display: inline-block;
+    width: 200px;
+    line-height: 24px;
+}
+
+/*导航icon*/
+.layui-nav-item>a>i{
+    font-size:25px;
+    vertical-align: middle;
+    position: relative;
+    top: -2px;
+    margin-right:6px;
+}
+.layui-nav-item>a>.fen-icon{
+    font-size: 20px;
+    margin-right: 10px;
+    left: 2px;
+}
+
+/*分页*/
+.layui-laypage{
+    margin-bottom:0px;
+}
+
+.infomation-one-title{
+    font-weight: 400;
+    font-size:22px;
+    color:#666;
+    padding-left:30px;
+    line-height: 56px;
+    position: absolute;
+}
+
+.font-icons{
+    font-size:18px;
+    vertical-align: middle;
+}
+.page-filedset .layui-input-block span{
+    margin:0px!important;
+    line-height: 40px!important;
+}

@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en" style="height:100%;">
+<head>
+    {include file='public/head' /}
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link href="__STATIC__/css/product.css" rel="stylesheet">
+    <style rel="stylesheet">
+        .container{width: 1000px;margin: 0 auto;font-size: 16px;}
+        .fl{float: left}
+        .fr{float: right}
+        .header{
+            overflow: hidden;
+            padding-top: 30px;
+        }
+        .header_left{
+            font-size: 22px;
+            line-height: 34px;
+            width: 650px;
+        }
+        .header_right{
+            font-size: 15px;
+            text-align: right;
+            line-height: 22px;
+        }
+        .header-right-bold{
+            font-weight: bold;
+            margin-right: 20px;
+        }
+        .voucher_title{
+            font-size: 26px;
+            font-weight: 600;
+            color: #1379BC;
+            border-bottom: 7px solid #1379BC;
+            padding-bottom:5px;
+        }
+        .plan_list{
+            margin:10px 0px 20px;
+        }
+        .plan_list .voucher_title img,.other_title img{
+            vertical-align: bottom;
+        }
+        .div_clear{overflow: hidden;font-size: 22px;line-height: 32px;}
+        .div_clear .fl{
+            margin-right: 40px;
+        }
+        .tour_Voucher{position: relative;}
+        .tour_Voucher .w{
+            width: 200px;
+        }
+        .tour_Voucher .t{
+            width: 120px;
+        }
+        #company_order_name{
+            width: 485px;
+        }
+        .tour-pos{position: absolute;right: 0px;top:70px;line-height: 22px;text-align: right;font-size: 14px;}
+        .other_title{
+            color: #25AAE1;
+            font-size: 26px;
+            font-weight: 600;
+        }
+        .other_title_border{
+            border-bottom: 7px solid #25AAE1;
+        }
+        table,table th,table td{border: none}
+        table{width: 100%}
+        thead{display: table-row-group;word-wrap: break-word;text-align: left;background: #25A9E0;color: #fff;font-size: 16px;}
+        th{padding: 5px 25px;font-weight: normal}
+        .sour_box{overflow: hidden;font-size: 16px;line-height: 26px}
+        tr {
+            page-break-before: always;
+            page-break-after: always;
+            page-break-inside: avoid;
+        }
+        table td {
+            word-break: break-all;
+            padding:5px 10px;
+        }
+    </style>
+</head>
+<body id="container" style="height: 100%">
+<div class="layui-layout layui-layout-admin">
+    <div class="container">
+        <div class="header">
+            <div class="header_left fl">
+                <div>Voucher No: <span class="company_order_number"></span>-<span class="tour_code"></span></div>
+                <div>Booking No: <sp16n class="company_order_number"></sp16n></div>
+                <div style="color: #f00;font-size: 13px;line-height: 16px;">導遊信息會在出發前一天以短信形式發送到您手機上。如果晚上7點還未收到信息,請
+                    聯絡右側緊急聯絡人詢問。Tour guide's name and contact will be sent to you
+                    in text message the day before departure. If you haven't heard from us by
+                    7pm please call emergency contact at the right corner.</div>
+                <div style="font-size: 13px;line-height: 16px;">http://www.booknexus.com.au/info?bk=c7177F&p=XLU</div>
+            </div>
+            <div class="header_right fr">
+                <div><span class="header-right-bold">Prepared for:</span><span id="distributor_name">Nexus Holidays New York</span></div>
+                <!--<div>(Wholesale)</div>
+                <div>36-26 MAIN ST</div>
+                <div>3C</div>
+                <div>FLUSHING NEW YORK 11354</div>-->
+                <div id="distributor_address"></div>
+                <div id="distributor_phone">T: 718-888-1889 F: 718-889-2408</div>
+            </div>
+        </div>
+        <div class="plan_list">
+            <div class="voucher_title"><img src="__STATIC__/image/branchcompany/Tour_Voucher.png" />Tour Voucher 旅遊確認單</div>
+            <div class="tour_Voucher">
+                <div class="div_clear">
+                    <div class="fl w">Tour Name</div>
+                    <div class="fl t">團名</div>
+                    <div class="fl" id="company_order_name"></div>
+                </div>
+                <div class="div_clear">
+                    <div class="fl w">Duration</div>
+                    <div class="fl t">天數</div>
+                    <div class="fl" id="day_count"></div>
+                </div>
+                <div class="div_clear">
+                    <div class="fl w">Tour Code</div>
+                    <div class="fl t">團代號</div>
+                    <div class="fl tour_code"></div>
+                </div>
+                <div class="div_clear">
+                    <div class="fl w">Tour Date</div>
+                    <div class="fl t">日期</div>
+                    <div class="fl" id="begin_time"></div>
+                </div>
+                <div class="div_clear">
+                    <div class="fl w">Tour Language</div>
+                    <div class="fl t">語言</div>
+                    <div class="fl">English</div>
+                </div>
+                <div class="tour-pos">
+                    <div>Emergency Contact</div>
+                    <div id="lianxiren"></div>
+                    <div>T: <span id="lianxidianhua">0499 666 631</span></div>
+                </div>
+            </div>
+        </div><!--旅游确认单-->
+        <div class="plan_list">
+            <div class="other_title"><img src="__STATIC__/image/branchcompany/Travellers.png" />Travellers 客人資料</div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Name<br>姓名</th>
+                        <th>Room<br>房間</th>
+                    </tr>
+                </thead>
+                <tbody id="information"></tbody>
+            </table>
+        </div><!--客人资料-->
+        <div class="plan_list">
+            <div class="other_title"><img src="__STATIC__/image/branchcompany/Transfer_Service.png" />Transfer Service 接送機服務</div>
+            <table>
+                <thead>
+                <tr>
+                    <th width="120px">Date<br>日期</th>
+                    <th>Airport<br>機場</th>
+                    <th>Service<br>服務</th>
+                    <th>Flight#<br>機號</th>
+                    <th>Time<br>時間</th>
+                </tr>
+                </thead>
+                <tbody id="flight"></tbody>
+            </table>
+        </div><!--接送机服务-->
+        <div class="plan_list">
+            <div class="other_title"><img src="__STATIC__/image/branchcompany/Hotel_Accommodation.png" />Hotel Accommodation 前/後酒店住宿</div>
+            <table>
+                <thead>
+                <tr>
+                    <th width="120px">Date<br>日期</th>
+                    <th>Travellers<br>客人</th>
+                    <th>Pre/Post<br>前/後</th>
+                    <th>Hotel<br>酒店</th>
+                    <th>Night<br>天數</th>
+                    <th>Room<br>房間</th>
+                </tr>
+                </thead>
+                <tbody id="customer_info"></tbody>
+            </table>
+        </div><!--前后酒店住宿-->
+        <div class="plan_list">
+            <div class="other_title other_title_border"><img src="__STATIC__/image/branchcompany/Remark.png" />Remark 備註</div>
+            <div id="teshuyaoqiu_str"></div>
+        </div><!--备注-->
+        <div class="plan_list">
+            <div class="other_title other_title_border"><img src="__STATIC__/image/branchcompany/Tour_Option.png" />Tour Option 旅遊選項</div>
+            <div class="sour_box">
+                <div class="fl" style="margin-right: 20px;">Tour Package:</div>
+                <div class="fl" id="own_expense_info"></div>
+            </div>
+        </div><!--旅游选项-->
+        <div class="plan_list" id="return_receipt">
+
+        </div><!--回执单-->
+        <div class="plan_list">
+            <div class="other_title other_title_border"><img src="__STATIC__/image/branchcompany/Itinerary.png" />Itinerary 行程</div>
+            <table>
+                <tbody id="team_product_jounery"></tbody>
+            </table>
+        </div><!--行程-->
+
+
+        <input type="hidden" name="number" value="{$company_order_number}" id="number" />
+    </div>
+</div>
+{include file='public/foot_js' /}
+<script type="text/javascript" src="__STATIC__/javascript/data.js"></script>
+<script type="text/javascript" src="__STATIC__/javascript/branchcompany/planTourIframe.js"></script>
+</body>
+</html>

@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    {include file='public/head' /}
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>{$language_tag.index_public_finance}-{$language_tag.index_product_PlanSuppliersPayable_incomeStatement}</title>
+    <link href="__STATIC__/css/product.css" rel="stylesheet">
+    <style>
+        #page-content th,#page-content td{
+            text-align: center;
+            line-height: 30px;
+            padding:10px;
+        }
+        #page-content th{
+            font-weight: bold;
+        }
+        .tr-none{
+            display: none;
+        }
+    </style>
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+    <div class="layui-header">
+        {include file='public/header' /}
+    </div>
+
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll">
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            {include file='public/left_menu' /}
+        </div>
+    </div>
+
+    <div class="layui-body layui-body-bg">
+        <div style="padding: 15px 15px 0px;">
+            <div class="body-top">
+                <div class='layui-form-item'>
+                    <span class="layui-breadcrumb" lay-separator="-">
+                        <a>{$language_tag.index_public_homepage}</a>
+                        <a>{$language_tag.index_source_showSupplierManage_supplier_administrate}</a>
+                        <a>{$language_tag.index_source_showSupplierManage_manage_supplier}</a>
+                        <a><cite>账户</cite></a>
+                    </span>
+                </div>
+                <div class='layui-block all-search-bg'>
+                    <br/>
+
+                        <div class="layui-row">
+
+                            <div class="layui-col-md4">
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">账户余额:</label>
+                                    <div class="layui-input-block">
+                                        <input type="text" id="tableMonths" name="year_month" value="{$supplier_account.symbol}    {$supplier_account.account}" class="layui-input" disabled>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-col-md4">
+                                <div class='input-inline button-marginLeft'>
+                                    <!--<button class="layui-btn nav-search" >{$language_tag.index_public_add}</button>-->
+                                </div>
+                            </div>
+                        </div>
+                </div>
+            </div>
+            <div class="content-bg">
+                <form method='get' action='/source/supplierAccount'>
+
+                    <div class="layui-row">
+                        <div class="layui-col-md4">
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">{$language_tag.index_public_time}:</label>
+                                <div class="layui-input-block">
+                                    <div class="layui-input-inline datetime-width">
+                                        <input type="text" name="begin_time" placeholder="{$language_tag.index_branchcompany_showDistributorManage_pleaseSelectTheDate}" autocomplete="off" value="{$_GET["begin_time"]}" class="layui-input sales-date">
+                                    </div>
+                                    <div class="date-and">-</div>
+                                    <div class="layui-input-inline datetime-width">
+                                        <input type="text" name="end_time" placeholder="{$language_tag.index_branchcompany_showDistributorManage_pleaseSelectTheDate}" autocomplete="off" value="{$_GET["end_time"]}" class="layui-input sales-date">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-col-md4">
+                            <div class='input-inline all-button-center pages-search-margin'>
+                                <input type="hidden" name="supplier_id" value="{$_GET["supplier_id"]}">
+                                <button class="layui-btn nav-search" data-type="reload">{$language_tag.index_public_search}</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+                <hr>
+                <div class="table-nont" id="page-content" style="width: 100%;margin:0px auto">
+                    <table class="layui-table" id="table-list" style="width:100%;margin-bottom:20px;border-collapse: collapse;border:none">
+                        <thead>
+                            <tr align="left" style="background:#f2f2f2">
+                                <th style="width:20%">时间</th>
+                                <th style="width:20%">账户操作</th>
+                                <th style="width:20%">备注</th>
+                            </tr>
+                        </thead>
+
+                        <tbody style="border:1px solid #e6e6e6">
+                            {foreach name="$supplier_account_info" item="v"}
+                            <tr>
+                                <td>{$v.create_time|date="Y-m-d H:m:i",###}</td>
+                                <td>{$v.type==1 ? '+' : '-'}&nbsp;{$v.money}{$v.symbol}</td>
+                                <td>{$v.remark}</td>
+                            </tr>
+                            {/foreach}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="layui-footer">
+        <!-- 底部固定区域 -->
+        © layui.com - 底部固定区域
+    </div>
+    <script id="demo" type="text/html">
+
+    </script>
+</div>
+{include file='public/foot_js' /}
+<script type="text/javascript" src="__STATIC__/javascript/product/all.js"></script>
+<script>
+    layui.use(['layer', 'form','laydate'], function(){
+        var layer = layui.layer
+            ,laydate=layui.laydate
+            ,form = layui.form;
+
+        lay('.sales-date').each(function(){
+            laydate.render({
+                elem: this
+                ,trigger: 'click',
+                type:'datetime'
+                ,done: function(value, date){
+                    console.log(date)
+                }
+            });
+        });
+
+    });
+
+</script>
+
+
+
+</body>
+</html>

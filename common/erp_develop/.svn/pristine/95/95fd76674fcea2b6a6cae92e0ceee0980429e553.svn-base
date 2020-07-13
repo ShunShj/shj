@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {include file='public/head' /}
+    <title>{$language_tag.index_product_showRouteTemplateManage_receiptTemplate}</title>
+    <link href="__STATIC__/css/product.css" rel="stylesheet">
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+    <div class="layui-header">
+        {include file='public/header' /}
+    </div>
+
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll">
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            {include file='public/left_menu' /}
+        </div>
+    </div>
+
+    <div class="layui-body">
+
+        <!-- 内容主体区域 -->
+        <div style="padding: 15px;">
+            <div class='layui-form-item'>
+                <span class="layui-breadcrumb" lay-separator="-">
+                    <a>{$language_tag.index_public_homepage}</a>
+                    <a>{$language_tag.index_branchcompany_showBranchProductManage_branchManagement}</a>
+                    <a>{$language_tag.index_branchcompany_showCompanyOrderManage_orderManagement}</a>
+                     <a><cite>{$language_tag.index_branchcompany_showCompanyOrderManage_addEdit_primeCost}</cite></a>
+                </span>
+                <div style="display:inline-block;width:88%;"></div>
+                <span><button class="layui-btn nav-submit" onclick="all_array_submit();">{$language_tag.index_branchcompany_showCompanyOrderManage_addEdit_submit}</button></span>
+                <a href="/branchcompany/showCompanyOrderManage">
+                    <button type="button" class="layui-btn layui-btn-primary">{$language_tag.index_branchcompany_showCompanyOrderManage_addEdit_temporaryStorage}</button>
+                </a>
+            </div>
+            <div class="layui-tab layui-tab-brief" lay-filter="companyOrder">
+                <ul class="layui-tab-title layui-tab-url">
+                    <li>{$language_tag.index_product_showRouteTemplateManage_information}</li>
+                    <li>{$language_tag.index_branchcompany_showCompanyOrderManage_addEdit_touristInformation}</li>
+                    <li>{$language_tag.index_branchcompany_showCompanyOrderManage_addEdit_product}</li>
+                    <li class="layui-this">{$language_tag.index_branchcompany_showCompanyOrderManage_addEdit_primeCost}</li>
+                    <li>{$language_tag.index_branchcompany_showCompanyOrderManage_addEdit_quotedPrice}</li>
+                    <li>{$language_tag.index_branchcompany_showCompanyOrderManage_addEdit_salesReceipts}</li>
+                </ul>
+                <br>
+                <div class="layui-tab-content">
+                    <div class="layui-tab-item layui-show table-nont">
+                        <table class="layui-table table-product layui-form layui-order-cost table-select-none">
+                            <colgroup>
+                                <col width="130">
+                                <col width="130">
+                                <col width="130">
+                                <col width="130">
+                                <col width="130">
+                                <col width="170">
+                                <col width="250">
+                                <col width="200">
+                                <col width="150">
+                                <col width="100">
+                                <col width="80">
+                            </colgroup>
+                            <thead>
+                            <tr>
+                                <th>{$language_tag.index_product_PlanSuppliersPayable_payableNumber}</th>
+                                <th>{$language_tag.index_branchcompany_showBranchProductManage_productType}</th>
+                                <!--<th>分公司</th>-->
+                                <th>{$language_tag.index_public_supplier}</th>
+                                <th>{$language_tag.index_product_PlanBooking_order_product}</th>
+                                <th>{$language_tag.index_product_PlanBooking_number}</th>
+                                <th>{$language_tag.index_finance_showMustPayManage_receivable_invoice_number}</th>
+                                <th>{$language_tag.index_finance_showMustPayManage_receivable_invoice_time}</th>
+                                <th>{$language_tag.index_product_showRouteTemplateManage_resources_currency}</th>
+                                <th>{$language_tag.index_product_showRouteTemplateManage_resources_price}</th>
+                                <th>{$language_tag.index_source_operation}</th>
+                                <th style="display:none;"></th>
+                                <th style="display:none;"></th>
+                            </tr>
+                            </thead>
+                            {volist name="company_order_product_team" id="vo_c"}
+                                <tbody>
+                                    <tr>
+                                        <td class="aa">{$vo_c.company_order_product_team_id}</td>
+                                        <td class="bb">{$language_tag.index_product_ShowPlanTour_resources_teamProduct}</td>
+                                        <!--<td>加拿大</td>-->
+                                        <td>{$vo_c.supplier_name}</td>
+                                        <td>{$vo_c.team_product_name}</td>
+                                        <td>{$vo_c.count}</td>
+                                        <td><input type="text" name="costSpinv" placeholder="{$language_tag.index_branchcompany_showCompanyOrderManage_addEdit_statementNumber}" value="{$vo_c.invoice_number}" class="layui-input invoice-number"></td>
+                                        <td>
+                                            {if condition="$vo_c.invoice_time eq '1970-01-01'"}
+                                            <input type="text" name="costSpinvDate" placeholder="{$language_tag.index_branchcompany_showCompanyOrderManage_addEdit_balanceDate}" value="" class="layui-input layui-input-date invoice-time">
+                                            {else/}
+                                            <input type="text" name="costSpinvDate" placeholder="{$language_tag.index_branchcompany_showCompanyOrderManage_addEdit_balanceDate}" value="{$vo_c.invoice_time}" class="layui-input layui-input-date invoice-time">
+                                            {/if}
+                                        </td>
+                                        <td class="table-input-none">
+                                            <select name="costCurrency" lay-verify="required" disabled>
+                                                {volist name="currency_result_data" id="currency"}
+                                                <option value="{$currency.currency_id}" {if condition="$currency.currency_id eq $vo_c.cost_currency_id"}selected="seleted"{/if}>{$currency.currency_name}</option>
+                                                {/volist}
+                                            </select>
+                                        </td>
+                                        <td>{$vo_c.team_product_cost*$vo_c.count}</td>
+                                        <td><a href="#" class="layui-btn layui-btn-sm hover-edit layui-btn-primary" onclick="edit_cost(this)">{$language_tag.index_branchcompany_showCompanyOrderManage_addEdit_preserve}</a></td>
+                                        <td class="ll" style="display:none">{$vo_c.team_product_number}</td>
+                                        <td class="mm" style="display:none">{$vo_c.branch_product_number}</td>
+                                    </tr>
+                                </tbody>
+                            {/volist}
+
+                            {volist name="company_order_product_source" id="vo_c"}
+                          
+		                            <tbody>
+		                            <tr>
+		                                <td class="aa">{$vo_c.company_order_product_team_id}</td>
+		                                <td class="bb">{$language_tag.index_finance_showReceivableManage_ownexpense}</td>
+		                                <!--<td>加拿大</td>-->
+		                                <td>{$vo_c.supplier_name}</td>
+		                                <td>{$vo_c.source_name}</td>
+		                                <td>{$vo_c.count}</td>
+		                                <td><input type="text" name="costSpinv" placeholder="{$language_tag.index_branchcompany_showCompanyOrderManage_addEdit_statementNumber}" value="{$vo_c.invoice_number}" class="layui-input invoice-number"></td>
+		                                <td>
+		                                    {if condition="$vo_c.invoice_time eq '1970-01-01'"}
+		                                    <input type="text" name="costSpinvDate" placeholder="{$language_tag.index_branchcompany_showCompanyOrderManage_addEdit_balanceDate}" value="" class="layui-input layui-input-date invoice-time">
+		                                    {else/}
+		                                        <input type="text" name="costSpinvDate" placeholder="{$language_tag.index_branchcompany_showCompanyOrderManage_addEdit_balanceDate}" value="{$vo_c.invoice_time}" class="layui-input layui-input-date invoice-time">
+		                                    {/if}
+		                                </td>
+		                                <td class="table-input-none">
+		                                    <select name="costCurrency" lay-verify="required" disabled>
+		                                        {volist name="currency_result_data" id="currency"}
+		                                        <option value="{$currency.currency_id}" {if condition="$currency.currency_id eq $vo_c.cost_currency_id"}selected="seleted"{/if}>{$currency.currency_name}</option>
+		                                        {/volist}
+		                                    </select>
+		                                </td>
+		                                <td>{$vo_c.source_cost*$vo_c.count}</td>
+		                                <td><a href="#" class="layui-btn layui-btn-sm hover-edit layui-btn-primary" onclick="edit_cost(this)">{$language_tag.index_branchcompany_showCompanyOrderManage_addEdit_preserve}</a></td>
+		                                <td class="lll" style="display:none">{$vo_c.company_order_product_source_id}</td>
+		                                <td class="mm" style="display:none">{$vo_c.branch_product_number}</td>
+		                            </tr>
+		                            </tbody>
+		                        
+                            {/volist}
+
+                            {volist name="company_order_product_diy" id="vo_c"}
+                            <tbody>
+                            <tr>
+                                <td class="aa">{$vo_c.company_order_product_team_id}</td>
+                                <td class="bb">{$language_tag.index_branchcompany_showCompanyOrderManage_addEdit_customProduct}</td>
+                                <!--<td>加拿大</td>-->
+                                <td>{$vo_c.supplier_name}</td>
+                                <td>{$vo_c.diy_name}</td>
+                                <td>{$vo_c.count}</td>
+                                <td><input type="text" name="costSpinv" placeholder="{$language_tag.index_branchcompany_showCompanyOrderManage_addEdit_statementNumber}" value="{$vo_c.invoice_number}" class="layui-input invoice-number"></td>
+                                <td>
+                                    {if condition="$vo_c.invoice_time eq '1970-01-01'"}
+                                    <input type="text" name="costSpinvDate" placeholder="{$language_tag.index_branchcompany_showCompanyOrderManage_addEdit_balanceDate}" value="" class="layui-input layui-input-date invoice-time">
+                                    {else/}
+                                    <input type="text" name="costSpinvDate" placeholder="{$language_tag.index_branchcompany_showCompanyOrderManage_addEdit_balanceDate}" value="{$vo_c.invoice_time}" class="layui-input layui-input-date invoice-time">
+                                    {/if}
+                                </td>
+                                <td class="">
+                                    <!--<select name="costCurrency" lay-verify="required" disabled>-->
+                                        <!--{volist name="currency_result_data" id="currency"}-->
+                                        <!--<option value="{$currency.currency_id}" {if condition="$currency.currency_id eq $vo_c.cost_currency_id"}selected="seleted"{/if}>{$currency.currency_name}</option>-->
+                                        <!--{/volist}-->
+                                    <!--</select>-->
+                                    &nbsp;&nbsp;{$vo_c.price_currency_name}
+                                </td>
+                                <td>{$vo_c.diy_cost*$vo_c.count}</td>
+                                <td><a href="#" class="layui-btn layui-btn-sm hover-edit layui-btn-primary" onclick="edit_cost(this)">{$language_tag.index_branchcompany_showCompanyOrderManage_addEdit_preserve}</a></td>
+                                <td class="llll" style="display:none">{$vo_c.company_order_product_diy_number}</td>
+                                <td class="mm" style="display:none">{$vo_c.branch_product_number}</td>
+                            </tr>
+                            </tbody>
+                            {/volist}
+
+                        </table>
+                    </div><!--成本-->
+                </div>
+            </div>
+        </div>
+    </div>
+    <div  class="layui-layer layui-layer-dialog" id="han_test" type="dialog" times="1" showtime="0" contype="string" style="display:none;z-index: 19891015; width: 450px; height: 380px; top: 169.5px; left: 735px;">
+        <div class="layui-layer-title" style="cursor: move;">{$language_tag.index_finance_showReceivableManage_choose_customer}</div>
+        <div id="" class="layui-layer-content" style="height: 244px;">
+            <form class="layui-form visitorListTips">
+
+                <div class="checkboxList" id="'visitorList3">
+                    {foreach name='company_order_customer' item='vo'}
+                    <input type="checkbox" name="productCheckbox1" value="{$vo.customer_id}" title="{$vo.customer_first_name}{$vo.customer_last_name}" lay-skin="primary" class="productCheckbox">
+                    {/foreach}
+
+
+                </div>
+            </form>
+        </div>
+
+        <div class="layui-layer-btn layui-layer-btn-c">
+            <a class="layui-layer-btn1 layui-btn-primary" id="close_div">{$language_tag.index_public_cancel}</a>
+        </div>
+
+    </div>
+    
+    <input type='hidden' id='lang_team_product' value="{$language_tag.index_product_ShowPlanTour_resources_teamProduct}" />
+    <input type='hidden' id='lang_own_expense' value="{$language_tag.index_finance_showReceivableManage_ownexpense}" />
+    <input type='hidden' id='lang_diy' value="{$language_tag.index_product_ShowPlanTour_resources_teamProduct}" />
+    <div class="layui-footer">
+        <!-- 底部固定区域 -->
+        © layui.com - 底部固定区域
+    </div>
+    <input type="hidden" id="template_do" value="4">
+</div>
+<!--游客选择-->
+<script id="visitorListTips" type="text/html">
+    <form class="layui-form visitorListTips">
+        <div><input type="checkbox" name="productCheckboxAll" title="{$language_tag.index_finance_showReceivableManage_choose_all}" lay-skin="primary" lay-filter="checkboxAll"></div>
+        <br>
+        <div class="checkboxList">
+            <input type="checkbox" name="productCheckbox" title="1" lay-skin="primary" class="productCheckbox">
+            <input type="checkbox" name="productCheckbox1" title="2" lay-skin="primary" class="productCheckbox">
+        </div>
+    </form>
+</script>
+{include file='public/foot_js' /}
+<script src='__STATIC__/javascript/product/all.js'></script>
+<script src="__STATIC__/javascript/product/cost.js"></script>
+</body>
+</html>

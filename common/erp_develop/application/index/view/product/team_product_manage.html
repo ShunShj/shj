@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {include file='public/head' /}
+    <title>language-manage</title>
+
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+    <div class="layui-header">
+        {include file='public/header' /}
+    </div>
+
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll">
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            {include file='public/left_menu' /}
+        </div>
+    </div>
+
+    <div class="layui-body">
+
+        <!-- 内容主体区域 -->
+        <div style="padding: 15px;">
+            <div class='layui-form-item'>
+			<span class="layui-breadcrumb">
+				<a href="#">{$language_tag.index_public_product}</a>
+				<a href="#"><cite>{$language_tag.index_product_ShowPlanTour_resources_teamProduct}</cite></a>
+			</span>
+            </div>
+            <br/>
+            <div class='layui-form-item'>
+                <a href='/product/showTeamProductAdd'><button class="layui-btn">{$language_tag.index_product_showTeamProductManage_creat_team_product}</button></a>&nbsp;&nbsp;
+                <a href='/product/showTeamProductAdd'><button class="layui-btn">{$language_tag.index_product_ShowPlanTour_group_booking}</button></a>
+            </div>
+            <br/>
+            <form method='get' action='/product/showRouteTypeManage'>
+                <div class='layui-input-inline'>
+                    <div class="layui-form">
+                        <select id="" name="status">
+                            <option value="" selected="">{$language_tag.index_product_showRouteTemplateManage_routeType}</option>
+                            <option value="1">{$language_tag.index_product_showRouteTemplateManage_chineseGroup}</option>
+                            <option value="2">{$language_tag.index_product_showRouteTemplateManage_foreignRegiment}</option>
+                        </select>
+                    </div>
+                </div>
+                <div class='layui-input-inline'>
+                    <div class="layui-form">
+                        <select id="" name="status">
+                            <option value="0" selected="">{$language_tag.index_product_showRouteTemplateManage_status}</option>
+                            <option value="1">{$language_tag.index_public_show}</option>
+                            <option value="2">{$language_tag.index_product_showTeamProductManage_stop_use}</option>
+                            <option value="3">{$language_tag.index_branchcompany_showCompanyOrderManage_approval}</option>
+                            <option value="4">{$language_tag.index_branchcompany_showCompanyOrderManage_notAdopted}</option>
+                        </select>
+                    </div>
+                </div>
+                <div class='layui-input-inline'>
+                    <input type="text" id="" name="route_type_name"  placeholder="{$language_tag.index_product_ShowPlanTour_productNumber}" class="layui-input">
+                </div>
+                <div class='layui-input-inline'>
+                    <input type="text" id="" name="route_type_name"  placeholder="{$language_tag.index_product_ShowPlanTour_teamName}" class="layui-input">
+                </div>
+                <div class='layui-input-inline'>
+                    <input type="hidden" name="supplier_type_id" value="4">
+                    <button class="layui-btn" >{$language_tag.index_public_search}</button>
+                </div>
+            </form>
+        </div>
+        <table class="layui-table" id="language-table">
+            <thead>
+            <tr>
+                <th></th>
+                <th>{$language_tag.index_public_status}</th>
+                <th>package_number</th>
+                <th>{$language_tag.index_product_ShowPlanTour_productNumber}</th>
+                <th>{$language_tag.index_product_ShowPlanTour_teamName}</th>
+                <th>{$language_tag.index_product_showRouteTemplateManage_days}</th>
+                <th>{$language_tag.index_product_showRouteTemplateManage_routeType}</th>
+                <th>{$language_tag.index_branchcompany_showBranchProductManage_startDate}</th>
+                <th>{$language_tag.index_product_showRouteTemplateManage_resourceAllocation}</th>
+                <th>{$language_tag.index_product_showRouteTemplateManage_userName}</th>
+                <th>{$language_tag.index_product_showRouteTemplateManage_plan_custom_number}</th>
+                <th>{$language_tag.index_product_ShowPlanTour_receivedVisitors}</th>
+                <th>{$language_tag.index_product_showRouteTemplateManage_updateTime}</th>
+                <th>{$language_tag.index_product_ShowPlanTour_operatingPersonnel}</th>
+                <th>{$language_tag.index_product_ShowPlanTour_suppliersPayable}</th>
+                <th>{$language_tag.index_product_PlanBooking_order}</th>
+                <th>{$language_tag.index_source_operation}</th>
+            </tr>
+            </thead>
+
+            <tbody>
+            <!--{foreach name="data" item="vo" }-->
+            <!--<tr>-->
+                <!--<th>{$vo.route_type_id}</th>-->
+                <!--<th>{$vo.route_type_name}</th>-->
+                <!--<th>{if condition="$vo.type eq 1"}华人团{else/}老外团{/if}</th>-->
+                <!--<th>{if condition="$vo.status eq 1"}启用{else/}禁用{/if}</th>-->
+                <!--<th><a href='/product/showRouteTypeEdit?route_type_id={$vo.route_type_id}'><button class="layui-btn layui-btn-sm">&nbsp;编&nbsp;辑&nbsp;</button></a> <a href='/product/showRouteTypeInfo?route_type_id={$vo.route_type_id}'><button class="layui-btn layui-btn-sm">&nbsp;详&nbsp;情&nbsp;</button></a></th>-->
+            <!--</tr>-->
+            <!--{/foreach}-->
+                <tr>
+                    <th><input type="checkbox"></th>
+                    <th><span style="color:red;">{$language_tag.index_product_showRouteOwnExpenseAdd_conglomerate}</span></th>
+                    <th><a href="#">package_number</a></th>
+                    <th>NHC19-TW6D0202</th>
+                    <th>{$language_tag.index_product_showTeamProductManage_19_six-day_tour}</th>
+                    <th>6</th>
+                    <th>{$language_tag.index_product_showRouteTemplateManage_chineseGroup}</th>
+                    <th>2018-7-20</th>
+                    <th><span class="set_border">{$language_tag.index_finance_showReceivableManage_hotel}</span> <span class="set_border">{$language_tag.index_public_dining}</span> <span class="set_border">{$language_tag.index_finance_showReceivableManage_flight}</span> <span class="set_border">{$language_tag.index_finance_showReceivableManage_cruise}</span> <span class="set_border">{$language_tag.index_finance_showReceivableManage_scenic_spot}</span> <span class="set_border">{$language_tag.index_finance_showReceivableManage_visa}</span> <span class="set_border">{$language_tag.index_finance_showReceivableManage_vehicle}</span> <span class="set_border">{$language_tag.index_finance_showReceivableManage_tourguide}</span> <span class="set_border2">{$language_tag.index_finance_showReceivableManage_singlesource}</span></th>
+                    <th>baimin</th>
+                    <th>6</th>
+                    <th>6</th>
+                    <th>2018-7-20 13:16:00</th>
+                    <th>baimin</th>
+                    <th><a href='/product/showRouteTypeEdit?route_type_id={$vo.route_type_id}'><button class="layui-btn layui-btn-sm">&nbsp;{$language_tag.index_branchcompany_showBranchProductManage_look}&nbsp;</button></a></th>
+                    <th><a href='/product/showRouteTypeEdit?route_type_id={$vo.route_type_id}'><button class="layui-btn layui-btn-sm">&nbsp;{$language_tag.index_branchcompany_showBranchProductManage_look}&nbsp;</button></a></th>
+                    <th><a href='/product/showRouteTypeEdit?route_type_id={$vo.route_type_id}'><button class="layui-btn layui-btn-sm">&nbsp;{$language_tag.index_product_showTeamProductManage_edit}&nbsp;</button></a><br/><a href='/product/showRouteTypeInfo?route_type_id={$vo.route_type_id}'><button class="layui-btn layui-btn-sm" style="margin-top:5px;">&nbsp;{$language_tag.index_public_info}&nbsp;</button></a><br/><a href='/product/showRouteTypeInfo?route_type_id={$vo.route_type_id}'><button class="layui-btn layui-btn-sm" style="margin-top:5px;">&nbsp;{$language_tag.index_product_showTeamProductManage_cancel_conglomerate}&nbsp;</button></a></th>
+                </tr>
+                <tr>
+                    <th><input type="checkbox"></th>
+                    <th>{$language_tag.index_public_show}</th>
+                    <th><a href="#">package_number</a></th>
+                    <th>NHC19-TW6D0202</th>
+                    <th>{$language_tag.index_product_showTeamProductManage_19_six-day_tour}</th>
+                    <th>6</th>
+                    <th>{$language_tag.index_product_showRouteTemplateManage_chineseGroup}</th>
+                    <th>2018-7-20</th>
+                    <th><span class="set_border">{$language_tag.index_finance_showReceivableManage_hotel}</span> <span class="set_border">{$language_tag.index_public_dining}</span> <span class="set_border">{$language_tag.index_finance_showReceivableManage_flight}</span> <span class="set_border">{$language_tag.index_finance_showReceivableManage_cruise}</span> <span class="set_border">{$language_tag.index_finance_showReceivableManage_scenic_spot}</span> <span class="set_border">{$language_tag.index_finance_showReceivableManage_visa}</span> <span class="set_border">{$language_tag.index_finance_showReceivableManage_vehicle}</span> <span class="set_border">{$language_tag.index_finance_showReceivableManage_tourguide}</span> <span class="set_border2">{$language_tag.index_finance_showReceivableManage_singlesource}</span></th>
+                    <th>baimin</th>
+                    <th>6</th>
+                    <th>6</th>
+                    <th>2018-7-20 13:16:00</th>
+                    <th>baimin</th>
+                    <th><a href='/product/showRouteTypeEdit?route_type_id={$vo.route_type_id}'><button class="layui-btn layui-btn-sm">&nbsp;{$language_tag.index_branchcompany_showBranchProductManage_look}&nbsp;</button></a></th>
+                    <th><a href='/product/showRouteTypeEdit?route_type_id={$vo.route_type_id}'><button class="layui-btn layui-btn-sm">&nbsp;{$language_tag.index_branchcompany_showBranchProductManage_look}&nbsp;</button></a></th>
+                    <th><a href='/product/showRouteTypeEdit?route_type_id={$vo.route_type_id}'><button class="layui-btn layui-btn-sm">&nbsp;{$language_tag.index_product_showTeamProductManage_edit}&nbsp;</button></a><br/><a href='/product/showRouteTypeInfo?route_type_id={$vo.route_type_id}'><button class="layui-btn layui-btn-sm" style="margin-top:5px;">&nbsp;{$language_tag.index_public_info}&nbsp;</button></a><br/><a href='/product/showRouteTypeInfo?route_type_id={$vo.route_type_id}'><button class="layui-btn layui-btn-sm" style="margin-top:5px;">&nbsp;{$language_tag.index_product_showTeamProductManage_cancel_conglomerate}&nbsp;</button></a></th>
+                </tr>
+                <tr>
+                    <th><input type="checkbox"></th>
+                    <th>{$language_tag.index_public_show}</th>
+                    <th><a href="#">package_number</a></th>
+                    <th>NHC19-TW6D0202</th>
+                    <th>{$language_tag.index_product_showTeamProductManage_19_six-day_tour}</th>
+                    <th>6</th>
+                    <th>{$language_tag.index_product_showRouteTemplateManage_chineseGroup}</th>
+                    <th>2018-7-20</th>
+                    <th><span class="set_border">{$language_tag.index_finance_showReceivableManage_hotel}</span> <span class="set_border">{$language_tag.index_public_dining}</span> <span class="set_border">{$language_tag.index_finance_showReceivableManage_flight}</span> <span class="set_border">{$language_tag.index_finance_showReceivableManage_cruise}</span> <span class="set_border">{$language_tag.index_finance_showReceivableManage_scenic_spot}</span> <span class="set_border">{$language_tag.index_finance_showReceivableManage_visa}</span> <span class="set_border">{$language_tag.index_finance_showReceivableManage_vehicle}</span> <span class="set_border">{$language_tag.index_finance_showReceivableManage_tourguide}</span> <span class="set_border2">{$language_tag.index_finance_showReceivableManage_singlesource}</span></th>
+                    <th>baimin</th>
+                    <th>6</th>
+                    <th>6</th>
+                    <th>2018-7-20 13:16:00</th>
+                    <th>baimin</th>
+                    <th><a href='/product/showRouteTypeEdit?route_type_id={$vo.route_type_id}'><button class="layui-btn layui-btn-sm">&nbsp;{$language_tag.index_branchcompany_showBranchProductManage_look}&nbsp;</button></a></th>
+                    <th><a href='/product/showRouteTypeEdit?route_type_id={$vo.route_type_id}'><button class="layui-btn layui-btn-sm">&nbsp;{$language_tag.index_branchcompany_showBranchProductManage_look}&nbsp;</button></a></th>
+                    <th><a href='/product/showRouteTypeEdit?route_type_id={$vo.route_type_id}'><button class="layui-btn layui-btn-sm">&nbsp;{$language_tag.index_product_showTeamProductManage_edit}&nbsp;</button></a><br/><a href='/product/showRouteTypeInfo?route_type_id={$vo.route_type_id}'><button class="layui-btn layui-btn-sm" style="margin-top:5px;">&nbsp;{$language_tag.index_public_info}&nbsp;</button></a><br/><a href='/product/showRouteTypeInfo?route_type_id={$vo.route_type_id}'><button class="layui-btn layui-btn-sm" style="margin-top:5px;">&nbsp;{$language_tag.index_product_showTeamProductManage_cancel_conglomerate}&nbsp;</button></a></th>
+                </tr>
+            </tbody>
+
+        </table>
+    </div>
+</div>
+
+<div class="layui-footer">
+    <!-- 底部固定区域 -->
+    © layui.com - 底部固定区域
+</div>
+</div>
+{include file='public/foot_js' /}
+<script src='__STATIC__/javascript/system/product.js'></script>
+
+</body>
+</html>

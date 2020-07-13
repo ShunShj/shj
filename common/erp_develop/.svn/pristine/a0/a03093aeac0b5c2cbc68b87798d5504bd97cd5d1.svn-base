@@ -1,0 +1,141 @@
+
+//添加分公司产品类型
+function branch_product_type_add(){
+	
+
+	var branch_product_type_name = $('#branch_product_type_name').val();
+
+    $.ajax({
+        type: "POST",
+        url: '/branchcompany/branchProductTypeAddAjax',
+        data: {
+        	branch_product_type_name:branch_product_type_name,
+        },
+        success: function(data){
+        	
+
+            if(data.code!=200){
+                layer.msg(data.msg);
+                return false;
+            }else if(data.code==200) {
+                layer.msg('操作成功',{time:1,end : function(layero, index){
+                		//location.href='/branchcompany/showBranchProductTypeManage'
+                        layer.load(2);
+                        history.back(-1);
+                    }
+                });
+            }
+        },
+        error:function(XMLHttpRequest, textStatus, errorThrown){
+            layer.msg('验证失败')
+        }
+    });
+	
+	
+	
+	return false;
+	
+	
+}
+	
+//修改分公司产品类型
+function branch_product_type_edit(){
+	
+
+	var branch_product_type_name = $('#branch_product_type_name').val();
+	var branch_product_type_id = $('#branch_product_type_id').val();
+	var status = $('#edit_status').val();
+
+    $.ajax({
+        type: "POST",
+        url: '/branchcompany/branchProductTypeEditAjax',
+        data: {
+        	branch_product_type_name:branch_product_type_name,
+        	branch_product_type_id:branch_product_type_id,
+        	status:status
+        },
+        success: function(data){
+        	
+
+            if(data.code!=200){
+                layer.msg(data.msg);
+                return false;
+            }else if(data.code==200) {
+                layer.msg('操作成功',{time:1,end : function(layero, index){
+                		//location.href='/branchcompany/showBranchProductTypeManage'
+                        layer.load(2);
+                        history.back(-1);
+                    }
+                });
+            }
+        },
+        error:function(XMLHttpRequest, textStatus, errorThrown){
+            layer.msg('验证失败')
+        }
+    });
+
+	return false;
+	
+	
+}
+
+
+//触发事件
+$('.branch_product_type_edit').click(function(){
+	var branch_product_type_id = $(this).attr('branch_product_type_id');
+    //示范一个公告层
+    layer.open({
+      type: 1
+      ,title: '确认删除吗' //不显示标题栏
+      ,closeBtn: false
+      //,area: '300px;'
+      ,shade: 0.8
+      ,id: 'LAY_layuipro' //设定一个id，防止重复弹出
+      ,btn: ['确定', '取消']
+      ,btnAlign: 'c'
+      ,moveType: 1 //拖拽模式，0或者1
+     // ,content:'确认删除吗'
+      ,yes: function(index,layero){
+    		var status = 0;
+    		
+
+    	    $.ajax({
+    	        type: "POST",
+    	        url: '/branchcompany/branchProductTypeEditAjax',
+    	        data: {
+    	        	status:status,
+    	        	branch_product_type_id:branch_product_type_id
+    	        },
+    	        success: function(data){
+    	        	
+
+    	            if(data.code!=200){
+    	                layer.msg(data.msg);
+    	                return false;
+    	            }else if(data.code==200) {
+    	                layer.msg('操作成功',{time:1,end : function(layero, index){
+    	                		//location.href='/branchcompany/showBranchProductTypeManage'
+                                layer.load(2);
+                                history.back(-1);
+    	                    }
+    	                });
+    	            }
+    	        },
+    	        error:function(XMLHttpRequest, textStatus, errorThrown){
+    	            layer.msg('验证失败')
+    	        }
+    	    });
+      }
+    });
+
+
+	
+	
+	
+	
+})
+
+
+
+
+

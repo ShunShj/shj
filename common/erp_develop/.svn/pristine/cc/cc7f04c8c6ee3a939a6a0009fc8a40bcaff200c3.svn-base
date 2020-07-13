@@ -1,0 +1,359 @@
+
+var formSelects = layui.formSelects;
+
+
+var team_product_number = $('#team_product_number').val();
+if(team_product_number != ''){
+	$('#shouru').show();
+	$('#zhichu').show();
+}
+var gettpl = $('#agentExpenseAdd').html();
+var gettpltwo = $('#agentExpenseAddTwo').html();
+var num='0';
+var numTwo=$("#cope_count").val();
+
+if(numTwo==0){
+	numTwo = 1;
+}
+
+/*点击input弹出游客选择*/
+//function agentVisitor() {
+//    $(".poperList,.productVisitor").show(300)
+//}
+/*添加地接报账--》删除表格列表*/
+function agentExpenseReduce(obj) {
+    $(obj).parents("tr").remove();
+}
+/*添加地接报账--》增加表格列表*/
+function agentExpenseAdd(obj) {
+    num=parseInt(num)+1;
+    laytpl(gettpl).render(num, function(html){
+        $(obj).parents("tr").after(html);
+    });
+    form.render();
+}
+function agentExpenseAddTwo(obj) {
+	
+    numTwo=parseInt(numTwo)+1;
+    laytpl(gettpltwo).render(numTwo, function(html){
+        $(obj).parents("tr").after(html);
+    });
+    
+    form.render();
+}
+form.on('select(checkTeam)', function(data){
+	location.href="/finance/showAgentExpenseAdd?team_product_number="+data.value
+	
+})
+
+//关闭游客选择
+$('#close_div').click(function(){
+	$('#open_window').hide();
+})
+
+ $(document).on('click','.look',function(){
+	 	var index   = $(".look").index(this);
+	 	$('#look_index').val(index)
+	 	
+		var company_order_number  = $(this).parent().parent().children('td').eq(1).find("option:selected").val();
+		
+
+		//	var insert_input = $('#insert_input');
+	 	//获取查看的 顾客ID
+	 	var company_order_customer_str = $(".look").eq(index).attr('company_order_customer_id');
+	 
+	 	var company_order_customer_arr = company_order_customer_str.split(',');
+	 
+		$.ajax({
+		  type: "POST",
+		  url: '/product/getCompanyOrderCustomer',
+		  data: {
+			  company_order_number:company_order_number,
+
+		  },
+		  success: function(data){
+			  	console.log(data)
+			  	var  data = data.data
+				var insert_input = $('#insert_input');
+				insert_input.html('')
+			  	var data_result =data//eval('(' +data.data+ ')') 
+			  	for(var i=0;i<data_result.length;i++){
+			  		var coc_id = data_result[i].company_order_customer_id;
+			  		coc_id = coc_id.toString();
+//			  		console.log(coc_id)
+//			  		console.log(company_order_customer_arr)
+//			  		console.log($.inArray(coc_id,company_order_customer_arr))
+			  		//开始判断是否需要选中
+			  		if($.inArray(coc_id,company_order_customer_arr)>=0){
+				  		var h = "<input type='checkbox' checked  name='productCheckbox1' company_customer_id='"+data_result[i].company_order_customer_id+"' value='"+data_result[i].customer_id+"' title='"+data_result[i].customer_name+"' lay-skin='primary' class='productCheckbox'>"
+
+			  		}else{
+				  		var h = "<input type='checkbox'  name='productCheckbox1' company_customer_id='"+data_result[i].company_order_customer_id+"' value='"+data_result[i].customer_id+"' title='"+data_result[i].customer_name+"' lay-skin='primary' class='productCheckbox'>"
+
+			  		}
+			  		insert_input.append(h)
+			  	}
+		        form.render();
+		    	$('#open_window').show();
+		  },
+		  error:function(XMLHttpRequest, textStatus, errorThrown){
+		      layer.msg('验证失败')
+		  }
+		});
+			 
+ });
+
+$(document).on('click','#update_customer',function(){
+	 
+	var customer_str='';
+	var customer_str2='';
+	//获得选中的游客
+	$("input[name='productCheckbox1']").each(function(index, item){
+		
+		if($(this).is(':checked')){
+			customer_str+=','+$(this).val()+'_'+$(this).attr('company_customer_id');
+			customer_str2+=','+$(this).attr('company_customer_id');
+		}
+	});
+	customer_str = customer_str.substring(1);
+	customer_str2 = customer_str2.substring(1);
+
+	$(".look").eq($('#look_index').val()).attr('company_order_customer_id_and_customer_id',customer_str);
+	$(".look").eq($('#look_index').val()).attr('company_order_customer_id',customer_str2);
+	$('#open_window').hide();
+	 
+});
+//选中支出供应商
+form.on('select(agentExpenseNote2)', function(data){
+	//获取当前的value
+	var value = data.value;
+	var that = data.elem.getAttribute('id')
+	
+
+
+
+	if(value>=2){//开始调取AJAX
+		//调取接口插入数据库
+		$.ajax({
+			  type: "POST",
+			  url: '/json/getSupplierAjax',
+			  data: {
+				
+				  supplier_type_id:value
+
+			  },
+			
+			  success: function(data){
+				  var data = eval('(' +data+ ')');
+			
+	            if(data.code!=200){
+	                layer.msg(data.msg);
+	                return false;
+	            }else if(data.code==200) {
+	            	//that.parent().next().find('input').val('胡胡测试');
+	            	$('#'+that+'_select').html('')
+	            	var data_result =data.data// eval('(' +data.data+ ')') 
+
+	            	for(var i =0;i<data_result.length;i++){
+	            		
+	            		var html ="<option value='"+data_result[i]['supplier_id']+"'>"+data_result[i]['supplier_name']+"</option>"
+	            		$('#'+that+'_select').append(html)
+	            	}
+	            	 form.render();
+	            }
+				  	
+			  },
+			  error:function(XMLHttpRequest, textStatus, errorThrown){
+			      layer.msg('验证失败')
+			  }
+			});	
+	}
+});
+
+function submitAdd(){
+
+	/**
+	 * 开始获取收入
+	 * 
+	 */
+	var shouru = $('#shouru_info').children('tr')
+	var team_product_number =formSelects.value('team_product_number');
+
+	var team_product_number_string = '';
+	for(var i=0;i<team_product_number.length;i++){
+		if(i==0){
+			team_product_number_string+=team_product_number[i]['val']
+		}else{
+			team_product_number_string+=','+team_product_number[i]['val']
+		}
+		
+			
+		
+	}
+
+	var zhichu = $('#zhichu_info').children('tr')
+	
+
+	if(shouru.length==0 && zhichu.length==0){
+		layer.msg('收入，支出必须有一项',2)
+		return false;
+	}
+	var shouru_arr =  new Array();
+	var zhichu_arr = new  Array();
+	for(var i =0; i<shouru.length; i++){
+		var company_order_number = shouru.eq(i).children('td').eq(1).find("option:selected").val();
+		var source_type = shouru.eq(i).children('td').eq(2).find("option:selected").val();
+		var product_name = shouru.eq(i).children('td').eq(3).find('input').val();
+		var company_customer_id = shouru.eq(i).children('td').eq(4).find('a').attr('company_order_customer_id');
+		var currency_id = shouru.eq(i).children('td').eq(5).find("option:selected").val();
+		var price = shouru.eq(i).children('td').eq(6).find('input').val();
+		shouru_arr.push([company_order_number,source_type,product_name,
+		                 company_customer_id,currency_id,price
+		                 
+		                 ])
+		
+	}
+	for(var j = 0; j<zhichu.length; j++){
+		var source_type_id =zhichu.eq(j).children('td').eq(1).find("option:selected").val();
+		var supplier_id =zhichu.eq(j).children('td').eq(2).find("option:selected").val();
+		var product_name = zhichu.eq(j).children('td').eq(3).find('input').val();
+		var currency_id = zhichu.eq(j).children('td').eq(4).find("option:selected").val();
+		var price = zhichu.eq(j).children('td').eq(5).find('input').val();
+		var unit = zhichu.eq(j).children('td').eq(6).find('input').val();
+		var total_price = zhichu.eq(j).children('td').eq(7).find('input').val();
+		zhichu_arr.push([
+		                 source_type_id,supplier_id,
+		                 product_name,currency_id,
+		                 price,unit,total_price 
+		                 ])
+	}
+	
+	//调取接口插入数据库
+	$.ajax({
+		  type: "POST",
+		  url: '/finance/AgentExpenseAddAjax',
+		  data: {
+			
+		    shouru_arr:JSON.stringify(shouru_arr),
+		    zhichu_arr:JSON.stringify(zhichu_arr),   
+		    team_product_number:team_product_number_string    
+		          
+		    
+		  },
+		
+		  success: function(data){
+
+            if(data.code!=200){
+                layer.msg(data.msg);
+                return false;
+            }else if(data.code==200) {
+                layer.msg('操作成功',{time:1,end : function(layero, index){
+                	location.href="/finance/showAgentExpenseManage"
+                    }
+                });
+            }
+			  	
+		  },
+		  error:function(XMLHttpRequest, textStatus, errorThrown){
+		      layer.msg('验证失败')
+		  }
+		});	
+	
+	return false;
+}
+
+/**
+提交
+*/
+//$('#submit_add').click(function(){
+//	
+//
+//	
+//})
+
+function submitEdit(){
+	
+	/**
+	 * 开始获取收入
+	 * 
+	 */
+	var shouru = $('#shouru_info').children('tr')
+	var travel_agency_reimbursement = $('#travel_agency_reimbursement_number').val();
+	var zhichu = $('#zhichu_info').children('tr')
+	
+	var team_product_number = $('#team_product_number').val();
+	if(shouru.length==0 && zhichu.length==0){
+		layer.msg('收入，支出必须有一项',2)
+		return false;
+	}
+	var shouru_arr =  new Array();
+	var zhichu_arr = new  Array();
+	for(var i =0; i<shouru.length; i++){
+		var company_order_number = shouru.eq(i).children('td').eq(1).find("option:selected").val();
+		var source_type = shouru.eq(i).children('td').eq(2).find("option:selected").val();
+		var product_name = shouru.eq(i).children('td').eq(3).find('input').val();
+		var company_customer_id = shouru.eq(i).children('td').eq(4).find('a').attr('company_order_customer_id');
+		var currency_id = shouru.eq(i).children('td').eq(5).find("option:selected").val();
+		var price = shouru.eq(i).children('td').eq(6).find('input').val();
+		var receivable_id = shouru.eq(i).children('td').eq(7).html();
+		shouru_arr.push([company_order_number,source_type,product_name,
+		                 company_customer_id,currency_id,price,
+		                 receivable_id
+		                 
+		                 ])
+		
+	}
+	for(var j = 0; j<zhichu.length; j++){
+		var source_type_id =zhichu.eq(j).children('td').eq(1).find("option:selected").val();
+		var supplier_id =zhichu.eq(j).children('td').eq(2).find("option:selected").val();
+		var product_name = zhichu.eq(j).children('td').eq(3).find('input').val();
+		var currency_id = zhichu.eq(j).children('td').eq(4).find("option:selected").val();
+		var price = zhichu.eq(j).children('td').eq(5).find('input').val();
+		var unit = zhichu.eq(j).children('td').eq(6).find('input').val();
+		var total_price = zhichu.eq(j).children('td').eq(7).find('input').val();
+		var cope_id = zhichu.eq(j).children('td').eq(8).html();
+		var cope_number = zhichu.eq(j).children('td').eq(9).html();
+		zhichu_arr.push([
+		                 source_type_id,supplier_id,
+		                 product_name,currency_id,
+		                 price,unit,total_price,
+		                 cope_id,
+		         
+		                 cope_number
+		                 ])
+	}
+	
+	//调取接口插入数据库
+	$.ajax({
+		  type: "POST",
+		  url: '/finance/AgentExpenseEditAjax',
+		  data: {
+			
+		    shouru_arr:JSON.stringify(shouru_arr),
+		    zhichu_arr:JSON.stringify(zhichu_arr),   
+		    travel_agency_reimbursement:travel_agency_reimbursement,
+		    team_product_number:team_product_number
+		    
+		  },
+		
+		  success: function(data){
+
+            if(data.code!=200){
+                layer.msg(data.msg);
+                return false;
+            }else if(data.code==200) {
+                layer.msg('操作成功',{time:1,end : function(layero, index){
+                	location.href="/finance/showAgentExpenseManage"
+                    }
+                });
+            }
+			  	
+		  },
+		  error:function(XMLHttpRequest, textStatus, errorThrown){
+		      layer.msg('验证失败')
+		  }
+		});	
+	
+	return false;
+}
+

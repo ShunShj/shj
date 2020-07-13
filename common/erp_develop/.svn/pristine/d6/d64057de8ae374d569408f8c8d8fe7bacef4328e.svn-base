@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {include file='public/head' /}
+    <title>{$language_tag.index_branchcompany_showCustomerAdd_add_customer}</title>
+
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+
+    <div class="layui-header">
+        {include file='public/header' /}
+    </div>
+
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll">
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            {include file='public/left_menu' /}
+        </div>
+    </div>
+
+    <div class="layui-body">
+
+        <!-- 内容主体区域 -->
+        <div style="padding: 15px;">
+            <div class='layui-form-item'>
+		   		<span class="layui-breadcrumb" lay-separator="-">
+                    <a>{$language_tag.index_public_homepage}</a>
+                    <a>{$language_tag.index_branchcompany_showBranchProductManage_branchManagement}</a>
+					<a>{$language_tag.index_branchcompany_showCustomerManage_customerManagement}</a>
+					<a><cite>{$language_tag.index_branchcompany_showCustomerManage_addCustomer}</cite></a>
+				</span>
+            </div>
+            <br/>
+            <br/>
+            <form class="layui-form layui-row" id="form1" onSubmit="return add()">
+                <div class="layui-form-item">
+                    <div class="layui-col-md4">
+                        <label class="layui-form-label input-required">{$language_tag.index_public_type}:</label>
+                        <div class="layui-input-block">
+                            <select name="customer_type" required lay-verify="required" class="layui-input" >
+                                <option></option>
+                                <option value="1">{$language_tag.index_branchcompany_showBranchProductManage_growUp}</option>
+                                <option value="2">{$language_tag.index_branchcompany_showBranchProductManage_childrenInBed}</option>
+                                <option value="3">{$language_tag.index_branchcompany_showBranchProductManage_childrenNotInBed}</option>
+                                <option value="4">{$language_tag.index_branchcompany_showBranchProductManage_oldMan}</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+			
+                <div class="layui-form-item">
+                    <div class="layui-col-md4">
+                        <label class="layui-form-label input-required">{$language_tag.index_branchcompany_showBranchProductManage_name}:</label>
+                        <div class="layui-input-block">
+                            <input name="customer_last_name" required lay-verify="required" class="layui-input" />
+                        </div>
+                    </div>
+                    <div class="layui-col-md4">
+                        <label class="layui-form-label input-required">{$language_tag.index_branchcompany_showBranchProductManage_surname}:</label>
+                        <div class="layui-input-block">
+                            <input name="customer_first_name" required lay-verify="required" class="layui-input" />
+                        </div>
+                    </div>
+                </div>
+                <!-- 
+                <div class="layui-form-item">
+                    <div class="layui-col-md4">
+                        <label class="layui-form-label ">{$language_tag.index_branchcompany_showBranchProductManage_englishName}:</label>
+                        <div class="layui-input-block">
+                            <input name="english_last_name"  class="layui-input" />
+                        </div>
+                    </div>
+                    <div class="layui-col-md4">
+                        <label class="layui-form-label ">{$language_tag.index_branchcompany_showBranchProductManage_englishSurname}:</label>
+                        <div class="layui-input-block">
+                            <input name="english_first_name"  class="layui-input" />
+                        </div>
+                    </div>
+                </div>
+                 -->
+                <div class="layui-form-item">
+                    <div class="layui-col-md4">
+                        <label class="layui-form-label input-required">{$language_tag.index_branchcompany_showBranchProductManage_sex}:</label>
+                        <div class="layui-input-block">
+                            <select name="gender"   lay-verify="required" >
+                                <option></option>
+                                <option value="1">{$language_tag.index_branchcompany_showBranchProductManage_boy}</option>
+                                <option value="2">{$language_tag.index_branchcompany_showBranchProductManage_girl}</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="layui-col-md4">
+                        <label class="layui-form-label input-required">{$language_tag.index_branchcompany_showBranchProductManage_nationality}:</label>
+                        <div class="layui-input-block">
+                            <select name="country_id"  lay-verify="required" lay-search>
+                                <option value="">{$language_tag.index_source_showSupplier_choose_own_zone}</option>
+                                {foreach $CountryList as $vo}
+                                <option value="{$vo.id}">{$vo.cpc_name}</option>
+                                {/foreach}
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="layui-col-md4">
+                        <label class="layui-form-label ">{$language_tag.index_branchcompany_showCompanyOrderManage_birthday}</label>
+                        <div class="layui-input-block">
+                            <input name="birthday" id='birthday' class="layui-input sales-date" />
+                        </div>
+                    </div>
+                    
+                </div>
+
+                <div class="layui-form-item">
+                    <div class="layui-col-md4">
+                        <label class="layui-form-label input-required">{$language_tag.index_branchcompany_showBranchProductManage_language}:</label>
+                        <div class="layui-input-block">
+                            <select name="language_id"   lay-verify="required" >
+                                <option></option>
+                                {foreach $langList as $langListV}
+                                <option value="{$langListV.language_id}">{$langListV.language_name}</option>
+                                {/foreach}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="layui-col-md4">
+                        <label class="layui-form-label ">{$language_tag.index_branchcompany_showBranchProductManage_phone}:</label>
+                        <div class="layui-input-block">
+                            <input name="phone"  class="layui-input" />
+                        </div>
+                    </div>
+                    <div class="layui-col-md4">
+                        <label class="layui-form-label">{$language_tag.index_branchcompany_showBranchProductManage_email}:</label>
+                        <div class="layui-input-block">
+                            <input name="email"  class="layui-input" />
+                        </div>
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <div class="layui-col-md4">
+                        <label class="layui-form-label input-required">{$language_tag.index_branchcompany_showBranchProductManage_passport}:</label>
+                        <div class="layui-input-block">
+                            <input name="passport_number" required lay-verify="required" class="layui-input" />
+                        </div>
+                    </div>
+                    <div class="layui-col-md4">
+                        <label class="layui-form-label">{$language_tag.index_public_status}:</label>
+                        <div class="layui-input-block">
+                            <select name="status" id='status' lay-verify="required">
+                                <option value="1" selected>{$language_tag.index_branchcompany_showCustomerAdd_normal}</option>
+                                <option value="0">{$language_tag.index_branchcompany_showCustomerAdd_backlist}</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="layui-col-md4">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label input-required">{$language_tag.index_public_company}:</label>
+                            <div class="layui-input-block">
+                                <select {$Think.session.user.company_id!=1?'readonly':''} name="choose_company_id"
+                                        id="choose_company_id" lay-verify="required">
+                                    {foreach name='company_result'  item='vo'}
+                                    <option value="{$vo.company_id}" {if condition="$vo.company_id eq  $Think.session.user.company_id"} selected='selected'{/if}>{$MultilingualAll['company-company_name-'.$vo.company_id.'-'.$Think.session.user.language_id][0]['translate']|default=$vo.company_name}</option>
+                                    {/foreach}
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                	<!-- 
+                    <div class="layui-col-md4">
+                        <label class="layui-form-label ">{$language_tag.index_branchcompany_showBranchProductManage_documentType}:</label>
+                        <div class="layui-input-block">
+                            <select name="card_type"  >
+                                 <option></option>
+                                <option value="1">{$language_tag.index_branchcompany_showBranchProductManage_passport}</option>
+                                <option value="2">{$language_tag.index_branchcompany_showBranchProductManage_idCard}</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="layui-col-md4">
+                        <label class="layui-form-label ">{$language_tag.index_branchcompany_showBranchProductManage_certificateNumber}:</label>
+                        <div class="layui-input-block">
+                            <input name="card_number" class="layui-input" />
+                        </div>
+                    </div>
+ 					-->
+                </div>
+                <div class='layui-form-item'>
+                    <div class="layui-col-md4">
+                        <label class="layui-form-label">{$language_tag.index_branchcompany_showCompanyOrderManage_issueData}:</label>
+                        <div class="layui-input-block">
+                            <input name="issuing_date" id="issuing_date"  class="layui-input sales-date" />
+                        </div>
+                    </div>
+                   <div class="layui-col-md4">
+                        <label class="layui-form-label">{$language_tag.index_branchcompany_showBranchProductManage_effectiveDate}:</label>
+                        <div class="layui-input-block">
+                            <input name="term_of_validity" id="term_of_validity"  class="layui-input sales-date" />
+                        </div>
+                    </div>
+                    <div class="layui-col-md4">
+                        <label class="layui-form-label">{$language_tag.index_branchcompany_showBranchProductManage_middleName}:</label>
+                        <div class="layui-input-block">
+                            <input name="middle_name" id="middle_name"  class="layui-input" />
+                        </div>
+                    </div>
+				</div>
+				<div class="layui-form-item">
+				    <div class="layui-col-md4">
+                        <label class="layui-form-label">{$language_tag.index_branchcompany_showCompanyOrderManage_emergencyContact}:</label>
+                        <div class="layui-input-block">
+                            <input name="emergency_contact" id="emergency_contact"  class="layui-input " />
+                        </div>
+                    </div>
+                    <div class="layui-col-md4">
+                        <label class="layui-form-label">{$language_tag.index_branchcompany_showCompanyOrderManage_emergencyContact_phone}:</label>
+                        <div class="layui-input-block">
+                            <input name="emergency_call" id="emergency_call"  class="layui-input " />
+                        </div>
+                    </div>
+                    
+                      <div class="layui-col-md4">
+                        <label class="layui-form-label">{$language_tag.index_branchcompany_showDistributorManage_address}:</label>
+                        <div class="layui-input-block">
+                            <input name="address" id="address"  class="layui-input " />
+                        </div>
+                    </div>                  
+				</div>
+                <div class="layui-form-item">
+                    <div class="layui-col-md8">
+                        <label class="layui-form-label">{$language_tag.index_public_mark}:</label>
+                        <div class="layui-input-block">
+                            <textarea name="remark"   class="layui-textarea"></textarea>
+                        </div>
+                    </div>
+                </div>
+                <br>
+                <div class="layui-form-item">
+                    <div class="all-button-center">
+                        <button class="layui-btn nav-submit" lay-submit="" lay-filter="formDemo" id="language_add_button">{$language_tag.index_public_submit}</button>
+                        <!--<button type="reset" class="layui-btn layui-btn-primary">{$language_tag.index_product_showRouteTemplateManage_reload}</button>-->
+                        <a href="javascript:history.back(-1)"><button type="button" class="layui-btn layui-btn-primary">{$language_tag.index_public_back}</button></a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="layui-footer">
+        <!-- 底部固定区域 -->
+        © layui.com - 底部固定区域
+    </div>
+</div>
+{include file='public/foot_js' /}
+
+
+<script>
+    layui.use('laydate', function(){
+        var laydate = layui.laydate;
+        //执行一个laydate实例
+
+        lay('.sales-date').each(function(){
+            laydate.render({
+                elem: this
+                ,trigger: 'click'
+                ,done: function(value, date){
+                    console.log(date)
+                }
+            });
+        });
+    });
+
+    function add() {
+
+        $.ajax({
+            type: "POST",
+            url: '/branchcompany/AddCustomerAjax',
+            data: $('#form1').serializeArray(),
+            success: function (data) {
+                if(data.code!=200){
+                    layer.msg(data.msg)
+                    return false;
+                }else if(data.code==200){
+                    layer.msg('success',{time:1,end : function(layero, index){
+                        history.back(-1);
+                    }
+                    });
+                }
+            },
+            error:function(XMLHttpRequest, textStatus, errorThrown){
+                //console.log(errorThrown)
+                layer.msg('{$language_tag.index_public_verificationFailure}')
+
+            }
+        });
+        return false;
+    }
+</script>
+
+</body>
+</html>

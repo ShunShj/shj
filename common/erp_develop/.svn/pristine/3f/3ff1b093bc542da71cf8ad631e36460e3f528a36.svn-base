@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {include file='public/head' /}
+    <title>{$language_tag.index_product_ShowPlanTour_resources_teamProduct}-{$language_tag.index_product_PlanBooking_order}</title>
+    <link href="/static/css/product.css" rel="stylesheet">
+
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+    <div class="layui-header">
+        {include file='public/header' /}
+    </div>
+
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll">
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            {include file='public/left_menu' /}
+        </div>
+    </div>
+
+    <div class="layui-body">
+
+        <!-- 内容主体区域 -->
+        <div style="padding: 15px;">
+            <div class='layui-form-item'>
+			<span class="layui-breadcrumb" lay-separator="-">
+                <a>{$language_tag.index_public_homepage}</a>
+                <a>{$language_tag.index_public_product}</a>
+				<a>{$language_tag.index_product_ShowPlanTour_resources_teamProduct}</a>
+                <a>{$language_tag.index_product_PlanBooking_order}</a>
+                <a><cite>{$language_tag.index_product_PlanBooking_orderInfo}</cite></a>
+			</span>
+            </div>
+            <br/>
+            <div class=''>
+                <font style="font-size: 20px;font-weight: bold">{$language_tag.index_product_PlanBooking_orderDetails}</font>
+            </div>
+            <div style="text-align: right">
+                <a href="/product/PlanBooking?number={$_GET['number']}&plan_id={$_GET['plan_id']}" class="layui-btn nav-add">{$language_tag.index_public_history_back}</a>
+            </div>
+            <div class="table-nont">
+                <table class="layui-table">
+                    <thead>
+                    <tr>
+                        <td>{$language_tag.index_product_PlanBooking_order_product}</td>
+                        <td>{$language_tag.index_finance_showReceivableManage_customer_number}</td>
+                        <td>{$language_tag.index_product_PlanBooking_number}</td>
+                        <td  width="40%">{$language_tag.index_public_mark}</td>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {foreach $company_order_product_team as $v}
+                        <tr>
+                            <td>{$v.team_product_name}</td>
+                            <td>{$v.customer_info_number|default='-'}</td>
+                            <td>{$v.count}</td>
+                            <td>{$v.remark}</td>
+                        </tr>
+                    {/foreach}
+
+                    {foreach $company_order_product_source_11 as $v}
+                    <tr>
+                        <td>{$language_tag.index_source_showOwnExpenseManage_own_expense}-{$v.source_name}</td>
+                        <td>{$v.customer_info_number|default='-'}</td>
+                        <td>{$v.count}</td>
+                        <td>{$v.remark}</td>
+                    </tr>
+                    {/foreach}
+
+                    </tbody>
+                </table>
+            </div>
+
+            <br>
+            <div class='layui-form-item'>
+                <font style="font-size: 20px;font-weight: bold">{$language_tag.index_product_visitor_touristList}</font>
+            </div>
+            <br>
+            <div  class="layui-table-main table-nont height-div" style="overflow: auto;">
+                <table  class="layui-table layui-form"  style="table-layout:fixed;">
+                    <colgroup>
+                        <col width="80"  style="display: none">
+                        <col width="80" >
+                        <col width="180"  style="display: none" >
+                        <!--<col width="100" >-->
+                        <col width="150" >
+                        <col width="100" >
+                        <col width="100" >
+                        <col width="150" >
+                        <col width="200" >
+                        <col width="150" >
+                        <col width="150" >
+                        <col width="250" >
+                        <col width="300" >
+                        <col width="150" >
+                        <col width="100" >
+                        <col width="100" >
+                        <col width="150" >
+                    </colgroup>
+                    <thead>
+                        <tr>
+                            <td  style="display: none"><input type="checkbox" lay-skin="primary" lay-filter="CheckboxAll"></td>
+                            <td>{$language_tag.index_finance_showReceivableManage_customer_number}</td>
+                            <td style="display: none">{$language_tag.index_public_status}</td>
+                            <!--<td>{$language_tag.index_public_type}</td>-->
+                            <td>{$language_tag.index_branchcompany_showBranchProductManage_name}</td>
+                            <td>{$language_tag.index_branchcompany_showCompanyOrderManage_middleName}</td>
+                            <td>{$language_tag.index_branchcompany_showBranchProductManage_surname}</td>
+                            <td>{$language_tag.index_branchcompany_showBranchProductManage_sex}</td>
+                            <td>{$language_tag.index_branchcompany_showBranchProductManage_nationality}</td>
+                            <td>{$language_tag.index_source_showTourGuideSourceManage_passport}</td>
+                            <!--<td>{$language_tag.index_branchcompany_showBranchProductManage_documentType}</td>-->
+                            <!--<td>{$language_tag.index_branchcompany_showBranchProductManage_certificateNumber}</td>-->
+                            <td>{$language_tag.index_branchcompany_showBranchProductManage_effectiveDate}</td>
+                            <td>{$language_tag.index_branchcompany_showBranchProductManage_phone}</td>
+                            <td>{$language_tag.index_branchcompany_showBranchProductManage_email}</td>
+                            <td>{$language_tag.index_branchcompany_showBranchProductManage_language}</td>
+                            <td>{$language_tag.index_product_visitor_accommodationInformation}</td>
+                            <td>{$language_tag.index_public_flightInformation}</td>
+                            <td>{$language_tag.index_source_operation}</td>
+                        </tr>
+                    </thead>
+                    <tbody id="passengers">
+                    {foreach $CompanyOrderCustomer as $v}
+                        <tr>
+                            <td  style="display: none"><input type="checkbox" lay-skin="primary" value="{$v.company_order_customer_id}" ></td>
+                            <!--<td>{$v[$_GET['number']]}</td>-->
+                            <td>{$v.company_order_customer_id}</td>
+                            <td style="display: none">
+                                <span>
+                                    <select lay-filter="customer-status">
+                                    {foreach $orderState as $Ky=>$Vy}
+                                    <option value="{$Ky}-{$v.company_order_customer_id}" {$Ky==$v.status?'selected':''}>{$Vy}</option>
+                                    {/foreach}
+                                </select>
+                                </span>
+
+                            </td>
+                            <!--<td>{$customer_type[$v.customer_type]|default='-'}</td>-->
+                            <td>{$v.customer_last_name|default='-'}</td>
+                            <td>{$v.middle_name|default='-'}</td>
+                            <td>{$v.customer_first_name|default='-'}</td>
+                            <td>{$v.gender?$v.gender==1?$language_tag.index_branchcompany_showBranchProductManage_boy:$language_tag.index_branchcompany_showBranchProductManage_girl:'-'}</td>
+                            <td>{$v.country_name|default='-'}</td>
+                            <!--<td>{$v.card_type?$v.card_type==1?$language_tag.index_branchcompany_showBranchProductManage_passport:$language_tag.index_branchcompany_showBranchProductManage_idCard:'-'}</td>-->
+                            <!--<td>{$v.card_number|default='-'}</td>-->
+                            <td>{$v.passport_number|default='-'}</td>
+                            <td>{if $v.term_of_validity}{$v.term_of_validity|date='Y-m-d',###}{else/}{/if}</td>
+                            <td>{$v.phone|default='-'}</td>
+                            <td>{$v.email|default='-'}</td>
+                            <td>{$v.language_name|default='-'}</td>
+                            <td>
+                                {if $v["accommodation_info"]}
+                                <button class="layui-btn layui-btn-sm hover-look layui-btn-primary" onclick="hotelLook(this)"  data-info='<?=$v["accommodation_info"]?json_encode($v["accommodation_info"]):null;?>'>{$language_tag.index_branchcompany_showBranchProductManage_look}</button>
+                                {else}
+                                -
+                                {/if}
+                            </td>
+                            <td>
+                                {if $v["flight_info"]}
+                                <button class="layui-btn layui-btn-sm hover-look layui-btn-primary" onclick="flightLook(this)" data-info='<?=$v["flight_info"]?json_encode($v["flight_info"]):null;?>'>{$language_tag.index_branchcompany_showBranchProductManage_look}</button>
+                                {else}
+                                 -
+                                {/if}
+                            </td>
+                            <td>
+                                <a class="layui-btn layui-btn-sm passengers-edit hover-edit layui-btn-primary" data-info="{$v.company_order_customer_id}">{$language_tag.index_public_update}</a>
+                            </td>
+                        </tr>
+                    {/foreach}
+                    </tbody>
+                </table>
+
+            </div>
+            <div style="margin-bottom: 10px">
+                <a class="layui-btn layui-btn-sm layui-btn-normal nav-details" id="batch-confirmation"  style="display: none">{$language_tag.index_product_visitor_batchConfirmation}</a>
+                <!--<a class="layui-btn layui-btn-sm layui-btn-primary">{$language_tag.index_public_save}</a>-->
+            </div>
+        </div>
+
+
+            <div class=''>
+                &nbsp&nbsp<font style="font-size: 20px;font-weight: bold">{$language_tag.index_public_comment}</font>
+            </div>
+<table class="layui-table layui-form">
+                                <thead>
+                                    <tr>
+                                        <th>{$language_tag.index_public_comment_content}</th>
+                                        <th>{$language_tag.index_public_comment_time}</th>
+                                        <th>{$language_tag.index_public_comment_username}</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="message_board">  
+                                {foreach name='comment_result' item='comment_result'}
+                                	<tr> 
+                                		<td>{$comment_result.comment}</td>
+                                		<td>{$comment_result.create_time|date='Y-m-d H:i:s',###}</td>
+                                		<td>{$comment_result.username}</td> 
+                                	</tr>
+                                {/foreach}	
+                                </tbody>
+ </table>
+ <div>
+ <textarea rows="" cols="" style='width:100%;height:100px;' id='liuyan'></textarea>
+ <input type='hidden' value="{$Think.get.bookingId}" id='company_order_number' />
+ </div>
+ <div style='text-align:center'>
+ 	<a class='layui-btn nav-add layui-btn-sm' id='tijiaoliuyan'>提交留言</a>
+ </div>
+    </div>
+</div>
+
+
+
+<div class="layui-footer">
+    <!-- 底部固定区域 -->
+    © layui.com - 底部固定区域
+</div>
+</div>
+{include file='public/foot_js' /}
+
+<script id="hotelLook" type="text/html">
+    <div style="max-height:150px;overflow-y: auto">
+        <table class="layui-table">
+            <thead>
+            <tr>
+                <th>{$language_tag.index_product_visitor_roomNumber}</th><th>{$language_tag.index_product_showRouteTemplateManage_resource_roomType}</th><th>{$language_tag.index_product_visitor_checkIn}</th><th>{$language_tag.index_product_visitor_checkOut}</th>
+            </tr>
+            </thead>
+            <tbody>
+            {{# for(var i = 0, len = d.length; i < len; i++){ }}
+            <tr>
+                <td>{{d[i].number}}</td>
+                <td>{{d[i].fangx}}</td>
+                <td>{{d[i].tiqian}}</td>
+                <td>{{d[i].yanzhu}}</td>
+            </tr>
+            {{# } }}
+            </tbody>
+        </table>
+    </div>
+
+</script>
+<script id="flightLook" type="text/html">
+    <div style="max-height:150px;overflow-y: auto">
+        <table class="layui-table">
+            <thead>
+            <tr>
+                <th>{$language_tag.index_finance_showReceivableManage_flight}</th>
+                <th>{$language_tag.index_product_visitor_goTime}</th>
+                <th>{$language_tag.index_product_visitor_arrivalTime}</th>
+                <th>{$language_tag.index_public_transportMachine}</th>
+                <th>{$language_tag.index_public_startPlace}</th>
+                <th>{$language_tag.index_public_endPlace}</th>
+            </tr>
+            </thead>
+            <tbody>
+            {{# for(var i = 0, len = d.length; i < len; i++){ }}
+            <tr>
+                <td>{{d[i].flight}}</td>
+                <td>{{d[i].Stime}}</td>
+                <td>{{d[i].Etime}}</td>
+                <td>{{d[i].jiesong}}</td>
+                <td>{{d[i].chufa}}</td>
+                <td>{{d[i].daoda}}</td>
+            </tr>
+            {{# } }}
+            </tbody>
+        </table>
+    </div>
+
+</script>
+
+
+
+
+<script>
+    var roomType = {$room_type};
+    var FlightType = {0:'-',1:'{$language_tag.index_public_meetAirport}',2:'{$language_tag.index_public_giveAirport}',3:'{$language_tag.index_public_changeAirport}'};
+    var bookingId = '<?=$_GET['bookingId'];?>';
+    var layer = layui.layer ;
+    var form = layui.form;
+    var element=layui.element;
+    var laydate=layui.laydate;
+    var table=layui.table;
+    var laytpl=layui.laytpl;
+    var open;
+
+
+    //JavaScript代码区域
+    !function(){
+        $('#passengers').delegate('.passengers-edit','click',function(){
+            var passengers_id = $(this).data('info');
+            open = layer.open({
+                title:'',
+                type: 2,
+                area: ['95%','600px'],
+                content: ['/product/PlanBookingPassenger?passengers_id='+passengers_id+'&bookingId='+bookingId] //这里content是一个URL，如果你不想让iframe出现滚动条，你还可以content: ['http://sentsin.com', 'no']
+            });
+        });
+
+        $(".height-div tr:last td span,.height-div tr:eq(-2) td span,.height-div tr:eq(-3) td span").click(function () {
+            $(".height-div").scrollTop($(".height-div")[0].scrollHeight);
+        });
+
+        form.on('checkbox(CheckboxAll)', function(data){
+            var child = $(data.elem).parents('thead').siblings("tbody").find('td input[type="checkbox"]');
+            child.each(function(index, item){
+                item.checked = data.elem.checked;
+            });
+            form.render('checkbox');
+        });
+
+        //批量确认
+        $('#batch-confirmation').on('click',function(){
+            var it = new Array(); var et;
+            $('#passengers').find('td input[type="checkbox"]').each(function(index,item){
+//                console.log(item.checked);
+                if(item.checked){
+//                    console.log(item.value);
+                    it.push(item.value);
+                }
+                 et = it.join('-');
+            });
+            if(et){
+                layer.load(2);
+                $.ajax({
+                    type: "POST",
+                    url: '/product/BatchConfirmationAjax',
+                    data: {"et":et},
+                    success: function (data) {
+                        layer.closeAll();
+                        if(data.code!=200){
+                            layer.msg(data.msg);
+                            return false;
+                        }else if(data.code==200){
+                            layer.msg('{$language_tag.index_public_success}',{time:1,end : function(layero, index){
+                                location.reload();
+                            }
+                            });
+                        }
+                    },
+                    error:function(XMLHttpRequest, textStatus, errorThrown){
+                        layer.closeAll();
+                        //console.log(errorThrown)
+                        layer.msg('{$language_tag.index_public_verificationFailure}')
+
+                    }
+                });
+            }
+
+
+
+        });
+
+
+        form.on('select(customer-status)',function(data){
+            var v = data.value;
+            $.ajax({
+                type: "POST",
+                url: '/product/updateCompanyOrderCustomerStatusByCompanyOrderCustomerId',
+                data: {"company_order_customer_id":v},
+                success: function (data) {
+                    if(data.code!=200){
+                        layer.msg(data.msg);
+                        return false;
+                    }else if(data.code==200){
+                        layer.msg('{$language_tag.index_public_success}',{time:1,end : function(layero, index){
+
+                        }
+                        });
+                    }
+                },
+                error:function(XMLHttpRequest, textStatus, errorThrown){
+                    //console.log(errorThrown)
+                    layer.msg('{$language_tag.index_public_verificationFailure}')
+
+                }
+            });
+
+        });
+
+    }();
+
+    function openClose(){
+        layer.close(open);
+    }
+
+
+
+    /*住宿信息查看*/
+    function hotelLook(obj) {
+        var gettpl = $('#hotelLook').html();
+        var json = $(obj).data('info');
+        var newJson=[];
+        console.log(json)
+        for(var i=0;i<json.length;i++){
+            console.log(json[i])
+            var check_in = json[i].check_in;
+            var check_on = json[i].check_on;
+            if(check_in==0){
+                check_in = '{$language_tag.index_product_visitor_specialRequirements}';
+            }else if(check_in>0){
+                check_in = '{$language_tag.index_product_visitor_postpone}'+check_in*1+'{$language_tag.index_product_ShowPlanTour_day}';
+            }else{
+                check_in = '{$language_tag.index_product_visitor_shift}'+check_in*-1+'{$language_tag.index_product_ShowPlanTour_day}';
+            }
+            if(check_on==0){
+                check_on = '{$language_tag.index_product_visitor_specialRequirements}';
+            }else if(check_on>0){
+                check_on = '{$language_tag.index_product_visitor_postpone}'+check_on*1+'{$language_tag.index_product_ShowPlanTour_day}';
+            }else{
+                check_on = '{$language_tag.index_product_visitor_shift}'+check_on*-1+'{$language_tag.index_product_ShowPlanTour_day}';
+            }
+
+            newJson.push({
+                "number":json[i].room_code,
+                "fangx":roomType[json[i].room_type],
+                'tiqian':check_in,
+                'yanzhu':check_on,
+            });
+        }
+
+      
+        laytpl(gettpl).render(newJson, function(html){
+            layer.tips(html, obj, {
+                tips: [4, '#ccc'],
+                padding:'0',
+                tipsMore: false,
+                area: ['450px', 'auto'],
+                closeBtn :1,
+                time:0
+            });
+        })
+
+    }
+    /*航班信息查看*/
+    function flightLook(obj) {
+        var gettpl = $('#flightLook').html();
+        var json = $(obj).data('info');
+      
+        var newJson=[];
+        for(var i= 0;i<json.length;i++){
+             newJson.push({
+                "flight": json[i].flight_code,
+                 "Stime": json[i].flight_begin_time,
+                 "Etime": json[i].flight_end_time,
+                 "jiesong":FlightType[json[i].flight_type],
+                "chufa":json[i].start_place,
+                 'daoda':json[i].end_place
+            });
+        }
+        laytpl(gettpl).render(newJson, function(html){
+            layer.tips(html, obj, {
+                tips: [4, '#ccc'],
+                padding:'0',
+                tipsMore: false,
+                area: ['650px', 'auto'],
+                closeBtn :1,
+                time:0
+            });
+        });
+
+    }
+
+
+	$('#tijiaoliuyan').click(function(){
+	      layer.load(5, {
+              shade: [0.5,'gray'],
+   
+          });
+		var comment = $('#liuyan').val();
+		var company_order_number = $('#company_order_number').val();
+        $.ajax({
+            type: "POST",
+            url: '/companyorder/addCompanyOrderCommentAjax',
+            data: {
+            	comment:comment,
+            	company_order_number:company_order_number
+            	
+            },
+            success: function (data) {
+            	  layer.closeAll();
+            	  window.location.reload()
+            },
+            error:function(XMLHttpRequest, textStatus, errorThrown){
+                //console.log(errorThrown)
+                 layer.close(loadIndex);
+                layer.msg('{$language_tag.index_public_verificationFailure}')
+
+            }
+        });
+	})
+</script>
+</body>
+</html>
+

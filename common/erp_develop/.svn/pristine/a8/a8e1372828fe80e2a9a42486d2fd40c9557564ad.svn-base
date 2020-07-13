@@ -1,0 +1,8 @@
+$fonts:20px;
+
+
+@for $i from 5 to 31{
+  .col_#{$i}{
+    width:percentage(7*$i/1918);
+  }
+}

@@ -1,0 +1,55 @@
+<div class="modal"></div>
+<br class="clear" />
+<br class="clear" />
+
+<!--
+	This is view/includes/footer.php
+-->
+</div><!-- end main -->
+
+<div id="footer">
+    <div id="footer_text">
+        <p>
+            <?php
+                    $arr=array();
+                    $a = '';
+            $b = 'ABN 34 124 885 356';
+            if (!empty($a)) {
+            $arr[]=$a;
+            }
+            if (!empty($b)) {
+            $arr[]=$b;
+            }
+            echo implode(" | ",$arr);
+            if(!empty($arr)){
+            echo " |";
+            }
+            ?>
+            &copy; <?php echo date('Y') ?>
+            <a href="">
+               {$booking_system_website}
+            </a> {$company_name} | Site Map | <a href="">FAQ</a>
+            | Nexus Holidays Booking System Pro v{$booking_system_version}</p>
+    </div>
+</div>
+</div><!-- end wapper -->
+<script src="https://use.fontawesome.com/690ab28302.js"></script>
+<script>
+    var checked = "{$Think.session.systemPopupChecked}";
+
+    var systemModalPopup = function(){
+        $.get("/info/getSystemModal", function(data) {
+            if(data) {
+                var modalData = $.parseJSON(data);
+                $(modalData[0].content).appendTo('body').modal();
+            }
+        });
+    };
+
+    if(!checked) {
+        systemModalPopup();
+    }
+
+</script>
+</body>
+</html>

@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {include file='public/head' /}
+    <title>地接报账</title>
+    <link href="__STATIC__/css/product.css" rel="stylesheet">
+    <link href="__STATIC__/css/finance.css" rel="stylesheet">
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+    <div class="layui-header">
+        {include file='public/header' /}
+    </div>
+
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll">
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            {include file='public/left_menu' /}
+        </div>
+    </div>
+
+    <div class="layui-body">
+
+        <!-- 内容主体区域 -->
+        <div style="padding: 15px 15px 0px;">
+            <div class="body-top">
+                <div class='layui-form-item'>
+                <span class="layui-breadcrumb" lay-separator="-">
+                    <a>{$Think.lang.index_public_homepage}</a>
+                    <a>{$Think.lang.index_public_finance}</a>
+                    <a><cite>{$Think.lang.index_finance_showAgentExpenseManage_travel_agency_reimbursement}</cite></a>
+                </span>
+                </div>
+                <br>
+                <div class='layui-block input-inline'>
+                    <form class="layui-form mustpay-form" method='get' action='/finance/showAgentExpenseManage'>
+                        <div class='layui-input-inline'>
+                            <select name="status">
+                                <option value="" selected='selected'>-{$Think.lang.index_source_showCruisesManage_search_status}-</option>
+                                <option value="1" {if condition="$Think.get.status eq 1"}selected='selected' {/if}>{$Think.lang.index_public_show}</option>
+                                <option value="0">{$Think.lang.index_public_disabled}</option>
+                            </select>
+                        </div>
+
+                        <div class='layui-input-inline'>
+                            <input type="text" id="" value="{$Think.get.team_product_number}" name="team_product_number"
+                                   placeholder="{$Think.lang.index_finance_showAgentExpenseManage_team_product_number}" class="layui-input">
+                        </div>
+
+                        <div class='layui-button-inline layui-search-inline'>
+                            <button class="layui-btn nav-search" >{$Think.lang.index_public_search}</button>
+                        </div>
+                    </form>
+                    <div class='layui-button-inline'>
+                        <span style="{:action('index/auth/check_auth',['role_id'=>'261'])}"><a href="/finance/showAgentExpenseAdd"><button class="layui-btn nav-add">{$Think.lang.index_finance_showAgentExpenseManage_add_agency}</button></a></span>
+                    </div>
+                </div>
+                <hr><br>
+            </div>
+            <div class="">
+                <table class="layui-table layui-form"  id="">
+                    <colgroup>
+                        <col width="180">
+                        <col width="180">
+                        <col width="80">
+                        <col width="120">
+                        <col width="100">
+                        <col width="100">
+                        <col width="80">
+                        <col width="100">
+                        <col width="160">
+                        <col width="100">
+                        <col width="160">
+                    </colgroup>
+                    <thead>
+                    <tr>
+                        <th>{$Think.lang.index_finance_showAgentExpenseManage_team_product_number}</th>
+                        <th>{$Think.lang.index_finance_showAgentExpenseManage_team_product_name}</th>
+                        <th>{$Think.lang.index_finance_showAgentExpenseManage_the_days}</th>
+                        <th>{$Think.lang.index_finance_showAgentExpenseManage_route_type_id}</th>
+                        <th>{$Think.lang.index_finance_showAgentExpenseManage_begin_time}</th>
+                   
+                        <th>{$Think.lang.index_public_status}</th>
+                
+                        <th>{$Think.lang.index_finance_showAgentExpenseManage_update_time}</th>
+                        <th>{$Think.lang.index_finance_showAgentExpenseManage_update_user_name}</th>
+                        <th>{$Think.lang.index_source_operation}</th>
+                    </tr>
+                    </thead>
+
+                    <tbody>
+                    {foreach name='data' item='vo'}
+                    <tr>
+                        <td>{$vo.team_product_number}</td>
+                        <td>{$vo.team_product_name}</td>
+                        <td>{$vo.the_days}</td>
+                        <td>
+                        	{if condition="$vo.route_type_id eq 1"}
+                            {$Think.lang.index_finance_showAgentExpenseManage_update_chinese_group}
+                        	{elseif condition="$vo.route_type_id eq 2"}
+                            {$Think.lang.index_finance_showAgentExpenseManage_update_foreigners_group}
+                        	{else/}
+                            {$Think.lang.index_finance_showAgentExpenseManage_other}
+                        	{/if}
+                        	
+                        </td>
+                        <td>{$vo.begin_time|date='Y-m-d',###}</td>
+                  
+                        <td>
+                            {if condition="$vo.status eq 1"}
+                            {$Think.lang.index_public_show}
+                        	{elseif condition="$vo.status eq 0"}
+                            {$Think.lang.index_public_disabled}
+
+                        	{/if}
+                        </td>
+                    
+                        <td>{$vo.update_time|date='Y-m-d',###}</td>
+                        <td>{$vo.update_user_name}</td>
+                        <td>
+                            <span style="{:action('index/auth/check_auth',['role_id'=>'262'])}"><a href="/finance/showAgentExpenseEdit?travel_agency_reimbursement={$vo.travel_agency_reimbursement_number}" class="layui-btn layui-btn-sm hover-edit layui-btn-primary">{$Think.lang.index_public_update}</a></span></td>
+                    </tr>
+                    {/foreach}
+                    </tbody>
+                </table>
+            </div>
+            <div class="listButtom">
+                <!--加载分页-->
+                {include file='public/page' /}
+            </div>
+        </div>
+    </div>
+    <div class="layui-footer">
+        <!-- 底部固定区域 -->
+        © layui.com - 底部固定区域
+    </div>
+</div>
+{include file='public/foot_js' /}
+<script src='__STATIC__/javascript/product/all.js'></script>
+<script src='__STATIC__/javascript/finance/receivable.js'></script>
+</body>
+</html>

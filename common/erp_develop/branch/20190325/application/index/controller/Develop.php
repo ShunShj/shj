@@ -1,0 +1,354 @@
+<?php
+
+namespace app\index\controller;
+use think\Controller;
+use app\common\help\Help;
+use think\Request;
+
+class Develop extends Base
+{
+
+	//显示导入管理页面
+
+	public function showImportingManage(){
+		$import_result = $this->callSoaErp('post', '/develop/getImporting',[]);
+		
+		$this->assign('import_result',$import_result['data']);
+		return $this->fetch('import_manage');
+		
+	}
+	//显示导入页面
+	public function showImporting(){
+		
+		return $this->fetch('importing');
+	}
+	//导入工作开始
+	public function working(){
+  		vendor("phpexcel.PHPExcel");
+	
+  		vendor("phpexcel.PHPExcel.IOFactory");
+  		
+    	$objPHPExcel = new \PHPExcel();
+    	$objPHPExcel = \PHPExcel_IOFactory::load($_FILES["inputExcel"]["tmp_name"]);
+    	set_time_limit(0);
+    	//$file_info = $_FILES["inputExcel"];
+    	
+//    	if(input('type')==2){//如果是csv
+//    		$file = request()->file('inputExcel');
+//    		$info = $file->move(ROOT_PATH.'public'.DS.'upload'.DS.'csv'.DS);
+//     		$filename = ROOT_PATH.'public'.DS.'upload/csv/'.$info->getSaveName();
+//     		$handle = fopen($filename,'r');
+    
+//     		$csv_file = $handle;
+//     		$result_arr = array ();
+//     		$i = 0;
+//     		while($data_line = fgetcsv($csv_file,10000)) {
+//     			if ($i == 0) {
+//     				$GLOBALS ['csv_key_name_arr'] = $data_line;
+//     				$i ++;
+//     				continue;
+//     			}
+//     			foreach($GLOBALS['csv_key_name_arr'] as $csv_key_num =>$csv_key_name ) {
+//     				$result_arr[$i][$csv_key_name] = $data_line[$csv_key_num];
+//     			}
+//     			$i++;
+//     		}
+    		
+//     	}
+    	
+//     	$len_result = count($result_arr);
+//     	echo $len_result;
+//     	dump($result_arr);
+//     	exit();
+    	//内容转换为数组
+    	$indata = $objPHPExcel->getSheet(0)->toArray();
+    	
+    	
+    	$importing_id = input('importing_id');
+    	$data = [];
+    	$data_params['importing_id'] = $importing_id;
+    	if($importing_id==1){//货币管理
+    		for($i = 1; $i < count($indata); $i++){
+    			$params = [    					
+    				'currency_name'=>trim($indata[$i][0]),
+    				'symbol'=>trim($indata[$i][1]),
+    				'unit'=>trim($indata[$i][2]),
+    				'user_id'=>session('user')['user_id']
+    			];
+    			$data[]=$params;
+    		}
+
+    	}
+    	if($importing_id==2){//语言管理
+    		for($i = 1; $i < count($indata); $i++){
+    			$params = [
+    				'language_name'=>trim($indata[$i][0]),
+    				'user_id'=>session('user')['user_id']
+    			];
+    			$data[]=$params;
+    		}
+    	}    	
+    	if($importing_id==3){//国家管理
+    		for($i = 2; $i < count($indata); $i++){
+    			$params = [
+    				'country_name'=>trim($indata[$i][0]),
+    				'country_code'=>trim($indata[$i][1]),	
+    				'user_id'=>session('user')['user_id']
+    	
+    			];
+    			$data[]=$params;
+    		}
+    	}    	
+    	if($importing_id==4){//公司管理
+    		for($i = 1; $i < count($indata); $i++){
+    			$params = [
+    				'company_name'=>trim($indata[$i][0]),
+    				'country_name'=>trim($indata[$i][1]),
+    				'currency_name'=>trim($indata[$i][4]),
+    				'language_name'=>trim($indata[$i][5]),
+    				'user_id'=>session('user')['user_id']
+    			];
+    			$data[]=$params;
+    		}
+    	}    	
+    	if($importing_id==5){//部门管理
+    		for($i = 1; $i < count($indata); $i++){
+    			$params = [
+    				'department_name'=>trim($indata[$i][0]),
+    				'company_name'=>trim($indata[$i][1]),
+    				'user_id'=>session('user')['user_id']
+    	
+    			];
+    			$data[]=$params;
+    		}
+    	}
+    	if($importing_id==6){//职位管理
+    		for($i = 1; $i < count($indata); $i++){
+    			$params = [
+    				'company_name'=>trim($indata[$i][0]),
+    				'department_name'=>trim($indata[$i][1]),
+    				'job_name'=>trim($indata[$i][2]),
+    				'user_id'=>session('user')['user_id']
+    	
+    			];
+    			$data[]=$params;
+    		}
+    	}
+    	if($importing_id==7){//角色管理
+    		for($i = 1; $i < count($indata); $i++){
+    			$params = [
+    				'role_name'=>trim($indata[$i][0]),
+    				'user_id'=>session('user')['user_id']
+    	
+    					 
+    	
+    			];
+    			$data[]=$params;
+    		}
+    	}
+    	if($importing_id==8){//线路类型
+    		for($i = 1; $i < count($indata); $i++){
+    			$params = [
+    				'route_type_name'=>trim($indata[$i][0]),
+
+    				'type'=>trim($indata[$i][1]),
+    				'user_id'=>session('user')['user_id']
+    					 
+    			];
+    			$data[]=$params;
+    		}
+    	}
+    	if($importing_id==9){//用户管理
+    		for($i = 1; $i < count($indata); $i++){
+    			$params = [
+    				'company_name'=>trim($indata[$i][0]),
+    				'department_name'=>trim($indata[$i][1]),
+    				'job_name'=>trim($indata[$i][2]),
+    					
+    				'username'=>trim($indata[$i][3]),
+    			
+    				'last_name'=>trim($indata[$i][5]),
+    				'first_name'=>trim($indata[$i][6]),
+    				'email'=>trim($indata[$i][8]),
+    				'user_id'=>session('user')['user_id']
+    			];
+    			$data[]=$params;
+    		}
+    	}    	
+    	if($importing_id==10){//回执单模板
+    		for($i = 1; $i < count($indata); $i++){
+    			$params = [
+    				'return_receipt_name'=>trim($indata[$i][0]),
+    				'title1'=>trim($indata[$i][1]),
+    				'content1'=>trim($indata[$i][2]),
+    						
+    				'title2'=>trim($indata[$i][3]),
+    					 
+    				'content2'=>trim($indata[$i][4]),
+    				'user_id'=>session('user')['user_id']
+    					 
+    			];
+    			$data[]=$params;
+    		}
+    	}    
+    	if($importing_id==11){//供应商
+    		for($i = 1; $i < count($indata); $i++){
+    			$params = [
+    				'supplier_name'=>trim($indata[$i][0]),
+    				'address'=>trim($indata[$i][1]),
+    				'linkman'=>trim($indata[$i][4]),
+    				'email'=>trim($indata[$i][5]),
+    				'phone'=>trim($indata[$i][6]),
+    				'fax'=>trim($indata[$i][7]),
+    				'remark'=>trim($indata[$i][8]),
+    				'source_type_name'=>trim($indata[$i][9]),
+    				'user_id'=>session('user')['user_id']
+    	
+    	
+    			];
+    			$data[]=$params;
+    		}
+    	}  
+    	if($importing_id==12){//团队产品
+    		
+    		for($i = 1; $i < count($indata); $i++){
+    			$t = (int) trim($indata[$i][3]);
+    		
+    			$t = bcsub($t,25569);//减法
+    			
+    		
+    			$params = [
+    				'team_product_name'=>trim($indata[$i][1]),
+    				'route_type_name'=>trim($indata[$i][2]),
+    				'begin_time'=>date('Y-m-d',$t*24*60*60),
+
+
+    					 
+    					 
+    			];
+    			$data[]=$params;
+    		}
+    	}
+    	if($importing_id==13){//行程内容
+    		
+    		for($i = 1; $i < count($indata); $i++){
+				$content = trim($indata[$i][5]);
+				$title = trim($indata[$i][4]);
+				$title = str_replace(array("\r\n", "\r", "\n","_x000D_"), "", $title);
+				$content = str_replace(array("\r\n", "\r", "\n","_x000D_"), "", $content);
+    			$params = [
+    				'team_product_name'=>trim($indata[$i][1]),
+    				'the_days'=>trim($indata[$i][2]),
+    				'title'=> addslashes($title),
+    				'content'=>addslashes($content),
+    		
+					'eat_mark'=>trim($indata[$i][8]),
+    					 
+    				'remark'=>trim($indata[$i][11]),
+    			];
+    			$data[]=$params;
+    		}
+    	}
+    	if($importing_id==14){//游客
+    		$term_of_validity = trim($indata[$i][7]);
+    		if(strlen($term_of_validity)==0){
+    			$term_of_validity_result = '';
+    		}else{
+ 	
+    			$term_of_validity_result = strtotime(trim($indata[$i][7]));
+    		}
+			$first_name = str_replace(array("\r\n", "\r", "\n","_x000D_","\\"), "", trim($indata[$i][1]));
+			$last_name = str_replace(array("\r\n", "\r", "\n","_x000D_","\\"), "", trim($indata[$i][2]));
+    		for($i = 1; $i < count($indata); $i++){
+    			$content = trim($indata[$i][5]);
+    			$title = trim($indata[$i][4]);
+    			$params = [
+    				'first_name'=>str_replace("'", "\'", $first_name),
+    				'last_name'=>str_replace("'", "\'", $last_name),
+    				'gender'=>trim($indata[$i][3]),
+    				'card_type'=>trim($indata[$i][5]),
+    				'card_number'=>trim($indata[$i][6]),
+    				'term_of_validity'=>trim($indata[$i][7]),
+    				
+    			];
+    			$data[]=$params;
+    		}
+    	}        	
+    	if($importing_id==15){//经销商
+    		
+    		for($i = 1; $i < count($indata); $i++){
+    			$distributor_name = trim($indata[$i][2]);
+    			$distributor_name = trim($distributor_name,'\\');
+    			$address = trim($indata[$i][6]);
+    			$address = trim($address,'\\');
+    			$params = [
+    				'company_name'=>trim($indata[$i][1]),
+    				'distributor_name'=>str_replace("'", "\'", $distributor_name),
+    				'tel'=>$indata[$i][4],
+    				'address'=>str_replace("'", "\'", $address),
+					'zip_code'=>trim($indata[$i][8]),
+    					 
+    				'email'=>trim($indata[$i][10]),
+    			];
+    			$data[]=$params;
+    		}
+    	}
+
+		if($importing_id==16){
+			for($i = 1; $i < count($indata); $i++){
+				$params['company_id'] = trim($indata[$i][1]);
+				$params['years'] = trim($indata[$i][2]);
+				$params['month'] = trim($indata[$i][3]);
+				$params['number_of_staff'] = trim($indata[$i][4]);
+				$params['number_of_guests_received'] = trim($indata[$i][5]);
+				$params['order_amount'] = trim($indata[$i][6]);
+				$params['main_operating_income'] = trim($indata[$i][7]);
+				$params['external_income'] = trim($indata[$i][8]);
+				$params['internal_settlement_income'] = trim($indata[$i][9]);
+				$params['main_business_cost'] = trim($indata[$i][10]);
+				$params['external_cost'] = trim($indata[$i][11]);
+				$params['internal_settlement_cost'] = trim($indata[$i][12]);
+				$params['gross_profit'] = trim($indata[$i][13]);
+				$params['ratio_of_margin'] = trim($indata[$i][14]);
+				$params['operating_taxes_and_attachments'] = trim($indata[$i][15]);
+				$params['selling_expenses'] = trim($indata[$i][16]);
+				$params['commission'] = trim($indata[$i][17]);
+				$params['other'] = trim($indata[$i][18]);
+				$params['overhead_expenses'] = trim($indata[$i][19]);
+				$params['salary'] = trim($indata[$i][20]);
+				$params['chummage'] = trim($indata[$i][21]);
+				$params['hydroelectricity'] = trim($indata[$i][22]);
+				$params['handle_official_business'] = trim($indata[$i][23]);
+				$params['cost_of_financing'] = trim($indata[$i][24]);
+				$params['interest'] = trim($indata[$i][25]);
+				$params['exchange_gain_or_loss'] = trim($indata[$i][26]);
+				$params['poundage'] = trim($indata[$i][27]);
+				$params['nonbusiness_income'] = trim($indata[$i][28]);
+				$params['non_business_expenditure'] = trim($indata[$i][29]);
+				$params['total_profit'] = trim($indata[$i][30]);
+				$params['income_tax'] = trim($indata[$i][31]);
+				$params['net_margin'] = trim($indata[$i][32]);
+				$params['is_predict'] = 1;
+				$params['create_time'] = time();
+				$params['update_time'] = time();
+				$params['create_user_id'] = session('user')['user_id'];
+				$params['update_user_id'] = session('user')['user_id'];
+				$params['status'] = 1;
+				$data[]=$params;
+			}
+		}
+
+    	$data_params['data'] = $data;
+//		var_dump($data_params);exit;
+		
+		
+    	$result = $this->callSoaErp('post', '/develop/daoruWorking',$data_params);
+    	
+		echo $result['data'];
+		
+		exit();
+
+
+	}
+	
+}

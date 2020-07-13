@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+<head>
+	{include file='public/head' /}
+	<title>shopping-manage-edit</title>
+
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+
+	<div class="layui-header">
+		{include file='public/header' /}
+	</div>
+
+	<div class="layui-side layui-bg-black">
+		<div class="layui-side-scroll">
+			<!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+			{include file='public/left_menu' /}
+		</div>
+	</div>
+
+	<div class="layui-body">
+
+		<!-- 内容主体区域 -->
+		<div style="padding: 15px;">
+			<div class='layui-form-item'>
+		   		<span class="layui-breadcrumb" lay-separator="-">
+					<a>{$language_tag.index_public_homepage}</a>
+					<a>{$language_tag.index_source_showHotelSource_source_administrate}</a>
+					<a>{$language_tag.index_source_showShoppingManage_shop_manage}</a>
+					<a><cite>修改购物店</cite></a>
+				</span>
+			</div>
+			<br/>
+			<br/>
+			<form class="layui-form" onSubmit="return shopping_Edit()">
+				<div class="layui-row layui-col-space10">
+					<div class="layui-col-md4">
+						<div class="layui-form-item">
+							<label class="layui-form-label input-required">{$language_tag.index_public_supplier}:</label>
+							<div class="layui-input-block">
+								<select  name="supplier_id" id='supplier_id' lay-verify="required" lay-search>
+									<option>{$language_tag.index_public_select}</option>
+									{foreach name='data' item='vo'}
+									<option value="{$vo.supplier_id}" {$vo.supplier_id==$result.supplier_id?"selected":''}>{$MultilingualAll['supplier-supplier_name-'.$vo.supplier_id.'-'.$Think.session.user.language_id][0]['translate']|default=$vo.supplier_name}</option>
+									{/foreach}
+								</select>
+							</div>
+						</div>
+					</div>
+					<div class="layui-col-md4">
+						<div class="layui-form-item">
+							<label class="layui-form-label input-required">{$language_tag.index_source_showFlightSourceManage_ResourceName}:</label>
+							<div class="layui-input-block">
+								<input name="shopping_name" maxlength="300" id="shopping_name" lay-verify="required" placeholder="" autocomplete="off" class="layui-input" type="text" value="{$result.shopping_name}">
+								<input name="shopping_id" id="shopping_id" lay-verify="required" type="hidden" value="{$result.shopping_id}">
+							</div>
+						</div>
+					</div>
+
+				</div>
+				<div class="layui-row layui-col-space10">
+					<div class="layui-col-md4">
+						<div class="layui-form-item">
+							<label class="layui-form-label input-required">{$language_tag.index_public_type}:</label>
+							<div class="layui-input-block">
+								<select name='shopping_type' id='shopping_type'>
+									<option value='1' {if condition="$result.shopping_type eq 1"} selected='selected' {/if}>有全陪</option>
+									<option value='2' {if condition="$result.shopping_type eq 2"} selected='selected' {/if}>无全陪</option>
+									<option value='3' {if condition="$result.shopping_type eq 3"} selected='selected' {/if}>小车司机参赌</option>
+									<option value='4' {if condition="$result.shopping_type eq 4"} selected='selected' {/if}>小车司机不参赌</option>
+								</select>
+							</div>
+						</div>
+					</div>
+					<div class="layui-col-md4">
+						<div class="layui-form-item">
+							<label class="layui-form-label">{$language_tag.index_public_status}:</label>
+							<div class="layui-input-block">
+								<select name="status" id='status' lay-verify="required">
+									<option value="1" {if condition="$result.status eq 1"} selected='selected' {/if}>{$language_tag.index_public_show}</option>
+									<option value="0" {if condition="$result.status eq 0"} selected='selected' {/if}>{$language_tag.index_public_disabled}</option>
+								</select>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="layui-row layui-col-space10">
+					<div class="layui-col-md4">
+						<div class="layui-form-item">
+							<label class="layui-form-label">{$language_tag.index_public_mark}:</label>
+							<div class="layui-input-block">
+								<textarea name="remark"  id="remark" cols="80"   rows="5" style="OVERFLOW:   hidden">{$result.remark}</textarea>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="layui-row layui-col-space10">
+					<div class="layui-col-md4">
+						<div class="layui-form-item">
+							<label class="layui-form-label input-required">{$language_tag.index_public_company}:</label>
+							<div class="layui-input-block">
+								<select {$Think.session.user.company_id!=1?'disabled':''} name="choose_company_id" id="choose_company_id" lay-verify="required" >
+									<option value="0">{$language_tag.index_source_showHotelSource_own_company}</option>
+									{foreach name='company_result'  item='vo'}
+									<option value="{$vo.company_id}" {if condition="$vo.company_id eq $Think.session.user.company_id"} selected='selected'{/if}>{$MultilingualAll['company-company_name-'.$vo.company_id.'-'.$Think.session.user.language_id][0]['translate']|default=$vo.company_name}</option>
+									{/foreach}
+								</select>
+							</div>
+						</div>
+					</div>
+				</div>
+				<br/>
+
+				<div class="layui-form-item">
+					<div class="layui-input-block all-button-center">
+						<button class="layui-btn nav-submit" lay-submit="" lay-filter="formDemo" id="hotel_edit_button">{$language_tag.index_public_submit}</button>
+						<a href='javascript:history.back(-1)'><button type="button" class="layui-btn layui-btn-primary">{$language_tag.index_public_back}</button></a>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+
+	<div class="layui-footer">
+		<!-- 底部固定区域 -->
+		© layui.com - 底部固定区域
+	</div>
+</div>
+{include file='public/foot_js' /}
+<script src='__STATIC__/javascript/system/source.js'>
+</script>
+
+</body>
+</html>

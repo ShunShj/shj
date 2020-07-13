@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    {include file='public/head' /}
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>无标题文档</title>
+    <style>
+        .layui-body{
+            background:#E9EBEF;
+        }
+        #page-content{position: relative}
+        #page-content th,#page-content td{
+            text-align: center;
+            line-height: 30px;
+            padding:10px;
+        }
+        #page-content th{
+            font-weight: bold;
+        }
+        .content-bg{
+            margin:15px 0px 10px;
+        }
+        .tr-none{
+            display: none;
+        }
+    </style>
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+    <div class="layui-header">
+        {include file='public/header' /}
+    </div>
+
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll">
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            {include file='public/left_menu' /}
+        </div>
+    </div>
+
+    <div class="layui-body">
+        <div style="padding: 15px 15px 0px;">
+            <div class="body-top">
+                <div class='layui-form-item'>
+                    <span class="layui-breadcrumb" lay-separator="-">
+                        <a>{$language_tag.index_public_homepage}</a>
+                        <a>{$language_tag.index_product_ShowPlanTour_resources_teamProduct}</a>
+                        <a><cite>{$language_tag.index_product_ShowPlanTour_guideBack}</cite></a>
+                    </span>
+                </div>
+                <div class="content-bg page-filedset clear">
+                    <h3 class="fl infomation-one-title">
+                        {$language_tag.index_product_ShowPlanTour_guideBack}
+                    </h3>
+                    <div class="fr">
+                        <span id="file"></span>&nbsp;&nbsp;
+                        <button class="layui-btn nav-submit" id="upload">{$language_tag.index_public_upload}</button>
+                        <button class="layui-btn nav-add word-export">{$language_tag.index_public_download}</button>
+                        <button class="layui-btn nav-add" id="file_name" style="display: none;margin:0px;"></button>
+                        <button class="layui-btn nav-add" style="margin:0px"><a href="/product/ShowPlanTour" style="color: #fff">{$language_tag.index_public_history_back}</a></button>
+                    </div>
+                    <div class="clear fr"><span class="layui-icon layui-icon-about font-icons" id="tips" onclick="tips()"></span>&nbsp;&nbsp;<span class="red" style="text-align: right;padding-top:5px">{$language_tag.index_product_showshowPlanTourGuideReceipt_explain_paragraph}</span></div>
+                </div>
+            </div>
+            <div id="infomation-table">
+                <div class='content-bg page-filedset all-detail'>
+                    <fieldset class="layui-elem-field layui-field-title" style="margin-top: 0px;">
+                        <legend>{$language_tag.index_product_showshowPlanTourGuideReceipt_travel_itinerary}</legend>
+                    </fieldset>
+                    <div class="layui-row">
+                        <label class="layui-form-label">{$language_tag.index_product_ShowPlanTour_regimentName}:</label>
+                        <span class="layui-input-block" id="team_product_name">
+
+                        </span>
+                    </div>
+                    <div class="layui-row">
+                        <label class="layui-form-label">{$language_tag.index_product_ShowPlanTour_productNumber}:</label>
+                        <span class="layui-input-block" id="team_product_number">
+
+                        </span>
+                    </div>
+                    <div class="layui-row">
+                        <label class="layui-form-label">{$language_tag.index_branchcompany_showBranchProductManage_startDate}:</label>
+                        <span class="layui-input-block" id="begin_time">
+
+                        </span>
+                    </div>
+                </div><!--行程单-->
+                <div class="content-bg page-filedset">
+                    <fieldset class="layui-elem-field layui-field-title" style="margin-top: 0px;">
+                        <legend>{$language_tag.index_product_showshowPlanTourGuideReceipt_travel}</legend>
+                    </fieldset>
+                    <div class="">
+                        <table class="layui-table">
+                            <thead>
+                            <tr>
+                                <th style="width: 100px">{$language_tag.index_product_showshowPlanTourGuideReceipt_date}</th>
+                                <th style="width:130px">{$language_tag.index_public_travelTitle}</th>
+                                <th style="width:190px">{$language_tag.index_finance_showReceivableManage_scenic_spot}</th>
+                                <th class="eats" style="width: 100px">{$language_tag.index_public_dining}</th>
+                                <th style="width: 100px">{$language_tag.index_finance_showReceivableManage_hotel}</th>
+                                <th style="width: 50px">{$language_tag.index_product_PlanBooking_number}</th>
+                                <th style="width: 150px">{$language_tag.index_product_showshowPlanTourGuideReceipt_user_room_number}</th>
+                                <th style="width: 130px">{$language_tag.index_public_mark}</th>
+                            </tr>
+                            </thead>
+                            <tbody id="team_product_journey">
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div><!--住宿-->
+                <div class="content-bg page-filedset">
+                    <fieldset class="layui-elem-field layui-field-title" style="margin-top: 0px;">
+                        <legend>{$language_tag.index_product_showshowPlanTourGuideReceipt_visitor_list}</legend>
+                    </fieldset>
+                    <div class="">
+                        <table class="layui-table">
+                            <thead>
+                            <tr>
+                                <th style="min-width: 80px">{$language_tag.index_branchcompany_showBranchProductManage_visitorNumber}</th>
+                                <th>{$language_tag.index_public_type}</th>
+                                <th>{$language_tag.index_branchcompany_showBranchProductManage_surname}</th>
+                                <th>{$language_tag.index_branchcompany_showBranchProductManage_name}</th>
+                                <th>{$language_tag.index_branchcompany_showBranchProductManage_sex}</th>
+                                <th>{$language_tag.index_branchcompany_showBranchProductManage_nationality}</th>
+                                <th>{$language_tag.index_branchcompany_showBranchProductManage_passport}</th>
+                                <th>{$language_tag.index_branchcompany_showBranchProductManage_phone}</th>
+                                <th>{$language_tag.index_branchcompany_showBranchProductManage_language}</th>
+                            </tr>
+                            </thead>
+                            <tbody id="order_customers">
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div><!--客人名单-->
+                <div class="content-bg page-filedset">
+                    <fieldset class="layui-elem-field layui-field-title" style="margin-top: 0px;">
+                        <legend>{$language_tag.index_product_visitor_accommodationInformation}</legend>
+                    </fieldset>
+                    <div class="">
+                        <table class="layui-table">
+                            <thead>
+                            <tr>
+                                <th>{$language_tag.index_branchcompany_showBranchProductManage_surname}</th>
+                                <th>{$language_tag.index_branchcompany_showBranchProductManage_name}</th>
+                                <th>{$language_tag.index_product_visitor_roomType}</th>
+                                <th>入住日期</th>
+                                <th>退房日期</th>
+                            </tr>
+                            </thead>
+                            <tbody id="information">
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div><!--住宿信息-->
+                <div class="content-bg page-filedset">
+                    <fieldset class="layui-elem-field layui-field-title" style="margin-top: 0px;">
+                        <legend>{$language_tag.index_public_transportMachine}</legend>
+                    </fieldset>
+                    <div class="">
+                        <table class="layui-table">
+                            <thead>
+                            <tr>
+                                <th>{$language_tag.index_finance_showReceivableManage_flight}</th>
+                                <th>{$language_tag.index_product_showshowPlanTourGuideReceipt_date}</th>
+                                <th>{$language_tag.index_public_startPlace}</th>
+                                <th>{$language_tag.index_public_endPlace}</th>
+                                <th>{$language_tag.index_public_time}</th>
+                                <th>{$language_tag.index_product_PlanBooking_number}</th>
+                                <th style="max-width: 23%">{$language_tag.index_product_showshowPlanTourGuideReceipt_airport_drop_list}</th>
+                                <th style="max-width: 180px">{$language_tag.index_public_mark}</th>
+                            </tr>
+                            </thead>
+                            <tbody id="team_product_flight">
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div><!--航班-->
+                <div class="content-bg page-filedset">
+                    <fieldset class="layui-elem-field layui-field-title" style="margin-top: 0px;">
+                        <legend>{$language_tag.index_finance_showReceivableManage_ownexpense}</legend>
+                    </fieldset>
+                    <div class="">
+                        <table class="layui-table">
+                            <thead>
+                            <tr>
+                                <th>{$language_tag.index_branchcompany_showCompanyOrderManage_addEdit_product}</th>
+                                <!--<th>{$language_tag.index_product_showRouteTemplateManage_resources_currency}</th>
+                                <th>{$language_tag.index_product_showRouteTemplateManage_resources_price}</th>-->
+                                <th style="min-width:23%">{$language_tag.index_product_visitor_order_visitor}</th>
+                            </tr>
+                            </thead>
+                            <tbody id="team_product_single_source">
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div><!--自费项目-->
+                <div class="content-bg page-filedset">
+                    <fieldset class="layui-elem-field layui-field-title" style="margin-top: 0px;">
+                        <legend>{$Think.lang.index_branchcompany_showCompanyOrderManage_specificRequirements}</legend>
+                    </fieldset>
+                    <div class="">
+                        <table class="layui-table">
+                            <thead>
+                            <tr>
+                                <th>{$Think.lang.index_branchcompany_showBranchProductManage_surname}</th>
+                                <th>{$Think.lang.index_branchcompany_showBranchProductManage_name}</th>
+                                <th>{$Think.lang.index_branchcompany_showCompanyOrderManage_specificRequirements}</th>
+                            </tr>
+                            </thead>
+                            <tbody id="special_claim">
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div id="return_receipt">
+
+                </div>
+            </div>
+        </div>
+        <input type="hidden" name="number" value="{$_GET['number']}" id="number" />
+        <input type="hidden" name="number" value="{$_GET['team_product_id']}" id="team_product_id" />
+    </div>
+    <div class="layui-footer">
+        <!-- 底部固定区域 -->
+        © layui.com - 底部固定区域
+    </div>
+    <script id="demo" type="text/html">
+        {{#  layui.each(d, function(index, item){ }}
+            <div class="content-bg page-filedset">
+                <fieldset class="layui-elem-field layui-field-title" style="margin-top: 0px;">
+                    <legend>{{item.title}}</legend>
+                </fieldset>
+                <div class="infomation-list-line">
+                    {{content(item.content,index)}}
+                </div>
+            </div>
+        {{#  }); }}
+    </script>
+</div>
+<script type="text/javascript" src="__STATIC__/javascript/data.js"></script>
+{include file='public/foot_js' /}
+<script type="text/javascript" src="__STATIC__/javascript/product/tour_guide.js"></script>
+<script type="text/javascript" src="__STATIC__/javascript/product/all.js"></script>
+<script type="text/javascript" src="__STATIC__/javascript/product/FileSaver.js"></script>
+<script type="text/javascript" src="__STATIC__/javascript/product/wors.js"></script>
+
+<script>
+    
+    var number = $('#number').val();
+    var team_product_id = $('#team_product_id').val();
+
+    $.ajax({
+        type: "POST",
+        url: '/upload/get_guide_receipt_file',
+        data: {
+            "team_product_number":number,
+            
+        },
+        success: function(data){
+    
+            if(data.length>0) {
+                var index = data .lastIndexOf("\/");
+                var str= data .substring(index + 1, data .length);
+                $("#file").show().html('&nbsp;&nbsp;<a href="javascript:;" onclick="fileDel()"><u>删除附件</u></a>')
+                $("#file_name").append("<a href='"+data+"' style='color:#fff'>附件下载</a>");
+                $("#file_name").show();
+            }
+        }
+    });
+
+    var team_product_id =$("#team_product_id").val();
+    layui.use('upload', function() {
+        var upload = layui.upload;
+        upload.render({
+            elem: '#upload',
+            url: '/upload/upload_guide_receipt_file?team_product_number='+number+'&team_product_id='+team_product_id,
+            multiple:'true',
+            accept: 'file',
+            size:(5*1024), //默认KB，小于5M
+            exts: "doc|docx|pdf|xls|xlsx", //只允许上传word,execl,pdf
+            drag:'true',
+            bindAction: '#upload',
+            before: function(obj){
+                layer.load(2); //上传loading
+
+            },
+            done: function(res, index, upload){
+                layer.closeAll('loading'); //关闭loading
+                window.location.reload();
+            },
+            choose: function(obj) {
+
+            },
+            error: function(index, upload){
+            }
+        });
+    })
+    /*换行*/
+    function content(content,index) {
+        if(index=='0'||index=='2'){
+            return content.replace(/_x000D_/g,"<br>");
+        }else{
+            return content.replace(/_x000D_/g,"<br><br>");
+        }
+    }
+    /*删除*/
+    function fileDel() {
+        $.ajax({
+            type: "POST",
+            url: '/product/updateTeamProductGuideReceipt',
+            data: {
+                "team_product_number":number
+            },
+            success: function(data){
+        		
+                if(data.code==200) {
+                    $("#file_name,#file").hide();
+                }
+            }
+        });
+    
+    }
+</script>
+
+
+</body>
+</html>

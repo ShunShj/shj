@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {include file='public/head' /}
+    <title>language-manage</title>
+    <link href="__STATIC__/css/source.css" rel="stylesheet">
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+    <div class="layui-header">
+        {include file='public/header' /}
+    </div>
+
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll">
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            {include file='public/left_menu' /}
+        </div>
+    </div>
+
+    <div class="layui-body">
+
+            <!-- 内容主体区域 -->
+            <div style="padding: 15px 15px 0px;">
+                <div class="body-top">
+                    <div class='layui-form-item'>
+                    <span class="layui-breadcrumb" lay-separator="-">
+                        <a>首页</a>
+                        <a>资源管理</a>
+                        <a><cite>地接管理</cite></a>
+                    </span>
+                    </div>
+                    <br/>
+                    <div class='layui-block input-inline'>
+                        <form method='get' action='/source/showAgentManage'>
+                            <div class='layui-input-inline'>
+                                <div class="layui-form">
+                                    <select id="" name="status">
+                                        <option value="0" selected="">状态</option>
+                                        <option value="1" {if condition="$Think.get.status eq 1"}selected='selected' {/if}>可用</option>
+                                        <option value="2" {if condition="$Think.get.status eq 2"}selected='selected' {/if}>禁用</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class='layui-input-inline'>
+                                <input type="text" id="" name="supplier_name" value="{$Think.get.supplier_name}"  placeholder="供应商名称" class="layui-input">
+                            </div>
+                            <!--<div class='layui-input-inline'>-->
+                            <!--<input type="text" id="" name="level_name"  placeholder="等级" class="layui-input">-->
+                            <!--</div>-->
+                            <!--<div class='layui-input-inline'>-->
+                            <!--<input type="text" id="" name=""  placeholder="电话、联系人、操作人" class="layui-input">-->
+                            <!--</div>-->
+                            <div class='layui-button-inline layui-search-inline'>
+                                <button class="layui-btn nav-search" >搜索</button>
+                            </div>
+                        </form>
+                        <div class='layui-button-inline'>
+                            <a href='/source/showSupplierAdd'><button class="layui-btn nav-add">添加地接</button></a>
+                        </div>
+                    </div>
+                    <hr><br>
+                </div>
+                <div class="table-nont user-manage pageHeight">
+                    <table class="layui-table" id="language-table">
+                        <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>供应商名称</th>
+                            <th>等级</th>
+                            <th>状态</th>
+                            <th>地接内容</th>
+                            <!--<th class="layui-table-width">操作</th>-->
+                        </tr>
+                        </thead>
+
+                        <tbody>
+                        {foreach name="data" item="vo" }
+                        <tr>
+                            <th>{$vo.supplier_id}</th>
+                            <th>{$vo.supplier_name}</th>
+                            <th>{$vo.level_name}</th>
+                            <th>{if condition="$vo.status eq 1"}启用{else/}禁用{/if}</th>
+                            <th><a href='/source/showAgentSource?supplier_id={$vo.supplier_id}'><button class="layui-btn layui-btn-sm hover-edit layui-btn-primary source-button-width">地接内容设置</button></a></th>
+                            <!--<th><a href='/source/showSupplierEdit?supplier_id={$vo.supplier_id}'><button class="layui-btn layui-btn-sm hover-edit layui-btn-primary">修改</button></a> <a href='/source/showSupplierInfo?supplier_id={$vo.supplier_id}'><button class="layui-btn layui-btn-sm hover-details layui-btn-primary">详情</button></a></th>-->
+                        </tr>
+                        {/foreach}
+                        </tbody>
+
+                    </table>
+                </div>
+            </div>
+    </div>
+
+    <div class="layui-footer">
+        <!-- 底部固定区域 -->
+        © layui.com - 底部固定区域
+    </div>
+</div>
+{include file='public/foot_js' /}
+<script src='__STATIC__/javascript/system/source.js'></script>
+
+</body>
+</html>

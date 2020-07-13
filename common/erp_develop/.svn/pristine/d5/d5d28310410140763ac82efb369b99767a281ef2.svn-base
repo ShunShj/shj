@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+<head>
+	{include file='public/head' /}
+  	<title>country-manage</title>
+ 
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+  <div class="layui-header">
+	{include file='public/header' /}
+  </div>
+  
+  <div class="layui-side layui-bg-black">
+    <div class="layui-side-scroll">
+      <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+		{include file='public/left_menu' /}
+    </div>
+  </div>
+  
+  <div class="layui-body">
+  
+    <!-- 内容主体区域 -->
+    <div style="padding: 15px 15px 0px;">
+		<div class="body-top">
+			<div class='layui-form-item'>
+			<span class="layui-breadcrumb" lay-separator="-">
+				<a>{$Think.lang.index_public_homepage}</a>
+				<a>{$Think.lang.index_public_system}</a>
+				<a><cite>{$Think.lang.index_system_showCountryManage_country_manage}</cite></a>
+			</span>
+			</div>
+			<br/>
+			<div class='layui-block input-inline' >
+				<form method='get' action='/system/showCountryManage'>
+					<div class='layui-inline' >
+						<div class='layui-input-inline'>
+							<input type="text" name="country_name" value="{$Think.get.country_name}"  placeholder="{$Think.lang.index_system_showCountryManage_input_name}" class="layui-input">
+						</div>
+						<div class='layui-input-inline'>
+							<div class="layui-form">
+								<select name="status">
+									<option value="">-{$Think.lang.index_source_showCruisesManage_search_status}-</option>
+									<option value="1" selected>{$Think.lang.index_public_show}</option>
+									<option value="2" {if condition="$Think.get.status eq 2"}selected='selected' {/if}>{$Think.lang.index_public_disabled}</option>
+								</select>
+							</div>
+						</div>
+						<div class='layui-button-inline layui-search-inline'>
+							<button class="layui-btn nav-search">{$Think.lang.index_public_search}</button>
+						</div>
+					</div>
+				</form>
+				<div class='layui-button-inline'>
+					<span style="{:action('index/auth/check_auth',['role_id'=>'273'])}"><a href='/system/showCountryStateAdd'><button class="layui-btn nav-add">{$Think.lang.index_system_showCountryManage_add_country}</button></a></span>
+					<span style="{:action('index/auth/check_auth',['role_id'=>'274'])}"><a href='/system/showCountryCityAdd'><button class="layui-btn nav-add">{$Think.lang.index_system_showCountryManage_add_city}</button></a></span>
+					<span style="{:action('index/auth/check_auth',['role_id'=>'275'])}"><a href='/system/showCountryZoneAdd'><button class="layui-btn nav-add">{$Think.lang.index_system_showCountryManage_add_zone}</button></a></span>
+				</div>
+			</div>
+			<hr><br>
+		</div>
+		<div class="table-nont user-manage pageHeight">
+			<table class="layui-table" id="country-table">
+				<thead>
+				<tr>
+					<th>{$Think.lang.index_system_showCountryManage_id}</th>
+					<th>{$Think.lang.index_system_showCountryManage_name}</th>
+					<th>{$Think.lang.index_system_showCountryManage_level}</th>
+					<th>{$Think.lang.index_system_showCountryManage_country_code}</th>
+					<th>{$Think.lang.index_public_status}</th>
+					<th  class="layui-table-width">{$Think.lang.index_source_operation}</th>
+				</tr>
+				</thead>
+
+				<tbody>
+				{foreach $data as $k=>$v}
+				<tr>
+					<th>{$v.country_id}</th>
+					<th>{$MultilingualAll['country-country_name-'.$v.country_id.'-'.$Think.session.user.language_id][0]['translate']|default=$v.country_name}</th>
+					<th>{if condition="$v.level eq 1"}{$Think.lang.index_system_showCountryManage_country}{else}{/if}
+						{if condition="$v.level eq 2"}{$Think.lang.index_system_showCountryManage_city}{else}{/if}
+						{if condition="$v.level eq 3"}{$Think.lang.index_system_showCountryManage_zone}{else}{/if}
+					</th>
+					<th>{$v.country_code}</th>
+					<th>{if condition="$v.status eq 1"}{$Think.lang.index_public_show}{else}{$Think.lang.index_public_disabled}{/if}</th>
+					<th>
+						<span style="{:action('index/auth/check_auth',['role_id'=>'276'])}"><a href='/system/showCountryEditManage?country_id={$v.country_id}&level={$v.level}'><button class="layui-btn layui-btn-sm hover-edit layui-btn-primary">{$Think.lang.index_public_update}</button></a></span>
+						<span style="{:action('index/auth/check_auth',['role_id'=>'277'])}"><a href='/system/showCountryInfo?country_id={$v.country_id}&level={$v.level}'><button class="layui-btn layui-btn-sm hover-details layui-btn-primary">{$Think.lang.index_public_info}</button></a></span>
+						<!--<a href='/system/showCountryEditLanguage?country_id={$v.country_id}'><button class='layui-btn layui-btn-sm hover-polylingual layui-btn-primary'>{$Think.lang.index_public_language}</button></a>-->
+					</th>
+
+				</tr>
+				{/foreach}
+				</tbody>
+
+			</table>
+		</div>
+		<div class="listButtom">
+
+			<!--加载分页-->
+			{include file='public/page' /}
+
+		</div>
+    </div>
+  </div>
+
+  <div class="layui-footer">
+    <!-- 底部固定区域 -->
+    © layui.com - 底部固定区域
+  </div>
+</div>
+{include file='public/foot_js' /}
+
+</body>
+</html>

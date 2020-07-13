@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+<head>
+	{include file='public/head' /}
+  	<title>tag-manage</title>
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+  <div class="layui-header">
+	{include file='public/header' /}
+  </div>
+  
+  <div class="layui-side layui-bg-black">
+    <div class="layui-side-scroll">
+      <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+		{include file='public/left_menu' /}
+    </div>
+  </div>
+  
+  <div class="layui-body">
+  
+    <!-- 内容主体区域 -->
+    <div style="padding: 15px 15px 0px;">
+		<div class="body-top">
+			<div class='layui-form-item'>
+			<span class="layui-breadcrumb" lay-separator="-">
+
+				<a>{$language_tag.index_public_homepage}</a>
+				<a>{$language_tag.index_public_system}</a>
+				<a><cite>房型管理</cite></a>
+
+			</span>
+			</div>
+			<br/>
+			<div class='layui-block input-inline' >
+				<span>
+					<a href='/system/showRoomTypeAdd'>
+						<button class="layui-btn nav-add">{$language_tag.index_public_add}</button>
+					</a>
+				</span>
+			</div>
+			<hr>
+		</div>
+		<div class="table-nont user-manage pageHeight">
+			<table class="layui-table  layui-form" id="language-table">
+				<thead>
+				<tr>
+					<th>编号</th>
+					<th>房型名称</th>
+					<th>可容纳人数</th>
+					<th>新增时间</th>
+					<th class="layui-table-width">{$language_tag.index_source_operation}</th>
+				</tr>
+				</thead>
+
+				<tbody>
+				{foreach $data as $k=>$v}
+				<tr>
+					<th>{$v.room_type_id}</th>
+					<th>{$MultilingualAll['room_type-room_type_name-'.$v.room_type_id.'-'.$Think.session.user.language_id][0]['translate']|default=$v.room_type_name}</th>
+					<th>{$v.accommodate}</th>
+					<th>{$v.create_time|date='Y-m-d H:i:s',###}</th>
+					<th>
+						<a href='/system/showRoomTypeEdit?room_type_id={$v.room_type_id}'><button class="layui-btn layui-btn-sm hover-edit layui-btn-primary">{$language_tag.index_public_update}</button></a>
+						<a class="layui-btn layui-btn-sm hover-edit layui-btn-primary del-operations" data-tit="{$v.room_type_name}" data-id="{$v.room_type_id}">{$language_tag.index_public_del}</a>
+					</th>
+				</tr>
+				{/foreach}
+				</tbody>
+			</table>
+		</div>
+		<div class="listButtom">
+			{include file='public/page' /}
+		</div>
+    </div>
+
+  </div>
+  
+  <div class="layui-footer">
+    <!-- 底部固定区域 -->
+    © layui.com - 底部固定区域
+  </div>
+</div>
+{include file='public/foot_js' /}
+
+<script>
+	!function() {
+		var layer = layui.layer;
+		var room_type_id;
+		$('.del-operations').on('click',function(){
+			var tit = $(this).data('tit');
+			room_type_id = $(this).data('id');
+
+			layer.confirm('确定要删除<font style="color: red">'+tit+'</font>么？', {icon:3, title:'提示'}, function(index){
+				$.ajax({
+					type: "POST",
+					url: '/system/delRoomTypeAjax',
+					data: {
+						room_type_id:room_type_id,
+					},
+					success: function(data){
+						//console.log(data);
+						if(data.code!=200){
+							layer.msg(data.msg);
+							return false;
+						}else if(data.code==200) {
+							layer.msg('操作成功',{time:1,end : function(layero, index){
+									layer.closeAll();
+									location.reload();
+								}
+							});
+						}
+					},
+					error:function(XMLHttpRequest, textStatus, errorThrown){
+						layer.msg('验证失败')
+					}
+				});
+				layer.close(index);
+			});
+		});
+
+	}();
+</script>
+</body>
+</html>

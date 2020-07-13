@@ -1,0 +1,12 @@
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="__STATIC__/css/formSelects-v4.css">
+    <link rel="stylesheet" href="__STATIC__/layui/css/layui.css">
+	<link rel="stylesheet" href="__STATIC__/css/public.css">
+    <link rel="stylesheet" href="__STATIC__/layui/icon/iconfont.css">
+    <link rel="stylesheet" href="__STATIC__/layui/multilingual/iconfont.css">
+    <!--公共CSS样式-->
+    <!--  <link rel="stylesheet" href="__STATIC__/css/public_style.css"> -->
+    <script src='__STATIC__/javascript/public/jquery-2.1.1.min.js'></script>
+
+

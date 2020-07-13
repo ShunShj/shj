@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<head>
+    {include file='public/head' /}
+    <title>language-manage-add</title>
+
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+
+    <div class="layui-header">
+        {include file='public/header' /}
+    </div>
+
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll">
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            {include file='public/left_menu_booknexus' /}
+        </div>
+    </div>
+
+    <div class="layui-body">
+
+        <!-- 内容主体区域 -->
+        <div style="padding: 15px;">
+            <div class='layui-form-item'>
+		   		<span class="layui-breadcrumb" lay-separator="-">
+					<a>{$language_tag.index_public_homepage}</a>
+                    <a>B2B</a>
+                    <a>代理分类</a>
+                    <a><cite>添加代理分类</cite></a>
+				</span>
+            </div>
+            <br/>
+            <br/>
+            <div class="layui-row">
+                <form class="layui-form layui-col-md4" onSubmit="return distributor_type_add()">
+                    <div class="layui-form-item">
+                        <label class="layui-form-label input-required">分类名称：</label>
+                        <div class="layui-input-block">
+                            <input id="distributor_type_name" name="distributor_type_name" required="" lay-verify="required" placeholder="" autocomplete="off" class="layui-input" type="text">
+                        </div>
+                    </div>
+                    <br/>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label input-required">{$language_tag.index_public_company}:</label>
+                        <div class="layui-input-block">
+                            <select {$Think.session.user.company_id!=1?'disabled':''} name="choose_company_id" id="choose_company_id" lay-verify="required" >
+                                <option value="0">{$language_tag.index_source_showSupplier_choose_company}</option>
+                                {foreach name='company_result'  item='vo'}
+                                <option value="{$vo.company_id}" {if condition="$vo.company_id eq $Think.session.user.company_id"}selected='selected'{/if}>{$MultilingualAll['company-company_name-'.$vo.company_id.'-'.$Think.session.user.language_id][0]['translate']|default=$vo.company_name}</option>
+                                {/foreach}
+                            </select>
+                        </div>
+                    </div>
+                    <br/>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">{$language_tag.index_public_status}：</label>
+
+                        <div class="layui-input-block">
+                            <select name="status" id="status" lay-filter="required" >
+                                <option value="1" selected="selected">{$language_tag.index_public_show}</option>
+                                <option value="0">{$language_tag.index_public_disabled}</option>
+                            </select>
+                        </div>
+                    </div>
+                    <br/>
+                    <div class="layui-form-item">
+                        <div class="layui-input-block">
+                            <button class="layui-btn nav-submit" lay-submit="" lay-filter="formDemo" id="">{$language_tag.index_public_submit}</button>
+                            <a href="#" onClick="javascript :history.back(-1);"><button type="button" class="layui-btn layui-btn-primary">{$language_tag.index_public_back}</button></a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="layui-footer">
+        <!-- 底部固定区域 -->
+        © layui.com - 底部固定区域
+    </div>
+</div>
+{include file='public/foot_js' /}
+<script>
+    function distributor_type_add(){
+
+        var distributor_type_name = $("#distributor_type_name").val();
+        var status = $("#status").val();
+        var company_id = $("#choose_company_id").val();
+
+        $.ajax({
+            type: "POST",
+            url: '/distributor/addDistributorTypeAjax',
+            data: {
+                distributor_type_name:distributor_type_name,
+                status:status,
+                choose_company_id:company_id,
+            },
+            success: function(data){
+                //console.log(data);
+                if(data.code!=200){
+                    layer.msg(data.msg);
+                    return false;
+                }else if(data.code==200) {
+                    layer.msg('操作成功',{time:1,end : function(layero, index){
+                            layer.load(2);
+                            history.back(-1);
+                        }
+                    });
+                }
+            },
+            error:function(XMLHttpRequest, textStatus, errorThrown){
+                layer.msg('验证失败')
+            }
+        });
+        return false;
+
+    }
+</script>
+</body>
+</html>

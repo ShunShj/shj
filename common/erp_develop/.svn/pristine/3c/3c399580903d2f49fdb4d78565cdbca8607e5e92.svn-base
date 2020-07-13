@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {include file='public/head' /}
+    <title>{$supplierName}{$language_tag.index_source_showTourGuideSourceManage_tour_source}</title>
+
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+    <div class="layui-header">
+        {include file='public/header' /}
+    </div>
+
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll">
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            {include file='public/left_menu' /}
+        </div>
+    </div>
+
+    <div class="layui-body">
+
+        <!-- 内容主体区域 -->
+        <div style="padding: 15px;">
+            <div class='layui-form-item'>
+			<span class="layui-breadcrumb" lay-separator="-">
+                <a>{$language_tag.index_public_homepage}</a>
+                <a>{$language_tag.index_source_showTourGuideManage_source_administrate}</a>
+				<a>{$language_tag.index_source_showTourGuideManage_tourguide_administrate}</a>
+                <a><cite>{$language_tag.index_source_showTourGuideSourceManage_all_source}</cite></a>
+			</span>
+            </div>
+            <br/>
+            <div class="layui-block input-inline">
+                <form action="/source/setTourGuideSourceManage?id={$_GET['id']}"  method="post">
+                    <div class='layui-input-inline'>
+                        <div class="layui-form">
+                            <select  id="search_status" name="search_status">
+                                <option value="0">-{$language_tag.index_source_showTourGuideManage_search_status}-</option>
+                                <option value="1" selected>{$language_tag.index_public_show}</option>
+                                <option value="2" {$setTourGuideSourceManage.search_status==2?"selected":''} >{$language_tag.index_public_disabled}</option>
+                            </select>
+                        </div>
+                    </div>
+                    <!--<div class='layui-input-inline'>-->
+                    <!--<input type="text" id="search_ID" name="search_ID" value="{$setTourGuideSourceManage.search_ID}"  placeholder="ID" class="layui-input">-->
+                    <!--</div>-->
+                    <div class='layui-inline' >
+                        <div class='layui-input-inline'>
+                            <input type="text" id="search_Name" name="search_Name" value="{$setTourGuideSourceManage.search_Name}"  placeholder="{$language_tag.index_source_showTourGuideSourceManage_input_tourguide_name}" class="layui-input">
+                        </div>
+                        <!--<div class='layui-input-inline'>-->
+                        <!--<input type="text" id="search_Operator" name="search_Operator" value=""  placeholder="操作人" class="layui-input">-->
+                        <!--</div>-->
+
+
+                        <div class='layui-button-inline layui-search-inline'>
+                            <button class="layui-btn nav-search"  >{$language_tag.index_public_search}</button>
+                            <!--<a href="/source/clearTourGuideSourceManage?id={$_GET['id']}" class="layui-btn layui-btn-primary">清除</a>-->
+                        </div>
+                    </div>
+                </form>
+                <div class='layui-button-inline'>
+                    <span style="{:action('index/auth/check_auth',['role_id'=>'212'])}"><a href='/source/showTourGuideSourceAdd?id={$_GET["id"]}'><button class="layui-btn nav-add">{$language_tag.index_source_showTourGuideManage_add_source}</button></a></span>
+                    <a href='/source/showSupplierManage?status=1'><button class="layui-btn nav-add">{$language_tag.index_source_supplier_list}</button></a>
+                </div>
+            </div>
+
+            <div class="table-nont">
+                <table class="layui-table layui-form" id="language-table">
+                    <thead>
+                    <tr>
+                        <th>{$language_tag.index_source_showTourGuideManage_id}</th>
+                        <th>{$language_tag.index_source_showTourGuideSourceManage_tourguide_name}</th>
+                        <th>{$language_tag.index_public_supplier}</th>
+                        <th>{$language_tag.index_source_showTourGuideSourceManage_phone_number}</th>
+                        <th>{$language_tag.index_source_showTourGuideSourceManage_guide_id_card}</th>
+                        <th>{$language_tag.index_public_status}</th>
+                        <!--<th>{$language_tag.index_finance_showReceivableManage_currency_name}</th>-->
+                        <!--<th>{$language_tag.index_public_price}</th>-->
+                        <!--<th>最后操作时间</th>-->
+                        <!--<th>操作人</th>-->
+                        <th class="layui-table-width">{$language_tag.index_source_operation}</th>
+                    </tr>
+                    </thead>
+
+                    <tbody>
+                    {foreach name="data" item="vo"}
+                    <tr>
+                        <th class="tour_guide_id">{$vo.tour_guide_id}</th>
+                        <th>{$vo.tour_guide_name}</th>
+                        <th>{$MultilingualAll['supplier-supplier_name-'.$vo.supplier_id.'-'.$Think.session.user.language_id][0]['translate']|default=$vo.supplier_name}</th>
+                        <th>{$vo.phone}</th>
+                        <th>{$vo.guide_id_card}</th>
+                        <th>
+                            {if condition="in_array('208',$auth_id) OR $Think.session.user.role_id eq 1"}<input type="checkbox" {if condition="$vo.status eq 1"}checked=""{else/}{/if} name="open" lay-skin="switch" lay-filter="switchTest" lay-text="{$language_tag.index_public_show}|{$language_tag.index_public_disabled}">{else/}{if condition="$vo.status eq 1"}{$language_tag.index_public_show}{else}{$language_tag.index_public_disabled}{/if}{/if}
+                        </th>
+                        <!--<th>{$vo.payment_currency_type==1?'人民币':''}</th>-->
+                        <!--<th>{$vo.normal_retail_price}</th>-->
+                        <!--<th><?=date("Y-m-d H:i:s", strtotime("0 hour",$vo['update_time']))?></th>-->
+                        <!--<th>{$vo.create_user_name}</th>-->
+                        <th>
+                            {if condition="$vo.company_id eq $Think.session.user.company_id"}
+                            <span style="{:action('index/auth/check_auth',['role_id'=>'213'])}"><a href='/source/showTourGuideSourceEdit?id={$vo.tour_guide_id}'><button class="layui-btn layui-btn-sm hover-edit layui-btn-primary">{$language_tag.index_public_update}</button></a></span>
+                            {/if}
+                            <span style="{:action('index/auth/check_auth',['role_id'=>'214'])}"><a href='/source/showTourGuideSourceInfo?id={$vo.tour_guide_id}'><button class="layui-btn layui-btn-sm hover-details layui-btn-primary">{$language_tag.index_public_info}</button></a></span>
+                            <!--<a href='/source/showTourGuideSpotEditLanguage?source_number={$vo.source_number}'><button class="layui-btn layui-btn-sm hover-polylingual layui-btn-primary">{$language_tag.index_public_language}</button></a>-->
+                        </th>
+                    </tr>
+                    {/foreach}
+                    </tbody>
+
+                </table>
+            </div>
+            <div class="listButtom">
+                {include file='public/page' /}
+            </div>
+        </div>
+    </div>
+
+    <div class="layui-footer">
+        <!-- 底部固定区域 -->
+        © layui.com - 底部固定区域
+    </div>
+</div>
+{include file='public/foot_js' /}
+<script>
+    var layer = layui.layer;
+
+    var form = layui.form;
+    form.on('switch(switchTest)', function(data){
+        var table_id = $(data.elem).parents("tr").children(".tour_guide_id").html();
+        var table_id_name = "tour_guide_id";
+        var table_name = "tour_guide";
+        if(this.checked == true){
+            var status = 1;
+        }else{
+            var status = 2;
+        }
+
+        $.ajax({
+            type: "POST",
+            url: '/index/changeStatus',
+            data: {
+                table_id:table_id,
+                table_id_name:table_id_name,
+                table_name:table_name,
+                status:status,
+            },
+            success: function(data){
+                //console.log(data);
+                if(data.code!=200){
+                    layer.msg(data.msg);
+                    return false;
+                }else if(data.code==200) {
+                    layer.msg('操作成功',{time:1,end : function(layero, index){
+
+                        }
+                    });
+                }
+            },
+            error:function(XMLHttpRequest, textStatus, errorThrown){
+                layer.msg('验证失败')
+            }
+        });
+    });
+
+
+</script>
+</body>
+</html>
+
+<script>
+    $(function(){
+        var layer = layui.layer  ,form = layui.form;
+
+        //选择国家更新城市
+        form.on('select(Owned_country)',function(data){
+            var cid = data.value;
+            $.ajax({
+                type: "POST",
+                url: '',
+                data: {
+                    'cid': cid,
+                },
+                success: function (data) {
+                    if(data.code!=200){
+                        layer.msg(data.msg)
+                        return false;
+                    }else if(data.code==200){
+
+                    }
+                },
+                error:function(XMLHttpRequest, textStatus, errorThrown){
+                    //console.log(errorThrown)
+                    layer.msg('{$language_tag.index_public_verificationFailure}')
+
+                }
+            });
+        });
+
+    });
+</script>

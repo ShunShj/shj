@@ -1,0 +1,935 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {include file='public/head' /}
+    <title>{$language_tag.index_product_ShowPlanTour_resources_teamProduct}-{$language_tag.index_product_PlanSuppliersPayable_incomeStatement}</title>
+    <link href="__STATIC__/css/select2.min.css" rel="stylesheet">
+
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+    <div class="layui-header">
+        {include file='public/header' /}
+    </div>
+
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll">
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            {include file='public/left_menu' /}
+        </div>
+    </div>
+
+    <div class="layui-body">
+
+        <!-- 内容主体区域 -->
+        <div style="padding: 15px;">
+            <div class='layui-form-item'>
+			<span class="layui-breadcrumb" lay-separator="-">
+                <a>{$language_tag.index_public_homepage}</a>
+                <a>{$language_tag.index_public_product}</a>
+				<a>{$language_tag.index_product_ShowPlanTour_resources_teamProduct}</a>
+                <a><cite>{$language_tag.index_product_ShowPlanTour_suppliersPayable}</cite></a>
+			</span>
+            </div>
+            <br/>
+            <div class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief">
+                <table  class="layui-table" style="text-align: center;width: 700px;">
+                    <tr>
+                        <td colspan="3">{$language_tag.index_product_public_receivable}</td>
+                        <td colspan="2" >{$language_tag.index_product_public_copeWith}</td>
+                        <td rowspan="2" style="font-weight: bold;background-color: #5897fb" ><a href="/product/profitStatement?plan_id={$_GET['plan_id']}&number={$_GET['number']}">{$language_tag.index_product_PlanSuppliersPayable_incomeStatement}</a></td>
+                        
+                        {if condition="$Think.session.user.company_id eq $team_product_result.company_id"}
+                        <td colspan="1" >
+							财务审核
+                        
+                        </td>
+                        {/if}
+                                        
+                    </tr>
+                   
+                    <tr>
+                        <td><a href="/product/supplierReceivable?plan_id={$_GET['plan_id']}&number={$_GET['number']}">{$language_tag.index_product_public_ReceiveSupplier}</a></td>
+                        <td><a href="/product/PlanReceivableBranch?plan_id={$_GET['plan_id']}&number={$_GET['number']}">{$language_tag.index_product_public_ReceiveBranch}</a></td>
+                        <td><a href="/product/ReceivableDirectPassengerAgent?plan_id={$_GET['plan_id']}&number={$_GET['number']}">{$language_tag.index_product_public_receiveDirectOrAgent}</a></td>
+                        <td ><a href="/product/PlanSuppliersPayable?plan_id={$_GET['plan_id']}&number={$_GET['number']}">{$language_tag.index_product_public_PaymentSupplier}</a></td>
+                        <td><a href="/product/payableBranch?plan_id={$_GET['plan_id']}&number={$_GET['number']}">{$language_tag.index_product_public_PayBranch}</a></td>
+                    	  {if condition="$Think.session.user.company_id eq $team_product_result.company_id"}
+                    	<td>
+                    	 <div class="layui-form-item">
+                    	 <form class="layui-form" action="">
+
+						 <div class="layui-form-item" pane="">
+						
+						   
+						      <input type="checkbox" name=""  lay-filter='id_profit_approve' id='id_profit_approve' {if condition="$team_product_result.is_profit_approve eq 1"}checked{else/}{/if} lay-skin="primary">
+						
+						    
+						  </div>
+             			</form>       	
+                    	</td>
+                  {/if}
+                    </tr>
+                    
+
+                </table>
+
+                <!--<ul class="layui-tab-title">-->
+                <!--<li><a href="/product/PlanSuppliersPayable?plan_id={$_GET['plan_id']}&number={$_GET['number']}">{$language_tag.index_product_PlanSuppliersPayable_payableToSuppliers}</a></li>-->
+                <!--<li ><a href="/product/PlanReceivableBranch?plan_id={$_GET['plan_id']}&number={$_GET['number']}">{$language_tag.index_product_PlanSuppliersPayable_receivableBranch}</a></li>-->
+                <!--<li class="layui-this">{$language_tag.index_product_PlanSuppliersPayable_incomeStatement}</li>-->
+                <!--</ul>-->
+                <br/>
+                <div class="layui-tab-content">
+                    <div class="layui-btn"  style="float: right;margin:10px" onclick="upload('{$_GET["number"]}')">{$language_tag.index_public_download}</div>
+                    <div class="table-nont">
+                        <table class="layui-table" id="xiazai">
+
+                            <tr>
+                                <td colspan="14" style="font-weight: bold">{$language_tag.index_product_public_receivable}</td>
+                            </tr>
+                            <!--应收供应商-->
+                            <tr style="text-align: center;">
+                                <td rowspan="2" style="background-color: #c2c2c2;color: red;font-weight: bold;"></td>
+                                <td rowspan="2" style="background-color: #c2c2c2;color: red;font-weight: bold;" width="10%">{$language_tag.index_public_type}</td>
+                                <td rowspan="2" style="background-color: #c2c2c2;color: red;font-weight: bold;" width="15%">{$language_tag.index_public_supplier}</td>
+                                <td colspan="6" style="background-color: #c2c2c2;color: red;font-weight: bold;" width="50%">{$language_tag.index_product_PlanSuppliersPayable_detail}</td>
+                                <td rowspan="2" style="background-color: #c2c2c2;color: red;font-weight: bold;" width="5%">{$language_tag.index_product_PlanReceivableBranch_receivable_branch}</td>
+                                <td rowspan="2" style="background-color: #c2c2c2;color: red;font-weight: bold;" width="5%">{$language_tag.index_finance_showReceivableManage_true_receipt}</td>
+                                <td rowspan="2" style="background-color: #c2c2c2;color: red;font-weight: bold;" width="5%">{$language_tag.index_finance_showReceivableManage_uncollected}</td>
+                                <td rowspan="2" style="background-color: #c2c2c2;color: red;font-weight: bold;" width="5%">{$language_tag.index_product_PlanSuppliersPayable_totalReceivable}</td>
+                                <td rowspan="2" style="background-color: #c2c2c2;color: red;font-weight: bold;" width="5%">{$language_tag.index_product_PlanSuppliersPayable_totalReceived}</td>
+                            </tr>
+                            <tr style="text-align: center;">
+                                <td width="10%" style="background-color: #c2c2c2;color: red;font-weight: bold;">{$language_tag.index_finance_showReceivableManage_receivable_number}</td>
+                                <td width="10%" style="background-color: #c2c2c2;color: red;font-weight: bold;">{$language_tag.index_product_PlanSuppliersPayable_name}</td>
+                                <td width="10%" style="background-color: #c2c2c2;color: red;font-weight: bold;">{$language_tag.index_product_showRouteTemplateManage_resources_currency}</td>
+                                <td width="10%" style="background-color: #c2c2c2;color: red;font-weight: bold;">{$language_tag.index_public_price}</td>
+                                <td width="10%" style="background-color: #c2c2c2;color: red;font-weight: bold;">{$language_tag.index_product_showRouteTemplateManage_resource_number}</td>
+                                <td width="10%" style="background-color: #c2c2c2;color: red;font-weight: bold;">{$language_tag.index_product_PlanSuppliersPayable_total}</td>
+                            </tr>
+                            {notempty name='$TeamProductReceivableSupplierList["团费"]'}
+                            {assign name='s1' value='1'}
+                            {assign name='s2' value='1'}
+                            {assign name='ss2' value='1'}
+                            {assign name='s3' value='1'}
+                            {assign name='u1' value=''}
+                            <!--类型-->
+                            {assign name='u2' value=''}
+                            <!--供应商-->
+                            {assign name='u3' value='0'}
+                            {assign name='bl' value='1'}
+                            {foreach $TeamProductReceivableSupplierList['团费']['data'] as $k1=>$v1}
+                            {foreach $v1['data'] as $k2=>$v2}
+                            {foreach $v2 as $k3=>$v3}
+                            <tr  style="text-align: center;">
+                                {if ($bl==1)}
+                                <td id="r-1" rowspan="{$TeamProductReceivableSupplierList['团费']['count']}">{$language_tag.index_product_PlanSuppliersPayable_teamCoping}</td>
+
+                                {/if}
+
+                                {if ($u2!=$k1)}
+                                {assign name='ss2' value='1'}
+                                <td class="layui-form type" id="r-1-{$s1}" rowspan="{$v1['count']}" >
+                                    {$language_tag[$types[$k1]]}
+                                </td>
+                                {assign name='s1' value='$s1+1'}
+                                {/if}
+
+                                {if ($u3!=$k2 || $u2!=$k1) }
+                                <td class="layui-form supplier" id="r-2-{$s2}" rowspan="{$v2|count}">
+                                    {foreach $SupplierArr[$k1] as $vv}
+                                    {$vv["supplier_id"]==$k2?$vv['supplier_name']:""}
+                                    {/foreach}
+                                </td>
+                                {assign name='s2' value='$s2+1'}
+                                {assign name='ss2' value='$ss2+1'}
+                                {/if}
+
+                                <td {if $v3.company_order_status===3}style="text-decoration: line-through"{/if}>
+                                    {$v3.receivable_number}
+                                </td>
+                                <td>
+                                    {$v3.product_name|default='-'}
+                                </td>
+                                <td class="layui-form">
+                                    {foreach $Currency as $kv}
+                                    {$kv.currency_id==$v3.receivable_currency_id?$kv.currency_name:''}
+                                    {/foreach}
+                                </td>
+                                <td>
+                                    {$v3.price}
+                                </td>
+                                <td>
+                                    {$v3.unit}
+                                </td>
+                                <td>
+                                    {$v3.receivable_money}
+                                </td>
+
+                                {if ($u2!=$k1)}
+                                <td class="yingshougongyingshang-{$k1}" rowspan="{$v1['count']}">-</td>
+                                <td class="gongyingshangshishou-{$k1}" rowspan="{$v1['count']}">-</td>
+                                <td class="gongyingshangweishou-{$k1}" rowspan="{$v1['count']}">-</td>
+                                {/if}
+                                {if ($bl==1)}
+                                <td class="gongyingshangyingshouzongji" rowspan="{$TeamProductReceivableSupplierList['团费']['count']}">-</td>
+                                <td class="gongyingshangshishouzongji" rowspan="{$TeamProductReceivableSupplierList['团费']['count']}">-</td>
+                                {assign name='bl' value='0'}
+                                {/if}
+                                {assign name='s3' value='$s3+1'}
+                                {assign name='u2' value='$k1'}
+                                {assign name='u3' value='$k2'}
+
+                                <?php
+                                    $yingshougongyingshang[$k1] += $v3['receivable_money'];
+                                    $gongyingshangshishou[$k1] += $v3['true_receipt'];
+                                    $gongyingshangweishou[$k1] += ($v3['receivable_money']-$v3['true_receipt']);
+                                    $gongyingshangyingshouzongji += $v3['receivable_money'];
+                                    $gongyingshangshishouzongji += $v3['true_receipt'];
+                                ?>
+
+                            </tr>
+                            {/foreach}
+                            {/foreach}
+                            <script>
+                                var k1 = <?=$k1?$k1:0?>;
+                                var yingshougongyingshang = <?=$yingshougongyingshang[$k1]?$yingshougongyingshang[$k1]:0; ?>;
+                                var gongyingshangshishou = <?=$gongyingshangshishou[$k1]?$gongyingshangshishou[$k1]:0; ?>;
+                                var gongyingshangweishou = <?=$gongyingshangweishou[$k1]?$gongyingshangweishou[$k1]:0; ?>;
+
+                                $('.yingshougongyingshang-'+k1).html(yingshougongyingshang.toFixed(2));
+                                $('.gongyingshangshishou-'+k1).html(gongyingshangshishou.toFixed(2));
+                                $('.gongyingshangweishou-'+k1).html(gongyingshangweishou.toFixed(2));
+                            </script>
+                            {/foreach}
+                            <script>
+                                var gongyingshangyingshouzongji = <?=$gongyingshangyingshouzongji?$gongyingshangyingshouzongji:0;?>;
+                                var gongyingshangshishouzongji = <?=$gongyingshangshishouzongji?$gongyingshangshishouzongji:0;?>;
+                                $('.gongyingshangyingshouzongji').html(gongyingshangyingshouzongji.toFixed(2));
+                                $('.gongyingshangshishouzongji').html(gongyingshangshishouzongji.toFixed(2));
+                            </script>
+                            {/notempty}
+
+                            <tr>
+                                <td colspan="14"></td>
+                            </tr>
+                            <!--收分公司-->
+                            <tr style="text-align: center">
+                                <td rowspan="2" style="background-color: #f2e7c3;color: red;font-weight: bold;"></td>
+                                <td rowspan="2" style="background-color: #f2e7c3;color: red;font-weight: bold;">{$language_tag.index_product_PlanSuppliersPayable_sourceBranch}</td>
+                                <td rowspan="2" style="background-color: #f2e7c3;color: red;font-weight: bold;">{$language_tag.index_finance_showReceivableManage_order_number}</td>
+                                <td rowspan="2" style="background-color: #f2e7c3;color: red;font-weight: bold;">{$language_tag.index_finance_showReceivableManage_receivable_number}</td>
+                                <td colspan="5" style="background-color: #f2e7c3;color: red;font-weight: bold;">{$language_tag.index_product_PlanSuppliersPayable_detail}</td>
+                                <td rowspan="2" style="background-color: #f2e7c3;color: red;font-weight: bold;">{$language_tag.index_product_PlanSuppliersPayable_receivableBranch}</td>
+                                <td rowspan="2" style="background-color: #f2e7c3;color: red;font-weight: bold;">{$language_tag.index_finance_showReceivableManage_true_receipt}</td>
+                                <td rowspan="2" style="background-color: #f2e7c3;color: red;font-weight: bold;">{$language_tag.index_finance_showReceivableManage_uncollected}</td>
+                                <td rowspan="2" style="background-color: #f2e7c3;color: red;font-weight: bold;">{$language_tag.index_product_PlanSuppliersPayable_totalReceivable}</td>
+                                <td rowspan="2" style="background-color: #f2e7c3;color: red;font-weight: bold;">{$language_tag.index_product_PlanSuppliersPayable_totalReceived}</td>
+
+                            </tr>
+                            <tr style="text-align: center">
+                                <td style="background-color: #f2e7c3;color: red;font-weight: bold;">{$language_tag.index_product_visitor_order_visitor}</td>
+                                <td style="background-color: #f2e7c3;color: red;font-weight: bold;">{$language_tag.index_public_type}</td>
+                                <td style="background-color: #f2e7c3;color: red;font-weight: bold;">{$language_tag.index_product_PlanBooking_order_product}</td>
+                                <td style="background-color: #f2e7c3;color: red;font-weight: bold;">{$language_tag.index_product_showRouteTemplateManage_resources_currency}</td>
+                                <td style="background-color: #f2e7c3;color: red;font-weight: bold;">{$language_tag.index_product_showRouteTemplateManage_resources_price}</td>
+                            </tr>
+                            {notempty name='$TeamProductReceivableCompany["团费"]'}
+                            {assign name='s1' value='1'}
+                            {assign name='s2' value='1'}
+                            {assign name='ss2' value='1'}
+                            {assign name='s3' value='1'}
+                            {assign name='u1' value=''}
+                            <!--类型-->
+                            {assign name='u2' value=''}
+                            <!--供应商-->
+                            {assign name='u3' value='0'}
+                            {assign name='bl' value='1'}
+                            {foreach $TeamProductReceivableCompany['团费']['data'] as $k1=>$v1}
+                            {foreach $v1['data'] as $k2=>$v2}
+                            {foreach $v2 as $k3=>$v3}
+                            <tr style="text-align: center">
+                                {if ($bl==1)}
+                                <td  rowspan="{$TeamProductReceivableCompany['团费']['count']}">{$language_tag.index_product_PlanSuppliersPayable_teamReceivable}</td>
+                                {/if}
+
+                                {if ($u2!=$k1)}
+                                {assign name='ss2' value='1'}
+                                <td class="layui-form branch"  rowspan="{$v1['count']}" >
+                                    {foreach $branchs as $k=>$v}
+                                        {$v.company_id==$k1?$v.company_name:''}
+                                    {/foreach}
+                                </td>
+                                {assign name='s1' value='$s1+1'}
+                                {/if}
+
+                                {if ($u3!=$k2 || $u2!=$k1) }
+                                <td class="layui-form booking" rowspan="{$v2|count}">
+                                    {foreach $ReceivableList[$k1] as $k=>$v}
+                                     {$k2==$v.company_order_number?$v.company_order_number:''}
+                                    {/foreach}
+                                </td>
+                                {assign name='s2' value='$s2+1'}
+                                {assign name='ss2' value='$ss2+1'}
+                                {/if}
+                                <td {if $v3.company_order_status===3}style="text-decoration: line-through"{/if}>
+                                    {$v3.receivable_number}
+                                </td>
+                                <td width="20%" >
+                                    <?=implode(',',$v3['customer_info']);?>
+                                </td>
+                                <td>
+                                    {assign name='product_source_type_id' value='$v3.product_source_type_id?:1'}
+                                    {foreach $types2 as $k=>$v}
+                                    {$k==$product_source_type_id? $language_tag[$v]:''}
+                                    {/foreach}
+                                </td>
+                                <td>
+                                    {$v3.product_name}
+                                </td>
+                                <td>
+                                    {foreach $Currency as $v}
+                                    {$v3.receivable_currency_id==$v.currency_id?$v.currency_name:''}
+                                    {/foreach}
+                                </td>
+
+                                <td>
+                                    {$v3.receivable_money}
+                                </td>
+
+                                {if ($u2!=$k1)}
+                                <td class="yingshouTeamProductReceivableCompany-{$k1}" rowspan="{$v1['count']}">-</td>
+                                <td class="TeamProductReceivableCompanyshishou-{$k1}" rowspan="{$v1['count']}">-</td>
+                                <td class="TeamProductReceivableCompanyweishou-{$k1}" rowspan="{$v1['count']}">-</td>
+                                {/if}
+                                {if ($bl==1)}
+                                <td class="TeamProductReceivableCompanyYingShouZhongJi" rowspan="{$TeamProductReceivableCompany['团费']['count']}">-</td>
+                                <td class="TeamProductReceivableCompanyShiShouZhongJi" rowspan="{$TeamProductReceivableCompany['团费']['count']}">-</td>
+                                {assign name='bl' value='0'}
+                                {/if}
+
+                                {assign name='s3' value='$s3+1'}
+                                {assign name='u2' value='$k1'}
+                                {assign name='u3' value='$k2'}
+
+                                <?php
+                                $yingshouTeamProductReceivableCompany[$k1] += $v3['receivable_money'];
+                                $TeamProductReceivableCompanyshishou[$k1] += $v3['true_receipt'];
+                                $TeamProductReceivableCompanyweishou[$k1] += ($v3['receivable_money']-$v3['true_receipt']);
+
+                                $TeamProductReceivableCompanyYingShouZhongJi += $v3['receivable_money'];
+                                $TeamProductReceivableCompanyShiShouZhongJi += $v3['true_receipt'];
+                                ?>
+
+                            </tr>
+                            {/foreach}
+                            {/foreach}
+                            <script>
+                                var k1 = <?=$k1?$k1:0?>;
+                                var yingshouTeamProductReceivableCompany = <?=$yingshouTeamProductReceivableCompany[$k1]?$yingshouTeamProductReceivableCompany[$k1]:0; ?>;
+                                var TeamProductReceivableCompanyshishou = <?=$TeamProductReceivableCompanyshishou[$k1]?$TeamProductReceivableCompanyshishou[$k1]:0; ?>;
+                                var TeamProductReceivableCompanyweishou = <?=$TeamProductReceivableCompanyweishou[$k1]?$TeamProductReceivableCompanyweishou[$k1]:0; ?>;
+
+                                $('.yingshouTeamProductReceivableCompany-'+k1).html(yingshouTeamProductReceivableCompany.toFixed(2));
+                                $('.TeamProductReceivableCompanyshishou-'+k1).html(TeamProductReceivableCompanyshishou.toFixed(2));
+                                $('.TeamProductReceivableCompanyweishou-'+k1).html(TeamProductReceivableCompanyweishou.toFixed(2));
+                            </script>
+
+                            {/foreach}
+                            <script>
+                                var TeamProductReceivableCompanyYingShouZhongJi = <?=$TeamProductReceivableCompanyYingShouZhongJi;?>;
+                                var TeamProductReceivableCompanyShiShouZhongJi = <?=$TeamProductReceivableCompanyShiShouZhongJi;?>;
+                                $('.TeamProductReceivableCompanyYingShouZhongJi').html(TeamProductReceivableCompanyYingShouZhongJi.toFixed(2));
+                                $('.TeamProductReceivableCompanyShiShouZhongJi').html(TeamProductReceivableCompanyShiShouZhongJi.toFixed(2));
+
+                            </script>
+                            {/notempty}
+
+                            <tr>
+                                <td colspan="14"></td>
+                            </tr>
+
+                            <!--应收直客代理-->
+                            <tr style="text-align: center">
+                                <td rowspan="2" style="background-color: #d1f6db;color: red;font-weight: bold;"></td>
+                                <td rowspan="2" style="background-color: #d1f6db;color: red;font-weight: bold;">{$language_tag.index_product_public_receiveDirectOrAgent}</td>
+                                <td rowspan="2" style="background-color: #d1f6db;color: red;font-weight: bold;">{$language_tag.index_finance_showReceivableManage_order_number}</td>
+                                <td rowspan="2" style="background-color: #d1f6db;color: red;font-weight: bold;">{$language_tag.index_finance_showReceivableManage_receivable_number}</td>
+                                <td colspan="5" style="background-color: #d1f6db;color: red;font-weight: bold;">{$language_tag.index_product_PlanSuppliersPayable_detail}</td>
+                                <td rowspan="2" style="background-color: #d1f6db;color: red;font-weight: bold;">{$language_tag.direct_customer_receivable_or_agent}</td>
+                                <td rowspan="2" style="background-color: #d1f6db;color: red;font-weight: bold;">{$language_tag.index_finance_showReceivableManage_true_receipt}</td>
+                                <td rowspan="2" style="background-color: #d1f6db;color: red;font-weight: bold;">{$language_tag.index_finance_showReceivableManage_uncollected}</td>
+                                <td rowspan="2" style="background-color: #d1f6db;color: red;font-weight: bold;">{$language_tag.index_product_PlanSuppliersPayable_totalReceivable}</td>
+                                <td rowspan="2" style="background-color: #d1f6db;color: red;font-weight: bold;">{$language_tag.index_product_PlanSuppliersPayable_totalReceived}</td>
+
+                            </tr>
+                            <tr style="text-align: center">
+                                <td style="background-color: #d1f6db;color: red;font-weight: bold;">{$language_tag.index_product_visitor_order_visitor}</td>
+                                <td style="background-color: #d1f6db;color: red;font-weight: bold;">{$language_tag.index_public_type}</td>
+                                <td style="background-color: #d1f6db;color: red;font-weight: bold;">{$language_tag.index_product_PlanBooking_order_product}</td>
+                                <td style="background-color: #d1f6db;color: red;font-weight: bold;">{$language_tag.index_product_showRouteTemplateManage_resources_currency}</td>
+                                <td style="background-color: #d1f6db;color: red;font-weight: bold;">{$language_tag.index_product_showRouteTemplateManage_resources_price}</td>
+                            </tr>
+                            {notempty name='$TeamProductReceivableCustomerAndDistributorlist["团费"]'}
+                            {assign name='s1' value='1'}
+                            {assign name='s2' value='1'}
+                            {assign name='ss2' value='1'}
+                            {assign name='s3' value='1'}
+                            {assign name='u1' value=''}
+                            <!--类型-->
+                            {assign name='u2' value=''}
+                            <!--供应商-->
+                            {assign name='u3' value='0'}
+                            {assign name='bl' value='1'}
+                            {foreach $TeamProductReceivableCustomerAndDistributorlist['团费']['data'] as $k1=>$v1}
+                            {foreach $v1['data'] as $k2=>$v2}
+                            {foreach $v2 as $k3=>$v3}
+                            <tr style="text-align: center">
+                                {if ($bl==1)}
+                                <td rowspan="{$TeamProductReceivableCustomerAndDistributorlist['团费']['count']}">{$language_tag.index_product_receivableDirectOrAgent}</td>
+                                {/if}
+
+                                {if ($u2!=$k1)}
+                                {assign name='ss2' value='1'}
+                                <td class="layui-form branch" rowspan="{$v1['count']}" >
+                                    {$k1=='a'?$language_tag['index_product_automaticAcquisition']:""}
+                                    {$k1=='3'?$language_tag['index_branchcompany_showCompanyOrderManage_addEdit_straightGuest']:""}
+                                    {$k1=='4'?$language_tag['index_branchcompany_showDistributorManage_agent']:""}
+                                </td>
+                                {assign name='s1' value='$s1+1'}
+                                {/if}
+
+                                {if ($u3!=$k2 || $u2!=$k1) }
+                                <td class="layui-form booking" rowspan="{$v2|count}">
+                                    {foreach $order_number as $vl}
+                                    {$vl.order_number==$v3.order_number?$vl.order_number:''}
+                                    {/foreach}
+                                </td>
+                                {assign name='s2' value='$s2+1'}
+                                {assign name='ss2' value='$ss2+1'}
+                                {/if}
+
+                                <td {if $v3.company_order_status===3}style="text-decoration: line-through"{/if}>
+                                    {$v3.receivable_number}
+                                </td>
+
+                                <td width="20%" >
+                                    <?=implode(',',$v3['customer_info']);?>
+                                </td>
+
+                                <td>
+                                    {foreach $types3 as $k=>$v}
+                                    {assign name='product_source_type_id' value='$v3.source_type_id?:1'}
+                                    {$k==$product_source_type_id?$language_tag[$v]:''}
+                                    {/foreach}
+                                </td>
+
+                                <td>
+                                    {$v3.product_name}
+                                </td>
+
+                                <td>
+                                    {foreach $Currency as $v}
+                                    {$v3.receivable_currency_id==$v.currency_id?$v.currency_name:''}
+                                    {/foreach}
+                                </td>
+
+                                <td>
+                                    {$v3.receivable_money}
+                                </td>
+
+                                {if ($u2!=$k1)}
+                                <td class="yingshouTeamProductReceivableCustomerAndDistributor-{$k1}" rowspan="{$v1['count']}">-</td>
+                                <td class="TeamProductReceivableCustomerAndDistributorshishou-{$k1}" rowspan="{$v1['count']}">-</td>
+                                <td class="TeamProductReceivableCustomerAndDistributorweishou-{$k1}" rowspan="{$v1['count']}">-</td>
+                                {/if}
+                                {if ($bl==1)}
+                                <td class="TeamProductReceivableCustomerAndDistributorYingShouZhongJi" rowspan="{$TeamProductReceivableCustomerAndDistributorlist['团费']['count']}">-</td>
+                                <td class="TeamProductReceivableCustomerAndDistributorShiShouZhongJi" rowspan="{$TeamProductReceivableCustomerAndDistributorlist['团费']['count']}">-</td>
+                                {assign name='bl' value='0'}
+                                {/if}
+
+                                {assign name='s3' value='$s3+1'}
+                                {assign name='u2' value='$k1'}
+                                {assign name='u3' value='$k2'}
+
+                                <?php
+                                    $yingshouTeamProductReceivableCustomerAndDistributor[$k1] += $v3['receivable_money'];
+                                    $TeamProductReceivableCustomerAndDistributorshishou[$k1] += $v3['true_receipt'];
+                                    $TeamProductReceivableCustomerAndDistributorweishou[$k1] += ($v3['receivable_money']-$v3['true_receipt']);
+
+                                    $TeamProductReceivableCustomerAndDistributorYingShouZhongJi += $v3['receivable_money'];
+                                    $TeamProductReceivableCustomerAndDistributorShiShouZhongJi += $v3['true_receipt'];
+                                ?>
+
+                            </tr>
+                            {/foreach}
+                            {/foreach}
+                            <script>
+                                var k1 = <?=$k1?$k1:0?>;
+                                var yingshouTeamProductReceivableCustomerAndDistributor = <?=$yingshouTeamProductReceivableCustomerAndDistributor[$k1]?$yingshouTeamProductReceivableCustomerAndDistributor[$k1]:0; ?>;
+                                var TeamProductReceivableCustomerAndDistributorshishou = <?=$TeamProductReceivableCustomerAndDistributorshishou[$k1]?$TeamProductReceivableCustomerAndDistributorshishou[$k1]:0; ?>;
+                                var TeamProductReceivableCustomerAndDistributorweishou = <?=$TeamProductReceivableCustomerAndDistributorweishou[$k1]?$TeamProductReceivableCustomerAndDistributorweishou[$k1]:0; ?>;
+
+                                $('.yingshouTeamProductReceivableCustomerAndDistributor-'+k1).html(yingshouTeamProductReceivableCustomerAndDistributor.toFixed(2));
+                                $('.TeamProductReceivableCustomerAndDistributorshishou-'+k1).html(TeamProductReceivableCustomerAndDistributorshishou.toFixed(2));
+                                $('.TeamProductReceivableCustomerAndDistributorweishou-'+k1).html(TeamProductReceivableCustomerAndDistributorweishou.toFixed(2));
+                            </script>
+                            {/foreach}
+                            <script>
+                                var TeamProductReceivableCustomerAndDistributorYingShouZhongJi = <?=$TeamProductReceivableCustomerAndDistributorYingShouZhongJi;?>;
+                                var TeamProductReceivableCustomerAndDistributorShiShouZhongJi = <?=$TeamProductReceivableCustomerAndDistributorShiShouZhongJi;?>;
+                                $('.TeamProductReceivableCustomerAndDistributorYingShouZhongJi').html(TeamProductReceivableCustomerAndDistributorYingShouZhongJi.toFixed(2));
+                                $('.TeamProductReceivableCustomerAndDistributorShiShouZhongJi').html(TeamProductReceivableCustomerAndDistributorShiShouZhongJi.toFixed(2));
+                            </script>
+
+                            {/notempty}
+
+                            <tr>
+                                <td colspan="14"></td>
+                            </tr>
+                            <tr>
+                                <td colspan="14" style="font-weight: bold">{$language_tag.index_product_public_copeWith}</td>
+                            </tr>
+                            <!--应付供应商-->
+                            <tr style="text-align: center">
+                                <td rowspan="2" style="background-color: #98aff6;color: red;font-weight: bold;"></td>
+                                <td rowspan="2" style="background-color: #98aff6;color: red;font-weight: bold;">{$language_tag.index_public_type}</td>
+                                <td rowspan="2" style="background-color: #98aff6;color: red;font-weight: bold;">{$language_tag.index_public_supplier}</td>
+                                <td colspan="6" style="background-color: #98aff6;color: red;font-weight: bold;">{$language_tag.index_product_PlanSuppliersPayable_detail}</td>
+                                <td rowspan="2" style="background-color: #98aff6;color: red;font-weight: bold;">{$language_tag.index_product_PlanSuppliersPayable_payableToSuppliers}</td>
+                                <td rowspan="2" style="background-color: #98aff6;color: red;font-weight: bold;">{$language_tag.index_finance_showMustPayManage_true_receipt}</td>
+                                <td rowspan="2" style="background-color: #98aff6;color: red;font-weight: bold;">{$language_tag.index_finance_showMustPayManage_unpaid}</td>
+                                <td rowspan="2" style="background-color: #98aff6;color: red;font-weight: bold;">{$language_tag.index_product_PlanSuppliersPayable_totalPayable}</td>
+                                <td rowspan="2" style="background-color: #98aff6;color: red;font-weight: bold;">{$language_tag.index_product_PlanSuppliersPayable_totalActualPayments}</td>
+                            </tr>
+                            <tr style="text-align: center">
+                                <td style="background-color: #98aff6;color: red;font-weight: bold;">{$language_tag.index_product_PlanSuppliersPayable_payableNumber}</td>
+                                <td style="background-color: #98aff6;color: red;font-weight: bold;">{$language_tag.index_product_PlanSuppliersPayable_name}</td>
+                                <td style="background-color: #98aff6;color: red;font-weight: bold;">{$language_tag.index_product_showRouteTemplateManage_resources_currency}</td>
+                                <td style="background-color: #98aff6;color: red;font-weight: bold;">{$language_tag.index_public_price}</td>
+                                <td style="background-color: #98aff6;color: red;font-weight: bold;">{$language_tag.index_product_showRouteTemplateManage_resource_number}</td>
+                                <td style="background-color: #98aff6;color: red;font-weight: bold;">{$language_tag.index_product_PlanSuppliersPayable_total}</td>
+                            </tr>
+
+                            <?php $yingfuzongji=0;$shifuzogji=0;?>
+                            {notempty name='$TeamProductCopeSupplierList["团费"]'}
+                            {assign name='s1' value='1'}
+                            {assign name='s2' value='1'}
+                            {assign name='ss2' value='1'}
+                            {assign name='s3' value='1'}
+                            {assign name='u1' value=''}
+                            <!--类型-->
+                            {assign name='u2' value=''}
+                            <!--供应商-->
+                            {assign name='u3' value='0'}
+                            {assign name='bl' value='1'}
+                            {foreach $TeamProductCopeSupplierList['团费']['data'] as $k1=>$v1}
+                            {foreach $v1['data'] as $k2=>$v2}
+                            {foreach $v2 as $k3=>$v3}
+                            <tr style="text-align: center">
+                                {if ($bl==1)}
+                                <td  rowspan="{$TeamProductCopeSupplierList['团费']['count']}">{$language_tag.index_product_PlanSuppliersPayable_teamCoping}</td>
+                                {/if}
+
+                                {if ($u2!=$k1)}
+                                {assign name='ss2' value='1'}
+                                <td class="layui-form type" rowspan="{$v1['count']}" >
+                                    {$language_tag[$types[$k1]]}
+                                </td>
+                                {assign name='s1' value='$s1+1'}
+                                {/if}
+
+                                {if ($u3!=$k2 || $u2!=$k1) }
+                                <td class="layui-form supplier"  rowspan="{$v2|count}">
+                                    {foreach $SupplierArr[$k1] as $vv}
+                                    {$vv["supplier_id"]==$k2?$vv['supplier_name']:""}
+                                    {/foreach}
+                                </td>
+                                {assign name='s2' value='$s2+1'}
+                                {assign name='ss2' value='$ss2+1'}
+                                {/if}
+
+                                <td {if $v3.company_order_status===3}style="text-decoration: line-through"{/if}>
+                                    {$v3.cope_number}
+
+                                </td>
+                                <td>{$v3.product_name|default='-'}</td>
+                                <td class="layui-form">
+                                    {foreach $Currency as $v}
+                                    {$v3.cope_currency_id==$v.currency_id?$v.currency_name:''}
+                                    {/foreach}
+                                </td>
+                                <td>{$v3.price}</td>
+                                <td>{$v3.unit}</td>
+                                <td>{$v3.cope_money}</td>
+
+
+                                {if ($u2!=$k1)}
+                                <td class="tuanduiyingfu-{$k1}" rowspan="{$v1['count']}">-</td>
+                                <td class="tuanduishifu-{$k1}" rowspan="{$v1['count']}">-</td>
+                                <td class="tuanduiweifu-{$k1}" rowspan="{$v1['count']}">-</td>
+                                {/if}
+
+
+                                {if ($bl==1)}
+                                <td class="yingfuzongji" rowspan="{$TeamProductCopeSupplierList['团费']['count']+$TeamProductCopeSupplierList['地接']['count']}">-</td>
+                                <td class="shifuzogji" rowspan="{$TeamProductCopeSupplierList['团费']['count']+$TeamProductCopeSupplierList['地接']['count']}">-</td>
+                                {assign name='bl' value='0'}
+                                {/if}
+
+                                <?php $tuanduiyingfu[$k1] += $v3['cope_money'];?>
+                                <?php $tuanduishifu[$k1] += $v3['true_receipt'];?>
+                                <?php $tuanduiweifu[$k1] += $v3['balance_money'];?>
+                                <?php $yingfuzongji += $v3['cope_money']; $shifuzogji += $v3['true_receipt'];?>
+                                {assign name='s3' value='$s3+1'}
+                                {assign name='u2' value='$k1'}
+                                {assign name='u3' value='$k2'}
+                            </tr>
+                            {/foreach}
+                            {/foreach}
+                            <script>
+                                var k1 = <?=$k1?$k1:0?>;
+
+                                var tuanduiyingfu = <?=$tuanduiyingfu[$k1]?$tuanduiyingfu[$k1]:0;?>;
+                                var tuanduishifu = <?=$tuanduishifu[$k1]?$tuanduishifu[$k1]:0;?>;
+                                var tuanduiweifu = <?=$tuanduiweifu[$k1]?$tuanduiweifu[$k1]:0;?>;
+
+                                $('.tuanduiyingfu-'+k1).html(tuanduiyingfu.toFixed(2));
+                                $('.tuanduishifu-'+k1).html(tuanduishifu.toFixed(2));
+                                $('.tuanduiweifu-'+k1).html(tuanduiweifu.toFixed(2));
+                            </script>
+                            {/foreach}
+                            {/notempty}
+                            {notempty name='$TeamProductCopeSupplierList["地接"]'}
+                            {assign name='s1' value='1'}
+                            {assign name='s2' value='1'}
+                            {assign name='ss2' value='1'}
+                            {assign name='s3' value='1'}
+                            {assign name='u1' value=''}
+                            <!--类型-->
+                            {assign name='u2' value=''}
+                            <!--供应商-->
+                            {assign name='u3' value='0'}
+                            {assign name='bl' value='1'}
+                            {foreach $TeamProductCopeSupplierList['地接']['data'] as $k1=>$v1}
+                            {foreach $v1['data'] as $k2=>$v2}
+                            {foreach $v2 as $k3=>$v3}
+                            <tr style="text-align: center">
+                                {if ($bl==1)}
+                                <td  rowspan="{$TeamProductCopeSupplierList['地接']['count']}">{$language_tag.index_product_PlanSuppliersPayable_teamCoping}</td>
+                                {/if}
+
+                                {if ($u2!=$k1)}
+                                {assign name='ss2' value='1'}
+                                <td class="layui-form type" rowspan="{$v1['count']}" >
+                                    {$language_tag[$types[$k1]]}
+                                </td>
+                                {assign name='s1' value='$s1+1'}
+                                {/if}
+
+                                {if ($u3!=$k2 || $u2!=$k1) }
+                                <td class="layui-form supplier"  rowspan="{$v2|count}">
+                                    {foreach $SupplierArr[$k1] as $vv}
+                                    {$vv["supplier_id"]==$k2?$vv['supplier_name']:""}
+                                    {/foreach}
+                                </td>
+                                {assign name='s2' value='$s2+1'}
+                                {assign name='ss2' value='$ss2+1'}
+                                {/if}
+
+                                <td {if $v3.company_order_status===3}style="text-decoration: line-through"{/if}>
+                                    {$v3.cope_number}
+
+                                </td>
+                                <td>{$v3.product_name|default='-'}</td>
+                                <td class="layui-form">
+                                    {foreach $Currency as $v}
+                                    {$v3.cope_currency_id==$v.currency_id?$v.currency_name:''}
+                                    {/foreach}
+                                </td>
+                                <td>{$v3.price}</td>
+                                <td>{$v3.unit}</td>
+                                <td>{$v3.cope_money}</td>
+
+
+                                {if ($u2!=$k1)}
+                                <td class="tuanduiyingfu2-{$k1}" rowspan="{$v1['count']}">-</td>
+                                <td class="tuanduishifu2-{$k1}" rowspan="{$v1['count']}">-</td>
+                                <td class="tuanduiweifu2-{$k1}" rowspan="{$v1['count']}">-</td>
+                                {/if}
+
+                                {if ($bl==1)}
+                                {empty name='$TeamProductCopeSupplierList["团费"]'}
+                                <td class="yingfuzongji" rowspan="{$TeamProductCopeSupplierList['地接']['count']}">-</td>
+                                <td class="shifuzogji" rowspan="{$TeamProductCopeSupplierList['地接']['count']}">-</td>
+                                {/empty}
+                                {assign name='bl' value='0'}
+                                {/if}
+
+                                <?php $tuanduiyingfu2[$k1] += $v3['cope_money'];?>
+                                <?php $tuanduishifu2[$k1] += $v3['true_receipt'];?>
+                                <?php $tuanduiweifu2[$k1] += $v3['balance_money'];?>
+                                <?php $yingfuzongji += $v3['cope_money']; $shifuzogji += $v3['true_receipt'];?>
+                                {assign name='s3' value='$s3+1'}
+                                {assign name='u2' value='$k1'}
+                                {assign name='u3' value='$k2'}
+                            </tr>
+                            {/foreach}
+                            {/foreach}
+                            <script>
+                                var k1 = <?=$k1?$k1:0?>;
+
+                                var tuanduiyingfu2 = <?=$tuanduiyingfu2[$k1]?$tuanduiyingfu2[$k1]:0;?>;
+                                var tuanduishifu2 = <?=$tuanduishifu2[$k1]?$tuanduishifu2[$k1]:0;?>;
+                                var tuanduiweifu2 = <?=$tuanduiweifu2[$k1]?$tuanduiweifu2[$k1]:0;?>;
+
+                                $('.tuanduiyingfu2-'+k1).html(tuanduiyingfu2.toFixed(2));
+                                $('.tuanduishifu2-'+k1).html(tuanduishifu2.toFixed(2));
+                                $('.tuanduiweifu2-'+k1).html(tuanduiweifu2.toFixed(2));
+                            </script>
+                            {/foreach}
+                            {/notempty}
+
+                            {notempty name='$TeamProductCopeSupplierList["团费"]'}
+                                <script>
+                                   var yingfuzongji =  <?=$yingfuzongji;?>;
+                                   var shifuzogji =  <?=$shifuzogji;?>;
+                                   $('.yingfuzongji').html(yingfuzongji.toFixed(2));
+                                   $('.shifuzogji').html(shifuzogji.toFixed(2));
+                                </script>
+                            {/notempty}
+                            {notempty name='$TeamProductCopeSupplierList["地接"]'}
+                                <script>
+                                    var yingfuzongji =  <?=$yingfuzongji;?>;
+                                    var shifuzogji =  <?=$shifuzogji;?>;
+                                    $('.yingfuzongji').html(yingfuzongji.toFixed(2));
+                                    $('.shifuzogji').html(shifuzogji.toFixed(2));
+                                </script>
+                            {/notempty}
+
+
+                            <tr>
+                                <td colspan="14"></td>
+                            </tr>
+                            <!--付分公司-->
+                            <tr style="text-align: center">
+                                <td rowspan="2"  style="background-color: #dcf0b9;color: red;font-weight: bold;"></td>
+                                <td rowspan="2"  style="background-color: #dcf0b9;color: red;font-weight: bold;">{$language_tag.index_product_PlanSuppliersPayable_sourceBranch}</td>
+                                <td rowspan="2"  style="background-color: #dcf0b9;color: red;font-weight: bold;">{$language_tag.index_finance_showReceivableManage_order_number}</td>
+                                <td rowspan="2"  style="background-color: #dcf0b9;color: red;font-weight: bold;">{$language_tag.index_finance_showMustPayManage_cope_number}</td>
+                                <td colspan="5"  style="background-color: #dcf0b9;color: red;font-weight: bold;">{$language_tag.index_product_PlanSuppliersPayable_detail}</td>
+                                <td rowspan="2" style="background-color: #dcf0b9;color: red;font-weight: bold;">{$language_tag.index_product_PlanSuppliersPayable_receivableBranch}</td>
+                                <td rowspan="2" style="background-color: #dcf0b9;color: red;font-weight: bold;">{$language_tag.index_finance_showMustPayManage_true_receipt}</td>
+                                <td rowspan="2" style="background-color: #dcf0b9;color: red;font-weight: bold;">{$language_tag.index_finance_showMustPayManage_unpaid}</td>
+                                <td rowspan="2" style="background-color: #dcf0b9;color: red;font-weight: bold;">{$language_tag.index_product_PlanSuppliersPayable_totalPayable}</td>
+                                <td rowspan="2" style="background-color: #dcf0b9;color: red;font-weight: bold;">{$language_tag.index_product_PlanSuppliersPayable_totalActualPayments}</td>
+                            </tr>
+                            <tr style="text-align: center">
+                                <td style="background-color: #dcf0b9;color: red;font-weight: bold;">{$language_tag.index_product_visitor_order_visitor}</td>
+                                <td style="background-color: #dcf0b9;color: red;font-weight: bold;">{$language_tag.index_public_type}</td>
+                                <td style="background-color: #dcf0b9;color: red;font-weight: bold;">{$language_tag.index_product_PlanBooking_order_product}</td>
+                                <td style="background-color: #dcf0b9;color: red;font-weight: bold;">{$language_tag.index_product_showRouteTemplateManage_resources_currency}</td>
+                                <td style="background-color: #dcf0b9;color: red;font-weight: bold;">{$language_tag.index_product_showRouteTemplateManage_resources_price}</td>
+                            </tr>
+                            {notempty name='$TeamProductCopeCompanyList["团费"]'}
+                            {assign name='s1' value='1'}
+                            {assign name='s2' value='1'}
+                            {assign name='ss2' value='1'}
+                            {assign name='s3' value='1'}
+                            {assign name='u1' value=''}
+                            <!--类型-->
+                            {assign name='u2' value=''}
+                            <!--供应商-->
+                            {assign name='u3' value='0'}
+                            {assign name='bl' value='1'}
+                            {foreach $TeamProductCopeCompanyList['团费']['data'] as $k1=>$v1}
+                            {foreach $v1['data'] as $k2=>$v2}
+                            {foreach $v2 as $k3=>$v3}
+                            <tr style="text-align: center">
+                                {if ($bl==1)}
+                                <td   rowspan="{$TeamProductCopeCompanyList['团费']['count']}">{$language_tag.index_product_PlanSuppliersPayable_payable_branch}</td>
+                                {/if}
+
+                                {if ($u2!=$k1)}
+                                {assign name='ss2' value='1'}
+                                <td class="layui-form branch"   rowspan="{$v1['count']}" >
+                                    {foreach $branchs as $k=>$v}
+                                    {$v.company_id==$k1?$v.company_name:''}
+                                    {/foreach}
+                                </td>
+                                {assign name='s1' value='$s1+1'}
+                                {/if}
+
+                                {if ($u3!=$k2 || $u2!=$k1) }
+                                <td class="layui-form booking"  rowspan="{$v2|count}">
+                                    {foreach $ReceivableList[$k1] as $k=>$v}
+                                    {$k2==$v.company_order_number?$v.company_order_number:''}
+                                    {/foreach}
+                                </td>
+                                {assign name='s2' value='$s2+1'}
+                                {assign name='ss2' value='$ss2+1'}
+                                {/if}
+
+                                <td {if $v3.company_order_status===3}style="text-decoration: line-through"{/if}>
+                                    {$v3.cope_number}
+                                </td>
+
+                                <td width="20%" >
+                                    <?=implode(',',$v3['customer_info']);?>
+                                </td>
+
+                                <td>
+                                    {foreach $types as $k=>$v}
+                                    {assign name='product_source_type_id' value='$v3.source_type_id?:1'}
+                                    {$k==$product_source_type_id?$language_tag[$v]:''}
+                                    {/foreach}
+                                </td>
+
+                                <td>
+                                    {$v3.product_name}
+                                </td>
+
+                                <td>
+                                    {foreach $Currency as $v}
+                                    {$v3.cope_currency_id==$v.currency_id?$v.currency_name:''}
+                                    {/foreach}
+                                </td>
+
+                                <td>
+                                   {$v3.cope_money}
+                                </td>
+
+
+                                {if ($u2!=$k1)}
+                                <td class="TeamProductCopeCompanyYingShou-{$k1}" rowspan="{$v1['count']}">-</td>
+                                <td class="TeamProductCopeCompanyShiShou-{$k1}" rowspan="{$v1['count']}">-</td>
+                                <td class="TeamProductCopeCompanyWeiFu-{$k1}" rowspan="{$v1['count']}">-</td>
+                                {/if}
+
+                                {if ($bl==1)}
+                                <td class="TeamProductCopeCompanyYingfuZhongJi" rowspan="{$TeamProductCopeCompanyList['团费']['count']}">-</td>
+                                <td class="TeamProductCopeCompanyShiFuZhongJi" rowspan="{$TeamProductCopeCompanyList['团费']['count']}">-</td>
+                                {assign name='bl' value='0'}
+                                {/if}
+
+                                {assign name='s3' value='$s3+1'}
+                                {assign name='u2' value='$k1'}
+                                {assign name='u3' value='$k2'}
+
+                                <?php
+                                    $TeamProductCopeCompanyYingShou[$k1] += $v3['cope_money'];
+                                    $TeamProductCopeCompanyShiShou[$k1] += $v3['true_receipt'];
+                                    $TeamProductCopeCompanyWeiFu[$k1] += ($v3['cope_money']-$v3['true_receipt']);
+                                    $TeamProductCopeCompanyYingfuZhongJi+= $v3['cope_money'];
+                                    $TeamProductCopeCompanyShiFuZhongJi+= $v3['true_receipt'];
+                                ?>
+
+                            </tr>
+                            {/foreach}
+                            {/foreach}
+                            <script>
+                                var k1 = <?=$k1?$k1:0?>;
+
+                                var TeamProductCopeCompanyYingShou = <?=$TeamProductCopeCompanyYingShou[$k1]?$TeamProductCopeCompanyYingShou[$k1]:0;?>;
+                                var TeamProductCopeCompanyShiShou = <?=$TeamProductCopeCompanyShiShou[$k1]?$TeamProductCopeCompanyShiShou[$k1]:0;?>;
+                                var TeamProductCopeCompanyWeiFu = <?=$TeamProductCopeCompanyWeiFu[$k1]?$TeamProductCopeCompanyWeiFu[$k1]:0;?>;
+
+                                $('.TeamProductCopeCompanyYingShou-'+k1).html(TeamProductCopeCompanyYingShou.toFixed(2));
+                                $('.TeamProductCopeCompanyShiShou-'+k1).html(TeamProductCopeCompanyShiShou.toFixed(2));
+                                $('.TeamProductCopeCompanyWeiFu-'+k1).html(TeamProductCopeCompanyWeiFu.toFixed(2));
+                            </script>
+                            {/foreach}
+                            <script>
+                                var TeamProductCopeCompanyYingfuZhongJi = <?=$TeamProductCopeCompanyYingfuZhongJi;?>;
+                                var TeamProductCopeCompanyShiFuZhongJi = <?=$TeamProductCopeCompanyShiFuZhongJi;?>;
+                                $('.TeamProductCopeCompanyYingfuZhongJi').html(TeamProductCopeCompanyYingfuZhongJi.toFixed(2));
+                                $('.TeamProductCopeCompanyShiFuZhongJi').html(TeamProductCopeCompanyShiFuZhongJi.toFixed(2));
+                            </script>
+                            {/notempty}
+
+                            <tr>
+                                <td colspan="14"></td>
+                            </tr>
+                            <tr>
+                                <td colspan="12"></td>
+                                <td>{$language_tag.index_product_profitStatement_anticipated_profit}</td>
+                                <td>{$language_tag.index_product_profitStatement_actual_profit}</td>
+                            </tr>
+                            <tr>
+                                <td colspan="12"></td>
+                                <td><?=$gongyingshangyingshouzongji+$TeamProductReceivableCompanyYingShouZhongJi+$TeamProductReceivableCustomerAndDistributorYingShouZhongJi-$yingfuzongji-$TeamProductCopeCompanyYingfuZhongJi;?></td>
+                                <td><?=$gongyingshangshishouzongji+$TeamProductReceivableCompanyShiShouZhongJi+$TeamProductReceivableCustomerAndDistributorShiShouZhongJi-$shifuzogji-$TeamProductCopeCompanyShiFuZhongJi?></td>
+                            </tr>
+
+                        </table>
+                    </div>
+                </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <input type='hidden' id='team_product_id' value='{$Think.get.plan_id}' />
+</body>
+{include file='public/foot_js' /}
+<script src='__STATIC__/javascript/public/select2.min.js'></script>
+<script type="text/javascript" src="__STATIC__/javascript/finance/tableExport.min.js"></script>
+<script>
+    function upload(number) {
+        $('#xiazai').tableExport({
+            fileName: '{$language_tag.index_nav_gross_profit_statistics}-'+number,
+            type: 'excel',
+            escape:'true'
+        });
+    }
+    layui.use(['layer', 'form'], function(){
+    	  var layer = layui.layer
+    	  ,form = layui.form;
+    	  
+    	    form.on('checkbox(id_profit_approve)', function(data){
+    	        //这里监听所有checkbox
+    	   　　//我是用来实现checkbox单选效果
+    	     	if(data.elem.checked == true){
+    	     		var is_profit_approve = 1;
+    	     	}else{
+    	     		var is_profit_approve = 0;
+    	     	}
+    	        var team_product_id = $('#team_product_id').val();
+    	        
+    	      layer.load(5, {
+                    shade: [0.5,'gray'],
+         
+                });
+    	    
+    	        //开始调取AJAX
+    	        
+
+    	        $.ajax({
+    	            type: "POST",
+    	            url: '/product/updateTeamProductByTeamPdocutId',
+    	            data: {
+    	            	team_product_id:team_product_id,
+    	            	is_profit_approve:is_profit_approve
+    	            	
+    	            },
+    	            success: function (data) {
+    	            	  layer.closeAll();
+    	            },
+    	            error:function(XMLHttpRequest, textStatus, errorThrown){
+    	                //console.log(errorThrown)
+    	                 layer.close(loadIndex);
+    	                layer.msg('{$language_tag.index_public_verificationFailure}')
+
+    	            }
+    	        });
+    	        
+    	        
+    	        
+    	});
+
+});
+</script>
+
+</html>

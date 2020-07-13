@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {include file='public/head' /}
+    <title>language-manage</title>
+
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+    <div class="layui-header">
+        {include file='public/header' /}
+    </div>
+
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll">
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            {include file='public/left_menu' /}
+        </div>
+    </div>
+
+    <div class="layui-body">
+
+        <!-- 内容主体区域 -->
+        <div style="padding: 15px;">
+            <div class='layui-form-item'>
+			<span class="layui-breadcrumb" lay-separator="-">
+                <a>{$language_tag.index_public_homepage}</a>
+				<a>{$language_tag.index_source_showHotelSource_source_administrate}</a>
+                <a>{$language_tag.index_source_showHotelSource_hotel_administrate}</a>
+				<a><cite>{$language_tag.index_source_showHotelSource_hotel_source}</cite></a>
+			</span>
+            </div>
+            <br/>
+            <div class='layui-block input-inline'>
+                <form action="/source/showHotelSource" method="get">
+                    <div class='layui-input-inline'>
+                        <div class="layui-form">
+                            <select id="status" name="status">
+                                <option value="0" {if condition="$Think.get.status eq 0"}selected='selected' {/if}>-{$language_tag.index_public_status}-</option>
+                                <option value="1" selected=''>{$language_tag.index_public_show}</option>
+                                <option value="2" {if condition="$Think.get.status eq 2"}selected='selected' {/if}>{$language_tag.index_public_disabled}</option>
+                            </select>
+                        </div>
+                    </div>
+                    <!--<div class='layui-input-inline'>
+                        <input type="text" id="" name="level_name"  placeholder="等级" class="layui-input">
+                    </div>-->
+                    <div class='layui-input-inline'>
+                        <input type="text" id="room_name" name="room_name" value="{$Think.get.room_name}"
+                               placeholder="{$language_tag.index_source_showHotelSource_room_name}" class="layui-input">
+                    </div>
+                    <!--<div class='layui-input-inline'>-->
+                    <!--<input type="text" id="" name=""  placeholder="电话、联系人、操作人" class="layui-input">-->
+                    <!--</div>-->
+                    <div class='layui-button-inline layui-search-inline'>
+                        <input type="hidden" name="supplier_id" value="{$_GET[" id"]}">
+                        <button class="layui-btn nav-search">{$language_tag.index_public_search}</button>
+                    </div>
+                </form>
+                <div class='layui-button-inline'>
+                    <span style="{:action('index/auth/check_auth',['role_id'=>'177'])}"><a href='/source/showHotelAdd?id={$_GET["id"]}'>
+                        <button class="layui-btn nav-add">{$language_tag.index_source_showHotelSource_add_source_hotel}
+                        </button>
+                    </a></span>
+                    <a href='/source/showHotelManage'>
+                        <button class="layui-btn nav-add">{$language_tag.index_public_history_back}</button>
+                    </a>
+
+                </div>
+            </div>
+            <hr>
+            <br>
+            <div class="table-nont">
+                <table class="layui-table" id="language-table">
+                    <thead>
+                    <tr>
+                        <th>{$language_tag.index_source_showHotelSource_id}</th>
+                        <th>{$language_tag.index_source_showHotelSource_supplier}</th>
+                        <th>{$language_tag.index_source_showHotelSource_level}</th>
+                        <th>{$language_tag.index_source_showHotelSource_room_name}</th>
+                        <th>{$language_tag.index_public_status}</th>
+                        <th class="layui-table-width">{$language_tag.index_source_showHotelManage_operation}</th>
+                    </tr>
+                    </thead>
+
+                    <tbody>
+                    {foreach name="data" item="vo" }
+                    <tr>
+                        <th>{$vo.hotel_id}</th>
+                        <th>{$MultilingualAll['supplier-supplier_name-'.$vo.supplier_id.'-'.$Think.session.user.language_id][0]['translate']|default=$vo.supplier_name}</th>
+                        <th>{$MultilingualAll['hotel-level_name-'.$vo.hotel_id.'-'.$Think.session.user.language_id][0]['translate']|default=$vo.level_name}</th>
+                        <th>{$MultilingualAll['hotel-room_name-'.$vo.hotel_id.'-'.$Think.session.user.language_id][0]['translate']|default=$vo.room_name}</th>
+                        <th>{if condition="$vo.status eq 1"}{$language_tag.index_public_show}{else/}{$language_tag.index_public_disabled}{/if}
+                        </th>
+                        <th>
+                            {if condition="$vo.company_id eq $Think.session.user.company_id"}
+                            <span style="{:action('index/auth/check_auth',['role_id'=>'178'])}"><a href='/source/showHotelEdit?hotel_id={$vo.hotel_id}'>
+                                <button class="layui-btn layui-btn-sm hover-edit layui-btn-primary">
+                                    {$language_tag.index_public_update}
+                                </button>
+                            </a></span>
+                            {/if}
+                            <span style="{:action('index/auth/check_auth',['role_id'=>'179'])}"><a href='/source/showHotelInfo?hotel_id={$vo.hotel_id}'>
+                                <button class="layui-btn layui-btn-sm hover-details layui-btn-primary">
+                                    {$language_tag.index_public_info}
+                                </button>
+                            </a></span>
+                            <!--<a href='/source/showHotelEditLanguage?source_number={$vo.source_number}'><button class="layui-btn layui-btn-sm hover-polylingual layui-btn-primary">{$language_tag.index_public_language}</button></a>-->
+                        </th>
+                    </tr>
+                    {/foreach}
+                    </tbody>
+                </table>
+            </div>
+            <div class="listButtom">
+                {include file='public/page' /}
+            </div>
+        </div>
+    </div>
+
+
+</div><div class="layui-footer">
+    <!-- 底部固定区域 -->
+    © layui.com - 底部固定区域
+</div>
+{include file='public/foot_js' /}
+<script src='__STATIC__/javascript/system/source.js'></script>
+<script>
+    //JavaScript代码区域
+    ;!function () {
+        var layer = layui.layer
+            , form = layui.form;
+
+
+    }();
+
+</script>
+</body>
+</html>
+
+<script>
+    //搜索语言
+    function searchLanguageManage(search_name, search_status) {
+        $.ajax({
+            type: "POST",
+            url: '/system/searchLanguageManage',
+            data: {
+                'name': search_name,
+                'status': search_status
+            },
+            success: function (data) {
+                var info = eval("[" + data + "]");
+                // console.log(info);
+                $("#language-table tbody").html("");
+                for (i in info[0]['data']) {
+                    if (info[0]['data'][i]['status'] == 1) {
+                        info[0]['data'][i]['status'] = "可用";
+                    } else {
+                        info[0]['data'][i]['status'] = "禁用";
+                    }
+                    $("#language-table tbody").append("<tr><td>" + info[0]['data'][i]['language_id'] + "</td><td>" + info[0]['data'][i]['language_name'] + "</td><td>" + info[0]['data'][i]['status'] + "</td><td><a  class='layui-btn layui-btn-sm' onclick='redLanguageManage(" + info[0]['data'][i]['language_id'] + ");'>&nbsp;编&nbsp;辑&nbsp;</a></td></tr>");
+                }
+            }
+        });
+    }
+</script>

@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html>
+<head>
+	{include file='public/head' /}
+	<title>dining-manage-add</title>
+
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+
+	<div class="layui-header">
+		{include file='public/header' /}
+	</div>
+
+	<div class="layui-side layui-bg-black">
+		<div class="layui-side-scroll">
+			<!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+			{include file='public/left_menu' /}
+		</div>
+	</div>
+
+	<div class="layui-body">
+
+		<!-- 内容主体区域 -->
+		<div style="padding: 15px;">
+			<div class='layui-form-item'>
+		   		<span class="layui-breadcrumb" lay-separator="-">
+					<a>{$language_tag.index_public_homepage}</a>
+					<a>财务管理</a>
+					<a>实收财务</a>
+					<a><cite>添加实收财务</cite></a>
+					
+				</span>
+			</div>
+			<br/>
+
+			
+<form class="layui-form layui-form-pane"  onSubmit="return addReceipts()">
+
+  <div class="layui-form-item">
+    <label class="layui-form-label">流水编号</label>
+    <div class="layui-input-inline">
+      <input type="text" name="serial_number" id='serial_number' lay-verify="required" value='{$result.serial_number}' placeholder="" autocomplete="off" class="layui-input">
+    </div>
+    
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label">收/付</label>
+    <div class="layui-input-inline">
+      	<select name="object_type" id='type' >
+		
+        	<option value='1'>收</option>
+        	<option value='2'>付</option>
+
+    
+	
+		</select>
+    </div>
+    
+  </div>
+ <div class="layui-form-item">
+    <label class="layui-form-label">支付对象</label>
+    <div class="layui-input-inline">
+      	<select name="object_type" id='object_type' lay-verify="required" lay-filter="object_type">
+			<option value=''>请选择</option>
+        	<option value='1'>公司</option>
+        	<option value='2'>供应商</option>
+        	<option value='3'>代理</option>
+        	<option value='4'>直客</option>
+    
+	
+		</select>
+    </div>
+    <div class="layui-input-inline layui-form " lay-filter="selFilter" id='object_id_diy' style='display:none'>
+      	<select name="object_id" id='object_id'  lay-search="" lay-verify="required">
+	
+
+    
+	
+		</select>
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <label class="layui-form-label">支付方式</label>
+    <div class="layui-input-inline">
+      	<select name="pay_type" id='pay_type' lay-filter="aihao" style='overflow:visible' >
+	
+        	<option value='1'>银行转账</option>
+        	<option value='2'>现金</option>
+        	<option value='3'>第三方</option>
+        	
+    
+	
+		</select>
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label">币种</label>
+    <div class="layui-input-inline">
+      	<select name="base_currency_id" id='base_currency_id' lay-filter="base_currency_id" style='overflow:visible' >
+			{foreach name='currency_result' item='currency_result'}
+        	<option value="{$currency_result.currency_id}">{$currency_result.currency_name}</option>
+
+    		{/foreach}
+	
+		</select>
+    </div>
+  </div>
+  
+  <div class="layui-form-item">
+    <label class="layui-form-label">金额</label>
+    <div class="layui-input-inline">
+      <input type="text" name="base_money" id='base_money' value='{$result.title}' lay-verify="required" placeholder="" autocomplete="off" class="layui-input">
+    </div>
+    <label class="layui-form-label">{$Think.session.user.unit}</label>
+    <div class="layui-input-inline">
+    <input type="hidden"  id='proportion' value='' >
+    <input type="hidden"  id='result_currency_id' value='' >
+      <input type="text" name="result_money" id='result_money' value='{$result.result_money}' lay-verify="required" placeholder="" autocomplete="off" class="layui-input">
+    </div>
+    
+  </div>
+   <div class="layui-form-item">
+    <label class="layui-form-label">凭证编号</label>
+    <div class="layui-input-inline">
+      <input type="text" name="voucher_number" id='voucher_number' value='{$result.voucher_number}' placeholder="" autocomplete="off" class="layui-input">
+    </div>
+  
+  </div>
+    <div class="layui-form-item">
+    <label class="layui-form-label">凭证时间</label>
+    <div class="layui-input-inline">
+      <input type="text" name="voucher_time" id='voucher_time' value=''   placeholder="" autocomplete="off" class="layui-input voucher_time">
+    </div>
+    
+  </div> 
+     <div class="layui-form-item">
+    <label class="layui-form-label">上传附件</label>
+    <div class="layui-input-inline">
+                      		<a class="layui-btn test">{$language_tag.index_source_showVisaSourceManage_upload}</a>
+                    	    <a id="download" style="display: none" href="" target="_blank" class="layui-btn layui-btn-danger">{$language_tag.index_source_showVisaSourceManage_download}</a>
+                    	 	<input type="hidden" name="file_url" id="attachment" />
+    </div>
+    
+  </div>  
+  
+
+  <div class="layui-form-item">
+    <label class="layui-form-label">备注</label>
+    <div class="layui-input-inline">
+		<textarea class='layui-textarea' id='remark'></textarea>
+    </div>
+  </div>		
+
+	<input type='hidden' id='id' value="{$result.id}" />
+  <!--<div class="layui-form-item layui-form-text">
+    <label class="layui-form-label">编辑器</label>
+    <div class="layui-input-block">
+      <textarea class="layui-textarea layui-hide" name="content" lay-verify="content" id="LAY_demo_editor"></textarea>
+    </div>
+  </div>-->
+  <div class="layui-form-item">
+    <div class="layui-input-block">
+      <button class="layui-btn nav-submit" lay-submit="" lay-filter="formDemo" id="hotel_add_button">{$language_tag.index_public_submit}</button>
+  
+	  <a href='/finance/receipts' class='layui-btn'>返回</a>
+    </div>
+  </div>
+</form>
+		</div>
+	</div>
+	{foreach name='proporation_result' item='v'}
+	<input type='hidden' class='proportion_result{$v.currency_id}' value='{$v.currency_proportion}' />
+	{/foreach}
+	<div class="layui-footer">
+		<!-- 底部固定区域 -->
+		© layui.com - 底部固定区域
+	</div>
+</div>
+{include file='public/foot_js' /}
+
+<script>
+var layer = layui.layer;
+var form = layui.form;
+var upload = layui.upload; //得到 upload 对象
+var laydate = layui.laydate;
+var table=layui.table;
+var laytpl=layui.laytpl;
+
+//常规用法
+
+        laydate.render({
+            elem: '.voucher_time'
+            ,lang: 'zn'
+        });
+
+var company_id = $('#user_company_id').val()
+
+upload.render({
+    elem: '.test',
+    url:'/upload/uploadFileAll',
+    accept:'file',
+  	size:20480,
+    before: function(obj){ //obj参数包含的信息，跟 choose回调完全一致，可参见上文。
+    layer.load(); //上传loading
+    },
+    done: function(res, index, upload){
+        layer.closeAll('loading'); //关闭loading
+      
+        if(res.code == 200){
+            //do something （比如将res返回的图片链接保存到表单的隐藏域）
+            $('#attachment').val(res.data);
+            $('#download').attr('href',res.data);
+            $('#download').show();
+        }
+    },error: function(index, upload){
+        layer.closeAll('loading'); //关闭loading
+    }
+});
+form.on('select(object_type)',function(data){
+	var object_type = data.value;
+	var url = '';
+	if(object_type==2){ //供应商
+		url = '/system/getSupplierAjax';
+			//分公司
+	}else if(object_type==1){
+		url = '/system/getCompanyAjax'
+			//代理
+	}else if(object_type ==3){
+		url = '/branchcompany/getDistributorAjax'
+	}else if(object_type ==4){
+		$('#object_id_diy').hide(500);
+		return false;
+	}
+    $.ajax({
+        type: "POST",
+        url: url,
+        dataType: "json",
+        data: {
+		
+			status:1
+        },
+        success: function (data) {
+
+        	$('#object_id').html('')
+			if(object_type==2){
+				
+				var data = data.data
+				$('#object_id_diy').show(500);
+	
+				var l = data.length
+				
+				$('#object_id').append("<option value=''>请选择</option>")
+				for(var i=0;i<l;i++){
+				
+					$('#object_id').append("<option value='"+data[i].supplier_id+"'>"+data[i].supplier_name+"</option>")
+				}
+			}else if(object_type==3){
+				var data = data.data
+				$('#object_id_diy').show(500);
+	
+				var l = data.length
+				
+				$('#object_id').append("<option value=''>请选择</option>")
+				for(var i=0;i<l;i++){
+				
+					$('#object_id').append("<option value='"+data[i].distributor_id+"'>"+data[i].distributor_name+"</option>")
+				}
+			}else if(object_type==1){
+				var data = data.data
+				$('#object_id_diy').show(500);
+	
+				var l = data.length
+				
+				$('#object_id').append("<option value=''>请选择</option>")
+				for(var i=0;i<l;i++){
+					if( company_id== data[i].company_id){
+						$('#object_id').append("<option disabled value='"+data[i].company_id+"'>"+data[i].company_name+"</option>")
+					}else{
+						$('#object_id').append("<option value='"+data[i].company_id+"'>"+data[i].company_name+"</option>")
+					}
+					
+				}
+			}
+			
+			form.render('select','selFilter');
+        },
+        error: function (XMLHttpRequest, textStatus, errorThrown) {
+            //console.log(errorThrown)
+            layer.msg('验证失败');
+
+        }
+    });
+
+	//开始调取接口信息
+	
+})
+
+form.on('select(base_currency_id)',function(data){
+	
+	;
+	var money = $('#base_money').val();
+	var currency_id =data.value;
+	//再获取汇率
+	var proportion =$('.proportion_result'+currency_id).val();
+	
+	$('#proportion').val(proportion)
+	var result_money = money*proportion;
+	
+	/*
+	var k =0;
+	var timer = setInterval(function(){
+		k = k+100;
+	    var x = 1000;
+	    var y = 0;
+	    var rand = parseInt(Math.random() * (x - y + 1) + y);
+		$('#result_money').val(rand)
+		if(k==1000){
+			clearInterval(timer)
+			$('#result_money').val(result_money)
+		}
+	},100)
+	*/
+	$('#result_money').val(result_money)	
+	
+})
+    $('#base_money').keyup(function(){
+    	//获取金额 以及当前币种
+    	var money = $(this).val();
+    	var currency_id = $('#base_currency_id').val();
+    	//再获取汇率
+    	var proportion =$('.proportion_result'+currency_id).val();
+    	$('#proportion').val(proportion)
+    	
+    	var result_money = money*proportion;
+    	$('#result_money').val(result_money)
+    	/*
+		var k =0;
+    	var timer = setInterval(function(){
+    		k = k+100;
+    	    var x = 1000;
+    	    var y = 0;
+    	    var rand = parseInt(Math.random() * (x - y + 1) + y);
+    		$('#result_money').val(rand)
+    		if(k==1000){
+    			clearInterval(timer)
+    			$('#result_money').val(result_money)
+    		}
+    	},100)
+    	*/
+    	$('#result_money').val(result_money)
+    	
+    })
+    function addReceipts(){
+    	var serial_number = $('#serial_number').val();
+    	var object_type = $('#object_type').val();
+    	var object_id = $('#object_id').val();
+    	var pay_type = $('#pay_type').val();
+    	var base_currency_id = $('#base_currency_id').val();
+    	var base_money = $('#base_money').val();
+    	var voucher_number = $('#voucher_number').val();
+    	var voucher_time = $('#voucher_time').val();
+    	var attachment = $('#attachment').val();
+    	var remark = $('#remark').val();
+    	var proportion = $('#proportion').val()
+    	
+   		var type = $('#type').val();
+    	var result_money = $('#result_money').val()
+    	//开始提交AJAX
+    $.ajax({
+        type: "POST",
+        url: '/finance/receiptsAddAjax',
+        dataType: "json",
+        data: {
+        	serial_number:serial_number,
+        	object_type:object_type,
+        	object_id:object_id,
+        	pay_type:pay_type,
+        	base_currency_id:base_currency_id,
+        	base_money:base_money,
+        	voucher_number:voucher_number,
+        	voucher_time:voucher_time,
+        	attachment:attachment,
+        	type:type,
+			status:1,
+			remark:remark,
+			proportion:proportion,
+			result_money:result_money
+			
+        },
+        success: function (data) {
+            layer.msg('添加成功',{time:3000,end : function(layero, index){
+                window.location.href='/finance/receipts'; 
+            }
+        });
+		
+        },
+        error: function (XMLHttpRequest, textStatus, errorThrown) {
+            //console.log(errorThrown)
+            layer.msg('验证失败');
+
+        }
+    });    	
+    	return false;
+    	
+    }
+</script>
+</body>
+</html>

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {include file='public/head' /}
+    <title>dining-manage-add</title>
+
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+
+    <div class="layui-header">
+        {include file='public/header' /}
+    </div>
+
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll">
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            {include file='public/left_menu' /}
+        </div>
+    </div>
+
+    <div class="layui-body">
+
+        <!-- 内容主体区域 -->
+        <div style="padding: 15px;">
+            <div class='layui-form-item'>
+		   		<span class="layui-breadcrumb" lay-separator="-">
+					<a>{$Think.lang.index_public_homepage}</a>
+					<a>{$Think.lang.index_source_showHotelSource_source_administrate}</a>
+					<a>{$Think.lang.index_source_showHotelManage_source_administrate}</a>
+                    <a>{$Think.lang.index_source_showHotelSource_hotel_source}</a>
+					<a><cite>{$Think.lang.index_public_language}</cite></a>
+				</span>
+            </div>
+            <br/>
+            <br/>
+            <div class="layui-row">
+                <form class="layui-form layui-col-md4" onSubmit="return hotel_edit_language()">
+                    {volist name='language_result' id='v'}
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">{$v.language_name}{$Think.lang.index_source_showHotelSource_name}:</label>
+                        <div class="layui-input-block layui-form" >
+                            <input  class="layui-input edit_language" name="country_code" hotel_language_id='{$v.language_info.hotel_language_id}' hotel_name='{$v.language_info.hotel_name}' lang_id='{$v.language_id}' placeholder="请输入名称" autocomplete="off"  type="text" value="{$v.language_info.room_name}">
+
+                        </div>
+                    </div>
+                    {/volist}
+
+                    <input type='hidden' value="{$Think.get.source_number}" id='source_number' />
+                    <div class="layui-form-item">
+                        <div class="layui-input-block">
+                            <button class="layui-btn nav-submit" lay-submit="" lay-filter="formDemo" id="hotel_edit_button">{$Think.lang.index_public_submit}</button>
+                            <a href='javascript:history.back(-1)'><button type="button" class="layui-btn layui-btn-primary">{$Think.lang.index_public_back}</button></a>
+                            <input type="hidden" id="hotel_hidden_hotel_id" value="{$hotel_result.hotel_id}">
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="layui-footer">
+        <!-- 底部固定区域 -->
+        © layui.com - 底部固定区域
+    </div>
+</div>
+{include file='public/foot_js' /}
+<script src='__STATIC__/javascript/system/source.js'></script>
+</body>
+</html>

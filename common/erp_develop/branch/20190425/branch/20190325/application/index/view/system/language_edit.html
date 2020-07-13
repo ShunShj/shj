@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {include file='public/head' /}
+    <title>language-manage-edit</title>
+
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+
+    <div class="layui-header">
+        {include file='public/header' /}
+    </div>
+
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll">
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            {include file='public/left_menu' /}
+        </div>
+    </div>
+
+    <div class="layui-body">
+
+        <!-- 内容主体区域 -->
+        <div style="padding: 15px;">
+            <div class='layui-form-item'>
+		   		<span class="layui-breadcrumb" lay-separator="-">
+                    <a>{$Think.lang.index_public_homepage}</a>
+					<a>{$Think.lang.index_public_system}</a>
+					<a>{$Think.lang.index_system_showLanguageManage_language_manage}</a>
+					<a><cite>{$Think.lang.index_system_showLanguageManage_edit_language}</cite></a>
+				</span>
+            </div>
+            <br/>
+            <br/>
+            {foreach $data as $k=>$v}
+                <div class="layui-row">
+                    <form class="layui-form layui-col-md4" onSubmit="return edit()">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label input-required">{$Think.lang.index_system_showLanguageManage_name}：</label>
+                            <div class="layui-input-block">
+                                <input id="edit_lg_name" name="name" required="" lay-verify="required" placeholder="{$Think.lang.index_system_showLanguageManage_input_name}" autocomplete="off" class="layui-input" type="text" value="{$v.language_name}">
+                                <i class="iconfont icon-fanyifuwu" style="position: absolute;width: 38px;height: 38px;top: 0px;right: 0px;font-size:
+                                   35px;cursor:pointer;"
+                                       onclick="MultilingualSetting('edit_lg_name','language','language_name',{$_GET['id']})"></i>
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">{$Think.lang.index_public_status}：</label>
+                            <div class="layui-input-block">
+                                <select name="status" id="edit_lg_status" lay-filter="required" >
+                                    {if condition="$v.status eq 1"}
+                                    <option value="1" selected>{$Think.lang.index_public_show}</option>
+                                    <option value="2">{$Think.lang.index_public_disabled}</option>
+                                    {else}
+                                    <option value="1">{$Think.lang.index_public_show}</option>
+                                    <option value="2" selected>{$Think.lang.index_public_disabled}</option>
+                                    {/if}
+                                </select>
+                            </div>
+                        </div>
+                        <br/>
+                        <div class="layui-form-item">
+                            <div class="layui-input-block">
+                                <button class="layui-btn nav-submit" lay-submit="" lay-filter="formDemo" id="language_edit_button">{$Think.lang.index_public_submit}</button>
+                                <a href='/system/showLanguageManage'><button type="button" class="layui-btn layui-btn-primary">{$Think.lang.index_public_back}</button></a>
+                                <input type="hidden" id="language_id_hidden" value="{$language_id}">
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            {/foreach}
+        </div>
+    </div>
+
+    <div class="layui-footer">
+        <!-- 底部固定区域 -->
+        © layui.com - 底部固定区域
+    </div>
+</div>
+{include file='public/foot_js' /}
+<script src='__STATIC__/javascript/system/language.js'></script>
+</body>
+</html>

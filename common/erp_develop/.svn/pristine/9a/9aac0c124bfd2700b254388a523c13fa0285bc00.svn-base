@@ -1,0 +1,374 @@
+@charset "utf-8";
+/* CSS Document */
+/*@media print {*/
+@page {
+    size: A4;
+    margin: 0.4in;
+}
+
+table {
+    page-break-inside: auto;
+    border-spacing: 0;
+}
+
+tr {
+    page-break-inside: avoid;
+    page-break-after: auto
+}
+
+thead {
+    display: table-header-group
+}
+
+body {
+    color: #000000;
+}
+
+#header, #footer, nav, img {
+    display: none;
+}
+
+#booking_voucher {
+    display: none;
+}
+
+#booking_voucher_print {
+    display: block;
+    width: 100%;
+    font-size: 16px;
+}
+
+#booking_voucher_print #pax_info img {
+    /*padding-top: 5px;*/
+    /*padding-bottom: 5px;*/
+}
+
+#booking_voucher_print img {
+    display: inline-block;
+    /*width: 1180px;*/
+}
+
+#booking_voucher_print #top_voucher p.left {
+    margin-left: 15px;
+    margin-bottom: 30px;
+    font-size: 14px;
+}
+
+#booking_voucher #top_voucher {
+    margin-bottom: 10px;
+}
+
+#booking_voucher_print #top_voucher p.right {
+    float: right;
+    margin-top: -105px;
+    text-align: right;
+    margin-right: 20px;
+    font-size: 14px;
+}
+
+#booking_voucher_print #top_voucher p.right span.pre {
+    /*margin-right: 120px;*/
+}
+
+#booking_voucher_print #booking_info table#booking_info_table {
+    /*width: 780px;*/
+    width: 100%;
+    /*margin-left: 30px;*/
+    height: 100px;
+    font-size: 16px;
+    vertical-align: top;
+}
+
+#booking_voucher_print #booking_info table#booking_info_table > tbody {
+    vertical-align: top;
+}
+
+#booking_voucher_print #booking_info table#booking_info_table > tbody > tr > td:first-child {
+    padding-left: 30px;
+}
+
+#booking_info_table td.title {
+    min-width: 100px;
+}
+
+#booking_voucher_print #booking_info p.office {
+    /*float: right;*/
+    /*margin-top: -90px;*/
+    text-align: right;
+    /*margin-right: 30px;*/
+    font-size: 15px;
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    margin: 0 10px 0 0;
+    padding: 0;
+}
+
+#pickup_info, #tour_option_info, #pickup_info_table {
+    font-size: 16px !important;
+}
+
+#booking_voucher_print #pickup_info table#pickup_info_table, #booking_voucher_print #tour_option_info table#tour_option_info_table {
+    width: 100%;
+    text-align: left;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    margin-left: 30px;
+    font-size: 16px;
+}
+
+#booking_voucher_print #pax_info span.head_title {
+    /*position: absolute;*/
+    /*margin-left: 58px;*/
+    /*margin-top: -42px;*/
+    color: #fff !important;
+    font-weight: bold;
+    font-size: 18px !important;
+}
+
+#booking_voucher_print #pax_info span.head_title_right {
+    position: absolute;
+    margin-left: 505px;
+    margin-top: -42px;
+    color: #fff !important;
+    font-weight: bold;
+    font-size: 18px !important;
+}
+
+#booking_voucher_print #pax_info ul#pax_info_ul {
+    list-style: none;
+    margin-left: 10px;
+    width: 100%;
+    margin-top: -11px;
+    font-size: 16px !important;
+}
+
+#booking_voucher_print #pax_info ul#room_info_ul {
+    position: absolute;
+    margin-right: 475px;
+    top: 0;
+    margin-top: 370px;
+    margin-left: 461px;
+    list-style: none;
+    font-size: 16px;
+}
+
+.info div#itn_cn .itn_text_cn, .info div#itn_en .itn_text_en {
+    padding-left: 20px;
+}
+
+#booking_voucher_print #pax_info ul#pax_info_ul li span.no {
+    padding-right: 10px;
+}
+
+#booking_voucher_print #pax_info table#pax_info_table tr td.no {
+    width: 30px;
+}
+
+#booking_voucher_print #pax_info table#pax_info_table tr td.name {
+    min-width: 165px;
+}
+
+#booking_voucher_print #pax_info table#room_info_table tr td.room_type {
+    min-width: 70px;
+}
+
+#booking_voucher_print #pax_info table#room_info_table tr td.seat_no {
+    min-width: 150px;
+}
+
+#booking_voucher_print #pax_info ul#room_info_ul li span.room_type {
+    padding-right: 10px;
+}
+
+#booking_voucher_print #transfer_info table#transfer_info_table {
+    margin-top: -25px;
+}
+
+#booking_voucher_print #transfer_info table#transfer_info_table tr th {
+    color: #FFF;
+    padding-bottom: 10px;
+}
+
+#booking_voucher_print #transfer_info table#transfer_info_table tr th.date, th.airport, th.flight, th.time, {
+    width: 120px;
+}
+
+#booking_voucher_print #transfer_info table#transfer_info_table tr th.transfer_type {
+    width: 150px;
+}
+
+#booking_voucher_print #transfer_info table#transfer_info_table tr th.travellers {
+    width: 230px;
+}
+
+#booking_voucher_print p#special_request {
+    margin-left: 30px;
+}
+
+#booking_voucher_print p.tour_sr {
+    font-size: 16px !important;
+}
+
+#booking_voucher_print span.bottom_title {
+    margin-left: 160px;
+    width: 300px;
+}
+
+#booking_voucher_print table#itinerary_table {
+    /*width: 93%;*/
+    width: 100%;
+    font-size: 16px;
+    /*margin-left: 20px;*/
+    margin-left: 0;
+}
+
+#booking_voucher_print table#itinerary_table p {
+    margin: 0;
+    padding: 0;
+}
+
+#booking_voucher_print table#footer_text_print {
+    /*width: 980px;*/
+    width: 100%;
+    /*margin-left: 50px;*/
+    margin-top: 5px;
+    font-size: 14px;
+
+}
+
+#booking_voucher_print table#footer_text_print > tbody > tr > td:first-child {
+    padding-left: 30px;
+}
+
+#notice {
+    page-break-before: always;
+}
+
+#notice table#notice_table {
+    font-size: 13px;
+    margin-left: 0px;
+    margin-top: 0px;
+    width: 100%;
+}
+
+#notice table#notice_table tr td {
+    width: 480px;
+    vertical-align: top;
+    padding: 5px;
+}
+
+#notice table#notice_table tr td ul.notice_list, #notice table#notice_table tr td ol.notice_list {
+    margin-left: 10px;
+}
+
+#notice table#notice_table tr td ul.notice_list {
+    list-style-type: square;
+}
+
+#notice table#notice_table tr td p {
+    margin-bottom: 5px;
+}
+
+#booking_voucher_print img {
+    vertical-align: bottom;
+    padding: 0;
+    margin-left: 30px;
+}
+
+#booking_voucher_print .info_main_table > tbody > tr > td:first-child,
+#booking_voucher_print .info_main_table > thead > tr > td:first-child,
+#booking_voucher_print .info_main_table > thead > tr > th:first-child {
+    padding-left: 30px;
+}
+
+div#itinerary {
+    page-break-before: always;
+}
+
+#booking_voucher_print div#booking_info {
+    position: relative;
+}
+
+#itinerary table#itinerary_table tr td.date {
+    padding-top: 5px;
+}
+
+br.clear {
+    display: none;
+}
+
+.main_table_head .cn_header{
+    font-size: 12px;
+}
+
+.info_main_table > thead > tr td, .info_main_table > thead > tr th {
+    padding: 2px 0;
+}
+
+.section_head span{
+    font-size: 21px;
+}
+
+*{
+    margin: 0;
+    padding: 0;
+}
+
+.terms_wrapper_all {
+    padding-left: 45px;
+    padding-top: 10px;
+}
+
+/*}*/
+
+@media print and (-webkit-min-device-pixel-ratio: 0) {
+
+    /* Set backgrounp to exact color */
+    body, span, div, table, tr, tbody, tfoot, td, hr {
+        -webkit-print-color-adjust: exact;
+    }
+
+    @page {
+        margin-left: 0cm;
+        margin-right: 0cm;
+        margin-top: 1.3cm;
+        margin-bottom: 1.3cm;
+    }
+
+    /* div#notice
+     {
+        page-break-after: always;
+        page-break-inside: avoid;
+     }*/
+    /* div#itinerary
+     {
+        page-break-after: always;
+        page-break-inside: avoid;
+     } */
+    #booking_voucher_print {
+        display: block;
+        width: 100%;
+        font-size: 16px;
+    }
+
+    #booking_voucher #top_voucher p.left {
+        margin-left: 53px;
+        margin-top: 550px;
+    }
+
+    #booking_voucher_print #pax_info ul#room_info_ul {
+        margin-top: 415px;
+    }
+
+    #booking_voucher_print #transfer_info table#transfer_info_table {
+        /*width: 1000px;*/
+        width: 100%;
+    }
+
+    #booking_voucher_print #notice table#notice_table {
+        /*width: 95%;*/
+        margin-left: 0px;
+    }
+
+}

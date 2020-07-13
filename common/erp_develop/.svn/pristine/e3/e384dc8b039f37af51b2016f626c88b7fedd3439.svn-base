@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+
+<head>
+	{include file='public/head' /}
+  	<title>layout 后台大布局 - Layui</title>
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+  <div class="layui-header">
+	{include file='public/header' /}
+  </div>
+  
+  <div class="layui-side layui-bg-black">
+    <div class="layui-side-scroll">
+      <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+		{include file='public/left_menu_web' /}
+    </div>
+  </div>
+  
+  <div class="layui-body">
+  
+		<!-- 内容主体区域 -->
+		<div style="padding: 15px 15px 0px;">
+		<div class="body-top">
+			<div class='layui-form-item'>
+			<span class="layui-breadcrumb" lay-separator="-">
+				<a>{$Think.lang.index_public_homepage}</a>
+				<a>管网管理</a>
+			  	<a><cite>管网列表</cite></a>
+			</span>
+			</div>
+			<br/>
+			<div class='layui-block input-inline' >
+				<!--<form method='get' action='/ota_system/showOtaWebsiteManage'>-->
+					<!--<div class='layui-input-inline'>-->
+						<!--<input type="text" name="web_name" value="{$Think.get.web_name}" placeholder="网站名称" autocomplete="off" class="layui-input">-->
+					<!--</div>-->
+					<!--<div class='layui-input-inline'>-->
+						<!--<div class="layui-form">-->
+							<!--<select name="status" lay-verify="required">-->
+								<!--<option value="2" {if condition="$Think.get.status eq 2"}selected='selected' {/if}>-{$Think.lang.index_source_showCruisesManage_search_status}-</option>-->
+								<!--<option value="1" {if condition="$Think.get.status eq 1"}selected='selected' {/if}>{$Think.lang.index_public_show}</option>-->
+								<!--<option value="0" {if condition="$Think.get.status eq 0"}selected='selected' {/if}>{$Think.lang.index_public_disabled}</option>-->
+							<!--</select>-->
+						<!--</div>-->
+					<!--</div>-->
+					<!--<div class='layui-button-inline layui-search-inline'>-->
+						<!--<button class="layui-btn nav-search">{$Think.lang.index_public_search}</button>-->
+					<!--</div>-->
+				<!--</form>-->
+				<div class='layui-button-inline'>
+					<span><a href='/ota_system/showOtaWebsiteEdit'><button class="layui-btn nav-add">添加网站</button></a></span>
+				</div>
+			</div>
+			<hr><br>
+		</div>
+		<div class="table-nont user-manage pageHeight">
+			<table class="layui-table" >
+				<thead>
+				<tr>
+					<th>ID</th>
+					<th>网站名称</th>
+					<th>网站链接</th>
+					<th>所属分公司</th>
+					<!--<th>状态</th>-->
+					<!--<th>创建时间</th>-->
+					<!--<th>创建人</th>-->
+					<th>{$Think.lang.index_source_operation}</th>
+				</tr>
+
+				</thead>
+				<tbody>
+				{foreach name="web_list" item="vo" }
+				<tr>
+					<th>{$vo.ota_website_id}</th>
+					<th>{$vo.web_name}</th>
+					<th>{$vo.web_href}</th>
+					<th>{$vo.company_name}</th>
+					<!--<th>{if condition="$vo.status eq 1"}{$Think.lang.index_public_show}{else/}{$Think.lang.index_public_disabled}{/if}</th>-->
+					<!--<th>{$vo.update_time|date="y-m-d",###}</th>-->
+					<!--<th>{$vo.nickname}</th>-->
+					<th><span><a href='/ota_system/showOtaWebsiteEdit/ota_website_id/{$vo.ota_website_id}'><button class="layui-btn layui-btn-sm hover-edit  layui-btn-primary" style="width: 100px">编辑网站信息</button></a></span>
+						{if condition="$vo.uuid eq $Think.session.website_uuid"}
+						<!--<span><a href='/ota_system/removeOtaWebsite/website_uuid/{$vo.uuid}'><button class="layui-btn layui-btn-sm hover-details layui-btn-primary">取消</button></a></span>-->
+						{else/}
+						<span><a href='/ota_system/setOtaWebsite/website_uuid/{$vo.uuid}'><button class="layui-btn layui-btn-sm hover-details layui-btn-primary" style="width: 100px">切换至此网站</button></a></span>
+						{/if}
+					</th>
+				</tr>
+				{/foreach}
+				</tbody>
+			</table>
+		</div>
+
+
+    </div>
+  </div>
+  
+  <div class="layui-footer">
+    <!-- 底部固定区域 -->
+    © layui.com - 底部固定区域
+  </div>
+</div>
+{include file='public/foot_js' /}
+<script>
+  //JavaScript代码区域
+  var layer = layui.layer
+</script>
+</body>
+</html>

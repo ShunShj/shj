@@ -1,0 +1,247 @@
+<?php
+
+namespace app\index\controller;
+
+use app\common\help\Help;
+use think\Request;
+
+/***
+ * 文章
+ *
+ **/
+class OtaArticle extends Base
+{
+    public function showArticleManage(){
+        $post = Request::instance()->param();
+
+        $post['page'] = $this->page();
+        $post['size'] = $this->_page_size;
+        $post['choose_company_id'] = session('user')['company_id'];
+        $post['website_uuid'] = session('website_uuid');
+
+        $result = $this->callSoaErp('post','/ota_article/getArticleList',$post);
+
+        $this->getPageParams($result);
+
+        return $this->fetch('article_manage');
+    }
+
+    public function showArticleAdd(){
+
+        $data['status'] = 1;
+        $data['choose_company_id'] = session('user')['company_id'];
+        $data['website_uuid'] = session('website_uuid');
+        $result = $this->callSoaErp('post','/ota_article/getArticleTypeList',$data);
+        $this->assign('result',$result['data']);
+
+        return $this->fetch('article_add');
+    }
+
+    public function addArticleAjax(){
+
+//        $title = input("title");
+//        $ota_article_type_uuid = input("ota_article_type_uuid");
+        $choose_company_id = session('user')['company_id'];
+//        $status = input("status");
+        $user_id = session('user')['user_id'];
+//        $content = input("content");
+//        $start_time = input("start_time");
+//        $end_time = input("end_time");
+//        $keywords = input("keywords");
+//        $description = input("description");
+        $website_uuid = session('website_uuid');
+//
+//        $data = [
+//            "title"=>$title,
+//            "ota_article_type_uuid"=>$ota_article_type_uuid,
+//            'choose_company_id'=>$choose_company_id,
+//            'user_id'=>$user_id,
+//            'status'=>$status,
+//            "content"=>$content,
+//            'start_time'=>$start_time,
+//            'end_time'=>$end_time,
+//            'keywords'=>$keywords,
+//            'description'=>$description,
+//            'website_uuid'=>$website_uuid
+//        ];
+        $param = Request::instance()->param();
+        $param['choose_company_id'] = $choose_company_id;
+        $param['user_id'] = $user_id;
+        $param['website_uuid'] = $website_uuid;
+
+        return $this->callSoaErp('post','/ota_article/addOtaArticle',$param);
+
+    }
+
+    public function showArticleEdit(){
+
+        $where['ota_article_id'] = input('ota_article_id');
+        $article_result = $this->callSoaErp('post','/ota_article/getOtaArticle',$where);
+        if ($article_result['data']['start_time']>0){
+            $article_result['data']['start_time'] = date("Y-m-d",$article_result['data']['start_time']);
+        }else{
+            $article_result['data']['start_time'] = '';
+        }
+        if ($article_result['data']['end_time']>0){
+            $article_result['data']['end_time'] = date("Y-m-d",$article_result['data']['end_time']);
+        }else{
+            $article_result['data']['end_time'] = '';
+        }
+        $this->assign(['article_result' => $article_result['data']]);
+
+        $data['status'] = 1;
+        $data['choose_company_id'] = session('user')['company_id'];
+        $data['website_uuid'] = session('website_uuid');
+        $result = $this->callSoaErp('post','/ota_article/getArticleTypeList',$data);
+        $this->assign('result',$result['data']);
+
+        return $this->fetch('article_edit');
+    }
+
+    public function editArticleAjax(){
+
+        $choose_company_id = session('user')['company_id'];
+        $user_id = session('user')['user_id'];
+//        $ota_article_id = input("ota_article_id");
+//        $title = input("title");
+//        $pid = input("pid");
+//        $content = input("content");
+//        $start_time = input("start_time");
+//        $end_time = input("end_time");
+//        $keywords = input("keywords");
+//        $description = input("description");
+//        $status = input("status");
+//        $data = [
+//            "ota_article_id" => $ota_article_id,
+//            "title"=>$title,
+//            "pid"=>$pid,
+//            'choose_company_id'=>$choose_company_id,
+//            'user_id'=>$user_id,
+//            'status'=>$status,
+//            "content"=>$content,
+//            'start_time'=>$start_time,
+//            'end_time'=>$end_time,
+//            'keywords'=>$keywords,
+//            'description'=>$description,
+//        ];
+        $param = Request::instance()->param();
+        $param['choose_company_id'] = $choose_company_id;
+        $param['user_id'] = $user_id;
+        return $this->callSoaErp('post','/ota_article/updateOtaArticle',$param);
+
+    }
+
+    public function showArticleInfo(){
+
+        $where['ota_article_id'] = input('ota_article_id');
+        $result = $this->callSoaErp('post','/ota_article/getOtaArticle',$where);
+        $this->assign(['result' => $result['data']]);
+
+        return $this->fetch('article_info');
+    }
+
+    public function showArticleTypeManage(){
+
+        $post = Request::instance()->param();
+
+        $post['page'] = $this->page();
+        $post['size'] = $this->_page_size;
+        $post['choose_company_id'] = session('user')['company_id'];
+        $post['website_uuid'] = session('website_uuid');
+        $result = $this->callSoaErp('post','/ota_article/getArticleTypeList',$post);
+
+        $this->getPageParams($result);
+
+        return $this->fetch('article_type_manage');
+    }
+
+    public function showArticleTypeAdd(){
+
+        //获取公司信息
+        $data = [
+            'status'=>1
+        ];
+        $company_result =  $this->callSoaErp('post', '/system/getCompany',$data);
+        $this->assign('company_result',$company_result['data']);
+
+        $data['choose_company_id'] = session('user')['company_id'];
+        $data['website_uuid'] = session('website_uuid');
+        $result = $this->callSoaErp('post','/ota_article/getArticleTypeList',$data);
+        $this->assign('result',$result['data']);
+
+        return $this->fetch('article_type_add');
+    }
+
+    public function addArticleTypeAjax(){
+
+        $article_type_name = input("article_type_name");
+        $pid = input("pid");
+        $choose_company_id = input("choose_company_id");
+        $status = input("status");
+        $user_id = session('user')['user_id'];
+        $website_uuid = session('website_uuid');
+        $data = [
+            "article_type_name"=>$article_type_name,
+            "pid"=>$pid,
+            'choose_company_id'=>$choose_company_id,
+            'user_id'=>$user_id,
+            'status'=>$status,
+            'website_uuid'=>$website_uuid
+        ];
+
+        return $this->callSoaErp('post','/ota_article/addOtaArticleType',$data);
+
+    }
+
+    public function showArticleTypeEdit(){
+
+        $where['ota_article_type_id'] = input('ota_article_type_id');
+        $type_result = $this->callSoaErp('post','/ota_article/getOtaArticleType',$where);
+        $this->assign(['type_result' => $type_result['data']]);
+
+        $data = [
+            'status'=>1
+        ];
+        $company_result =  $this->callSoaErp('post', '/system/getCompany',$data);
+        $this->assign('company_result',$company_result['data']);
+
+        $data['choose_company_id'] = session('user')['company_id'];
+        $data['website_uuid'] = session('website_uuid');
+        $result = $this->callSoaErp('post','/ota_article/getArticleTypeList',$data);
+        $this->assign('result',$result['data']);
+
+        return $this->fetch('article_type_edit');
+    }
+
+    public function editArticleTypeAjax(){
+        $article_type_name = input("article_type_name");
+        $pid = input("pid");
+        $choose_company_id = input("choose_company_id");
+        $status = input("status");
+        $user_id = session('user')['user_id'];
+        $ota_article_type_id = input("ota_article_type_id");
+
+        $data = [
+            "ota_article_type_id" =>$ota_article_type_id,
+            "article_type_name"=>$article_type_name,
+            "pid"=>$pid,
+            'choose_company_id'=>$choose_company_id,
+            'user_id'=>$user_id,
+            'status'=>$status,
+        ];
+
+        return $this->callSoaErp('post','/ota_article/updateOtaArticleType',$data);
+
+    }
+
+    public function showArticleTypeInfo(){
+
+        $where['ota_article_type_id'] = input('ota_article_type_id');
+        $type_result = $this->callSoaErp('post','/ota_article/getOtaArticleType',$where);
+        $this->assign(['type_result' => $type_result['data']]);
+
+        return $this->fetch('article_type_info');
+    }
+
+
+}

@@ -1,0 +1,297 @@
+<!--
+  This is view/booktour/aside_booking_summarys.php
+-->
+<aside>
+    <div id="sidebar"><!-- sidebar -->
+        <h3><img src="<?php echo base_url('assets/images/aside_booking_summary_icn.png'); ?>" alt="Nexus Latest News"/>Booking
+            Summary</h3>
+        <table id="aside_booking_summary_table" border="0" cellpadding="0">
+            <tr>
+                <td class="head">Tour Name</td>
+                <td><?php if (session('tour_name')): echo session('tour_name'); endif; ?>
+                    <br/>
+                    <?php if (session('tour_name_ch')): echo session('tour_name_ch'); endif; ?>
+                </td>
+            </tr>
+            <tr>
+                <td class="head">Duration</td>
+                <td><?php if (session('length')): echo session('length'); endif; ?> Days</td>
+            </tr>
+            <tr>
+                <td class="head">Tour Date</td>
+                <td>
+                    <div id="tour_date"><?php if (session('tour_date')) {
+                        echo session('tour_date');
+                        } else {
+                        echo "N/A";
+                        } ?></div>
+                </td>
+            </tr>
+            <tr>
+                <td class="head">Tour Language</td>
+                <td>
+                    <div id="tour_lang"><?php if (session('tour_lang')) {
+                        echo session('tour_lang');
+                        } else {
+                        echo "N/A";
+                        } ?></div>
+                </td>
+            </tr>
+            <tr>
+                <td class="head">No. of Pax</td>
+                <td><?php if (session('pax')) {
+                    echo session('pax');
+                    } else {
+                    echo "N/A";
+                    } ?></td>
+            </tr>
+            <tr>
+                <td class="head">Passenger/s</td>
+                <td>
+                    <div id="toru_pax">
+                        <?php if (session('lname')) {
+                        for ($i = 0; $i < session('pax'); $i++) {
+                        // Set name
+                        $lname_arr = session('lname');
+                        $fname_arr = session('fname');
+                        $age_cat_arr = session('age_cat');
+                        $name = ucfirst($lname_arr[$i] . " " . $fname_arr[$i]);
+                        // Set pax number
+                        $a = $i + 1;
+                        echo '<span>' . $a . '. </span> ';
+                        echo $name . " (" . $age_cat_arr[$i] . ")";
+                        echo '<br />';
+                        }
+                        } else {
+                        echo "N/A";
+                        }
+                        ?>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td class="head">No. of Room/s</td>
+                <td>
+                    <div id="room_pax">
+                        <?php if (session('room_type')) {
+                        for ($i = 0; $i < count(session('room_type')); $i++) {
+                        $room_type_arr = session('room_type');
+                        //print_r($room_type_arr);
+                        // Set name
+                        echo $room_type_arr[$i]['type'] . " x " . $room_type_arr[$i]['num'];
+                        echo "<br />";
+                        //echo "Child with bed x ". session('room_type')[$i]['bed'];
+
+                        }
+                        } else {
+                        echo "N/A";
+                        }
+                        ?>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td class="head">Hotel Transfer</td>
+                <td>
+                    <div id="hotel_transfer">
+                        <?php if (session('hotel_transfer_info')) {
+                        $hotel_transfer_info_arr = session('hotel_transfer_info');
+                        for ($i = 0; $i < count($hotel_transfer_info_arr); $i++) {
+                        // Set name
+                        //                    $new_date_format = new DateTime($hotel_transfer_info_arr[$i]['date']);
+                        echo $hotel_transfer_info_arr[$i]['date'] . " " . $hotel_transfer_info_arr[$i]['flight'] . " " . $hotel_transfer_info_arr[$i]['time'];
+
+                        echo "<br />(";
+                        // Get number of pax in the transfer
+                        $num_pax = count($hotel_transfer_info_arr[$i]['pax']);
+                        // Get number of pax in the booking
+                        $total_pax = count(session('lname'));
+                        $fname_pax_arr = session('fname');
+                        $lname_pax_arr = session('lname');
+                        // Check if transfer pax are match with pax in the booking by looping though two arrays
+                        for ($z = 0; $z < $total_pax; $z++) {
+                        $name = ucfirst($lname_pax_arr[$z] . " " . $fname_pax_arr[$z]);
+                        $temp_id = "";
+                        // Get it's temp id if match
+                        for ($k = 0; $k < $num_pax; $k++) {
+                        //echo session('hotel_transfer_info')[$i]['pax'][$k];
+                        if ($name == ucfirst($hotel_transfer_info_arr[$i]['pax'][$k])) {
+                        $temp_arr = session('temp_id');
+                        $temp_id .= $temp_arr[$z];
+                        $index = $k + 1;
+
+                        if ($num_pax != $index) {
+                        $temp_id .= ",";
+                        }
+                        } // end if
+                        } // end for $num_pax
+                        echo $temp_id;
+                        } // end for $total_pax
+
+                        echo ")<br/>";
+
+                        }
+                        } else {
+                        echo "N/A";
+                        }
+                        ?>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td class="head">Airport Transfer</td>
+                <td>
+                    <div id="airport_transfer">
+                        <?php if (session('airport_transfer_info')) {
+                        $airport_transfer_info_arr = session('airport_transfer_info');
+                        for ($i = 0; $i < count($airport_transfer_info_arr); $i++) {
+                        // Set name
+                        //                    $new_date_format = new DateTime($airport_transfer_info_arr[$i]['date']);
+                        echo $airport_transfer_info_arr[$i]['date'] . " " . $airport_transfer_info_arr[$i]['flight'] . " " . $airport_transfer_info_arr[$i]['time'];
+
+                        echo "<br />(";
+                        // Get number of pax in the transfer
+                        $num_pax = count($airport_transfer_info_arr[$i]['pax']);
+                        // Get number of pax in the booking
+                        $total_pax = count(session('lname'));
+                        $fname_pax_arr = session('fname');
+                        $lname_pax_arr = session('lname');
+                        // Check if transfer pax are match with pax in the booking by looping though two arrays
+                        for ($z = 0; $z < $total_pax; $z++) {
+                        $name = ucfirst($lname_pax_arr[$z] . " " . $fname_pax_arr[$z]);
+                        $temp_id = "";
+                        // Get it's temp id if match
+                        for ($k = 0; $k < $num_pax; $k++) {
+                        //echo session('airport_transfer_info')[$i]['pax'][$k];
+                        if ($name == ucfirst($airport_transfer_info_arr[$i]['pax'][$k])) {
+                        $temp_arr = session('temp_id');
+                        $temp_id .= $temp_arr[$z];
+                        $index = $k + 1;
+
+                        if ($num_pax != $index) {
+                        $temp_id .= ",";
+                        }
+                        } // end if
+                        } // end for $num_pax
+                        echo $temp_id;
+                        } // end for $total_pax
+
+                        echo ")<br/>";
+
+                        }
+                        } else {
+                        echo "N/A";
+                        }
+                        ?>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td class="head">Pre Tour</td>
+                <td>
+                    <div id="pre_tour">
+                        <?php if (session('pre_tour_accommodation_info')) {
+                        $pre_tour_arr = session('pre_tour_accommodation_info');
+                        $room_array = array();
+                        //                                                print_r($pre_charge);
+                        for ($i = 0; $i < count($pre_tour_arr); $i++) {
+                        $room_array[$i] = $pre_tour_arr[$i]['room_type'];
+                        $nights = $pre_tour_arr[$i]['nights'];
+                        }
+
+                        $room_same_type = array_count_values($room_array);
+
+                        foreach ($room_same_type as $key => $num) {
+                        echo $key . " x " . $num . " (" . $nights . " Night/s)";
+                        echo "<br/>";
+                        }
+                        } else {
+                        echo "N/A";
+                        }
+                        ?>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td class="head">Post Tour</td>
+                <td>
+                    <div id="post_tour">
+                        <?php if (session('post_tour_accommodation_info')) {
+                        $post_tour_arr = session('post_tour_accommodation_info');
+                        $post_room_array = array();
+                        for ($i = 0; $i < count($post_tour_arr); $i++) {
+                        $post_room_array[$i] = $post_tour_arr[$i]['room_type'];
+                        $post_nights = $post_tour_arr[$i]['nights'];
+                        }
+
+                        $room_same_type = array_count_values($post_room_array);
+
+                        foreach ($room_same_type as $key => $num) {
+                        echo $key . " x " . $num . " (" . $post_nights . " Night/s)";
+                        echo "<br/>";
+                        }
+
+                        } else {
+                        echo "N/A";
+                        }
+                        ?>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td class="head">Is Pre-Paid Tip and <br/>Compulsory Program ?</td>
+                <td>
+                    <div id="post_tour">
+                        <?php
+            if (session('is_step4_data')) {
+                        if (session('is_tip') && session('is_comp_progm')) {
+                        echo "YES";
+                        } else {
+                        echo "NO";
+                        }
+                        } else {
+                        echo "N/A";
+                        }
+                        ?>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td class="hr">&nbsp;</td>
+                <td class="hr">&nbsp;</td>
+            </tr>
+
+            <tr>
+                <td class="head">Booking ID</td>
+                <td>
+                    <div id="tour_date"><?php if (session('last_booking_id')) {
+                        echo session('last_booking_id');
+                        } else {
+                        echo "N/A";
+                        } ?></div>
+                </td>
+            </tr>
+            <tr>
+                <td class="head">Tour Code</td>
+                <td><?php if (session('tour_code')): echo session('tour_code'); endif; ?></td>
+            </tr>
+            <tr>
+                <td class="head">Your Ref. No</td>
+                <td>
+                    <div id="reference_no"><?php if (session('reference')) {
+                        echo session('reference');
+                        } else {
+                        echo "N/A";
+                        } ?></div>
+                </td>
+            </tr>
+            <!--tr>
+                <td>&nbsp;</td>
+                <td class="btn"><span class="print_btn" ></span></td>
+            </tr-->
+
+        </table>
+    </div>
+    <!-- end sidebar -->
+
+</aside>

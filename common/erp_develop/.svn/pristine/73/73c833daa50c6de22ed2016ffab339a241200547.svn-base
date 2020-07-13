@@ -1,0 +1,185 @@
+{include file='/book_tour/includes/header' /}
+{include file='/book_tour/includes/top_nav' /}
+
+<!--
+	This is view/booktour/room_config.php
+-->
+<style>
+    #room_config button.ui-multiselect{
+        height: 29px;
+        margin-top: 10px;
+    }
+</style>
+<?php
+$selectedPax=array();
+$roomInfo="";
+if(session('room_info'))
+{
+$room_info_arr = session('room_info');
+//print_r(session('room_info'));
+$a = 1;
+
+//echo session('room_info')[2]['pax'][0];
+//echo count(session('room_info')[2]['pax']);
+for($i=0; $i<count($room_info_arr); $i++)
+{
+//print_r(session('room_info')[$i]);
+
+$tourPax = '';
+$is_status = '';
+// Get room type
+$type = ucfirst($room_info_arr[$i]['type']);
+// Get room max capacity
+$maxPax = ucfirst($room_info_arr[$i]['max']);
+// Get age cat
+for($z=0; $z < count($room_info_arr[$i]['age']); $z++)
+{
+// Get age cat
+$ageCat = ucfirst($room_info_arr[$i]['age'][$z]);
+
+//echo session('room_info')[0]['pax'][$z];
+
+// Get pax name
+$pax = ucfirst($room_info_arr[$i]['pax'][$z]);
+$selectedPax[]=$pax;
+
+$tourPax .= "<li id=" . $z . ">";
+    $tourPax .= $pax . "|" . $ageCat ;
+    $tourPax .= "</li>";
+}
+
+if($room_info_arr[$i]['charge_type'] == 2)
+{
+$child_bed = $room_info_arr[$i]['charge_num'];
+$is_status = '<span style="color:#005702;" class="child_with_bed'.$a.'">'.$child_bed.'</span><span style="color:#005702;"> x child/s need to pay bed charge</span>';
+}
+if($room_info_arr[$i]['charge_type'] == 1)
+{
+$single_bed = $room_info_arr[$i]['charge_num'];
+$is_status = '<span style="color:#005702;">This person needs to pay Single Supplement fee</span>';
+}
+
+$roomInfo.=("
+<div id='roomDiv'>
+    <hr />
+    <p id='selectedRoom'>
+        <span id='maxPax$a' style='display:none;'>$maxPax</span>
+        <span style='color:#3376bb; font-size:20px;'>$a. </span>
+        <span id='room$a' style='color:#3376bb; font-size:20px;'>$type</span>
+    <ol id='pax$a' style='margin-top:-25px; margin-left: 500px; color:#3376bb; font-size:16px; height:auto;'>$tourPax</ol>
+    </p>
+    $is_status
+</div>");
+$a++;
+}
+}
+?>
+
+<section id="content">
+
+    <section id="booktour">
+        <article>
+            <h1><img src="<?php echo base_url('assets/images/room_configure.png'); ?>" width="700" alt="Room Configure"/></h1>
+            <h2 class="top_icn"><div class="top_icn_text">4</div><img src="<?php echo base_url('assets/images/room_configure_icn.png');?>" alt="Room Configure - Step 4"/>
+                <div class="top_text">&nbsp;&nbsp;&nbsp;<span class="message success"></span></div>
+            </h2>
+            <!--?php $attribute = array('id' => 'booktour_step4');
+                 echo form_open('booktour/service_requests', $attribute); ?-->
+            <div id="room_config"><!-- Room Type -borrow the css stype from passgener_details --> 
+
+                <div id="errorMessage"><?php echo session('message');?></div>
+                <table width="700" cellspacing='0' border="0">
+                    <tr>
+                        <th><h3>Select Room Type</h3></th>
+                        <th><h3 class="select_pax_title">Select Passengers</h3></th>
+                        <th>&nbsp;</th>
+                    </tr>
+                    <tr>
+                        <td width="180">
+                            <select title="Hotel Rooms" class="room_type_form_select" name="room_type">
+                                <option value="" selected>-- Room Type --</option>
+                                <?php
+                        foreach($all_rooms as $key => $room) { ?>
+                                <option value="<?php echo $all_rooms[$key]->room; ?>" <?php echo set_select('room_type', $all_rooms[$key]->room); ?>>
+                                <?php echo ucfirst($all_rooms[$key]->room); ?>
+                                </option>
+                                <?php }; ?>
+                            </select>
+                        </td>
+                        <td width="200">
+                            <select title="Tour Passengers" class="room_pax_form_select" name="tour_pax" multiple="multiple">
+                                <?php
+
+                        for($i=0; $i<session('pax'); $i++)
+                                {
+                                // Set name
+                                $lname_arr      = session('lname');
+                                $fname_arr      = session('fname');
+                                $age_cat_arr    = session('age_cat');
+                                $allow_nbed_arr = session('allow_nbed');
+                                $name      = ucfirst($lname_arr[$i] . " " . $fname_arr[$i]);
+                                $age_cat   = ucfirst($age_cat_arr[$i]);
+                                $allow_nbed   = $allow_nbed_arr[$i];
+
+
+                                // Load pax into the list if they are not Infant
+                                if($age_cat != 'Infant') {
+                                // Set pax number
+                                $a = $i + 1;
+                                echo '<option value="'.$name. '|'.$age_cat.'|'.$allow_nbed.'|'.$a.'" '.(in_array($name,$selectedPax)?'disabled="disabled"':'').'>';
+                                echo '<span>'.$a.'. </span> ';
+                                echo  $name. " (" . $age_cat . ")" ;
+                                if($allow_nbed == 2) {
+                                echo  "(Allow no bed)";
+                                }
+                                echo '</option>';
+                                }
+                                }
+                                ?>
+                            </select>
+                        </td>
+                        <td width="200">
+                            <span class="pax-btn room-btn" style="padding: 6px 10px 6px 10px; vertical-align: middle;"><i class="fa fa-plus" aria-hidden="true"></i></span>
+                            <span class="reset" style="margin-top: 5px;"> CLEAR </span>
+                        </td>
+                    </tr>
+                </table>
+                <div id="room_pax">
+                    <?php echo $roomInfo ?>
+                </div><!-- end room pax -->
+            </div> <!-- end room config -->
+            <div id="page_nav">
+                <hr />
+                <p>
+                    <!--input type="submit" name="submit" value="back" class="page_nav_left"/-->
+                    <a href="<?php echo base_url('booktour/passenger_details'); ?>" class="page_nav_left">Left</a>
+                    <input type="submit" name="submit" value="next" class="page_nav_right" />
+                    <input type="hidden" name="back" value="passenger_details"/>
+                    <input type="hidden" name="next" value="service_requests"/>
+                    <input type="hidden" id="is_opt_tip_comp" value="<?php echo session('is_opt_tip_comp'); ?>">
+                    <input type="hidden" name="process" value="room_config"/> <!-- this data is for form process in booktour contorller -->
+
+                </p>
+            </div><!-- end page nav -->
+        </article>
+    </section> <!-- end booktour -->
+</section> <!-- end content -->
+<?php echo session('is_opt_tip_comp');
+if(session('is_opt_tip_comp')) { ?>
+<div id="dialog-confirm" title="Tip and Compulsory Program">
+    <p><span class="ui-icon ui-icon-help" style="float:left; margin:0 7px 20px 0;"></span>Is Tip and Compulsory Program Pre-Paid ?</p>
+</div>
+<?php } ?>
+<link type="text/css" href="<?php echo base_url('assets/css/jquery.multiselect.css');?>" rel="stylesheet" />
+<link type="text/css" href="<?php echo base_url('assets/css/prettify.css');?>" rel="stylesheet" />
+
+<script type="text/javascript" src="<?php echo base_url('assets/js/jquery.multiselect.js');?>"></script>
+<script type="text/javascript" src="<?php echo base_url('assets/js/prettify.js');?>"></script>
+<?php echo $room_config_js; // contorller to decide what js file should be used for room config, it may depends on the type of tour or rules of tour. Please refer to room_config controller for more information. ?>
+
+
+
+
+
+{include file='/book_tour/aside_booking_summary' /}
+{include file='/book_tour/includes/footer' /}

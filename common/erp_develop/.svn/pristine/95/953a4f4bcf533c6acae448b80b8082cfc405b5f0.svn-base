@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tours>
+   <tour cateogry="china">
+      <tourid>1</tourid>
+      <tourcode>SGJN07NH</tourcode>
+   </tour>
+   <tour cateogry="china">
+      <tourid>166</tourid>
+      <tourcode>SGHS09NH</tourcode>
+   </tour>
+   <tour cateogry="china">
+      <tourid>2</tourid>
+      <tourcode>SGCD08NH</tourcode>
+   </tour>
+   <tour cateogry="china">
+      <tourid>16</tourid>
+      <tourcode>SGYN07NH</tourcode>
+   </tour>
+   <tour cateogry="china">
+      <tourid>17</tourid>
+      <tourcode>SGYN08NH</tourcode>
+   </tour>
+   <tour cateogry="china">
+      <tourid>3</tourid>
+      <tourcode>SGSGR08NH</tourcode>
+   </tour>
+   <tour cateogry="china">
+      <tourid>37</tourid>
+      <tourcode>SGSGR09NH</tourcode>
+   </tour>
+   <tour cateogry="china">
+      <tourid>18</tourid>
+      <tourcode>SGZJJ07NH</tourcode>
+   </tour>
+   <tour cateogry="china">
+      <tourid>19</tourid>
+      <tourcode>SGZJJ11NH</tourcode>
+   </tour>
+   <tour cateogry="china">
+      <tourid>21</tourid>
+      <tourcode>SGJZG08NH</tourcode>
+   </tour>
+   <tour cateogry="china">
+      <tourid>96</tourid>
+      <tourcode>SGJZG11NH</tourcode>
+   </tour>
+   <tour cateogry="china">
+      <tourid>23</tourid>
+      <tourcode>SGGL06NH</tourcode>
+   </tour>
+   <tour cateogry="china">
+      <tourid>45</tourid>
+      <tourcode>SGGS06NH</tourcode>
+   </tour>
+   <tour cateogry="china">
+      <tourid>26</tourid>
+      <tourcode>SGXM07NH</tourcode>
+   </tour>
+   <tour cateogry="china">
+      <tourid>89</tourid>
+      <tourcode>SGSY06NH</tourcode>
+   </tour>
+   <tour cateogry="china">
+      <tourid>188</tourid>
+      <tourcode>SGBF07NH</tourcode>
+   </tour>
+   <tour cateogry="china">
+      <tourid>175</tourid>
+      <tourcode>SGSD07NH</tourcode>
+   </tour>
+</tours>

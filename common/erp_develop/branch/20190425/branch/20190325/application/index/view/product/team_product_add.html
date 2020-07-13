@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {include file='public/head' /}
+    <title>language-manage-add</title>
+
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+
+    <div class="layui-header">
+        {include file='public/header' /}
+    </div>
+
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll">
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            {include file='public/left_menu' /}
+        </div>
+    </div>
+
+    <div class="layui-body">
+
+        <!-- 内容主体区域 -->
+        <div style="padding: 15px;">
+            <div class='layui-form-item'>
+		   		<span class="layui-breadcrumb">
+					<a href="#">产品管理</a>
+				    <a href="#">团队产品</a>
+					<a href="#"><cite>添加团队产品</cite></a>
+				</span>
+            </div>
+            <br/>
+            <div class="layui-tab layui-tab-card" lay-filter="test">
+                <ul class="layui-tab-title">
+                    <li class="layui-this">基本配置</li>
+                    <li class="layui-checked">产品开班日期</li>
+                    <li>行程内容</li>
+                    <li>资源配置</li>
+                    <li>产品报价</li>
+                </ul>
+            </div>
+            <br/>
+            <br/>
+            <form class="layui-form" onSubmit="return team_peoduct_add()">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">产品编号</label>
+                    <div class="layui-input-block">
+                        <input id="" name="" value="NHC19-TW6D0202" required="" lay-verify="required" placeholder="类型名称" autocomplete="off" class="layui-input" type="text">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label"><span style="color:red;">*</span>&nbsp;团名</label>
+                    <div class="layui-input-block">
+                        <input id="" name="" required="required" lay-verify="required" placeholder="请输入团名称" autocomplete="off" class="layui-input" type="text">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label"><span style="color:red;">*</span>&nbsp;线路类型</label>
+                    <div class="layui-input-block">
+                        <select id="" name="" lay-filter="required" >
+                            <option value="" selected="selected">请输入线路类型</option>
+                            <option value="1">华人团</option>
+                            <option value="2">老外团</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">团队类型</label>
+                    <div class="layui-input-block">
+                        <input type="radio" name="type" value="1" title="散客拼团" checked="checked">
+                        <input type="radio" name="type" value="2" title="单团定制">
+                    </div>
+                </div>
+                <div class="layui-form-item" id="sp1">
+                    <label class="layui-form-label">收客截至</label>
+                    <div class="layui-form-mid">出团前</div>
+                    <div class="layui-input-inline">
+                        <input id="" name="" required="" lay-verify="required" placeholder="请输入天数" autocomplete="off" class="layui-input" type="text">
+                    </div>
+                    <div class="layui-form-mid">天</div>
+                </div>
+                <div class="layui-form-item" id="sp2">
+                    <label class="layui-form-label"><span style="color:red;">*</span>&nbsp;计划收客数</label>
+                    <div class="layui-input-inline">
+                        <input id="" name="" required="" lay-verify="required" placeholder="请输入天数" autocomplete="off" class="layui-input" type="text">
+                    </div>
+                    <div class="layui-form-mid">已收客: 0</div>
+                </div>
+                <div class="layui-form-item" id="sp3">
+                    <label class="layui-form-label"><span style="color:red;">*</span>&nbsp;客户名称</label>
+                    <div class="layui-input-block">
+                        <input id="" name="" required="required" lay-verify="required" placeholder="请输入客户名称" autocomplete="off" class="layui-input" type="text">
+                    </div>
+                </div>
+                <div class="layui-form-item" id="sp4" style="display:none;">
+                    <label class="layui-form-label">联系人</label>
+                    <div class="layui-input-block">
+                        <input id="" name="" required="" lay-verify="required" placeholder="请输入联系人" autocomplete="off" class="layui-input" type="text">
+                    </div>
+                </div>
+                <div class="layui-form-item" id="sp5">
+                    <label class="layui-form-label">联系电话</label>
+                    <div class="layui-input-block">
+                        <input id="" name="" required="" lay-verify="required" placeholder="请输入联系电话" autocomplete="off" class="layui-input" type="text">
+                    </div>
+                </div>
+                <div class="layui-form-item" id="sp6">
+                    <label class="layui-form-label"><span style="color:red;">*</span>&nbsp;单团定制人数</label>
+                    <div class="layui-input-block">
+                        <input id="" name="" required="" lay-verify="required" placeholder="请输入联系电话" autocomplete="off" class="layui-input" type="text">
+                    </div>
+                </div>
+                <div class="layui-form">
+                    <label class="layui-form-label">可见分公司</label>
+                    <div class="layui-input-block">
+                        <select name="" id="" xm-select="example10_1" xm-select-search="" xm-select-search-type="dl">
+                            <option value="1" selected="selected">美国</option>
+                            <option value="2" selected="selected">上海</option>
+                            <option value="3">广州</option>
+                            <option value="4">深圳</option>
+                            <option value="5">天津</option>
+                        </select>
+                    </div>
+                </div>
+                <br/>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">结算方式</label>
+                    <div class="layui-input-block">
+                        <select name="" id="" lay-filter="required" >
+                            <option value="1" selected="selected">一口价</option>
+                            <option value="2">真实结算</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">负责人</label>
+                    <div class="layui-input-block">
+                        <input id="" name="" value="胡胡" required="" lay-verify="required" placeholder="请输入团名称" autocomplete="off" class="layui-input" type="text">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">状态</label>
+                    <div class="layui-input-block">
+                        <select name="status" id="route_type_status" lay-filter="required" >
+                            <option value="1" selected="selected">可用</option>
+                            <option value="2">禁用</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-input-block">
+                        <button class="layui-btn" lay-submit="" lay-filter="formDemo" id="route_type_add_button">立即提交</button>
+                        <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                        <a href='/product/showRouteTypeManage'><button type="button" class="layui-btn layui-btn-primary">返回</button></a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="layui-footer">
+        <!-- 底部固定区域 -->
+        © layui.com - 底部固定区域
+    </div>
+</div>
+{include file='public/foot_js' /}
+<script src='__STATIC__/javascript/system/product.js'></script>
+</body>
+</html>
+<script>
+    $("#sp3").hide();
+    $("#sp4").hide();
+    $("#sp5").hide();
+    $("#sp6").hide();
+
+    form.on('radio', function(data){
+        if(data.value==1 && data.value !=''){
+
+            $("#sp1").show();
+            $("#sp2").show();
+
+            $("#sp3").hide();
+            $("#sp4").hide();
+            $("#sp5").hide();
+            $("#sp6").hide();
+        }else if(data.value==2 && data.value !=''){
+
+            $("#sp1").hide();
+            $("#sp2").hide();
+
+            $("#sp3").show();
+            $("#sp4").show();
+            $("#sp5").show();
+            $("#sp6").show();
+        }
+    });
+</script>

@@ -1,0 +1,64 @@
+<!--
+	This is view/templates/header.php
+-->
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href='/assets/css/style.css' type="text/css" media="screen"/>
+    <link rel="shortcut icon" href="http://www.nexusholidays.com.au/favicon.ico" type="image/x-icon"/>
+    <title>{$site_title} - Nexus Holidays Booking System</title>
+    <link type="text/css" href='/assets/css/jquery-ui.css' rel="stylesheet" />
+    <link rel="stylesheet" href="/assets/css/icons.css" type="text/css" media="screen"/>
+    <script src="/assets/js/jquery-1.9.0.min.js"></script>
+    <script src="/assets/js/jquery-ui.js"></script>
+    <script src="/assets/js/jquery.validate.js"></script>
+    <script>
+        <?php
+                $date_format=config('date_format');
+        ?>
+        default_date_format='<?php echo to_JS_date_format($date_format,1); ?>';
+        default_date_mask='<?php echo to_JS_date_format($date_format,2); ?>';
+        default_date_js_format='<?php echo to_JS_date_format($date_format,3); ?>';
+        $(function(){
+            $("#uername_icon_wrapper").tooltip();
+        });
+    </script>
+</head>
+
+<body>
+
+<div id="wapper">
+    <div id="main">
+        <header>
+            <div id="header">
+                <h1 class="header_h1">
+                    <a href="" title="Nexus Holidays Booking System">
+                        <img class="header_logo" src="/assets/images/nexus_logo.png" alt="Nexus Holidays Logo" />
+                    </a>
+                </h1>
+                <p class="header_banner">
+                    <img src="/assets/images/banner_img1.png" width="550" alt="Nexus Holidays Header Banner">
+                </p><!-- header banner -->
+                <ul style="text-align: right;padding-right: 40px;">
+                    <li class="header_login">Welcome,
+                        {$Think.session.user.nickname}
+                        <a id="uername_icon_wrapper" title="" href="">
+                            <span class="header_icon user_icon nh-user-alt-2 nh-icon-blue-base nh-icon"></span>My Account
+                        </a> |
+                        <a title="Logout" href="/login/loginOut">
+                            <span class="header_icon nh-logout nh-icon-blue-base nh-icon"></span>Logout
+                        </a>
+
+                    </li> <!-- header login details -->
+                    <li class="header_contact">
+                        <!--                        Need help?-->
+                        <br/>
+                        <p class="header_call_text" style="margin-top: -20px;">
+                            <img src="/assets/images/phone_icon_25.png" alt="Nexus Holidays Help Desk"/>Call <span style="padding-left:7px;"> </span>
+                        </p>
+                        <p class="header_call_text" style="padding-left:-20px; padding-top:3px;"><span style="padding-top:10px; padding-left: 25px;"> </span></p>
+                    </li> <!-- header contact -->
+                </ul>
+            </div>
+        </header>

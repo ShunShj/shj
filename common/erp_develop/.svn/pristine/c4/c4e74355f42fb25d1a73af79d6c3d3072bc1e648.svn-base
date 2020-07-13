@@ -1,0 +1,79 @@
+<?php
+/**
+ * Created by PhpStorm.
+ * User: Hugh
+ * Date: 2019/11/04
+ * Time: 13:40
+ */
+
+namespace app\index\controller;
+use \Underscore\Types\Arrays;
+use think\Session;
+use think\Paginator;
+use think\Request;
+use think\Controller;
+use app\common\help\Help;
+
+class BookTour extends Base
+{
+    public function select_tour(){
+
+        $this->assign('tabs','');
+        $this->assign('type_arr','');
+        $this->assign('all_tours','');
+        $this->assign('site_title','1.Select Tour');
+        return $this->fetch('/book_tour/select_tour');
+    }
+
+    public function select_date(){
+
+        $this->assign('important_notice','<strong>Important Notice:</strong> Cantonese tour guide is not guaranteed available.');
+        $this->assign('site_title','2.Select Date & Language');
+        $side_content_path = session('side_content_path'); // Booking Summary
+        $this->assign('side_content',$side_content_path);
+        return $this->fetch('/book_tour/select_date');
+    }
+
+
+    public function passenger_details(){
+        $this->assign('all_nations','');
+        $this->assign('site_title','3.Enter Passenger Details');
+
+        return $this->fetch('/book_tour/passenger_details');
+    }
+
+
+    public function room_config(){
+        $tour_type = 'US';
+
+        if($tour_type == "US") {
+            $room_config_js = '<script type="text/javascript" src="' . base_url('assets/js/room-config-us-201703031346.js') . '"></script>'; // need to add and modify this js file
+        } else {
+            $room_config_js = '<script type="text/javascript" src="' . base_url('assets/js/room-config-201703031347.js') . '"></script>';
+        }
+
+        $this->assign('room_config_js',$room_config_js);
+        $all_rooms = [];
+        $this->assign('all_rooms',$all_rooms);
+        $this->assign('site_title','4.Room Configure');
+        return $this->fetch('/book_tour/room_config');
+    }
+
+    public function service_requests(){
+
+        $all_rooms=[];
+        $this->assign('all_rooms',$all_rooms);
+        $this->assign('site_title','5.Service Requests');
+        return $this->fetch('/book_tour/service_requests');
+
+    }
+
+
+
+    public function booking_summary(){
+        $this->assign('site_title','6.Booking Summary');
+        return $this->fetch('/book_tour/booking_summary');
+    }
+
+
+}

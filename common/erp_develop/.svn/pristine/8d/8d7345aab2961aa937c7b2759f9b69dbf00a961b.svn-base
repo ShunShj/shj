@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+<head>
+	{include file='public/head' /}
+  	<title>language-manage</title>
+ 
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+  <div class="layui-header">
+	{include file='public/header' /}
+  </div>
+  
+  <div class="layui-side layui-bg-black">
+    <div class="layui-side-scroll">
+      <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+		{include file='public/left_menu' /}
+    </div>
+  </div>
+  
+  <div class="layui-body">
+  
+    <!-- 内容主体区域 -->
+    <div style="padding: 15px 15px 0px;">
+		<div class="body-top">
+			<div class='layui-form-item'>
+			<span class="layui-breadcrumb" lay-separator="-">
+				<a>{$language_tag.index_public_homepage}</a>
+				<a>{$language_tag.index_public_system}</a>
+				<a><cite>{$language_tag.index_system_showAuthManage_auth_manage}</cite></a>
+			</span>
+			</div>
+			<br/>
+			<div class='layui-block input-inline' >
+				<form method='get' action='/system/showAuthManage'>
+					<div class='layui-input-inline'>
+						<input type="text" name="controller_name"  value="{$Think.get.controller_name}"  placeholder="{$language_tag.index_system_showAuthManage_controller_name}" class="layui-input">
+					</div>
+					<div class='layui-input-inline'>
+						<div class="layui-form">
+							<select name="status">
+								<option value="0" selected="">-{$language_tag.index_source_showCruisesManage_search_status}-</option>
+								<option value="1" selected>{$language_tag.index_public_show}</option>
+								<option value="2" {if condition="$Think.get.type eq 2"}selected='selected' {/if}>{$language_tag.index_public_disabled}</option>
+							</select>
+						</div>
+					</div>
+					<div class='layui-button-inline layui-search-inline'>
+						<button class="layui-btn nav-search">{$language_tag.index_public_search}</button>
+					</div>
+				</form>
+				<div class='layui-button-inline'>
+					<span style="{:action('index/auth/check_auth',['role_id'=>'291'])}"><a href='/system/showAuthControllerAdd'><button class="layui-btn nav-add">{$language_tag.index_system_showAuthManage_add_controller_method}</button></a></span>
+					<span style="{:action('index/auth/check_auth',['role_id'=>'292'])}"><a href='/system/showAuthButtonAdd'><button class="layui-btn nav-add">{$language_tag.index_system_showAuthManage_add_button}</button></a></span>
+				</div>
+			</div>
+			<hr><br>
+		</div>
+		<div class="table-nont user-manage pageHeight">
+			<table class="layui-table" id="language-table">
+				<thead>
+				<tr>
+					<th>{$language_tag.index_system_showAuthManage_id}</th>
+					<th>{$language_tag.index_system_showAuthManage_pid_id}</th>
+					<th>{$language_tag.index_system_showAuthManage_controller_name}</th>
+					<th>{$language_tag.index_system_showAuthManage_method_name}</th>
+					<th>{$language_tag.index_system_showAuthManage_button_name}</th>
+					<th>{$language_tag.index_system_showAuthManage_level}</th>
+					<th>{$language_tag.index_system_showAuthManage_subjection_where_system}</th>
+					<th>{$language_tag.index_public_status}</th>
+					<th class="layui-table-width">{$language_tag.index_source_operation}</th>
+				</tr>
+				</thead>
+
+				<tbody>
+				{foreach name='data' item='v'}
+				<tr>
+					<th>{$v.auth_id}</th>
+					<th>{$v.pid}</th>
+					<th>{$v.controller_name}</th>
+					<th>{$v.function_name}</th>
+					<th>{$v.button_name}</th>
+					<th>{$v.level}</th>
+					<th>
+						{if condition="$v.type eq 1"}erp{/if}
+
+					</th>
+					<th>{if condition="$v.status eq 1"}{$language_tag.index_public_show}{else}{$language_tag.index_public_disabled}{/if}</th>
+					<th>
+						{if condition="$v.level eq 1"}
+						<span style="{:action('index/auth/check_auth',['role_id'=>'293'])}"><a href='/system/showAuthControllerEdit?auth_id={$v.auth_id}'>
+							{else/}
+							<span style="{:action('index/auth/check_auth',['role_id'=>'293'])}"><a href='/system/showAuthButtonEdit?auth_id={$v.auth_id}'>
+								{/if}
+								<button class="layui-btn layui-btn-sm hover-edit layui-btn-primary">{$language_tag.index_public_update}</button>
+							</a>
+							<!-- <a href='/system/showLanguageInfo?id={$v.language_id}'><button class="layui-btn layui-btn-sm nav-details">{$language_tag.index_public_info}</button></a> -->
+							</span></th>
+				</tr>
+				{/foreach}
+				</tbody>
+
+			</table>
+		</div>
+
+
+		<div class="listButtom">
+
+			<!--加载分页-->
+			{include file='public/page' /}
+
+		</div>
+
+    </div>
+  </div>
+  
+  <div class="layui-footer">
+    <!-- 底部固定区域 -->
+    © layui.com - 底部固定区域
+  </div>
+</div>
+{include file='public/foot_js' /}
+
+</body>
+</html>

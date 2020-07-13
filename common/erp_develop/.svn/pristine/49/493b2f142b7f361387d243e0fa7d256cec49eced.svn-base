@@ -1,0 +1,421 @@
+<?php
+
+/**
+ * 助手函数类，主要就是解决一些公用的函数所用
+ */
+
+namespace app\common\help;
+
+
+
+/**
+ * Description of Helper
+ *
+ * @author 胡
+ */
+class Help {
+    public static function http($method,$url,$data=null)
+    {
+	
+        //1初始化，创建一个新cURL资源
+
+        $ch = curl_init();
+        if($method == 'post'){
+            curl_setopt($ch, CURLOPT_POST, 1);
+            // Accept:application/json; charset=utf-8;Content-Type:application/x-www-form-urlencoded;charset=utf-8
+            curl_setopt($ch, CURLOPT_HTTPHEADER, array('Accept:application/json'));
+            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);    // https请求 不验证证书和hosts
+            curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, FALSE);
+
+            curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));//http_build_query
+
+        }
+        //2设置URL和相应的选项
+        curl_setopt($ch,CURLOPT_RETURNTRANSFER,1);
+
+        curl_setopt($ch, CURLOPT_URL, $url);
+
+        curl_setopt($ch, CURLOPT_HEADER, 0);
+
+        //3抓取URL并把它传递给浏览器
+
+        $output = curl_exec($ch);
+
+        return $output;
+        //4关闭cURL资源，并且释放系统资源
+
+        curl_close($ch);
+        exit();
+
+    }
+    
+    public static function callSoaErp($method,$function,$data=[]){
+    	$soaerp_config = config('soaerp');
+    	$soa_erp_url = $soaerp_config['ip'].':'.$soaerp_config['port'];
+    	$data['appKey'] = 'nexus';
+    	$data['appSecret']='nexusIt';
+    	
+    	$result = Help::http($method,$soa_erp_url.$function,$data);
+    	
+    	//dump($result);exit();
+    	$result = json_decode($result,true);
+    	
+    	if($result['code']==200){
+    		//$this->outPut($result['data']);
+    		$result = ['code' => '200', 'msg' => 'success','data'=>$result['data']];
+    
+    	}else{
+    		//$this->outPutError($result);
+    		$result = ['code' => '400', 'msg' => $result['msg']];
+    	}
+    	return $result;
+    }
+    
+    
+    //把URL中的参数page删除
+    public static function delUrlPage($url){
+    	$array = explode('&',$url);
+    	$new_array=[];
+		foreach($array as $key=>$v){
+			
+			if(substr($v,0,strpos($v,'='))!='page'){
+				$new_array[] = $v;
+			}
+		}
+    	return implode('&', $new_array);
+    }
+    /**
+     * 模型数据转数组
+     * @param $data
+     * @return mixed
+     */
+    public static function modelDataToArr($data){
+        return json_decode(json_encode($data),true);
+    }
+
+	
+    //curl 上传图片
+    public static function curlImages($path,$url){
+    	$curl = curl_init();
+		if (class_exists('\CURLFile')) {
+		  	curl_setopt($curl, CURLOPT_SAFE_UPLOAD, true);
+			$data = array('file' => new \CURLFile(realpath($path)));//>=5.5
+		}else{
+		  	if (defined('CURLOPT_SAFE_UPLOAD')) {
+		    	curl_setopt($curl, CURLOPT_SAFE_UPLOAD, false);
+		  	}
+		  	$data = array('file' => '@' . realpath($path));//<=5.5
+		}
+		
+		curl_setopt($curl, CURLOPT_URL, $url);
+		curl_setopt($curl, CURLOPT_POST, 1 );
+		curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
+		curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+		curl_setopt($curl, CURLOPT_USERAGENT,"TEST");
+		$result = curl_exec($curl);
+		$error = curl_error($curl);
+		return $result;
+    }
+
+    public function getFeeType(){
+    	$array = [
+    
+    			['fee_type_name'=>'应付供应商的酒店款','fee_type_type'=>101,'fee_type_code'=>1],
+    			['fee_type_name'=>'应付供应商的用餐款','fee_type_type'=>101,'fee_type_code'=>2],
+    			['fee_type_name'=>'应付供应商的航班款','fee_type_type'=>101,'fee_type_code'=>3],
+    			['fee_type_name'=>'应付供应商的邮轮款','fee_type_type'=>101,'fee_type_code'=>4],
+    			['fee_type_name'=>'应付供应商的签证款','fee_type_type'=>101,'fee_type_code'=>5],
+    			['fee_type_name'=>'应付供应商的景点款','fee_type_type'=>101,'fee_type_code'=>6],
+    			['fee_type_name'=>'应付供应商的车辆款','fee_type_type'=>101,'fee_type_code'=>7],
+    			['fee_type_name'=>'应付供应商的导游款','fee_type_type'=>101,'fee_type_code'=>8],
+    			['fee_type_name'=>'应付供应商的单项资源款','fee_type_type'=>101,'fee_type_code'=>9],
+    			['fee_type_name'=>'应付供应商的自费项目款','fee_type_type'=>101,'fee_type_code'=>10],
+    			['fee_type_name'=>'应付供应商的其他项目款','fee_type_type'=>101,'fee_type_code'=>11],
+    			['fee_type_name'=>'地接报账的应付供应商的酒店款','fee_type_type'=>102,'fee_type_code'=>12],
+    			['fee_type_name'=>'地接报账的应付供应商的用餐款','fee_type_type'=>102,'fee_type_code'=>13],
+    			['fee_type_name'=>'地接报账的应付供应商的航班款','fee_type_type'=>102,'fee_type_code'=>14],
+    			['fee_type_name'=>'地接报账的应付供应商的邮轮款','fee_type_type'=>102,'fee_type_code'=>15],
+    			['fee_type_name'=>'地接报账的应付供应商的签证款','fee_type_type'=>102,'fee_type_code'=>16],
+    			['fee_type_name'=>'地接报账的应付供应商的景点款','fee_type_type'=>102,'fee_type_code'=>17],
+    			['fee_type_name'=>'地接报账的应付供应商的车辆款','fee_type_type'=>102,'fee_type_code'=>18],
+    			['fee_type_name'=>'地接报账的应付供应商的导游款','fee_type_type'=>102,'fee_type_code'=>19],
+    			['fee_type_name'=>'地接报账的应付供应商的单项资源款','fee_type_type'=>102,'fee_type_code'=>20],
+    			['fee_type_name'=>'地接报账的应付供应商的自费项目款','fee_type_type'=>102,'fee_type_code'=>21],
+    			['fee_type_name'=>'地接报账的应付供应商的其他项目款','fee_type_type'=>102,'fee_type_code'=>22],
+    			['fee_type_name'=>'凭空添加的其他应付供应商的酒店款','fee_type_type'=>103,'fee_type_code'=>23],
+    			['fee_type_name'=>'凭空添加的其他应付供应商的用餐款','fee_type_type'=>103,'fee_type_code'=>24],
+    			['fee_type_name'=>'凭空添加的其他应付供应商的航班款','fee_type_type'=>103,'fee_type_code'=>25],
+    			['fee_type_name'=>'凭空添加的其他应付供应商的邮轮款','fee_type_type'=>103,'fee_type_code'=>26],
+    			['fee_type_name'=>'凭空添加的其他应付供应商的签证款','fee_type_type'=>103,'fee_type_code'=>27],
+    			['fee_type_name'=>'凭空添加的其他应付供应商的景点款','fee_type_type'=>103,'fee_type_code'=>28],
+    			['fee_type_name'=>'凭空添加的其他应付供应商的车辆款','fee_type_type'=>103,'fee_type_code'=>29],
+    			['fee_type_name'=>'凭空添加的其他应付供应商的导游款','fee_type_type'=>103,'fee_type_code'=>30],
+    			['fee_type_name'=>'凭空添加的其他应付供应商的单项资源款','fee_type_type'=>103,'fee_type_code'=>31],
+    			['fee_type_name'=>'凭空添加的其他应付供应商的自费项目款','fee_type_type'=>103,'fee_type_code'=>32],
+    			['fee_type_name'=>'凭空添加的其他应付供应商的其他项目款','fee_type_type'=>103,'fee_type_code'=>33],
+    			['fee_type_name'=>'应收分公司团队产品款','fee_type_type'=>201,'fee_type_code'=>34],
+    			['fee_type_name'=>'应收分公司的酒店款','fee_type_type'=>201,'fee_type_code'=>35],
+    			['fee_type_name'=>'应收分公司的用餐款','fee_type_type'=>201,'fee_type_code'=>36],
+    			['fee_type_name'=>'应收分公司的航班款','fee_type_type'=>201,'fee_type_code'=>37],
+    			['fee_type_name'=>'应收分公司的邮轮款','fee_type_type'=>201,'fee_type_code'=>38],
+    			['fee_type_name'=>'应收分公司的签证款','fee_type_type'=>201,'fee_type_code'=>39],
+    			['fee_type_name'=>'应收分公司的景点款','fee_type_type'=>201,'fee_type_code'=>40],
+    			['fee_type_name'=>'应收分公司的车辆款','fee_type_type'=>201,'fee_type_code'=>41],
+    			['fee_type_name'=>'应收分公司的导游款','fee_type_type'=>201,'fee_type_code'=>42],
+    			['fee_type_name'=>'应收分公司的单项资源款','fee_type_type'=>201,'fee_type_code'=>43],
+    			['fee_type_name'=>'应收分公司的自费项目款','fee_type_type'=>201,'fee_type_code'=>44],
+    			['fee_type_name'=>'应收分公司的其他项目款','fee_type_type'=>201,'fee_type_code'=>45],
+    			['fee_type_name'=>'地接报账的应收分公司团队产品款','fee_type_type'=>202,'fee_type_code'=>46],
+    			['fee_type_name'=>'地接报账的应收分公司的酒店款','fee_type_type'=>202,'fee_type_code'=>47],
+    			['fee_type_name'=>'地接报账的应收分公司的用餐款','fee_type_type'=>202,'fee_type_code'=>48],
+    			['fee_type_name'=>'地接报账的应收分公司的航班款','fee_type_type'=>202,'fee_type_code'=>49],
+    			['fee_type_name'=>'地接报账的应收分公司的邮轮款','fee_type_type'=>202,'fee_type_code'=>50],
+    			['fee_type_name'=>'地接报账的应收分公司的签证款','fee_type_type'=>202,'fee_type_code'=>51],
+    			['fee_type_name'=>'地接报账的应收分公司的景点款','fee_type_type'=>202,'fee_type_code'=>52],
+    			['fee_type_name'=>'地接报账的应收分公司的车辆款','fee_type_type'=>202,'fee_type_code'=>53],
+    			['fee_type_name'=>'地接报账的应收分公司的导游款','fee_type_type'=>202,'fee_type_code'=>54],
+    			['fee_type_name'=>'地接报账的应收分公司的单项资源款','fee_type_type'=>202,'fee_type_code'=>55],
+    			['fee_type_name'=>'地接报账的应收分公司的自费项目款','fee_type_type'=>202,'fee_type_code'=>56],
+    			['fee_type_name'=>'地接报账的应收分公司的其他项目款','fee_type_type'=>202,'fee_type_code'=>57],
+    			['fee_type_name'=>'凭空添加的其他应收分公司团队产品款','fee_type_type'=>203,'fee_type_code'=>58],
+    			['fee_type_name'=>'凭空添加的其他应收分公司的酒店款','fee_type_type'=>203,'fee_type_code'=>59],
+    			['fee_type_name'=>'凭空添加的其他应收分公司的用餐款','fee_type_type'=>203,'fee_type_code'=>60],
+    			['fee_type_name'=>'凭空添加的其他应收分公司的航班款','fee_type_type'=>203,'fee_type_code'=>61],
+    			['fee_type_name'=>'凭空添加的其他应收分公司的邮轮款','fee_type_type'=>203,'fee_type_code'=>62],
+    			['fee_type_name'=>'凭空添加的其他应收分公司的签证款','fee_type_type'=>203,'fee_type_code'=>63],
+    			['fee_type_name'=>'凭空添加的其他应收分公司的景点款','fee_type_type'=>203,'fee_type_code'=>64],
+    			['fee_type_name'=>'凭空添加的其他应收分公司的车辆款','fee_type_type'=>203,'fee_type_code'=>65],
+    			['fee_type_name'=>'凭空添加的其他应收分公司的导游款','fee_type_type'=>203,'fee_type_code'=>66],
+    			['fee_type_name'=>'凭空添加的其他应收分公司的单项资源款','fee_type_type'=>203,'fee_type_code'=>67],
+    			['fee_type_name'=>'凭空添加的其他应收分公司的自费项目款','fee_type_type'=>203,'fee_type_code'=>68],
+    			['fee_type_name'=>'凭空添加的其他应收分公司的其他项目款','fee_type_type'=>203,'fee_type_code'=>69],
+    			['fee_type_name'=>'应付发布公司团队产品款','fee_type_type'=>104,'fee_type_code'=>70],
+    			['fee_type_name'=>'应付供应商的酒店款','fee_type_type'=>104,'fee_type_code'=>71],
+    			['fee_type_name'=>'应付供应商的用餐款','fee_type_type'=>104,'fee_type_code'=>72],
+    			['fee_type_name'=>'应付供应商的航班款','fee_type_type'=>104,'fee_type_code'=>73],
+    			['fee_type_name'=>'应付供应商的邮轮款','fee_type_type'=>104,'fee_type_code'=>74],
+    			['fee_type_name'=>'应付供应商的签证款','fee_type_type'=>104,'fee_type_code'=>75],
+    			['fee_type_name'=>'应付供应商的景点款','fee_type_type'=>104,'fee_type_code'=>76],
+    			['fee_type_name'=>'应付供应商的车辆款','fee_type_type'=>104,'fee_type_code'=>77],
+    			['fee_type_name'=>'应付供应商的导游款','fee_type_type'=>104,'fee_type_code'=>78],
+    			['fee_type_name'=>'应付供应商的单项资源款','fee_type_type'=>104,'fee_type_code'=>79],
+    			['fee_type_name'=>'应付供应商的自费项目款','fee_type_type'=>104,'fee_type_code'=>80],
+    			['fee_type_name'=>'应付供应商的其他项目款','fee_type_type'=>104,'fee_type_code'=>81],
+    			['fee_type_name'=>'应收代理分公司产品款','fee_type_type'=>204,'fee_type_code'=>82],
+    			['fee_type_name'=>'应收代理的自费项目款','fee_type_type'=>204,'fee_type_code'=>83],
+    			['fee_type_name'=>'应收直客分公司产品款','fee_type_type'=>204,'fee_type_code'=>84],
+    			['fee_type_name'=>'应收直客的自费项目款','fee_type_type'=>204,'fee_type_code'=>85],
+    			['fee_type_name'=>'销售代收的实收代理分公司产品款','fee_type_type'=>601,'fee_type_code'=>86],
+    			['fee_type_name'=>'销售代收的实收代理的自费项目款','fee_type_type'=>601,'fee_type_code'=>87],
+    			['fee_type_name'=>'销售代收的实收直客分公司产品款','fee_type_type'=>601,'fee_type_code'=>88],
+    			['fee_type_name'=>'销售代收的实收直客的自费项目款','fee_type_type'=>601,'fee_type_code'=>89],
+    			['fee_type_name'=>'地接报账的应付供应商的酒店款','fee_type_type'=>105,'fee_type_code'=>90],
+    			['fee_type_name'=>'地接报账的应付供应商的用餐款','fee_type_type'=>105,'fee_type_code'=>91],
+    			['fee_type_name'=>'地接报账的应付供应商的航班款','fee_type_type'=>105,'fee_type_code'=>92],
+    			['fee_type_name'=>'地接报账的应付供应商的邮轮款','fee_type_type'=>105,'fee_type_code'=>93],
+    			['fee_type_name'=>'地接报账的应付供应商的签证款','fee_type_type'=>105,'fee_type_code'=>94],
+    			['fee_type_name'=>'地接报账的应付供应商的景点款','fee_type_type'=>105,'fee_type_code'=>95],
+    			['fee_type_name'=>'地接报账的应付供应商的车辆款','fee_type_type'=>105,'fee_type_code'=>96],
+    			['fee_type_name'=>'地接报账的应付供应商的导游款','fee_type_type'=>105,'fee_type_code'=>97],
+    			['fee_type_name'=>'地接报账的应付供应商的单项资源款','fee_type_type'=>105,'fee_type_code'=>98],
+    			['fee_type_name'=>'地接报账的应付供应商的自费项目款','fee_type_type'=>105,'fee_type_code'=>99],
+    			['fee_type_name'=>'地接报账的应付供应商的其他项目款','fee_type_type'=>105,'fee_type_code'=>100],
+    			['fee_type_name'=>'地接报账的应收分公司团队产品款','fee_type_type'=>205,'fee_type_code'=>101],
+    			['fee_type_name'=>'地接报账的应收分公司的酒店款','fee_type_type'=>205,'fee_type_code'=>102],
+    			['fee_type_name'=>'地接报账的应收分公司的用餐款','fee_type_type'=>205,'fee_type_code'=>103],
+    			['fee_type_name'=>'地接报账的应收分公司的航班款','fee_type_type'=>205,'fee_type_code'=>104],
+    			['fee_type_name'=>'地接报账的应收分公司的邮轮款','fee_type_type'=>205,'fee_type_code'=>105],
+    			['fee_type_name'=>'地接报账的应收分公司的签证款','fee_type_type'=>205,'fee_type_code'=>106],
+    			['fee_type_name'=>'地接报账的应收分公司的景点款','fee_type_type'=>205,'fee_type_code'=>107],
+    			['fee_type_name'=>'地接报账的应收分公司的车辆款','fee_type_type'=>205,'fee_type_code'=>108],
+    			['fee_type_name'=>'地接报账的应收分公司的导游款','fee_type_type'=>205,'fee_type_code'=>109],
+    			['fee_type_name'=>'地接报账的应收分公司的单项资源款','fee_type_type'=>205,'fee_type_code'=>110],
+    			['fee_type_name'=>'地接报账的应收分公司的自费项目款','fee_type_type'=>205,'fee_type_code'=>111],
+    			['fee_type_name'=>'地接报账的应收分公司的其他项目款','fee_type_type'=>205,'fee_type_code'=>112],
+    			['fee_type_name'=>'财务实收分公司团队产品款','fee_type_type'=>602,'fee_type_code'=>113],
+    			['fee_type_name'=>'财务实收分公司的酒店款','fee_type_type'=>602,'fee_type_code'=>114],
+    			['fee_type_name'=>'财务实收分公司的用餐款','fee_type_type'=>602,'fee_type_code'=>115],
+    			['fee_type_name'=>'财务实收分公司的航班款','fee_type_type'=>602,'fee_type_code'=>116],
+    			['fee_type_name'=>'财务实收分公司的邮轮款','fee_type_type'=>602,'fee_type_code'=>117],
+    			['fee_type_name'=>'财务实收分公司的签证款','fee_type_type'=>602,'fee_type_code'=>118],
+    			['fee_type_name'=>'财务实收分公司的景点款','fee_type_type'=>602,'fee_type_code'=>119],
+    			['fee_type_name'=>'财务实收分公司的车辆款','fee_type_type'=>602,'fee_type_code'=>120],
+    			['fee_type_name'=>'财务实收分公司的导游款','fee_type_type'=>602,'fee_type_code'=>121],
+    			['fee_type_name'=>'财务实收分公司的单项资源款','fee_type_type'=>602,'fee_type_code'=>122],
+    			['fee_type_name'=>'财务实收分公司的自费项目款','fee_type_type'=>602,'fee_type_code'=>123],
+    			['fee_type_name'=>'财务实收分公司的其他项目款','fee_type_type'=>602,'fee_type_code'=>124],
+    			['fee_type_name'=>'财务实收地接报账的收分公司团队产品款','fee_type_type'=>603,'fee_type_code'=>125],
+    			['fee_type_name'=>'财务实收地接报账的应收分公司的酒店款','fee_type_type'=>603,'fee_type_code'=>126],
+    			['fee_type_name'=>'财务实收地接报账的应收分公司的用餐款','fee_type_type'=>603,'fee_type_code'=>127],
+    			['fee_type_name'=>'财务实收地接报账的应收分公司的航班款','fee_type_type'=>603,'fee_type_code'=>128],
+    			['fee_type_name'=>'财务实收地接报账的应收分公司的邮轮款','fee_type_type'=>603,'fee_type_code'=>129],
+    			['fee_type_name'=>'财务实收地接报账的应收分公司的签证款','fee_type_type'=>603,'fee_type_code'=>130],
+    			['fee_type_name'=>'财务实收地接报账的应收分公司的景点款','fee_type_type'=>603,'fee_type_code'=>131],
+    			['fee_type_name'=>'财务实收地接报账的应收分公司的车辆款','fee_type_type'=>603,'fee_type_code'=>132],
+    			['fee_type_name'=>'财务实收地接报账的应收分公司的导游款','fee_type_type'=>603,'fee_type_code'=>133],
+    			['fee_type_name'=>'财务实收地接报账的应收分公司的单项资源款','fee_type_type'=>603,'fee_type_code'=>134],
+    			['fee_type_name'=>'财务实收地接报账的应收分公司的自费项目款','fee_type_type'=>603,'fee_type_code'=>135],
+    			['fee_type_name'=>'财务实收地接报账的应收分公司的其他项目款','fee_type_type'=>603,'fee_type_code'=>136],
+    			['fee_type_name'=>'财务实收凭空添加的其他应收分公司团队产品款','fee_type_type'=>604,'fee_type_code'=>137],
+    			['fee_type_name'=>'财务实收凭空添加的其他应收分公司的酒店款','fee_type_type'=>604,'fee_type_code'=>138],
+    			['fee_type_name'=>'财务实收凭空添加的其他应收分公司的用餐款','fee_type_type'=>604,'fee_type_code'=>139],
+    			['fee_type_name'=>'财务实收凭空添加的其他应收分公司的航班款','fee_type_type'=>604,'fee_type_code'=>140],
+    			['fee_type_name'=>'财务实收凭空添加的其他应收分公司的邮轮款','fee_type_type'=>604,'fee_type_code'=>141],
+    			['fee_type_name'=>'财务实收凭空添加的其他应收分公司的签证款','fee_type_type'=>604,'fee_type_code'=>142],
+    			['fee_type_name'=>'财务实收凭空添加的其他应收分公司的景点款','fee_type_type'=>604,'fee_type_code'=>143],
+    			['fee_type_name'=>'财务实收凭空添加的其他应收分公司的车辆款','fee_type_type'=>604,'fee_type_code'=>144],
+    			['fee_type_name'=>'财务实收凭空添加的其他应收分公司的导游款','fee_type_type'=>604,'fee_type_code'=>145],
+    			['fee_type_name'=>'财务实收凭空添加的其他应收分公司的单项资源款','fee_type_type'=>604,'fee_type_code'=>146],
+    			['fee_type_name'=>'财务实收凭空添加的其他应收分公司的自费项目款','fee_type_type'=>604,'fee_type_code'=>147],
+    			['fee_type_name'=>'财务实收凭空添加的其他应收分公司的其他项目款','fee_type_type'=>604,'fee_type_code'=>148],
+    			['fee_type_name'=>'财务实收代理分公司产品款','fee_type_type'=>605,'fee_type_code'=>149],
+    			['fee_type_name'=>'财务实收代理的自费项目款','fee_type_type'=>605,'fee_type_code'=>150],
+    			['fee_type_name'=>'财务实收直客分公司产品款','fee_type_type'=>605,'fee_type_code'=>151],
+    			['fee_type_name'=>'财务实收直客的自费项目款','fee_type_type'=>605,'fee_type_code'=>152],
+    			['fee_type_name'=>'财务创建应收团队产品款','fee_type_type'=>206,'fee_type_code'=>153],
+    			['fee_type_name'=>'财务创建应收酒店款','fee_type_type'=>206,'fee_type_code'=>154],
+    			['fee_type_name'=>'财务创建应收用餐款','fee_type_type'=>206,'fee_type_code'=>155],
+    			['fee_type_name'=>'财务创建应收航班款','fee_type_type'=>206,'fee_type_code'=>156],
+    			['fee_type_name'=>'财务创建应收邮轮款','fee_type_type'=>206,'fee_type_code'=>157],
+    			['fee_type_name'=>'财务创建应收签证款','fee_type_type'=>206,'fee_type_code'=>158],
+    			['fee_type_name'=>'财务创建应收景点款','fee_type_type'=>206,'fee_type_code'=>159],
+    			['fee_type_name'=>'财务创建应收车辆款','fee_type_type'=>206,'fee_type_code'=>160],
+    			['fee_type_name'=>'财务创建应收导游款','fee_type_type'=>206,'fee_type_code'=>161],
+    			['fee_type_name'=>'财务创建应收单项资源款','fee_type_type'=>206,'fee_type_code'=>162],
+    			['fee_type_name'=>'财务创建应收自费项目款','fee_type_type'=>206,'fee_type_code'=>163],
+    			['fee_type_name'=>'财务创建应收其他项目款','fee_type_type'=>206,'fee_type_code'=>164],
+    			['fee_type_name'=>'创建应付对应的应收团队产品款','fee_type_type'=>106,'fee_type_code'=>165],
+    			['fee_type_name'=>'创建应付对应的应收酒店款','fee_type_type'=>106,'fee_type_code'=>166],
+    			['fee_type_name'=>'创建应付对应的应收用餐款','fee_type_type'=>106,'fee_type_code'=>167],
+    			['fee_type_name'=>'创建应付对应的应收航班款','fee_type_type'=>106,'fee_type_code'=>168],
+    			['fee_type_name'=>'创建应付对应的应收邮轮款','fee_type_type'=>106,'fee_type_code'=>169],
+    			['fee_type_name'=>'创建应付对应的应收签证款','fee_type_type'=>106,'fee_type_code'=>170],
+    			['fee_type_name'=>'创建应付对应的应收景点款','fee_type_type'=>106,'fee_type_code'=>171],
+    			['fee_type_name'=>'创建应付对应的应收车辆款','fee_type_type'=>106,'fee_type_code'=>172],
+    			['fee_type_name'=>'创建应付对应的应收导游款','fee_type_type'=>106,'fee_type_code'=>173],
+    			['fee_type_name'=>'创建应付对应的应收单项资源款','fee_type_type'=>106,'fee_type_code'=>174],
+    			['fee_type_name'=>'创建应付对应的应收自费项目款','fee_type_type'=>106,'fee_type_code'=>175],
+    			['fee_type_name'=>'创建应付对应的应收其他项目款','fee_type_type'=>106,'fee_type_code'=>176],
+    			['fee_type_name'=>'财务创建实收团队产品款','fee_type_type'=>606,'fee_type_code'=>177],
+    			['fee_type_name'=>'财务创建实收酒店款','fee_type_type'=>606,'fee_type_code'=>178],
+    			['fee_type_name'=>'财务创建实收用餐款','fee_type_type'=>606,'fee_type_code'=>179],
+    			['fee_type_name'=>'财务创建实收航班款','fee_type_type'=>606,'fee_type_code'=>180],
+    			['fee_type_name'=>'财务创建实收邮轮款','fee_type_type'=>606,'fee_type_code'=>181],
+    			['fee_type_name'=>'财务创建实收签证款','fee_type_type'=>606,'fee_type_code'=>182],
+    			['fee_type_name'=>'财务创建实收景点款','fee_type_type'=>606,'fee_type_code'=>183],
+    			['fee_type_name'=>'财务创建实收车辆款','fee_type_type'=>606,'fee_type_code'=>184],
+    			['fee_type_name'=>'财务创建实收导游款','fee_type_type'=>606,'fee_type_code'=>185],
+    			['fee_type_name'=>'财务创建实收单项资源款','fee_type_type'=>606,'fee_type_code'=>186],
+    			['fee_type_name'=>'财务创建实收自费项目款','fee_type_type'=>606,'fee_type_code'=>187],
+    			['fee_type_name'=>'财务创建实收其他项目款','fee_type_type'=>606,'fee_type_code'=>188],
+    			['fee_type_name'=>'创建应付对应的应收团队产品款的实付款','fee_type_type'=>107,'fee_type_code'=>189],
+    			['fee_type_name'=>'创建应付对应的应收酒店款的实付款','fee_type_type'=>107,'fee_type_code'=>190],
+    			['fee_type_name'=>'创建应付对应的应收用餐款的实付款','fee_type_type'=>107,'fee_type_code'=>191],
+    			['fee_type_name'=>'创建应付对应的应收航班款的实付款','fee_type_type'=>107,'fee_type_code'=>192],
+    			['fee_type_name'=>'创建应付对应的应收邮轮款的实付款','fee_type_type'=>107,'fee_type_code'=>193],
+    			['fee_type_name'=>'创建应付对应的应收签证款的实付款','fee_type_type'=>107,'fee_type_code'=>194],
+    			['fee_type_name'=>'创建应付对应的应收景点款的实付款','fee_type_type'=>107,'fee_type_code'=>195],
+    			['fee_type_name'=>'创建应付对应的应收车辆款的实付款','fee_type_type'=>107,'fee_type_code'=>196],
+    			['fee_type_name'=>'创建应付对应的应收导游款的实付款','fee_type_type'=>107,'fee_type_code'=>197],
+    			['fee_type_name'=>'创建应付对应的应收单项资源款的实付款','fee_type_type'=>107,'fee_type_code'=>198],
+    			['fee_type_name'=>'创建应付对应的应收自费项目款的实付款','fee_type_type'=>107,'fee_type_code'=>199],
+    			['fee_type_name'=>'创建应付对应的应收其他项目款的实付款','fee_type_type'=>107,'fee_type_code'=>200],
+    			['fee_type_name'=>'财务实付分公司团队产品款','fee_type_type'=>501,'fee_type_code'=>201],
+    			['fee_type_name'=>'财务实付分公司的酒店款','fee_type_type'=>501,'fee_type_code'=>202],
+    			['fee_type_name'=>'财务实付分公司的用餐款','fee_type_type'=>501,'fee_type_code'=>203],
+    			['fee_type_name'=>'财务实付分公司的航班款','fee_type_type'=>501,'fee_type_code'=>204],
+    			['fee_type_name'=>'财务实付分公司的邮轮款','fee_type_type'=>501,'fee_type_code'=>205],
+    			['fee_type_name'=>'财务实付分公司的签证款','fee_type_type'=>501,'fee_type_code'=>206],
+    			['fee_type_name'=>'财务实付分公司的景点款','fee_type_type'=>501,'fee_type_code'=>207],
+    			['fee_type_name'=>'财务实付分公司的车辆款','fee_type_type'=>501,'fee_type_code'=>208],
+    			['fee_type_name'=>'财务实付分公司的导游款','fee_type_type'=>501,'fee_type_code'=>209],
+    			['fee_type_name'=>'财务实付分公司的单项资源款','fee_type_type'=>501,'fee_type_code'=>210],
+    			['fee_type_name'=>'财务实付分公司的自费项目款','fee_type_type'=>501,'fee_type_code'=>211],
+    			['fee_type_name'=>'财务实付分公司的其他项目款','fee_type_type'=>501,'fee_type_code'=>212],
+    			['fee_type_name'=>'财务实付地接报账的收分公司团队产品款','fee_type_type'=>502,'fee_type_code'=>213],
+    			['fee_type_name'=>'财务实付地接报账的应收分公司的酒店款','fee_type_type'=>502,'fee_type_code'=>214],
+    			['fee_type_name'=>'财务实付地接报账的应收分公司的用餐款','fee_type_type'=>502,'fee_type_code'=>215],
+    			['fee_type_name'=>'财务实付地接报账的应收分公司的航班款','fee_type_type'=>502,'fee_type_code'=>216],
+    			['fee_type_name'=>'财务实付地接报账的应收分公司的邮轮款','fee_type_type'=>502,'fee_type_code'=>217],
+    			['fee_type_name'=>'财务实付地接报账的应收分公司的签证款','fee_type_type'=>502,'fee_type_code'=>218],
+    			['fee_type_name'=>'财务实付地接报账的应收分公司的景点款','fee_type_type'=>502,'fee_type_code'=>219],
+    			['fee_type_name'=>'财务实付地接报账的应收分公司的车辆款','fee_type_type'=>502,'fee_type_code'=>220],
+    			['fee_type_name'=>'财务实付地接报账的应收分公司的导游款','fee_type_type'=>502,'fee_type_code'=>221],
+    			['fee_type_name'=>'财务实付地接报账的应收分公司的单项资源款','fee_type_type'=>502,'fee_type_code'=>222],
+    			['fee_type_name'=>'财务实付地接报账的应收分公司的自费项目款','fee_type_type'=>502,'fee_type_code'=>223],
+    			['fee_type_name'=>'财务实付地接报账的应收分公司的其他项目款','fee_type_type'=>502,'fee_type_code'=>224],
+    			['fee_type_name'=>'财务实付凭空添加的其他应收分公司团队产品款','fee_type_type'=>503,'fee_type_code'=>225],
+    			['fee_type_name'=>'财务实付凭空添加的其他应收分公司的酒店款','fee_type_type'=>503,'fee_type_code'=>226],
+    			['fee_type_name'=>'财务实付凭空添加的其他应收分公司的用餐款','fee_type_type'=>503,'fee_type_code'=>227],
+    			['fee_type_name'=>'财务实付凭空添加的其他应收分公司的航班款','fee_type_type'=>503,'fee_type_code'=>228],
+    			['fee_type_name'=>'财务实付凭空添加的其他应收分公司的邮轮款','fee_type_type'=>503,'fee_type_code'=>229],
+    			['fee_type_name'=>'财务实付凭空添加的其他应收分公司的签证款','fee_type_type'=>503,'fee_type_code'=>230],
+    			['fee_type_name'=>'财务实付凭空添加的其他应收分公司的景点款','fee_type_type'=>503,'fee_type_code'=>231],
+    			['fee_type_name'=>'财务实付凭空添加的其他应收分公司的车辆款','fee_type_type'=>503,'fee_type_code'=>232],
+    			['fee_type_name'=>'财务实付凭空添加的其他应收分公司的导游款','fee_type_type'=>503,'fee_type_code'=>233],
+    			['fee_type_name'=>'财务实付凭空添加的其他应收分公司的单项资源款','fee_type_type'=>503,'fee_type_code'=>234],
+    			['fee_type_name'=>'财务实付凭空添加的其他应收分公司的自费项目款','fee_type_type'=>503,'fee_type_code'=>235],
+    			['fee_type_name'=>'财务实付凭空添加的其他应收分公司的其他项目款','fee_type_type'=>503,'fee_type_code'=>236],
+    			['fee_type_name'=>'财务实付代理分公司产品款','fee_type_type'=>504,'fee_type_code'=>237],
+    			['fee_type_name'=>'财务实付代理的自费项目款','fee_type_type'=>504,'fee_type_code'=>238],
+    			['fee_type_name'=>'财务实付直客分公司产品款','fee_type_type'=>504,'fee_type_code'=>239],
+    			['fee_type_name'=>'财务实付直客的自费项目款','fee_type_type'=>504,'fee_type_code'=>240],
+    			['fee_type_name'=>'财务创建应付团队产品款','fee_type_type'=>108,'fee_type_code'=>241],
+    			['fee_type_name'=>'财务创建应付酒店款','fee_type_type'=>108,'fee_type_code'=>242],
+    			['fee_type_name'=>'财务创建应付用餐款','fee_type_type'=>108,'fee_type_code'=>243],
+    			['fee_type_name'=>'财务创建应付航班款','fee_type_type'=>108,'fee_type_code'=>244],
+    			['fee_type_name'=>'财务创建应付邮轮款','fee_type_type'=>108,'fee_type_code'=>245],
+    			['fee_type_name'=>'财务创建应付签证款','fee_type_type'=>108,'fee_type_code'=>246],
+    			['fee_type_name'=>'财务创建应付景点款','fee_type_type'=>108,'fee_type_code'=>247],
+    			['fee_type_name'=>'财务创建应付车辆款','fee_type_type'=>108,'fee_type_code'=>248],
+    			['fee_type_name'=>'财务创建应付导游款','fee_type_type'=>108,'fee_type_code'=>249],
+    			['fee_type_name'=>'财务创建应付单项资源款','fee_type_type'=>108,'fee_type_code'=>250],
+    			['fee_type_name'=>'财务创建应付自费项目款','fee_type_type'=>108,'fee_type_code'=>251],
+    			['fee_type_name'=>'财务创建应付其他项目款','fee_type_type'=>108,'fee_type_code'=>252],
+    			['fee_type_name'=>'创建应收对应的应付团队产品款','fee_type_type'=>207,'fee_type_code'=>253],
+    			['fee_type_name'=>'创建应收对应的应付酒店款','fee_type_type'=>207,'fee_type_code'=>254],
+    			['fee_type_name'=>'创建应收对应的应付用餐款','fee_type_type'=>207,'fee_type_code'=>255],
+    			['fee_type_name'=>'创建应收对应的应付航班款','fee_type_type'=>207,'fee_type_code'=>256],
+    			['fee_type_name'=>'创建应收对应的应付邮轮款','fee_type_type'=>207,'fee_type_code'=>257],
+    			['fee_type_name'=>'创建应收对应的应付签证款','fee_type_type'=>207,'fee_type_code'=>258],
+    			['fee_type_name'=>'创建应收对应的应付景点款','fee_type_type'=>207,'fee_type_code'=>259],
+    			['fee_type_name'=>'创建应收对应的应付车辆款','fee_type_type'=>207,'fee_type_code'=>260],
+    			['fee_type_name'=>'创建应收对应的应付导游款','fee_type_type'=>207,'fee_type_code'=>261],
+    			['fee_type_name'=>'创建应收对应的应付单项资源款','fee_type_type'=>207,'fee_type_code'=>262],
+    			['fee_type_name'=>'创建应收对应的应付自费项目款','fee_type_type'=>207,'fee_type_code'=>263],
+    			['fee_type_name'=>'创建应收对应的应付其他项目款','fee_type_type'=>207,'fee_type_code'=>264],
+    			['fee_type_name'=>'财务创建实付团队产品款','fee_type_type'=>505,'fee_type_code'=>265],
+    			['fee_type_name'=>'财务创建实付酒店款','fee_type_type'=>505,'fee_type_code'=>266],
+    			['fee_type_name'=>'财务创建实付用餐款','fee_type_type'=>505,'fee_type_code'=>267],
+    			['fee_type_name'=>'财务创建实付航班款','fee_type_type'=>505,'fee_type_code'=>268],
+    			['fee_type_name'=>'财务创建实付邮轮款','fee_type_type'=>505,'fee_type_code'=>269],
+    			['fee_type_name'=>'财务创建实付签证款','fee_type_type'=>505,'fee_type_code'=>270],
+    			['fee_type_name'=>'财务创建实付景点款','fee_type_type'=>505,'fee_type_code'=>271],
+    			['fee_type_name'=>'财务创建实付车辆款','fee_type_type'=>505,'fee_type_code'=>272],
+    			['fee_type_name'=>'财务创建实付导游款','fee_type_type'=>505,'fee_type_code'=>273],
+    			['fee_type_name'=>'财务创建实付单项资源款','fee_type_type'=>505,'fee_type_code'=>274],
+    			['fee_type_name'=>'财务创建实付自费项目款','fee_type_type'=>505,'fee_type_code'=>275],
+    			['fee_type_name'=>'财务创建实付其他项目款','fee_type_type'=>505,'fee_type_code'=>276],
+    			['fee_type_name'=>'创建应收对应的应付团队产品款的实付款','fee_type_type'=>506,'fee_type_code'=>277],
+    			['fee_type_name'=>'创建应收对应的应付酒店款的实付款','fee_type_type'=>506,'fee_type_code'=>278],
+    			['fee_type_name'=>'创建应收对应的应付用餐款的实付款','fee_type_type'=>506,'fee_type_code'=>279],
+    			['fee_type_name'=>'创建应收对应的应付航班款的实付款','fee_type_type'=>506,'fee_type_code'=>280],
+    			['fee_type_name'=>'创建应收对应的应付邮轮款的实付款','fee_type_type'=>506,'fee_type_code'=>281],
+    			['fee_type_name'=>'创建应收对应的应付签证款的实付款','fee_type_type'=>506,'fee_type_code'=>282],
+    			['fee_type_name'=>'创建应收对应的应付景点款的实付款','fee_type_type'=>506,'fee_type_code'=>283],
+    			['fee_type_name'=>'创建应收对应的应付车辆款的实付款','fee_type_type'=>506,'fee_type_code'=>284],
+    			['fee_type_name'=>'创建应收对应的应付导游款的实付款','fee_type_type'=>506,'fee_type_code'=>285],
+    			['fee_type_name'=>'创建应收对应的应付单项资源款的实付款','fee_type_type'=>506,'fee_type_code'=>286],
+    			['fee_type_name'=>'创建应收对应的应付自费项目款的实付款','fee_type_type'=>506,'fee_type_code'=>287],
+    			['fee_type_name'=>'创建应收对应的应付其他项目款的实付款','fee_type_type'=>506,'fee_type_code'=>288],
+    
+    
+    
+    	];
+    
+    
+    
+    
+    
+    }
+}

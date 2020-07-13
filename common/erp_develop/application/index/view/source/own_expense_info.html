@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {include file='public/head' /}
+    <title>language-manage-add</title>
+
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+
+    <div class="layui-header">
+        {include file='public/header' /}
+    </div>
+
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll">
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            {include file='public/left_menu' /}
+        </div>
+    </div>
+
+    <div class="layui-body">
+
+        <!-- 内容主体区域 -->
+        <div style="padding: 15px;">
+            <div class='layui-form-item'>
+		   		<span class="layui-breadcrumb" lay-separator="-">
+                   <a>{$language_tag.index_public_homepage}</a>
+                    <a>{$language_tag.index_source_showOwnExpenseManage_source_administrate}</a>
+                    <a>{$language_tag.index_source_showOwnExpenseManage_own_expense_administrate}</a>
+                    <a>{$language_tag.index_source_showOwnExpenseSource_all_own_expense}</a>
+					<a><cite>{$language_tag.index_source_showOwnExpenseSource_info_own_expense}</cite></a>
+				</span>
+            </div>
+            <br/>
+            <br/>
+            <form class="layui-form all-detail">
+                <div class="layui-row layui-col-space10">
+                    <div class="layui-col-md4">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">{$language_tag.index_public_supplier}:</label>
+                            <div class="layui-input-block">
+                                {$MultilingualAll['supplier-supplier_name-'.$own_expense_result.supplier_id.'-'.$Think.session.user.language_id][0]['translate']|default=$own_expense_result.supplier_name}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-row layui-col-space10">
+                    <div class="layui-col-md4">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">{$language_tag.index_public_status}:</label>
+                            <div class="layui-input-block all-select">
+                                <select name="status" id="edit_single_source_status" disabled lay-filter="required" >
+                                    <option> </option>
+                                    <option value="1" {if condition="1 eq $own_expense_result['status']"}selected="seleted"{/if}>{$language_tag.index_public_show}</option>
+                                    <option value="2" {if condition="2 eq $own_expense_result['status']"}selected="seleted"{/if}>{$language_tag.index_public_disabled}</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-row layui-col-space10">
+                    <div class="layui-col-md4">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">{$language_tag.index_public_company}:</label>
+                            <div class="layui-input-block">
+                                {$MultilingualAll['company-company_name-'.$own_expense_result.company_id.'-'.$Think.session.user.language_id][0]['translate']|default=$own_expense_result.company_name}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-row layui-col-space10">
+                    <div class="layui-col-md4">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">{$language_tag.index_source_showOwnExpenseSource_own_expense_name}:</label>
+                            <div class="layui-input-block">
+                                {$own_expense_result.own_expense_name}
+                                <!--<i class="iconfont icon-fanyifuwu"-->
+                                   <!--onclick="MultilingualSetting('edit_own_expense_name','own_expense','own_expense_name',{$_GET['own_expense_id']})"></i>-->
+                                <i class="iconfont icon-fanyifuwu"
+                                   style="position: absolute;width: 38px;height: 38px;top: 0px;right: 200px;font-size:
+                                   30px;cursor:pointer;"
+                                   onclick="MultilingualSetting('edit_own_expense_name','own_expense','own_expense_name',{$_GET['own_expense_id']})"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-row layui-col-space10">
+                    <div class="layui-col-md4">
+                        <label class="layui-form-label">{$language_tag.index_source_showOwnExpenseSource_payment_currency_type}:</label>
+                        <div class="layui-input-block all-select">
+                            <select name="payment_currency_type" id="payment_currency_type" lay-verify="required" disabled>
+                                <option> </option>
+                                {foreach name='currency_data_result '  item='vo'}
+                                <option  value="{$vo.currency_id}" {if condition="$vo.currency_id eq $own_expense_result.payment_currency_type"} selected="seleted"{/if}>{$MultilingualAll['currency-currency_name-'.$vo.currency_id.'-'.$Think.session.user.language_id][0]['translate']|default=$vo.currency_name}</option>
+                                {/foreach}
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-row layui-col-space10">
+                    <div class="layui-col-md4">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">{$language_tag.index_public_price}:</label>
+                            <div class="layui-input-block">
+                                <table class="layui-table">
+                                    <colgroup>
+                                        <col width="20%">
+                                        <col width="20%">
+                                        <col width="25%">
+                                        <!--<col width="20%">-->
+                                    </colgroup>
+                                    <thead>
+                                    <tr>
+                                        <th>{$language_tag.index_public_type_price}</th>
+                                        <th>{$language_tag.index_public_costprice}</th>
+                                        <th>{$language_tag.index_public_settlementprice}</th>
+                                        <!--<th>建议客户售价</th>-->
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr>
+                                        <td>{$language_tag.index_public_count_price}:</td>
+                                        <td class="all-select">
+                                            <input type="text" name="normal_price" id="edit_own_expense_normal_price" value="{$own_expense_result.normal_price}" disabled lay-verify="required" autocomplete="off" class="layui-input">
+                                        </td>
+                                        <td class="all-select">
+                                            <input type="text" name="normal_settlement_price" id="own_expense_normal_settlement_price" value="{$own_expense_result.normal_settlement_price}" disabled lay-verify="required" autocomplete="off" class="layui-input">
+                                        </td>
+                                        <!--<td>-->
+                                        <!--<input type="text" name="normal_retail_price" id="flight_normal_retail_price" lay-verify="required" autocomplete="off" class="layui-input">-->
+                                        <!--</td>-->
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <br/>
+                <br/>
+                <br/>
+                <!--<div class="layui-form-item layui-form-text">-->
+                    <!--<label class="layui-form-label">说明:</label>-->
+                    <!--<div class="layui-input-block">-->
+                        <!--<textarea id="edit_own_expense_remark" name="remark" placeholder="请输入内容" disabled class="layui-textarea">{$own_expense_result.remark}</textarea>-->
+                    <!--</div>-->
+                <!--</div>-->
+                    <div class="layui-form-item">
+                        <div class="layui-input-block">
+                            <a href='javascript:history.back(-1)'><button type="button" class="layui-btn layui-btn-primary">{$language_tag.index_public_back}</button></a>
+                            <input type="hidden" id="own_expense_hidden_own_expense_id" value="{$own_expense_result.own_expense_id}">
+                        </div>
+                    </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="layui-footer">
+        <!-- 底部固定区域 -->
+        © layui.com - 底部固定区域
+    </div>
+</div>
+{include file='public/foot_js' /}
+<script src='__STATIC__/javascript/system/source.js'></script>
+</body>
+</html>

@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {include file='public/head' /}
+    <title>客户订单</title>
+
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+    <div class="layui-header">
+        {include file='public/header' /}
+    </div>
+
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll">
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            {include file='public/left_menu' /}
+        </div>
+    </div>
+
+    <div class="layui-body layui-body-bg">
+
+        <!-- 内容主体区域 -->
+        <div style="padding: 15px;">
+            <div class="body-top">
+                <div class='layui-form-item'>
+                <span class="layui-breadcrumb" lay-separator="-">
+                    <a>{$Think.lang.index_public_homepage}</a>
+                    <a>{$Think.lang.index_branchcompany_showBranchProductManage_branchManagement}</a>
+                    <a>{$Think.lang.index_branchcompany_showCustomerManage_customerManagement}</a>
+                    <a><cite>客户订单</cite></a>
+                </span>
+                </div>
+            </div>
+            <div class="content-bg">
+                <div class="table-nont user-manage company-pageHeight">
+                    <table class="layui-table" id="language-table">
+                        <thead>
+                        <tr>
+                            <th>订单编号</th>
+                            <th>订购时间</th>
+                            <th class="layui-table-width">{$Think.lang.index_source_operation}</th>
+                        </tr>
+                        </thead>
+
+                        {empty name='data'}
+
+                        {else /}
+                        {foreach name='data' item='v'}
+                        <tr>
+                            <th>{$v.company_order_number}</th>
+                            <th>{$v.create_time|date='Y-m-d H:i:s',###}</th>
+                            <th>
+                                <span style="{:action('index/auth/check_auth',['role_id'=>'254'])}"><a href='/branchcompany/showCustomerInfo?id={$CustomerListV.customer_id}'><button class="layui-btn layui-btn-sm hover-details layui-btn-primary">{$Think.lang.index_public_info}</button></a></span>
+                            </th>
+                        </tr>
+                        {/foreach}
+                        {/empty}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="layui-footer">
+        <!-- 底部固定区域 -->
+        © layui.com - 底部固定区域
+    </div>
+</div>
+{include file='public/foot_js' /}
+
+</body>
+</html>

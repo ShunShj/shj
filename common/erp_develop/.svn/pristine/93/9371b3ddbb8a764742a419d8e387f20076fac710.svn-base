@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {include file='public/head' /}
+    <title>ACCOUNT</title>
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+    <div class="layui-header">
+        {include file='public/header' /}
+    </div>
+
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll">
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            {include file='public/left_menu_booknexus' /}
+        </div>
+    </div>
+
+    <div class="layui-body layui-body-bg">
+
+        <!-- 内容主体区域 -->
+        <div style="padding: 15px;">
+            <div class="body-top">
+                <div class='layui-form-item'>
+                    <span class="layui-breadcrumb" lay-separator="-">
+                        <a>{$language_tag.index_public_homepage}</a>
+                        <a>B2B</a>
+                        <a>ACCOUNTING</a>
+                        <a><cite>Account Tour Code</cite></a>
+                    </span>
+                </div>
+                <div class='layui-block input-inline'>
+
+                    <form method='get' action='/accounting/showAccountTourCodeManage'>
+                        <div class='layui-input-inline'>
+                            <input type="text" name="account_code" value="{$Think.get.account_code}"  lay-verify="" placeholder="Account Code" autocomplete="off" class="layui-input">
+                        </div>
+                        <div class='layui-input-inline'>
+                            <input type="text" name="tour_name" value="{$Think.get.tour_name}"  lay-verify="" placeholder="Tour Name" autocomplete="off" class="layui-input">
+                        </div>
+                        <div class='layui-input-inline'>
+                            <div class="layui-form">
+                                <select name="status" lay-verify="required">
+                                    <option value="2" {if condition="$Think.get.status eq 2"}selected='selected' {/if}>-{$language_tag.index_source_showCruisesManage_search_status}-</option>
+                                    <option value="1" {if condition="$Think.get.status eq 1"}selected='selected' {/if}>{$language_tag.index_public_show}</option>
+                                    <option value="0" {if condition="$Think.get.status eq 0"}selected='selected' {/if}>{$language_tag.index_public_disabled}</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class='layui-button-inline layui-search-inline'>
+                            <button class="layui-btn nav-search">{$language_tag.index_public_search}</button>
+                        </div>
+                    </form>
+                    <div class='layui-button-inline'>
+                        <span><a href='/accounting/showAccountCodeManage?status=1'><button class="layui-btn nav-add">AccountCode</button></a></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="table-nont user-manage pageHeight">
+                <table class="layui-table layui-form" >
+                    <thead>
+                    <tr>
+                        <th>Product Code</th>
+                        <th>Product Name</th>
+                        <th>状态</th>
+                    </tr>
+
+                    </thead>
+                    <tbody>
+                    {foreach name="data" item="vo" }
+                    <tr>
+                        <th>
+                            <div class="layui-form" data-id="{$vo.btb_tour_id}">
+                                <select class="account_tour_code" lay-filter="account_code">
+                                    <option value="">请选择</option>
+                                    {foreach $code_result as $vl}
+                                    <option value="{$vl.name}" {if condition="$vo.account_code eq $vl.name"} selected {/if}>{$vl.name}</option>
+                                    {/foreach}
+                                </select>
+                            </div>
+                        </th>
+                        <th>{$vo.tour_name}</th>
+                        <th>
+                            {if condition="$vo.status eq 1"}{$language_tag.index_public_show}{else}{$language_tag.index_public_disabled}{/if}
+                        </th>
+                    </tr>
+                    {/foreach}
+                    </tbody>
+                </table>
+
+            </div>
+
+            <div class="listButtom">
+                <!--加载分页-->
+                {include file='public/page' /}
+            </div>
+        </div>
+    </div>
+
+    <div class="layui-footer">
+        <!-- 底部固定区域 -->
+        © layui.com - 底部固定区域
+    </div>
+</div>
+{include file='public/foot_js' /}
+<script>
+
+    var form = layui.form;
+    form.on("select(account_code)",function (data) {
+        var account_code = data.value;
+        var btb_tour_id = $(data.elem).parents('div').attr('data-id');
+
+        $.ajax({
+            type: "POST",
+            url: '/accounting/changeAccountCode',
+            data: {
+                btb_tour_id:btb_tour_id,
+                account_code:account_code,
+            },
+            success: function(data){
+                //console.log(data);
+                if(data.code!=200){
+                    layer.msg(data.msg);
+                    return false;
+                }else if(data.code==200) {
+                    layer.msg('操作成功',{time:1,end : function(layero, index){
+
+                        }
+                    });
+                }
+            },
+            error:function(XMLHttpRequest, textStatus, errorThrown){
+                layer.msg('验证失败')
+            }
+        });
+    })
+
+</script>
+</body>
+</html>

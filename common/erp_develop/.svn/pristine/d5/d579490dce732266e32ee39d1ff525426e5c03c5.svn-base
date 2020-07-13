@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<head>
+    {include file='public/head' /}
+    <title>layout 后台大布局 - Layui</title>
+
+    <style>
+        .nav {
+            display: inline-block;
+            position: relative;
+            height: 54px;
+            font-size: 15px;
+        }
+
+        .nav > * {
+            display: inline-block;
+        }
+
+        .nav > .t {
+            position: absolute;
+            top: 0;
+            background: rgb(208, 210, 211);
+            /* Skew */
+            -webkit-transform: skew(30deg);
+            -moz-transform: skew(30deg);
+            -o-transform: skew(30deg);
+            transform: skew(30deg);
+        }
+
+        .nav > .b {
+            position: absolute;
+            bottom: 0;
+            background: rgb(208, 210, 211);
+            /* Skew */
+            -webkit-transform: skew(-30deg);
+            -moz-transform: skew(-30deg);
+            -o-transform: skew(-30deg);
+            transform: skew(-30deg);
+        }
+
+        .tab .nav>.t,.tab .nav>.b{
+            -webkit-transform: none;
+            -moz-transform: none;
+            -o-transform: none;
+            transform: none;
+        }
+
+
+        .nav > a {
+            /*position:absolute;
+            top:0;*/
+            margin-left: 13px;
+            vertical-align: middle;
+            text-align: center;
+            text-decoration: none;
+            cursor: default;
+            font-weight: bold;
+            color: #77787b !important;
+        }
+
+        .nav.hover>a{
+            color: #ffffff !important;
+        }
+
+        .nav.hover > span {
+            background-color: #3376ba;
+            cursor: pointer;
+        }
+
+        .nav.done_step.hover>span{
+            background-color: #3376ba;
+        }
+
+        .nav.hover > a {
+            cursor: pointer;
+        }
+
+        .ab_position {
+            position: absolute;
+        }
+
+        .nav > .first_mark {
+            position: absolute;
+            top: 0;
+            z-index: 1;
+            width: 16px;
+            height: 100%;
+            background-color: #ffffff;
+            left: -8px;
+        }
+
+        .nav.done_step>a,.nav.active_step>a{
+            color: #ffffff !important;
+        }
+
+        .nav.done_step>.t,.nav.done_step>.b{
+            background-color: #767780;
+        }
+
+        .nav.active_step>.t,.nav.active_step>.b{
+            background-color: #3376ba;
+        }
+
+        .tab_border{
+            height: 2px;
+            background-color: #767780;
+            margin-left: 8px;
+            margin-top: -4px;
+        }
+
+    </style>
+
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+    <div class="layui-header">
+        {include file='public/header' /}
+    </div>
+
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll">
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            {include file='public/left_menu_booknexus' /}
+        </div>
+    </div>
+
+    <div class="layui-body">
+
+        <!-- 内容主体区域 -->
+        <div style="padding: 15px 15px 0px;">
+            <div class='layui-row'>
+		   		<span class="layui-breadcrumb" lay-separator="-">
+                    <a>首页</a>
+                    <a>B2B</a>
+					<a>创建产品</a>
+				</span>
+            </div>
+            <br>
+            {include file='booknexus_tour/menu' /}
+
+            <div class="layui-row layui-col-space12" style="padding: 20px 10px">
+                <form class="layui-form" id="form1" onSubmit="return add()">
+                    <div class="layui-col-md8">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label ">ADULT GROSS CN:</label>
+                            <div class="layui-input-block layui-form">
+                                 <input class="layui-input" value="" name="" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-col-md8">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label ">ADULT COMM CN:</label>
+                            <div class="layui-input-block layui-form">
+                                <input class="layui-input" value="" name="" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-col-md8">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label ">ADULT NETT CN:</label>
+                            <div class="layui-input-block layui-form">
+                                <input class="layui-input" value="" name="" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-col-md8">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label ">CHILD WBED GROSS CN:</label>
+                            <div class="layui-input-block layui-form">
+                                <input class="layui-input" value="" name="" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-col-md8">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label ">CHILD WBED COMM CN:</label>
+                            <div class="layui-input-block layui-form">
+                                <input class="layui-input" value="" name="" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-col-md8">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label ">CHILD WBED NETT CN:</label>
+                            <div class="layui-input-block layui-form">
+                                <input class="layui-input" value="" name="" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-col-md8">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label ">CHILD NBED NETT CN:</label>
+                            <div class="layui-input-block layui-form">
+                                <input class="layui-input" value="" name="" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-col-md8">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label ">ADULT NETT EN:</label>
+                            <div class="layui-input-block layui-form">
+                                <input class="layui-input" value="" name="" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-col-md8">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label ">CHILD WBED NETT EN:</label>
+                            <div class="layui-input-block layui-form">
+                                <input class="layui-input" value="" name="" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-col-md8">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label ">CHILD NBED NETT EN:</label>
+                            <div class="layui-input-block layui-form">
+                                <input class="layui-input" value="" name="" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-col-md8">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label ">SINGLE SUPP:</label>
+                            <div class="layui-input-block layui-form">
+                                <input class="layui-input" value="" name="" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-col-md8">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label ">HOTEL TWIN:</label>
+                            <div class="layui-input-block layui-form">
+                                <input class="layui-input" value="" name="" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-col-md8">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label ">TRIPLE:</label>
+                            <div class="layui-input-block layui-form">
+                                <input class="layui-input" value="" name="" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-col-md8">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label ">TRANSFER:</label>
+                            <div class="layui-input-block layui-form">
+                                <input class="layui-input" value="" name="" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-col-md8">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label ">INFANT:</label>
+                            <div class="layui-input-block layui-form">
+                                <input class="layui-input" value="" name="" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-col-md8">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label ">TIPPING:</label>
+                            <div class="layui-input-block layui-form">
+                                <input class="layui-input" value="" name="" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-col-md8">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label ">COMPULSORY PROGRAM:</label>
+                            <div class="layui-input-block layui-form">
+                                <input class="layui-input" value="" name="" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-col-md8">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label ">SEASON ID:</label>
+                            <div class="layui-input-block layui-form">
+                                <input class="layui-input" value="" name="" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-col-md8">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label ">INBOUND QUAD ROOM NET:</label>
+                            <div class="layui-input-block layui-form">
+                                <input class="layui-input" value="" name="" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-col-md8">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label ">INBOUND TRIPLE ROOM NET:</label>
+                            <div class="layui-input-block layui-form">
+                                <input class="layui-input" value="" name="" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-col-md8">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label ">INBOUND TWIN ROOM NET:</label>
+                            <div class="layui-input-block layui-form">
+                                <input class="layui-input" value="" name="" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-col-md8">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label ">INBOUND SINGLE ROOM NET:</label>
+                            <div class="layui-input-block layui-form">
+                                <input class="layui-input" value="" name="" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-col-md8">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label ">STATUS:</label>
+                            <div class="layui-input-block layui-form">
+                                <select class="layui-select">
+                                    <option value="1">Enable</option>
+                                    <option value="2">Disable</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-col-md8">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label ">NOTE:</label>
+                            <div class="layui-input-block layui-form">
+                                <textarea class="layui-textarea"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-col-md8" style="padding: 20px;font-weight: bold;font-size:14px;text-align: center">
+                        <button   class="layui-btn nav-submit" >Save & Next</button>
+                    </div>
+
+                </form>
+            </div>
+
+
+    </div>
+
+
+    <div class="layui-footer">
+        <!-- 底部固定区域 -->
+        © layui.com - 底部固定区域
+    </div>
+</div>
+{include file='public/foot_js' /}
+<script>
+    //JavaScript代码区域
+    var layer = layui.layer;
+    var form = layui.form;
+    var laydate = layui.laydate;
+
+
+    function add(){
+        $.ajax({
+            type: "POST",
+            url: '/booknexus_tour/addTourCommissionFormAjax',
+            data:  $('#form1').serializeArray(),
+            success: function(data){
+                //console.log(data);
+                if(data.code!=200){
+                    layer.msg(data.msg);
+                    return false;
+                }else if(data.code==200) {
+                    layer.msg('操作成功',{time:2000,end : function(layero, index){
+                        location.href="/booknexus_tour/addTourOptionsForm";
+                    }
+                    });
+                }
+            },
+            error:function(XMLHttpRequest, textStatus, errorThrown){
+                layer.msg('验证失败')
+            }
+        });
+        return false;
+    }
+
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {include file='public/head' /}
+    <title>修改客户来源</title>
+
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+
+    <div class="layui-header">
+        {include file='public/header' /}
+    </div>
+
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll">
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            {include file='public/left_menu' /}
+        </div>
+    </div>
+
+    <div class="layui-body">
+
+        <!-- 内容主体区域 -->
+        <div style="padding: 15px;">
+            <div class='layui-form-item'>
+		   		<span class="layui-breadcrumb" lay-separator="-">
+                    <a>{$Think.lang.index_public_homepage}</a>
+                    <a>{$Think.lang.index_branchcompany_showBranchProductManage_branchManagement}</a>
+					<a>客户来源</a>
+					<a><cite>修改客户来源</cite></a>
+				</span>
+            </div>
+            <br/>
+            <br/>
+            <form class="layui-form" id="form1" onSubmit="return edit()">
+                <div class="layui-form-item">
+                    <div class="layui-col-md4">
+                        <label class="layui-form-label input-required">客户来源名称:</label>
+                        <div class="layui-input-block">
+                            <input name="customer_source_name" required lay-verify="required" autocomplete="off"
+                                   class="layui-input" value="{$result.customer_source_name}" />
+                            <input name="customer_source_id" id="customer_source_id" lay-verify="required" type="hidden" value="{$result.customer_source_id}">
+                        </div>
+                    </div>
+                </div>
+                <br>
+                <div class="layui-form-item">
+                    <div class="layui-col-md4">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">{$Think.lang.index_public_status}:</label>
+                            <div class="layui-input-block">
+                                <select name="status" id='status' lay-verify="required">
+                                    <option value="1" {if condition="$result.status eq 1"} selected='selected' {/if}>{$Think.lang.index_public_show}</option>
+                                    <option value="0" {if condition="$result.status eq 0"} selected='selected' {/if}>{$Think.lang.index_public_disabled}</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <div class="layui-col-md4">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label input-required">{$Think.lang.index_public_company}:</label>
+                            <div class="layui-input-block">
+                                <select {$Think.session.user.company_id!=1?'readonly':''} name="choose_company_id"
+                                        id="choose_company_id" lay-verify="required">
+                                    {foreach name='company_result'  item='vo'}
+                                    <option value="{$vo.company_id}" {if condition="$vo.company_id eq  $result.company_id"} selected='selected'{/if}>{$MultilingualAll['company-company_name-'.$vo.company_id.'-'.$Think.session.user.language_id][0]['translate']|default=$vo.company_name}</option>
+                                    {/foreach}
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <br>
+                <div class="layui-form-item">
+                    <div class="all-button-center">
+                        <button class="layui-btn nav-submit" lay-submit="" lay-filter="formDemo" id="add_button">{$Think.lang.index_public_submit}</button>
+                        <!--<button type="reset" class="layui-btn layui-btn-primary">重置</button>-->
+                        <a href="javascript:history.back(-1)"><button type="button" class="layui-btn layui-btn-primary">{$Think.lang.index_public_back}</button></a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="layui-footer">
+        <!-- 底部固定区域 -->
+        © layui.com - 底部固定区域
+    </div>
+</div>
+{include file='public/foot_js' /}
+
+
+<script>
+
+    function edit() {
+
+        $.ajax({
+            type: "POST",
+            url: '/branchcompany/editCustomerSourceAjax',
+            data: $('#form1').serializeArray(),
+            success: function (data) {
+                if(data.code!=200){
+                    layer.msg(data.msg)
+                    return false;
+                }else if(data.code==200){
+                    layer.msg('success',{time:1,end : function(layero, index){
+                        history.back(-1);
+                    }
+                    });
+                }
+            },
+            error:function(XMLHttpRequest, textStatus, errorThrown){
+                //console.log(errorThrown)
+                layer.msg('{$Think.lang.index_public_verificationFailure}')
+
+            }
+        });
+        return false;
+    }
+</script>
+
+</body>
+</html>

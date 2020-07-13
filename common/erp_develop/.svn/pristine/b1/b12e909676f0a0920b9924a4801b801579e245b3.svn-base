@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {include file='public/head' /}
+    <title>网站-需求定制</title>
+    <link href="__STATIC__/css/product.css" rel="stylesheet">
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+    <div class="layui-header">
+        {include file='public/header' /}
+    </div>
+
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll">
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            {include file='public/left_menu_web' /}
+        </div>
+    </div>
+
+    <div class="layui-body layui-body-bg">
+
+        <!-- 内容主体区域 -->
+        <div style="padding: 15px 15px 0px;">
+            <div class="body-top">
+                <div class='layui-form-item'>
+                    <span class="layui-breadcrumb" lay-separator="-">
+                        <a>首页</a>
+                        <a>网站</a>
+                        <a><cite>需求定制</cite></a>
+                    </span>
+                </div>
+            </div>
+
+            <div class="layui-block all-search-bg layui-form demoTable">
+            <form action="/enquirty/index" class="layui-form" method="get">
+                <div class="layui-row">
+                    <div class="layui-col-md4">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">出游目的地:</label>
+                            <div class="layui-input-block">
+                                <input type="text" id="travel_destinations" value="{$_GET['travel_destinations']}" name="travel_destinations"   class="layui-input">
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="layui-col-md4">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">下单时间:</label>
+                            <div class="layui-input-block">
+                                <div class="layui-input-inline date-width">
+                                    <input type="text" value="{$_GET['s_create_time']}" name="s_create_time" placeholder="请选择日期"  id="s_create_time" class="layui-input sales-date">
+                                </div>
+                                <div class="date-and">-</div>
+                                <div class="layui-input-inline date-width">
+                                    <input type="text" value="{$_GET['e_create_time']}" name="e_create_time" placeholder="请选择日期"   id="e_create_time" class="layui-input sales-date" >
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="layui-col-md4">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">出发时间:</label>
+                            <div class="layui-input-block">
+                                <div class="layui-input-inline date-width">
+                                    <input type="text" value="{$_GET['s_departure_date']}" name="s_departure_date" placeholder="请选择日期"   id="s_departure_date" class="layui-input sales-date"  >
+                                </div>
+                                <div class="date-and">-</div>
+                                <div class="layui-input-inline date-width">
+                                    <input type="text" value="{$_GET['e_departure_date']}" name="e_departure_date" placeholder="请选择日期"  id="e_departure_date" class="layui-input sales-date"  >
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="layui-row">
+                    <div class="layui-col-md4">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">联系人:</label>
+                            <div class="layui-input-block">
+                                <input type="text" id="contect_name" value="{$_GET['contect_name']}" name="contect_name"  class="layui-input">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="layui-col-md4">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">联系电话:</label>
+                            <div class="layui-input-block">
+                                <input type="text" id="tel" value="{$_GET['tel']}" name="tel" class="layui-input">
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="layui-row">
+                    <div class="layui-col-md4 layui-col-md-offset4">
+                        <div class="input-inline all-button-center pages-search-margin">
+                            <button class="layui-btn nav-search" data-type="reload">搜索</button>
+                        </div>
+                    </div>
+                </div>
+
+
+            </form>
+            </div>
+
+            <div class="content-bg">
+                <a href='/enquirty/addEnquirty/'><button class="layui-btn nav-add layui-btn-sm">新建</button></a>
+                <a href='#'><button class="layui-btn nav-add layui-btn-sm batch-assignment">批量指派</button></a>
+                <hr>
+                <div class="table-nont user-manage newBg-pageHeight">
+                    <table class="layui-table layui-form" id="language-table">
+                        <thead>
+                        <tr>
+                            <th><input lay-skin="primary" type="checkbox" lay-filter="all_checkbox_id" ></th>
+                            <th>需求提交时间</th>
+                            <th>出游目的地</th>
+                            <th>出发日期</th>
+                            <th>联繫人姓名</th>
+                            <th>联繫电话</th>
+                            <th>电子邮件</th>
+                            <th>语言</th>
+                            <th>负责人</th>
+                            <th>操作</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                            {foreach $data as $v}
+                            <tr>
+                                <th><input class="checkbox_id" lay-skin="primary" type="checkbox" value="{$v.enquiry_id}"></th>
+                                <th>{$v.create_time|date='Y-m-d',###}</th>
+                                <th>{$v.travel_destinations}</th>
+                                <th>{$v.departure_date|date='Y-m-d',###}</th>
+                                <th>{$v.contect_name}</th>
+                                <th>{$v.tel}</th>
+                                <th>{$v.email}</th>
+                                <th>{$v.language_name}</th>
+                                <th width="150">
+                                    <select class="layui-select" disabled>
+                                        <option></option>
+                                        {foreach $UserList as $uv}
+                                        <option value="{$uv.user_id}" {$uv.user_id==$v.person_in_charge?'selected':''}>{$uv.nickname}</option>
+                                        {/foreach}
+                                    </select>
+                                </th>
+                                <th>
+                                    <a href="/enquirty/editEnquirty?enquiry_id={$v.enquiry_id}" class="layui-btn layui-btn-sm layui-btn-primary">编辑</a>
+                                    <a class="layui-btn layui-btn-sm layui-btn-primary c-assign" data-info="{$v.enquiry_id}" >指派</a>
+                                    <a class="layui-btn layui-btn-sm layui-btn-primary">下单</a>
+                                </th>
+                            </tr>
+                            {/foreach}
+                        </tbody>
+                    </table>
+                </div>
+                <div class="listButtom">
+                    {include file='public/page' /}
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <div class="layui-footer">
+        <!-- 底部固定区域 -->
+        © layui.com - 底部固定区域
+    </div>
+</div>
+
+<div class="batch-assignment-operation" style="display: none" >
+<div class="layui-form">
+    <select class="layui-select" id="assignment_operation" lay-filter="s_assignment_operation_id" >
+        <option></option>
+        {foreach $UserList as $uv}
+        <option value="{$uv.user_id}" >{$uv.nickname}</option>
+        {/foreach}
+    </select>
+</div>
+</div>
+
+
+{include file='public/foot_js' /}
+<script src='__STATIC__/javascript/product/all.js'></script>
+<script src='__STATIC__/javascript/product/company_order.js'></script>
+
+<script>
+    !function() {
+        var layer = layui.layer;
+        var form = layui.form;
+        var laydate = layui.laydate;
+
+        $('.sales-date').each(function(){
+            //日期选择器
+            laydate.render({
+                elem: this
+                //,type: 'date' //默认，可不填
+            });
+        });
+
+        //全选
+        form.on('checkbox(all_checkbox_id)', function(data){
+            var child = $(data.elem).parents('thead').siblings("tbody").find('th input[type="checkbox"]');
+            child.each(function(index, item){
+                item.checked = data.elem.checked;
+            });
+            form.render('checkbox');
+        });
+
+        var assignment_operation = 0; //指派用户ID
+        $('.batch-assignment').on('click',function(){ //批量指派
+            assignment_operation = 0;
+            var newQ = new Array();
+            $('.checkbox_id').each(function(index, item) {
+                if (item.checked == true) {
+                    newQ.push(item.value);
+                }
+            });
+            if(newQ.length<1){
+                layer.msg('至少选择一个进行指派');
+                return;
+            }
+
+            layer.open({
+                title: '指派负责人'
+                ,content: $('.batch-assignment-operation').html()
+                ,area: [true,'400px']
+                ,shade: 0.8
+                ,tipsMore:true
+                ,btn: ['确定', '取消']
+                ,yes:function(index, layero){
+                    if(assignment_operation==0){
+                        layer.msg('请选择指派人');
+                        return ;
+                    }
+
+                    console.log(newQ);
+                    layer.load(2);
+                    var enquiry_id = newQ.join(',');
+                    $.post('/enquirty/editEnquirtyPersonInCharge',{'person_in_charge':assignment_operation,'enquiry_id':enquiry_id},function(a){
+                        layer.closeAll();
+                        if(a.code==200){
+                            location.reload();
+                        }else{
+                            layer.msg(a.msg);
+                        }
+
+                    });
+                }
+                ,zIndex: layer.zIndex //重点1
+                ,success: function(layero){
+                    layer.setTop(layero); //重点2
+                }
+
+            });
+            form.render();
+        });
+
+
+        //单指派
+        $('.c-assign').on('click',function(){
+            var enquiry_id = $(this).data('info');
+            layer.open({
+                title: '指派负责人'
+                ,content: $('.batch-assignment-operation').html()
+                ,area: [true,'400px']
+                ,shade: 0.8
+                ,tipsMore:true
+                ,btn: ['确定', '取消']
+                ,yes:function(index, layero){
+                    if(assignment_operation==0){
+                        layer.msg('请选择指派人');
+                        return ;
+                    }
+                    layer.load(2);
+                    $.post('/enquirty/editEnquirtyPersonInCharge',{'person_in_charge':assignment_operation,'enquiry_id':enquiry_id},function(a){
+                        layer.closeAll();
+                        if(a.code==200){
+                            location.reload();
+                        }else{
+                            layer.msg(a.msg);
+                        }
+
+                    });
+                }
+                ,zIndex: layer.zIndex //重点1
+                ,success: function(layero){
+                    layer.setTop(layero); //重点2
+                }
+
+            });
+            form.render();
+        });
+
+
+        form.on('select(s_assignment_operation_id)', function(data){
+            assignment_operation = data.value;
+        });
+
+    }();
+</script>
+
+
+</body>
+</html>

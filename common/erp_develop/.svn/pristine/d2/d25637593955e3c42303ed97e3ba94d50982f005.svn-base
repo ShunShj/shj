@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {include file='public/head' /}
+    <title>{$language_tag.index_product_showRouteTemplateManage_receiptTemplate}</title>
+
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+    <div class="layui-header">
+        {include file='public/header' /}
+    </div>
+
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll">
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            {include file='public/left_menu' /}
+        </div>
+    </div>
+
+    <div class="layui-body">
+
+        <!-- 内容主体区域 -->
+        <div style="padding: 15px;">
+            <div class='layui-form-item'>
+			<span class="layui-breadcrumb" lay-separator="-">
+				<a>{$language_tag.index_public_homepage}</a>
+                <a>{$language_tag.index_public_system}</a>
+				<a><cite>{$language_tag.index_product_showRouteTemplateManage_receiptTemplate}</cite></a>
+			</span>
+            </div>
+            <br/>
+            <div class='layui-block input-inline'>
+                <form action="/system/setReturnReceiptManage" method="post" >
+                    <div class='layui-inline' >
+                        <div class='layui-input-inline'>
+                            <input type="text" id="search_Id" name="search_Id" value="{$setReturnReceiptManage.search_Id}"   placeholder="{$language_tag.index_source_showHotelSource_id}" class="layui-input">
+                        </div>
+                        <div class='layui-input-inline'>
+                            <input type="text" id="search_Name" name="search_Name" value="{$setReturnReceiptManage.search_Name}"  placeholder="{$language_tag.index_product_PlanSuppliersPayable_name}" class="layui-input">
+                        </div>
+
+                        <div class='layui-input-inline'>
+                            <div class="layui-form">
+                                <select  id="search_status" name="search_status">
+                                    <option value="0" {$setReturnReceiptManage.search_status==0?'selected':''} >-{$language_tag.index_public_search_type}-</option>
+                                    <option value="1" {$setReturnReceiptManage.search_status==1?'selected':''} >{$language_tag.index_public_show}</option>
+                                    <option value="2" {$setReturnReceiptManage.search_status==2?'selected':''} >{$language_tag.index_public_disabled}</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class='layui-button-inline layui-search-inline'>
+                            <button class="layui-btn nav-search">{$language_tag.index_public_search}</button>
+                        </div>
+                    </div>
+                </form>
+                <div class='layui-button-inline'>
+                    <a href='/system/showReturnReceiptAdd'><button class="layui-btn nav-add">{$language_tag.index_product_showRouteTypeManage_addReceiptTemplate}</button></a>
+                </div>
+            </div>
+            <hr><br>
+            <table class="layui-table" id="language-table">
+                <thead>
+                <tr>
+                    <th>{$language_tag.index_source_showHotelSource_id}</th>
+                    <th>{$language_tag.index_product_showReturnReceiptManage_receiptName}</th>
+                    <th>{$language_tag.index_public_status}</th>
+                    <th>{$language_tag.index_source_showHotelManage_FinalOperationTime}</th>
+                    <th>{$language_tag.index_source_showHotelManage_Operator}</th>
+                    <th class="layui-table-width">{$language_tag.index_source_operation}</th>
+                </tr>
+                </thead>
+
+                {empty name='ReturnReceiptList'}
+
+                {else /}
+                {foreach $ReturnReceiptList as $ReturnReceiptListV}
+                <tr>
+                    <th>{$ReturnReceiptListV.return_receipt_id}</th>
+                    <th>{$ReturnReceiptListV.return_receipt_name}</th>
+                    <th>{$ReturnReceiptListV.status==1 ? $language_tag.index_public_show : $language_tag.index_public_disabled}</th>
+                    <th><?=date("Y-m-d H:i:s", strtotime("0 hour",$ReturnReceiptListV['update_time']))?></th>
+                    <th>{$ReturnReceiptListV.create_user_name}</th>
+                    <th>
+                        <a href='/system/showReturnReceiptEdit?id={$ReturnReceiptListV.return_receipt_id}'><button class="layui-btn layui-btn-sm hover-edit layui-btn-primary">{$language_tag.index_public_update}</button></a>
+                        <a href='/system/showReturnReceiptInfo?id={$ReturnReceiptListV.return_receipt_id}'><button class="layui-btn layui-btn-sm hover-details layui-btn-primary">{$language_tag.index_public_info}</button></a>
+                    </th>
+                </tr>
+                {/foreach}
+                {/empty}
+                </tbody>
+
+            </table>
+        </div>
+    </div>
+
+    <div class="layui-footer">
+        <!-- 底部固定区域 -->
+        © layui.com - 底部固定区域
+    </div>
+</div>
+{include file='public/foot_js' /}
+<script>
+    //JavaScript代码区域
+    !function(){
+        var layer = layui.layer ;
+        var form = layui.form;
+
+    }();
+
+</script>
+</body>
+</html>
+
+<script>
+
+
+</script>

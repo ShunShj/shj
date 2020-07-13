@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {include file='public/head' /}
+    <title>{$supplierName}{$language_tag.index_source_showTourGuideSourceInfo_touur_source_info}</title>
+
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+
+    <div class="layui-header">
+        {include file='public/header' /}
+    </div>
+
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll">
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            {include file='public/left_menu' /}
+        </div>
+    </div>
+
+    <div class="layui-body">
+
+        <!-- 内容主体区域 -->
+        <div style="padding: 15px;">
+            <div class='layui-form-item'>
+		   		<span class="layui-breadcrumb" lay-separator="-">
+					 <a>{$language_tag.index_public_homepage}</a>
+                    <a>{$language_tag.index_source_showTourGuideManage_source_administrate}</a>
+				    <a>{$language_tag.index_source_showTourGuideManage_tourguide_administrate}</a>
+                    <a>{$language_tag.index_source_showTourGuideSourceManage_all_source}</a>
+                    <a><cite>{$language_tag.index_source_showTourGuideSourceManage_info_tourguide}</cite></a>
+				</span>
+            </div>
+            <br/>
+            <br/>
+            <form class="layui-form all-detail" id="form1" onSubmit="return edit()">
+                <div class="layui-form-item">
+                    <div class="layui-col-md4">
+                        <label class="layui-form-label">{$language_tag.index_public_supplier}:</label>
+                        <div class="layui-input-block all-select">
+                            {$MultilingualAll['supplier-supplier_name-'.$TourGuideAr.supplier_id.'-'.$Think.session.user.language_id][0]['translate']|default=$TourGuideAr.supplier_name}
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-col-md4">
+                        <label class="layui-form-label">{$language_tag.index_public_status}:</label>
+                        <div class="layui-input-block all-select" disabled>
+                            <select id="status" name="status"  disabled >
+                                <option> </option>
+                                <option value="1" {$TourGuideAr.status==1?'selected':''} >{$language_tag.index_public_show}</option>
+                                <option value="2" {$TourGuideAr.status==2?'selected':''} >{$language_tag.index_public_disabled}</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-col-md4">
+                        <label class="layui-form-label">{$language_tag.index_source_showTourGuideSourceManage_tourguide_name}:</label>
+                        <div class="layui-input-block" >
+                            {$TourGuideAr.tour_guide_name}
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-col-md4">
+                        <label class="layui-form-label">{$language_tag.index_source_showTourGuideSourceManage_identity_card}:</label>
+                        <div class="layui-input-block">
+                            {$TourGuideAr.identity_card}
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-col-md4">
+                        <label class="layui-form-label">{$language_tag.index_source_showTourGuideSourceManage_guide_id_card}:</label>
+                        <div class="layui-input-block">
+                            {$TourGuideAr.guide_id_card}
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-col-md4">
+                        <label class="layui-form-label">{$language_tag.index_source_showTourGuideSourceManage_phone}:</label>
+                        <div class="layui-input-block">
+                            {$TourGuideAr.phone}
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-col-md4">
+                        <label class="layui-form-label">{$language_tag.index_source_showTourGuideSourceManage_address}:</label>
+                        <div class="layui-input-block">
+                            {$TourGuideAr.address}
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-col-md4">
+                        <label class="layui-form-label">{$language_tag.index_source_showTourGuideSourceManage_email}:</label>
+                        <div class="layui-input-block">
+                            {$TourGuideAr.email}
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-col-md4">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">{$language_tag.index_public_company}:</label>
+                            <div class="layui-input-block all-select">
+                                <select name="company_id" id="company_id" lay-verify="required" disabled>
+                                    <option> </option>
+                                    {foreach name='company_result'  item='vo'}
+                                    <option value="{$vo.company_id}" {if condition="$vo.company_id eq  $TourGuideAr.company_id"} selected='selected'{/if}>{$MultilingualAll['company-company_name-'.$vo.company_id.'-'.$Think.session.user.language_id][0]['translate']|default=$vo.company_name}</option>
+                                    {/foreach}
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-col-md4">
+                        <label class="layui-form-label">{$language_tag.index_source_showTourGuideSourceManage_passport}:</label>
+                        <div class="layui-input-block">
+                            {$TourGuideAr.passport}
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-col-md4">
+                        <label class="layui-form-label">{$language_tag.index_source_showTourGuideSourceManage_payment_currency_type}:</label>
+                        <div class="layui-input-block all-select">
+                            <select name="payment_currency_type" id="payment_currency_type" lay-verify="required" disabled>
+                                {foreach name='currency_data_result'  item='vo'}
+                                <option  value="{$vo.currency_id}" {if condition="$vo.currency_id eq  $TourGuideAr.payment_currency_type"} selected='selected'{/if}>{$MultilingualAll['currency-currency_name-'.$vo.currency_id.'-'.$Think.session.user.language_id][0]['translate']|default=$vo.currency_name}</option>
+                                {/foreach}
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <!--<div class="layui-form-item">-->
+                    <!--<div class="layui-col-md9">-->
+                        <!--<label class="layui-form-label">简介:</label>-->
+                        <!--<div class="layui-input-block">-->
+                            <!--<textarea name="remark" id="remark" class="layui-textarea"  disabled required lay-verify="required">{$TourGuideAr.remark}</textarea>-->
+                        <!--</div>-->
+                    <!--</div>-->
+                <!--</div>-->
+
+                <div class="layui-form-item">
+                    <div class="layui-col-md4">
+                        <label class="layui-form-label">{$language_tag.index_public_price}:</label>
+                        <div class="layui-input-block table-nont">
+                            <table class="layui-table">
+                                <colgroup>
+                                    <col width="20%">
+                                    <col width="20%">
+                                    <col width="25%">
+                                </colgroup>
+                                <thead>
+                                <tr>
+                                    <th>{$language_tag.index_public_type_price}</th>
+                                    <th>{$language_tag.index_public_costprice}</th>
+                                    <th>{$language_tag.index_public_settlementprice}</th>
+                                    <!--<th>零售价</th>-->
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <th>{$language_tag.index_public_count_price}:</th>
+                                    <th class="all-select"><input value="{$TourGuideAr.normal_price}" type="text" name="normal_price" id="normal_price"  disabled class="layui-input" required lay-verify="required|number"/ ></th>
+                                    <th class="all-select"><input value="{$TourGuideAr.normal_settlement_price}" type="text" name="normal_settlement_price" id="normal_settlement_price" disabled class="layui-input" required lay-verify="required|number"/></th>
+                                    <!--<th><input value="{$TourGuideAr.normal_retail_price}" type="text" name="normal_retail_price" id="normal_retail_price" class="layui-input" required lay-verify="required|number"/></th>-->
+                                </tr>
+                                <!--<tr>-->
+                                <!--<th>成人:</th>-->
+                                <!--<th><input value="{$TourGuideAr.adult_settlement_price}" type="text" name="adult_settlement_price" id="adult_settlement_price" class="layui-input" /></th>-->
+                                <!--<th><input value="{$TourGuideAr.adult_price}" type="text" name="adult_price"   class="layui-input" /></th>-->
+                                <!--&lt;!&ndash;<th><input value="{$TourGuideAr.adult_retail_price}" type="text" name="adult_retail_price"   class="layui-input" /></th>&ndash;&gt;-->
+                                <!--</tr>-->
+                                <!--<tr>-->
+                                <!--<th>占床儿童:</th>-->
+                                <!--<th><input value="{$TourGuideAr.child_bed_settlement_price}" type="text" name="child_bed_settlement_price"   class="layui-input" /></th>-->
+                                <!--<th><input value="{$TourGuideAr.child_bed_price}" type="text" name="child_bed_price"   class="layui-input" /></th>-->
+                                <!--&lt;!&ndash;<th><input value="{$TourGuideAr.child_bed_retail_price}" type="text" name="child_bed_retail_price"   class="layui-input" /></th>&ndash;&gt;-->
+                                <!--</tr>-->
+                                <!--<tr>-->
+                                <!--<th>老人:</th>-->
+                                <!--<th><input value="{$TourGuideAr.old_settlement_price}" type="text" name="old_settlement_price"   class="layui-input" /></th>-->
+                                <!--<th><input value="{$TourGuideAr.old_price}" type="text" name="old_price"   class="layui-input" /></th>-->
+                                <!--&lt;!&ndash;<th><input value="{$TourGuideAr.old_retail_price}" type="text" name="old_retail_price"   class="layui-input" /></th>&ndash;&gt;-->
+                                <!--</tr>-->
+                                <!--<tr>-->
+                                <!--<th>不占床儿童:</th>-->
+                                <!--<th><input value="{$TourGuideAr.child_settlement_price}" type="text" name="child_settlement_price"   class="layui-input" /></th>-->
+                                <!--<th><input value="{$TourGuideAr.child_price}" type="text" name="child_price"   class="layui-input" /></th>-->
+                                <!--&lt;!&ndash;<th><input value="{$TourGuideAr.child_retail_price}" type="text" name="child_retail_price"   class="layui-input" /></th>&ndash;&gt;-->
+                                <!--</tr>-->
+                                <!--<tr>-->
+                                <!--<th>单房差:</th>-->
+                                <!--<th><input value="{$TourGuideAr.single_settlement_price}" type="text" name="single_settlement_price"   class="layui-input" /></th>-->
+                                <!--<th><input value="{$TourGuideAr.single_price}" type="text" name="single_price"   class="layui-input" /></th>-->
+                                <!--&lt;!&ndash;<th><input value="{$TourGuideAr.single_retail_price}" type="text" name="single_retail_price"   class="layui-input" /></th>&ndash;&gt;-->
+                                <!--</tr>-->
+                                </tbody>
+
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!--<div class="layui-form-item">-->
+                <!--<div class="layui-col-md9">-->
+                <!--<label class="layui-form-label">说明:</label>-->
+                <!--<div class="layui-input-block">-->
+                <!--<textarea name=""  class="layui-textarea"></textarea>-->
+                <!--</div>-->
+                <!--</div>-->
+                <!--</div>-->
+                <br>
+                <div class="layui-form-item">
+                    <div class="layui-col-md4">
+                        <div class="layui-input-block">
+                            <a href="javascript:history.back(-1)"><button type="button" class="layui-btn layui-btn-primary">{$language_tag.index_public_back}</button></a>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="layui-footer">
+        <!-- 底部固定区域 -->
+        © layui.com - 底部固定区域
+    </div>
+</div>
+{include file='public/foot_js' /}
+
+
+<script>
+    $(function(){
+
+
+    });
+
+    function edit() {
+        $.ajax({
+            type: "POST",
+            url: '/source/editTourGuideSourceAjax?id={$_GET["id"]}',
+            data: $('#form1').serializeArray(),
+            success: function (data) {
+                if(data.code!=200){
+                    layer.msg(data.msg)
+                    return false;
+                }else if(data.code==200){
+                    layer.msg('{$language_tag.index_public_success}',{time:1,end : function(layero, index){
+                            history.back(-1);
+                        }
+                    });
+                }
+            },
+            error:function(XMLHttpRequest, textStatus, errorThrown){
+                //console.log(errorThrown)
+                layer.msg('{$language_tag.index_public_verificationFailure}')
+
+            }
+        });
+        return false;
+    }
+</script>
+
+</body>
+</html>

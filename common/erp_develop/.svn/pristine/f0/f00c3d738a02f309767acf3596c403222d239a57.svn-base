@@ -1,0 +1,156 @@
+@charset "utf-8";
+/* CSS Document */
+
+/*
+Table Style - This is what you want
+------------------------------------------------------------------ 
+
+#commission_div table a:link {
+	color: #666;
+	font-weight: bold;
+	text-decoration:none;
+}
+#commission_div table a:visited {
+	color: #999999;
+	font-weight:bold;
+	text-decoration:none;
+}
+#commission_div table a:active,
+#commission_div table a:hover {
+	color: #bd5a35;
+	text-decoration:underline;
+}*/
+#commission_div table, #commission_en_div table,.inbound_commission_table {
+	font-family:Arial, Helvetica, sans-serif;
+	color:#666;
+	font-size:12px;
+	-moz-border-radius:3px;
+	-webkit-border-radius:3px;
+	border-radius:3px;
+	width: 1220px;
+	text-align: center;
+}
+#commission_div table tr th.category, #commission_en_div table tr th.category{
+	width: 180px;
+}
+#commission_div table tr th.duration, #commission_en_div table tr th.duration{
+	width: 50px;
+}
+#commission_div table tr td.top_category, #commission_en_div table tr td.top_category {
+	text-align: left;
+	padding-left: 12px;	
+	color: red;
+}
+#commission_div table th, #commission_en_div table th,.commission_table_head>th {
+	padding:5px 5px 5px 5px;
+	border-bottom:1px dashed #58595b;
+	background-color: #ededed;
+	background: -webkit-gradient(linear, left top, left bottom, from(#ededed), to(#ebebeb));
+	background: -moz-linear-gradient(top,  #ededed,  #ebebeb);
+}
+
+#commission_div table th:first-child, #commission_en_div table th:first-child, .inbound_commission_table tr th:first-child{
+	text-align: left;
+	padding-left:20px;
+}
+
+#commission_div table tr, #commission_en_div table tr, .inbound_commission_table tr td{
+	text-align: center;
+	padding-left:20px;
+}
+#commission_div table tr td:first-child, #commission_en_div table tr td:first-child, .inbound_commission_table tr td:first-child{
+	text-align: left;
+	padding-left:20px;
+	border-left: 0;
+}
+#commission_div table tr td, #commission_en_div table tr td,.inbound_commission_table tbody tr td {
+	padding:5px;
+	border-top: 1px dashed #ffffff;
+	border-bottom:1px dashed #58595b;
+	border-left: 1px solid #e0e0e0;
+	
+
+}
+/*
+#commission_div table tr.even td{
+	
+	
+}
+#commission_div table tr:last-child td{
+	border-bottom:0;
+}
+#commission_div table tr:last-child td:first-child{
+	-moz-border-radius-bottomleft:3px;
+	-webkit-border-bottom-left-radius:3px;
+	border-bottom-left-radius:3px;
+}
+#commission_div table tr:last-child td:last-child{
+	-moz-border-radius-bottomright:3px;
+	-webkit-border-bottom-right-radius:3px;
+	border-bottom-right-radius:3px;
+}
+#commission_div table tr:hover td{
+	background-color: #caf1ff;
+	background: -webkit-gradient(linear, left top, left bottom, from(#caf1ff), to(#caf1ff));
+	background: -moz-linear-gradient(top,  #caf1ff,  #caf1ff);	
+}
+#commission_div .country {
+	width: 35%;
+}
+#commission_div .duration {
+	width: 8%;
+}
+#commission_div .price {
+	width: 8%;	
+}
+
+
+#commission_div .view a {
+	color: #666;
+	background: #d1d3d4;
+	padding: 4px 35px;
+	-moz-border-radius:5px;
+	-webkit-border--radius:5px;
+	border-radius:5px;
+}
+#commission_div .view a:hover {
+	background: #6d6e71;
+	color: #fff;
+	text-decoration: none;
+}
+#commission_div .book a {
+	background: #3376bb;
+	color: #fff;
+	padding: 4px 35px;
+	-moz-border-radius:5px;
+	-webkit-border--radius:5px;
+	border-radius:5px;
+}
+#commission_div .book a:hover {
+	background: #ed1c24;
+	color: #fff;
+	text-decoration: none;
+}
+*/
+
+#commission_table tr.tour_row:nth-child(2n+1){
+    background-color: #F2F6F8;
+}
+
+#commission_table tr.tour_row td.ignore_bg{
+    background-color: #FFF;
+}
+
+.inbound_commission_table tbody tr:nth-child(2n+1){
+    background-color: #F2F6F8;
+}
+
+.room_comm_wrapper{
+    text-align: left;
+    display: inline-block;
+}
+
+.room_comm_wrapper>label{
+    display: inline-block;
+    width: 50px;
+}

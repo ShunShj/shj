@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html>
+<head>
+	{include file='public/head' /}
+  	<title>layout 后台大布局 - Layui</title>
+ 	<style>
+		.bill-picture{
+			position: relative;
+		}
+		.upload-hide{
+			display: none;
+			position: absolute;
+			left:0px;
+			top:0px;
+			background: rgba(0,0,0,0);
+			width: 100%;
+			height: 38px;
+		}
+	</style>
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+	
+	<div class="layui-header">
+	{include file='public/header' /}
+	</div>
+  
+	 <div class="layui-side layui-bg-black">
+	   <div class="layui-side-scroll">
+	     <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+		{include file='public/left_menu_web' /}
+	   </div>
+	 </div>
+  
+	<div class="layui-body">
+	 
+		<!-- 内容主体区域 -->
+		<div style="padding: 15px;">
+			<div class='layui-form-item'>
+		   		<span class="layui-breadcrumb" lay-separator="-">
+					<a>首页</a>
+					<a>网站设置</a>
+					<a><cite>网站配置管理</cite></a>
+				</span>
+			</div>
+			<br><br>
+			<div class="layui-row" >
+				<form class="layui-form layui-col-md4"  onSubmit="return systemEdit()">
+
+					<div class="layui-form-item">
+						<label class="layui-form-label ">LOGO：</label>
+						<div class="layui-input-block bill-picture">
+							<button type="button" class="layui-btn" id="pic">
+								<i class="layui-icon">&#xe67c;</i>上传图片
+							</button>
+							<div class="upload-hide" onclick="submit_add(this)"></div>
+						</div>
+						<div id="u-img1" style="padding: 10px; margin-left: 100px">
+							{if condition="$result.logo eq null"}
+							{else/}
+							<div style="padding: 5px;width: 110px;float: left" class="img_list del_img">
+								<div >
+									<img src="{$result.logo}" height="100" width="100">
+									<input type="hidden" value="{$result.logo}" name="pic">
+								</div>
+								<div><a class="layui-btn layui-btn-danger r-journey-img nav-edit"  onclick="delpicture(this)">删除</a></div>
+							</div>
+							{/if}
+						</div>
+					</div>
+					<div class="layui-form-item">
+						<label class="layui-form-label input-required ">官网名称：</label>
+						<div class="layui-input-block ">
+							<input name="web_name"  id="web_name" lay-verify="required" placeholder="" autocomplete="off" class="layui-input" type="text" value="{$result.web_name}">
+						</div>
+					</div>
+					<div class="layui-form-item">
+						<label class="layui-form-label">官网链接：</label>
+						<div class="layui-input-block ">
+							<input name="web_href"  id="web_href" placeholder="" autocomplete="off" class="layui-input" type="text" value="{$result.web_href}">
+						</div>
+					</div>
+					<div class="layui-form-item">
+						<label class="layui-form-label input-required ">网站默认时区：</label>
+						<div class="layui-input-block ">
+							<select name="time_zone_id" id='time_zone_id' lay-search>
+								<option value="">{$language_tag.index_system_showCompanyManage_choose}</option>
+								<option value="1" {if condition="1 eq $result.time_zone_id"}selected="seleted"{/if}>北京</option>
+								<option value="2" {if condition="2 eq $result.time_zone_id"}selected="seleted"{/if}>伦敦</option>
+								<option value="3" {if condition="3 eq $result.time_zone_id"}selected="seleted"{/if}>洛杉矶</option>
+							</select>
+						</div>
+					</div>
+					<div class="layui-form-item">
+						<label class="layui-form-label input-required ">网站默认语言：</label>
+						<div class="layui-input-block ">
+							<select name="language_id" id='language_id' lay-search>
+								<option value="">{$language_tag.index_system_showCompanyManage_choose}</option>
+								{foreach name='language_data_result'  item='vo'}
+								<option value="{$vo.language_id}" {if condition="$vo.language_id eq $result.language_id"}selected="seleted"{/if}>{$vo.language_name}</option>
+								{/foreach}
+							</select>
+						</div>
+					</div>
+					<div class="layui-form-item">
+						<label class="layui-form-label input-required ">网站默认币种：</label>
+						<div class="layui-input-block ">
+							<select name="currency_id" id='currency_id' lay-search>
+								<option value="">{$language_tag.index_system_showCompanyManage_choose}</option>
+								{foreach name='currency_data_result'  item='vo'}
+								<option value="{$vo.currency_id}" {if condition="$vo.currency_id eq $result.currency_id"}selected="seleted"{/if}>{$vo.currency_name}</option>
+								{/foreach}
+							</select>
+						</div>
+					</div>
+
+					<div class="layui-form-item">
+						<label class="layui-form-label">网站备案信息：</label>
+						<div class="layui-input-block ">
+							<input name="put_on_records"  id="put_on_records"  placeholder="" autocomplete="off" class="layui-input" type="text" value="{$result.put_on_records}">
+						</div>
+					</div>
+					<div class="layui-form-item">
+						<label class="layui-form-label">旅游经营许可证号：</label>
+						<div class="layui-input-block ">
+							<input name="tourism_business_license_number"  id="tourism_business_license_number"  placeholder="" autocomplete="off" class="layui-input" type="text" value="{$result.tourism_business_license_number}">
+						</div>
+					</div>
+					<div class="layui-form-item">
+						<label class="layui-form-label">预订热线：</label>
+						<div class="layui-input-block ">
+							<input name="reservation_phone"  id="reservation_phone" placeholder="" autocomplete="off" class="layui-input" type="text" value="{$result.reservation_phone}">
+						</div>
+					</div>
+					<div class="layui-form-item">
+						<label class="layui-form-label">联系邮箱：</label>
+						<div class="layui-input-block ">
+							<input name="email"  id="email"  placeholder="" autocomplete="off" class="layui-input" type="text" value="{$result.email}">
+						</div>
+					</div>
+					<div class="layui-form-item">
+						<label class="layui-form-label">经营范围：</label>
+						<div class="layui-input-block ">
+							<input name="scope_of_business"  id="scope_of_business"  placeholder="" autocomplete="off" class="layui-input" type="text" value="{$result.scope_of_business}">
+						</div>
+					</div>
+					<div class="layui-form-item">
+						<label class="layui-form-label">公司地址：</label>
+						<div class="layui-input-block ">
+							<input name="company_address"  id="company_address"  placeholder="" autocomplete="off" class="layui-input" type="text" value="{$result.company_address}">
+						</div>
+					</div>
+					<div class="layui-form-item">
+						<label class="layui-form-label">关于我们：</label>
+						<div class="layui-input-block ">
+							<textarea name="about_us" id="about_us" placeholder="请输入内容" class="layui-textarea">{$result.about_us}</textarea>
+						</div>
+					</div>
+					<div class="layui-form-item">
+						<label class="layui-form-label">联系我们：</label>
+						<div class="layui-input-block ">
+							<textarea name="contact_us" id="contact_us" placeholder="请输入内容" class="layui-textarea">{$result.contact_us}</textarea>
+						</div>
+					</div>
+					<div class="layui-form-item">
+						<label class="layui-form-label">状态:</label>
+						<div class="layui-input-block">
+							<select name="status" id='status' lay-verify="required">
+								<option value="1">启用</option>
+								<option value="0" {if condition="0 eq $result.about_us"}selected="seleted"{/if}>禁用</option>
+							</select>
+						</div>
+					</div>
+					<div class="layui-form-item">
+						<div class="layui-input-block">
+							<input type="hidden" id="system_config_id" value="{$result.system_config_id}" >
+							<button class="layui-btn nav-submit" lay-submit="" lay-filter="formDemo" >提交</button>
+							<a href="javascript:history.back(-1)"><button type="button" class="layui-btn layui-btn-primary">返回</button></a>
+						</div>
+					</div>
+				</form>
+			</div>
+
+		</div>
+	</div>
+  
+  <div class="layui-footer">
+    <!-- 底部固定区域 -->
+    © layui.com - 底部固定区域
+  </div>
+</div>
+{include file='public/foot_js' /}
+
+<script>
+	layui.use('upload', function(){
+		var upload = layui.upload;
+
+		//头部图片
+		var uploadInst = upload.render({
+			elem: '#pic' //绑定元素
+			,url: '/demo/uploadFile', //上传接口
+			multiple:false,
+			drag:'true'
+			,acceptMime:'image/*'
+			,accept:'images'
+			,before: function(obj){ //obj参数包含的信息，跟 choose回调完全一致，可参见上文。
+				layer.load(); //上传loading
+			}
+			,done: function(res){
+				//上传完毕回调
+				// console.log(res);
+				layer.closeAll('loading'); //关闭loading
+				if(res.code == 200){
+					var h = '<div style="padding: 5px;width: 110px;float: left" class="img_list"><div><img src="'+res.data+'" height="100" width="100" /><input type="hidden" value="'+res.data+'" name="title-picture" /></div><div><a class="layui-btn layui-btn-danger r-journey-img nav-edit" onclick="del(this)">删除</a></div></div>';
+					$('#u-img1').append(h);
+					$("#pic").siblings(".upload-hide").show();
+				}
+			}
+			,error: function(res){
+				//请求异常回调
+				console.log(res);
+				layer.closeAll('loading'); //关闭loading
+			}
+		});
+	});
+	function del(obj){
+		$(obj).parents("#u-img1").siblings(".bill-picture").find(".upload-hide").hide();
+		$(obj).parents(".img_list").remove();
+	}
+	function submit_add(a){
+		if($("#u-img1 .img_list").length==1){
+			layer.msg('只能上传一张图片');
+		}
+	}
+	function delpicture(obj){
+		$(obj).parents(".del_img").remove();
+		$("#pic").siblings(".upload-hide").hide();
+	}
+
+	if($("#u-img1 .img_list").length==1){
+		$("#bill_template_title_pic").siblings(".upload-hide").show();
+	}
+
+
+	function systemEdit(){
+		var system_config_id = $("#system_config_id").val();
+		var web_name = $("#web_name").val();
+		var pic=$("#u-img1").find("img").attr("src");
+		var web_href=$("#web_href").val();
+		var time_zone_id=$("#time_zone_id").val();
+		var language_id = $("#language_id").val();
+		var currency_id=$("#currency_id").val();
+		var put_on_records=$("#put_on_records").val();
+		var tourism_business_license_number = $("#tourism_business_license_number").val();
+		var reservation_phone = $("#reservation_phone").val();
+		var email = $("#email").val();
+		var scope_of_business=$("#scope_of_business").val();
+		var company_address=$("#company_address").val();
+		var about_us = $("#about_us").val();
+		var contact_us = $("#contact_us").val();
+		var status = $("#status").val();
+		var data={
+			system_config_id:system_config_id,
+			web_name:web_name,
+			logo:pic,
+			web_href:web_href,
+			time_zone_id:time_zone_id,
+			language_id:language_id,
+			currency_id:currency_id,
+			put_on_records:put_on_records,
+			tourism_business_license_number:tourism_business_license_number,
+			reservation_phone:reservation_phone,
+			email:email,
+			scope_of_business:scope_of_business,
+			company_address:company_address,
+			about_us:about_us,
+			contact_us:contact_us,
+			status:status,
+		}
+		$.ajax({
+			type: "POST",
+			url: '/ota_system/editOtaSystemAjax',
+			data: data,
+			dataType: "json",
+			success: function(data){
+				if(data.code!=200){
+					layer.msg(data.msg);
+					return false;
+				}else if(data.code==200) {
+					layer.msg('success',{time:1,end : function(layero, index){
+							location.href='/ota_system/showOtaSystemManage?status=1';
+						}
+					});
+				}
+			},
+			error:function(XMLHttpRequest, textStatus, errorThrown){
+				layer.msg('验证失败')
+			}
+		});
+		return false;
+	}
+</script>
+
+</body>
+</html>

@@ -1,0 +1,242 @@
+
+var roomTypeArr=[];//房型
+roomTypeZu();
+
+
+var company_order_number=$("#number").val();
+$.ajax({
+    type : "post",
+    url : "/publicshow/getCompanyOrderCustomerJouneryMenuAjax",//branchcompany--publicshow
+    data : {company_order_number:company_order_number},
+    dataType : "json",
+    success : function(result) {
+
+        var datas=result.data;
+        /*行程单*/
+        $("#company_order_name").html(datas.company_order_name);
+        $(".tour_code").html(isFieldName(datas.tour_code));
+        $(".company_order_number").html(datas.company_order_number);
+        $("#begin_time").html(date('d-m-Y',datas.begin_time));
+        $("#begin_city").html(datas.begin_city);
+        $("#remark").html(datas.remark);
+        $("#distributor_name").html(datas.distributor_name);
+        $("#distributor_address").html(datas.distributor_address);
+        $("#distributor_phone").html(datas.distributor_phone);
+        $("#lianxiren").html(datas.lianxiren);
+        $("#lianxidianhua").html(datas.lianxidianhua);
+        $("#day_count").html(datas.day_count);
+        $("#teshuyaoqiu_str").html(datas.teshuyaoqiu_str);
+
+        if($("#teshuyaoqiu_str").html()==''){
+            $("#teshuyaoqiu_str").parents(".plan_list").remove();
+        }
+
+        var hotelHtml='';
+        if(datas.team_product_jounery&&datas.team_product_jounery.length>0){
+            for(var i=0;i<datas.team_product_jounery.length;i++){
+                hotelHtml+='<tr style="border-bottom: 2px dashed #25AAE1;padding-bottom:30px;">'+
+                    '<td style="width:30%;color: #283891;font-size: 20px;font-weight: bold">'+isTime(datas.team_product_jounery[i].jounery_time,"isYmd")+'</td>';
+                hotelHtml+='<td valign="top">'+isFieldName(datas.team_product_jounery[i].route_journey_content)+'</td></tr>';
+            }
+            $("#team_product_jounery").html(hotelHtml);
+        }
+        if($("#team_product_jounery").html()==''){
+            $("#team_product_jounery").parents(".plan_list").remove();
+        }
+
+
+        /*住宿信息*/
+        var informationHtml='';
+        if(datas.customer_info && datas.customer_info.length>0){
+            var newCustomer=[];
+            for(var i=0;i<datas.customer_info.length;i++){
+                informationHtml+='<tr>' +
+                    '<td valign="top">'+isFieldName(datas.customer_info[i].customer_name)+'</td>';
+                if(i==0){
+                    informationHtml+='<td valign="top" rowspan="'+datas.customer_info.length+'">'+roomTypeAll(datas.room_type)+'</td>';
+                }
+                informationHtml+='</tr>';
+            }
+            $("#information").html(informationHtml);
+        }
+        if($("#information").html()==''){
+            $("#information").parents(".plan_list").remove();
+        }
+
+
+        /*接送机*/
+        var flightHtml='';
+        if(datas.flight_info && datas.flight_info.length>0){
+            for(var i=0;i<datas.flight_info.length;i++){
+                flightHtml+='<tr>' +
+                    '<td valign="top">'+isTime(datas.flight_info[i][0].flight_time,"isYmd")+'</td>' +
+                    '<td valign="top">'+flightPlace(datas.flight_info[i][0].end_place,datas.flight_info[i][0].start_place,datas.flight_info[i][0].flight_type)+'</td>'+
+                    '<td valign="top">'+flightType(datas.flight_info[i][0].flight_type)+'</td>'+
+                    '<td valign="top">'+isFieldName(datas.flight_info[i][0].flight_code)+'</td>' +
+                    '<td valign="top">'+flightTime(datas.flight_info[i][0].flight_begin_time,datas.flight_info[i][0].flight_end_time,datas.flight_info[i][0].flight_type)+'</td>';
+                flightHtml+='</tr>';
+            }
+            $("#flight").html(flightHtml);
+        }
+        if($("#flight").html()==''){
+            $("#flight").parents(".plan_list").remove();
+        }
+
+        /*自费项目*/
+        var sourceHtml='';
+        if(datas.own_expense_info && datas.own_expense_info.length>0){
+            for(var i=0;i<datas.own_expense_info.length;i++){
+                sourceHtml+='<div>' +
+                    isFieldName(datas.own_expense_info[i].source_name)+'</div>';
+            }
+            $("#own_expense_info").html(sourceHtml);
+        }
+        if($("#own_expense_info").html()==''){
+            $("#own_expense_info").parents(".plan_list").remove();
+        }
+
+
+
+        var specialHtml='';
+        if(datas.customer_info && datas.customer_info.length>0){
+            var newCustomer=[];
+            for(var i=0;i<datas.customer_info.length;i++){
+                if(datas.customer_info[i].check_in<0){
+                    specialHtml += '<tr>' +
+                        '<td valign="top">' + isTime(datas.customer_info[i].check_in_time,"isYmd") + '</td>' +
+                        '<td valign="top">'+isFieldName(datas.customer_info[i].customer_name)+'</td>' +
+                        '<td valign="top">Pre Accommodation</td>' +
+                        '<td valign="top">' + isFieldName(datas.customer_info[i].check_in_hotel) + '</td>' +
+                        '<td valign="top">' + checkInt(datas.customer_info[i].check_in) + '</td>' +
+                        '<td valign="top">' + isFieldName(datas.customer_info[i].room_type_name) + '</td>' +
+                        '</tr>';
+                }
+                if(datas.customer_info[i].check_on>0){
+                    specialHtml += '<tr>' +
+                        '<td valign="top">' + isTime(datas.customer_info[i].check_on_time,"isYmd") + '</td>' +
+                        '<td valign="top">'+isFieldName(datas.customer_info[i].customer_name)+'</td>' +
+                        '<td valign="top">Post Accommodation</td>' +
+                        '<td valign="top">' + isFieldName(datas.customer_info[i].check_on_hotel) + '</td>' +
+                        '<td valign="top">' + isFieldName(datas.customer_info[i].check_on) + '</td>' +
+                        '<td valign="top">' + isFieldName(datas.customer_info[i].room_type_name) + '</td>' +
+                        '</tr>';
+                }
+            }
+            $("#customer_info").html(specialHtml);
+        }
+        if($("#customer_info").html()==''){
+            $("#customer_info").parents(".plan_list").remove();
+        }
+
+        var receiptHtml='';
+        if(datas.return_receipt&&datas.return_receipt.length>0){
+            for(var i=0;i<datas.return_receipt.length;i++){
+                receiptHtml+='<div class="other_title other_title_border"><img src="/static/image/branchcompany/Notice.png" />'+isFieldName(datas.return_receipt[i].title)+'</div>'+
+                    '<div style="font-size: 14px;line-height: 20px; padding: 10px 20px ">'+isFieldName(datas.return_receipt[i].content)+'</div>';
+            }
+            $("#return_receipt").html(receiptHtml);
+        }
+        if($("#return_receipt").html()==''){
+            $("#return_receipt").remove();
+        }
+
+        /*var heights=$("#container").height();
+        $(window.parent.document).find("#infomation-table").css('height',heights+50);
+        layer.closeAll('loading');*/
+
+        var height = calcPageHeight(document)
+        parent.document.getElementById('iframe').style.height = height+50 + 'px'
+        parent.document.getElementById('infomation-table').style.height = height+50 + 'px'
+    }
+})
+
+function calcPageHeight(doc) {
+    var cHeight = Math.max(doc.body.clientHeight, doc.documentElement.clientHeight)
+    var sHeight = Math.max(doc.body.scrollHeight, doc.documentElement.scrollHeight)
+    var height  = Math.max(cHeight, sHeight)
+    return height
+}
+
+function roomTypeAll(roomArr) {
+    var roomTypeHtml='';
+    for(var i in roomArr){
+        roomTypeHtml+=roomType(i)+'*'+roomArr[i]+',';
+    }
+    return roomTypeHtml;
+}
+
+function checkInt(obj) {
+    return Math.abs(obj);
+}
+
+function flightPlace(endPlace,startPlace,flightType) {
+    return flightType==1?endPlace:flightType==2?startPlace:'-';
+}
+
+function flightType(flightType) {
+    return flightType==1?'接机':flightType==2?'送机':'-';
+}
+
+function flightTime(beginTime,endTime,flightTime) {
+    return flightTime==1?isTime(endTime):flightType==2?isTime(beginTime):'-';
+}
+
+/*证件类型*/
+function cardType(cardType) {
+    return cardType==1?'护照':cardType==2?'身份证':'-'
+}
+
+function roomTypeZu() {
+    $.ajax({
+        type: "post",
+        url: "/publicshow/getRoomTypeAjax",
+        data:{},
+        dataType: "json",
+        success: function (result) {
+            if(result.code==200) {
+                var list=result.data;
+                roomTypeArr=list;
+            }else if(result.code!=200){
+                return false;
+            }
+        }
+    });
+}
+
+//房型
+function roomType(obj) {
+    if(obj==null){
+        return '-';
+    }else{
+        for(var i=0;i<roomTypeArr.length;i++){
+            if(roomTypeArr[i].room_type_id==obj){
+                return roomTypeArr[i].room_type_name;
+            }
+        }
+    }
+}
+
+/*时间*/
+function isTime(time,isYmd) {
+    if(time && time!=null){
+        if(time=='0'){
+            return "-";
+        }else{
+            if(isYmd=='isYmd'){
+                return date("d-m-Y",time)
+            }else{
+                return date("H:i",time)
+            }
+        }
+    }else{
+        return "-";
+    }
+}
+/*判断是否是null或没有字段*/
+function isFieldName(fieldName) {
+    if(fieldName&&fieldName!=''){
+        return fieldName;
+    }else{
+        return "-";
+    }
+}

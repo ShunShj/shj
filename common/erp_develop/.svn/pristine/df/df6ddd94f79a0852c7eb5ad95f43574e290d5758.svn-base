@@ -1,0 +1,95 @@
+<link rel="stylesheet" href="/static/css/formSelects-v4.css">
+<link rel="stylesheet" href="/static/layui/css/layui.css">
+<!--公共CSS样式-->
+<link rel="stylesheet" href="/static/css/public_style.css">
+<script src='/static/javascript/public/jquery-2.1.1.min.js'></script>
+<link href="/static/css/product.css" rel="stylesheet">
+<link href="/static/css/public.css" rel="stylesheet">
+
+<body style="margin: 0 10%">
+<!--添加游客start-->
+<div class="lay-visitor-add" style="width: 80%;height: 500px" >
+    <fieldset class="layui-elem-field layui-field-title">
+        <legend>{$language_tag.index_language_multilingualSetting_multilingual_settings}: <font style="color: red"></font></legend>
+    </fieldset>
+    <form class="layui-form" id="form1" onSubmit="return save()">
+
+        {foreach $LanguageAr as $v}
+        <div class="layui-form-item">
+            <label class="layui-form-label">{$v.language_name}</label>
+            <div class="layui-input-block">
+                <input type="text" class="layui-input" name="language[{$v.language_id}]" value="{$MultilingualAll[$_GET['original_table_name'].'-'.$_GET['original_table_field_name'].'-'.$_GET['original_table_id'].'-'.$v.language_id][0]['translate']}">
+                <input type="hidden" name="multilingual_id[{$v.language_id}]" value="{$MultilingualAll[$_GET['original_table_name'].'-'.$_GET['original_table_field_name'].'-'.$_GET['original_table_id'].'-'.$v.language_id][0]['multilingual_id']}" />
+            </div>
+        </div>
+        {/foreach}
+
+        <input type="hidden" name="original_table_name" value="{$_GET['original_table_name']}" />
+        <input type="hidden" name="original_table_field_name" value="{$_GET['original_table_field_name']}" />
+        <input type="hidden" name="original_table_id" value="{$_GET['original_table_id']}" />
+
+        <br>
+        <div class="layui-row" style="padding-bottom: 50px">
+            <div class="layui-form-button" style="text-align: center">
+                <button class="layui-btn nav-submit" >{$language_tag.index_public_save}</button>
+                <button type="button" class="layui-btn layui-btn-primary" onclick="multilingualSettingVisitorMessBack()">{$language_tag.index_public_back}</button>
+            </div>
+        </div>
+    </form>
+</div>
+<!--添加游客end-->
+</body>
+
+
+
+
+<script src="/static/layui/layui.all.js"></script>
+
+<script>
+    var layer = layui.layer;
+    var form = layui.form;
+    var laydate = layui.laydate;
+    var upload = layui.upload;
+    var element = layui.element;
+    var formSelects = layui.formSelects;
+    !function() {
+
+
+
+    }();
+
+    function multilingualSettingVisitorMessBack(){
+        parent.multilingualSettingVisitorMessBackOpenClose();
+    }
+
+
+
+    function save(){
+        layer.load();
+        $.ajax({
+            type: "POST",
+            url: '/language/editMultilingualSetting',
+            data: $('#form1').serializeArray(),
+            success: function (data) {
+                layer.closeAll('loading'); //关闭loading
+                if(data.code!=200){
+                    layer.msg(data.msg);
+                    return false;
+                }else if(data.code==200){
+                    layer.msg('success',{time:1,end : function(layero, index){
+                        parent.multilingualSettingVisitorMessBackOpenClose();
+                    }
+                    });
+                }
+            },
+            error:function(XMLHttpRequest, textStatus, errorThrown){
+                //console.log(errorThrown)
+                layer.msg('{$language_tag.index_public_verificationFailure}')
+                layer.closeAll('loading'); //关闭loading
+            }
+        });
+        return false;
+    }
+
+
+</script>

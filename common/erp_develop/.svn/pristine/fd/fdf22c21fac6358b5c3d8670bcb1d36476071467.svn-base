@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {include file='public/head' /}
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link href="__STATIC__/css/product.css" rel="stylesheet">
+    <style>
+        #receipt_box{
+            background-color:#fff;
+            margin:20px;
+        }
+        #receipt_box div,#receipt_box td{
+            font-size:16px;color: #000;
+        }
+        #receipt_box thead tr{
+            background:#CCCCCC!important;
+            color:#000;
+        }
+        #receipt_box tbody tr:nth-child(even){
+            background:#E0EBFF;
+        }
+        #receipt_box td,th{
+            border:none!important;
+        }
+        #receipt_box table{
+            border:1px solid #333!important;
+        }
+        #receipt_box th{
+            font-weight: bold;
+        }
+        #receipt_box .footer{
+            border-top:3px solid #000;
+            border-bottom:3px solid #000;
+            padding:10px 0px;
+        }
+        #receipt_box .footer-right span{
+            width:45%;
+            text-align: right!important;
+            display: inline-block;
+            padding-right:10px;
+        }
+        #receipt_box .footer-right em{
+            width:47%;
+            border:1px solid #000;
+            text-align: right!important;
+            display: inline-block;
+        }
+        #receipt_box .footer-right>div{
+            line-height: 26px;
+        }
+        #receipt_box .footer-right{
+            vertical-align: bottom;
+        }
+    </style>
+</head>
+<body style='font-family:simsun'>
+<div id="receipt_box" >
+<input type='hidden' id='bill_template_id' value='{$bill_template_id}' />
+<input type='hidden' id='company_order_id' value='{$company_order_id}' />
+<input type='hidden' id='receivable_info_id' value='{$receivable_info_id}' />
+<input type='hidden' id='default_bill_template_id' value='{$default_bill_template_id}' />
+<input type='hidden' id='now_user_id' value='{$now_user_id}' />
+</div>
+<script id="receipt" type="text/html">
+    <div id="bill_template_title_pic" style="width:1106px;height:160px;background: #ccc;">
+        {{#  if(d.bill_template_title_pic !=null){ }}
+        <img crossorigin='anonymous' src="{{d.bill_template_title_pic}}" width="100%" height="160px" />
+        {{#  } }}
+    </div>
+    <div class="receipt_message clear">
+        <div class="fl">
+            <div style="height:26px"> </div>
+            <div>To:</div>
+            <div>{{fn(d.content_name)}}</div>
+            <div>{{fn(d.city_name)}}</div>
+            <div>{{fn(d.country_name)}}</div>
+            <div>{{fn(d.tel)}}</div>
+            <div>{{fn(d.email)}}</div>
+        </div>
+        <div class="fl">
+            <div style="color:#0070E6;font-size:28px">Invoice</div>
+            <div>No:{{fn(d.receivable_voucher)}}</div>
+            <div>Booking Date:{{date('Y-m-d',d.create_time)}}</div>
+            <div>Product Code:{{fn(d.branch_product_name)}}</div>
+            <div>Tour Code:{{fn(d.branch_product_number)}}</div>
+            <div>Depart Date:{{date('Y-m-d',d.begin_time)}}</div>
+            <div>Sales agent:{{fn(d.create_user_name)}}</div>
+            <div>Description:{{fn(d.description)}}</div>
+        </div>
+    </div>
+    <!--游客信息-->
+    <div class="tourist_information">
+        <div class="bill_tourist_title">
+            <span>Clients Name List:</span>
+            <span>Person(s):{{fn(d.customer_count)}}</span>
+        </div>
+        <table class="layui-table">
+            <thead>
+            <tr>
+                <th>SN</th>
+                <th>Gender</th>
+                <th>FirstName</th>
+                <th>LastName</th>
+                <th>RoomType</th>
+            </tr>
+            </thead>
+            <tbody>
+            {{#  layui.each(d.customer_info, function(index, item){ }}
+            <tr>
+                <td>{{fn(item.company_order_lineup_number)}}</td>
+                <td>{{genders(item.gender)}}</td>
+                <td>{{fn(item.customer_first_name)}}</td>
+                <td>{{fn(item.customer_last_name)}}</td>
+                <td>{{roomType(item.room_type)}}</td>
+            </tr>
+            {{#  }); }}
+            </tbody>
+        </table>
+    </div>
+    <!--报价信息-->
+    <div class="tourist_Quotation">
+        <div>Pricing List:</div>
+        <table class="layui-table">
+            <thead>
+            <tr>
+                <th>Item</th>
+                <th>Currency</th>
+                <th>Price</th>
+                <th>Total</th>
+                <th>Note</th>
+            </tr>
+            </thead>
+            <tbody>
+            {{#  layui.each(d.company_order_price, function(index, item){ }}
+            <tr>
+                <td>{{fn(item.product_name)}}</td>
+                <td>{{fn(item.currency_name)}}</td>
+                <td>{{fn(item.price)}}</td>
+                <td>{{fn(item.total)}}</td>
+                <td>{{fn(item.remark)}}</td>
+            </tr>
+            {{#  }); }}
+            </tbody>
+        </table>
+    </div>
+    <div class="tourist_sales">
+        <div>Payment Record:</div>
+        <table class="layui-table">
+            <thead>
+            <tr>
+                <th>PmtDate</th>
+                <th>Currency</th>
+                <th>Amount</th>
+                <th>PmtMode</th>
+                <th>PmtNum</th>
+                <th>Agent</th>
+                <th>Note</th>
+            </tr>
+            </thead>
+            <tbody>
+            {{#  layui.each(d.sale_info, function(index, item){ }}
+            <tr>
+                <td>{{fn(item.payment_time)}}</td>
+                <td>{{fn(item.currency_name)}}</td>
+                <td>{{fn(item.amount)}}</td>
+                <td>{{fnPayment(item.payment_type)}}</td>
+                <td>{{fn(item.payment_number)}}</td>
+                <td>{{fn(item.receivable_user_name)}}</td>
+                <td>{{fn(item.remark)}}</td>
+            </tr>
+            {{#  }); }}
+            </tbody>
+        </table>
+    </div>
+    <div style="height:100px"></div>
+    <div class="clear footer" style="position: relative">
+        <div id="bill_template_foot_pic" class="fl" style="width:840px;height:400px;background: #ccc">
+            {{#  if(d.bill_template_foot_pic !=null){ }}
+            <img crossorigin='anonymous' src="{{d.bill_template_foot_pic}}" width="100%" height="400px" />
+            {{#  } }}
+        </div>
+        <div class="fr footer-right" style="width: 22%;position: absolute;bottom: 20px;right:0px;">
+            <div><span>Price</span><em>{{fn(d.price)}}</em></div>
+            <div><span>Tax</span><em>{{fn(d.tax)}}</em></div>
+            <div><span>Total</span><em>{{fn(d.total)}}</em></div>
+            <div><span>Paid</span><em>{{fn(d.paid)}}</em></div>
+            {{#  layui.each(d.balance, function(index, item){ }}
+            <div><span>Balance({{fn(item.unit)}})</span><em>{{fn(item.balance_money)}}</em></div>
+            {{#  }); }}
+        </div>
+    </div>
+</script>
+<script src="__STATIC__/layui/layui.all.js"></script>
+<script type="text/javascript" src="__STATIC__/javascript/data.js"></script>
+<script>
+    var laytpl=layui.laytpl;
+    $.ajax({
+        type: "post",
+        url: "/publicshow/getSaleBillAjax",
+  
+        data: {        	    		
+            bill_template_id:$("#bill_template_id").val(),
+            company_order_id:$("#company_order_id").val(),
+            receivable_info_id:$("#receivable_info_id").val(),
+            default_bill_template_id:$("#default_bill_template_id").val(),
+            now_user_id:$('#now_user_id').val()
+        },
+        dataType: "json",
+        success: function (result) {
+            layer.load();
+            $(".puts").hide();
+            $("#receipt_box").css("display","block");
+            var datas=result.data;
+            var getTpl=$("#receipt").html();
+            laytpl(getTpl).render(datas,function(html){
+                $("#receipt_box").html(html);
+                layer.closeAll('loading');
+            });
+        }
+    })
+    function fn(names) {
+        if(names==null || names==''){
+            return '--';
+        }else{
+            return names
+        }
+    }
+    //性别
+    function genders(obj) {
+        return obj==1?'男':obj==2?'女':'';
+    }
+    //房型
+    function roomType(obj) {
+        return obj==1?'双人房':obj==2?'大床房':obj==3?'单人房':obj==4?'加床':'-';
+    }
+    //支付方式
+    function fnPayment(type) {
+        return type==1?'cash':type==2?'check':type==3?'debit card':type==4?'credit card(mc)':type==5?'credit card(vs)':type==6?'credit card(ax)':type==7?'direct depsit':type==8?'others':'';
+    }
+    //支付类型
+    function stage(type) {
+        return type==1?'Balance':type==2?'Deposit':type==3?'Fullpmt':type==4?'Gratuities':type==5?'Insurance':type==6?'Partpmt':type==7?'Rebate':type==8?'Tkt':type==9?'Visa':'';
+    }
+    function getQueryVariable(variable)
+    {
+        var query = window.location.search.substring(1);
+        var vars = query.split("&");
+        for (var i=0;i<vars.length;i++) {
+            var pair = vars[i].split("=");
+            if(pair[0] == variable){return pair[1];}
+        }
+        return(false);
+    }
+</script>
+</body>
+</html>

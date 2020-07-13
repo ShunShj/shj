@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {include file='public/head' /}
+    <title>{$language_tag.index_product_visitor_checkIn}-{$language_tag.index_finance_showReceivableManage_flight}</title>
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+
+    <div class="layui-header">
+        {include file='public/header' /}
+    </div>
+
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll">
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            {include file='public/left_menu' /}
+        </div>
+    </div>
+
+    <div class="layui-body">
+
+        <!-- 内容主体区域 -->
+        <div style="padding: 15px;">
+            <div class='layui-form-item'>
+		   		<span class="layui-breadcrumb" lay-separator="-">
+                    <a>{$language_tag.index_public_homepage}</a>
+                    <a>{$language_tag.index_public_product}</a>
+					<a>{$language_tag.index_product_ShowPlanTour_resources_teamProduct}</a>
+					<a>{$_GET['plan_id'] ? $language_tag.index_public_update  : $language_tag.index_public_add}{$language_tag.index_product_ShowPlanTour_resources_teamProduct}</a>
+                    <a><cite>{$language_tag.index_product_showRouteTemplateManage_resources_resourcesFlight}</cite></a>
+				</span>
+            </div>
+            <div style="font-weight:bold;font-size: 20px;">{$language_tag.index_product_visitor_checkIn}-{$language_tag.index_finance_showReceivableManage_flight}</div>
+
+            <br/>
+            <br/>
+            <br/>
+            <form class="layui-form" id="form1" onSubmit="return add()">
+                <div class="table-nont">
+                    <table  class="layui-table" id="t-flight">
+                        <thead>
+                        <tr>
+                            <th>{$language_tag.index_product_showRouteTemplateManage_resource_resourceSupplier}</th>
+                            <!--<th>地接社</th>-->
+                            <th>{$language_tag.index_public_flightNumber}</th>
+                            <th>{$language_tag.index_product_showRouteTemplateManage_resources_berth}</th>
+                            <th>{$language_tag.index_product_showRouteTemplateManage_resource_number}</th>
+                            <th>{$language_tag.index_public_type_price}</th>
+                            <th>{$language_tag.index_product_showRouteTemplateManage_resources_currency}</th>
+                            <th>{$language_tag.index_public_price}</th>
+                            <th>{$language_tag.index_product_PlanSuppliersPayable_total}</th>
+                            <th>{$language_tag.index_source_operation}</th>
+                        </tr>
+                        </thead>
+                        {foreach $session_flight as $ky=>$session_flightV}
+                        <tr>
+                            <th>
+                                <select name="supplier_id[{$ky}]" lay-filter="supplier_id" class="supplier_id" required lay-verify="required" lay-search >
+                                    <option></option>
+                                    {foreach $SupplierList as $vl}
+                                    <option value="{$vl.supplier_id}" {$session_flightV.supplier_id==$vl.supplier_id?"selected":""}>{$vl.supplier_name}</option>
+                                    {/foreach}
+                                </select>
+                            </th>
+                            <!--<th>-->
+                                <!--<select name="agent_id[{$ky}]" class="agent_id" lay-filter="agent_id" lay-search>-->
+                                    <!--<option></option>-->
+                                    <!--{foreach $session_flightV.agent_data as $vl}-->
+                                    <!--<option value="{$vl.supplier_id}" {$vl.supplier_id==$session_flightV.agent_id?'selected':''}>{$vl.supplier_name}</option>-->
+                                    <!--{/foreach}-->
+                                <!--</select>-->
+                            <!--</th>-->
+                            <th>
+                                <select name="flight_number[{$ky}]" class="flight_number" lay-filter="flight_number" required lay-verify="required" lay-search>
+                                    <option></option>
+                                    {foreach $session_flightV.resource_data as $vl}
+                                    <option value="{$vl.flight_id}" {$vl.flight_id==$session_flightV.flight_number?'selected':''}>{$vl.flight_number}({$vl.shipping_space})</option>
+                                    {/foreach}
+                                </select>
+                                <input type="hidden" class="flight_id" name="flight_id[{$ky}]" value="{$session_flightV.flight_id}">
+                            </th>
+                            <th>
+                                <input class="layui-input shipping_space" name="shipping_space[{$ky}]" required lay-verify="required"  readonly value="{$session_flightV.shipping_space}"/>
+                            </th>
+                            <th>
+                                <input class="layui-input quantity"  name="quantity[{$ky}]" required lay-verify="required|number" value="{$session_flightV.quantity}">
+                            </th>
+                            <th>
+                                <select name="unit_value_type[{$ky}]" class="unit_value_type">
+                                    <option value="1">{$language_tag.index_public_adult}</option>
+                                </select>
+                            </th>
+                            <th>
+                                <select name="currency[{$ky}]" class="currency">
+                                    <option value="0"></option>
+                                    {foreach $CurrencyList as $v }
+                                    <option value="{$v.currency_id}" {$v.currency_id==$session_flightV.currency?'selected':''}>{$v.currency_name}</option>
+                                    {/foreach}
+                                </select>
+                            </th>
+                            <th><input class="layui-input unit_price"  name="unit_price[{$ky}]" required lay-verify="required|number"  value="{$session_flightV.unit_price}"></th>
+                            <th><input class="layui-input total"  name="total[{$ky}]" required lay-verify="required|number"   value="{$session_flightV.total}"></th>
+                            <th>
+                                <input type="hidden" name="team_product_allocation_id[{$ky}]" value="{$session_flightV.team_product_allocation_id}" />
+                                <a class="layui-btn r-flight layui-btn-sm hover-edit layui-btn-primary" >{$language_tag.index_public_del}</a></th>
+                        </tr>
+                        {/foreach}
+
+                    </table>
+                </div>
+
+
+                <br><br><br>
+                <div class="layui-form-item">
+                    <div class="">
+                        <a class="layui-btn nav-add" id="add-flight">{$language_tag.index_public_add}</a>
+                        <button class="layui-btn nav-submit" lay-submit="" lay-filter="formDemo" id="language_add_button">{$language_tag.index_public_submit}</button>
+                        <a href="javascript:location.reload()" class="layui-btn layui-btn-primary">{$language_tag.index_product_showRouteTemplateManage_reload}</a>
+                        <a href="javascript:window.close()"><button type="button" class="layui-btn layui-btn-primary">{$language_tag.index_public_back}</button></a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!--用餐配置模板-->
+    <table style="display: none" id="add_div">
+        <tr>
+            <th>
+                <select name="supplier_id[ii]" lay-filter="supplier_id" class="supplier_id" required lay-verify="required" lay-search >
+                    <option></option>
+                    {foreach $SupplierList as $vl}
+                    <option value="{$vl.supplier_id}">{$vl.supplier_name}</option>
+                    {/foreach}
+                </select>
+            </th>
+            <!--<th>-->
+                <!--<select name="agent_id[ii]" class="agent_id" lay-filter="agent_id" lay-search>-->
+                    <!--<option></option>-->
+                <!--</select>-->
+            <!--</th>-->
+            <th>
+                <select name="flight_number[ii]" class="flight_number" lay-filter="flight_number" required lay-verify="required" lay-search>
+                    <option></option>
+                </select>
+                <input type="hidden" class="flight_id" name="flight_id[ii]">
+            </th>
+            <th>
+                <input class="layui-input shipping_space" name="shipping_space[ii]" required lay-verify="required"  readonly />
+            </th>
+            <th>
+                <input class="layui-input quantity"  name="quantity[ii]" required lay-verify="required|number" >
+            </th>
+            <th>
+                <select name="unit_value_type[ii]" class="unit_value_type">
+                    <option value="1">{$language_tag.index_public_adult}</option>
+                </select>
+            </th>
+            <th>
+                <select name="currency[ii]" class="currency">
+                    <option value="0"></option>
+                    {foreach $CurrencyList as $v }
+                    <option value="{$v.currency_id}">{$v.currency_name}</option>
+                    {/foreach}
+                </select>
+            </th>
+            <th><input class="layui-input unit_price"  name="unit_price[ii]" required lay-verify="required|number"></th>
+            <th><input class="layui-input total"  name="total[ii]" required lay-verify="required|number"></th>
+            <th><a class="layui-btn r-flight layui-btn-sm hover-edit layui-btn-primary" >{$language_tag.index_public_del}</a></th>
+        </tr>
+    </table>
+    <div class="layui-footer">
+        <!-- 底部固定区域 -->
+        © layui.com - 底部固定区域
+    </div>
+</div>
+{include file='public/foot_js' /}
+
+
+<script>
+    !function() {
+        var layer = layui.layer;
+        var form = layui.form;
+        var laydate = layui.laydate;
+        var num = <?=count($session_flight)?:0;?>;
+
+        //添加用餐
+        $('#add-flight').on('click',function(){
+            tableNone()
+            var html = $('#add_div').html();
+            for(var ij=1;ij<15;ij++){
+                html = html.replace('ii',num);
+            }
+            $('#t-flight').append(html);
+            num++;
+            form.render();
+        });
+        //删除
+        $('#t-flight').delegate('.r-flight','click',function(){
+            $(this).parent().parent().remove();
+            table()
+        });
+
+
+        var tr;
+        //供应商获取用餐信息
+        form.on('select(supplier_id)', function(data){
+            tr = $(this).parent().parent().parent().parent();
+            if(data.value){
+                layer.load(2);
+                $.post('/product/getFlightAjax',{supplier_id:data.value},function(a){
+                    if(a.code==200){
+                        //地接社
+                        tr.find('.agent_id').html('');
+                        var html = '<option></option>';
+                        if(a.LocalTravelAgencyAr){
+                            for(var x in a['LocalTravelAgencyAr'])
+                                html += '<option value="'+a['LocalTravelAgencyAr'][x]['supplier_id']+'">'+a['LocalTravelAgencyAr'][x]['supplier_name']+'</option>';
+                        }
+                        tr.find('.agent_id').html(html);
+                        //航班
+                        tr.find('.flight_number').html('');
+                        var html2 = '<option></option>';
+                        if(a.flightData){
+                            for(var x in a['flightData']){
+                                html2 += '<option value="'+a['flightData'][x]['flight_id']+'">'+a['flightData'][x]['flight_number']+'('+a['flightData'][x]['shipping_space']+')</option>';
+                            }
+                        }
+                        tr.find('.flight_number').html(html2);
+                    }else{
+                        tr.find('.agent_id').html('');
+                        tr.find('.flight_number').html('');
+                    }
+                    form.render();
+                    layer.closeAll('loading'); //关闭loading
+                },'json');
+            }else{
+                tr.find('.agent_id').html('');
+                tr.find('.flight_number').html('');
+                form.render();
+            }
+        });
+
+        //地接社
+        form.on('select(agent_id)', function(data) {
+            tr = $(this).parent().parent().parent().parent();
+            var supplier_id = tr.find('.supplier_id').val();
+            if(data.value){
+                layer.load(2);
+                $.post('/product/getFlightAgentAjax',{agent_id:data.value,supplier_id:supplier_id},function(a){
+                    tr.find('.flight_number').html('');
+                    if(a.code==200){
+                        var html = '<option></option>';
+                        if(a.flightData){
+                            for(var x in a['flightData']){
+                                html += '<option value="'+a['flightData'][x]['flight_id']+'">'+a['flightData'][x]['flight_number']+'('+a['flightData'][x]['shipping_space']+')</option>';
+                            }
+                        }
+                        tr.find('.flight_number').html(html);
+                    }
+                    form.render();
+                    layer.closeAll('loading'); //关闭loading
+                },'json');
+            }else{
+                tr.find('.flight_number').html('');
+                layer.load(2);
+                $.post('/product/getFlightAjax',{supplier_id:supplier_id},function(a){
+                    if(a.code==200){
+//                        航班
+                        tr.find('.flight_number').html('');
+                        var html2 = '<option></option>';
+                        if(a.flightData){
+                            for(var x in a['flightData']){
+                                html2 += '<option value="'+a['flightData'][x]['flight_id']+'">'+a['flightData'][x]['flight_number']+'('+a['flightData'][x]['shipping_space']+')</option>';
+                            }
+                        }
+                        tr.find('.flight_number').html(html2);
+                    }else{
+                        tr.find('.agent_id').html('');
+                        tr.find('.flight_number').html('');
+                    }
+                    form.render();
+                    layer.closeAll('loading'); //关闭loading
+                },'json');
+            }
+        });
+
+        //航班详情
+        form.on('select(flight_number)', function(data) {
+            tr = $(this).parent().parent().parent().parent();
+            if(data.value){
+                layer.load(2);
+                tr.find('.quantity').val(0);
+                tr.find('.unit_price').val(0);
+                tr.find('.total').val(0);
+                tr.find('.shipping_space').val('');
+                tr.find('.flight_id').val(0);
+                tr.find('.currency').val(0);
+                $.post('/product/getFlightInfo',{flight_id:data.value},function(a){
+                    if(a.code==200){
+                        tr.find('.quantity').val(1);
+                        tr.find('.unit_price').val(a.flightData.normal_settlement_price);
+                        tr.find('.total').val(a.flightData.normal_settlement_price);
+                        tr.find('.shipping_space').val(a.flightData.shipping_space);
+                        tr.find('.flight_id').val(a.flightData.flight_id);
+                        tr.find('.currency').val(a.flightData.payment_currency_type);
+                    }
+                    form.render();
+                    layer.closeAll('loading'); //关闭loading
+                },'json');
+            }
+        });
+
+        //数量计算总价
+        $('#t-flight').delegate('.quantity','blur',function(){
+            tr = $(this).parent().parent();
+            var quantity =   tr.find('.quantity').val()?tr.find('.quantity').val():0;
+            var unit_price = tr.find('.unit_price').val()?tr.find('.unit_price').val():0;
+            var t = quantity*unit_price;
+            tr.find('.total').val(t);
+        });
+
+        //单价计算总价
+        $('#t-flight').delegate('.unit_price','blur',function(){
+            tr = $(this).parent().parent();
+            var quantity =   tr.find('.quantity').val()?tr.find('.quantity').val():0;
+            var unit_price = tr.find('.unit_price').val()?tr.find('.unit_price').val():0;
+            var t = quantity*unit_price;
+            tr.find('.total').val(t);
+        });
+
+
+    }();
+
+
+    function add() {
+
+        $.ajax({
+            type: "POST",
+            url: '/product/sessionFlightAjax',
+            data: $('#form1').serializeArray(),
+            success: function (data) {
+                if(data.code!=200){
+                    layer.msg(data.msg)
+                    return false;
+                }else if(data.code==200){
+                    layer.msg('success',{time:1,end : function(layero, index){
+                        opener.addFlight();
+                        window.close();
+                    }
+                    });
+                }
+            },
+            error:function(XMLHttpRequest, textStatus, errorThrown){
+                //console.log(errorThrown)
+                layer.msg('{$language_tag.index_public_verificationFailure}')
+
+            }
+        });
+        return false;
+    }
+</script>
+
+
+<script>
+    // opener.addHotel();
+</script>
+
+</body>
+</html>
+

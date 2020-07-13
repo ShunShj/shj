@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {include file='public/head' /}
+    <title>资源配置-车辆</title>
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+
+    <div class="layui-header">
+        {include file='public/header' /}
+    </div>
+
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll">
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            {include file='public/left_menu' /}
+        </div>
+    </div>
+
+    <div class="layui-body">
+
+        <!-- 内容主体区域 -->
+        <div style="padding: 15px;">
+            <div class='layui-form-item'>
+		   		<span class="layui-breadcrumb" lay-separator="-">
+                    <a>首页</a>
+                    <a>产品管理</a>
+					<a>团队产品</a>
+					<a>{$_GET['plan_id']?"修改":"添加"}团队产品</a>
+                    <a><cite>配置车辆资源</cite></a>
+				</span>
+            </div>
+            <div style="font-weight:bold;font-size: 20px;">资源配置-车辆</div>
+
+            <br/>
+            <br/>
+            <br/>
+            <form class="layui-form" id="form1" onSubmit="return add()">
+                <div class="table-nont">
+                    <table  class="layui-table" id="t-vehicle">
+                        <thead>
+                        <tr>
+                            <th>资源供应商</th>
+                            <!--<th>地接社</th>-->
+                            <th>车型</th>
+                            <th>车牌号</th>
+                            <th>核载</th>
+                            <th>天数</th>
+                            <th>单价类型</th>
+                            <th>币种</th>
+                            <th>单价</th>
+                            <th>总价</th>
+                            <th>操作</th>
+                        </tr>
+                        </thead>
+                    </table>
+                </div>
+
+
+                <br><br><br>
+                <div class="layui-form-item">
+                    <div class="">
+                        <a class="layui-btn nav-add" id="add-vehicle">添加</a>
+                        <button class="layui-btn nav-submit" lay-submit="" lay-filter="formDemo" id="language_add_button">立即提交</button>
+                        <a href="javascript:location.reload()" class="layui-btn layui-btn-primary">重置</a>
+                        <a href="javascript:window.close()"><button type="button" class="layui-btn layui-btn-primary">返回</button></a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!--邮轮模板-->
+    <table style="display: none" id="add_div">
+        <tr>
+            <th>
+                <select name="supplier_id[ii]" lay-filter="supplier_id" class="supplier_id" required lay-verify="required" lay-search >
+                    <option></option>
+                    {foreach $SupplierList as $vl}
+                    <option value="{$vl.supplier_id}">{$vl.supplier_name}</option>
+                    {/foreach}
+                </select>
+            </th>
+            <th>
+                <select name="agent_id[ii]" class="agent_id" lay-filter="agent_id" lay-search>
+                    <option></option>
+                </select>
+            </th>
+            <!--<th>-->
+                <!--<select name="vehicle_name[ii]" class="vehicle_name" lay-filter="vehicle_name" required lay-verify="required" lay-search>-->
+                    <!--<option></option>-->
+                <!--</select>-->
+                <!--<input type="hidden" name="vehicle_id[ii]" class="vehicle_id" />-->
+            <!--</th>-->
+            <th>
+                <input class="layui-input vehicle_number"  name="vehicle_number[ii]" required lay-verify="required"  readonly >
+            </th>
+            <th>
+                <input class="layui-input load"  name="load[ii]" required lay-verify="required" readonly  >
+            </th>
+            <th>
+                <input class="layui-input quantity"  name="quantity[ii]" required lay-verify="required|number" >
+            </th>
+            <th>
+                <select name="unit_value_type[ii]" class="unit_value_type">
+                    <option value="1">成人</option>
+                </select>
+            </th>
+            <th>
+                <select name="currency[ii]" class="currency">
+                    <option value="0"></option>
+                    {foreach $CurrencyList as $v }
+                    <option value="{$v.currency_id}">{$v.currency_name}</option>
+                    {/foreach}
+                </select>
+            </th>
+            <th><input class="layui-input unit_price"  name="unit_price[ii]" required lay-verify="required|number"></th>
+            <th><input class="layui-input total"  name="total[ii]" required lay-verify="required|number"></th>
+            <th><a class="layui-btn r-vehicle layui-btn-sm hover-edit layui-btn-primary" >删除</a></th>
+        </tr>
+    </table>
+    <div class="layui-footer">
+        <!-- 底部固定区域 -->
+        © layui.com - 底部固定区域
+    </div>
+</div>
+{include file='public/foot_js' /}
+
+
+<script>
+    !function() {
+        var layer = layui.layer;
+        var form = layui.form;
+        var laydate = layui.laydate;
+        var num = 0;
+
+        //添加景点
+        $('#add-vehicle').on('click',function(){
+            tableNone();
+            var html = $('#add_div').html();
+            for(var ij=1;ij<15;ij++){
+                html = html.replace('ii',num);
+            }
+            $('#t-vehicle').append(html);
+            num++;
+            form.render();
+        });
+        //删除
+        $('#t-vehicle').delegate('.r-vehicle','click',function(){
+            $(this).parent().parent().remove();
+            table();
+        });
+
+
+        var tr;
+        //供应商获取车辆信息
+        form.on('select(supplier_id)', function(data){
+            tr = $(this).parent().parent().parent().parent();
+            if(data.value){
+                layer.load(2);
+                $.post('/product/getVehicleAjax',{supplier_id:data.value},function(a){
+                    if(a.code==200){
+                        //地接社
+                        tr.find('.agent_id').html('');
+                        var html = '<option></option>';
+                        if(a.LocalTravelAgencyAr){
+                            for(var x in a['LocalTravelAgencyAr'])
+                                html += '<option value="'+a['LocalTravelAgencyAr'][x]['supplier_id']+'">'+a['LocalTravelAgencyAr'][x]['supplier_name']+'</option>';
+                        }
+                        tr.find('.agent_id').html(html);
+                        //车辆
+                        tr.find('.vehicle_name').html('');
+                        var html2 = '<option></option>';
+                        if(a.vehicleData){
+                            for(var x in a['vehicleData']){
+                                html2 += '<option value="'+a['vehicleData'][x]['vehicle_id']+'">'+a['vehicleData'][x]['vehicle_name']+'('+a['vehicleData'][x]['vehicle_number']+')</option>';
+                            }
+                        }
+                        tr.find('.vehicle_name').html(html2);
+                    }else{
+                        tr.find('.agent_id').html('');
+                        tr.find('.vehicle_name').html('');
+                    }
+                    form.render();
+                    layer.closeAll('loading'); //关闭loading
+                },'json');
+            }else{
+                tr.find('.agent_id').html('');
+                tr.find('.vehicle_name').html('');
+                form.render();
+            }
+        });
+
+        //地接社
+        form.on('select(agent_id)', function(data) {
+            tr = $(this).parent().parent().parent().parent();
+            var supplier_id = tr.find('.supplier_id').val();
+            if(data.value){
+                layer.load(2);
+                $.post('/product/getVehicleAgentAjax',{agent_id:data.value,supplier_id:supplier_id},function(a){
+                    tr.find('.vehicle_name').html('');
+                    if(a.code==200){
+                        var html = '<option></option>';
+                        if(a.vehicleData){
+                            for(var x in a['vehicleData']){
+                                html += '<option value="'+a['vehicleData'][x]['vehicle_id']+'">'+a['vehicleData'][x]['vehicle_name']+'('+a['vehicleData'][x]['vehicle_number']+')</option>';
+                            }
+                        }
+                        tr.find('.vehicle_name').html(html);
+                    }
+                    form.render();
+                    layer.closeAll('loading'); //关闭loading
+                },'json');
+            }else{
+                tr.find('.vehicle_name').html('');
+                layer.load(2);
+                $.post('/product/getVehicleAjax',{supplier_id:supplier_id},function(a){
+                    if(a.code==200){
+                        tr.find('.vehicle_name').html('');
+                        var html2 = '<option></option>';
+                        if(a.vehicleData){
+                            for(var x in a['vehicleData']){
+                                html2 += '<option value="'+a['vehicleData'][x]['vehicle_id']+'">'+a['vehicleData'][x]['vehicle_name']+'('+a['vehicleData'][x]['vehicle_number']+')</option>';
+                            }
+                        }
+                        tr.find('.vehicle_name').html(html2);
+                    }else{
+                        tr.find('.agent_id').html('');
+                        tr.find('.vehicle_name').html('');
+                    }
+                    form.render();
+                    layer.closeAll('loading'); //关闭loading
+                },'json');
+            }
+        });
+
+        //车辆详情
+        form.on('select(vehicle_name)', function(data) {
+            tr = $(this).parent().parent().parent().parent();
+            if(data.value){
+                layer.load(2);
+                tr.find('.quantity').val(0);
+                tr.find('.unit_price').val(0);
+                tr.find('.total').val(0);
+                tr.find('.vehicle_number').val('');
+                tr.find('.load').val('');
+                tr.find('.vehicle_id').val(0);
+                tr.find('.currency').val(0);
+                $.post('/product/getVehicleInfo',{vehicle_id:data.value},function(a){
+                    if(a.code==200){
+                        tr.find('.quantity').val(1);
+                        tr.find('.unit_price').val(a.vehicleData.normal_settlement_price);
+                        tr.find('.total').val(a.vehicleData.normal_settlement_price);
+                        tr.find('.vehicle_number').val(a.vehicleData.vehicle_number);
+                        tr.find('.load').val(a.vehicleData.load);
+                        tr.find('.vehicle_id').val(a.vehicleData.vehicle_id);
+                        tr.find('.currency').val(a.vehicleData.payment_currency_type);
+                    }
+                    form.render();
+                    layer.closeAll('loading'); //关闭loading
+                },'json');
+            }
+        });
+
+        //数量计算总价
+        $('#t-vehicle').delegate('.quantity','blur',function(){
+            tr = $(this).parent().parent();
+            var quantity =   tr.find('.quantity').val()?tr.find('.quantity').val():0;
+            var unit_price = tr.find('.unit_price').val()?tr.find('.unit_price').val():0;
+            var t = quantity*unit_price;
+            tr.find('.total').val(t);
+        });
+
+        //单价计算总价
+        $('#t-vehicle').delegate('.unit_price','blur',function(){
+            tr = $(this).parent().parent();
+            var quantity =   tr.find('.quantity').val()?tr.find('.quantity').val():0;
+            var unit_price = tr.find('.unit_price').val()?tr.find('.unit_price').val():0;
+            var t = quantity*unit_price;
+            tr.find('.total').val(t);
+        });
+
+
+    }();
+
+
+    function add() {
+
+        $.ajax({
+            type: "POST",
+            url: '/product/sessionVehicleAjax',
+            data: $('#form1').serializeArray(),
+            success: function (data) {
+                if(data.code!=200){
+                    layer.msg(data.msg)
+                    return false;
+                }else if(data.code==200){
+                    layer.msg('success',{time:1,end : function(layero, index){
+                        opener.addVehicle();
+                        window.close();
+                    }
+                    });
+                }
+            },
+            error:function(XMLHttpRequest, textStatus, errorThrown){
+                //console.log(errorThrown)
+                layer.msg('验证失败')
+
+            }
+        });
+        return false;
+    }
+</script>
+
+
+<script>
+    // opener.addHotel();
+</script>
+
+</body>
+</html>
+

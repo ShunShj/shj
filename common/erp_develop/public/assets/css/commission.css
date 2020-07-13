@@ -1,0 +1,296 @@
+.commission-table {
+  font-family: "lihei-pro", sans-serif; }
+  .commission-table .color-1-li, .commission-table .color-1-li a {
+    background-color: #ff0000; }
+  .commission-table .color-1-li.ui-tabs-active a {
+    background-color: #ff6666; }
+  .commission-table .color-2-li, .commission-table .color-2-li a {
+    background-color: #de8b2b; }
+  .commission-table .color-2-li.ui-tabs-active a {
+    background-color: #ecbb83; }
+  .commission-table .color-3-li, .commission-table .color-3-li a {
+    background-color: #1d2d85; }
+  .commission-table .color-3-li.ui-tabs-active a {
+    background-color: #354dd3; }
+  .commission-table .color-4-li, .commission-table .color-4-li a {
+    background-color: #5a4a77; }
+  .commission-table .color-4-li.ui-tabs-active a {
+    background-color: #8c7aad; }
+  .commission-table .color-5-li, .commission-table .color-5-li a {
+    background-color: #7f9145; }
+  .commission-table .color-5-li.ui-tabs-active a {
+    background-color: #b0c07c; }
+  .commission-table .color-6-li, .commission-table .color-6-li a {
+    background-color: #31839b; }
+  .commission-table .color-6-li.ui-tabs-active a {
+    background-color: #64b6ce; }
+  .commission-table .color-7-li, .commission-table .color-7-li a {
+    background-color: #4470eb; }
+  .commission-table .color-7-li.ui-tabs-active a {
+    background-color: #a0b6f5; }
+  .commission-table .pattern-1 .heading-1 {
+    background-color: #ff0000; }
+  .commission-table .pattern-1 .heading-2 {
+    background-color: #ff9999; }
+  .commission-table .pattern-1 .heading-3 {
+    background-color: #feceba; }
+  .commission-table .pattern-2 .heading-1 {
+    background-color: #ff57a5; }
+  .commission-table .pattern-2 .heading-2 {
+    background-color: #ffffff; }
+  .commission-table .pattern-2 .heading-3 {
+    background-color: #ff9fc9; }
+  .commission-table .pattern-3 .heading-1 {
+    background-color: #a44512; }
+  .commission-table .pattern-3 .heading-2 {
+    background-color: #e5660d; }
+  .commission-table .pattern-3 .heading-3 {
+    background-color: #e5b381; }
+  .commission-table .pattern-4 .heading-1 {
+    background-color: #f78c1a; }
+  .commission-table .pattern-4 .heading-2 {
+    background-color: #f9bf8f; }
+  .commission-table .pattern-4 .heading-3 {
+    background-color: #fce9da; }
+  .commission-table .pattern-5 .heading-1 {
+    background-color: #133687; }
+  .commission-table .pattern-5 .heading-2 {
+    background-color: #4da2e3; }
+  .commission-table .pattern-5 .heading-3 {
+    background-color: #dbe5f1; }
+  .commission-table .pattern-6 .heading-1 {
+    background-color: #5f497a; }
+  .commission-table .pattern-6 .heading-2 {
+    background-color: #e5dfed; }
+  .commission-table .pattern-6 .heading-3 {
+    background-color: #b1a1c6; }
+  .commission-table .pattern-7 .heading-1 {
+    background-color: #ffffff; }
+  .commission-table .pattern-7 .heading-2 {
+    background-color: #78023f; }
+  .commission-table .pattern-7 .heading-3 {
+    background-color: #e795b9; }
+  .commission-table .pattern-8 .heading-1 {
+    background-color: #76923d; }
+  .commission-table .pattern-8 .heading-2 {
+    background-color: #c2d69b; }
+  .commission-table .pattern-8 .heading-3 {
+    background-color: #eaf2dd; }
+  .commission-table .pattern-9 .heading-1 {
+    background-color: #b95be3; }
+  .commission-table .pattern-9 .heading-2 {
+    background-color: #c78be8; }
+  .commission-table .pattern-9 .heading-3 {
+    background-color: #e8d4f4; }
+  .commission-table .pattern-10 .heading-1 {
+    background-color: #31849b; }
+  .commission-table .pattern-10 .heading-2 {
+    background-color: #ffffff; }
+  .commission-table .pattern-10 .heading-3 {
+    background-color: #92cddc; }
+  .commission-table .pattern-11 .heading-1 {
+    background-color: #008001; }
+  .commission-table .pattern-11 .heading-2 {
+    background-color: #9bdb8f; }
+  .commission-table .pattern-11 .heading-3 {
+    background-color: #e7ffdf; }
+  .commission-table .pattern-12 .heading-1 {
+    background-color: #1871ef; }
+  .commission-table .pattern-12 .heading-2 {
+    background-color: #97cdf1; }
+  .commission-table .pattern-12 .heading-3 {
+    background-color: #e4f8ff; }
+  .commission-table .col-1 {
+    width: 1.96%;
+    min-width: 1.96%; }
+  .commission-table .col-2 {
+    width: 3.92%;
+    min-width: 3.92%; }
+  .commission-table .col-3 {
+    width: 5.88%;
+    min-width: 5.88%; }
+  .commission-table .col-4 {
+    width: 7.84%;
+    min-width: 7.84%; }
+  .commission-table .col-5 {
+    width: 9.8%;
+    min-width: 9.8%; }
+  .commission-table .col-6 {
+    width: 11.76%;
+    min-width: 11.76%; }
+  .commission-table .col-7 {
+    width: 13.72%;
+    min-width: 13.72%; }
+  .commission-table .col-8 {
+    width: 15.68%;
+    min-width: 15.68%; }
+  .commission-table .col-9 {
+    width: 17.64%;
+    min-width: 17.64%; }
+  .commission-table .col-10 {
+    width: 19.6%;
+    min-width: 19.6%; }
+  .commission-table .col-11 {
+    width: 21.56%;
+    min-width: 21.56%; }
+  .commission-table .col-12 {
+    width: 23.52%;
+    min-width: 23.52%; }
+  .commission-table .col-13 {
+    width: 25.48%;
+    min-width: 25.48%; }
+  .commission-table .col-14 {
+    width: 27.44%;
+    min-width: 27.44%; }
+  .commission-table .col-15 {
+    width: 29.4%;
+    min-width: 29.4%; }
+  .commission-table .col-16 {
+    width: 31.36%;
+    min-width: 31.36%; }
+  .commission-table .col-17 {
+    width: 33.32%;
+    min-width: 33.32%; }
+  .commission-table .col-18 {
+    width: 35.28%;
+    min-width: 35.28%; }
+  .commission-table .col-19 {
+    width: 37.24%;
+    min-width: 37.24%; }
+  .commission-table .col-20 {
+    width: 39.2%;
+    min-width: 39.2%; }
+  .commission-table .col-21 {
+    width: 41.16%;
+    min-width: 41.16%; }
+  .commission-table .col-22 {
+    width: 43.12%;
+    min-width: 43.12%; }
+  .commission-table .col-23 {
+    width: 45.08%;
+    min-width: 45.08%; }
+  .commission-table .col-24 {
+    width: 47.04%;
+    min-width: 47.04%; }
+  .commission-table .col-25 {
+    width: 49%;
+    min-width: 49%; }
+  .commission-table .col-26 {
+    width: 50.96%;
+    min-width: 50.96%; }
+  .commission-table .col-27 {
+    width: 52.92%;
+    min-width: 52.92%; }
+  .commission-table .col-28 {
+    width: 54.88%;
+    min-width: 54.88%; }
+  .commission-table .col-29 {
+    width: 56.84%;
+    min-width: 56.84%; }
+  .commission-table .col-30 {
+    width: 58.8%;
+    min-width: 58.8%; }
+  .commission-table .col-31 {
+    width: 60.76%;
+    min-width: 60.76%; }
+  .commission-table .col-32 {
+    width: 62.72%;
+    min-width: 62.72%; }
+  .commission-table .col-33 {
+    width: 64.68%;
+    min-width: 64.68%; }
+  .commission-table .col-34 {
+    width: 66.64%;
+    min-width: 66.64%; }
+  .commission-table .col-35 {
+    width: 68.6%;
+    min-width: 68.6%; }
+  .commission-table .col-36 {
+    width: 70.56%;
+    min-width: 70.56%; }
+  .commission-table .col-37 {
+    width: 72.52%;
+    min-width: 72.52%; }
+  .commission-table .col-38 {
+    width: 74.48%;
+    min-width: 74.48%; }
+  .commission-table .col-39 {
+    width: 76.44%;
+    min-width: 76.44%; }
+  .commission-table .col-40 {
+    width: 78.4%;
+    min-width: 78.4%; }
+  .commission-table .col-41 {
+    width: 80.36%;
+    min-width: 80.36%; }
+  .commission-table .col-42 {
+    width: 82.32%;
+    min-width: 82.32%; }
+  .commission-table .col-43 {
+    width: 84.28%;
+    min-width: 84.28%; }
+  .commission-table .col-44 {
+    width: 86.24%;
+    min-width: 86.24%; }
+  .commission-table .col-45 {
+    width: 88.2%;
+    min-width: 88.2%; }
+  .commission-table .col-46 {
+    width: 90.16%;
+    min-width: 90.16%; }
+  .commission-table .col-47 {
+    width: 92.12%;
+    min-width: 92.12%; }
+  .commission-table .col-48 {
+    width: 94.08%;
+    min-width: 94.08%; }
+  .commission-table .col-49 {
+    width: 96.04%;
+    min-width: 96.04%; }
+  .commission-table .col-50 {
+    width: 98%;
+    min-width: 98%; }
+  .commission-table table {
+    width: 100%;
+    font-size: 11px;
+    border-collapse: collapse;
+    text-align: center;
+    font-family: "lihei-pro", sans-serif; }
+  .commission-table td {
+    padding: 2px;
+    border: #000 0.1em solid; }
+  .commission-table .heading-1 {
+    padding: 5px 0 5px;
+    font-size: 2.4em;
+    border: 0;
+    font-weight: 800;
+    color: #fff; }
+    .commission-table .heading-1 img {
+      height: 20px;
+      width: auto; }
+  .commission-table .heading-2 {
+    padding: 3px 0 3px;
+    font-size: 1.7em;
+    font-weight: 800; }
+  .commission-table header table {
+    margin: 0 0 20px 0;
+    color: #00a1d9; }
+    .commission-table header table td {
+      border: 0;
+      padding: 0; }
+  .commission-table #title {
+    font-size: 2.4em;
+    font-weight: bolder;
+    font-family: "myriad-pro", sans-serif;
+    vertical-align: bottom; }
+  .commission-table #company-info {
+    text-align: right;
+    font-size: 0.8em;
+    vertical-align: bottom; }
+  .commission-table .content table {
+    font-size: 44%;
+    vertical-align: middle; }
+  .commission-table .page-break {
+    page-break-after: always; }
+
+/*# sourceMappingURL=commission.css.map */

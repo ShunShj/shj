@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<head>
+    {include file='public/head' /}
+    <title>language-manage-add</title>
+    <style>
+        .bill-picture{
+            position: relative;
+        }
+        .upload-hide{
+            display: none;
+            position: absolute;
+            left:0px;
+            top:0px;
+            background: rgba(0,0,0,0);
+            width: 100%;
+            height: 38px;
+        }
+    </style>
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+
+    <div class="layui-header">
+        {include file='public/header' /}
+    </div>
+
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll">
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            {include file='public/left_menu_web' /}
+        </div>
+    </div>
+
+    <div class="layui-body">
+
+        <!-- 内容主体区域 -->
+        <div style="padding: 15px;">
+            <div class='layui-form-item'>
+		   		<span class="layui-breadcrumb" lay-separator="-">
+					<a>{$language_tag.index_public_homepage}</a>
+                    <a>管网管理</a>
+                    <a>文章管理</a>
+                    <a><cite>添加文章</cite></a>
+				</span>
+            </div>
+            <br/>
+            <br/>
+            <div class="layui-row">
+                <form class="layui-form layui-col-md4" id="form1" onSubmit="return article_add()">
+                    <div class="layui-form-item">
+                        <label class="layui-form-label input-required">标题：</label>
+                        <div class="layui-input-block">
+                            <input id="title" name="title" required="" lay-verify="required" placeholder="" autocomplete="off" class="layui-input" type="text">
+                        </div>
+                    </div>
+                    <br/>
+                    <div class="layui-form-item" style="position: relative;z-index: 10000;">
+                        <label class="layui-form-label input-required">所属分类：</label>
+                        <div class="layui-input-block">
+                            <!--<select name="pid" id="pid" lay-filter="required" lay-search>-->
+                                <!--{foreach $result as $vl}-->
+                                <!--<option value="{$vl.ota_article_type_id}">{$vl.article_type_name}</option>-->
+                                <!--{/foreach}-->
+                            <!--</select>-->
+
+                            <select  id="ota_article_type_uuid" name="ota_article_type_uuid" data-tabs="0" class="ota_article_type_uuid" xm-select="ota_article_type_uuid" xm-select-search="" xm-select-search-type="dl">
+                                <option></option>
+                                {foreach $result as $vl}
+                                <option value="{$vl.uuid}">{$vl.article_type_name}</option>
+                                {/foreach}
+                            </select>
+                        </div>
+                    </div>
+                    <br/>
+
+                    <div class="layui-form-item">
+                        <label class="layui-form-label input-required">图片：</label>
+                        <div class="layui-input-block bill-picture">
+                            <button type="button" class="layui-btn" id="pic">
+                                <i class="layui-icon">&#xe67c;</i>上传图片
+                            </button>
+                            <button type="button" class="layui-btn" id="pool">
+                                <i class="layui-icon">&#xe67c;</i>媒体库
+                            </button>
+                            <div class="upload-hide" onclick="submit_add(this)"></div>
+                        </div>
+                        <div id="u-img1" style="padding: 10px; margin-left: 100px">
+                        </div>
+                    </div>
+                    <br/>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label input-required">内容：</label>
+                        <div class="layui-input-block">
+                            <textarea  type="text"  name="content" id="EditorId" placeholder="请输入内容"></textarea>
+                        </div>
+                    </div>
+                    <!--<div class="layui-form-item">-->
+                        <!--<label class="layui-form-label input-required">{$language_tag.index_public_company}:</label>-->
+                        <!--<div class="layui-input-block">-->
+                            <!--<select {$Think.session.user.company_id!=1?'disabled':''} name="choose_company_id" id="choose_company_id" lay-verify="required" >-->
+                                <!--<option value="0">{$language_tag.index_source_showSupplier_choose_company}</option>-->
+                                <!--{foreach name='company_result'  item='vo'}-->
+                                <!--<option value="{$vo.company_id}" {if condition="$vo.company_id eq $Think.session.user.company_id"}selected='selected'{/if}>{$MultilingualAll['company-company_name-'.$vo.company_id.'-'.$Think.session.user.language_id][0]['translate']|default=$vo.company_name}</option>-->
+                                <!--{/foreach}-->
+                            <!--</select>-->
+                        <!--</div>-->
+                    <!--</div>-->
+
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">上架时间：</label>
+                        <div class="layui-input-block">
+                            <div class="layui-input-inline date-width">
+                                <input type="text" name="start_time" placeholder="{$language_tag.index_branchcompany_showDistributorManage_pleaseSelectTheDate}" autocomplete="off" id="start_time" class="layui-input sales-date">
+                            </div>
+                            <div class="date-and">-</div>
+                            <div class="layui-input-inline date-width">
+                                <input type="text" name="end_time" placeholder="{$language_tag.index_branchcompany_showDistributorManage_pleaseSelectTheDate}" autocomplete="off" id="end_time" class="layui-input sales-date">
+                            </div>
+                        </div>
+                    </div>
+                    <br/>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">title：</label>
+                        <div class="layui-input-block">
+                            <input id="author" name="author" placeholder="" autocomplete="off" class="layui-input" type="text">
+                        </div>
+                    </div>
+                    <br/>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">keywords：</label>
+                        <div class="layui-input-block">
+                            <input id="keywords" name="keywords" placeholder="" autocomplete="off" class="layui-input" type="text">
+                        </div>
+                    </div>
+                    <br/>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">description：</label>
+                        <div class="layui-input-block">
+                            <input id="description" name="description" placeholder="" autocomplete="off" class="layui-input" type="text">
+                        </div>
+                    </div>
+
+                    <script type="text/javascript" charset="utf-8">
+                        window.UEDITOR_HOME_URL = "__STATIC__/ueditor/";
+                        window.onload=function(){
+                            window.UEDITOR_CONFIG.initialFrameHeight=800;
+                            window.UEDITOR_CONFIG.initialFrameWidth=1200;
+                            window.UEDITOR_CONFIG.autoHeightEnabled=false;
+                            window.UEDITOR_CONFIG.autoFloatEnabled=false;
+                            window.UEDITOR_CONFIG.elementPathEnabled=false;
+                            var editor = new UE.ui.Editor({
+                                imageUrl : '',
+                                fileUrl : '',
+                                imagePath : '',
+                                filePath : '',
+                                imageManagerUrl:'',
+                                imageManagerPath:'/static/uploads/images/'
+                            });
+                            editor.render("EditorId");
+                        }
+                    </script>
+                    <br/>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">{$language_tag.index_public_status}：</label>
+
+                        <div class="layui-input-block">
+                            <select name="status" id="status" lay-filter="required" >
+                                <option value="1" selected="selected">{$language_tag.index_public_show}</option>
+                                <option value="0">{$language_tag.index_public_disabled}</option>
+                            </select>
+                        </div>
+                    </div>
+                    <br/>
+                    <div class="layui-form-item">
+                        <div class="layui-input-block">
+                            <button class="layui-btn nav-submit" lay-submit="" lay-filter="formDemo" id="">{$language_tag.index_public_submit}</button>
+                            <a href="#" onClick="javascript :history.back(-1);"><button type="button" class="layui-btn layui-btn-primary">{$language_tag.index_public_back}</button></a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="layui-footer">
+        <!-- 底部固定区域 -->
+        © layui.com - 底部固定区域
+    </div>
+</div>
+{include file='public/foot_js' /}
+<script type="text/javascript" src="__STATIC__/ueditor/ueditor.config.js"></script>
+<script type="text/javascript" src="__STATIC__/ueditor/ueditor.all.min.js"></script>
+<script type="text/javascript" src="__STATIC__/ueditor/lang/zh-cn/zh-cn.js"></script>
+
+
+<script>
+    layui.use(['laydate','element','form'], function(){
+        var laydate = layui.laydate;
+        var element = layui.element;
+        var formSelects = layui.formSelects;
+
+        lay('.sales-date').each(function(){
+            laydate.render({
+                elem: this
+                ,trigger: 'click'
+                ,done: function(value, date){
+                    console.log(date)
+                }
+            });
+        });
+
+    });
+
+
+    function qq(aaa){
+
+        layer.closeAll();
+        var h =
+            '<div style="padding: 5px;width: 110px;float: left" class="img_list"><div><img src="'+$(aaa).attr("src")+'" height="100" width="100" /><input type="hidden" value="'+$(aaa).attr("src")+'" name="image" /></div><div><a class="layui-btn layui-btn-danger r-journey-img nav-edit" onclick="del(this)">删除</a></div></div>';
+        $('#u-img1').append(h);
+        $("#pic").siblings(".upload-hide").show();
+    }
+
+
+    $('#pool').on('click', function(){
+
+        $.ajax({
+            url:'/ota_media_pool/getMediaPoolListAjax',
+            type:"post",
+            dataType:"json",
+            success: function (data) {
+                console.log(data.data);
+                var list=data.data;
+                var html='';
+                if(list){
+                    for(var i = 0, len = list.length; i < len; i++)
+                    {
+                        html += '<img src=" '+list[i].url+ '" height="300" width="200" onclick="qq(this)"/>'
+                    }
+                }
+                layer.open({
+                    type: 1,
+                    area: ['1200px', '900px'],
+                    shadeClose: true, //点击遮罩关闭
+                    content: html
+                });
+            }
+
+        });
+
+    });
+
+    layui.use('upload', function(){
+        var upload = layui.upload;
+
+        //头部图片
+        var uploadInst = upload.render({
+            elem: '#pic' //绑定元素
+            ,url: '/demo/uploadOtaFile', //上传接口
+            multiple:false,
+            drag:'true'
+            ,acceptMime:'image/*'
+            ,accept:'images'
+            ,before: function(obj){ //obj参数包含的信息，跟 choose回调完全一致，可参见上文。
+                layer.load(); //上传loading
+            }
+            ,done: function(res){
+                //上传完毕回调
+                // console.log(res);
+                layer.closeAll('loading'); //关闭loading
+                if(res.code == 200){
+                    var h =
+                        '<div style="padding: 5px;width: 110px;float: left" class="img_list"><div><img src="'+res.data+'" height="100" width="100" /><input type="hidden" value="'+res.data+'" name="image" /></div><div><a class="layui-btn layui-btn-danger r-journey-img nav-edit" onclick="del(this)">删除</a></div></div>';
+                    $('#u-img1').append(h);
+                    $("#pic").siblings(".upload-hide").show();
+                }
+            }
+            ,error: function(res){
+                //请求异常回调
+                console.log(res);
+                layer.closeAll('loading'); //关闭loading
+            }
+        });
+    });
+    function del(obj){
+        $(obj).parents("#u-img1").siblings(".bill-picture").find(".upload-hide").hide();
+        $(obj).parents(".img_list").remove();
+    }
+    function submit_add(a){
+        if($("#u-img1 .img_list").length==1){
+            layer.msg('只能上传一张图片');
+        }
+    }
+
+
+    function article_add(){
+        //
+        if($("#u-img1 .img_list").length==0){
+            layer.msg('没得图片，请找一张图片，爱你哦！', {icon: 5});
+            return false;
+        }
+        // var title = $("#title").val();
+        // var ota_article_type_uuid = $("#ota_article_type_uuid").val();
+        // var status = $("#status").val();
+        // var content = $("#demo").val();
+        // var start_time = $("#start_time").val();
+        // var end_time = $("#end_time").val();
+        // var keywords = $("#keywords").val();
+        // var description = $("#description").val();
+        $.ajax({
+            type: "POST",
+            url: '/ota_article/addArticleAjax',
+            data: $('#form1').serializeArray(),
+            // data: {
+            //     title:title,
+            //     ota_article_type_uuid:ota_article_type_uuid,
+            //     status:status,
+            //     content:content,
+            //     start_time:start_time,
+            //     end_time:end_time,
+            //     keywords:keywords,
+            //     description:description,
+            // },
+            success: function(data){
+                //console.log(data);
+                if(data.code!=200){
+                    layer.msg(data.msg);
+                    return false;
+                }else if(data.code==200) {
+                    layer.msg('操作成功',{time:1,end : function(layero, index){
+                            //location.href="/ota_article/showArticleManage?status=1";
+                            layer.load(2);
+                            history.back(-1);
+                        }
+                    });
+                }
+            },
+            error:function(XMLHttpRequest, textStatus, errorThrown){
+                layer.msg('验证失败')
+            }
+        });
+        return false;
+
+    }
+</script>
+</body>
+</html>

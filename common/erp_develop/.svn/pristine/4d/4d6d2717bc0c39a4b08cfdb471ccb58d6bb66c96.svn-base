@@ -1,0 +1,192 @@
+{include file='/book_tour/includes/header' /}
+{include file='/book_tour/includes/top_nav' /}
+
+<!--
+  This is view/booktour/select_date.php
+-->
+<section id="content">
+
+    <style type="text/css" ref="stylesheet">
+        #booktour_step2  span.error {
+            color:red;
+            padding-left: 5px;
+        }
+        #select_date table tr th{
+            text-align: left;
+        }
+    </style>
+
+    <section id="booktour">
+        <article>
+            <h1>
+                <img src="<?php echo base_url('assets/images/select_date_language.png'); ?>"
+                     width="700" alt="Select Date"/>
+            </h1>
+            <h2 class="top_icn">
+                <div class="top_icn_text">2</div>
+                <img src="<?php echo base_url('assets/images/select_date_language_icn.png');?>"
+                     alt="Select Date - Step 2"/>
+                <div class="top_text" style="margin-left: 80px; color: red; font-size: 20px;"><?php echo $important_notice; ?> </div>
+            </h2>
+
+            <form action="/booktour/passenger_details" method="post" accept-charset="utf-8" id="booktour_step2" novalidate="novalidate">
+            <div id="select_date"><!-- sidebar -->
+                <?php // echo validation_errors(); ?>
+                <table width="700" cellspacing='0' border="0">
+                    <tr>
+                        <th><h3>Select a tour date</h3></th>
+                        <th><h3>Select a tour language</h3></th>
+                    </tr>
+                    <tr>
+                        <td width="350">
+                            <input type="text" name="tour_date" id="datepicker" class="tour_date" value="" readonly='true' placeholder="Click to select a tour date" />
+                        </td>
+                        <td width="350">
+                            <select class="language" name="language"  style="width: 220px">
+                                <option value="">-- Select a language --</option>
+                                <option value="1">test1</option>
+                                <?php for($i=0; $i < count($tour_lang); $i++) { ?>
+                                <option value="<?php echo $tour_lang[$i]; ?>" >
+                                <?php echo ucfirst($tour_lang[$i]); ?>
+                                </option>
+                                <?php }; ?>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><div id="add_note"></div></td>
+                    </tr>
+                    <tr>
+                        <td colspan="2"><div id="tour_notice" style="margin-top:50px; margin-left:5px; margin-bottom: -100px; font-size:18px; "><?php if($tour_notice != "" && $tour_notice != NULL) { echo '<b>IMPORTANT TOUR NOTICE: </b>' . $tour_notice; } ?></div></td>
+                    </tr>
+                </table>
+            </div><!-- end select_date -->
+            <hr />
+            <div id="page_nav">
+                <p>
+                    <a href="<?php echo base_url('booktour/select_tour/'); ?>" class="page_nav_left">Left</a>
+                    <input type="submit" name="submit" value="next" class="page_nav_right"/>
+                    <input type="hidden" name="back" value="booktour"/>
+                    <input type="hidden" name="next" value="passenger_details"/>
+                    <input type="hidden" name="process" value="select_date"/>
+
+                </p>
+            </div><!-- end page nav -->
+           </form>
+        </article>
+        <div id="dialog" title="Tour Notice">
+            <p>Loading ... </p>
+        </div>
+    </section>   <!-- end booktour session -->
+</section><!-- end content -->
+<script type="text/javascript">
+    // Get array value from php
+    availableDates = ["06-11-2019","07-11-2019","08-11-2019","09-11-2019","10-11-2019","11-11-2019","12-11-2019","13-11-2019","14-11-2019","15-11-2019","16-11-2019","17-11-2019","18-11-2019","19-11-2019","20-11-2019","21-11-2019","22-11-2019","23-11-2019","24-11-2019","25-11-2019","26-11-2019","27-11-2019","28-11-2019","29-11-2019","30-11-2019","01-12-2019","02-12-2019","03-12-2019","04-12-2019","05-12-2019","06-12-2019","07-12-2019","08-12-2019","09-12-2019","10-12-2019","11-12-2019","12-12-2019","13-12-2019","14-12-2019","15-12-2019","16-12-2019","17-12-2019","18-12-2019","19-12-2019","20-12-2019","21-12-2019","22-12-2019","23-12-2019","24-12-2019","25-12-2019","26-12-2019","27-12-2019","28-12-2019","29-12-2019","30-12-2019","31-12-2019"];
+    //alert(availableDates);
+    if(availableDates == undefined || availableDates == null || availableDates.length == 0) {
+        //alert("Sorry, there is no availables date for this tour !");
+    } else {
+        // Populate available dates only current to future
+        function available(date) {
+            dmy = $.datepicker.formatDate(default_date_format,date);
+            if ($.inArray(dmy, availableDates) != -1) {
+                return [true, "","Available"];
+            } else {
+                return [false,"","unAvailable"];
+            }
+        }
+    }
+
+
+    // Show jquery datepick in html
+    $( "#datepicker" ).datepicker({ changeMonth: true, changeYear: true, beforeShowDay: available, numberOfMonths: 1, minDate: 1, dateFormat: default_date_format||'yy-mm-dd'});
+
+    $("document").ready(function() {
+
+
+        /**** Set the div height of content same as booking summary ****/
+        divSidebarH = $('#sidebar').height();
+        divContentH = $('#content').height();
+        if(divSidebarH > divContentH) {
+            divContentH = divSidebarH + 150;
+            $('#content').height(divContentH)
+                    .css({});
+        }
+
+        // show message if there is for the tour date
+        $(".tour_date").on("change", function() {
+            var tour_date=  $(".tour_date").val();
+            $.ajax({
+                        type: "POST",
+                        dataType: "json",
+                        data: { get_tourdate: JSON.stringify(tour_date) },
+                        beforeSend: function(x) {
+                            if(x && x.overrideMimeType) {
+                                x.overrideMimeType("application/json;charet=UTF-8");
+                            }
+                        },
+                        url: '<?php echo base_url('booktour/get_tourdatenote_by_date');?>',
+                    success: function(data) {
+                if(data != null) {
+                    $('div#add_note').html('<span style="color:red; font-weight:bold; margin-left: 5px; font-size:18px;">NOTICE: '+data+'</span>');
+                } else {
+                    $('div#add_note').html("");
+                }
+            }
+
+        });
+    });
+
+    $(function() {
+        $( "#dialog" ).hide();
+        $.post( '<?php echo base_url("booktour/get_tour_notice");?>', function( data ) {
+            console.log(data.content);
+            if(data != false) {
+                //$( ".result" ).html( data );
+                $( "#dialog" ).dialog();
+                $( "#dialog" ).show();
+                $("#dialog p").html(data.content);
+            }
+        },"json");
+
+    });
+
+
+    // Form Validation
+    $("#booktour_step2").validate({
+
+        // set the rules for the field names
+        rules: {
+            tour_date: {
+                required: true
+            },
+            language: {
+                required: true
+            }
+        },
+
+        // set error messages
+        messages: {
+
+            tour_date: {
+                required: "required."
+            },
+            language: {
+                required: "required."
+            }
+        },
+
+        // Custom error placement
+        errorElement: "span",
+        errorPlacement: function(error, element) {
+            error.appendTo(element.parent());
+        }
+    });
+
+    });
+
+</script>
+
+{include file='/book_tour/aside_booking_summary' /}
+
+{include file='/book_tour/includes/footer' /}

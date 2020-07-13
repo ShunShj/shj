@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {include file='public/head' /}
+    <title>{$language_tag.index_product_showRouteTemplateManage_receiptTemplate}</title>
+    <link href="__STATIC__/css/product.css" rel="stylesheet">
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+    <div class="layui-header">
+        {include file='public/header' /}
+    </div>
+
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll">
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            {include file='public/left_menu' /}
+        </div>
+    </div>
+
+    <div class="layui-body">
+
+        <!-- 内容主体区域 -->
+        <div style="padding: 15px;">
+            <div class='layui-form-item'>
+                <span class="layui-breadcrumb" lay-separator="-">
+                    <a>{$language_tag.index_public_homepage}</a>
+                    <a>{$language_tag.index_branchcompany_showBranchProductManage_branchManagement}</a>
+                    <a>{$language_tag.index_branchcompany_showCompanyOrderManage_orderManagement}</a>
+                    <a><cite>{$language_tag.index_branchcompany_showCompanyOrderManage_addEdit_salesReceipts}</cite></a>
+                </span>
+                <div style="display:inline-block;width:88%;"></div>
+                <span><button class="layui-btn nav-submit" onclick="all_array_submit();">{$language_tag.index_branchcompany_showCompanyOrderManage_addEdit_submit}</button></span>
+                <a href="/branchcompany/showCompanyOrderManage">
+                    <button type="button" class="layui-btn layui-btn-primary">{$language_tag.index_branchcompany_showCompanyOrderManage_addEdit_temporaryStorage}</button>
+                </a>
+            </div>
+            <div class="layui-tab layui-tab-brief" lay-filter="companyOrder">
+                <ul class="layui-tab-title layui-tab-url">
+                    <li>{$language_tag.index_product_showRouteTemplateManage_information}</li>
+                    <li>{$language_tag.index_branchcompany_showCompanyOrderManage_addEdit_touristInformation}</li>
+                    <li>{$language_tag.index_branchcompany_showCompanyOrderManage_addEdit_product}</li>
+                    <li>{$language_tag.index_branchcompany_showCompanyOrderManage_addEdit_primeCost}</li>
+                    <li>{$language_tag.index_branchcompany_showCompanyOrderManage_addEdit_quotedPrice}</li>
+                    <li class="layui-this">{$language_tag.index_branchcompany_showCompanyOrderManage_addEdit_salesReceipts}</li>
+                </ul>
+                <br>
+                <div class="layui-tab-content">
+                    <div class="layui-tab-item layui-show">
+                        <fieldset class="layui-elem-field layui-field-title" style="border:none">
+                            <legend>{$language_tag.index_finance_showReceivableManage_receivable_number}:&nbsp;{$receivable_number}</legend>
+                            <input type="hidden" id="receivable_number_hidden" value="{$receivable_number}">
+                        </fieldset>
+                        <div class='layui-form-item'>
+                        	{if condition="$receivable_number neq '' "}
+                        		<button class="layui-btn nav-add" onclick="salesAdd('add')">{$language_tag.index_public_add}</button>
+                        	{/if}
+                            <a><button class="layui-btn nav-add" data-disabled="false" id="buttonPut" onclick="put(this)">打印</button></a>
+                            <!--<a href='#'><button class="layui-btn nav-submit">{$language_tag.index_public_save}</button></a>-->
+                        </div>
+                        <div class="table-nont">
+                            <table class="layui-table table-product layui-form" id="putTable">
+                                <colgroup>
+                                    <col width="150">
+                                    <col width="150">
+                                    <col width="150">
+                                    <col width="150">
+                                    <col width="150">
+                                    <col width="150">
+                                    <col width="150">
+                                    <col width="150">
+                                    <col width="200">
+                                    <col width="180">
+                                </colgroup>
+                                <thead>
+                                <tr>
+                                	 <th><input type="checkbox" name="checkboxAll" lay-skin="primary" lay-filter="checkboxAll" ></th>
+                                    <th>审批状态</th>
+                                    <th>{$language_tag.index_finance_showMustpayAllManage_payment_type_number}</th>
+                                    <th>{$language_tag.index_branchcompany_showCompanyOrderManage_addEdit_timeOfPayment}</th>
+                                    <th>PmtStage</th>
+                                    <th>{$language_tag.index_branchcompany_showCompanyOrderManage_addEdit_payment}</th>
+                                    <th>{$language_tag.index_product_showRouteTemplateManage_resources_currency}</th>
+                                    <th>{$language_tag.index_branchcompany_showCompanyOrderManage_addEdit_salesReceiptsT}</th>
+                                    <th>{$language_tag.index_branchcompany_showDistributorManage_operationUser}</th>
+                                    <th>{$language_tag.index_source_operation}</th>
+                                    <th style="display:none">{$language_tag.index_branchcompany_showCompanyOrderManage_addEdit_pay}id</th>
+                                </tr>
+                                </thead>
+
+                                {volist name="receivable_info" id="ri"}
+                                    <tbody>
+                                        <tr>
+                                        	<th><input lay-filter="filter" type="checkbox" value='{$ri.receivable_info_id}' name="checkbox"  class='checkbox' lay-skin="primary" ></th> 
+                                            <th>通过</th>
+                                            <th>{$ri.payment_number}</th>
+                                            <th><input type="salesPMT" class="layui-input layui-input-date" id="SalesPMT" value="{$ri.payment_time}"></th>
+                                            <th>
+                                                <select name="salesPmtStage" id="salesPmtStage">
+                                                    <option value="">{$language_tag.index_public_select}</option>
+                                                    <option value="1" {if condition="1 eq $ri.payment_stage"}selected="seleted"{/if}>Balance</option>
+                                                    <option value="2" {if condition="2 eq $ri.payment_stage"}selected="seleted"{/if}>Deposit</option>
+                                                    <option value="3" {if condition="3 eq $ri.payment_stage"}selected="seleted"{/if}>Fullpmt</option>
+                                                    <option value="4" {if condition="4 eq $ri.payment_stage"}selected="seleted"{/if}>Gratuities</option>
+                                                    <option value="5" {if condition="5 eq $ri.payment_stage"}selected="seleted"{/if}>Insurance</option>
+                                                    <option value="6" {if condition="6 eq $ri.payment_stage"}selected="seleted"{/if}>Partpmt</option>
+                                                    <option value="7" {if condition="7 eq $ri.payment_stage"}selected="seleted"{/if}>Rebate</option>
+                                                    <option value="8" {if condition="8 eq $ri.payment_stage"}selected="seleted"{/if}>Tkt</option>
+                                                    <option value="9" {if condition="9 eq $ri.payment_stage"}selected="seleted"{/if}>Visa</option>
+                                                </select>
+                                            </th>
+                                            <th>
+                                                <select name="salesPayment" id="salesPayment">
+                                                    <option value="">{$language_tag.index_public_select}</option>
+                                                    <option value="1" {if condition="1 eq $ri.payment_type"}selected="seleted"{/if}>cash</option>
+                                                    <option value="2" {if condition="2 eq $ri.payment_type"}selected="seleted"{/if}>check</option>
+                                                    <option value="3" {if condition="3 eq $ri.payment_type"}selected="seleted"{/if}>debit card</option>
+                                                    <option value="4" {if condition="4 eq $ri.payment_type"}selected="seleted"{/if}>credit card(mc)</option>
+                                                    <option value="5" {if condition="5 eq $ri.payment_type"}selected="seleted"{/if}>credit card(vs)</option>
+                                                    <option value="6" {if condition="6 eq $ri.payment_type"}selected="seleted"{/if}>credit card(ax)</option>
+                                                    <option value="7" {if condition="7 eq $ri.payment_type"}selected="seleted"{/if}>direct depsit</option>
+                                                    <option value="8" {if condition="8 eq $ri.payment_type"}selected="seleted"{/if}>others</option>
+                                                </select>
+                                            </th>
+                                            <th>
+                                                <select name="salesRMB" id="salesRMB">
+                                                    {volist name="currency_result_data" id="crd"}
+                                                        {if condition="$crd.currency_id eq $ri.payment_currency_id"}
+                                                        <option value="{$crd.currency_id}" selected>{$crd.currency_name}</option>
+                                                        {else/}
+                                                        <option value="{$crd.currency_id}">{$crd.currency_name}</option>
+                                                        {/if}
+                                                    {/volist}
+                                                </select>
+                                            </th>
+                                            <th>
+                                                <input type="text" name="salesReceipts" value="{$ri.payment_money}" class="layui-input">
+                                            </th>
+                                            <th>
+                                                {$ri.create_user_name}
+                                            </th>
+                                            <th>
+                                                <button class="layui-btn layui-btn-sm hover-edit layui-btn-primary" onclick="slaves_edit(this)">{$language_tag.index_branchcompany_showCompanyOrderManage_addEdit_preserve}</button> <button class="layui-btn layui-btn-sm nav-del layui-btn-primary" onclick="slaves_delete(this)">{$language_tag.index_public_del}</button>
+                                            </th>
+                                            <th style="display:none">{$ri.receivable_info_id}</th>
+                                        </tr>
+                                    </tbody>
+                                {/volist}
+                            </table>
+                        </div>
+
+                        <!--发票--start-->
+                            <div id="receipt_box"></div>
+                        <!--发票--end-->
+
+                    </div><!--销售收款-->
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="layui-footer">
+        <!-- 底部固定区域 -->
+        © layui.com - 底部固定区域
+    </div>
+    <input type="hidden" id="template_do" value="6">
+    <input type="hidden" value="{$_GET['company_order_number']}" id="company_order_number">
+</div>
+<script id="productAddTips" type="text/html">
+    <form class="layui-form saleForm">
+        <div class="layui-form-item">
+            <label class="layui-form-label">{$language_tag.index_branchcompany_showCompanyOrderManage_addEdit_timeOfPayment}：</label>
+            <div class="layui-input-block">
+                <input type="text" id="payment_time" name="saleTime" placeholder="{$language_tag.index_branchcompany_showCompanyOrderManage_addEdit_timeOfPayment}" class="layui-input layui-input-date">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">PmtStage：</label>
+            <div class="layui-input-block">
+                <select name="saleStage" id="payment_stage">
+                    <option value="">{$language_tag.index_public_select}</option>
+                    <option value="1">Balance</option>
+                    <option value="2">Deposit</option>
+                    <option value="3">Fullpmt</option>
+                    <option value="4">Gratuities</option>
+                    <option value="5">Insurance</option>
+                    <option value="6">Partpmt</option>
+                    <option value="7">Rebate</option>
+                    <option value="8">Tkt</option>
+                    <option value="9">Visa</option>
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">{$language_tag.index_branchcompany_showCompanyOrderManage_addEdit_payment}：</label>
+            <div class="layui-input-block">
+                <select name="salePaymentType" id="payment_type">
+                    <option value="">{$language_tag.index_public_select}</option>
+                    <option value="1">cash</option>
+                    <option value="2">check</option>
+                    <option value="3">debit card</option>
+                    <option value="4">credit card(mc)</option>
+                    <option value="5">credit card(vs)</option>
+                    <option value="6">credit card(ax)</option>
+                    <option value="7">direct depsit</option>
+                    <option value="8">others</option>
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">{$language_tag.index_product_showRouteTemplateManage_resources_currency}：</label>
+            <div class="layui-input-block">
+                <select id="payment_currency_id" name="saleCurrency">
+                    <option value="">{$language_tag.index_public_select}</option>
+                    {volist name="currency_result_data" id="vo_cu"}
+                    <option value="{$vo_cu.currency_id}">{$vo_cu.currency_name}</option>
+                    {/volist}
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">{$language_tag.index_branchcompany_showCompanyOrderManage_addEdit_salesReceiptsT}：</label>
+            <div class="layui-input-block">
+                <input type="text" id="payment_money" name="salesPMT" placeholder="{$language_tag.index_branchcompany_showCompanyOrderManage_addEdit_salesReceiptsT}" class="layui-input">
+            </div>
+        </div>
+    </form>
+</script>
+<!--打印弹出-->
+<script id="put" type="text/html">
+    <form class="layui-form">
+        <div class="layui-row">
+            <div class="layui-col-md10">
+                <label class="layui-form-label">发票抬头:</label>
+                <div class="layui-input-block">
+                    <select name="put" id="bill_template_id">
+						<option value="">-请选择-</option>
+						{foreach name='bill_template_result' item='bill_template_result'}
+                        	<option value="{$bill_template_result.bill_template_id}" {if condition="$user_result.default_bill_template_id eq $bill_template_result.bill_template_id"}selected = "selected" {/if}>{$bill_template_result.bill_template_title}</option>
+						{/foreach}
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="layui-row">
+            <div class="layui-col-md10 all-button-right" id="putCheckbox">
+                <input type="checkbox" name="putCheckbox" value="1" title="设为默认抬头" lay-skin="primary" checked id="default_bill_template_id" />
+            </div>
+        </div>
+    </form>
+</script>
+<!--发票-->
+<script id="receipt" type="text/html">
+    <div id="bill_template_title_pic">
+        {{#  if(d.bill_template_title_pic !=null){ }}
+            <img src="{{d.bill_template_title_pic}}" width="100%" height="110px" />
+        {{#  } }}
+    </div>
+    <div class="receipt_message clear">
+        <div class="fl">
+            <div>To:</div>
+            <div>{{fn(d.content_name)}}</div>
+            <div>{{fn(d.city_name)}}</div>
+            <div>{{fn(d.country_name)}}</div>
+            <div>{{fn(d.tel)}}</div>
+            <div>{{fn(d.email)}}</div>
+        </div>
+        <div class="fl">
+            <div>Invoice</div>
+            <div>No:{{fn(d.receivable_voucher)}}</div>
+            <div>Booking Date:{{fn(d.create_time)}}</div>
+            <div>Product Code:{{fn(d.branch_product_name)}}</div>
+            <div>Tour Code:{{fn(d.branch_product_number)}}</div>
+            <div>Depart Date:{{fn(d.begin_time)}}</div>
+            <div>Sales agent:{{fn(d.create_user_name)}}</div>
+            <div>Description:{{fn(d.description)}}</div>
+        </div>
+    </div>
+    <!--游客信息-->
+    <div class="tourist_information">
+        <div class="bill_tourist_title">
+            <span>Clients Name List:</span>
+            <span>Person(s):{{fn(d.customer_count)}}</span>
+        </div>
+        <table class="layui-table">
+            <thead>
+                <tr>
+                    <th>SN</th>
+                    <th>Gender</th>
+                    <th>FirstName</th>
+                    <th>LastName</th>
+                    <th>RoomType</th>
+                </tr>
+            </thead>
+            <tbody>
+            {{#  layui.each(d.customer_info, function(index, item){ }}
+                <tr>
+                    <td>{{fn(item.company_order_lineup_number)}}</td>
+                    <td>{{item.gender==1 ? $language_tag.index_branchcompany_showBranchProductManage_boy : item.gender==2 ? $language_tag.index_branchcompany_showBranchProductManage_girl : '--'}}</td>
+                    <td>{{fn(item.customer_first_name)}}</td>
+                    <td>{{fn(item.customer_last_name)}}</td>
+                    <td>{{item.room_type==1?'双人房':item.room_type==2?'大床房':item.room_type==3?'单人房':item.room_type==4?'加床':'--'}}</td>
+                </tr>
+            {{#  }); }}
+            </tbody>
+        </table>
+    </div>
+    <!--报价信息-->
+    <div class="tourist_Quotation">
+        <div>Pricing List:</div>
+        <table class="layui-table">
+            <thead>
+                <tr>
+                    <th>Item</th>
+                    <th>Currency</th>
+                    <th>Price</th>
+                    <th>Total</th>
+                    <th>Note</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#  layui.each(d.company_order_price, function(index, item){ }}
+                    <tr>
+                        <td>{{fn(item.product_name)}}</td>
+                        <td>{{fn(item.currency_name)}}</td>
+                        <td>{{fn(item.price)}}</td>
+                        <td>{{fn(item.total)}}</td>
+                        <td>{{fn(item.remark)}}</td>
+                    </tr>
+                {{#  }); }}
+            </tbody>
+        </table>
+    </div>
+    <div class="tourist_sales">
+        <div>Payment Record:</div>
+        <table class="layui-table">
+            <thead>
+                <tr>
+                    <th>PmtDate</th>
+                    <th>Currency</th>
+                    <th>Amount</th>
+                    <th>PmtMode</th>
+                    <th>PmtNum</th>
+                    <th>Agent</th>
+                    <th>Note</th>
+                </tr>
+            </thead>
+            <tbody>
+            {{#  layui.each(d.sale_info, function(index, item){ }}
+                <tr>
+                    <td>{{fn(item.payment_time)}}</td>
+                    <td>{{fn(item.currency_name)}}</td>
+                    <td>{{fn(item.amount)}}</td>
+                    <td>{{fnPayment(item.payment_type)}}</td>
+                    <td>{{fn(item.payment_number)}}</td>
+                    <td>{{fn(item.receivable_user_name)}}</td>
+                    <td>{{fn(item.remark)}}</td>
+                </tr>
+            {{#  }); }}
+            </tbody>
+        </table>
+    </div>
+    <div class="clear">
+        <div id="bill_template_foot_pic" class="fl" style="width:80%">
+            {{#  if(d.bill_template_foot_pic !=null){ }}
+                <img src="{{d.bill_template_foot_pic}}" width="100%" height="110px" />
+            {{#  } }}
+        </div>
+        <div class="fr" style="width: 20%">
+            <div>Price:{{fn(d.price)}}</div>
+            <div>Tax:{{fn(d.tax)}}</div>
+            <div>Total:{{fn(d.total)}}</div>
+            <div>Paid:{{fn(d.paid)}}</div>
+            {{#  layui.each(d.balance, function(index, item){ }}
+                <div>Balance({{fn(item.unit)}}):{{fn(item.balance_money)}}</div>
+            {{#  }); }}
+        </div>
+    </div>
+</script>
+{include file='public/foot_js' /}
+<script src='__STATIC__/javascript/product/all.js'></script>
+<script src='__STATIC__/javascript/product/sale.js'></script>
+<script src='__STATIC__/javascript/branchcompany/Print.js'></script>
+</body>
+</html>

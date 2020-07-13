@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {include file='public/head' /}
+    <title>{$language_tag.index_product_showRouteTemplateManage_source}-{$language_tag.index_finance_showReceivableManage_scenic_spot}</title>
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+
+    <div class="layui-header">
+        {include file='public/header' /}
+    </div>
+
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll">
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            {include file='public/left_menu' /}
+        </div>
+    </div>
+
+    <div class="layui-body">
+
+        <!-- 内容主体区域 -->
+        <div style="padding: 15px;">
+            <div class='layui-form-item'>
+		   		<span class="layui-breadcrumb" lay-separator="-">
+                    <a>{$language_tag.index_public_homepage}</a>
+                    <a>{$language_tag.index_public_product}</a>
+                    <a>{$language_tag.index_product_showRouteTemplateManage_route_template}</a>
+					<a>{$_GET['template_id']?$language_tag.index_public_update:$language_tag.index_public_add}{$language_tag.index_product_showRouteTemplateManage_route_template}</a>
+                    <a><cite>{$language_tag.index_product_showRouteTemplateManage_resources_resourcesScenic}</cite></a>
+				</span>
+            </div>
+            <div style="font-weight:bold;font-size: 20px;">{$language_tag.index_product_showRouteTemplateManage_resourceAllocation}-{$language_tag.index_finance_showReceivableManage_scenic_spot}
+                <br><br><a href="/source/showScenicSpotSourceAdd" target="_blank" class="layui-btn">{$language_tag.index_source_showOwnExpenseManage_add_source}</a>
+            </div>
+
+            <br/>
+            <br/>
+            <br/>
+            <form class="layui-form" id="form1" onSubmit="return add()">
+                <div class="table-nont">
+                    <table  class="layui-table" id="t-scenic-spot">
+                        <thead>
+                        <tr>
+                            <th>{$language_tag.index_product_showRouteTemplateManage_resource_resourceSupplier}</th>
+                            <!--<th>地接社</th>-->
+                            <th>{$language_tag.index_product_showRouteTemplateManage_resources_scenicSpotName}</th>
+                            <th>{$language_tag.index_product_showRouteTemplateManage_resource_whatDay}</th>
+                            <th>{$language_tag.index_product_showRouteTemplateManage_resource_number}</th>
+                            <th width="10%">{$language_tag.index_product_showRouteTemplateManage_resources_costPrice}</th>
+                            <th width="10%">{$language_tag.index_product_showRouteTemplateManage_resources_settlementPrice}</th>
+                            <th>{$language_tag.index_product_showRouteTemplateManage_resources_currency}</th>
+                            <th>{$language_tag.index_product_showRouteTemplateManage_resources_quotedPrice}</th>
+                            <th class="template-edit">{$language_tag.index_source_operation}</th>
+                        </tr>
+                        </thead>
+
+                        {foreach $session_scenic_spot as $ky=>$session_scenic_spotV}
+                        <tr>
+                            <th>
+                                <select name="supplier_id[{$ky}]" lay-filter="supplier_id" class="supplier_id" required lay-verify="required" lay-search >
+                                    <option></option>
+                                    {foreach $SupplierList as $vl}
+                                    <option value="{$vl.supplier_id}" {$session_scenic_spotV.supplier_id==$vl.supplier_id?'selected':''} >{$vl.supplier_name}</option>
+                                    {/foreach}
+                                </select>
+                            </th>
+                            <!--<th>-->
+                            <!--<select name="agent_id[{$ky}]" class="agent_id" lay-filter="agent_id" lay-search>-->
+                            <!--<option></option>-->
+                            <!--{foreach $session_scenic_spotV.agent_data as $vl}-->
+                            <!--<option value="{$vl.supplier_id}" {$session_scenic_spotV.agent_id==$vl.supplier_id?'selected':''} >{$vl.supplier_name}</option>-->
+                            <!--{/foreach}-->
+                            <!--</select>-->
+                            <!--</th>-->
+                            <th>
+                                <select name="scenic_spot_name[{$ky}]" class="scenic_spot_name" lay-filter="scenic_spot_name" required lay-verify="required" lay-search>
+                                    <option></option>
+                                    {foreach $session_scenic_spotV.resource_data as $vl}
+                                    <option value="{$vl.scenic_spot_id}" {$session_scenic_spotV.scenic_spot_name==$vl.scenic_spot_id?'selected':''} >{$vl.scenic_spot_name}</option>
+                                    {/foreach}
+                                </select>
+                                <input type="hidden" name="scenic_spot_id[{$ky}]" class="scenic_spot_id" />
+                            </th>
+                            <th>
+                                <input class="layui-input the_day" name="the_day[{$ky}]" value="{$session_scenic_spotV.the_day}" type="number" required />
+                            </th>
+                            <th>
+                                <input class="layui-input quantity"  name="quantity[{$ky}]" required lay-verify="required|number" value="{$session_scenic_spotV.quantity}">
+                            </th>
+                            <th class="th_cost_price">{$session_scenic_spotV.symbol}{$session_scenic_spotV.quantity*$session_scenic_spotV.cost_price}</th>
+                            <input class="cost_price" name="cost_price[{$ky}]" type="hidden" value="{$session_scenic_spotV.cost_price}"/>
+                            <th class="th_unit_price">{$session_scenic_spotV.symbol}{$session_scenic_spotV.quantity*$session_scenic_spotV.unit_price}</th>
+                            <input class="layui-input unit_price"  name="unit_price[{$ky}]" type="hidden" value="{$session_scenic_spotV.unit_price}" />
+                            <th>
+                                <select name="currency[{$ky}]" class="currency">
+                                    <option value="0"></option>
+                                    {foreach $CurrencyList as $v }
+                                    <option value="{$v.currency_id}" {$v.currency_id==$session_scenic_spotV.currency?'selected':''} >{$v.currency_name}</option>
+                                    {/foreach}
+                                </select>
+                            </th>
+                            <input class="symbol" name="symbol[{$ky}]" type="hidden" value="{$session_scenic_spotV.symbol}" />
+                            <th><input class="layui-input total"  name="total[{$ky}]" required lay-verify="required|number" value="{$session_scenic_spotV.total}"></th>
+                            <th>
+                                <input type="hidden" name="team_product_allocation_id[{$ky}]" value="{$session_scenic_spotV.team_product_allocation_id}" />
+                                <a class="layui-btn r-scenic-spot layui-btn-sm hover-edit layui-btn-primary" >{$language_tag.index_public_del}</a></th>
+                        </tr>
+                        {/foreach}
+
+                    </table>
+                </div>
+
+
+                <br><br><br>
+                <div class="layui-form-item">
+                    <div class="">
+                        <a class="layui-btn nav-add" id="add-scenic-spot">{$language_tag.index_public_add}</a>
+                        <button class="layui-btn nav-submit" lay-submit="" lay-filter="formDemo" id="language_add_button">{$language_tag.index_public_submit}</button>
+                        <a href="javascript:location.reload()" class="layui-btn layui-btn-primary">{$language_tag.index_product_showRouteTemplateManage_reload}</a>
+                        <a href="javascript:window.close()"><button type="button" class="layui-btn layui-btn-primary">{$language_tag.index_public_back}</button></a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!--邮轮模板-->
+    <table style="display: none" id="add_div">
+        <tr>
+            <th>
+                <select name="supplier_id[ii]" lay-filter="supplier_id" class="supplier_id" required lay-verify="required" lay-search >
+                    <option></option>
+                    {foreach $SupplierList as $vl}
+                    <option value="{$vl.supplier_id}">{$vl.supplier_name}</option>
+                    {/foreach}
+                </select>
+            </th>
+            <!--<th>-->
+            <!--<select name="agent_id[ii]" class="agent_id" lay-filter="agent_id" lay-search>-->
+            <!--<option></option>-->
+            <!--</select>-->
+            <!--</th>-->
+            <th>
+                <select name="scenic_spot_name[ii]" class="scenic_spot_name" lay-filter="scenic_spot_name" required lay-verify="required" lay-search>
+                    <option></option>
+                </select>
+                <input type="hidden" name="scenic_spot_id[ii]" class="scenic_spot_id" />
+            </th>
+            <th>
+                <input class="layui-input the_day" name="the_day[ii]" value="" type="number" required />
+            </th>
+            <th>
+                <input class="layui-input quantity"  name="quantity[ii]" type="number" required lay-verify="required|number" >
+            </th>
+            <th class="th_cost_price"></th>
+            <input class="cost_price" name="cost_price[ii]" type="hidden" />
+            <th class="th_unit_price"></th>
+            <input class="layui-input unit_price"  name="unit_price[ii]" type="hidden">
+            <th>
+                <select name="currency[ii]" class="currency">
+                    <option value="0"></option>
+                    {foreach $CurrencyList as $v }
+                    <option value="{$v.currency_id}">{$v.currency_name}</option>
+                    {/foreach}
+                </select>
+            </th>
+            <input class="symbol" name="symbol[ii]" type="hidden" />
+            <th><input class="layui-input total"  name="total[ii]" required lay-verify="required|number"></th>
+            <th><a class="layui-btn r-scenic-spot layui-btn-sm hover-edit layui-btn-primary" >{$language_tag.index_public_del}</a></th>
+        </tr>
+    </table>
+    <div class="layui-footer">
+        <!-- 底部固定区域 -->
+        © layui.com - 底部固定区域
+    </div>
+</div>
+{include file='public/foot_js' /}
+
+
+<script>
+    var CurrencyJson = <?=json_encode($CurrencyJson)?>;
+
+    !function() {
+        var layer = layui.layer;
+        var form = layui.form;
+        var laydate = layui.laydate;
+        var num = <?=count($session_scenic_spot)?:0;?>;
+
+        //添加景点
+        $('#add-scenic-spot').on('click',function(){
+            tableNone()
+            var html = $('#add_div').html();
+            for(var ij=1;ij<15;ij++){
+                html = html.replace('ii',num);
+            }
+            $('#t-scenic-spot').append(html);
+            num++;
+            form.render();
+        });
+        //删除
+        $('#t-scenic-spot').delegate('.r-scenic-spot','click',function(){
+            $(this).parent().parent().remove();
+            table()
+        });
+
+
+        var tr;
+        //供应商获取景点信息
+        form.on('select(supplier_id)', function(data){
+            tr = $(this).parent().parent().parent().parent();
+            if(data.value){
+                layer.load(2);
+                $.post('/product/getScenicSpotAjax',{supplier_id:data.value},function(a){
+                    if(a.code==200){
+                        //地接社
+                        tr.find('.agent_id').html('');
+                        var html = '<option></option>';
+                        if(a.LocalTravelAgencyAr){
+                            for(var x in a['LocalTravelAgencyAr'])
+                                html += '<option value="'+a['LocalTravelAgencyAr'][x]['supplier_id']+'">'+a['LocalTravelAgencyAr'][x]['supplier_name']+'</option>';
+                        }
+                        tr.find('.agent_id').html(html);
+                        //景点
+                        tr.find('.scenic_spot_name').html('');
+                        var html2 = '<option></option>';
+                        if(a.ScenicSpotData){
+                            for(var x in a['ScenicSpotData']){
+                                html2 += '<option value="'+a['ScenicSpotData'][x]['scenic_spot_id']+'">'+a['ScenicSpotData'][x]['scenic_spot_name']+'</option>';
+                            }
+                        }
+                        tr.find('.scenic_spot_name').html(html2);
+                    }else{
+                        tr.find('.agent_id').html('');
+                        tr.find('.scenic_spot_name').html('');
+                    }
+                    form.render();
+                    layer.closeAll('loading'); //关闭loading
+                },'json');
+            }else{
+                tr.find('.agent_id').html('');
+                tr.find('.scenic_spot_name').html('');
+                form.render();
+            }
+        });
+
+        //地接社
+        form.on('select(agent_id)', function(data) {
+            tr = $(this).parent().parent().parent().parent();
+            var supplier_id = tr.find('.supplier_id').val();
+            if(data.value){
+                layer.load(2);
+                $.post('/product/getScenicSpotAgentAjax',{agent_id:data.value,supplier_id:supplier_id},function(a){
+                    tr.find('.scenic_spot_name').html('');
+                    if(a.code==200){
+                        var html = '<option></option>';
+                        if(a.ScenicSpotData){
+                            for(var x in a['ScenicSpotData']){
+                                html += '<option value="'+a['ScenicSpotData'][x]['scenic_spot_id']+'">'+a['ScenicSpotData'][x]['scenic_spot_name']+'</option>';
+                            }
+                        }
+                        tr.find('.scenic_spot_name').html(html);
+                    }
+                    form.render();
+                    layer.closeAll('loading'); //关闭loading
+                },'json');
+            }else{
+                tr.find('.scenic_spot_name').html('');
+                layer.load(2);
+                $.post('/product/getScenicSpotAjax',{supplier_id:supplier_id},function(a){
+                    if(a.code==200){
+                        tr.find('.scenic_spot_name').html('');
+                        var html2 = '<option></option>';
+                        if(a.ScenicSpotData){
+                            for(var x in a['ScenicSpotData']){
+                                html2 += '<option value="'+a['ScenicSpotData'][x]['scenic_spot_id']+'">'+a['ScenicSpotData'][x]['scenic_spot_name']+'</option>';
+                            }
+                        }
+                        tr.find('.scenic_spot_name').html(html2);
+                    }else{
+                        tr.find('.agent_id').html('');
+                        tr.find('.scenic_spot_name').html('');
+                    }
+                    form.render();
+                    layer.closeAll('loading'); //关闭loading
+                },'json');
+            }
+        });
+
+        //景点详情
+        form.on('select(scenic_spot_name)', function(data) {
+            tr = $(this).parent().parent().parent().parent();
+            if(data.value){
+                layer.load(2);
+                tr.find('.quantity').val(0);
+                tr.find('.unit_price').val(0);
+                tr.find('.total').val(0);
+                tr.find('.scenic_spot_id').val(0);
+                tr.find('.currency').val(0);
+
+                tr.find('.cost_price').val(0);
+                tr.find('.unit_price').val(0);
+                tr.find('.th_cost_price').html('');
+                tr.find('.th_unit_price').html('');
+                tr.find('.symbol').val('');
+
+                $.post('/product/getScenicSpotInfo',{scenic_spot_id:data.value},function(a){
+                    if(a.code==200){
+                        tr.find('.quantity').val(1);
+                        tr.find('.unit_price').val(a.ScenicSpotData.normal_settlement_price);
+                        tr.find('.total').val(a.ScenicSpotData.normal_settlement_price);
+                        tr.find('.scenic_spot_id').val(a.ScenicSpotData.scenic_spot_id);
+                        tr.find('.currency').val(a.ScenicSpotData.payment_currency_type);
+
+                        tr.find('.cost_price').val(a.ScenicSpotData.normal_price);
+                        tr.find('.unit_price').val(a.ScenicSpotData.normal_settlement_price);
+                        tr.find('.th_cost_price').html(CurrencyJson[a.ScenicSpotData.payment_currency_type][0]['symbol']+a.ScenicSpotData.normal_price);
+                        tr.find('.th_unit_price').html(CurrencyJson[a.ScenicSpotData.payment_currency_type][0]['symbol']+a.ScenicSpotData.normal_settlement_price);
+                        tr.find('.symbol').val(CurrencyJson[a.ScenicSpotData.payment_currency_type][0]['symbol']);
+                    }
+                    form.render();
+                    layer.closeAll('loading'); //关闭loading
+                },'json');
+            }
+        });
+
+        //数量计算总价
+        $('#t-scenic-spot').delegate('.quantity','blur',function(){
+            tr = $(this).parent().parent();
+            var quantity =   tr.find('.quantity').val()?tr.find('.quantity').val():0;
+            var unit_price = tr.find('.unit_price').val()?tr.find('.unit_price').val():0;
+            var t = quantity*unit_price;
+            tr.find('.total').val(t);
+            var cost_price = tr.find('.cost_price').val()?tr.find('.cost_price').val():0;
+            var unit_price = tr.find('.unit_price').val()?tr.find('.unit_price').val():0;
+            var t_cost_price = quantity*cost_price;
+            var t_unit_price = quantity*unit_price;
+            var symbol = tr.find('.symbol').val();
+            tr.find('.th_cost_price').html(symbol+t_cost_price);
+            tr.find('.th_unit_price').html(symbol+t_unit_price);
+        });
+
+        //单价计算总价
+        $('#t-scenic-spot').delegate('.unit_price','blur',function(){
+            tr = $(this).parent().parent();
+            var quantity =   tr.find('.quantity').val()?tr.find('.quantity').val():0;
+            var unit_price = tr.find('.unit_price').val()?tr.find('.unit_price').val():0;
+            var t = quantity*unit_price;
+            tr.find('.total').val(t);
+        });
+
+
+    }();
+
+
+    function add() {
+        layer.load(2);
+        $.ajax({
+            type: "POST",
+            url: '/product/NsessionTemplateScenicSpotAjax',
+            data: $('#form1').serializeArray(),
+            success: function (data) {
+                layer.closeAll();
+                if(data.code!=200){
+                    layer.msg(data.msg)
+                    return false;
+                }else if(data.code==200){
+                    layer.msg('{$language_tag.index_public_success}',{time:1,end : function(layero, index){
+                        opener.addScenicSpot();
+                        window.close();
+                    }
+                    });
+                }
+            },
+            error:function(XMLHttpRequest, textStatus, errorThrown){
+                layer.closeAll();
+                //console.log(errorThrown)
+                layer.msg('{$language_tag.index_public_verificationFailure}')
+
+            }
+        });
+        return false;
+    }
+</script>
+
+
+<script>
+    // opener.addHotel();
+</script>
+
+</body>
+</html>
+

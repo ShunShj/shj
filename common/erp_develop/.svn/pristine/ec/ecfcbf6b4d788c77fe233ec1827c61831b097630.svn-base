@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<head>
+    {include file='public/head' /}
+    <title>layout 后台大布局 - Layui</title>
+
+    <link href="/static/css/select2.min.css" rel="stylesheet">
+
+
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+    <div class="layui-header">
+        {include file='public/header' /}
+    </div>
+
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll">
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            {include file='public/left_menu_booknexus' /}
+        </div>
+    </div>
+
+
+    <div class="layui-body">
+
+        <!-- 内容主体区域 -->
+        <div style="padding: 15px 15px 0px;">
+            <div class='layui-row'>
+		   		<span class="layui-breadcrumb" lay-separator="-">
+                    <a>首页</a>
+                    <a>B2B</a>
+					<a>编辑订单</a>
+				</span>
+            </div>
+            <br>
+            {include file='admin_booking/menu' /}
+            <style>
+                .layui-form .layui-form-label{
+                    width: 150px;
+                    text-align: right;
+                }
+                .layui-form .layui-input-block{
+                    margin-left: 160px;
+                }
+                .layui-form-item{
+                    padding: 0 5px;
+                }
+            </style>
+
+
+
+            <form class="layui-form" id="form1" onSubmit="return add()">
+                <div class="layui-col-md12" style="margin-top: 20px">
+                    <div class="layui-col-md6">
+                        <table class="layui-table" >
+                            <tr><th>Invoice</th><td><input type="text" class="layui-input" name="" required /></td></tr>
+                            <tr><th>Account Code</th><td><input type="text" class="layui-input" name="" required /></td></tr>
+                            <tr><th>Myob Sales</th><td><input type="text" class="layui-input" name="" required /></td></tr>
+                            <tr><th>Myob Cost</th><td><input type="text" class="layui-input" name="" required /></td></tr>
+                            <tr><th>Balance Due</th><td><input type="text" class="layui-input" name="" required /></td></tr>
+                            <tr><th>Due Date</th><td><input type="text" class="layui-input" name="" required /></td></tr>
+                            <tr><th>Terms</th><td><input type="text" class="layui-input" name="" required /></td></tr>
+                            <tr>
+                                <th>Invoice Type</th>
+                                <td>
+                                    <select class="layui-select">
+                                        <option value="" >Choose One</option>
+                                        <option value="1" >Quote</option>
+                                        <option value="2" >Pro-forma Invoice</option>
+                                        <option value="3" >Invoice</option>
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>Status</th>
+                                <td>
+                                    <select class="layui-select">
+                                        <option value="" >Choose One</option>
+                                        <option value="1" >Awaiting Payment </option>
+                                        <option value="2" >Completed </option>
+                                        <option value="3" >Cancelled </option>
+                                        <option value="4" >Refund </option>
+                                        <option value="5" >Credit </option>
+                                        <option value="6" >Overdue </option>
+                                        <option value="7" >Credit Deposited </option>
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>Is Ready</th>
+                                <td>
+                                    <select class="layui-select">
+                                        <option value="1" >Yes </option>
+                                        <option value="2" >No</option>
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr><th>Cost</th><td><input type="text" class="layui-input" name="" required /></td></tr>
+                            <tr><th>Approval</th><td><input type="text" class="layui-input" name="" required /></td></tr>
+                        </table>
+                    </div>
+                    <div class="layui-col-md6" style="position: absolute;bottom: 10px;right: -5px">
+                        <div style="font-weight: bold;font-size: 15px" >Invoice Note</div>
+                        <div><textarea class="layui-textarea" name=""></textarea></div>
+                    </div>
+                </div>
+
+                <div class="layui-row" style="font-weight: bold;font-size: 15px;margin-top: 10px">代理商财务</div>
+                <table class="layui-table" >
+                    <thead>
+                    <tr>
+                        <th width="5%">No</th>
+                        <th width="30%">Item Name/Description</th>
+                        <th width="10%">Qty</th>
+                        <th width="15%">Net Unit Price</th>
+                        <th width="10%">Is Gst</th>
+                        <th width="15%">Net Total</th>
+                        <th width="15%">Net Total</th>
+                    </tr>
+                    </thead>
+                    <tbody class="tbody">
+                        <tr>
+                            <td>1</td>
+                            <td><textarea class="layui-textarea"></textarea> </td>
+                            <td><input class="layui-input"></td>
+                            <td><input class="layui-input"></td>
+                            <td><select class="layui-select"><option value="1">Yes</option><option value="2">No</option> </select></td>
+                            <td>$900</td>
+                            <td><select class="layui-select"><option value="1">Enable</option><option value="2">Cancelled</option></select></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <table style="width: 100%;line-height: 24px">
+                    <tr>
+                        <td colspan="5" width="70%">&nbsp;</td>
+                        <td width="15%">Total inc. GST</td>
+                        <td width="15%">$900</td>
+                    </tr>
+                    <tr>
+                        <td colspan="5" width="70%">&nbsp;</td>
+                        <td width="15%">GST</td>
+                        <td width="15%">$0</td>
+                    </tr>
+                    <tr>
+                        <td colspan="5" width="70%">&nbsp;</td>
+                        <td width="15%">Amount Paid</td>
+                        <td width="15%">$0</td>
+                    </tr>
+                    <tr>
+                        <td colspan="5" width="70%">&nbsp;</td>
+                        <td width="15%">Balance Due</td>
+                        <td width="15%">$900</td>
+                    </tr>
+                </table>
+
+
+
+
+                <div class="layui-form layui-col-md12" style="margin-top: 20px">
+                    <div class="layui-row">
+                        <div class="layui-col-md6">
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">Product Code:</label>
+                                <div class="layui-input-block">
+                                    <select class="layui-select" name="">
+                                        <option></option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-row">
+                        <div class="layui-col-md6">
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">Description:</label>
+                                <div class="layui-input-block">
+                                    <textarea class="layui-textarea" name=""></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-row">
+                        <div class="layui-col-md6">
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">Qty:</label>
+                                <div class="layui-input-block">
+                                    <input type="text" name="" class="layui-input" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-row">
+                        <div class="layui-col-md6">
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">Price:</label>
+                                <div class="layui-input-block">
+                                    <input type="text" name="" class="layui-input" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-row">
+                        <div class="layui-col-md6">
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">Is GST:</label>
+                                <div class="layui-input-block">
+                                    <select class="layui-select" name="">
+                                        <option value="1">On</option>
+                                        <option value="2">Off</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-row">
+                        <div class="layui-col-md6">
+                            <div class="layui-form-item">
+                                <label class="layui-form-label"></label>
+                                <div class="layui-input-block">
+                                   <a class="layui-btn">Add Item</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="layui-row" style="font-weight: bold;font-size: 15px;margin-top: 10px">供应商财务</div>
+                <table class="layui-table">
+                    <thead>
+                        <tr>
+                            <th width="10%">应付编号</th>
+                            <th width="20%">Item Name/Description</th>
+                            <th width="20%">Type</th>
+                            <th width="20%">Supplier</th>
+                            <th width="10%">Supplier Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>F-111</td>
+                            <td>付无锡团费</td>
+                            <td>应付分公司的团款</td>
+                            <td>Nexus Holidays Wuxi</td>
+                            <td>$-100</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <table style="width: 100%;line-height: 24px">
+                    <tr>
+                        <td colspan="3" class="50%"></td>
+                        <td width="20%">Supplier Cost</td>
+                        <td width="10%">$-100</td>
+                    </tr>
+                    <tr>
+                        <td colspan="3" class="50%"></td>
+                        <td width="20%">Supplier Sales</td>
+                        <td width="10%">$100</td>
+                    </tr>
+                    <tr>
+                        <td colspan="3" class="50%"></td>
+                        <td width="20%">总 Cost</td>
+                        <td width="10%">$-980</td>
+                    </tr>
+                    <tr>
+                        <td colspan="3" class="50%"></td>
+                        <td width="20%">Supplier Sales</td>
+                        <td width="10%">$10000</td>
+                    </tr>
+                </table>
+
+
+                <div class="layui-col-md8" style="font-weight: bold;font-size:15px;text-align: center;margin-top: 20px">
+                    <button type="submit" class="layui-btn layui-btn-sm layui-btn-primary" >Update</button>
+                </div>
+            </form>
+
+
+
+
+
+
+        </div>
+    </div>
+
+
+
+
+
+    <div class="add-item" style="display: none">
+        <tr>
+            <td id="no-ii">1</td>
+            <td ><textarea class="layui-textarea" id="itemName-ii"></textarea></td>
+            <td><textarea class="layui-textarea" id="description-ii"></textarea> </td>
+            <td><input class="layui-input" id="qty-ii"></td>
+            <td><input class="layui-input" id="netUnitPrice-ii"></td>
+            <td><select class="layui-select"><option value="1">Yes</option><option value="2">No</option> </select></td>
+            <td>$900</td>
+            <td><select class="layui-select"><option value="1">Enable</option><option value="2">Cancelled</option></select></td>
+        </tr>
+    </div>
+
+
+
+
+
+    <div class="layui-footer">
+        <!-- 底部固定区域 -->
+        © layui.com - 底部固定区域
+    </div>
+</div>
+{include file='public/foot_js' /}
+<script src='__STATIC__/javascript/public/select2.min.js'></script>
+<script>
+    //JavaScript代码区域
+    var layer = layui.layer;
+    var form = layui.form;
+    var upload = layui.upload;
+
+
+    function add(){
+        $.ajax({
+            type: "POST",
+            url: '/booknexus_tour/createTourFormAjax',
+            data:  $('#form1').serializeArray(),
+            success: function(data){
+                //console.log(data);
+                if(data.code!=200){
+                    layer.msg(data.msg);
+                    return false;
+                }else if(data.code==200) {
+                    layer.msg('操作成功',{time:2000,end : function(layero, index){
+                        location.href="/booknexus_tour/addTourDatesForm";
+                    }
+                    });
+                }
+            },
+            error:function(XMLHttpRequest, textStatus, errorThrown){
+                layer.msg('验证失败')
+            }
+        });
+        return false;
+    }
+
+
+
+</script>
+
+</body>
+</html>

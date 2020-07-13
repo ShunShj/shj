@@ -1,0 +1,93 @@
+
+var form=layui.form;
+var laytpl=layui.laytpl;
+
+$(function () {
+    $.ajax({
+        type: "post",
+        url: "/branchcompany/getBranchProductTypeAjax",
+        data:"",
+        dataType: "json",
+        success: function (result) {
+            if(result.code==200){
+                var list=result.data;
+
+                var branchTypeHtml='';
+                branchTypeHtml+='<option value="">请输入选择类型</option>';
+                for(var i=0;i<list.length;i++){
+                    branchTypeHtml+='<option value="'+list[i].branch_product_type_id+'">'+list[i].branch_product_type_name+'</option>';
+                }
+                $("#branch_product_type_id").html(branchTypeHtml);
+                form.render();
+            }else if(result.code!=200){
+                layer.closeAll('loading');
+                layer.msg('类型获取失败！'+result.code);
+                return false;
+            }
+        }
+    });
+    manageSearch()
+    $("#mangeSearch").click(function () {
+        manageSearch()
+    })
+})
+
+//获取分公司产品
+function manageSearch() {
+    layer.load(2);
+    var status=$("#status").val();
+    var branch_product_type_id=$("#branch_product_type_id").val();
+    var branch_product_number=$("#branch_product_number").val();
+    var branch_product_name=$("#branch_product_name").val();
+    var create_user_name=$("#create_user_name").val();
+
+    $.ajax({
+        type: "post",
+        url: "/branchcompany/getBranchProductAjax",
+        data: {
+            branch_product_number:branch_product_number,
+            branch_product_name: branch_product_name,
+            branch_product_type_id: branch_product_type_id,
+            create_user_name:create_user_name,
+            status:status,
+            is_like:1
+        },
+        dataType: "json",
+        success: function (result) {
+            if(result.code==200){
+                var list=result.data;
+                var tbodyTr=$("#tbody_tr").html();
+                laytpl(tbodyTr).render(list, function(html) {
+                    $("#manage_tbody").html(html);
+                })
+                layer.closeAll('loading');
+                tableNone()
+            }else if(result.code!=200){
+                layer.closeAll('loading');
+                layer.msg('搜索失败！'+result.code);
+                return false;
+            }
+        }
+    })
+}
+//删除
+function delete_branch_product(obj) {
+    $.ajax({
+        type: "post",
+        url: "/branchcompany/updateBranchProductStatusByBranchProductNumberAjax",
+        data: {
+            branch_product_number: obj,
+            status:0,
+        },
+        dataType: "json",
+        success: function (result) {
+            if(result.code==200){
+                location.href="/branchcompany/showBranchProductManage"
+            }else if(result.code!=200){
+                layer.closeAll('loading');
+                layer.msg('删除失败！'+result.code);
+                return false;
+            }
+        }
+    })
+}

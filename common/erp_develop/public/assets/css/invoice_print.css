@@ -1,0 +1,440 @@
+/**
+    Don't use @media print here to make sure @page setting would not lost in IE
+**/
+
+#header, #footer, #header img, #footer img, nav {
+    display: none;
+}
+
+body {
+    margin: 0mm;
+}
+
+@page {
+    size: A4;
+    margin: 0.4in;
+    /*@top-left-corner{*/
+        /*content:"Hello";*/
+        /*color:red;*/
+    /*}*/
+}
+
+div#booking_invoice > div {
+    margin: 0 20px;
+}
+
+div#invoice-header {
+    font-size: 14px;
+    /*-moz-border:1px solid #8c8c8c !important;*/
+}
+
+div#invoice-header #logo img {
+    width: 200px;
+}
+
+div#invoice-header #logo em {
+    font-size: 10px;
+}
+
+div#invoice-header #logo p{
+    font-size: 7pt;
+    margin: 0;
+    padding: 0;
+}
+
+div#invoice-header #company-info {
+    margin-top: 15px;
+    font-size: 8pt;
+}
+
+div#invoice_banner img {
+    margin-top: -15px;
+}
+
+div#booking_invoice div#content-top table {
+    /*border: 1px solid #8c8c8c !important;*/
+    border-top:1px solid #8c8c8c !important;
+    page-break-inside:avoid;
+}
+
+div#content-top #agent-info, div#content-top #invoice-info {
+    font-size: 18px;
+}
+
+.filed_label {
+    width: 100px;
+}
+
+#content-body table tr:not(.first_page_item) {
+    display: none;
+}
+
+.note_for_print {
+    display: table-row !important;
+    font-weight: bold;
+}
+
+.note_for_print td {
+    border-top: 1px solid #8c8c8c;
+}
+
+div#booking_invoice div#content-body {
+    border: 0;
+}
+
+div#booking_invoice div#content-body table, div#page2_details table {
+    border: 1px solid #8c8c8c !important;
+}
+
+div#content-body td, div#content-summary td {
+    font-size: 16px;
+}
+
+div#content-summary td.summary_bot {
+    font-size: 16px;
+}
+
+div#invoice-footer {
+    font-size: 14px;
+}
+
+#page2_details{
+    page-break-before: always;
+}
+
+.page_break_after{
+    page-break-after: always;
+}
+
+div#booking_invoice > div.footer_wrapper{
+    width: 100%;
+    margin: 0;
+    /*padding:0;*/
+    /*position: absolute;*/
+    /*bottom: 0;*/
+    /*left:0;*/
+    /*display: block;*/
+}
+
+.footer_wrapper #invoice-footer{
+    position: relative;
+    margin: 0 18px;
+}
+
+div#invoice-footer .payment_header {
+    font-size: 20px;
+}
+
+div#invoice-footer .payment_title {
+    font-size: 18px;
+}
+
+div#invoice-footer img {
+    width: 50px;
+    margin-bottom: 10px;
+}
+
+hr {
+    border: 1px dashed #58595b;
+    margin-top: 18px;
+    margin-bottom: 8px;
+}
+
+table {
+    page-break-inside: avoid;
+}
+
+#content-body table{
+    page-break-inside: avoid;
+}
+
+#content-body table tr{
+    page-break-inside: avoid;
+    vertical-align: top;
+}
+#content-body table tr td{
+    /*height: 34pt;*/
+    height:0.3in;
+    overflow: hidden;
+}
+
+.page_break {
+    page-break-before: always;
+}
+
+div#booking_invoice > div#page2_details {
+    display: block;
+    margin: 0;
+}
+
+#page2_details #invoice-header, #page2_details .ditail_body,#page2_details #content-top {
+    margin: 0 20px 0 20px;
+}
+
+#page2_details #content-top{
+    margin-bottom: 20px;
+}
+
+.page_print{
+    display: block;
+}
+
+.strike {
+    display: none !important;
+}
+
+br.clear{
+    display: none;
+}
+
+div#booking_invoice div#content-top{
+    margin-top: 0 !important;
+}
+
+div#invoice-footer .payment_header{
+    margin: 5px 0 !important;
+}
+
+table {
+    border:solid #8c8c8c !important;
+    border-width:1px 0 0 1px !important;
+}
+#content-top th, #content-top td {
+    border:solid #8c8c8c !important;
+    border-width:0 1px 1px 0 !important;
+}
+
+#content-summary td.border_r{
+    border:solid #8c8c8c !important;
+    border-width:0 1px 1px 0 !important;
+}
+
+div#booking_invoice div#content-top, div#booking_invoice div#content-body, div#booking_invoice #content-summary {
+    margin-top: 15px;
+}
+
+div#content-top #agent-info, div#content-top #invoice-info {
+    padding: 5px 5px 7px 5px !important;
+}
+
+div#invoice-header #company-info {
+    border-right: 1px solid #1b77bd;
+}
+
+div#content-summary td.summary_bot {
+    border-bottom: 1px solid #8c8c8c;
+}
+
+.print_footer_margin{
+    display: block;
+    margin: 0 !important;
+}
+
+.print_footer_margin table tr td{
+   /*height: 30pt;*/
+    height:0.3in;
+}
+
+.footer_wrapper{
+    page-break-inside: avoid;
+}
+
+div#booking_invoice > div.actions_wrapper{
+    display: none;
+    margin: 0;
+}
+
+.summary_info{
+    margin-right: 3px;
+    font-size: 16px;
+}
+
+.summary_info p{
+    margin: 0;
+    padding: 0;
+}
+
+
+/* For firefox only*/
+@-moz-document url-prefix(){
+    div#invoice-header #company-info {
+        border-right-width: 2px;
+    }
+
+    #content-summary table{
+        border-right-width: 1px !important;
+        border-left-width: 1px !important;
+    }
+
+    span.light-colour {
+        opacity: 1 !important;
+    }
+
+    @page{
+        margin: .2in .3in;
+    }
+
+    /*.summary_info{*/
+        /*margin-right: 1px;*/
+    /*}*/
+
+    .summary_info .wrapper{
+        border-left-width: 2px !important;
+    }
+
+}
+
+
+/* For chrome 29+ & Opera 16+ only*/
+@media print and (-webkit-min-device-pixel-ratio: 0) and (min-resolution: .001dpcm) {
+
+    /* Set backgrounp to exact color */
+    body, span, div, table, tr, tbody, tfoot, td, hr {
+        -webkit-print-color-adjust: exact;
+    }
+
+    #header, #footer, #header img, #footer img, nav {
+        display: none;
+    }
+
+    body {
+        margin: 0mm;
+    }
+
+    @page {
+        size: A4;
+        margin: .4in .2in .4in .2in;
+    }
+
+    div#booking_invoice > div {
+        margin: 0 18px;
+    }
+
+    div#booking_invoice > div.footer_wrapper{
+        /*width: 150%;*/
+        margin: 0;
+        padding:0;
+    }
+
+    div#invoice-header {
+        font-size: 14px;
+    }
+
+    div#invoice-header #logo img {
+        width: 200px;
+    }
+
+    div#invoice-header #logo em {
+        font-size: 10px;
+    }
+
+    div#invoice-header #company-info {
+        margin-top: 15px;
+    }
+
+    div#content-top #agent-info, div#content-top #invoice-info {
+        font-size: 18px;
+    }
+
+    .filed_label {
+        width: 100px;
+    }
+
+    #content-body table tr:not(.first_page_item) {
+        display: none;
+    }
+
+    .note_for_print {
+        display: table-row;
+        font-weight: bold;
+    }
+
+    .note_for_print td {
+        border-top: 1px solid #8c8c8c;
+    }
+
+    div#booking_invoice div#content-body {
+        border: 0;
+    }
+
+    div#booking_invoice div#content-body table, div#page2_details table {
+        border: 1px solid #8c8c8c;
+    }
+
+    div#content-body td, div#content-summary td {
+        font-size: 16px;
+    }
+
+    div#content-summary td.summary_bot {
+        font-size: 16px;
+        border-bottom: 1px solid #8c8c8c;
+    }
+
+    div#booking_invoice div#content-top table {
+        border-bottom: 1px solid #8c8c8c !important;
+    }
+
+
+    div#content-top table tr:last-child td {
+        border-bottom: 1px solid #8c8c8c;
+        border-bottom-width: 1px !important;
+    }
+
+    div#invoice-footer {
+        font-size: 14px;
+        page-break-after: always;
+    }
+
+    div#invoice-footer .payment_header {
+        font-size: 20px;
+    }
+
+    div#invoice-footer .payment_title {
+        font-size: 18px;
+    }
+
+    div#invoice-footer img {
+        width: 50px;
+        margin-bottom: 10px;
+    }
+
+    hr {
+        border: 1px dashed #58595b;
+        margin-top: 20px;
+        margin-bottom: 15px;
+    }
+
+    table {
+        page-break-inside: avoid;
+    }
+
+    .page_break {
+        page-break-before: always;
+    }
+
+    div#booking_invoice > div#page2_details {
+        display: block;
+        margin: 0;
+    }
+
+    #page2_details #invoice-header, #page2_details #content-body-2 {
+        margin: 0 20px 0 20px;
+    }
+
+    br.clear{
+        display: none;
+    }
+
+    div#booking_invoice div#content-top{
+        margin-top: 0 !important;
+    }
+
+    div#invoice-footer .payment_header {
+        margin: 5px 0;
+    }
+
+    #content-summary table{
+        border-right-width: 1px !important;
+    }
+
+}

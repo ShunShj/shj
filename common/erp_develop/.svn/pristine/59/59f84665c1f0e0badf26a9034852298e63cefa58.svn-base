@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {include file='public/head' /}
+    <title>添加回执单模板</title>
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+
+    <div class="layui-header">
+        {include file='public/header' /}
+    </div>
+
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll">
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            {include file='public/left_menu' /}
+        </div>
+    </div>
+
+    <div class="layui-body">
+
+        <!-- 内容主体区域 -->
+        <div style="padding: 15px;">
+            <div class='layui-form-item'>
+		   		<span class="layui-breadcrumb" lay-separator="-">
+                    <a>首页</a>
+					<a>系统设置</a>
+					<a>回执单模板</a>
+                    <a>添加回执单模板</a>
+				</span>
+            </div>
+            <br/>
+            <br/>
+            <form class="layui-form" id="form1" onSubmit="return add()">
+
+                <div class="layui-form-item">
+                    <div class="layui-col-md9">
+                        <label class="layui-form-label">回执单名称：</label>
+                        <div class="layui-input-block">
+                             <input type="text" class="layui-input" required lay-verify="required" name="return_receipt_name">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <div class="layui-col-md9">
+                        <label class="layui-form-label">状态：</label>
+                        <div class="layui-input-block">
+                            <select id="status" name="status"  >
+                                <option value="1">启用</option>
+                                <option value="2">停用</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="layui-container" class="div_info">
+                    <div class="layui-row">
+                        <div class="layui-col-md3">
+                            <div class="layui-input-block">
+                                <input type="text" class="layui-input"  required lay-verify="required" placeholder="标题" name="title[0]" ><br>
+                                <input type="text" class="layui-input"  required lay-verify="required" placeholder="排序(小到大排序)" name="sorting[0]" >
+                            </div>
+                        </div>
+
+                        <div class="layui-col-md6" style="margin-left:10px ">
+                            <textarea required lay-verify="required"  class="layui-textarea" name="content[0]" placeholder="内容"></textarea>
+                        </div>
+
+                        <div  class="layui-col-md2" style="margin-left:10px ">
+                            <a  class="layui-btn del">删除</a>
+                        </div>
+                        <hr>
+                    </div>
+
+                </div>
+                <div>
+                    <a class="layui-btn add">添加</a>
+                </div>
+
+                <br><br><br>
+                    <div class="layui-form-item">
+                        <div class="layui-input-block">
+                            <button class="layui-btn nav-submit" lay-submit="" lay-filter="formDemo" id="language_add_button">立即提交</button>
+                            <a href="javascript:history.back(-1)"><button type="button" class="layui-btn layui-btn-primary">返回</button></a>
+                        </div>
+                    </div>
+            </form>
+        </div>
+    </div>
+
+    <div style="display: none" id="add_div">
+        <div class="layui-row" >
+            <div class="layui-col-md3">
+                <div class="layui-input-block">
+                    <input type="text" class="layui-input"  required lay-verify="required" placeholder="标题" name="title[num]"><br>
+                    <input type="text" class="layui-input"  required lay-verify="required" placeholder="排序(小到大排序)" name="sorting[num]">
+                </div>
+            </div>
+            <div class="layui-col-md6" style="margin-left:10px ">
+                <textarea required lay-verify="required"  class="layui-textarea" name="content[num]"></textarea>
+            </div>
+            <div  class="layui-col-md2" style="margin-left:10px ">
+                <a  class="layui-btn del">删除</a>
+            </div>
+            <hr>
+        </div>
+    </div>
+    <div class="layui-footer">
+        <!-- 底部固定区域 -->
+        © layui.com - 底部固定区域
+    </div>
+</div>
+{include file='public/foot_js' /}
+
+
+<script>
+    var num = 1;
+    $(function(){
+        $('.del').on('click',function(){
+            var o = $(this).parent().parent();
+            o.remove();
+        });
+
+        $('.add').on('click',function(){
+           var html = $('#add_div').html();
+           for(var ii =1; ii<5; ii++){
+               html = html.replace('num',num);
+           }
+           $('.div_info').append(html);
+
+            $('.del').on('click',function(){
+                var o = $(this).parent().parent();
+                o.remove();
+            });
+
+           num++;
+        });
+
+    });
+
+    function add() {
+
+        $.ajax({
+            type: "POST",
+            url: '/product/addShowReturnReceiptAjax',
+            data: $('#form1').serializeArray(),
+            success: function (data) {
+                if(data.code!=200){
+                    layer.msg(data.msg)
+                    return false;
+                }else if(data.code==200){
+                    layer.msg('操作成功',{time:1,end : function(layero, index){
+                        history.back(-1);
+                    }
+                    });
+                }
+            },
+            error:function(XMLHttpRequest, textStatus, errorThrown){
+                //console.log(errorThrown)
+                layer.msg('验证失败')
+
+            }
+        });
+        return false;
+    }
+</script>
+
+</body>
+</html>

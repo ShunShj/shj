@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {include file='public/head' /}
+    <title>添加客户</title>
+
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+
+    <div class="layui-header">
+        {include file='public/header' /}
+    </div>
+
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll">
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            {include file='public/left_menu' /}
+        </div>
+    </div>
+
+    <div class="layui-body">
+
+        <!-- 内容主体区域 -->
+        <div style="padding: 15px;">
+            <div class='layui-form-item'>
+		   		<span class="layui-breadcrumb">
+					<a href="#">销售管理</a>
+					<a href="/sale/showCustomerManage">客户管理</a>
+					<a href="#"><cite>添加客户</cite></a>
+				</span>
+            </div>
+            <br/>
+            <br/>
+            <br/>
+            <form class="layui-form" id="form1" onSubmit="return add()">
+                <div class="layui-form-item">
+                    <div class="layui-col-md6">
+                        <label class="layui-form-label">类型</label>
+                        <div class="layui-input-block">
+                            <select name="customer_type" required lay-verify="required" class="layui-input" >
+                                <option></option>
+                                {foreach $customer_type as $ky=>$Vl}
+                                <option value="{$ky}">{$Vl}</option>
+                                {/foreach}
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <div class="layui-col-md4">
+                        <label class="layui-form-label">姓名</label>
+                        <div class="layui-input-block">
+                            <input name="customer_name" required lay-verify="required" class="layui-input" />
+                        </div>
+                    </div>
+                    <div class="layui-col-md4">
+                        <label class="layui-form-label">性别</label>
+                        <div class="layui-input-block">
+                            <select name="gender"  required lay-verify="required" >
+                                <option></option>
+                                <option value="1">男</option>
+                                <option value="2">女</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="layui-col-md4">
+                        <label class="layui-form-label">国籍</label>
+                        <div class="layui-input-block">
+                            <select name="country_id"  required lay-verify="required" lay-search >
+                                <option></option>
+                                {foreach $CountryList as $CountryListV}
+                                <option value="{$CountryListV.country_id}">{$CountryListV.country_name}</option>
+                                {/foreach}
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <div class="layui-col-md4">
+                        <label class="layui-form-label">语言</label>
+                        <div class="layui-input-block">
+                            <select name="language_id"  required lay-verify="required" lay-search >
+                                <option></option>
+                                {foreach $langList as $langListV}
+                                <option value="{$langListV.language_id}">{$langListV.language_name}</option>
+                                {/foreach}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="layui-col-md4">
+                        <label class="layui-form-label">手机</label>
+                        <div class="layui-input-block">
+                            <input name="phone" required lay-verify="required" class="layui-input" />
+                        </div>
+                    </div>
+                    <div class="layui-col-md4">
+                        <label class="layui-form-label">邮箱</label>
+                        <div class="layui-input-block">
+                            <input name="email" required lay-verify="required|email" class="layui-input" />
+                        </div>
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <div class="layui-col-md4">
+                        <label class="layui-form-label">证件类型</label>
+                        <div class="layui-input-block">
+                            <select name="card_type"  required lay-verify="required" lay-search >
+                                 <option></option>
+                                {foreach $card_type as $ky=>$vl}
+                                <option value="{$ky}">{$vl}</option>
+                                {/foreach}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="layui-col-md4">
+                        <label class="layui-form-label">证件号码</label>
+                        <div class="layui-input-block">
+                            <input name="card_number" required lay-verify="required" class="layui-input" />
+                        </div>
+                    </div>
+                    <div class="layui-col-md4">
+                        <label class="layui-form-label">有效期</label>
+                        <div class="layui-input-block">
+                            <input name="term_of_validity" id="term_of_validity" required lay-verify="required" class="layui-input" />
+                        </div>
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <div class="layui-col-md10">
+                        <label class="layui-form-label">备注</label>
+                        <div class="layui-input-block">
+                            <textarea name="remark" required lay-verify="required"  class="layui-textarea"></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <div class="layui-input-block">
+                        <button class="layui-btn" lay-submit="" lay-filter="formDemo" id="language_add_button">立即提交</button>
+                        <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                        <a href="javascript:history.back(-1)"><button type="button" class="layui-btn layui-btn-primary">返回</button></a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="layui-footer">
+        <!-- 底部固定区域 -->
+        © layui.com - 底部固定区域
+    </div>
+</div>
+{include file='public/foot_js' /}
+
+
+<script>
+    layui.use('laydate', function(){
+        var laydate = layui.laydate;
+        //执行一个laydate实例
+        laydate.render({
+            elem: '#term_of_validity' //指定元素
+        });
+    });
+
+    function add() {
+
+        $.ajax({
+            type: "POST",
+            url: '/sale/AddCustomerAjax',
+            data: $('#form1').serializeArray(),
+            success: function (data) {
+                if(data.code!=200){
+                    layer.msg(data.msg)
+                    return false;
+                }else if(data.code==200){
+                    layer.msg('操作成功',{time:1,end : function(layero, index){
+                        history.back(-1);
+                    }
+                    });
+                }
+            },
+            error:function(XMLHttpRequest, textStatus, errorThrown){
+                //console.log(errorThrown)
+                layer.msg('验证失败')
+
+            }
+        });
+        return false;
+    }
+</script>
+
+</body>
+</html>

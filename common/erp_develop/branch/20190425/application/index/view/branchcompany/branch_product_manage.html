@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {include file='public/head' /}
+    <title>分公司产品</title>
+
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+    <div class="layui-header">
+        {include file='public/header' /}
+    </div>
+
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll">
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            {include file='public/left_menu' /}
+        </div>
+    </div>
+
+    <div class="layui-body layui-body-bg">
+
+        <!-- 内容主体区域 -->
+        <div style="padding: 15px 15px 0px;">
+            <div class="body-top">
+                <div class='layui-form-item'>
+                    <span class="layui-breadcrumb" lay-separator="-">
+                        <a>{$Think.lang.index_public_homepage}</a>
+                        <a>{$Think.lang.index_branchcompany_showBranchProductManage_branchManagement}</a>
+                        <a><cite>{$Think.lang.index_branchcompany_showBranchProductManage_branchProduct}</cite></a>
+                    </span>
+                </div>
+                <div class='layui-block all-search-bg'>
+                    <form class="layui-form">
+                        <div class="layui-row">
+                            <div class="layui-col-md4">
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">{$Think.lang.index_public_status}:</label>
+                                    <div class="layui-input-block">
+                                        <select class="" lay-verify="required" id="status">
+                                            <option value=""></option>
+                                            <option value="1">{$Think.lang.index_public_show}</option>
+                                            <option value="0">{$Think.lang.index_public_disabled}</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-col-md4">
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">{$Think.lang.index_branchcompany_showBranchProductTypeManage_branchCompanyProductType}:</label>
+                                    <div class="layui-input-block">
+                                        <select class="" lay-verify="required" lay-search id="branch_product_type_id">
+
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-col-md4">
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">{$Think.lang.index_branchcompany_showBranchProductManage_productNumber}:</label>
+                                    <div class="layui-input-block">
+                                        <input type="text"   name="branch_product_number" id="branch_product_number" value="{$Think.get.branch_product_number}"  placeholder="{$Think.lang.index_branchcompany_showBranchProductManage_productNumber}" class="layui-input">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-row">
+                            <div class="layui-col-md4">
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">{$Think.lang.index_branchcompany_showBranchProductManage_productName}:</label>
+                                    <div class="layui-input-block">
+                                        <input type="text"   name="team_name" value="{$Think.get.team_name}" id="branch_product_name"  placeholder="{$Think.lang.index_branchcompany_showBranchProductManage_productName}" class="layui-input">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-col-md4">
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">{$Think.lang.index_branchcompany_showBranchProductManage_userName}:</label>
+                                    <div class="layui-input-block">
+                                        <input type="text"   name="" id="create_user_name"  placeholder="{$Think.lang.index_branchcompany_showBranchProductManage_userName}" class="layui-input">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-row">
+                            <div class="layui-col-md4 layui-col-md-offset4">
+                                <div class='input-inline all-button-center pages-search-margin'>
+                                    <input type="hidden" name="" value="">
+                                    <a class="layui-btn nav-search" id="mangeSearch">{$Think.lang.index_public_search}</a>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="content-bg">
+                <span style="{:action('index/auth/check_auth',['role_id'=>'242'])}"><a href='/branchcompany/showBranchProductAdd'><button class="layui-btn nav-add layui-btn-sm">{$Think.lang.index_branchcompany_showBranchProductManage_addProduct}</button></a></span>
+                <hr>
+                <div class="table-nont user-manage company-pageHeight">
+                    <table class="layui-table" id="">
+                        <thead>
+                        <tr>
+                            <th>{$Think.lang.index_branchcompany_showBranchProductManage_branchProduct_number}</th>
+                            <th>{$Think.lang.index_branchcompany_showBranchProductManage_branchProduct_name}</th>
+                            <th>{$Think.lang.index_branchcompany_showBranchProductTypeManage_branchCompanyProductType}</th>
+                            <th>{$Think.lang.index_branchcompany_showBranchProductManage_startDate}</th>
+                            <th>{$Think.lang.index_branchcompany_showBranchProductManage_endDate}</th>
+                            <!--<th>币种</th>
+                            <th>直客价</th>
+                            <th>代理价</th>-->
+                            <th>{$Think.lang.index_branchcompany_showBranchProductManage_branchProduct_zum}</th>
+                            <th>{$Think.lang.index_public_status}</th>
+                            <th>{$Think.lang.index_branchcompany_showBranchProductManage_userName}</th>
+                            <th class="layui-table-width">{$Think.lang.index_source_operation}</th>
+                        </tr>
+                        </thead>
+                        <tbody id="manage_tbody">
+
+                        </tbody>
+
+                    </table>
+                </div>
+                <div class="listButtom">
+                    <!--加载分页-->
+                    {include file='public/page' /}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="layui-footer">
+        <!-- 底部固定区域 -->
+        © layui.com - 底部固定区域
+    </div>
+    <script type="text/html">
+
+    </script>
+    <script id="tbody_tr" type="text/html">
+        {{#  layui.each(d, function(index, item){ }}
+            <tr>
+                <td class="number">{{item.branch_product_number}}</td>
+                <td>{{item.branch_product_name}}</td>
+                <td>{{item.branch_product_type_name}}</td>
+                <td>{{date('Y-m-d',item.branch_product_begin_time)}}</td>
+                <td>{{date('Y-m-d',item.branch_product_end_time)}}</td>
+                <!--<td>{{item.price_currency_name}}</td>
+                <td>{{item.customer_price}}</td>
+                <td>{{item.distributor_price}}</td>-->
+                <td>{{item.customer_count}}</td>
+                <td>{{item.status==1?'{$Think.lang.index_public_show}':item.status==0?'{$Think.lang.index_public_disabled}':''}}</td>
+                <td>{{item.create_user_name}}</td>
+                <td>
+                    <!--<a href=''><button class="layui-btn layui-btn-sm hover-details layui-btn-primary">订购</button></a>-->
+                    {{#  if(item.locked==0){ }}
+                    <span style=""><button class="layui-btn layui-btn-sm nav-del layui-btn-primary" onclick="lock(this)">{$Think.lang.index_public_lock}</button></span>
+                    <span style="{:action('index/auth/check_auth',['role_id'=>'243'])}"><a href='/branchcompany/showBranchProductAdd?branch_product_number={{item.branch_product_number}}'><button class="layui-btn layui-btn-sm hover-edit layui-btn-primary" >{$Think.lang.index_public_update}</button></a></span>
+                    {{#  } }}
+                    <span style="{:action('index/auth/check_auth',['role_id'=>'244'])}"><a href='/branchcompany/showBranchProductInfo?branch_product_number={{item.branch_product_number}}'><button class="layui-btn layui-btn-sm hover-edit layui-btn-primary">{$Think.lang.index_public_info}</button></a></span>
+                </td>
+            </tr>
+        {{#  }); }}
+    </script>
+</div>
+{include file='public/foot_js' /}
+<script src='__STATIC__/javascript/branchcompany/product_manage.js'></script>
+<script src='__STATIC__/javascript/data.js'></script>
+<script>
+    //JavaScript代码区域
+    var layer = layui.layer
+</script>
+</body>
+</html>

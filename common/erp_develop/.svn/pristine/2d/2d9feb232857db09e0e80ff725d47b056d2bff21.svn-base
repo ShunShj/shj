@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {include file='public/head' /}
+    <title>网站-添加页面</title>
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+
+    <div class="layui-header">
+        {include file='public/header' /}
+        <link rel="stylesheet" href="__STATIC__/bootstrap-wysihtml5/bootstrap-wysihtml5.css">
+    </div>
+
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll">
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            {include file='public/left_menu_web' /}
+        </div>
+    </div>
+
+    <div class="layui-body">
+
+        <!-- 内容主体区域 -->
+        <div style="padding: 15px;">
+            <div class='layui-form-item'>
+		   		<span class="layui-breadcrumb" lay-separator="-">
+                    <a>首页</a>
+                    <a>网站</a>
+                    <a><cite>添加页面</cite></a>
+				</span>
+            </div>
+
+            <br/>
+            <br/>
+            <br/>
+            <?php $con = 0;?>
+            <form class="layui-form" id="form1" onSubmit="return add()">
+                <div class="layui-row layui-col-space10">
+                    <div class="layui-row">
+                        <div class="layui-col-md12">
+                            <div class="layui-form-item">
+                                <label class="layui-form-label input-required">页面模块:</label>
+                                <div class="layui-input-block layui-form">
+                                    <input  name="ota_theme_module_id" value="{$data['ota_page']['ota_theme_module_id']}" type="hidden"/>
+                                    <select lay-filter="ota_theme_module_id" class="layui-select" lay-verify="required" disabled >
+                                        <option value=""></option>
+                                        {foreach $getThemeModule as $v}
+                                        <option value="{$v.ota_theme_module_id}" {$data['ota_page']['ota_theme_module_id']==$v.ota_theme_module_id?'selected':''}>{$v.title}</option>
+                                        <?php
+                                            if($data['ota_page']['ota_theme_module_id']==$v['ota_theme_module_id']){
+                                                $con = $v['number_of_primary_keys'];
+                                            }
+                                        ?>
+                                        {/foreach}
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="layui-col-md12">
+                            <div class="layui-form-item">
+                                <label class="layui-form-label input-required">状态:</label>
+                                <div class="layui-input-block layui-form">
+                                    <select  name="page_status" class="layui-select"   >
+                                        <option value="1" {$data['ota_page']['status']==1?'selected':''}>使用</option>
+                                        <option value="2" {$data['ota_page']['status']==2?'selected':''}>不使用</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-col-md12">
+                            <div class="layui-form-item">
+                                <label class="layui-form-label input-required">标题:</label>
+                                <div class="layui-input-block layui-form">
+                                    <input type="text" name="page_title" class="layui-input" lay-verify="required" value="{$data['ota_page']['title']}" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-col-md12">
+                            <div class="layui-form-item">
+                                <label class="layui-form-label input-required">页面浏览量PV:</label>
+                                <div class="layui-input-block layui-form">
+                                    <input type="text" name="pv" class="layui-input" lay-verify="number" value="{$data['ota_page']['pv']}" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-col-md12">
+                            <div class="layui-form-item">
+                                <label class="layui-form-label input-required">排序（小到大）:</label>
+                                <div class="layui-input-block layui-form">
+                                    <input type="text" name="sort" class="layui-input" lay-verify="number" value="{$data['ota_page']['sort']}">
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div id="d-html">
+                    <div class="layui-container">
+
+                        <?php
+                        $it = 1;
+                        for($i=1;$i<=$con;$i++){?>
+                        <div class="p-{$i} layui-col-md11" style="margin:10px;border: 1px solid #C0C4CC">
+                            <div class="layui-row" style="padding: 10px 20px">
+                                <div class="layui-col-md8">position{$i}<font class="pf-{$i}">
+                                    {if $ota_components_under_the_page[$i][0]['subassembly_id']==1}---团队产品{/if}
+                                    {if $ota_components_under_the_page[$i][0]['subassembly_id']==2}---团队产品分类{/if}
+                                    {if $ota_components_under_the_page[$i][0]['subassembly_id']==3}---幻灯片{/if}
+                                    {if $ota_components_under_the_page[$i][0]['subassembly_id']==4}---文章{/if}
+                                    {if $ota_components_under_the_page[$i][0]['subassembly_id']==5}---文章分类{/if}
+                                    {if $ota_components_under_the_page[$i][0]['subassembly_id']==6}---广告位{/if}
+                                    {if $ota_components_under_the_page[$i][0]['subassembly_id']==7}---自定义代码{/if}
+                                    {if $ota_components_under_the_page[$i][0]['subassembly_id']==8}---菜单{/if}
+                                    {if $ota_components_under_the_page[$i][0]['subassembly_id']==9}---友情链接{/if}
+                                </font></div>
+                                <!--<div class="layui-col-md4" style="text-align: right;"><a class="layui-btn layui-btn-sm addty" data-info="{$i}">添 加</a></div>-->
+                            </div>
+                            <div style="margin: 10px;" class="pty-{$i}">
+                                {if  $ota_components_under_the_page[$i][0]}
+                                <!--团队产品-->
+                                    {if $ota_components_under_the_page[$i][0]['subassembly_id']==1}
+                                        <input type="hidden"  name="subassemblyId[{$i}]" value="1" />
+                                        <select name="shujuId[{$i}]" lay-search>
+                                            <option></option>
+                                            {foreach $getProductLists as $vl}
+                                                <option {$vl.uuid==$ota_components_under_the_page[$i][0]['shuju']?'selected':''} value="{$vl.uuid}">{$vl.title}</option>
+                                            {/foreach}
+                                        </select>
+                                    {/if}
+                                <!--团队产品分类-->
+                                {if $ota_components_under_the_page[$i][0]['subassembly_id']==2}
+                                <input type="hidden"  name="subassemblyId[{$i}]" value="2" />
+                                <select name="shujuId[{$i}]" lay-search>
+                                    <option></option>
+                                    {foreach $getProductTypes as $vl}
+                                    <option {$vl.uuid==$ota_components_under_the_page[$i][0]['shuju']?'selected':''} value="{$vl.uuid}">{$vl.type_name}</option>
+                                    {/foreach}
+                                </select>
+                                {/if}
+                                <!--幻灯片-->
+                                {if $ota_components_under_the_page[$i][0]['subassembly_id']==3}
+                                <input type="hidden"  name="subassemblyId[{$i}]" value="3" />
+                                <select name="shujuId[{$i}]" lay-search>
+                                    <option></option>
+                                    {foreach $getSlide as $vl}
+                                    <option {$vl.uuid==$ota_components_under_the_page[$i][0]['shuju']?'selected':''} value="{$vl.uuid}">{$vl.ota_slide_list_name}</option>
+                                    {/foreach}
+                                </select>
+                                {/if}
+                                <!--文章-->
+                                {if $ota_components_under_the_page[$i][0]['subassembly_id']==4}
+                                <input type="hidden"  name="subassemblyId[{$i}]" value="4" />
+                                <select name="shujuId[{$i}]" lay-search>
+                                    <option></option>
+                                    {foreach $getArticle as $vl}
+                                    <option {$vl.uuid==$ota_components_under_the_page[$i][0]['shuju']?'selected':''} value="{$vl.uuid}">{$vl.title}</option>
+                                    {/foreach}
+                                </select>
+                                {/if}
+                                <!--文章文章分类-->
+                                {if $ota_components_under_the_page[$i][0]['subassembly_id']==5}
+                                <input type="hidden"  name="subassemblyId[{$i}]" value="5" />
+                                <select name="shujuId[{$i}]" lay-search>
+                                    <option></option>
+                                    {foreach $getArticleType as $vl}
+                                    <option {$vl.uuid==$ota_components_under_the_page[$i][0]['shuju']?'selected':''} value="{$vl.uuid}">{$vl.article_type_name}</option>
+                                    {/foreach}
+                                </select>
+                                {/if}
+                                <!--广告位-->
+                                {if $ota_components_under_the_page[$i][0]['subassembly_id']==6}
+                                <input type="hidden"  name="subassemblyId[{$i}]" value="6" />
+                                <select name="shujuId[{$i}]" lay-search>
+                                    <option></option>
+                                    {foreach $getAdvertising as $vl}
+                                    <option {$vl.uuid==$ota_components_under_the_page[$i][0]['shuju']?'selected':''} value="{$vl.uuid}">{$vl.title}</option>
+                                    {/foreach}
+                                </select>
+                                {/if}
+                                <!--自定义代码-->
+                                {if $ota_components_under_the_page[$i][0]['subassembly_id']==7}
+                                <input type="hidden"  name="subassemblyId[{$i}]" value="7" />
+                                <textarea id="demo{$it}" name="shujuId[{$i}]" class="layui-textarea">{$ota_components_under_the_page[$i][0]['shujutext']}</textarea>
+                                <?php $it++;?>
+                                {/if}
+                                <!--菜单-->
+                                {if $ota_components_under_the_page[$i][0]['subassembly_id']==8}
+                                <input type="hidden"  name="subassemblyId[{$i}]" value="8" />
+                                <select name="shujuId[{$i}]" lay-search>
+                                    <option></option>
+                                    {foreach $getOtaMenu as $vl}
+                                    <option {$vl.uuid==$ota_components_under_the_page[$i][0]['shuju']?'selected':''} value="{$vl.uuid}">{$vl.title}</option>
+                                    {/foreach}
+                                </select>
+                                {/if}
+                                <!--菜单-->
+                                {if $ota_components_under_the_page[$i][0]['subassembly_id']==9}
+                                <input type="hidden"  name="subassemblyId[{$i}]" value="9" />
+                                <select name="shujuId[{$i}]" lay-search>
+                                    <option></option>
+                                    {foreach $getfriendlyLink as $vl}
+                                    <option {$vl.uuid==$ota_components_under_the_page[$i][0]['shuju']?'selected':''} value="{$vl.uuid}">{$vl.ota_advert_list_name}</option>
+                                    {/foreach}
+                                </select>
+                                {/if}
+
+
+                                <input name="ota_components_under_the_page_id[{$i}]"  value="{$ota_components_under_the_page[$i][0]['ota_components_under_the_page_id']}" type="hidden"/>
+                                {else/}
+                                    <div style="text-align: center">未选定内容类型</div>
+                                {/if}
+                            </div>
+
+                            {notempty name="$OtaCss[$ota_components_under_the_page[$i][0]['subassembly_id']]"}
+                            <div style="margin: 10px">
+                                <select name="css[{$i}]" lay-search>
+                                    <option value="0">-------选择一个样式-------</option>
+                                    {foreach $OtaCss[$ota_components_under_the_page[$i][0]['subassembly_id']] as $vl}
+                                    <option  {$vl.id==$ota_components_under_the_page[$i][0]['ota_css_id']?'selected':''}  value="{$vl.id}">{$vl.tit}</option>
+                                    {/foreach}
+                                </select>
+                            </div>
+                            {/notempty}
+
+                        </div>
+                        <?php }?>
+
+
+
+
+                    </div>
+
+
+                    <!--组件类型选择-->
+                    <script class="ty" type="text/html" >
+                        <div >
+                            <select  class="layui-select subassembly" style="width: 100%;">
+                                <option value="">-请选择-</option>
+                                {foreach $subgroup as $k=>$v}
+                                <option value="{$k}">{$v}</option>
+                                {/foreach}
+                            </select>
+
+                        </div>
+                    </script>
+
+
+                    <script>
+                        var position_i = 0;
+                        var  subassemblyId = 0;
+                        $('.addty').on('click',function(){
+                            position_i = $(this).data('info');
+
+                            layer.open({
+                                title: '组件选择'
+                                ,content:  $('.ty').html()
+                                ,btn: ['确定', '取消']
+                                ,yes: function(){
+                                    layer.load(2);
+                                    console.log($('.subassembly'));
+                                    subassemblyId = $('.subassembly').eq(0).val();
+
+                                    $.post('/ota_theme/getSubassemblyData',{subassemblyId:subassemblyId},function(a){
+                                        //旅游产品
+                                        if(subassemblyId==1){
+                                            console.log(a.data);
+                                            var h = '<input type="hidden"  name="subassemblyId['+position_i+']" value="'+subassemblyId+'" />';
+                                            h += '<select name="shujuId['+position_i+']" lay-search>';
+                                            for(ii in a.data){
+                                                h += '<option value="'+a.data[ii]['uuid']+'">'+a.data[ii]['title']+'</option>';
+                                            }
+                                            h += '</select>';
+
+                                            $('.pty-'+position_i).html(h);
+                                            $('.pf-'+position_i).html('---旅游产品');
+                                            form.render();
+
+                                        }
+                                        //旅游分类
+                                        if(subassemblyId==2){
+                                            var h = '<input type="hidden"  name="subassemblyId['+position_i+']" value="'+subassemblyId+'" />';
+                                            h+= '<select name="shujuId['+position_i+']" lay-search>';
+                                            for(ii in a.data){
+                                                h += '<option value="'+a.data[ii]['uuid']+'">'+a.data[ii]['type_name']+'</option>';
+                                            }
+                                            h += '</select>';
+
+                                            $('.pty-'+position_i).html(h);
+                                            $('.pf-'+position_i).html('---旅游分类');
+                                            form.render();
+
+                                        }
+                                        //幻灯片
+                                        if(subassemblyId==3){
+                                            var h = '<input type="hidden"  name="subassemblyId['+position_i+']" value="'+subassemblyId+'" />';
+                                            h+= '<select name="shujuId['+position_i+']" lay-search>';
+                                            for(ii in a.data){
+                                                h += '<option value="'+a.data[ii]['uuid']+'">'+a.data[ii]['ota_slide_list_name']+'</option>';
+                                            }
+                                            h += '</select>';
+
+                                            $('.pty-'+position_i).html(h);
+                                            $('.pf-'+position_i).html('---幻灯片');
+                                            form.render();
+
+                                        }
+                                        //文章
+                                        if(subassemblyId==4){
+                                            var h = '<input type="hidden"  name="subassemblyId['+position_i+']" value="'+subassemblyId+'" />';
+                                            h+= '<select name="shujuId['+position_i+']" lay-search>';
+                                            for(ii in a.data){
+                                                h += '<option value="'+a.data[ii]['uuid']+'">'+a.data[ii]['title']+'</option>';
+                                            }
+                                            h += '</select>';
+
+                                            $('.pty-'+position_i).html(h);
+                                            $('.pf-'+position_i).html('---文章');
+                                            form.render();
+                                        }
+                                        //文章分类
+                                        if(subassemblyId==5){
+                                            var h = '<input type="hidden"  name="subassemblyId['+position_i+']" value="'+subassemblyId+'" />';
+                                            h+= '<select name="shujuId['+position_i+']" lay-search>';
+                                            for(ii in a.data){
+                                                h += '<option value="'+a.data[ii]['uuid']+'">'+a.data[ii]['article_type_name']+'</option>';
+                                            }
+                                            h += '</select>';
+
+                                            $('.pty-'+position_i).html(h);
+                                            $('.pf-'+position_i).html('---文章分类');
+                                            form.render();
+                                        }
+                                        //广告位
+                                        if(subassemblyId==6){
+                                            var h = '<input type="hidden"  name="subassemblyId['+position_i+']" value="'+subassemblyId+'" />';
+                                            h+= '<select name="shujuId['+position_i+']" lay-search>';
+                                            for(ii in a.data){
+                                                h += '<option value="'+a.data[ii]['uuid']+'">'+a.data[ii]['title']+'</option>';
+                                            }
+                                            h += '</select>';
+
+                                            $('.pty-'+position_i).html(h);
+                                            $('.pf-'+position_i).html('---广告位');
+                                            form.render();
+                                        }
+                                        // 自定义代码
+                                        if(subassemblyId==7) {
+                                            $('.pty-' + position_i).html('');
+                                            var h = '<input type="hidden"  name="subassemblyId[' + position_i + ']" value="' + subassemblyId + '" />';
+                                            h += '<textarea  id="demo' + it + '" name="shujuId[' + position_i + ']" class="layui-textarea"></textarea>';
+                                            $('.pty-' + position_i).html(h);
+                                            $('.pf-' + position_i).html('---自定义代码');
+                                            UE.getEditor('demo'+it,{
+                                                toolbars: [
+                                                    [
+                                                        'source', //源代码
+                                                        //'anchor', //锚点
+                                                        'undo', //撤销
+                                                        'redo', //重做
+                                                        'bold', //加粗
+                                                        'indent', //首行缩进
+                                                        //'snapscreen', //截图
+                                                        'italic', //斜体
+                                                        'underline', //下划线
+                                                        'strikethrough', //删除线
+                                                        'subscript', //下标
+                                                        'fontborder', //字符边框
+                                                        'superscript', //上标
+                                                        'formatmatch', //格式刷
+
+                                                        'blockquote', //引用
+                                                        'pasteplain', //纯文本粘贴模式
+                                                        //'selectall', //全选
+                                                        //'print', //打印
+                                                        // 'preview', //预览
+                                                        'horizontal', //分隔线
+                                                        'removeformat', //清除格式
+                                                        'time', //时间
+                                                        'date', //日期
+                                                        'unlink', //取消链接
+                                                        'insertrow', //前插入行
+                                                        'insertcol', //前插入列
+                                                        'mergeright', //右合并单元格
+                                                        'mergedown', //下合并单元格
+                                                        'deleterow', //删除行
+                                                        'deletecol', //删除列
+                                                        'splittorows', //拆分成行
+                                                        'splittocols', //拆分成列
+                                                        'splittocells', //完全拆分单元格
+                                                        'deletecaption', //删除表格标题
+                                                        'inserttitle', //插入标题
+                                                        'mergecells', //合并多个单元格
+                                                        'deletetable', //删除表格
+                                                        'cleardoc', //清空文档
+                                                        'insertparagraphbeforetable', //"表格前插入行"
+                                                        'insertcode', //代码语言
+                                                        'fontfamily', //字体
+                                                        'fontsize', //字号
+                                                        'paragraph', //段落格式
+                                                        'simpleupload', //单图上传
+                                                        'insertimage', //多图上传
+                                                        'edittable', //表格属性
+                                                        'edittd', //单元格属性
+                                                        'link', //超链接
+                                                        'emotion', //表情
+                                                        'spechars', //特殊字符
+                                                        'searchreplace', //查询替换
+//                                    'map', //Baidu地图
+//                                    'gmap', //Google地图
+                                                        'insertvideo', //视频
+//                                    'help', //帮助
+                                                        'justifyleft', //居左对齐
+                                                        'justifyright', //居右对齐
+                                                        'justifycenter', //居中对齐
+                                                        'justifyjustify', //两端对齐
+                                                        'forecolor', //字体颜色
+                                                        'backcolor', //背景色
+                                                        'insertorderedlist', //有序列表
+                                                        'insertunorderedlist', //无序列表
+//                                    'fullscreen', //全屏
+                                                        'directionalityltr', //从左向右输入
+                                                        'directionalityrtl', //从右向左输入
+                                                        'rowspacingtop', //段前距
+                                                        'rowspacingbottom', //段后距
+                                                        'pagebreak', //分页
+                                                        'insertframe', //插入Iframe
+                                                        'imagenone', //默认
+                                                        'imageleft', //左浮动
+                                                        'imageright', //右浮动
+                                                        'attachment', //附件
+                                                        'imagecenter', //居中
+                                                        'wordimage', //图片转存
+                                                        'lineheight', //行间距
+                                                        'edittip ', //编辑提示
+                                                        'customstyle', //自定义标题
+                                                        'autotypeset', //自动排版
+//                                    'webapp', //百度应用
+                                                        'touppercase', //字母大写
+                                                        'tolowercase', //字母小写
+                                                        'background', //背景
+                                                        'template', //模板
+                                                        'scrawl', //涂鸦
+                                                        'music', //音乐
+                                                        'inserttable', //插入表格
+                                                        'drafts', // 从草稿箱加载
+                                                        'charts', // 图表
+                                                    ]],
+                                            });
+                                            it++;
+                                            form.render();
+                                            // $('.layui-form-select').css('z-index',9999999);
+                                        }
+
+                                        //菜单
+                                        if(subassemblyId==8){
+                                            var h = '<input type="hidden"  name="subassemblyId['+position_i+']" value="'+subassemblyId+'" />';
+                                            h+= '<select name="shujuId['+position_i+']" lay-search>';
+                                            for(ii in a.data){
+                                                h += '<option value="'+a.data[ii]['uuid']+'">'+a.data[ii]['title']+'</option>';
+                                            }
+                                            h += '</select>';
+
+                                            $('.pty-'+position_i).html(h);
+                                            $('.pf-'+position_i).html('---菜单');
+                                            form.render();
+                                        }
+
+                                        layer.closeAll();
+                                    });
+                                }
+                                ,btn2: function(){
+                                    layer.closeAll();
+                                }
+                            });
+
+                        });
+                    </script>
+                </div>
+
+
+                <div class="layui-form-item">
+                    <div class="layui-input-block all-button-center">
+                        <button class="layui-btn nav-submit" lay-submit="" lay-filter="formDemo" id="addBut">提交</button>
+                        <a href="/ota_theme/page_list"><button type="button" class="layui-btn layui-btn-primary">取消</button></a>
+                    </div>
+                </div>
+
+            </form>
+        </div>
+    </div>
+
+
+    <div class="layui-footer">
+        <!-- 底部固定区域 -->
+        © layui.com - 底部固定区域
+    </div>
+</div>
+{include file='public/foot_js' /}
+<script>
+    var layer = layui.layer;
+    var form = layui.form;
+    var laydate = layui.laydate;
+    var it = {$it};
+
+    !function() {
+        //获取页面模块
+        form.on('select(ota_theme_module_id)', function(data){
+            var ota_theme_module_id = data.value;
+            layer.load(2);
+            $.post('/ota_theme/getPageModuleComponent',{ota_theme_module_id:ota_theme_module_id},function(a){
+                layer.closeAll();
+                $('#d-html').html(a);
+                form.render();
+            });
+
+        });
+
+        for(var ji=1;ji<it;ji++){
+            UE.getEditor('demo'+ji,{
+                toolbars: [
+                    [
+                        'source', //源代码
+                        //'anchor', //锚点
+                        'undo', //撤销
+                        'redo', //重做
+                        'bold', //加粗
+                        'indent', //首行缩进
+                        //'snapscreen', //截图
+                        'italic', //斜体
+                        'underline', //下划线
+                        'strikethrough', //删除线
+                        'subscript', //下标
+                        'fontborder', //字符边框
+                        'superscript', //上标
+                        'formatmatch', //格式刷
+
+                        'blockquote', //引用
+                        'pasteplain', //纯文本粘贴模式
+                        //'selectall', //全选
+                        //'print', //打印
+                        // 'preview', //预览
+                        'horizontal', //分隔线
+                        'removeformat', //清除格式
+                        'time', //时间
+                        'date', //日期
+                        'unlink', //取消链接
+                        'insertrow', //前插入行
+                        'insertcol', //前插入列
+                        'mergeright', //右合并单元格
+                        'mergedown', //下合并单元格
+                        'deleterow', //删除行
+                        'deletecol', //删除列
+                        'splittorows', //拆分成行
+                        'splittocols', //拆分成列
+                        'splittocells', //完全拆分单元格
+                        'deletecaption', //删除表格标题
+                        'inserttitle', //插入标题
+                        'mergecells', //合并多个单元格
+                        'deletetable', //删除表格
+                        'cleardoc', //清空文档
+                        'insertparagraphbeforetable', //"表格前插入行"
+                        'insertcode', //代码语言
+                        'fontfamily', //字体
+                        'fontsize', //字号
+                        'paragraph', //段落格式
+                        'simpleupload', //单图上传
+                        'insertimage', //多图上传
+                        'edittable', //表格属性
+                        'edittd', //单元格属性
+                        'link', //超链接
+                        'emotion', //表情
+                        'spechars', //特殊字符
+                        'searchreplace', //查询替换
+//                                    'map', //Baidu地图
+//                                    'gmap', //Google地图
+                        'insertvideo', //视频
+//                                    'help', //帮助
+                        'justifyleft', //居左对齐
+                        'justifyright', //居右对齐
+                        'justifycenter', //居中对齐
+                        'justifyjustify', //两端对齐
+                        'forecolor', //字体颜色
+                        'backcolor', //背景色
+                        'insertorderedlist', //有序列表
+                        'insertunorderedlist', //无序列表
+//                                    'fullscreen', //全屏
+                        'directionalityltr', //从左向右输入
+                        'directionalityrtl', //从右向左输入
+                        'rowspacingtop', //段前距
+                        'rowspacingbottom', //段后距
+                        'pagebreak', //分页
+                        'insertframe', //插入Iframe
+                        'imagenone', //默认
+                        'imageleft', //左浮动
+                        'imageright', //右浮动
+                        'attachment', //附件
+                        'imagecenter', //居中
+                        'wordimage', //图片转存
+                        'lineheight', //行间距
+                        'edittip ', //编辑提示
+                        'customstyle', //自定义标题
+                        'autotypeset', //自动排版
+//                                    'webapp', //百度应用
+                        'touppercase', //字母大写
+                        'tolowercase', //字母小写
+                        'background', //背景
+                        'template', //模板
+                        'scrawl', //涂鸦
+                        'music', //音乐
+                        'inserttable', //插入表格
+                        'drafts', // 从草稿箱加载
+                        'charts', // 图表
+                    ]],
+            });
+        }
+
+    }();
+
+
+    function add() {
+        layer.load(2);
+        $.ajax({
+            type: "POST",
+            url: '/ota_theme/updateBuiltPageAjax?ota_page_id={$_GET["ota_page_id"]}&ota_theme_id={$_GET["ota_theme_id"]}',
+            data: $('#form1').serializeArray(),
+            success: function (data) {
+                layer.closeAll();
+                if(data.code!=200){
+                    layer.msg(data.msg)
+                    return false;
+                }else if(data.code==200){
+                    layer.msg('{$language_tag.index_public_success}',{time:1,end : function(layero, index){
+                        location.href = '/ota_theme/page_list';
+                    }
+                    });
+                }
+            },
+            error:function(XMLHttpRequest, textStatus, errorThrown){
+                layer.closeAll();
+                //console.log(errorThrown)
+                layer.msg('{$language_tag.index_public_verificationFailure}')
+
+            }
+        });
+        return false;
+    }
+</script>
+
+
+<script>
+    // opener.addHotel();
+</script>
+
+</body>
+</html>
+

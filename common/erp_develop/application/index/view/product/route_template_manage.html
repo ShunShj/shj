@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {include file='public/head' /}
+    <title>{$language_tag.index_product_showRouteTemplateManage_route_template}</title>
+
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+    <div class="layui-header">
+        {include file='public/header' /}
+    </div>
+
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll">
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            {include file='public/left_menu' /}
+        </div>
+    </div>
+
+    <div class="layui-body layui-body-bg">
+
+        <!-- 内容主体区域 -->
+        <div style="padding: 15px 15px 0px;">
+            <div class="body-top">
+                <div class='layui-form-item'>
+                    <span class="layui-breadcrumb" lay-separator="-">
+                        <a>{$language_tag.index_public_homepage}</a>
+                        <a>{$language_tag.index_public_product}</a>
+                        <a><cite>{$language_tag.index_product_showRouteTemplateManage_route_template}</cite></a>
+                    </span>
+                </div>
+                <div class='layui-block all-search-bg'>
+                    <form class="layui-form" method='get' action='/product/showRouteTemplateManage'>
+                        <div class="layui-row">
+                            <div class="layui-col-md4">
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">{$language_tag.index_product_showRouteTemplateManage_routeType}:</label>
+                                    <div class="layui-input-block">
+                                        <select name="route_type_id">
+                                            <option value=""></option>
+                                            {foreach $routeType as $v}
+                                            <option value="{$v.route_type_id}" {$_GET['route_type_id']==$v.route_type_id?'selected':''}>{$v.route_type_name}</option>
+                                            {/foreach}
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-col-md4">
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">{$language_tag.index_public_status}:</label>
+                                    <div class="layui-input-block">
+                                        <select name="status">
+                                            <option value="" {$_GET['status']==''?'selected':''} >{$language_tag.index_product_showRouteTemplateManage_status}</option>
+                                            <option value="1" {$_GET['status']=='1'?'selected':''} }>{$language_tag.index_public_show}</option>
+                                            <option value="0" {$_GET['status']=='0'?'selected':''}>{$language_tag.index_public_disabled}</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-col-md4">
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">{$language_tag.index_product_showRouteTemplateManage_routName}:</label>
+                                    <div class="layui-input-block">
+                                        <input type="text" id="" name="route_name" autocomplete="off"  placeholder="{$language_tag.index_product_showRouteTemplateManage_routName}" class="layui-input" value="{$_GET['route_name']}" >
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-row">
+                            <div class="layui-col-md4">
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">{$language_tag.index_product_showRouteTemplateManage_routeUserName}:</label>
+                                    <div class="layui-input-block">
+                                        <input class="layui-input" type="text" name="route_user" value="{$_GET['route_user']}" placeholder="{$language_tag.index_product_showRouteTemplateManage_routeUserName}" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="layui-row">
+                            <div class="layui-col-md4 layui-col-md-offset4">
+                                <div class='input-inline all-button-center pages-search-margin'>
+                                    <button class="layui-btn nav-search" >{$language_tag.index_public_search}</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                    <!--<div class='layui-button-inline'>
+                        <a href='/product/showRouteTemplateAdd'><button class="layui-btn nav-add">新建线路模板</button></a>
+                    </div>-->
+                </div>
+            </div>
+            <div class="content-bg">
+                <span style="{:action('index/auth/check_auth',['role_id'=>'225'])}"><a href='/product/showRouteTemplateAdd'><button class="layui-btn nav-add layui-btn-sm">{$language_tag.index_product_showRouteTemplateManage_newRouteTemplate}</button></a></span>
+                <hr>
+                <div class="table-nont user-manage company-pageHeight">
+                    <table class="layui-table layui-form" id="language-table">
+                        <thead>
+                        <tr>
+
+                            <th>{$language_tag.index_product_showRouteTemplateManage_id}</th>
+                            <th>{$language_tag.index_product_showRouteTemplateManage_newRouteTemplate_name}</th>
+                            <th>{$language_tag.index_product_showRouteTemplateManage_routeType}</th>
+                            <th>{$language_tag.index_product_showRouteTemplateManage_plan_custom_number}</th>
+                            <th>{$language_tag.index_product_showRouteTemplateManage_days}</th>
+                            <th>{$language_tag.index_product_showRouteTemplateManage_updateTime}</th>
+                            <th>{$language_tag.index_product_showRouteTemplateManage_userName}</th>
+                            <th>{$language_tag.index_product_showRouteTemplateManage_source}</th>
+                            <th>{$language_tag.index_public_status}</th>
+                            <th width="300">{$language_tag.index_source_operation}</th>
+                        </tr>
+                        </thead>
+
+                        <tbody>
+                        {foreach name="data" item="vo" }
+                        <tr>
+                            <th class="route_template_id" hidden="hidden">{$vo.route_template_id}</th>
+                            <th>{$vo.route_number}</th>
+                            <th>{$vo.route_name}</th>
+                            <th>{$vo.route_type_name}</th>
+                            <th>{$vo.plan_custom_number}</th>
+                            <th>{$vo.days}</th>
+                            <th>{$vo.update_time|date='Y-m-d H:i:s',###}</th>
+                            <th>{$vo.route_user_name}</th>
+                            <th><?php
+                                $source = [];
+                                foreach($vo['supplier_type_id'] as $v)
+                                {
+                                    $source[] = $language_tag[$source_type[$v]];
+                                }
+                                echo implode(",", $source);
+                            ?></th>
+                            <th>
+                                {if condition="in_array('226',$auth_id) OR $Think.session.user.role_id eq 1"}<input type="checkbox" {if condition="$vo.status eq 1"}checked=""{else/}{/if} name="open" lay-skin="switch" lay-filter="switchTest" lay-text="{$language_tag.index_public_show}|{$language_tag.index_public_disabled}">{else/}{if condition="$vo.status eq 1"}{$language_tag.index_public_show}{else}{$language_tag.index_public_disabled}{/if}{/if}
+                            </th>
+                            <th><span style="{:action('index/auth/check_auth',['role_id'=>'226'])}"><a href='/product/showRouteTemplateEdit?route_template_id={$vo.route_template_id}'><button class="layui-btn layui-btn-sm hover-edit layui-btn-primary">{$language_tag.index_public_update}</button></a></span>
+                                <span style="{:action('index/auth/check_auth',['role_id'=>'227'])}"><a href='/product/showRouteTemplateInfo?route_template_id={$vo.route_template_id}'><button class="layui-btn layui-btn-sm hover-edit layui-btn-primary">{$language_tag.index_public_info}</button></a></span>
+                                <!--<a href='/product/showRouteTemplateInfo?route_template_id={$vo.route_template_id}'><button class="layui-btn layui-btn-sm hover-details layui-btn-primary">{$language_tag.index_public_info}</button></a>-->
+                                <span style="{:action('index/auth/check_auth',['role_id'=>'227'])}">
+                                    <a class="layui-btn layui-btn-sm hover-edit layui-btn-primary synchronization" data-info="{$vo.route_template_id}">{$language_tag.index_product_showTeamProductManage_synchronization_team_product}</a>
+                                </span>
+                                 <span style="{:action('index/auth/check_auth',['role_id'=>'227'])}">
+                                    <a class="layui-btn layui-btn-sm hover-edit layui-btn-primary fuzhi"   data-info="{$vo.route_template_id}">{$language_tag.index_public_copy}</a>
+                                </span>
+                            </th>
+                        </tr>
+                        {/foreach}
+                        </tbody>
+
+                    </table>
+                </div>
+                <div class="listButtom">
+                    {include file='public/page' /}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="layui-footer">
+        <!-- 底部固定区域 -->
+        © layui.com - 底部固定区域
+    </div>
+</div>
+
+<div style="display: none" id="d-synchronization">
+    <div class="layui-row layui-form">
+        <div class="layui-col-md9">
+            <div class="layui-form-item d-tt">
+
+            </div>
+        </div>
+        <div>
+            <button class="layui-btn nav-search">{$language_tag.index_public_ok}</button>
+        </div>
+    </div>
+</div>
+
+
+{include file='public/foot_js' /}
+
+<script>
+    !function() {
+        var layer = layui.layer;
+        var form = layui.form;
+        var laydate = layui.laydate;
+        var route_template_id = 0;
+
+
+        $('.fuzhi').on('click',function(){
+            var route_template_id2 = $(this).data('info');
+//            alert(route_template_id2);
+            layer.load(2);
+            $.post('/product/copyCircuitTemplate ',{route_template_id:route_template_id2},function(a){
+                layer.closeAll();
+                if(a.code==200){
+                    location.href= '/product/showRouteTemplateEdit?route_template_id='+ a.data;
+                }else{
+                    layer.msg(a.msg);
+                    return false;
+                }
+
+            });
+        });
+
+
+        $('.synchronization').on('click',function(){
+            $('.d-tt').html('日期区间：<input type="text" id="ss_time" class="layui-input tt ss_time" placeholder="start" /> - <input placeholder="end" type="text" id="ee_time" class="layui-input tt ee_time" />');
+            route_template_id = $(this).data('info');
+            layer.open({
+                title: '同步日期'
+                ,content: $('#d-synchronization').html()
+                ,moveType: 1 //拖拽模式，0或者1
+                ,shade: 0
+                ,tipsMore :true
+                ,btn:false
+                ,success: function(layero){
+                    $('.tt').each(function(){
+                        laydate.render({
+                            elem: this
+                        })
+                    });
+                    form.render();
+                    $('.nav-search').on('click',function(){
+                        layer.load(2);
+                        var p = $(this).parent().parent();
+                        var ss_time = p.find('.ss_time').val();
+                        var ee_time = p.find('.ee_time').val();
+
+                        $.post('/product/synchronizationTeamProduct',{route_template_id:route_template_id,ss_time:ss_time,ee_time:ee_time},function(a){
+                           layer.closeAll();
+                            if(a.code==200)
+                           {
+                               layer.msg('{$language_tag.index_public_success}',{time:1,end : function(layero, index){
+                                   return false;
+                               }});
+                           }else{
+                               layer.msg(a.msg);
+                               return false;
+                           }
+                        });
+
+                    });
+
+                }
+            });
+
+
+        });
+
+
+
+    }();
+
+</script>
+<script>
+    var layer = layui.layer;
+
+    var form = layui.form;
+    form.on('switch(switchTest)', function(data){
+        var table_id = $(data.elem).parents("tr").children(".route_template_id").html();
+        var table_id_name = "route_template_id";
+        var table_name = "route_template";
+        if(this.checked == true){
+            var status = 1;
+        }else{
+            var status = 0;
+        }
+
+        $.ajax({
+            type: "POST",
+            url: '/index/changeStatus',
+            data: {
+                table_id:table_id,
+                table_id_name:table_id_name,
+                table_name:table_name,
+                status:status,
+            },
+            success: function(data){
+                //console.log(data);
+                if(data.code!=200){
+                    layer.msg(data.msg);
+                    return false;
+                }else if(data.code==200) {
+                    layer.msg('操作成功',{time:1,end : function(layero, index){
+
+                        }
+                    });
+                }
+            },
+            error:function(XMLHttpRequest, textStatus, errorThrown){
+                layer.msg('验证失败')
+            }
+        });
+    });
+
+
+</script>
+</body>
+</html>
+     

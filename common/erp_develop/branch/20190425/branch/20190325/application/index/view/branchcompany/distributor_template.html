@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    {include file='public/head' /}
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>无标题文档</title>
+    <style>
+        .tr-none{
+            display: none;
+        }
+    </style>
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+    <div class="layui-header">
+        {include file='public/header' /}
+    </div>
+
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll">
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            {include file='public/left_menu' /}
+        </div>
+    </div>
+
+    <div class="layui-body layui-body-bg">
+        <div style="padding: 15px 15px 0px;">
+            <div class="body-top">
+                <div class='layui-form-item top-bg'>
+                    <span class="layui-breadcrumb" lay-separator="-">
+                        <a>{$Think.lang.index_public_homepage}</a>
+                        <a>{$Think.lang.index_branchcompany_showBranchProductManage_branchManagement}</a>
+                        <a>{$Think.lang.index_branchcompany_showDistributorManage_channelManagement}</a>
+                        <a><cite>{$Think.lang.index_branchcompany_showDistributorManage_bill}</cite></a>
+                    </span>
+                </div>
+                <div class='layui-block all-search-bg'>
+                    <form class="layui-form" action="">
+                        <div class="layui-row">
+                            <div class="layui-col-md5 layui-col-md-offset3">
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">{$Think.lang.index_branchcompany_showDistributorManage_agent}:</label>
+                                    <div class="layui-input-block all-select">
+                                        <input value="{$distributor_result.distributor_name}" class="layui-input" disabled />
+                                        <input type="hidden" value="{$_GET['id']}" id="distributor_id">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-row">
+                            <div class="layui-col-md5 layui-col-md-offset3">
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">{$Think.lang.index_branchcompany_showDistributorManage_head}:</label>
+                                    <div class="layui-input-block">
+                                        <select name="title" lay-verify="required" id="bill_template_id">
+                                        	<option value="">--{$Think.lang.index_public_select}--</option>
+                                        	{foreach name='bill_template_result' item='bill_template_result'}
+                                            <option value="{$bill_template_result.bill_template_id}">{$bill_template_result.bill_template_title}</option>
+                                            {/foreach}
+   
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-row">
+                            <div class="layui-col-md5 layui-col-md-offset3">
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">{$Think.lang.index_branchcompany_showBranchProductManage_productNumber}:</label>
+                                    <div class="layui-input-block">
+                                        <select name="branch_product_number" id='branch_product_number'>
+                                            <option value="">--{$Think.lang.index_public_select}--</option>
+											{foreach name='branch_product_result' item='branch_product_result'}
+												<option value='{$branch_product_result.branch_product_number}'>{$branch_product_result.branch_product_number}</option>
+											{/foreach}	 
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-row">
+                            <div class="layui-col-md5 layui-col-md-offset3">
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">{$Think.lang.index_branchcompany_showBranchProductManage_startDate_scope}:</label>
+                                    <div class="layui-input-block">
+                                        <div class="layui-input-inline date-width">
+                                            <input type="text" name="" placeholder="{$Think.lang.index_branchcompany_showDistributorManage_pleaseSelectTheDate}" autocomplete="off" id="company_order_begin_time" class="layui-input sales-date">
+                                        </div>
+                                        <div class="date-and">-</div>
+                                        <div class="layui-input-inline date-width">
+                                            <input type="text" name="" placeholder="{$Think.lang.index_branchcompany_showDistributorManage_pleaseSelectTheDate}" autocomplete="off" id="company_order_end_time" class="layui-input sales-date">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-row">
+                            <div class="layui-col-md5 layui-col-md-offset3">
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">{$Think.lang.index_branchcompany_showDistributorManage_orderDate}:</label>
+                                    <div class="layui-input-block">
+                                        <div class="layui-input-inline date-width">
+                                            <input type="text" name="" placeholder="{$Think.lang.index_branchcompany_showDistributorManage_pleaseSelectTheDate}" autocomplete="off" id="company_order_create_from_time" class="layui-input sales-date aa">
+                                        </div>
+                                        <div class="date-and">-</div>
+                                        <div class="layui-input-inline date-width">
+                                            <input type="text" name="" placeholder="{$Think.lang.index_branchcompany_showDistributorManage_pleaseSelectTheDate}" autocomplete="off" id="company_order_create_to_time" class="layui-input sales-date">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-row">
+                            <div class="layui-col-md5 layui-col-md-offset3">
+                                <div class="layui-form-item">
+                                    <div class="layui-input-block" id="hidden_sale_over">
+                                        <input type="checkbox" name="" value="" title="{$Think.lang.index_branchcompany_showDistributorManage_hideSalesReceipts}" lay-skin="primary" id="input_sale_over">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!--<div class="layui-row">
+                            <div class="layui-col-md5 layui-col-md-offset3">
+                                <div class="layui-form-item">
+                                    <div class="layui-input-block">
+                                        <input type="checkbox" name="" title="隐藏出发日期在订单日期后并且佣金未付" lay-skin="primary">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>-->
+                        <div class="layui-row">
+                            <div class="layui-col-md5 layui-col-md-offset3">
+                                <div class='layui-input-block input-inline'>
+                                    <a lay-submit="" class="layui-btn layui-search-inline nav-search" id="create">{$Think.lang.index_branchcompany_showDistributorManage_generateBilling}</a>
+                                    <a href="/branchcompany/showDistributorManage" class="layui-btn layui-search-inline nav-add">{$Think.lang.index_public_back}</a>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="content-bg">
+                <a class="layui-btn layui-search-inline nav-add layui-btn-sm" onclick="acc()">{$Think.lang.index_public_put}</a>
+                <hr>
+                <!--startprint-->
+                <div id="distributor-table" class="table-nont" style="width: 100%;margin:0px auto">
+                    <table class="layui-table" style="width:100%;border-collapse: collapse;border:none">
+                        <thead>
+                        <tr align="left" class="tr-none" style="background:#fff;">
+                            <th colspan="11" style="border:none;padding:0px;" id="title_pic"></th>
+                        </tr>
+                        <tr align="left" style="background:#fff;">
+                            <th colspan="11" style="border:none" class="">
+                                <div class="layui-row">
+                                    <span class="div_md5 tfoot_bold" style="width: 40%;display: inline-block;font-weight:bold;text-align: left">Statment of:<b id="taitou"></b></span>&nbsp;&nbsp;&nbsp;&nbsp;
+                                    <span class="div_md7" style="width: 58%;display: inline-block;text-align: right">
+                                        Booked Between:<span id="date_one"></span> And:<span id="date_two"></span>
+                                        &nbsp;&nbsp;&nbsp;&nbsp;
+                                        Depart Between:<span id="date_three"></span> And:<span id="date_four"></span>
+                                    </span>
+                                </div>
+                            </th>
+                        </tr>
+                        <tr align="left" style="background:#f2f2f2">
+                            <th>BKIN</th>
+                            <th>BookingDate</th>
+                            <th>DepartDate</th>
+                            <th>TourCode</th>
+                            <th>Person(S)</th>
+                            <th>Total</th>
+                            <th>Paid</th>
+                            <th>Balance</th>
+                            <th>CURR</th>
+                            <th>ContactName</th>
+                            <th>Client name</th>
+                        </tr>
+                        </thead>
+                        <tbody style="border:1px solid #e6e6e6" id="bill-tbody">
+
+                        </tbody>
+                        <tfoot style="border:1px solid #ccc;border-top-width: 3px" id="bill-tfoot">
+
+                            <tr align="left" class="tr-none" style="background:#fff;">
+                                <td colspan="11" style="border:none;padding:0px;" id="foot_pic" ></td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+                <!--endprint-->
+            </div>
+        </div>
+    </div>
+    <div class="layui-footer">
+        <!-- 底部固定区域 -->
+        © layui.com - 底部固定区域
+    </div>
+    <script id="demo" type="text/html">
+        {{#  layui.each(d, function(index, item){ }}
+            <tr>
+                <td><div>{{item.company_order_number}}</div></td>
+                <td><div>{{item.create_time}}</div></td>
+                <td><div>{{item.begin_time}}</div></td>
+                <td><div>{{item.branch_product_number}}</div></td>
+                <td><div>{{item.company_order_customer_count}}</div></td>
+                <td><div>{{item.payment_money}}</div></td>
+                <td><div>{{item.true_payment}}</div></td>
+                <td><div>{{item.miss_payment}}</div></td>
+                <td><div>{{item.currency_name}}</div></td>
+                <td><div>{{item.create_user_name}}</div></td>
+                {{#
+                var fn = function(names){
+                    var arrayNames=names.split(",");
+                    var newItem=[];
+                    if(arrayNames.length>2){
+                        layui.each(arrayNames, function(indexs, items){
+                            if(indexs>1){
+                                arrayNames.splice(indexs,1)
+                            }else{
+                                if(indexs==1){
+                                    newItem.push(items+'...');
+                                }else{
+                                    newItem.push(items);
+                                }
+                            }
+                        });
+                        return newItem.join(",");
+                    }else{
+                        return arrayNames.join(",");
+                    }
+                };
+                }}
+                <td><div>{{fn(item.company_order_customer_name)}}</div></td>
+            </tr>
+        {{#  }); }}
+    </script>
+    <script id="tfoot" type="text/html">
+        <tr class="tfoot">
+            <td colspan="2">Sum of({{d.bill_data.length}} Bookings):</td>
+            <td></td>
+            <td></td>
+            <td>{{d.company_order_customer_count}}</td>
+            <td>{{d.total}}</td>
+            <td>{{d.paid}}</td>
+            <td>{{d.balance}}</td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr class="tfoot tfoot_bold">
+            <td colspan="2">Grand Total:</td>
+            <td></td>
+            <td></td>
+            <td>{{d.company_order_customer_count}}</td>
+            <td>{{d.total}}</td>
+            <td>{{d.paid}}</td>
+            <td>{{d.balance}}</td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        {{#  layui.each(d.currency_info, function(index, item){ }}
+            <tr class="tfoot tfoot_bold">
+                <td colspan="2">Grant {{item.unit}} Total:</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td>{{item.total}}</td>
+                <td>{{item.paid}}</td>
+                <td>{{item.balance}}</td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+        {{#  }); }}
+    </script>
+</div>
+{include file='public/foot_js' /}
+<script type="text/javascript" src="__STATIC__/javascript/branchcompany/template.js"></script>
+<script type="text/javascript" src="__STATIC__/javascript/branchcompany/Print.js"></script>
+<script>
+    layui.use('laydate', function(){
+        var laydate = layui.laydate;
+
+        lay('.sales-date').each(function(){
+            laydate.render({
+                elem: this
+                ,trigger: 'click'
+                ,done: function(value, date){
+                    console.log(date)
+                }
+            });
+        });
+
+
+
+    });
+</script>
+
+
+</body>
+</html>

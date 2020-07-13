@@ -1,0 +1,1080 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {include file='public/head' /}
+    <title>回执单模板</title>
+    <link href="__STATIC__/css/product.css" rel="stylesheet">
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+    <div class="layui-header">
+        {include file='public/header' /}
+    </div>
+
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll">
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            {include file='public/left_menu' /}
+        </div>
+    </div>
+
+    <div class="layui-body">
+
+        <!-- 内容主体区域 -->
+        <div style="padding: 15px;">
+            <div class="body-top">
+                <div class='layui-form-item'>
+                <span class="layui-breadcrumb" lay-separator="-">
+                    <a>{$Think.lang.index_public_homepage}</a>
+                    <a>{$Think.lang.index_branchcompany_showBranchProductManage_branchManagement}</a>
+                    <a>{$Think.lang.index_branchcompany_showCompanyOrderManage_orderManagement}</a>
+                    <a><cite>{$Think.lang.index_branchcompany_showCompanyOrderManage_addEdit_touristInformation}</cite></a>
+                </span>
+                    <div style="display:inline-block;width:88%;"></div>
+                    <span><button class="layui-btn nav-submit" onclick="all_array_submit();">{$Think.lang.index_branchcompany_showCompanyOrderManage_addEdit_submit}</button></span>
+                    <a href="/branchcompany/showCompanyOrderManage">
+                        <button type="button" class="layui-btn layui-btn-primary">{$Think.lang.index_branchcompany_showCompanyOrderManage_addEdit_temporaryStorage}</button>
+                    </a>
+                </div>
+            </div>
+            <div class="layui-tab layui-tab-brief" lay-filter="companyOrder">
+                <ul class="layui-tab-title layui-tab-url">
+                    <li>{$Think.lang.index_product_showRouteTemplateManage_information}</li>
+                    <li class="layui-this">{$Think.lang.index_branchcompany_showCompanyOrderManage_addEdit_touristInformation}</li>
+                    <li>{$Think.lang.index_branchcompany_showCompanyOrderManage_addEdit_product}</li>
+                    <li>{$Think.lang.index_branchcompany_showCompanyOrderManage_addEdit_primeCost}</li>
+                    <li>{$Think.lang.index_branchcompany_showCompanyOrderManage_addEdit_quotedPrice}</li>
+                    <li>{$Think.lang.index_branchcompany_showCompanyOrderManage_addEdit_salesReceipts}</li>
+                </ul>
+                <br>
+                <div class="layui-tab-content">
+                    <div class="layui-tab-item layui-show">
+                        <div class='layui-form-item lay-visitor-message'>
+                            <a href='#'><button class="layui-btn nav-add" onclick="visitor()">{$Think.lang.index_branchcompany_showCompanyOrderManage_addEdit_addVisitor}</button></a>
+                            <span style='color:red'>*{$Think.lang.index_branchcompany_showCompanyOrderManage_addEdit_placeChange}</span>
+                            <input type="hidden" id="company_order_number_hidden" value="{$company_order_number}">
+                            <!--<a href='#'><button class="layui-btn nav-details">批量导入</button></a>-->
+                        </div>
+                        <div class="lay-tab-box lay-visitor-message table-company user-manage company-pageHeight">
+                            <table class="layui-table" style="table-layout:fixed" id="visitorTable">
+                                <colgroup>
+                                    <col width="80">
+                                    <col width="80">
+                                    <col width="80">
+                                    <col width="220">
+                                    <col width="70">
+                                    <col width="120">
+                                    <col width="100">
+                                    <col width="170">
+                                    <col width="150">
+                                    <col width="150">
+                                    <col width="200">
+                                    <col width="100">
+                                    <col width="100">
+                                    <col width="100">
+                                    <col width="170">
+                                    <col width="0" style="display:none;">
+                                </colgroup>
+                                <thead>
+                                <tr>
+                                    <th>{$Think.lang.index_product_visitor_order_visitor}</th>
+                                    <th>{$Think.lang.index_public_status}</th>
+                                    <th>{$Think.lang.index_public_type}</th>
+                                    <th>{$Think.lang.index_product_showRouteTemplateManage_resources_name}</th>
+                                    <th>{$Think.lang.index_branchcompany_showBranchProductManage_sex}</th>
+                                    <th>{$Think.lang.index_branchcompany_showBranchProductManage_nationality}</th>
+                                    <th>{$Think.lang.index_branchcompany_showBranchProductManage_documentType}</th>
+                                    <th>{$Think.lang.index_branchcompany_showBranchProductManage_certificateNumber}</th>
+                                    <th>{$Think.lang.index_branchcompany_showBranchProductManage_effectiveDate}</th>
+                                    <th>{$Think.lang.index_branchcompany_showBranchProductManage_phone}</th>
+                                    <th>{$Think.lang.index_branchcompany_showBranchProductManage_email}</th>
+                                    <th>{$Think.lang.index_branchcompany_showBranchProductManage_language}</th>
+                                    <th>{$Think.lang.index_product_visitor_accommodationInformation}</th>
+                                    <th>{$Think.lang.index_public_flightInformation}</th>
+                                    <th>{$Think.lang.index_source_operation}</th>
+                                    <th style="display:none;">aaa</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                    {foreach name="$customer_result_data" item="vo" }
+                                    <tr>
+                                    	{if condition="$vo.status eq 2"}
+                                    	    <th class="aaa">-</th>
+	                                        <th>{if condition="$vo.status eq 1"}{$Think.lang.index_branchcompany_showCompanyOrderManage_addEdit_unconfirmed}{elseif condition="$vo.status eq 2"}{$Think.lang.index_branchcompany_showCompanyOrderManage_addEdit_zhanwei}{else/}{$Think.lang.index_branchcompany_showCompanyOrderManage_addEdit_confirm}{/if}</th>
+	                                        <th>-</th>
+	                                        <th>-</th>
+	                                        <th>-</th>
+	                                        <th>-</th>
+	                                        <th>-</th>
+	                                        <th>-</th>
+	                                        <th>-</th>
+	                                        <th>-</th>
+	                                        <th>-</th>
+	                                        <th>-</th>
+	                                        <th>-</th>
+	                                        <th>-</th>
+	                                        <th>{if condition="$vo.customer_id eq 0"}{else/}<button class="layui-btn layui-btn-sm hover-edit layui-btn-primary" onclick="order_customer_edit(this)" company_order_customer="{$vo.company_order_customer_id}">{$Think.lang.index_public_update}</button>{/if} <button class="layui-btn layui-btn-sm nav-del layui-btn-primary" onclick="delete_customer(this);">{$Think.lang.index_public_del}</button></th>
+	                                        <th style="display:none;">{$vo.company_order_customer_id}</th>
+                                    	{else/}
+	                                        <th class="aaa">{if condition="$vo.customer_id eq 0"}-{else/}{$vo.customer_id}{/if}</th>
+	                                        <th>{if condition="$vo.status eq 1"}{$Think.lang.index_branchcompany_showCompanyOrderManage_addEdit_unconfirmed}{elseif condition="$vo.status eq 2"}{$Think.lang.index_branchcompany_showCompanyOrderManage_addEdit_zhanwei}{else/}{$Think.lang.index_branchcompany_showCompanyOrderManage_addEdit_confirm}{/if}</th>
+	                                        <th>{if condition="$vo.customer_type eq ''"}-{else/}{if condition="$vo.customer_type eq 1"}{$Think.lang.index_branchcompany_showBranchProductManage_growUp}{elseif condition="$vo.customer_type eq 2"}{$Think.lang.index_branchcompany_showBranchProductManage_childrenInBed}{elseif condition="$vo.customer_type eq 3"}{$Think.lang.index_branchcompany_showBranchProductManage_childrenNotInBed}{elseif condition="$vo.customer_type eq 4"}{$Think.lang.index_branchcompany_showBranchProductManage_oldMan}{/if}{/if}</th>
+	                                        <th>{if condition="$vo.customer_id eq 0"}-{else/}{$vo.customer_first_name} {$vo.customer_last_name}{/if}</th>
+	                                        <th>{if condition="$vo.gender eq ''"}-{else/}{if condition="$vo.gender eq 1"}{$Think.lang.index_branchcompany_showBranchProductManage_boy}{else/}{$Think.lang.index_branchcompany_showBranchProductManage_girl}{/if}{/if}</th>
+	                                        <th>{if condition="$vo.card_type eq ''"}-{else/}{$vo.country_name}{/if}</th>
+	                                        <th>{if condition="$vo.card_type eq ''"}-{else/}{if condition="$vo.card_type eq 1"}{$Think.lang.index_branchcompany_showBranchProductManage_passport}{else/}{$Think.lang.index_branchcompany_showBranchProductManage_idCard}{/if}{/if}</th>
+	                                        <th>{if condition="$vo.card_number eq ''"}-{else/}{$vo.card_number}{/if}</th>
+	                                        <th>{if condition="$vo.term_of_validity eq '1970-01-01'"}-{else/}{$vo.term_of_validity}{/if}</th>
+	                                        <th>{if condition="$vo.phone eq ''"}-{else/}{$vo.phone}{/if}</th>
+	                                        <th>{if condition="$vo.email eq ''"}-{else/}{$vo.email}{/if}</th>
+	                                        <th>{if condition="$vo.language_name eq ''"}-{else/}{$vo.language_name}{/if}</th>
+	                                        <th>{if condition="$vo.accommodation_info eq null"}-{else/}<button class="layui-btn layui-btn-sm hover-look layui-btn-primary" onclick="hotelLook(this)">{$Think.lang.index_branchcompany_showBranchProductManage_look}</button>{/if}</th>
+	                                        <th>{if condition="$vo.flight_info eq null"}-{else/}<button class="layui-btn layui-btn-sm hover-look layui-btn-primary" onclick="flightLook(this)">{$Think.lang.index_branchcompany_showBranchProductManage_look}</button></a>{/if}</th>
+	                                        <th>{if condition="$vo.customer_id eq 0"}{else/}<button class="layui-btn layui-btn-sm hover-edit layui-btn-primary" onclick="order_customer_edit(this)" company_order_customer="{$vo.company_order_customer_id}">{$Think.lang.index_public_update}</button>{/if} <button class="layui-btn layui-btn-sm nav-del layui-btn-primary" onclick="delete_customer(this);">{$Think.lang.index_public_del}</button></th>
+	                                        <th style="display:none;">{$vo.company_order_customer_id}</th>                                    	
+                                    	{/if}
+
+                                    </tr>
+                                    {/foreach}
+                                </tbody>
+                            </table>
+                        </div>
+                        <!--添加游客start-->
+                        <div class="lay-visitor-add">
+                            <fieldset class="layui-elem-field layui-field-title">
+                                <legend>{$Think.lang.index_branchcompany_showCompanyOrderManage_addEdit_baseInformation}</legend>
+                            </fieldset>
+                            <form class="layui-form" action="">
+                                <div class="layui-row">
+                                    <div class="layui-col-md4">
+                                        <div class="layui-form-item" id="t1">
+                                            <label class="layui-form-label input-required">{$Think.lang.index_branchcompany_showCompanyOrderManage_addEdit_zhanwei}:</label>
+                                            <div class="layui-input-block" id="IsPurchased">
+                                                <input type="radio" name="order_hold" value="{$Think.lang.index_branchcompany_showCompanyOrderManage_addEdit_yes}" title="{$Think.lang.index_branchcompany_showCompanyOrderManage_addEdit_yes}" lay-filter="visitorYN">
+                                                <input type="radio" name="order_hold" value="{$Think.lang.index_branchcompany_showCompanyOrderManage_addEdit_no}" title="{$Think.lang.index_branchcompany_showCompanyOrderManage_addEdit_no}" lay-filter="visitorYN" checked>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="yesPurchased">
+
+                                </div>
+                                <div id="noPurchased">
+
+                                </div>
+                                <br>
+                                <div class="layui-row">
+                                    <div class="layui-form-button" style="text-align: center">
+                                        <button class="layui-btn nav-submit" lay-submit="" lay-filter="visitorMessAdd"  >{$Think.lang.index_branchcompany_showCompanyOrderManage_addEdit_preserve}</button>
+                                        <button type="button" class="layui-btn layui-btn-primary" onclick="visitorMessBack()">{$Think.lang.index_public_back}</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <!--添加游客end-->
+
+                        <!--修改游客start-->
+                        <div class="lay-visitor-edit" id="lay-visitor-edit" style="display:none;">
+                            <fieldset class="layui-elem-field layui-field-title">
+                                <legend>{$Think.lang.index_branchcompany_showCompanyOrderManage_addEdit_baseInformation}</legend>
+                            </fieldset>
+                            <form class="layui-form" action="">
+							
+                                <div class="layui-row" >
+                                    <div class="layui-col-md4">
+                                        <div class="layui-form-item" id="t2">
+                                            <!-- <label class="layui-form-label">占位:</label>
+                                            <div class="layui-input-block">
+                                                <input type="radio" name="order_hold" value="是" title="是" lay-filter="visitorYN">
+                                                <input type="radio" checked name="order_hold" value="否" title="否" lay-filter="visitorYN">
+                                            </div> -->
+                                        </div>
+                                    </div>
+                                </div>
+								
+                                <div class="layui-row  lay-visitor-holderNumber">
+                                    <div class="layui-col-md4">
+                                        <div class="layui-form-item">
+                                            <label class="layui-form-label input-required">{$Think.lang.index_branchcompany_showCompanyOrderManage_addEdit_zhanweiNumber}:</label>
+                                            <div class="layui-input-block">
+                                                <input type="text" id="occupy_count_edit" name="occupy_count" placeholder="{$Think.lang.index_public_placeHolder}" autocomplete="off" lay-verify="required" class="layui-input">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="visitor-message-other-edit" class="visitor-message-other-edit ">
+
+                                    <div class="layui-row">
+                                        <div class="layui-col-md4">
+                                            <div class="layui-form-item">
+                                                <label class="layui-form-label input-required">{$Think.lang.index_branchcompany_showBranchProductManage_name}:</label>
+                                                <div class="layui-input-block">
+                                                    <input type="text" id="customer_last_name_edit" name="customer_last_name" placeholder="{$Think.lang.index_public_placeHolder}" autocomplete="off" lay-verify="required" class="layui-input" value="">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="layui-col-md4">
+                                            <div class="layui-form-item">
+                                                <label class="layui-form-label input-required">{$Think.lang.index_branchcompany_showBranchProductManage_surname}:</label>
+                                                <div class="layui-input-block">
+                                                    <input type="text" id="customer_first_name_edit" name="customer_first_name" placeholder="{$Think.lang.index_public_placeHolder}" autocomplete="off" lay-verify="required" class="layui-input" value="{$vv.customer_first_name}">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="layui-col-md4">
+                                            <div class="layui-form-item">
+                                                <label class="layui-form-label input-required">{$Think.lang.index_branchcompany_showBranchProductManage_documentType}:</label>
+                                                <div class="layui-input-block">
+                                                    <select id="card_type_edit" name="card_type" lay-verify="required">
+                                                        <option value=""></option>
+                                                        <option value="1">{$Think.lang.index_branchcompany_showBranchProductManage_passport}</option>
+                                                        <option value="2">{$Think.lang.index_branchcompany_showBranchProductManage_idCard}</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="layui-row">
+                                        <div class="layui-col-md4">
+                                            <div class="layui-form-item">
+                                                <label class="layui-form-label">{$Think.lang.index_branchcompany_showBranchProductManage_englishSurname}:</label>
+                                                <div class="layui-input-block">
+                                                    <input type="text" id="english_last_name_edit" name="english_last_name" placeholder="{$Think.lang.index_public_placeHolder}" autocomplete="off" class="layui-input">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="layui-col-md4">
+                                            <div class="layui-form-item">
+                                                <label class="layui-form-label">{$Think.lang.index_branchcompany_showBranchProductManage_englishName}:</label>
+                                                <div class="layui-input-block">
+                                                    <input type="text" id="english_first_name_edit" name="english_first_name" placeholder="{$Think.lang.index_public_placeHolder}" autocomplete="off" class="layui-input">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="layui-col-md4">
+                                            <div class="layui-form-item">
+                                                <label class="layui-form-label input-required">{$Think.lang.index_branchcompany_showBranchProductManage_sex}:</label>
+                                                <div class="layui-input-block" lay-filter="selFilter">
+                                                    <select id="gender_edit" name="gender" lay-verify="required">
+                                                        <option value=""></option>
+                                                        <option value="1">{$Think.lang.index_branchcompany_showBranchProductManage_boy}</option>
+                                                        <option value="2">{$Think.lang.index_branchcompany_showBranchProductManage_girl}</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="layui-row">
+                                        <div class="layui-col-md4">
+                                            <div class="layui-form-item">
+                                                <label class="layui-form-label input-required">{$Think.lang.index_branchcompany_showBranchProductManage_certificateNumber}:</label>
+                                                <div class="layui-input-block">
+                                                    <input type="text" id="card_number_edit" name="card_number" placeholder="{$Think.lang.index_public_placeHolder}" autocomplete="off" lay-verify="required" class="layui-input">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="layui-col-md4">
+                                            <div class="layui-form-item">
+                                                <label class="layui-form-label">{$Think.lang.index_branchcompany_showBranchProductManage_effectiveDate}:</label>
+                                                <div class="layui-input-block">
+                                                    <input type="text" id="term_of_validity_edit" name="term_of_validity" placeholder="{$Think.lang.index_public_placeHolder}" autocomplete="off" class="layui-input layui-input-date">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="layui-col-md4">
+
+                                        </div>
+                                    </div>
+                                    <div class="layui-row">
+                                        <div class="layui-col-md4">
+                                            <div class="layui-form-item">
+                                                <label class="layui-form-label input-required">{$Think.lang.index_branchcompany_showBranchProductManage_nationality}:</label>
+                                                <div class="layui-input-block">
+                                                    <select id="country_id_edit" name="country_id" lay-verify="required">
+                                                        <option value=""></option>
+                                                        {volist name="country_result_data" id="ct"}
+                                                            <option value="{$ct.country_id}">{$ct.country_name}</option>
+                                                        {/volist}
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="layui-col-md4">
+                                            <div class="layui-form-item">
+                                                <label class="layui-form-label">{$Think.lang.index_branchcompany_showBranchProductManage_phone}:</label>
+                                                <div class="layui-input-block">
+                                                    <input type="text" id="phone_edit" name="phone" placeholder="{$Think.lang.index_public_placeHolder}" autocomplete="off" lay-verify="" class="layui-input">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="layui-col-md4">
+                                            <div class="layui-form-item">
+                                                <label class="layui-form-label">{$Think.lang.index_branchcompany_showBranchProductManage_email}:</label>
+                                                <div class="layui-input-block">
+                                                    <input type="text" id="email_edit" name="email" placeholder="{$Think.lang.index_public_placeHolder}" autocomplete="off" lay-verify="" class="layui-input">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="layui-row">
+                                        <div class="layui-col-md4">
+                                            <div class="layui-form-item">
+                                                <label class="layui-form-label input-required">{$Think.lang.index_public_type}:</label>
+                                                <div class="layui-input-block">
+                                                    <select id="customer_type_edit" name="customer_type" lay-verify="required">
+                                                        <option value=""></option>
+                                                        <option value="1">{$Think.lang.index_branchcompany_showBranchProductManage_growUp}</option>
+                                                        <option value="2">{$Think.lang.index_branchcompany_showBranchProductManage_childrenInBed}</option>
+                                                        <option value="3">{$Think.lang.index_branchcompany_showBranchProductManage_childrenNotInBed}</option>
+                                                        <option value="4">{$Think.lang.index_branchcompany_showBranchProductManage_oldMan}</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="layui-col-md4">
+                                            <div class="layui-form-item">
+                                                <label class="layui-form-label input-required">{$Think.lang.index_branchcompany_showBranchProductManage_language}:</label>
+                                                <div class="layui-input-block">
+                                                    <select id="language_id_edit" name="language_id" lay-verify="required">
+                                                        <option value="">{$Think.lang.index_public_select}</option>
+                                                        {volist name="language_result_data" id="lg"}
+                                                        <option value="{$lg.language_id}">{$lg.language_name}</option>
+                                                        {/volist}
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="flightMessage">
+                                        <fieldset class="layui-elem-field layui-field-title">
+                                            <legend>{$Think.lang.index_public_flightInformation}</legend>
+                                        </fieldset>
+                                        <div id="flightList_edit">
+                                            &nbsp;
+                                        </div>
+                                        <div class="layui-col-md4 layui-flight-edit">
+                                            <div class="layui-btn nav-add" onclick="flightEdit()">{$Think.lang.index_source_showFlightSourceManage_add_flight}</div>
+                                        </div>
+                                    </div>
+                                    </div><!--航班信息-->
+                                    <br>
+                                    <input type="hidden" id="customer_id_hidden" value="">
+                                    <br>
+                                    <fieldset class="layui-elem-field layui-field-title">
+                                        <legend>{$Think.lang.index_product_visitor_accommodationInformation}</legend>
+                                    </fieldset>
+                                    <div class="layui-row">
+                                        <div class="layui-col-md4">
+                                            <div class="layui-form-item">
+                                                <label class="layui-form-label">{$Think.lang.index_product_visitor_roomNumber}:</label>
+                                                <div class="layui-input-block">
+                                                    <select id="room_code_edit" name="room_code" lay-verify="">
+                                                        <option value=""></option>
+                                                        <option value="1">1</option>
+                                                        <option value="2">2</option>
+                                                        <option value="3">3</option>
+                                                        <option value="4">4</option>
+                                                        <option value="5">5</option>
+                                                        <option value="6">6</option>
+                                                        <option value="7">7</option>
+                                                        <option value="8">8</option>
+                                                        <option value="9">9</option>
+                                                        <option value="10">10</option>
+                                                    </select>
+                                                </div>
+                                                <div class="" style="margin-left:135px;">{$Think.lang.index_branchcompany_showCompanyOrderManage_addEdit_explain}</div>
+                                            </div>
+                                        </div>
+                                        <div class="layui-col-md4">
+                                            <div class="layui-form-item">
+                                                <label class="layui-form-label">{$Think.lang.index_product_showRouteTemplateManage_resource_roomType}:</label>
+                                                <div class="layui-input-block">
+                                                    <select id="room_type_edit" name="room_type"  lay-verify="">
+                                                        <option value=""></option>
+                                                        <option value="1">{$Think.lang.index_source_showHotelSource_doubble_room_name}</option>
+                                                        <option value="2">{$Think.lang.index_source_showHotelSource_big_room_name}</option>
+                                                        <option value="3">{$Think.lang.index_source_showHotelSource_single_room_name}</option>
+                                                        <option value="4">{$Think.lang.index_source_showHotelSource_extra}</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="layui-row">
+                                        <div class="layui-col-md4">
+                                            <div class="layui-form-item">
+                                                <label class="layui-form-label">{$Think.lang.index_product_visitor_checkIn}:</label>
+                                                <div class="layui-input-block">
+                                                    <select id="check_in_edit" name="check_in" lay-verify="" lay-filter="check_in_edit">
+                                                        <option value="-1">{$Think.lang.index_branchcompany_showCompanyOrderManage_addEdit_moveUp_one}</option>
+                                                        <option value="-2">{$Think.lang.index_branchcompany_showCompanyOrderManage_addEdit_moveUp_two}</option>
+                                                        <option value="-3">{$Think.lang.index_branchcompany_showCompanyOrderManage_addEdit_moveUp_three}</option>
+                                                        <option value="-4">{$Think.lang.index_branchcompany_showCompanyOrderManage_addEdit_moveUp_four}</option>
+                                                        <option value="-5">{$Think.lang.index_branchcompany_showCompanyOrderManage_addEdit_moveUp_five}</option>
+                                                        <option value="0" selected>{$Think.lang.index_product_visitor_specialRequirements}</option>
+                                                        <option value="1">延后一天</option>
+                                                        <option value="2">延后二天</option>
+                                                        <option value="3">延后三天</option>
+                                                        <option value="4">延后四天</option>
+                                                        <option value="5">延后五天</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="layui-col-md4">
+                                            <div class="layui-form-item">
+                                                <label class="layui-form-label">{$Think.lang.index_product_visitor_checkOut}:</label>
+                                                <div class="layui-input-block">
+                                                    <select id="check_on_edit" name="check_on" lay-verify="" lay-filter="check_on_edit">
+                                                        <option value="-1">提前一天</option>
+                                                        <option value="-2">提前二天</option>
+                                                        <option value="-3">提前三天</option>
+                                                        <option value="-4">提前四天</option>
+                                                        <option value="-5">提前五天</option>
+                                                        <option value="0" selected>{$Think.lang.index_product_visitor_specialRequirements}</option>
+                                                        <option value="1">{$Think.lang.index_branchcompany_showCompanyOrderManage_addEdit_postpone_one}</option>
+                                                        <option value="2">{$Think.lang.index_branchcompany_showCompanyOrderManage_addEdit_postpone_two}</option>
+                                                        <option value="3">{$Think.lang.index_branchcompany_showCompanyOrderManage_addEdit_postpone_three}</option>
+                                                        <option value="4">{$Think.lang.index_branchcompany_showCompanyOrderManage_addEdit_postpone_four}</option>
+                                                        <option value="5">{$Think.lang.index_branchcompany_showCompanyOrderManage_addEdit_postpone_five}</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="layui-row">
+                                        <div class="layui-col-md4">
+                                            <div class="layui-form-item" id="edit_hn11" style="display:none;">
+                                                <label class="layui-form-label">{$Think.lang.index_branchcompany_showCompanyOrderManage_addEdit_moveUp_one}{$Think.lang.index_product_visitor_checkIn}{$Think.lang.index_finance_showReceivableManage_hotel}:</label>
+                                                <div class="layui-input-block">
+                                                    <input type="text" id="edit_check_in_hotel_name1" name="check_in_edit" placeholder="{$Think.lang.index_public_placeHolder}" autocomplete="off" lay-verify="" class="layui-input">
+                                                </div>
+                                            </div>
+                                            <div class="layui-form-item" id="tt1" style="display:none;"></div>
+                                        </div>
+                                        <div class="layui-col-md4">
+                                            <div class="layui-form-item" id="edit_hn21" style="display:none;">
+                                                <label class="layui-form-label">{$Think.lang.index_branchcompany_showCompanyOrderManage_addEdit_moveUp_one}{$Think.lang.index_product_visitor_checkOut}{$Think.lang.index_finance_showReceivableManage_hotel}:</label>
+                                                <div class="layui-input-block">
+                                                    <input type="text" id="edit_check_on_hotel_name1" name="check_on_edit" placeholder="{$Think.lang.index_public_placeHolder}" autocomplete="off" lay-verify="" class="layui-input">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="layui-row">
+                                        <div class="layui-col-md4">
+                                            <div class="layui-form-item" id="edit_hn12" style="display:none;">
+                                                <label class="layui-form-label">{$Think.lang.index_branchcompany_showCompanyOrderManage_addEdit_moveUp_two}{$Think.lang.index_product_visitor_checkIn}{$Think.lang.index_finance_showReceivableManage_hotel}:</label>
+                                                <div class="layui-input-block">
+                                                    <input type="text" id="edit_check_in_hotel_name2" name="check_in_edit" placeholder="{$Think.lang.index_public_placeHolder}" autocomplete="off" lay-verify="" class="layui-input">
+                                                </div>
+                                            </div>
+                                            <div class="layui-form-item" id="tt2" style="display:none"></div>
+                                        </div>
+                                        <div class="layui-col-md4">
+                                            <div class="layui-form-item" id="edit_hn22" style="display:none;">
+                                                <label class="layui-form-label">{$Think.lang.index_branchcompany_showCompanyOrderManage_addEdit_moveUp_two}{$Think.lang.index_product_visitor_checkOut}{$Think.lang.index_finance_showReceivableManage_hotel}:</label>
+                                                <div class="layui-input-block">
+                                                    <input type="text" id="edit_check_on_hotel_name2" name="check_on_edit" placeholder="{$Think.lang.index_public_placeHolder}" autocomplete="off" lay-verify="" class="layui-input">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="layui-row">
+                                        <div class="layui-col-md4">
+                                            <div class="layui-form-item" id="edit_hn13" style="display:none;">
+                                                <label class="layui-form-label">{$Think.lang.index_branchcompany_showCompanyOrderManage_addEdit_moveUp_three}{$Think.lang.index_product_visitor_checkIn}{$Think.lang.index_finance_showReceivableManage_hotel}:</label>
+                                                <div class="layui-input-block">
+                                                    <input type="text" id="edit_check_in_hotel_name3" name="check_in_edit" placeholder="{$Think.lang.index_public_placeHolder}" autocomplete="off" lay-verify="" class="layui-input">
+                                                </div>
+                                            </div>
+                                            <div class="layui-form-item" id="tt3" style="display:none;"></div>
+                                        </div>
+                                        <div class="layui-col-md4">
+                                            <div class="layui-form-item" id="edit_hn23" style="display:none;">
+                                                <label class="layui-form-label">{$Think.lang.index_branchcompany_showCompanyOrderManage_addEdit_moveUp_three}{$Think.lang.index_product_visitor_checkOut}{$Think.lang.index_finance_showReceivableManage_hotel}:</label>
+                                                <div class="layui-input-block">
+                                                    <input type="text" id="edit_check_on_hotel_name3" name="check_on_edit" placeholder="{$Think.lang.index_public_placeHolder}" autocomplete="off" lay-verify="" class="layui-input">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="layui-row">
+                                        <div class="layui-col-md4">
+                                            <div class="layui-form-item" id="edit_hn14" style="display:none;">
+                                                <label class="layui-form-label">{$Think.lang.index_branchcompany_showCompanyOrderManage_addEdit_moveUp_four}{$Think.lang.index_product_visitor_checkIn}{$Think.lang.index_finance_showReceivableManage_hotel}:</label>
+                                                <div class="layui-input-block">
+                                                    <input type="text" id="edit_check_in_hotel_name4" name="check_in_edit" placeholder="{$Think.lang.index_public_placeHolder}" autocomplete="off" lay-verify="" class="layui-input">
+                                                </div>
+                                            </div>
+                                            <div class="layui-form-item" id="tt4" style="display:none;"></div>
+                                        </div>
+                                        <div class="layui-col-md4">
+                                            <div class="layui-form-item" id="edit_hn24" style="display:none;">
+                                                <label class="layui-form-label">{$Think.lang.index_branchcompany_showCompanyOrderManage_addEdit_moveUp_four}{$Think.lang.index_product_visitor_checkOut}{$Think.lang.index_finance_showReceivableManage_hotel}:</label>
+                                                <div class="layui-input-block">
+                                                    <input type="text" id="edit_check_on_hotel_name4" name="check_on_edit" placeholder="{$Think.lang.index_public_placeHolder}" autocomplete="off" lay-verify="" class="layui-input">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="layui-row">
+                                        <div class="layui-col-md4">
+                                            <div class="layui-form-item" id="edit_hn15" style="display:none;">
+                                                <label class="layui-form-label">{$Think.lang.index_branchcompany_showCompanyOrderManage_addEdit_moveUp_five}{$Think.lang.index_product_visitor_checkIn}{$Think.lang.index_finance_showReceivableManage_hotel}:</label>
+                                                <div class="layui-input-block">
+                                                    <input type="text" id="edit_check_in_hotel_name5" name="check_in_edit" placeholder="{$Think.lang.index_public_placeHolder}" autocomplete="off" lay-verify="" class="layui-input">
+                                                </div>
+                                            </div>
+                                            <div class="layui-form-item" id="tt5" style="display:none;"></div>
+                                        </div>
+                                        <div class="layui-col-md4">
+                                            <div class="layui-form-item" id="edit_hn25" style="display:none;">
+                                                <label class="layui-form-label">{$Think.lang.index_branchcompany_showCompanyOrderManage_addEdit_moveUp_five}{$Think.lang.index_product_visitor_checkOut}{$Think.lang.index_finance_showReceivableManage_hotel}:</label>
+                                                <div class="layui-input-block">
+                                                    <input type="text" id="edit_check_on_hotel_name5" name="check_on_edit" placeholder="{$Think.lang.index_public_placeHolder}" autocomplete="off" lay-verify="" class="layui-input">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                <br>
+                                <div class="layui-row">
+                                    <div class="layui-form-button" style="text-align: center">
+                                        <a class="layui-btn nav-submit" onclick="order_customer_edit_ajax()">{$Think.lang.index_branchcompany_showCompanyOrderManage_addEdit_preserve}</a>
+                                        <button type="button" class="layui-btn layui-btn-primary" onclick="visitorMessBack()">{$Think.lang.index_public_back}</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <!--修改游客end-->
+
+                    </div><!--游客信息-->
+                </div>
+            </div>
+        </div>
+    </div>
+    <input type="hidden" id="template_do" value="2">
+    <input type="hidden" id="company_order_customer_id_hidden" value="">
+    <div class="layui-footer">
+        <!-- 底部固定区域 -->
+        © layui.com - 底部固定区域
+    </div>
+</div>
+<script id="yesPurchasedHtml" type="text/html">
+    <div class="layui-row lay-visitor-holderNumber">
+        <div class="layui-col-md4">
+            <div class="layui-form-item">
+                <label class="layui-form-label input-required">{$Think.lang.index_branchcompany_showCompanyOrderManage_addEdit_zhanweiNumber}:</label>
+                <div class="layui-input-block">
+                    <input type="text" id="occupy_count" name="occupy_count" placeholder="{$Think.lang.index_public_placeHolder}{$Think.lang.index_branchcompany_showCompanyOrderManage_addEdit_zhanweiNumber}" autocomplete="off" lay-verify="required" class="layui-input">
+                </div>
+            </div>
+        </div>
+    </div>
+</script>
+<script id="noPurchasedHtml" type="text/html">
+    <div id="visitor-message-other" class="visitor-message-other">
+        <div class="layui-row">
+            <div class="layui-col-md4">
+                <div class="layui-form-item">
+                    <label class="layui-form-label input-required">{$Think.lang.index_branchcompany_showBranchProductManage_name}:</label>
+                    <div class="layui-input-block">
+                        <input type="text" id="customer_last_name" name="customer_last_name" placeholder="{$Think.lang.index_public_placeHolder}" autocomplete="off" lay-verify="required" class="layui-input" {if condition="$Think.get.customer_last_name neq '' "} value="{$customer_result_data.customer_last_name}" {/if}>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-col-md4">
+                <div class="layui-form-item">
+                    <label class="layui-form-label input-required">{$Think.lang.index_branchcompany_showBranchProductManage_surname}:</label>
+                    <div class="layui-input-block">
+                        <input type="text" id="customer_first_name" name="customer_first_name" placeholder="{$Think.lang.index_public_placeHolder}" autocomplete="off" lay-verify="required" class="layui-input">
+                    </div>
+                </div>
+            </div>
+            <div class="layui-col-md4">
+                <div class="layui-form-item">
+                    <label class="layui-form-label input-required">{$Think.lang.index_branchcompany_showBranchProductManage_language}:</label>
+                    <div class="layui-input-block">
+                        <select id="language_id" name="language_id" lay-verify="required">
+                            <option value="">{$Think.lang.index_public_select}</option>
+                            {volist name="language_result_data" id="lg"}
+                            <option value="{$lg.language_id}">{$lg.language_name}</option>
+                            {/volist}
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="layui-row">
+            <div class="layui-col-md4">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">{$Think.lang.index_branchcompany_showBranchProductManage_englishSurname}:</label>
+                    <div class="layui-input-block">
+                        <input type="text" id="english_last_name" name="english_last_name" placeholder="{$Think.lang.index_public_placeHolder}" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+            </div>
+            <div class="layui-col-md4">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">{$Think.lang.index_branchcompany_showBranchProductManage_englishName}:</label>
+                    <div class="layui-input-block">
+                        <input type="text" id="english_first_name" name="english_first_name" placeholder="{$Think.lang.index_public_placeHolder}" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+            </div>
+            <div class="layui-col-md4">
+                <div class="layui-form-item">
+                    <label class="layui-form-label input-required">{$Think.lang.index_branchcompany_showBranchProductManage_sex}:</label>
+                    <div class="layui-input-block">
+                        <select id="gender" name="gender" lay-verify="required">
+                            <option value=""></option>
+                            <option value="1">{$Think.lang.index_branchcompany_showBranchProductManage_boy}</option>
+                            <option value="2">{$Think.lang.index_branchcompany_showBranchProductManage_girl}</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="layui-row">
+            <div class="layui-col-md4">
+                <div class="layui-form-item">
+                    <label class="layui-form-label input-required">{$Think.lang.index_branchcompany_showBranchProductManage_documentType}:</label>
+                    <div class="layui-input-block">
+                        <select id="card_type" name="card_type" lay-verify="required">
+                            <option value=""></option>
+                            <option value="1">{$Think.lang.index_branchcompany_showBranchProductManage_passport}</option>
+                            <option value="2">{$Think.lang.index_branchcompany_showBranchProductManage_idCard}</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-col-md4">
+                <div class="layui-form-item">
+                    <label class="layui-form-label input-required">{$Think.lang.index_branchcompany_showBranchProductManage_certificateNumber}:</label>
+                    <div class="layui-input-block">
+                        <input type="text" id="card_number" name="card_number" placeholder="{$Think.lang.index_public_placeHolder}" autocomplete="off" lay-verify="required" class="layui-input">
+                    </div>
+                </div>
+            </div>
+            <div class="layui-col-md4">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">{$Think.lang.index_branchcompany_showBranchProductManage_effectiveDate}:</label>
+                    <div class="layui-input-block">
+                        <input type="text" id="term_of_validity" name="term_of_validity" placeholder="{$Think.lang.index_public_placeHolder}" autocomplete="off" class="layui-input layui-input-date">
+                    </div>
+                </div>
+            </div>
+            <div class="layui-col-md4">
+
+            </div>
+        </div>
+        <div class="layui-row">
+            <div class="layui-col-md4">
+                <div class="layui-form-item">
+                    <label class="layui-form-label input-required">{$Think.lang.index_branchcompany_showBranchProductManage_nationality}:</label>
+                    <div class="layui-input-block">
+                        <select id="country_id" name="country_id" lay-verify="required">
+                            <option value=""></option>
+                            {volist name="country_result_data" id="ct"}
+                            <option value="{$ct.country_id}">{$ct.country_name}</option>
+                            {/volist}
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-col-md4">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">{$Think.lang.index_branchcompany_showBranchProductManage_phone}:</label>
+                    <div class="layui-input-block">
+                        <input type="text" id="phone" name="phone" placeholder="{$Think.lang.index_public_placeHolder}" autocomplete="off" lay-verify="" class="layui-input">
+                    </div>
+                </div>
+            </div>
+            <div class="layui-col-md4">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">{$Think.lang.index_branchcompany_showBranchProductManage_email}:</label>
+                    <div class="layui-input-block">
+                        <input type="text" id="email" name="email" placeholder="{$Think.lang.index_public_placeHolder}" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="layui-row">
+            <div class="layui-col-md4">
+                <div class="layui-form-item">
+                    <label class="layui-form-label input-required">{$Think.lang.index_public_type}:</label>
+                    <div class="layui-input-block">
+                        <select id="customer_type" name="customer_type" lay-verify="required">
+                            <option value=""></option>
+                            <option value="1">{$Think.lang.index_branchcompany_showBranchProductManage_growUp}</option>
+                            <option value="2">{$Think.lang.index_branchcompany_showBranchProductManage_childrenInBed}</option>
+                            <option value="3">{$Think.lang.index_branchcompany_showBranchProductManage_childrenNotInBed}</option>
+                            <option value="4">{$Think.lang.index_branchcompany_showBranchProductManage_oldMan}</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="flightMessage">
+            <fieldset class="layui-elem-field layui-field-title">
+                <legend>{$Think.lang.index_public_flightInformation}</legend>
+            </fieldset>
+            <div id="flightList">
+
+            </div>
+            <div class="layui-col-md4 layui-flight-add">
+                <div class="layui-btn nav-add" onclick="flightAdd()">{$Think.lang.index_source_showFlightSourceManage_add_flight}</div>
+            </div>
+        </div><!--航班信息-->
+        <fieldset class="layui-elem-field layui-field-title">
+            <legend>{$Think.lang.index_product_visitor_accommodationInformation}</legend>
+        </fieldset>
+        <div class="layui-row">
+            <div class="layui-col-md4">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">{$Think.lang.index_product_visitor_roomNumber}:</label>
+                    <div class="layui-input-block">
+                        <select id="room_code" name="room_code" lay-verify="">
+                            <option value=""></option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                            <option value="6">6</option>
+                            <option value="7">7</option>
+                            <option value="8">8</option>
+                            <option value="9">9</option>
+                            <option value="10">10</option>
+                        </select>
+                    </div>
+                    <div class="" style="margin-left:135px;">{$Think.lang.index_branchcompany_showCompanyOrderManage_addEdit_explain}</div>
+                </div>
+            </div>
+            <div class="layui-col-md4">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">{$Think.lang.index_product_showRouteTemplateManage_resource_roomType}:</label>
+                    <div class="layui-input-block">
+                        <select name="room_type" id="room_type" lay-verify="">
+                            <option value=""></option>
+                            <option value="1">{$Think.lang.index_source_showHotelSource_doubble_room_name}</option>
+                            <option value="2">{$Think.lang.index_source_showHotelSource_big_room_name}</option>
+                            <option value="3">{$Think.lang.index_source_showHotelSource_single_room_name}</option>
+                            <option value="4">{$Think.lang.index_source_showHotelSource_extra}</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="layui-row">
+            <div class="layui-col-md4">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">{$Think.lang.index_product_visitor_checkIn}:</label>
+                    <div class="layui-input-block">
+                        <select id="check_in" name="check_in" lay-verify="" lay-filter="check_in">
+                            <option value="-1">{$Think.lang.index_branchcompany_showCompanyOrderManage_addEdit_moveUp_one}</option>
+                            <option value="-2">{$Think.lang.index_branchcompany_showCompanyOrderManage_addEdit_moveUp_two}</option>
+                            <option value="-3">{$Think.lang.index_branchcompany_showCompanyOrderManage_addEdit_moveUp_three}</option>
+                            <option value="-4">{$Think.lang.index_branchcompany_showCompanyOrderManage_addEdit_moveUp_four}</option>
+                            <option value="-5">{$Think.lang.index_branchcompany_showCompanyOrderManage_addEdit_moveUp_five}</option>
+                            <option value="0" selected>{$Think.lang.index_product_visitor_specialRequirements}</option>
+                            <option value="1">延后一天</option>
+                            <option value="2">延后二天</option>
+                            <option value="3">延后三天</option>
+                            <option value="4">延后四天</option>
+                            <option value="5">延后五天</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-col-md4">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">{$Think.lang.index_product_visitor_checkOut}:</label>
+                    <div class="layui-input-block">
+                        <select id="check_on" name="check_on" lay-verify="" lay-filter="check_on">
+                            <option value="-1">提前一天</option>
+                            <option value="-2">提前二天</option>
+                            <option value="-3">提前三天</option>
+                            <option value="-4">提前四天</option>
+                            <option value="-5">提前五天</option>
+                            <option value="0" selected>{$Think.lang.index_product_visitor_specialRequirements}</option>
+                            <option value="1">{$Think.lang.index_branchcompany_showCompanyOrderManage_addEdit_postpone_one}</option>
+                            <option value="2">{$Think.lang.index_branchcompany_showCompanyOrderManage_addEdit_postpone_two}</option>
+                            <option value="3">{$Think.lang.index_branchcompany_showCompanyOrderManage_addEdit_postpone_three}</option>
+                            <option value="4">{$Think.lang.index_branchcompany_showCompanyOrderManage_addEdit_postpone_four}</option>
+                            <option value="5">{$Think.lang.index_branchcompany_showCompanyOrderManage_addEdit_postpone_five}</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="layui-row">
+            <div class="layui-col-md4">
+                <div class="layui-form-item" id="hn11" style="display:none;">
+                    <label class="layui-form-label">{$Think.lang.index_branchcompany_showCompanyOrderManage_addEdit_moveUp_one}{$Think.lang.index_product_visitor_checkIn}{$Think.lang.index_finance_showReceivableManage_hotel}:</label>
+                    <div class="layui-input-block">
+                        <input type="text" id="check_in_hotel_name1" name="check_in_add" placeholder="{$Think.lang.index_public_placeHolder}" autocomplete="off" lay-verify="" class="layui-input" style="">
+                    </div>
+                </div>
+                <div class="layui-form-item" id="dd1" style="display:none;"></div>
+            </div>
+            <div class="layui-col-md4">
+                <div class="layui-form-item" id="hn21" style="display:none;">
+                    <label class="layui-form-label">{$Think.lang.index_branchcompany_showCompanyOrderManage_addEdit_postpone_one}{$Think.lang.index_product_visitor_checkOut}{$Think.lang.index_finance_showReceivableManage_hotel}:</label>
+                    <div class="layui-input-block">
+                        <input type="text" id="check_on_hotel_name1" name="check_on_add" placeholder="{$Think.lang.index_public_placeHolder}" autocomplete="off" lay-verify="" class="layui-input">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="layui-row">
+            <div class="layui-col-md4">
+                <div class="layui-form-item" id="hn12" style="display:none;">
+                    <label class="layui-form-label">{$Think.lang.index_branchcompany_showCompanyOrderManage_addEdit_moveUp_two}{$Think.lang.index_product_visitor_checkIn}{$Think.lang.index_finance_showReceivableManage_hotel}:</label>
+                    <div class="layui-input-block">
+                        <input type="text" id="check_in_hotel_name2" name="check_in_add" placeholder="{$Think.lang.index_public_placeHolder}" autocomplete="off" lay-verify="" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item" id="dd2" style="display:none;"></div>
+            </div>
+            <div class="layui-col-md4">
+                <div class="layui-form-item" id="hn22" style="display:none;">
+                    <label class="layui-form-label">{$Think.lang.index_branchcompany_showCompanyOrderManage_addEdit_postpone_two}{$Think.lang.index_product_visitor_checkOut}{$Think.lang.index_finance_showReceivableManage_hotel}:</label>
+                    <div class="layui-input-block">
+                        <input type="text" id="check_on_hotel_name2" name="check_on_add" placeholder="{$Think.lang.index_public_placeHolder}" autocomplete="off" lay-verify="" class="layui-input">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="layui-row">
+            <div class="layui-col-md4">
+                <div class="layui-form-item" id="hn13" style="display:none;">
+                    <label class="layui-form-label">{$Think.lang.index_branchcompany_showCompanyOrderManage_addEdit_moveUp_three}{$Think.lang.index_product_visitor_checkIn}{$Think.lang.index_finance_showReceivableManage_hotel}:</label>
+                    <div class="layui-input-block">
+                        <input type="text" id="check_in_hotel_name3" name="check_in_add" placeholder="{$Think.lang.index_public_placeHolder}" autocomplete="off" lay-verify="" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item" id="dd3" style="display:none;"></div>
+            </div>
+            <div class="layui-col-md4">
+                <div class="layui-form-item" id="hn23" style="display:none;">
+                    <label class="layui-form-label">{$Think.lang.index_branchcompany_showCompanyOrderManage_addEdit_postpone_three}{$Think.lang.index_product_visitor_checkOut}{$Think.lang.index_finance_showReceivableManage_hotel}:</label>
+                    <div class="layui-input-block">
+                        <input type="text" id="check_on_hotel_name3" name="check_on_add" placeholder="{$Think.lang.index_public_placeHolder}" autocomplete="off" lay-verify="" class="layui-input">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="layui-row">
+            <div class="layui-col-md4">
+                <div class="layui-form-item" id="hn14" style="display:none;">
+                    <label class="layui-form-label">{$Think.lang.index_branchcompany_showCompanyOrderManage_addEdit_moveUp_four}{$Think.lang.index_product_visitor_checkIn}{$Think.lang.index_finance_showReceivableManage_hotel}:</label>
+                    <div class="layui-input-block">
+                        <input type="text" id="check_in_hotel_name4" name="check_in_add" placeholder="{$Think.lang.index_public_placeHolder}" autocomplete="off" lay-verify="" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item" id="dd4" style="display:none;"></div>
+            </div>
+            <div class="layui-col-md4">
+                <div class="layui-form-item" id="hn24" style="display:none;">
+                    <label class="layui-form-label">{$Think.lang.index_branchcompany_showCompanyOrderManage_addEdit_postpone_four}{$Think.lang.index_product_visitor_checkOut}{$Think.lang.index_finance_showReceivableManage_hotel}:</label>
+                    <div class="layui-input-block">
+                        <input type="text" id="check_on_hotel_name4" name="check_on_add" placeholder="{$Think.lang.index_public_placeHolder}" autocomplete="off" lay-verify="" class="layui-input">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="layui-row">
+            <div class="layui-col-md4">
+                <div class="layui-form-item" id="hn15" style="display:none;">
+                    <label class="layui-form-label">{$Think.lang.index_branchcompany_showCompanyOrderManage_addEdit_moveUp_five}{$Think.lang.index_product_visitor_checkIn}{$Think.lang.index_finance_showReceivableManage_hotel}:</label>
+                    <div class="layui-input-block">
+                        <input type="text" id="check_in_hotel_name5" name="check_in_add" placeholder="{$Think.lang.index_public_placeHolder}" autocomplete="off" lay-verify="" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item" id="dd5" style="display:none;"></div>
+            </div>
+            <div class="layui-col-md4">
+                <div class="layui-form-item" id="hn25" style="display:none;">
+                    <label class="layui-form-label">{$Think.lang.index_branchcompany_showCompanyOrderManage_addEdit_postpone_five}{$Think.lang.index_product_visitor_checkOut}{$Think.lang.index_finance_showReceivableManage_hotel}:</label>
+                    <div class="layui-input-block">
+                        <input type="text" id="check_on_hotel_name5" name="check_on_add" placeholder="{$Think.lang.index_public_placeHolder}" autocomplete="off" lay-verify="" class="layui-input">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</script>
+<script id="flightBox" type="text/html">
+    <div class="customer-flight-list">
+        <hr>
+        <div class="layui-row layui-form">
+            <div class="layui-col-md4">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">{$Think.lang.index_finance_showReceivableManage_flight}:</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="messageFlight" placeholder="{$Think.lang.index_public_placeHolder}" autocomplete="off" class="layui-input input-flight-node" lay-verify="">
+                    </div>
+                </div>
+            </div>
+            <div class="layui-col-md4">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">{$Think.lang.index_branchcompany_showCompanyOrderManage_addEdit_flightTime}:</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="orderFlightDate" class="layui-input layui-input-date input-flight-time s" id="FlightDate{{ d }}" placeholder="{$Think.lang.index_public_placeHolder}" autocomplete="off" style="display:inline;width:48%" lay-verify=""> /
+                        <input type="text" name="orderFlightDateE" class="layui-input layui-input-date input-flight-time e" id="FlightDateE{{ d }}" placeholder="{$Think.lang.index_public_placeHolder}" autocomplete="off" style="display:inline;width:48%" lay-verify="" />
+                    </div>
+                </div>
+            </div>
+            <div class="layui-col-md4">
+                <div class="layui-form-item">
+                    <label class="layui-form-label"></label>
+                    <div class="layui-input-block">
+                        <input type="radio" name="messageAirport1{{ d }}" value="1" title="{$Think.lang.index_public_meetAirport}" lay-filter="messageAirport{{ d }}" class="input-flight-type">
+                        <input type="radio" name="messageAirport1{{ d }}" value="2" title="{$Think.lang.index_public_giveAirport}" lay-filter="messageAirport{{ d }}" class="input-flight-type">
+                        <input type="radio" name="messageAirport1{{ d }}" value="3" title="{$Think.lang.index_public_changeAirport}" lay-filter="messageAirport{{ d }}" class="input-flight-type">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="layui-row">
+            <div class="layui-col-md4">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">{$Think.lang.index_public_startPlace}:</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="orderStartPlace" placeholder="{$Think.lang.index_public_placeHolder}" autocomplete="off" class="layui-input input-flight-startplace" lay-verify="">
+                    </div>
+                </div>
+            </div>
+            <div class="layui-col-md4">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">{$Think.lang.index_public_endPlace}:</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="orderEndPlace" placeholder="{$Think.lang.index_public_placeHolder}" autocomplete="off" class="layui-input input-flight-endplace" lay-verify="">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="layui-row">
+            <div class="layui-col-md4">
+                <label class="layui-form-label">{$Think.lang.index_public_mark}:</label>
+                <div class="layui-input-block">
+                    <input type="text" name="orderRemark" placeholder="{$Think.lang.index_public_placeHolder}" autocomplete="off" class="layui-input input-flight-endplace" lay-verify="">
+                </div>
+            </div>
+        </div>
+        <i class="layui-icon layui-icon-close flight-list-close" onclick="flightListClose(this)"></i>
+    </div>
+</script>
+<script id="flightBoxEdit" type="text/html">
+    <div class="customer-flight-list">
+        <hr>
+        <div class="layui-row layui-form">
+            <div class="layui-col-md4">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">{$Think.lang.index_finance_showReceivableManage_flight}:</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="messageFlight{{ d }}" placeholder="{$Think.lang.index_public_placeHolder}" autocomplete="off" class="layui-input" lay-verify="">
+                    </div>
+                </div>
+            </div>
+            <div class="layui-col-md4">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">{$Think.lang.index_branchcompany_showCompanyOrderManage_addEdit_flightTime}:</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="orderFlightDate{{ d }}" class="layui-input layui-input-date" id="FlightDateEdit{{ d }}" required placeholder="{$Think.lang.index_public_placeHolder}" autocomplete="off" lay-verify="">
+                        <input type="text" name="orderFlightDateE{{ d }}" class="layui-input layui-input-date" id="FlightDateEditE{{ d }}" required placeholder="{$Think.lang.index_public_placeHolder}" autocomplete="off" lay-verify="">
+                    </div>
+                </div>
+            </div>
+            <div class="layui-col-md4">
+                <div class="layui-form-item">
+                    <label class="layui-form-label"></label>
+                    <div class="layui-input-block">
+                        <input type="radio" name="messageAirport1{{ d }}" value="1" title="{$Think.lang.index_public_meetAirport}" lay-filter="messageAirport{{ d }}">
+                        <input type="radio" name="messageAirport1{{ d }}" value="2" title="{$Think.lang.index_public_giveAirport}" lay-filter="messageAirport{{ d }}">
+                        <input type="radio" name="messageAirport1{{ d }}" value="3" title="{$Think.lang.index_public_changeAirport}" lay-filter="messageAirport{{ d }}">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="layui-row">
+            <div class="layui-col-md4">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">{$Think.lang.index_public_startPlace}:</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="orderStartPlace{{ d }}" placeholder="{$Think.lang.index_public_placeHolder}" autocomplete="off" class="layui-input" lay-verify="">
+                    </div>
+                </div>
+            </div>
+            <div class="layui-col-md4">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">{$Think.lang.index_public_endPlace}:</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="orderEndPlace{{ d }}" placeholder="{$Think.lang.index_public_placeHolder}" autocomplete="off" class="layui-input" lay-verify="">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="layui-row">
+            <div class="layui-col-md4">
+                <label class="layui-form-label">{$Think.lang.index_public_mark}:</label>
+                <div class="layui-input-block">
+                    <input type="text" name="orderRemark{{ d }}" placeholder="{$Think.lang.index_public_placeHolder}" autocomplete="off" class="layui-input" lay-verify="">
+                </div>
+            </div>
+        </div>
+        <i class="layui-icon layui-icon-close flight-list-close" onclick="flightListCloseEdit(this)"></i>
+    </div>
+</script>
+<script id="hotelLook" type="text/html">
+    <div class="table-nont" style="max-height:150px;overflow-y: auto">
+        <table class="layui-table">
+            <thead>
+            <tr>
+                <th>{$Think.lang.index_product_visitor_roomNumber}</th><th>{$Think.lang.index_source_showHotelSource_room_type}</th><th>{$Think.lang.index_product_visitor_checkIn}</th><th>{$Think.lang.index_product_visitor_checkOut}</th>
+            </tr>
+            </thead>
+            <tbody>
+            {{# for(var i = 0, len = d.length; i < len; i++){ }}
+            <tr>
+                <td>{{d[i].number}}</td>
+                <td>{{d[i].fangx}}</td>
+                <td>{{d[i].tiqian}}</td>
+                <td>{{d[i].yanzhu}}</td>
+            </tr>
+            {{# } }}
+            </tbody>
+        </table>
+    </div>
+</script>
+<script id="flightLook" type="text/html">
+    <div class="table-nont" style="max-height:150px;overflow-y: auto">
+        <table class="layui-table">
+            <thead>
+            <tr>
+                <th>{$Think.lang.index_finance_showReceivableManage_flight}</th><th>{$Think.lang.index_branchcompany_showCompanyOrderManage_addEdit_flightStartTime}</th><th>{$Think.lang.index_branchcompany_showCompanyOrderManage_addEdit_flightEndTime}</th><th>{$Think.lang.index_public_transportMachine}</th><th>{$Think.lang.index_public_startPlace}</th><th>{$Think.lang.index_public_endPlace}</th>
+            </tr>
+            </thead>
+            <tbody>
+            {{# for(var i = 0, len = d.length; i < len; i++){ }}
+            <tr>
+                <td>{{d[i].flight}}</td>
+                <td>{{d[i].flight_begin_time}}</td>
+				<td>{{d[i].flight_end_time}}</td>
+                <td>{{d[i].type}}</td>
+                <td>{{d[i].start_place}}</td>
+                <td>{{d[i].end_place}}</td>
+            </tr>
+            {{# } }}
+            </tbody>
+        </table>
+    </div>
+</script>
+{include file='public/foot_js' /}
+<script src='__STATIC__/javascript/product/all.js'></script>
+<script src='__STATIC__/javascript/product/customer.js'></script>
+</body>
+</html>

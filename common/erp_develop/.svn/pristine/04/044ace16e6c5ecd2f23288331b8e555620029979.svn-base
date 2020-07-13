@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {include file='public/head' /}
+    <title>language-manage-add</title>
+
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+
+    <div class="layui-header">
+        {include file='public/header' /}
+    </div>
+
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll">
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            {include file='public/left_menu' /}
+        </div>
+    </div>
+
+    <div class="layui-body">
+        <form class="layui-form" onSubmit="return team_peoduct_add()">
+            <div class="layui-form">
+                <label class="layui-form-label">可见分公司</label>
+                <div class="layui-input-block">
+                    <select name="" id="" xm-select="example10_1" xm-select-search="" xm-select-search-type="dl">
+                        <option value="1" selected="selected">美国</option>
+                        <option value="2" selected="selected">上海</option>
+                        <option value="3">广州</option>
+                        <option value="4">深圳</option>
+                        <option value="5">天津</option>
+                    </select>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <div class="layui-footer">
+        <!-- 底部固定区域 -->
+        © layui.com - 底部固定区域
+    </div>
+</div>
+{include file='public/foot_js' /}
+<script src='__STATIC__/javascript/system/product.js'></script>
+</body>
+</html>
+

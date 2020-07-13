@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+<head>
+	{include file='public/head' /}
+  	<title>layout 后台大布局 - Layui</title>
+ 
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+  <div class="layui-header">
+	{include file='public/header' /}
+  </div>
+  
+  <div class="layui-side layui-bg-black">
+    <div class="layui-side-scroll">
+      <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+		{include file='public/left_menu' /}
+    </div>
+  </div>
+  
+  <div class="layui-body">
+  
+		<!-- 内容主体区域 -->
+		<div style="padding: 15px 15px 0px;">
+		<div class="body-top">
+			<div class='layui-form-item'>
+			<span class="layui-breadcrumb" lay-separator="-">
+				<a>{$Think.lang.index_public_homepage}</a>
+				<a>{$Think.lang.index_public_system}</a>
+			  	<a><cite>{$Think.lang.index_system_showCompanyManage_company_manage}</cite></a>
+			</span>
+			</div>
+			<br/>
+			<div class='layui-block input-inline' >
+				<form method='get' action='/system/showCompanyManage'>
+					<div class='layui-input-inline'>
+						<input type="text" name="company_name" value="{$Think.get.company_name}"  lay-verify="" placeholder="{$Think.lang.index_system_showCompanyManage_input_company_name}" autocomplete="off" class="layui-input">
+					</div>
+					<div class='layui-input-inline'>
+						<div class="layui-form">
+							<select name="status" lay-verify="required">
+								<option value="">-{$Think.lang.index_source_showCruisesManage_search_status}-</option>
+								<option value="1" selected>{$Think.lang.index_public_show}</option>
+								<option value="2" {if condition="$Think.get.status eq 2"}selected='selected' {/if}>{$Think.lang.index_public_disabled}</option>
+							</select>
+						</div>
+					</div>
+					<div class='layui-button-inline layui-search-inline'>
+						<button class="layui-btn nav-search">{$Think.lang.index_public_search}</button>
+					</div>
+				</form>
+				<div class='layui-button-inline'>
+					<span style="{:action('index/auth/check_auth',['role_id'=>'278'])}"><a href='/system/showCompanyAdd'><button class="layui-btn nav-add">{$Think.lang.index_system_showCompanyManage_add_company}</button></a></span>
+				</div>
+			</div>
+			<hr><br>
+		</div>
+		<div class="table-nont user-manage pageHeight">
+			<table class="layui-table" >
+				<thead>
+				<tr>
+					<th>{$Think.lang.index_system_showCompanyManage_id}</th>
+					<th>{$Think.lang.index_system_showCompanyManage_name}</th>
+					<th>{$Think.lang.index_system_showCompanyManage_linkman}</th>
+					<th>{$Think.lang.index_system_showCompanyManage_phone}</th>
+					<th>{$Think.lang.index_system_showCompanyManage_zone}</th>
+					<th>{$Think.lang.index_system_showCompanyManage_language}</th>
+					<th>{$Think.lang.index_public_status}</th>
+					<th class="layui-table-width">{$Think.lang.index_source_operation}</th>
+				</tr>
+
+				</thead>
+				<tbody>
+				{foreach name="data" item="vo" }
+				<tr>
+					<th>{$vo.company_id}</th>
+					<th>{$MultilingualAll['company-company_name-'.$vo.company_id.'-'.$Think.session.user.language_id][0]['translate']|default=$vo.company_name}</th>
+					<th>{$vo.linkman}</th>
+
+					<th>{$vo.phone}</th>
+					<th>{$vo.country_name}</th>
+					<th>{$vo.language_name}</th>
+					<th>{if condition="$vo.status eq 1"}{$Think.lang.index_public_show}{else/}{$Think.lang.index_public_disabled}{/if}</th>
+					<th ><span style="{:action('index/auth/check_auth',['role_id'=>'279'])}"><a href='/system/showCompanyEdit/company_id/{$vo.company_id}'><button class="layui-btn layui-btn-sm hover-edit layui-btn-primary">{$Think.lang.index_public_update}</button></a></span>
+						<span style="{:action('index/auth/check_auth',['role_id'=>'280'])}"><a href='/system/showCompanyInfo/company_id/{$vo.company_id}'><button class="layui-btn layui-btn-sm hover-details layui-btn-primary">{$Think.lang.index_public_info}</button></a></span></th>
+				</tr>
+				{/foreach}
+				</tbody>
+			</table>
+		</div>
+
+		<div class="listButtom">
+			<!--加载分页-->
+			{include file='public/page' /}
+		</div>
+    </div>
+  </div>
+  
+  <div class="layui-footer">
+    <!-- 底部固定区域 -->
+    © layui.com - 底部固定区域
+  </div>
+</div>
+{include file='public/foot_js' /}
+<script>
+  //JavaScript代码区域
+  var layer = layui.layer
+</script>
+</body>
+</html>

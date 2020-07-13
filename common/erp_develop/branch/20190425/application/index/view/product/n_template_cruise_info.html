@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {include file='public/head' /}
+    <title>{$language_tag.index_product_visitor_checkIn}-{$language_tag.index_finance_showReceivableManage_cruise}</title>
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+
+    <div class="layui-header">
+        {include file='public/header' /}
+    </div>
+
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll">
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            {include file='public/left_menu' /}
+        </div>
+    </div>
+
+    <div class="layui-body">
+
+        <!-- 内容主体区域 -->
+        <div style="padding: 15px;">
+            <div class='layui-form-item'>
+		   		<span class="layui-breadcrumb" lay-separator="-">
+                    <a>{$language_tag.index_public_homepage}</a>
+                    <a>{$language_tag.index_public_product}</a>
+                    <a>{$language_tag.index_product_showRouteTemplateManage_route_template}</a>
+					<a>{$_GET['template_id']?$language_tag.index_public_update:$language_tag.index_public_add}{$language_tag.index_product_showRouteTemplateManage_route_template}</a>
+                    <a><cite>{$language_tag.index_product_showRouteTemplateManage_resources_resourcesCruise}</cite></a>
+				</span>
+            </div>
+            <div style="font-weight:bold;font-size: 20px;">{$language_tag.index_product_showRouteTemplateManage_resourceAllocation}-{$language_tag.index_finance_showReceivableManage_cruise}</div>
+
+            <br/>
+            <br/>
+            <br/>
+            <form class="layui-form" id="form1" onSubmit="return add()">
+                <div class="table-nont">
+                    <table  class="layui-table" id="t-cruise">
+                        <thead>
+                        <tr>
+                            <th>{$language_tag.index_product_showRouteTemplateManage_resource_resourceSupplier}</th>
+                            <!--<th>地接社</th>-->
+                            <th>{$language_tag.index_product_showRouteTemplateManage_resources_cruiseName}</th>
+                            <th>{$language_tag.index_product_showRouteTemplateManage_resource_roomType}</th>
+                            <th>{$language_tag.index_product_showRouteTemplateManage_resource_whatDay}</th>
+                            <th>{$language_tag.index_product_showRouteTemplateManage_resource_number}</th>
+                            <th width="10%">{$language_tag.index_product_showRouteTemplateManage_resources_costPrice}</th>
+                            <th width="10%">{$language_tag.index_product_showRouteTemplateManage_resources_settlementPrice}</th>
+                            <th>{$language_tag.index_product_showRouteTemplateManage_resources_currency}</th>
+                            <th>{$language_tag.index_product_showRouteTemplateManage_resources_quotedPrice}</th>
+
+                        </tr>
+                        </thead>
+
+                        {foreach $session_cruise as $ky=>$session_cruiseV}
+                        <tr>
+                            <th class="all-select">
+                                <select disabled name="supplier_id[{$ky}]" lay-filter="supplier_id" class="supplier_id" required lay-verify="required" lay-search >
+                                    <option></option>
+                                    {foreach $SupplierList as $vl}
+                                    <option value="{$vl.supplier_id}" {$session_cruiseV.supplier_id==$vl.supplier_id?'selected':''}>{$vl.supplier_name}</option>
+                                    {/foreach}
+                                </select>
+                            </th>
+                            <!--<th>-->
+                            <!--<select name="agent_id[{$ky}]" class="agent_id" lay-filter="agent_id" lay-search>-->
+                            <!--<option></option>-->
+                            <!--{foreach $session_cruiseV.agent_data as $vl}-->
+                            <!--<option value="{$vl.supplier_id}" {$session_cruiseV.agent_id==$vl.supplier_id?'selected':''}>{$vl.supplier_name}</option>-->
+                            <!--{/foreach}-->
+                            <!--</select>-->
+                            <!--</th>-->
+                            <th class="all-select">
+                                <select disabled name="cruise_name[{$ky}]" class="cruise_name" lay-filter="cruise_name" required lay-verify="required" lay-search>
+                                    <option></option>
+                                    {foreach $session_cruiseV.resource_data as $vl}
+                                    <option value="{$vl.cruise_id}" {$session_cruiseV.cruise_name==$vl.cruise_id?'selected':''}>{$vl.cruise_name}({$vl.room_name})</option>
+                                    {/foreach}
+                                </select>
+                                <input type="hidden" class="cruise_id" name="cruise_id[{$ky}]" value="{$session_cruiseV.cruise_name}" >
+                            </th>
+                            <th class="all-select">
+                                <input disabled class="layui-input room_name" name="room_name[{$ky}]" value="{$session_cruiseV.room_name}"  readonly />
+                            </th>
+                            <th class="all-select">
+                                <input disabled class="layui-input the_day" name="the_day[{$ky}]" value="{$session_cruiseV.the_day}" type="number" required />
+                            </th>
+                            <th class="all-select">
+                                <input disabled class="layui-input quantity"  name="quantity[{$ky}]" type="number" required lay-verify="required|number" value="{$session_cruiseV.quantity}" >
+                            </th>
+                            <th class="th_cost_price">{$session_cruiseV.symbol}{$session_cruiseV.quantity*$session_cruiseV.cost_price}</th>
+                            <input class="cost_price" name="cost_price[{$ky}]" type="hidden" value="{$session_cruiseV.cost_price}" />
+                            <th class="th_unit_price">{$session_cruiseV.symbol}{$session_cruiseV.quantity*$session_cruiseV.unit_price}</th>
+                            <input class="layui-input unit_price"  name="unit_price[{$ky}]" type="hidden" value="{$session_cruiseV.unit_price}">
+
+                            <th class="all-select">
+                                <select disabled name="currency[{$ky}]" class="currency">
+                                    <option value="0"></option>
+                                    {foreach $CurrencyList as $v }
+                                    <option value="{$v.currency_id}"  {$session_cruiseV.currency==$v.currency_id?'selected':''} >{$v.currency_name}</option>
+                                    {/foreach}
+                                </select>
+                            </th>
+                            <input class="symbol" name="symbol[{$ky}]" type="hidden" value='{$session_cruiseV.symbol}' />
+                            <th class="all-select"><input disabled class="layui-input total"  name="total[{$ky}]" required lay-verify="required|number" value="{$session_cruiseV.total}"></th>
+
+                        </tr>
+                        {/foreach}
+
+                    </table>
+                </div>
+
+                <br><br><br>
+                <div class="layui-form-item">
+                    <div class="">
+                         <a href="javascript:window.close()"><button type="button" class="layui-btn layui-btn-primary">{$language_tag.index_public_back}</button></a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!--邮轮模板-->
+    <table style="display: none" id="add_div">
+        <tr>
+            <th>
+                <select name="supplier_id[ii]" lay-filter="supplier_id" class="supplier_id" required lay-verify="required" lay-search >
+                    <option></option>
+                    {foreach $SupplierList as $vl}
+                    <option value="{$vl.supplier_id}">{$vl.supplier_name}</option>
+                    {/foreach}
+                </select>
+            </th>
+            <!--<th>-->
+            <!--<select name="agent_id[ii]" class="agent_id" lay-filter="agent_id" lay-search>-->
+            <!--<option></option>-->
+            <!--</select>-->
+            <!--</th>-->
+            <th>
+                <select name="cruise_name[ii]" class="cruise_name" lay-filter="cruise_name" required lay-verify="required" lay-search>
+                    <option></option>
+                </select>
+                <input type="hidden" class="cruise_id" name="cruise_id[ii]" >
+            </th>
+            <th>
+                <input class="layui-input room_name" name="room_name[ii]" readonly   />
+            </th>
+            <th>
+                <input class="layui-input the_day" name="the_day[ii]" value="" type="number" required />
+            </th>
+            <th>
+                <input class="layui-input quantity"  name="quantity[ii]" required lay-verify="required|number" >
+            </th>
+            <th class="th_cost_price"></th>
+            <input class="cost_price" name="cost_price[ii]" type="hidden" />
+            <th class="th_unit_price"></th>
+            <input class="layui-input unit_price"  name="unit_price[ii]" type="hidden">
+            <th>
+                <select name="currency[ii]" class="currency">
+                    <option value="0"></option>
+                    {foreach $CurrencyList as $v }
+                    <option value="{$v.currency_id}">{$v.currency_name}</option>
+                    {/foreach}
+                    <!--<option value="1">{$language_tag.index_product_showRouteTemplateManage_RMB}</option>-->
+                </select>
+            </th>
+            <input class="symbol" name="symbol[ii]" type="hidden" />
+            <th><input class="layui-input total"  name="total[ii]" required lay-verify="required|number"></th>
+            <th><a class="layui-btn r-cruise layui-btn-sm hover-edit layui-btn-primary" >{$language_tag.index_public_del}</a></th>
+        </tr>
+    </table>
+    <div class="layui-footer">
+        <!-- 底部固定区域 -->
+        © layui.com - 底部固定区域
+    </div>
+</div>
+{include file='public/foot_js' /}
+
+
+<script>
+    var CurrencyJson = <?=json_encode($CurrencyJson)?>;
+
+    !function() {
+        var layer = layui.layer;
+        var form = layui.form;
+        var laydate = layui.laydate;
+        var num = <?=count($session_cruise)?:0;?>;
+
+        //添加邮轮
+        $('#add-cruise').on('click',function(){
+            tableNone()
+            var html = $('#add_div').html();
+            for(var ij=1;ij<15;ij++){
+                html = html.replace('ii',num);
+            }
+            $('#t-cruise').append(html);
+            num++;
+            form.render();
+        });
+        //删除
+        $('#t-cruise').delegate('.r-cruise','click',function(){
+            $(this).parent().parent().remove();
+            table()
+        });
+
+
+        var tr;
+        //供应商获取邮轮信息
+        form.on('select(supplier_id)', function(data){
+            tr = $(this).parent().parent().parent().parent();
+            if(data.value){
+                layer.load(2);
+                $.post('/product/getCruiseAjax',{supplier_id:data.value},function(a){
+                    if(a.code==200){
+                        //地接社
+                        tr.find('.agent_id').html('');
+                        var html = '<option></option>';
+                        if(a.LocalTravelAgencyAr){
+                            for(var x in a['LocalTravelAgencyAr'])
+                                html += '<option value="'+a['LocalTravelAgencyAr'][x]['supplier_id']+'">'+a['LocalTravelAgencyAr'][x]['supplier_name']+'</option>';
+                        }
+                        tr.find('.agent_id').html(html);
+                        //邮轮
+                        tr.find('.cruise_name').html('');
+                        var html2 = '<option></option>';
+                        if(a.cruiseData){
+                            for(var x in a['cruiseData']){
+                                html2 += '<option value="'+a['cruiseData'][x]['cruise_id']+'">'+a['cruiseData'][x]['cruise_name']+'('+a['cruiseData'][x]['room_name']+')</option>';
+                            }
+                        }
+                        tr.find('.cruise_name').html(html2);
+                    }else{
+                        tr.find('.agent_id').html('');
+                        tr.find('.cruise_name').html('');
+                    }
+                    form.render();
+                    layer.closeAll('loading'); //关闭loading
+                },'json');
+            }else{
+                tr.find('.agent_id').html('');
+                tr.find('.cruise_name').html('');
+                form.render();
+            }
+        });
+
+        //地接社
+        form.on('select(agent_id)', function(data) {
+            tr = $(this).parent().parent().parent().parent();
+            var supplier_id = tr.find('.supplier_id').val();
+            if(data.value){
+                layer.load(2);
+                $.post('/product/getCruiseAgentAjax',{agent_id:data.value,supplier_id:supplier_id},function(a){
+                    tr.find('.cruise_name').html('');
+                    if(a.code==200){
+                        var html = '<option></option>';
+                        if(a.cruiseData){
+                            for(var x in a['cruiseData']){
+                                html += '<option value="'+a['cruiseData'][x]['cruise_id']+'">'+a['cruiseData'][x]['cruise_name']+'('+a['cruiseData'][x]['room_name']+')</option>';
+                            }
+                        }
+                        tr.find('.cruise_name').html(html);
+                    }
+                    form.render();
+                    layer.closeAll('loading'); //关闭loading
+                },'json');
+            }else{
+                tr.find('.cruise_name').html('');
+                layer.load(2);
+                $.post('/product/getCruiseAjax',{supplier_id:supplier_id},function(a){
+                    if(a.code==200){
+//                        邮轮
+                        tr.find('.cruise_name').html('');
+                        var html2 = '<option></option>';
+                        if(a.cruiseData){
+                            for(var x in a['cruiseData']){
+                                html2 += '<option value="'+a['cruiseData'][x]['cruise_id']+'">'+a['cruiseData'][x]['cruise_name']+'('+a['cruiseData'][x]['room_name']+')</option>';
+                            }
+                        }
+                        tr.find('.cruise_name').html(html2);
+                    }else{
+                        tr.find('.agent_id').html('');
+                        tr.find('.cruise_name').html('');
+                    }
+                    form.render();
+                    layer.closeAll('loading'); //关闭loading
+                },'json');
+            }
+        });
+
+        //邮轮详情
+        form.on('select(cruise_name)', function(data) {
+            tr = $(this).parent().parent().parent().parent();
+            if(data.value){
+                layer.load(2);
+                tr.find('.quantity').val(0);
+                tr.find('.unit_price').val(0);
+                tr.find('.total').val(0);
+                tr.find('.room_name').val('');
+                tr.find('.cruise_id').val(0);
+                tr.find('.currency').val(0);
+
+                tr.find('.cost_price').val(0);
+                tr.find('.unit_price').val(0);
+                tr.find('.th_cost_price').html('');
+                tr.find('.th_unit_price').html('');
+                tr.find('.symbol').val('');
+
+                $.post('/product/getCruiseInfo',{cruise_id:data.value},function(a){
+                    if(a.code==200){
+                        tr.find('.quantity').val(1);
+                        tr.find('.unit_price').val(a.cruiseData.normal_settlement_price);
+                        tr.find('.total').val(a.cruiseData.normal_settlement_price);
+                        tr.find('.room_name').val(a.cruiseData.room_name);
+                        tr.find('.cruise_id').val(a.cruiseData.cruise_id);
+                        tr.find('.currency').val(a.cruiseData.payment_currency_type);
+
+                        tr.find('.cost_price').val(a.cruiseData.normal_price);
+                        tr.find('.unit_price').val(a.cruiseData.normal_settlement_price);
+                        tr.find('.th_cost_price').html(CurrencyJson[a.cruiseData.payment_currency_type][0]['symbol']+a.cruiseData.normal_price);
+                        tr.find('.th_unit_price').html(CurrencyJson[a.cruiseData.payment_currency_type][0]['symbol']+a.cruiseData.normal_settlement_price);
+                        tr.find('.symbol').val(CurrencyJson[a.cruiseData.payment_currency_type][0]['symbol']);
+
+                    }
+                    form.render();
+                    layer.closeAll('loading'); //关闭loading
+                },'json');
+            }
+        });
+
+        //数量计算总价
+        $('#t-cruise').delegate('.quantity','blur',function(){
+            tr = $(this).parent().parent();
+            var quantity =   tr.find('.quantity').val()?tr.find('.quantity').val():0;
+            var unit_price = tr.find('.unit_price').val()?tr.find('.unit_price').val():0;
+            var t = quantity*unit_price;
+            tr.find('.total').val(t);
+
+            var cost_price = tr.find('.cost_price').val()?tr.find('.cost_price').val():0;
+            var unit_price = tr.find('.unit_price').val()?tr.find('.unit_price').val():0;
+            var t_cost_price = quantity*cost_price;
+            var t_unit_price = quantity*unit_price;
+            var symbol = tr.find('.symbol').val();
+            tr.find('.th_cost_price').html(symbol+t_cost_price);
+            tr.find('.th_unit_price').html(symbol+t_unit_price);
+
+        });
+
+        //单价计算总价
+        $('#t-cruise').delegate('.unit_price','blur',function(){
+            tr = $(this).parent().parent();
+            var quantity =   tr.find('.quantity').val()?tr.find('.quantity').val():0;
+            var unit_price = tr.find('.unit_price').val()?tr.find('.unit_price').val():0;
+            var t = quantity*unit_price;
+            tr.find('.total').val(t);
+        });
+
+
+    }();
+
+
+    function add() {
+
+        $.ajax({
+            type: "POST",
+            url: '/product/NsessionTemplateCruiseAjax',
+            data: $('#form1').serializeArray(),
+            success: function (data) {
+                if(data.code!=200){
+                    layer.msg(data.msg)
+                    return false;
+                }else if(data.code==200){
+                    layer.msg('{$language_tag.index_public_success}',{time:1,end : function(layero, index){
+                        opener.addCruise();
+                        window.close();
+                    }
+                    });
+                }
+            },
+            error:function(XMLHttpRequest, textStatus, errorThrown){
+                //console.log(errorThrown)
+                layer.msg('{$language_tag.index_public_verificationFailure}')
+
+            }
+        });
+        return false;
+    }
+</script>
+
+
+<script>
+    // opener.addHotel();
+</script>
+
+</body>
+</html>
+

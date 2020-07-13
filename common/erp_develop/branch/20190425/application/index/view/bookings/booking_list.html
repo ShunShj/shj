@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {include file='public/head' /}
+    <title>回执单模板</title>
+    <link href="__STATIC__/css/product.css" rel="stylesheet">
+    <link href="__STATIC__/css/animate.min.css" rel="stylesheet">
+    <link href="__STATIC__/css/soulTable.css" rel="stylesheet">
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+    <div class="layui-header">
+        {include file='public/header' /}
+    </div>
+
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll">
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            {include file='public/left_menu' /}
+        </div>
+    </div>
+
+    <div class="layui-body layui-body-bg">
+
+        <!-- 内容主体区域 -->
+        <div style="padding: 15px 15px 0px;">
+            <div class="body-top">
+                <div class='layui-form-item'>
+                    <span class="layui-breadcrumb" lay-separator="-">
+                        <a>{$Think.lang.index_public_homepage}</a>
+                        <a>{$Think.lang.index_branchcompany_showBranchProductManage_branchManagement}</a>
+                        <a><cite>{$Think.lang.index_branchcompany_showCompanyOrderManage_orderManagement}</cite></a>
+                    </span>
+                </div>
+            </div>
+            <div class="content-bg" style="padding-bottom: 5px!important;">
+                <span style="{:action('index/auth/check_auth',['role_id'=>'248'])}"><a href='/bookings/companyOrderManageAdd'><button class="layui-btn nav-add layui-btn-sm">{$Think.lang.index_branchcompany_showCompanyOrderManage_newOrder}</button></a></span>
+                <hr>
+                <div class="company-pageHeight">
+                    <table id="orderTable" lay-filter="orderTable"></table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script type="text/html" id="barDemo">
+        <span style="{:action('index/auth/check_auth',['role_id'=>'249'])}"><a href="javascript:void(0)"><button class="layui-btn  layui-btn-xs hover-edit layui-btn-primary" lay-event="edit">{$Think.lang.index_public_update}</button></a></span>
+        <span style="{:action('index/auth/check_auth',['role_id'=>'250'])}"><a class="layui-btn layui-btn-xs hover-edit layui-btn-primary" href="javascript:void(0)" lay-event="receipt">{$Think.lang.index_branchcompany_showCompanyOrderManage_touristItinerary}</a></span>
+        <span style="{:action('index/auth/check_auth',['role_id'=>'251'])}"><a href="javascript:void(0)" ><button company_order_number="{$vo.company_order_number}" class="del_company_order layui-btn layui-btn-xs nav-del layui-btn-primary" lay-event="del">{$Think.lang.index_public_cancel}</button></a></span>
+    </script>
+    <div class="layui-footer">
+        <!-- 底部固定区域 -->
+        © layui.com - 底部固定区域
+    </div>
+</div>
+{include file='public/foot_js' /}
+
+
+<script type="text/javascript">
+    layui.config({
+        base: '__STATIC__/javascript/layui_exts/',
+    }).extend({
+        soulTable: 'soulTable'
+    });
+</script>
+<script type="text/javascript">
+    layui.use(['table','jquery','laydate','soulTable'], function(){
+        var table = layui.table;
+        var $ = layui.jquery;
+        var laydate = layui.laydate;
+        var soulTable=layui.soulTable;
+
+        lay('.sales-date').each(function(){
+            laydate.render({
+                elem: this
+                ,trigger: 'click'
+                ,done: function(value, date){
+                    console.log(date)
+                }
+            });
+        });
+
+        var bodyTopH=$(".body-top").height();
+        var bodyH=$(".layui-body").height();
+        var height=bodyH-bodyTopH-15-120;
+        //layer.load(2);
+
+        var myTable = table.render({
+            elem: '#orderTable'
+            ,height: height+'px'
+            ,limits: [10,20,30,40,50,60,70,80,90]
+            ,limit: 10 //每页默认显示的数量
+            ,page: true
+            ,cols: [[ //表头
+                {field: 'company_order_number', title: '{$Think.lang.index_finance_showReceivableManage_order_number}', width:170, sort: true,filter: true, fixed: 'left'}
+                ,{field: 'order_name', title: '{$Think.lang.index_branchcompany_showBranchProductManage_productName}',filter:true, sort: true, width:150}
+                ,{field: 'buy_order_time', title: '{$Think.lang.index_branchcompany_showCompanyOrderManage_buyDate}', sort: true, width:120,filter: true}
+                ,{field: 'customer_count', title: '{$Think.lang.index_product_PlanBooking_number}', sort: true, width:100,filter:true}
+                ,{field: 'create_user_name', title: '{$Think.lang.index_branchcompany_showCompanyOrderManage_creater}', sort: true, width:140,filter:true}
+                ,{field: 'wr', title: '{$Think.lang.index_branchcompany_showCompanyOrderManage_retail}/{$Think.lang.index_branchcompany_showCompanyOrderManage_wholeSale}', sort: true, width:150,filter:true}
+                ,{field: 'clientsource', title: '{$Think.lang.index_branchcompany_showCompanyOrderManage_addEdit_customerSource}', sort: true, width:120,filter:true}
+                ,{field: 'channel_type', title: '{$Think.lang.index_branchcompany_showCompanyOrderManage_channelOf_distribution}', sort: true, width:120,filter:true}
+                ,{field: 'begin_time', title: '{$Think.lang.index_branchcompany_showBranchProductManage_startDate}', sort: true, width:120,filter: true}
+                ,{field: 'end_time', title: '{$Think.lang.index_branchcompany_showBranchProductManage_endDate}', sort: true, width:120,filter: true}
+                ,{field: 'begin_city', title: '{$Think.lang.index_branchcompany_showCompanyOrderManage_startCity}', sort: true, width:150,filter: true}
+                ,{field: 'distributor_distributor_name', title: '{$Think.lang.index_branchcompany_showCompanyOrderManage_channel}', sort: true, width:160,filter: true}
+                ,{field: 'distributor_associate_type', title: '{$Think.lang.index_branchcompany_showDistributorManage_associateType}', sort: true, width:160,filter: true}
+                ,{field: 'distributor_language_name', title: '{$Think.lang.index_branchcompany_showBranchProductManage_language}', sort: true, width:160,filter: true}
+                ,{field: 'distributor_city_name', title: '{$Think.lang.index_branchcompany_showDistributorManage_city}', sort: true, width:160,filter: true}
+                ,{field: 'distributor_province_name', title: '{$Think.lang.index_branchcompany_showCompanyOrderManage_addEdit_provincialState}', sort: true, width:160,filter: true}
+                ,{field: 'distributor_country_name', title: '{$Think.lang.index_branchcompany_showCompanyOrderManage_addEdit_country}', sort: true, width:160,filter: true}
+                ,{field: 'distributor_address', title: '{$Think.lang.index_branchcompany_showDistributorManage_address}', sort: true, width:160,filter: true}
+                ,{field: 'distributor_zip_code', title: '{$Think.lang.index_branchcompany_showDistributorManage_zipCode}', sort: true, width:160,filter: true}
+                ,{field: 'distributor_email', title: '{$Think.lang.index_branchcompany_showBranchProductManage_email}', sort: true, width:160,filter: true}
+                ,{field: 'distributor_contect', title: '{$Think.lang.index_branchcompany_showDistributorManage_contacts}', sort: true, width:160,filter: true}
+                ,{field: 'distributor_tel', title: '{$Think.lang.index_branchcompany_showCompanyOrderManage_addEdit_tel}', sort: true, width:160,filter: true}
+                ,{field: 'remark', title: '{$Think.lang.index_public_mark}', sort: true, width:120,filter: true}
+                ,{field: 'receivable_price', title: '{$Think.lang.index_branchcompany_showCompanyOrderManage_addEdit_quotedPrice}', sort: true, width:120,filter: true}
+                ,{field: 'receivable_tax', title: '{$Think.lang.index_branchcompany_showCompanyOrderManage_tax}', sort: true, width:120,filter: true}
+                ,{field: 'receivable_brokerage', title: '佣金', sort: true, width:120,filter: true}
+                ,{field: 'receivable_total', title: '{$Think.lang.index_finance_showReceivableManage_receivable_money}', sort: true, width:120,filter: true}
+                ,{field: 'receivable_miss_sale_receivable', title: '{$Think.lang.index_branchcompany_showCompanyOrderManage_sales_outstanding}', sort: true, width:120,filter: true}
+                ,{field: 'receivable_sale_receivable', title: '{$Think.lang.index_branchcompany_showCompanyOrderManage_sales_received}', sort: true, width:120,filter: true}
+                ,{field: 'receivable_miss_finance_receivable', title: '{$Think.lang.index_branchcompany_showCompanyOrderManage_financial_uncollected}', sort: true, width:120,filter: true}
+                ,{field: 'receivable_finance_receivable', title: '{$Think.lang.index_branchcompany_showCompanyOrderManage_financialReceived}', sort: true, width:120,filter: true}
+                ,{field: 'receivable_cost', title: '{$Think.lang.index_branchcompany_showCompanyOrderManage_addEdit_primeCost}', sort: true, width:120,filter: true}
+                ,{field: 'receivable_huiduisunyi', title: '{$Think.lang.index_branchcompany_showCompanyOrderManage_exchange}', sort: true, width:120,filter: true}
+                ,{field: 'receivable_maoli', title: '{$Think.lang.index_branchcompany_showCompanyOrderManage_gross_profit}', sort: true, width:120,filter: true}
+                ,{fixed: 'right',title: '{$Think.lang.index_source_operation}', width:240, align:'center', toolbar: '#barDemo'}
+            ]],
+            filter: {
+                bottom: false
+            }
+            ,done: function () {
+                soulTable.render(this)
+            }
+        });
+
+        search({});
+        function search(data) {
+            var loading = layer.load(2);
+            $.ajax({
+                url: '/CompanyOrder/getCompanyOrderBookingListAjax',
+                data: data,
+                dataType: 'json',
+                success: function (res) {
+                    myTable.reload({
+                        data: res.data
+                    })
+                },
+                complete: function () {
+                    layer.close(loading)
+                }
+            })
+        }
+        //删除
+        table.on('tool(orderTable)', function(obj){
+            var data = obj.data;
+            if(obj.event === 'del'){
+                layer.confirm('{$Think.lang.index_branchcompany_showCompanyOrderManage_ok}？', function(index){
+                    $.ajax({
+                        type: "POST",
+                        url: '/branchcompany/del_company_order',
+                        data: {
+                            "company_order_number":data.company_order_number,
+                            "status":0
+                        },
+                        success: function(data){
+                            layer.load(2);
+                            if(data.code!=200){
+                                layer.msg(data.msg);
+                                return false;
+                            }else if(data.code==200) {
+                                layer.closeAll();
+                                layer.msg('{$Think.lang.index_public_success}');
+                            }
+                        }
+                    });
+                });
+            }else if(obj.event==='edit'){
+                location.href="/bookings/companyOrderManageAdd?company_order_number="+data.company_order_number;
+            }else if(obj.event==='receipt'){
+                location.href="/branchcompany/showCompanyOrderCustomerGuideReceipt?company_order_number="+data.company_order_number+'&company_order_id='+data.company_order_id;
+            }
+        });
+    });
+</script>
+</body>
+</html>

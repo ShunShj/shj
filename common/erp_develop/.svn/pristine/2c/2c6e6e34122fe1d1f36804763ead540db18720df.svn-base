@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {include file='public/head' /}
+    <title>添加分摊比例</title>
+    <link href="__STATIC__/css/product.css" rel="stylesheet">
+    <link href="__STATIC__/css/finance.css" rel="stylesheet">
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+    <div class="layui-header">
+        {include file='public/header' /}
+    </div>
+
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll">
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            {include file='public/left_menu' /}
+        </div>
+    </div>
+
+    <div class="layui-body">
+        <div style="padding: 15px 15px 0px;">
+            <div class="body-top">
+                <div class='layui-form-item'>
+                <span class="layui-breadcrumb" lay-separator="-">
+                   <a>{$Think.lang.index_public_homepage}</a>
+                    <a>{$Think.lang.index_public_finance}</a>
+                    <a>{$Think.lang.index_finance_CostSharingList_apportion_proportion}</a>
+                    <a><cite>{$Think.lang.index_finance_CostSharingList_add_apportion_proportion}</cite></a>
+                </span>
+                </div>
+                <br>
+            </div>
+
+            <form class="layui-form" id="form1" onSubmit="return add()">
+                <div class='layui-block input-inline' style="text-align: right">
+                    <a href="javascript:history.back()" class="layui-btn hover-edit layui-btn-primary">{$Think.lang.index_finance_CostSharingList_cancel}</a>
+                    <button  class="layui-btn nav-submit" >{$Think.lang.index_finance_CostSharingList_sure}</button>
+                </div>
+                <hr><br>
+                <p style="font-size: 16px;font-weight: bold">{$Think.lang.index_finance_CostSharingList_add_detail_money}：</p>
+                <div class="table-nont pageHeight">
+                    <table class="layui-table layui-form"   >
+                        <thead>
+                        <tr>
+                            <td width="65%">{$Think.lang.index_finance_CostSharingList_add_detail}</td>
+                            <td width="30%" >{$Think.lang.index_finance_CostSharingList_add_total_money}({$Think.lang.index_finance_CostSharingList_add_chinese_money})</td>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td><input type="text" name="project_name" value="{$ApportionProportion.project_name}" class="layui-input" required /></td>
+                            <td><input type="text" name="total_money" value="{$ApportionProportion.total_money}" class="layui-input SumOfMoney" required></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <br>
+                    <p style="font-size: 16px;font-weight: bold">{$Think.lang.index_finance_CostSharingList_add_apportion_proportion_money}：</p>
+                    <table class="layui-table layui-form"  >
+                        <thead>
+                        <tr>
+                            <td width="35%">{$Think.lang.index_finance_CostSharingList_branchcompany}</td>
+                            <td width="30%" >{$Think.lang.index_finance_CostSharingList_proportion}</td>
+                            <td width="30%" >{$Think.lang.index_finance_CostSharingList_apportion_proportion_money}({$Think.lang.index_finance_CostSharingList_add_chinese_money})</td>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {foreach $ApportionProportion.apportion_proportion_info as $k=>$v}
+                        <tr>
+                            <td width="45%">{$v.company_name}</td>
+                            <td width="10%" style="position: relative" >
+                                <font class="font">{$v.apportion_proportion|default=0}</font><div style="position: absolute;top: 10px;left: 70px;">%</div>
+                                <input type="hidden" name="apportion_proportion[{$v.company_id}]" value="{$v.apportion_proportion|default=0}" />
+                            </td>
+                            <td width="40%" class="contributionQuota">{$v.money} </td>
+                            <input type="hidden" name="money[{$v.company_id}]" class="money" value="{$v.money}" />
+                        </tr>
+                        {/foreach}
+                        </tbody>
+
+                    </table>
+
+                </div>
+            </form>
+
+        </div>
+    </div>
+    <div class="layui-footer">
+        <!-- 底部固定区域 -->
+        © layui.com - 底部固定区域
+    </div>
+</div>
+{include file='public/foot_js' /}
+<script src='__STATIC__/javascript/product/all.js'></script>
+<script src='__STATIC__/javascript/finance/receivable.js'></script>
+
+<script>
+    !function() {
+        var layer = layui.layer;
+        var form = layui.form;
+        var laydate = layui.laydate;
+        var upload = layui.upload;
+        var element = layui.element;
+        var formSelects = layui.formSelects;
+
+        $('.SumOfMoney').on('blur',function(){
+            var SumOfMoney = $(this).val();
+            $('.font').each(function(index, domEle){
+                var n = $(domEle).html()*SumOfMoney/100;
+                $(domEle).parent().parent().find('td').eq(2).html(n.toFixed(2));
+                $(domEle).parent().parent().find('.money').val(n.toFixed(2));
+            });
+        });
+
+    }();
+    function add(){
+        layer.load(2);
+        $.ajax({
+            type: "POST",
+            url: '/finance/editApportionProportionAjax?apportion_proportion_id={$_GET["apportion_proportion_id"]}',
+            data: $('#form1').serializeArray(),
+            success: function (data) {
+                layer.closeAll();
+                if(data.code!=200){
+                    layer.msg(data.msg)
+                    return false;
+                }else if(data.code==200){
+                    layer.msg('操作成功',{time:1,end : function(layero, index){
+                        window.history.go(-1);
+                    }
+                    });
+                }
+            },
+            error:function(XMLHttpRequest, textStatus, errorThrown){
+                //console.log(errorThrown)
+                layer.closeAll();
+                layer.msg('验证失败')
+            }
+        });
+
+        return false;
+    }
+
+</script>
+</body>
+</html>

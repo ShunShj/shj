@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html>
+<head>
+	{include file='public/head' /}
+	<title>language-manage-add</title>
+
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+
+	<div class="layui-header">
+		{include file='public/header' /}
+	</div>
+
+	<div class="layui-side layui-bg-black">
+		<div class="layui-side-scroll">
+			<!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+			{include file='public/left_menu' /}
+		</div>
+	</div>
+
+	<div class="layui-body">
+
+		<!-- 内容主体区域 -->
+		<div style="padding: 15px;">
+			<div class='layui-form-item'>
+		   		<span class="layui-breadcrumb" lay-separator="-">
+					<a>{$language_tag.index_public_homepage}</a>
+					<a>{$language_tag.index_source_showSupplierManage_supplier_administrate}</a>
+					<a>{$language_tag.index_source_showAgentManage_manage_agent}</a>
+					<a><cite>{$language_tag.index_source_showAgentAdd_add_agent}</cite></a>
+				</span>
+			</div>
+			<br/>
+			<form class="layui-form" onSubmit="return agentAdd()">
+				<div class="layui-row layui-col-space10">
+					<div class="layui-col-md4">
+						<div class="layui-form-item">
+							<label class="layui-form-label input-required">{$language_tag.index_source_showSupplierManage_supplier_type}:</label>
+							<div class="layui-input-block layui-form">
+								<select name="supplier_type_id" id='supplier_type_id' lay-verify="required" disabled>
+									<option value="1" selected>{$language_tag.index_public_agent}</option>
+								</select>
+							</div>
+						</div>
+					</div>
+					<div class="layui-col-md4">
+						<div class="layui-form-item">
+							<label class="layui-form-label input-required">{$language_tag.index_source_showSupplierManage_supplier_name}:</label>
+							<div class="layui-input-block">
+								<input name="supplier_name" id="supplier_name" lay-verify="required" placeholder="{$language_tag.index_source_showSupplier_input_supplier_name}" autocomplete="off" class="layui-input" type="text">
+							</div>
+						</div>
+					</div>
+					<div class="layui-col-md4">
+						<div class="layui-form-item">
+							<label class="layui-form-label input-required">{$language_tag.index_source_showSupplier_own_zone}:</label>
+							<div class="layui-input-block">
+								<select name="country_id" id='country_id' lay-verify="required" lay-search>
+									<option value="">{$language_tag.index_source_showSupplier_choose_own_zone}</option>
+									{foreach name='country_result'  item='vo'}
+									<option value="{$vo.id}">{$vo.cpc_name}</option>
+									{/foreach}
+								</select>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="layui-row layui-col-space10">
+					<div class="layui-col-md4">
+						<div class="layui-form-item">
+							<label class="layui-form-label">{$language_tag.index_public_status}:</label>
+							<div class="layui-input-block">
+								<select name="status" id='supplier_status' >
+									<option value="1">{$language_tag.index_public_show}</option>
+									<option value="2">{$language_tag.index_public_disabled}</option>
+								</select>
+							</div>
+						</div>
+					</div>
+					<div class="layui-col-md4">
+						<div class="layui-form-item">
+							<label class="layui-form-label">{$language_tag.index_source_showSupplier_level}:</label>
+							<div class="layui-input-block">
+								<input name="level_name" id="supplier_level"  placeholder="{$language_tag.index_source_showSupplier_input_level}" autocomplete="off" class="layui-input" type="text">
+							</div>
+						</div>
+					</div>
+					<div class="layui-col-md4">
+						<div class="layui-form-item">
+							<label class="layui-form-label">{$language_tag.index_source_showSupplier_linkman}:</label>
+							<div class="layui-input-block">
+								<input name="linkman" id="supplier_linkman"  placeholder="{$language_tag.index_source_showSupplier_input_linkman}" autocomplete="off" class="layui-input" type="text">
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="layui-row layui-col-space10">
+					<div class="layui-col-md4">
+						<div class="layui-form-item">
+							<label class="layui-form-label">{$language_tag.index_source_showSupplier_address}:</label>
+							<div class="layui-input-block">
+								<input name="address" id="supplier_address"  placeholder="{$language_tag.index_source_showSupplier_input_address}" autocomplete="off" class="layui-input" type="text">
+							</div>
+						</div>
+					</div>
+					<div class="layui-col-md4">
+						<div class="layui-form-item">
+							<label class="layui-form-label">{$language_tag.index_source_showSupplier_phone}:</label>
+							<div class="layui-input-block">
+								<input name="phone" id="supplier_phone"   placeholder="{$language_tag.index_source_showSupplier_input_phone}" autocomplete="off" class="layui-input" type="text"  >
+							</div>
+						</div>
+					</div>
+					<div class="layui-col-md4">
+						<div class="layui-form-item">
+							<label class="layui-form-label">{$language_tag.index_source_showSupplier_email}:</label>
+							<div class="layui-input-block">
+								<input name="email" id="supplier_email"  placeholder="{$language_tag.index_source_showSupplier_input_email}" autocomplete="off" class="layui-input" type="text" >
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="layui-row layui-col-space10">
+					<div class="layui-col-md4">
+						<div class="layui-form-item">
+							<label class="layui-form-label">{$language_tag.index_source_showSupplier_website}:</label>
+							<div class="layui-input-block">
+								<input name="website" id="supplier_website"  placeholder="{$language_tag.index_source_showSupplier_input_website}" autocomplete="off" class="layui-input" type="text" >
+							</div>
+						</div>
+					</div>
+					<div class="layui-col-md4">
+						<div class="layui-form-item">
+							<label class="layui-form-label">{$language_tag.index_source_showSupplier_zip_code}:</label>
+							<div class="layui-input-block">
+								<input name="zip_code" id="supplier_zip_code"  placeholder="{$language_tag.index_source_showSupplier_input_zip_code}" autocomplete="off" class="layui-input" type="text">
+							</div>
+						</div>
+					</div>
+					<div class="layui-col-md4">
+						<div class="layui-form-item">
+							<label class="layui-form-label">{$language_tag.index_source_showSupplier_fax}:</label>
+							<div class="layui-input-block">
+								<input name="fax" id="supplier_fax"  placeholder="{$language_tag.index_source_showSupplier_input_fax}" autocomplete="off" class="layui-input" type="text">
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="layui-row layui-col-space10">
+					<div class="layui-col-md4">
+						<div class="layui-form-item">
+							<label class="layui-form-label input-required">{$language_tag.index_public_company}:</label>
+							<div class="layui-input-block">
+								<select {$Think.session.user.company_id!=1?'disabled':''} name="choose_company_id" id="choose_company_id" lay-verify="required" >
+									<option value="0">{$language_tag.index_source_showSupplier_choose_company}</option>
+									{foreach name='company_result'  item='vo'}
+									<option value="{$vo.company_id}" {if condition="$vo.company_id eq  $Think.session.user.company_id"} selected='selected'{/if}>{$MultilingualAll['company-company_name-'.$vo.company_id.'-'.$Think.session.user.language_id][0]['translate']|default=$vo.company_name}</option>
+									{/foreach}
+								</select>
+							</div>
+						</div>
+					</div>
+				</div>
+				<br/>
+				<div class="layui-form-item">
+					<div class="all-button-center">
+						<button class="layui-btn nav-submit" lay-submit="" lay-filter="formDemo" id="language_add_button">{$language_tag.index_public_submit}</button>&nbsp;
+						<a href='javascript:history.back(-1)'><button type="button" class="layui-btn layui-btn-primary">{$language_tag.index_public_back}</button></a>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+
+	<div class="layui-footer">
+		<!-- 底部固定区域 -->
+		© layui.com - 底部固定区域
+	</div>
+</div>
+{include file='public/foot_js' /}
+<script src='__STATIC__/javascript/system/source.js'></script>
+
+</body>
+</html>

@@ -1,0 +1,141 @@
+<?php
+/**
+ * Created by PhpStorm.
+ * User: Hugh
+ * Date: 2019/11/04
+ * Time: 13:40
+ */
+
+namespace app\index\controller;
+use \Underscore\Types\Arrays;
+use think\Session;
+use think\Paginator;
+use think\Request;
+use think\Controller;
+use app\common\help\Help;
+
+class AdminBooking extends Base
+{
+    public function index(){
+        return $this->fetch('list');
+    }
+
+    //General
+    public function updateBookingFormGeneral(){
+        return $this->fetch('update_booking_form_general');
+    }
+
+    //Passenger
+    public function updateBookingFormPassenger(){
+        return $this->fetch('update_booking_form_passenger');
+    }
+
+    //Room
+    public function updateBookingFormRoom(){
+        return $this->fetch('update_booking_form_room');
+    }
+
+    //Transfer
+    public function updateBookingFormTransfer(){
+        return $this->fetch('update_booking_form_transfer');
+    }
+
+    //option
+    public function  updateBookingFormOption(){
+        return $this->fetch('update_booking_form_option');
+    }
+
+    //Accommodation
+    public function  updateBookingFormAccommodation(){
+        return $this->fetch('update_booking_form_accommodation');
+    }
+
+    //Hotel
+    public function updateBookingFormHotel(){
+        return $this->fetch('update_booking_form_hotel');
+    }
+
+    //File
+    public function updateBookingFormFile(){
+        return $this->fetch('update_booking_form_file');
+    }
+
+    //Sales
+    public function updateBookingFormSales(){
+        return $this->fetch('update_booking_form_sales');
+    }
+
+
+    //后台创建订单
+    public function createBookingForm(){
+        //获取所有的 agent
+        $params['choose_company_id'] = session('user')['company_id'];
+        $params['status'] = 1;
+        $result = $this->callSoaErp('post', '/btob/getBtoBDistributor', $params);
+        $this->assign('all_agent',$result['data']);
+
+        unset($params);unset($result);
+        //获取B2Btour
+        $data['status'] = 1;
+        $data['company_id'] =  session('user')['company_id'];
+        $result = $this->callSoaErp('post', '/b2b_tour/getB2bTour',$data);
+        $this->assign('all_tours',$result['data']);
+        unset($data);unset($result);
+
+        return $this->fetch('create_booking_form');
+
+    }
+
+
+    public function createBookingFormAjax(){
+        session::set('adminBooking_createBookingFormAjax',$_POST);
+        return ['code'=>200];
+    }
+
+
+    public function select_date(){
+//        echo '<pre>';print_r($_SESSION);exit;
+
+        //获取团日期
+        $where['status'] = 1;
+        $where['btb_tour_id'] = session('adminBooking_createBookingFormAjax')['s_tour'];
+        $result = $this->callSoaErp('post','/b2b_tour/getB2bTourDates',$where);
+        $dateOj = [];
+        foreach($result['data'] as $date){
+            if(date('Y-m-d')<=$date['arrival_date'])
+                $dateOj[] = date('d-m-Y',strtotime($date['arrival_date']));
+        }
+        sort($dateOj);
+        $this->assign('dateOj',$dateOj);
+        unset($date);unset($result);
+
+        //获取语言
+        $where['btb_tour_id'] = session('adminBooking_createBookingFormAjax')['s_tour'];
+        $result = $this->callSoaErp('post', '/b2b_tour/getB2bTour',$where);
+        $this->assign('sLanguage',explode(',',$result['data'][0]['tour_languages']));
+        unset($date);unset($result);
+        $where = ['status'=>1];
+        $Language = $this->callSoaErp('post','/system/getLanguage',$where);
+        $this->assign('Language',$Language['data']);
+//        var_dump($Language);exit;
+        unset($date);
+
+        return $this->fetch('select_date');
+    }
+
+
+    public function select_dateAjax(){
+        session::set('adminBooking_select_dateAjax',$_POST);
+        return ['code'=>200];
+    }
+
+
+    public function passenger_details(){
+//        echo '<pre>';print_r($_SESSION);exit;
+
+        return $this->fetch('passenger_details');
+
+    }
+
+
+}

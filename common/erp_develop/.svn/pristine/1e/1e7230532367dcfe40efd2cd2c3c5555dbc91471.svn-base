@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {include file='public/head' /}
+    <title>回执单模板</title>
+    <link href="__STATIC__/css/product.css" rel="stylesheet">
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+    <div class="layui-header">
+        {include file='public/header' /}
+    </div>
+
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll">
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            {include file='public/left_menu' /}
+        </div>
+    </div>
+
+    <div class="layui-body layui-body-bg">
+
+        <!-- 内容主体区域 -->
+        <div style="padding: 15px 15px 0px;">
+            <div class="body-top">
+                <div class='layui-form-item'>
+                    <span class="layui-breadcrumb" lay-separator="-">
+                        <a>{$Think.lang.index_public_homepage}</a>
+                        <a>{$Think.lang.index_branchcompany_showBranchProductManage_branchManagement}</a>
+                        <a><cite>{$Think.lang.index_branchcompany_showCompanyOrderManage_orderManagement}</cite></a>
+                    </span>
+                </div>
+                <div class='layui-block all-search-bg layui-form demoTable'>
+
+                    <div class="layui-row">
+                        <div class="layui-col-md4">
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">{$Think.lang.index_finance_showReceivableManage_order_number}:</label>
+                                <div class="layui-input-block">
+                                    <input type="text" id="one_id_search" value="{$Think.get.one_id_search}" name="one_id_search"
+                                           placeholder="{$Think.lang.index_finance_showReceivableManage_order_number}" autocomplete="off" class="layui-input">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-col-md4">
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">{$Think.lang.index_branchcompany_showBranchProductManage_productName}:</label>
+                                <div class="layui-input-block">
+                                    <input type="order_name" placeholder="{$Think.lang.index_branchcompany_showBranchProductManage_productName}" id="order_name" autocomplete="off" class="layui-input" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-col-md4">
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">{$Think.lang.index_branchcompany_showCompanyOrderManage_channel}:</label>
+                                <div class="layui-input-block">
+                                    <select name="" lay-search="" id="distributor_name">
+
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-row">
+                        <div class="layui-col-md4">
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">{$Think.lang.index_branchcompany_showCompanyOrderManage_orderTime}:</label>
+                                <div class="layui-input-block">
+                                    <div class="layui-input-inline date-width">
+                                        <input type="text" name="" placeholder="{$Think.lang.index_branchcompany_showDistributorManage_pleaseSelectTheDate}" autocomplete="off" id="begin_create_time" class="layui-input sales-date">
+                                    </div>
+                                    <div class="date-and">-</div>
+                                    <div class="layui-input-inline date-width">
+                                        <input type="text" name="" placeholder="{$Think.lang.index_branchcompany_showDistributorManage_pleaseSelectTheDate}" autocomplete="off" id="end_create_time" class="layui-input sales-date">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-col-md4">
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">{$Think.lang.index_branchcompany_showCompanyOrderManage_client}:</label>
+                                <div class="layui-input-block">
+                                    <input type="text" id="contect_name" value="{$Think.get.one_content_search}" name="one_content_search"
+                                           placeholder="" autocomplete="off" class="layui-input">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-col-md4">
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">{$Think.lang.index_branchcompany_showCompanyOrderManage_creater}:</label>
+                                <div class="layui-input-block">
+                                    <input type="text" id="create_user_name" value="{$Think.get.one_agent_search}" name="one_agent_search"  placeholder="创建人"
+                                           autocomplete="off" class="layui-input">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-row">
+                        <div class="layui-col-md4">
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">{$Think.lang.index_product_visitor_goTime}:</label>
+                                <div class="layui-input-block">
+                                    <div class="layui-input-inline date-width">
+                                        <input type="text" name="" placeholder="{$Think.lang.index_branchcompany_showDistributorManage_pleaseSelectTheDate}" autocomplete="off" id="begin_begin_time" class="layui-input sales-date">
+                                    </div>
+                                    <div class="date-and">-</div>
+                                    <div class="layui-input-inline date-width">
+                                        <input type="text" name="" placeholder="{$Think.lang.index_branchcompany_showDistributorManage_pleaseSelectTheDate}" autocomplete="off" id="end_begin_time" class="layui-input sales-date">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-row">
+                        <div class="layui-col-md4 layui-col-md-offset4">
+                            <div class='input-inline all-button-center pages-search-margin'>
+                                <button class="layui-btn nav-search" data-type="reload">{$Think.lang.index_public_search}</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!--<div class='layui-button-inline'>
+
+                         <a href='#'><button class="layui-btn nav-details">打印订单</button></a>
+                    </div>-->
+                </div>
+            </div>
+            <div class="content-bg" style="padding-bottom: 5px!important;">
+                <span style="{:action('index/auth/check_auth',['role_id'=>'248'])}"><a href='/branchcompany/companyOrderManage'><button class="layui-btn nav-add layui-btn-sm">{$Think.lang.index_branchcompany_showCompanyOrderManage_newOrder}</button></a></span>
+                <button class="layui-btn nav-add layui-btn-sm" onclick="exportApiDemo('/companyorder/getCompanyOrderAjax')">{$Think.lang.index_branchcompany_showCompanyOrderManage_printOrder}</button><!--打印订单-->
+                <hr>
+                <div class="company-pageHeight">
+                    <table id="orderTable" lay-filter="orderTable"></table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script type="text/html" id="barDemo">
+        <span style="{:action('index/auth/check_auth',['role_id'=>'249'])}"><a href="javascript:void(0)"><button class="layui-btn  layui-btn-xs hover-edit layui-btn-primary" lay-event="edit">{$Think.lang.index_public_update}</button></a></span>
+        <span style="{:action('index/auth/check_auth',['role_id'=>'250'])}"><a class="layui-btn layui-btn-xs hover-edit layui-btn-primary" href="javascript:void(0)" lay-event="receipt">{$Think.lang.index_branchcompany_showCompanyOrderManage_touristItinerary}</a></span>
+        <span style="{:action('index/auth/check_auth',['role_id'=>'251'])}"><a href="javascript:void(0)" ><button company_order_number="{$vo.company_order_number}" class="del_company_order layui-btn layui-btn-xs nav-del layui-btn-primary" lay-event="del">{$Think.lang.index_public_cancel}</button></a></span>
+    </script>
+    <div class="layui-footer">
+        <!-- 底部固定区域 -->
+        © layui.com - 底部固定区域
+    </div>
+</div>
+{include file='public/foot_js' /}
+<script src='__STATIC__/javascript/product/all.js'></script>
+<script src='__STATIC__/javascript/data.js'></script>
+<script src='__STATIC__/javascript/product/company_order.js'></script>
+<script type="text/javascript" src="__STATIC__/layui/layui.js"></script>
+
+<script type="text/javascript">
+    layui.config({
+        base: '__STATIC__/javascript/layui_exts/',
+    }).extend({
+        excel: 'excel',
+    });
+</script>
+<script type="text/javascript">
+    layui.use(['table','jquery','laydate'], function(){
+        var table = layui.table;
+        var $ = layui.jquery;
+        var laydate = layui.laydate;
+
+        lay('.sales-date').each(function(){
+            laydate.render({
+                elem: this
+                ,trigger: 'click'
+                ,done: function(value, date){
+                    console.log(date)
+                }
+            });
+        });
+
+        var bodyTopH=$(".body-top").height();
+        var bodyH=$(".layui-body").height();
+        var company=bodyH-bodyTopH-15-115;
+        layer.load(2);
+        table.render({
+            elem: '#orderTable'
+            ,height:company+'px'
+            ,url: '/companyorder/getCompanyOrderAjax'
+            ,parseData: function(res){
+                console.log(res)
+                return {
+                    "code": res.code,
+                    "msg": res.msg,
+                    "count": res.data_count,
+                    "data": res.data
+                };
+            }
+            ,response: {
+                statusCode: 200 //规定成功的状态码，默认：0
+            }
+            ,cols: [[ //表头
+                {field: 'company_order_number', title: '{$Think.lang.index_finance_showReceivableManage_order_number}', width:170, sort: true, fixed: 'left'}
+                ,{field: 'order_name', title: '{$Think.lang.index_branchcompany_showBranchProductManage_productName}', sort: true, width:150}
+                ,{field: 'buy_order_time', title: '{$Think.lang.index_branchcompany_showCompanyOrderManage_buyDate}', sort: true, width:120,templet: '<div>{{d.buy_order_time!=null?date("Y-m-d",d.buy_order_time):""}}</div>'}
+                ,{field: 'customer_count', title: '{$Think.lang.index_product_PlanBooking_number}', sort: true, width:100}
+                ,{field: 'create_user_name', title: '{$Think.lang.index_branchcompany_showCompanyOrderManage_creater}', sort: true, width:140}
+                ,{field: 'wr', title: '{$Think.lang.index_branchcompany_showCompanyOrderManage_retail}/{$Think.lang.index_branchcompany_showCompanyOrderManage_wholeSale}', sort: true, width:150,templet: '<div>{{d.wr==1?"retail":"wholesale"}}</div>'}
+                ,{field: 'clientsource', title: '{$Think.lang.index_branchcompany_showCompanyOrderManage_addEdit_customerSource}', sort: true, width:120,templet: '<div>{{clientsource(d.clientsource)}}</div>'}
+                ,{field: 'channel_type', title: '{$Think.lang.index_branchcompany_showCompanyOrderManage_channelOf_distribution}', sort: true, width:120,templet: '<div>{{d.channel_type==1?"经销商":"直客"}}</div>'}
+                ,{field: 'begin_time', title: '{$Think.lang.index_branchcompany_showBranchProductManage_startDate}', sort: true, width:120,templet: '<div>{{d.begin_time!=null?date("Y-m-d",d.begin_time):""}}</div>'}
+                ,{field: 'end_time', title: '{$Think.lang.index_branchcompany_showBranchProductManage_endDate}', sort: true, width:120,templet: '<div>{{d.end_time!=null?date("Y-m-d",d.end_time):""}}</div>'}
+                ,{field: 'begin_city', title: '{$Think.lang.index_branchcompany_showCompanyOrderManage_startCity}', sort: true, width:150}
+                ,{field: 'distributor_info', title: '{$Think.lang.index_branchcompany_showCompanyOrderManage_channel}', sort: true, width:160,templet: '<div>{{d.distributor_info?d.distributor_info[0].distributor_name:""}}</div>'}
+                ,{field: 'distributor_info', title: '{$Think.lang.index_branchcompany_showDistributorManage_associateType}', sort: true, width:160,templet: '<div>{{d.distributor_info?associate_type(d.distributor_info[0].associate_type):""}}</div>'}
+                ,{field: 'distributor_info', title: '{$Think.lang.index_branchcompany_showBranchProductManage_language}', sort: true, width:160,templet: '<div>{{d.distributor_info?d.distributor_info[0].language_name!=null?d.distributor_info[0].language_name:"":""}}</div>'}
+                ,{field: 'distributor_info', title: '{$Think.lang.index_branchcompany_showDistributorManage_city}', sort: true, width:160,templet: '<div>{{d.distributor_info?d.distributor_info[0].city_name!=null?d.distributor_info[0].city_name:"":""}}</div>'}
+                ,{field: 'distributor_info', title: '{$Think.lang.index_branchcompany_showCompanyOrderManage_addEdit_provincialState}', sort: true, width:160,templet: '<div>{{d.distributor_info?d.distributor_info[0].province_name!=null?d.distributor_info[0].province_name:"":""}}</div>'}
+                ,{field: 'distributor_info', title: '{$Think.lang.index_branchcompany_showCompanyOrderManage_addEdit_country}', sort: true, width:160,templet: '<div>{{d.distributor_info?d.distributor_info[0].country_name!=null?d.distributor_info[0].country_name:"":""}}</div>'}
+                ,{field: 'distributor_info', title: '{$Think.lang.index_branchcompany_showDistributorManage_address}', sort: true, width:160,templet: '<div>{{d.distributor_info?d.distributor_info[0].address!=null?d.distributor_info[0].address:"":""}}</div>'}
+                ,{field: 'distributor_info', title: '{$Think.lang.index_branchcompany_showDistributorManage_zipCode}', sort: true, width:160,templet: '<div>{{d.distributor_info?d.distributor_info[0].zip_code!=null?d.distributor_info[0].zip_code:"":""}}</div>'}
+                ,{field: 'distributor_info', title: '{$Think.lang.index_branchcompany_showBranchProductManage_email}', sort: true, width:160,templet: '<div>{{d.distributor_info?d.distributor_info[0].email!=null?d.distributor_info[0].email:"":d.email}}</div>'}
+                ,{field: 'distributor_info', title: '{$Think.lang.index_branchcompany_showDistributorManage_contacts}', sort: true, width:160,templet: '<div>{{d.distributor_info?d.distributor_info[0].contect!=null?d.distributor_info[0].contect:"":d.contect_name}}</div>'}
+                ,{field: 'distributor_info', title: '{$Think.lang.index_branchcompany_showCompanyOrderManage_addEdit_tel}', sort: true, width:160,templet: '<div>{{d.distributor_info?d.distributor_info[0].tel!=null?d.distributor_info[0].tel:"":d.tel}}</div>'}
+                ,{field: 'remark', title: '{$Think.lang.index_public_mark}', sort: true, width:120}
+                ,{field: 'receivable_money', title: '{$Think.lang.index_finance_showReceivableManage_receivable_money}', sort: true, width:120}
+                ,{field: 'company_order_receivable_info', title: '{$Think.lang.index_branchcompany_showCompanyOrderManage_addEdit_quotedPrice}', sort: true, width:120,templet: '<div>{{d.company_order_receivable_info?d.company_order_receivable_info.price:""}}</div>'}
+                ,{field: 'company_order_receivable_info', title: '{$Think.lang.index_branchcompany_showCompanyOrderManage_tax}', sort: true, width:120,templet: '<div>{{d.company_order_receivable_info?d.company_order_receivable_info.tax:""}}</div>'}
+                ,{field: 'company_order_receivable_info', title: '{$Think.lang.index_branchcompany_showCompanyOrderManage_sales_outstanding}', sort: true, width:120,templet: '<div>{{d.company_order_receivable_info?d.company_order_receivable_info.miss_sale_receivable:""}}</div>'}
+                ,{field: 'company_order_receivable_info', title: '{$Think.lang.index_branchcompany_showCompanyOrderManage_sales_received}', sort: true, width:120,templet: '<div>{{d.company_order_receivable_info?d.company_order_receivable_info.sale_receivable:""}}</div>'}
+                ,{field: 'company_order_receivable_info', title: '{$Think.lang.index_branchcompany_showCompanyOrderManage_financial_uncollected}', sort: true, width:120,templet: '<div>{{d.company_order_receivable_info?d.company_order_receivable_info.miss_finance_receivable:""}}</div>'}
+                ,{field: 'company_order_receivable_info', title: '{$Think.lang.index_branchcompany_showCompanyOrderManage_financialReceived}', sort: true, width:120,templet: '<div>{{d.company_order_receivable_info?d.company_order_receivable_info.finance_receivable:""}}</div>'}
+                ,{field: 'company_order_receivable_info', title: '{$Think.lang.index_branchcompany_showCompanyOrderManage_addEdit_primeCost}', sort: true, width:120,templet: '<div>{{d.company_order_receivable_info?d.company_order_receivable_info.cost:""}}</div>'}
+                ,{field: 'company_order_receivable_info', title: '{$Think.lang.index_branchcompany_showCompanyOrderManage_exchange}', sort: true, width:120,templet: '<div>{{d.company_order_receivable_info?d.company_order_receivable_info.huiduisunyi:""}}</div>'}
+                ,{field: 'company_order_receivable_info', title: '{$Think.lang.index_branchcompany_showCompanyOrderManage_gross_profit}', sort: true, width:120,templet: '<div>{{d.company_order_receivable_info?d.company_order_receivable_info.maoli:""}}</div>'}
+                ,{fixed: 'right',title: '{$Think.lang.index_source_operation}', width:240, align:'center', toolbar: '#barDemo'}
+            ]]
+            ,page: true //开启分页
+            ,limits: [10,20,30,40,50,60,70,80,90]
+            ,limit: 10 //每页默认显示的数量
+            ,id: 'testReload',
+            done: function(res, curr, count){
+                layer.closeAll('loading');
+            }
+        });
+        var $ = layui.$, active = {
+            reload: function(){
+                var one_id_search = $('#one_id_search').val();
+                var order_name = $('#order_name').val();
+                var begin_create_time = $('#begin_create_time').val();
+                var end_create_time = $('#end_create_time').val();
+                var begin_begin_time = $('#begin_begin_time').val();
+                var end_begin_time = $('#end_begin_time').val();
+                var distributor_name = $('#distributor_name').val();
+                var contect_name = $('#contect_name').val();
+                var create_user_name = $('#create_user_name').val();
+                //执行重载
+                table.reload('testReload', {
+                    page: {
+                        curr: 1 //重新从第 1 页开始
+                    }
+                    ,where: {
+                        is_company_order_search:1,
+                        company_order_number: one_id_search,
+                        order_name:order_name,
+                        begin_create_time:dates(begin_create_time),
+                        end_create_time:dates(end_create_time),
+                        begin_begin_time:dates(begin_begin_time),
+                        end_begin_time:dates(end_begin_time),
+                        distributor_name:distributor_name,
+                        contect_name:contect_name,
+                        create_user_name:create_user_name
+                    }
+                    , url: '/companyorder/getCompanyOrderAjax'
+                    , method: 'post'
+                });
+            }
+        };
+        $('.demoTable .layui-btn').on('click', function(){
+            var type = $(this).data('type');
+            layer.load(2);
+            active[type] ? active[type].call(this) : '';
+        });
+        //删除
+        table.on('tool(orderTable)', function(obj){
+            var data = obj.data;
+            if(obj.event === 'del'){
+                layer.confirm('{$Think.lang.index_branchcompany_showCompanyOrderManage_ok}？', function(index){
+                    $.ajax({
+                        type: "POST",
+                        url: '/branchcompany/del_company_order',
+                        data: {
+                            "company_order_number":data.company_order_number,
+                            "status":0
+                        },
+                        success: function(data){
+                            layer.load(2);
+                            if(data.code!=200){
+                                layer.msg(data.msg);
+                                return false;
+                            }else if(data.code==200) {
+                                layer.closeAll();
+                                layer.msg('{$Think.lang.index_public_success}');
+                            }
+                        }
+                    });
+                });
+            }else if(obj.event==='edit'){
+                location.href="/branchcompany/companyOrderManage?company_order_number="+data.company_order_number;
+            }else if(obj.event==='receipt'){
+                location.href="/branchcompany/showCompanyOrderCustomerGuideReceipt?company_order_number="+data.company_order_number+'&company_order_id='+data.company_order_id;
+            }
+        });
+        function dates(obj) {
+            if(obj!=''){
+                return Math.round(new Date(obj).getTime()/1000).toString();
+            }else{
+                return '';
+            }
+        }
+    });
+</script>
+<script type="text/javascript">
+    function exportApiDemo(url) {
+        layui.use(['jquery', 'excel', 'layer'], function() {
+            var $ = layui.jquery;
+            var layer = layui.layer;
+            var excel = layui.excel;
+
+
+            $.ajax({
+                url: url
+                ,dataType: 'json'
+                ,success: function(res) {
+                    var data = res.data;
+                    data = excel.filterExportData(data, {
+                        company_order_number: 'company_order_number',
+                        order_name: 'order_name'
+                        ,buy_order_time: function (value,line,data) {
+                            return line.buy_order_time!=null?date('Y-m-d',line.buy_order_time):'';
+                        },
+                        customer_count:'customer_count',
+                        create_user_name:'create_user_name',
+                        wr:function (value,line,data) {
+                            return line.wr==1?"retail":"wholesale"
+                        },
+                        clientsource:function (value,line,data) {
+                            return clientsource(line.clientsource);
+                        },
+                        channel_type:function (value,line,data) {
+                            return line.channel_type==1?"{$Think.lang.index_branchcompany_showCompanyOrderManage_agent}":"{$Think.lang.index_branchcompany_showCompanyOrderManage_addEdit_straightGuest}";
+                        },
+                        begin_time:function (value,line,data) {
+                            return line.begin_time!=null?date('Y-m-d',line.begin_time):'';
+                        },
+                        end_time:function (value,line,data) {
+                            return line.end_time!=null?date('Y-m-d',line.end_time):'';
+                        },
+                        begin_city:'begin_city',
+                        distributor_name:function (value,line,data) {
+                            return line.distributor_info?line.distributor_info[0].distributor_name:'';
+                        },
+                        associate_type:function (value,line,data) {
+                            return line.distributor_info?line.distributor_info[0].associate_type!=null?associate_type(line.distributor_info[0].associate_type):'':'';
+                        },
+                        language_name:function (value,line,data) {
+                            return line.distributor_info?line.distributor_info[0].language_name!=null?line.distributor_info[0].language_name:'':'';
+                        },
+                        city_name:function (value,line,data) {
+                            return line.distributor_info?line.distributor_info[0].city_name!=null?line.distributor_info[0].city_name:'':'';
+                        },
+                        province_name:function (value,line,data) {
+                            return line.distributor_info?line.distributor_info[0].province_name!=null?line.distributor_info[0].province_name:'':'';
+                        },
+                        country_name:function (value,line,data) {
+                            return line.distributor_info?line.distributor_info[0].country_name!=null?line.distributor_info[0].country_name:'':'';
+                        },
+                        address:function (value,line,data) {
+                            return line.distributor_info?line.distributor_info[0].address!=null?line.distributor_info[0].address:'':'';
+                        },
+                        zip_code:function (value,line,data) {
+                            return line.distributor_info?line.distributor_info[0].zip_code!=null?line.distributor_info[0].zip_code:'':'';
+                        },
+                        email:function (value,line,data) {
+                            return line.distributor_info?line.distributor_info[0].email!=null?line.distributor_info[0].email:'':line.email!=null?line.email:'';
+                        },
+                        contect:function (value,line,data) {
+                            return line.distributor_info?line.distributor_info[0].contect!=null?line.distributor_info[0].contect:'':line.contect_name!=null?line.contect_name:'';
+                        },
+                        tel:function (value,line,data) {
+                            return line.distributor_info?line.distributor_info[0].tel!=null?line.distributor_info[0].tel:'':line.tel!=null?line.tel:'';
+                        },
+                        remark:function (value,line,data) {
+                            return line.remark!=null?line.remark:'';
+                        },
+                        receivable_money:function (value,line,data) {
+                            return line.receivable_money==0?'0.00':line.receivable_money;
+                        },
+                        price:function (value,line,data) {
+                            return line.company_order_receivable_info.price==0?'0.00':line.company_order_receivable_info.price;
+                        },
+                        tax:function (value,line,data) {
+                            return line.company_order_receivable_info.tax==0?'0.00':line.company_order_receivable_info.tax;
+                        },
+                        miss_sale_receivable:function (value,line,data) {
+                            return line.company_order_receivable_info.miss_sale_receivable==0?'0.00':line.company_order_receivable_info.miss_sale_receivable;
+                        },
+                        sale_receivable:function (value,line,data) {
+                            return line.company_order_receivable_info.sale_receivable==0?'0.00':line.company_order_receivable_info.sale_receivable;
+                        },
+                        miss_finance_receivable:function (value,line,data) {
+                            return line.company_order_receivable_info.miss_finance_receivable==0?'0.00':line.company_order_receivable_info.miss_finance_receivable;
+                        },
+                        finance_receivable:function (value,line,data) {
+                            return line.company_order_receivable_info.finance_receivable==0?'0.00':line.company_order_receivable_info.finance_receivable;
+                        },
+                        cost:function (value,line,data) {
+                            return line.company_order_receivable_info.cost==0?'0.00':line.company_order_receivable_info.cost;
+                        },
+                        huiduisunyi:function (value,line,data) {
+                            return line.company_order_receivable_info.huiduisunyi==0?'0.00':line.company_order_receivable_info.huiduisunyi;
+                        },
+                        maoli:function (value,line,data) {
+                            return line.company_order_receivable_info.maoli==0?'0.00':line.company_order_receivable_info.maoli;
+                        },
+                    });//梳理数据
+                    data.unshift({
+                        company_order_number: '{$Think.lang.index_finance_showReceivableManage_order_number}',
+                        order_name: "{$Think.lang.index_branchcompany_showBranchProductManage_productName}",
+                        buy_order_time: "{$Think.lang.index_branchcompany_showCompanyOrderManage_buyDate}",
+                        customer_count:'{$Think.lang.index_branchcompany_showCompanyOrderManage_buyDate}',
+                        create_user_name:'{$Think.lang.index_system_showCompanyManage_create_user}',
+                        wr:'{$Think.lang.index_branchcompany_showCompanyOrderManage_retail}/{$Think.lang.index_branchcompany_showCompanyOrderManage_wholeSale}',
+                        clientsource:'{$Think.lang.index_branchcompany_showCompanyOrderManage_addEdit_customerSource}',
+                        channel_type:'{$Think.lang.index_branchcompany_showCompanyOrderManage_channelOf_distribution}',
+                        begin_time:'{$Think.lang.index_branchcompany_showBranchProductManage_startDate}',
+                        end_time:'{$Think.lang.index_branchcompany_showBranchProductManage_endDate}',
+                        begin_city:'{$Think.lang.index_branchcompany_showCompanyOrderManage_startCity}',
+                        distributor_name:'{$Think.lang.index_branchcompany_showCompanyOrderManage_channel}',
+                        associate_type:'{$Think.lang.index_branchcompany_showDistributorManage_associateType}',
+                        language_name:'{$Think.lang.index_branchcompany_showBranchProductManage_language}',
+                        city_name:'{$Think.lang.index_branchcompany_showDistributorManage_city}',
+                        province_name:'{$Think.lang.index_branchcompany_showCompanyOrderManage_addEdit_provincialState}',
+                        country_name:'{$Think.lang.index_branchcompany_showCompanyOrderManage_addEdit_country}',
+                        address:'{$Think.lang.index_branchcompany_showDistributorManage_address}',
+                        zip_code:'{$Think.lang.index_branchcompany_showDistributorManage_zipCode}',
+                        email:'{$Think.lang.index_branchcompany_showBranchProductManage_email}',
+                        contect:'{$Think.lang.index_branchcompany_showDistributorManage_contacts}',
+                        tel:'{$Think.lang.index_branchcompany_showCompanyOrderManage_addEdit_tel}',
+                        remark:'{$Think.lang.index_public_mark}',
+                        receivable_money:'{$Think.lang.index_finance_showReceivableManage_receivable_money}',
+                        price:'{$Think.lang.index_branchcompany_showCompanyOrderManage_addEdit_quotedPrice}',
+                        tax:'{$Think.lang.index_branchcompany_showCompanyOrderManage_tax}',
+                        miss_sale_receivable:'{$Think.lang.index_branchcompany_showCompanyOrderManage_sales_outstanding}',
+                        sale_receivable:'{$Think.lang.index_branchcompany_showCompanyOrderManage_sales_received}',
+                        miss_finance_receivable:'{$Think.lang.index_branchcompany_showCompanyOrderManage_financial_uncollected}',
+                        finance_receivable:'{$Think.lang.index_branchcompany_showCompanyOrderManage_financialReceived}',
+                        cost:'{$Think.lang.index_branchcompany_showCompanyOrderManage_addEdit_primeCost}',
+                        huiduisunyi:'{$Think.lang.index_branchcompany_showCompanyOrderManage_exchange}',
+                        maoli:'{$Think.lang.index_branchcompany_showCompanyOrderManage_gross_profit}'
+                    });
+
+                    var timestart = Date.now();
+                    excel.exportExcel({
+                        sheet1: data
+                    }, '{$Think.lang.index_product_PlanBooking_order}.xlsx', 'xlsx');
+                }
+                ,error: function() {
+                    layer.alert('获取数据失败');
+                }
+            });
+        });
+    }
+</script>
+</body>
+</html>

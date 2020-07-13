@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {include file='public/head' /}
+    <title>{$language_tag.index_product_ShowPlanTour_resources_teamProduct}</title>
+    <link href="__STATIC__/css/product.css" rel="stylesheet">
+    <style>
+        .layui-body{
+            overflow: hidden;
+        }
+        .layui-body .layui-table-main{
+            overflow: auto;
+            height:350px;
+            margin-top:10px;
+            border-top:1px solid #e6e6e6;
+        }
+        .layui-body table{
+            margin:0px;
+        }
+        @media screen and (min-width:1680px){
+            .layui-body .layui-table-main{
+                height:580px;
+            }
+        }
+
+    </style>
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+    <div class="layui-header">
+        {include file='public/header' /}
+    </div>
+
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll">
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            {include file='public/left_menu' /}
+        </div>
+    </div>
+
+    <div class="layui-body layui-body-bg">
+
+        <!-- 内容主体区域 -->
+        <div style="padding: 15px 15px 0px;">
+            <div class="body-top">
+                <div class='layui-form-item'>
+                    <span class="layui-breadcrumb" lay-separator="-">
+                        <a>{$language_tag.index_public_homepage}</a>
+                        <a>{$language_tag.index_public_product}</a>
+                        <a><cite>{$language_tag.index_product_ShowPlanTour_resources_teamProduct}</cite></a>
+                    </span>
+                </div>
+                <div class='layui-block all-search-bg'>
+                    <form class="layui-form" action="/product/ShowPlanTour" method="get" >
+                        <div class="layui-row">
+                            <div class="layui-col-md4">
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">{$language_tag.index_product_ShowPlanTour_productNumber}:</label>
+                                    <div class="layui-input-block">
+                                        <input type="text"   name="search_code" value="{$setPlanTourManage.search_code}"  placeholder="{$language_tag.index_product_ShowPlanTour_productNumber}" class="layui-input">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-col-md4">
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">{$language_tag.index_product_ShowPlanTour_teamName}:</label>
+                                    <div class="layui-input-block">
+                                        <input type="text"   name="search_name" value="{$setPlanTourManage.search_name}"  placeholder="{$language_tag.index_product_ShowPlanTour_teamName}" class="layui-input">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-col-md4">
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">{$language_tag.index_public_status}:</label>
+                                    <div class="layui-input-block">
+                                        <select  id="search_status" name="status">
+                                            <option value="" {$setPlanTourManage.status==''?'selected':''} >-{$language_tag.index_public_search_type}-</option>
+                                            <option value="1" {$setPlanTourManage.status=='1'?'selected':''}  }>{$language_tag.index_public_show}</option>
+                                            <option value="0" {$setPlanTourManage.status=='0'?'selected':''}>{$language_tag.index_public_disabled}</option>
+                                            <!--{foreach $PlanTourState as $k=>$vl}-->
+                                            <!--<option value="{$k}" {$setPlanTourManage.search_status==$k?'selected':''}>{$vl}</option>-->
+                                            <!--{/foreach}-->
+
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="layui-col-md4">
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">{$language_tag.index_product_ShowPlanTour_team_status}:</label>
+                                <div class="layui-input-block">
+                                    <select name='search_plur_status'>
+                                         <option value="" {$Think.get.search_plur_status==''?'selected':''}>{$language_tag.index_public_select}</option>
+                                        {foreach $team_statu as $k=>$v}
+                                            <option value="{$v.plur_status}" {php}if(is_numeric($plur_status) and ($plur_status == $v['plur_status'])){echo 'selected';}{/php}>{$language_tag[$v.tag_name]}</option>
+                                        {/foreach}
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="layui-col-md4">
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">{$language_tag.index_product_showRouteTemplateManage_routeType}:</label>
+                                <div class="layui-input-block">
+                                    <select name='search_route_type'>
+                                        <option value="">{$language_tag.index_public_select}</option>
+                                        {foreach $RouteType as $vl}
+                                        <option value="{$vl.route_type_id}" {$setPlanTourManage.search_route_type==$vl.route_type_id?'selected':''}>{$vl.route_type_name}</option>
+                                        {/foreach}
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="layui-col-md4">
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">{$language_tag.index_product_ShowPlanTour_team_principal}:</label>
+                                <div class="layui-input-block">
+                                    <input  type="text" class="layui-input" name="search_responsible_person" value="{$setPlanTourManage.search_responsible_person}" />
+                                </div>
+                            </div>
+                        </div>
+						
+                        <div class="layui-col-md4">
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">{$language_tag.index_product_ShowPlanTour_departureDate}:</label>
+                                <div class='layui-input-block'>
+                                    <div class="layui-input-inline date-width">
+	                                    <input  type="text" class="layui-input all_time_name" name="search_all_time_name" value="{$setPlanTourManage.search_all_time_name}" />
+	                                	
+	                                </div>
+									<div class="date-and">-</div>
+	                                <div class="layui-input-inline date-width">
+	                                    <input  type="text" class="layui-input all_time_name2" name="search_all_time_name2" value="{$setPlanTourManage.search_all_time_name2}" />
+	                                	
+	                                </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <div class="layui-col-md4">
+                            <div class='layui-form-item company_id'>
+                                <label class="layui-form-label">{$language_tag.index_source_showSupplierManage_own_company}:</label>
+                                <div class="layui-input-block">
+                                    <select id="company_id"  name="choose_company_id">
+                                        <option value="0" selected="">{$language_tag.index_source_showSupplierManage_own_company}</option>
+                                        {foreach name='company_result'  item='vo'}
+                                        <option value="{$vo.company_id}" {if condition="$choose_company_id eq  $vo.company_id"}selected='selected'{/if} >{$vo.company_name}</option>
+                                        {/foreach}
+                                    </select>
+                                    <input type="hidden"  id="add_company_id" name="company_id" value="{$Think.session.user.company_id}" >
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="layui-col-md4">
+                            <div class='layui-form-item company_id'>
+                                <label class="layui-form-label">游客已确认:</label>
+                                <div class="layui-input-block">
+                                    <select name="customer_confirm">
+                                        <option value="">全部</option>
+                                        <option value="1" {if condition="$customer_confirm eq 1"}selected='selected'{/if} >是</option>
+                                        <option value="2" {if condition="$customer_confirm eq 2"}selected='selected'{/if} >否</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-col-md4">
+                            <div class='layui-form-item '>
+                                <label class="layui-form-label">{$language_tag.index_product_PlanSuppliersPayable_incomeStatement}:</label>
+                                <div class="layui-input-block">
+                                    <select name="is_profit_approve">
+                                        <option value='all'  {if condition="$Think.get.is_profit_approve eq 'all'"}selected='selected'{/if}>{$language_tag.index_public_select}</option>
+                                        <option value="1" {if condition="$Think.get.is_profit_approve eq 1"}selected='selected'{/if} >{$language_tag.index_branchcompany_showCompanyOrderManage_addEdit_confirmed}</option>
+                                        <option value="0" {if condition="$Think.get.is_profit_approve eq '0'"}selected='selected'{/if} >{$language_tag.index_branchcompany_showCompanyOrderManage_addEdit_unconfirmed}</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="layui-col-md4">
+                            <div class='layui-form-item '>
+                                <label class="layui-form-label">{$language_tag.index_public_company_order_status}:</label>
+                                <div class="layui-input-block">
+                                    <select name="company_order_status">
+                                        <option value='all'  {if condition="$Think.get.company_order_status eq 'all'"}selected='selected'{/if}>{$language_tag.index_public_select}</option>
+                                        <option value="1" {if condition="$Think.get.company_order_status eq 1"}selected='selected'{/if} >{$language_tag.index_branchcompany_showCompanyOrderManage_addEdit_unconfirmed}</option>
+                                        <option value="2" {if condition="$Think.get.company_order_status eq 2"}selected='selected'{/if} >{$language_tag.index_branchcompany_showCompanyOrderManage_addEdit_confirmed}</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="layui-row">
+                            <div class="layui-col-md4 layui-col-md-offset4">
+                                <div class='input-inline all-button-center pages-search-margin'>
+                                    <button class="layui-btn nav-search">{$language_tag.index_public_search}</button>
+                                </div>
+                            </div>
+                        </div>
+                        <!--<div class='layui-button-inline layui-search-inline'>&lt;!&ndash;  layui-button-inline layui-search-inline plan-margin&ndash;&gt;
+                            <button class="layui-btn nav-search">{$language_tag.index_public_search}</button>
+
+                        </div>-->
+
+                    </form>
+<!--                        <div class='layui-button-inline'>&lt;!&ndash;  layui-button-inline plan-margin&ndash;&gt;
+                            <a href='/product/showPlanTourAdd' class="layui-btn nav-add">{$language_tag.index_product_ShowPlanTour_addingTeamProducts}</a>
+                            &lt;!&ndash;<a class="layui-btn pintuan nav-add">{$language_tag.index_product_ShowPlanTour_group_booking}</a>&ndash;&gt;
+                            &lt;!&ndash;<a class="layui-btn">{$language_tag.index_product_PlanBooking_subgroup}</a>&ndash;&gt;
+                        </div>-->
+                </div>
+            </div>
+            <div class="content-bg">
+                <span style="{:action('index/auth/check_auth',['role_id'=>'228'])}"><a href='/product/showPlanTourAdd' class="layui-btn nav-add layui-btn-sm">{$language_tag.index_product_ShowPlanTour_addingTeamProducts}</a></span>
+                <span style="{:action('index/auth/check_auth',['role_id'=>'235'])}"><a class="layui-btn layui-btn-sm pintuan nav-add">{$language_tag.index_product_ShowPlanTour_group_booking}</a></span>
+                <hr>
+                <div class="company-pageHeight">
+                    <table lay-filter="demo" class="layui-table layui-form" >
+                        <thead>
+                        <tr>
+                            <th lay-data="{field:'check_box',type:'checkbox',width:80,fixed:'left'}"><input id="" type="checkbox" title="" lay-skin="primary" lay-filter="all_checkbox_id" /></th>
+                            <th lay-data="{field:'status',width:80,fixed:'left'}">{$language_tag.index_public_status}</th>
+                            <!--<th>拼团编号</th>-->
+                            <th lay-data="{field:'productNumber',width:150,fixed:'left',style:'overflow:hidden'}">{$language_tag.index_product_ShowPlanTour_productNumber}</th>
+                            <th lay-data="{field:'teamName',width:280,fixed:'left',style:'overflow:hidden'}">{$language_tag.index_product_ShowPlanTour_teamName}</th>
+                            <th lay-data="{field:'team_status',width:150,style:'z-index:100'}">{$language_tag.index_product_ShowPlanTour_team_status}</th>
+                            <!--<th>{$language_tag.index_product_showRouteTemplateManage_days}</th>-->
+                            <th lay-data="{field:'routeType',width:180,style:'overflow:hidden'}">{$language_tag.index_product_showRouteTemplateManage_routeType}</th>
+                            <th lay-data="{field:'departureDate',width:180,style:'overflow:hidden'}">{$language_tag.index_product_ShowPlanTour_departureDate}</th>
+                            <th lay-data="{field:'resourceAllocation',width:380,style:'overflow:hidden'}">{$language_tag.index_product_showRouteTemplateManage_resourceAllocation}</th>
+                            <th lay-data="{field:'userName',width:180,style:'overflow:hidden'}">{$language_tag.index_product_showRouteTemplateManage_userName}</th>
+                            <th lay-data="{field:'planToReceiveVisitors',width:180}">{$language_tag.index_product_ShowPlanTour_planToReceiveVisitors}</th>
+                            <th lay-data="{field:'receivedVisitors',width:180,style:'overflow:hidden'}">{$language_tag.index_product_ShowPlanTour_receivedVisitors}</th>
+                            <!--<th>本公司收客</th>-->
+                            <!--<th>{$language_tag.index_product_showRouteTemplateManage_updateTime}</th>-->
+                            <!--<th>{$language_tag.index_product_ShowPlanTour_operatingPersonnel}</th>-->
+                            <th lay-data="{field:'operation',width:400,fixed:'right'}">{$language_tag.index_source_operation}</th>
+                        </tr>
+                        </thead>
+
+                        <tbody>
+
+                        {foreach name="data" item="vl"}
+                        <tr>
+                            <td>
+                                {if $vl.status!=3}
+                                <input class="checkbox_id" value="{$vl.team_product_id}" type="checkbox" title="" lay-skin="primary" />
+                                {/if}
+                            </td>
+                            <td>
+                                <!--{if condition="$vl.status eq 0"}-->
+                                <!--{$language_tag.index_public_disabled}-->
+                                <!--{elseif condition="$vl.status eq 3"}-->
+                                <!--{$language_tag.index_nav_examineAnd_approve}-->
+                                <!--{elseif condition="$vl.status eq 1"}-->
+                                <!--{$language_tag.index_public_show}-->
+                                <!--{/if}-->
+                                {if condition="in_array('229',$auth_id) OR $Think.session.user.role_id eq 1"}<input type="checkbox" data-team="{$vl.team_product_id}" {if condition="$vl.status eq 1"}checked=""{else/}{/if} name="open" lay-skin="switch" lay-filter="switchTest" lay-text="{$language_tag.index_public_show}|{$language_tag.index_public_disabled}">{else/}{if condition="$vl.status eq 1"}{$language_tag.index_public_show}{else}{$language_tag.index_public_disabled}{/if}{/if}
+                            </td>
+                            <!--<th>空</th>-->
+                            {if condition="$Think.session.user.company_id eq $vl.company_id"}
+
+                            <td class="layui-table-cell"><a  href="/product/showPlanTourInfo?plan_id={$vl.team_product_id}" class="layui-table-link">{$vl.team_product_number}</a></td>
+                            {else/}
+                            <td class="layui-table-cell">{$vl.team_product_number}</td>
+
+                            {/if}
+
+                            <td>{$vl.team_product_name}</td>
+                            <td>
+                                <select {if condition="$vl.company_id neq $Think.session.user.company_id"}disabled{/if} class="u_plur_status" lay-filter="u_plur_status" title="{$vl.team_product_id}-{$vl.plur_status}" data-team_product_number="{$vl.team_product_number}" >
+                                {foreach $team_statu as $k=>$v}
+                                <option value="{$v.plur_status}"  {php}if($vl['plur_status'] == $v['plur_status']){echo 'selected ';}{/php}
+
+                                {php}
+                               //if($vl['plur_status'] ==0)
+                               // {
+                               // if($v['plur_status']==0.5)
+                               // {
+                               // echo "";
+                               // }else
+                               // {
+                               // echo "disabled";
+                               // }
+                               // }else if($vl['plur_status'] ==0.5){
+                               // if($v['plur_status']==1)
+                               // {
+                               // echo "";
+                               // }else
+                               // {
+                               // echo "disabled";
+                               // }
+                               // }else{
+                               // echo $vl['plur_status']+1==$v['plur_status']?'':'disabled';
+                               // }
+                                {/php}
+
+
+                                >{$language_tag[$v.tag_name]}</option>
+                                {/foreach}
+                                </select>
+
+
+                            </td>
+
+
+
+
+
+                            <!--<th>{$vl.base_count}</th>-->
+                            <td>{$vl.route_type_name}</td>
+                            <td><?=date('Y-m-d',$vl['begin_time']);?></td>
+                            <td><?php
+                                $source = [];
+                                foreach($vl['supplier_type_id'] as $v)
+                                {
+                                    $source[] = $language_tag[$source_type[$v]];
+                                }
+                                echo implode(",", $source);
+                            ?></td>
+                            <td>{$vl.team_product_user_name}</td>
+                            <td>{$vl.plan_custom_number}</td>
+                            <td>{$vl.stance}</td>
+                            <!--<th>本公司收客</th>-->
+                            <!--<th><?=date('Y-m-d',$vl['update_time'])?></th>-->
+                            <!--<th>{$vl.update_user_name}</th>-->
+
+                            {if $vl.status!=3}
+                            <td>
+                                {if condition="$vl.company_id eq $Think.session.user.company_id"}
+                                <span style="{:action('index/auth/check_auth',['role_id'=>'229'])}"><a href="/product/showPlanTourUpdate?plan_id={$vl.team_product_id}" class="layui-btn layui-btn-sm hover-edit layui-btn-primary">{$language_tag.index_public_update}</a></span>
+                                <span style="{:action('index/auth/check_auth',['role_id'=>'230'])}"><a href="/product/showPlanTourInfo?plan_id={$vl.team_product_id}" class="layui-btn layui-btn-sm hover-edit layui-btn-primary">{$language_tag.index_public_info}</a></span>
+                                <span style="{:action('index/auth/check_auth',['role_id'=>'231'])}"><a class="layui-btn layui-btn-sm hover-edit layui-btn-primary" href="/product/PlanBooking?plan_id={$vl.team_product_id}&number={$vl.team_product_number}">{$language_tag.index_product_ShowPlanTour_product_number}</a></span>
+
+                                <span style="{:action('index/auth/check_auth',['role_id'=>'232'])}"><a class="layui-btn layui-btn-sm hover-edit layui-btn-primary" href="/product/showshowPlanTourGuideReceipt?number={$vl.team_product_number}&team_product_id={$vl.team_product_id}">{$language_tag.index_product_ShowPlanTour_guideBack}</a></span>
+                                {if $vl.plur_status>0} {/if}
+                                <span style="{:action('index/auth/check_auth',['role_id'=>'233'])}"><a class="layui-btn layui-btn-sm hover-edit layui-btn-primary" href="/product/PlanSuppliersPayable?plan_id={$vl.team_product_id}&number={$vl.team_product_number}">{$language_tag.index_product_ShowPlanTour_suppliersPayable}</a></span>
+
+
+                                <span style="{:action('index/auth/check_auth',['role_id'=>'233'])}"><a class="layui-btn layui-btn-sm hover-edit layui-btn-primary" href="/product/buyTeamProduct?plan_id={$vl.team_product_id}&number={$vl.team_product_number}&begin_time={$vl.begin_time}">{$language_tag.index_product_ShowPlanTour_add_order}</a></span>
+                                <!--<a href="/product/showPlanTourInfo?plan_id={$vl.team_product_id}" class="layui-btn">{$language_tag.index_public_info}</a>-->
+                                {if $vl.is_establish_team_product<>1}
+                                <!--<span style="{:action('index/auth/check_auth',['role_id'=>'234'])}"><a class="layui-btn layui-btn-sm hover-edit layui-btn-primary chengtuan" data-info2="{$vl.team_product_id}" data-info="{$vl.team_product_number}">{$language_tag.index_product_showRouteOwnExpenseAdd_conglomerate}</a></span>-->
+                                {/if}
+                                <!--<a class="layui-btn">团队状态</a>-->
+
+                                {else}
+                                <span style="{:action('index/auth/check_auth',['role_id'=>'232'])}"><a class="layui-btn layui-btn-sm hover-edit layui-btn-primary" href="/product/showshowPlanTourGuideReceipt?number={$vl.team_product_number}&team_product_id={$vl.team_product_id}">{$language_tag.index_product_ShowPlanTour_guideBack}</a></span>
+
+                                {/if}
+
+                            </td>
+                            {else/}
+                            <td>
+                                <span style="{:action('index/auth/check_auth',['role_id'=>'230'])}"><a href="/product/showPlanTourAuditingInfo?plan_id={$vl.team_product_id}" class="layui-btn layui-btn-sm hover-edit layui-btn-primary">{$language_tag.index_public_info}</a></span>
+                            </td>
+                            {/if}
+
+                        </tr>
+                        {/foreach}
+                        </tbody>
+
+                    </table>
+                </div>
+                {include file='public/page' /}
+            </div>
+
+             <div class="listButtom" >
+               
+        	</div>
+        </div>
+        
+
+    </div>
+
+    <div class="layui-footer">
+        <!-- 底部固定区域 -->
+        © layui.com - 底部固定区域
+    </div>
+</div>
+{include file='public/foot_js' /}
+<script>
+    var layer = layui.layer;
+
+    var form = layui.form;
+    form.on('switch(switchTest)', function(data){
+        var table_id = $(data.elem).parents("td").find("input").attr("data-team");
+        var table_id_name = "team_product_id";
+        var table_name = "team_product";
+        if(this.checked == true){
+            var status = 1;
+        }else{
+            var status = 0;
+        }
+
+        $.ajax({
+            type: "POST",
+            url: '/index/changeStatus',
+            data: {
+                table_id:table_id,
+                table_id_name:table_id_name,
+                table_name:table_name,
+                status:status,
+            },
+            success: function(data){
+                //console.log(data);
+                if(data.code!=200){
+                    layer.msg(data.msg);
+                    return false;
+                }else if(data.code==200) {
+                    layer.msg('操作成功',{time:1,end : function(layero, index){
+
+                        }
+                    });
+                }
+            },
+            error:function(XMLHttpRequest, textStatus, errorThrown){
+                layer.msg('验证失败')
+            }
+        });
+    });
+
+
+</script>
+<script id="T-PinTuan" type="text/html">
+<form id="F-PinTuan" >
+    <table class="layui-table" style="width:80%;margin: 10px auto">
+        <thead>
+        <tr>
+            <th>{$language_tag.index_product_ShowPlanTour_pinNumber}</th><th>{$language_tag.index_product_ShowPlanTour_productNumber}</th><th>{$language_tag.index_product_ShowPlanTour_teamName}</th>
+        </tr>
+        </thead>
+        <tbody>
+        {{# for(var i = 0, len = d.length; i < len; i++){ }}
+        <tr>
+            {{# if(i==0){ }}
+            <td rowspan="{{d.length}}">{$language_tag.index_product_ShowPlanTour_pinNumber}</td>
+            {{# } }}
+            <td>{{d[i].team_product_number}}</td>
+            <td>{{d[i].team_product_name}}</td>
+            <input type="hidden" name="team_product_id[{{i}}]" value="{{d[i].team_product_id}}" />
+        </tr>
+        {{# } }}
+        </tbody>
+    </table>
+    <div style="text-align: center;margin-bottom: 10px">
+        <a class="layui-btn layui-btn-primary cancel">{$language_tag.index_public_cancel}</a>&nbsp;&nbsp;&nbsp; <a class="layui-btn layui-btn-normal confirm">{$language_tag.index_public_ok}</a>
+    </div>
+</form>
+</script>
+
+
+<script>
+    //JavaScript代码区域
+    !function(){
+        var layer = layui.layer ;
+        var form = layui.form;
+        var laydate = layui.laydate;
+        var table=layui.table;
+        var laytpl=layui.laytpl;
+
+        var table = layui.table;
+
+//转换静态表格
+        var bodyTopH=$(".body-top").height();
+        var bodyH=$(".layui-body").height();
+        var company=bodyH-bodyTopH-15-170;
+        table.init('demo', {
+            height:company+'px',
+            width:'100%',
+            limit:100
+        });
+
+        $('.layui-body .layui-table-main').css('margin-top',0);
+        $('.layui-table-cell, .layui-table-tool-panel li').css('height',40);
+        $('.layui-table-cell, .layui-table-tool-panel li').css('overflow','inherit');
+
+        //常规用法
+        laydate.render({
+            elem: '#search_sdata'
+            ,lang: 'zn'
+        });
+        laydate.render({
+            elem: '#search_edata'
+            ,lang: 'zn'
+        });
+        laydate.render({
+            elem: '.all_time_name'
+            ,lang: 'zn'
+        });
+        laydate.render({
+            elem: '.all_time_name2'
+            ,lang: 'zn'
+        });
+
+        //修改团队状态
+        var sel_plur_status;
+        var plur_status_n = {0:'未成团',1:'5{$language_tag.index_product_showRouteOwnExpenseAdd_conglomerate}',2:'结算',3:'结团'};
+        form.on('select(u_plur_status)', function(data){
+            sel_plur_status = $(data.elem);
+            console.log(data);
+            var plur_status = data.value;
+            var elem_tit = data.elem.title.split('-');
+            var u_team_product_id = elem_tit[0];
+            var e_plur_status = elem_tit[1];
+            var u_team_product_number = $(data.elem).data('team_product_number');
+            layer.open({
+                type: 1
+                ,title: false //不显示标题栏
+                ,closeBtn: false
+                ,area: '300px;'
+                ,shade: 0.8
+                ,id: 'LAY_layuipro' //设定一个id，防止重复弹出
+                ,btn: ['确定', '取消']
+                ,btnAlign: 'c'
+                ,moveType: 1 //拖拽模式，0或者1
+                ,content: '<div style="padding: 50px; line-height: 22px; background-color: #393D49; color: #fff; font-weight: 300;">{$language_tag.index_product_ShowPlanTour_productNumber}：'+u_team_product_number+'<br>确定要修改为'+plur_status_n[plur_status]+'状态吗？</div>'
+                ,success: function(layero){
+                    var btn = layero.find('.layui-layer-btn');
+                    btn.find('.layui-layer-btn0').on('click',function(){
+                        $.post('/product/upPlurStatusAjax',{u_team_product_id:u_team_product_id,plur_status:plur_status,u_team_product_number:u_team_product_number},function(a){
+                            if(a.code==400){
+                                layer.msg(a.msg);
+                            }
+							/*
+                            var h = '';
+                            var sa = parseInt(a.plur_status)+1;
+                            var ea = parseInt(a.plur_status);
+                            for(var ie in plur_status_n){
+                                if(ie==sa){
+                                    h += '<option value="'+ie+'" >'+plur_status_n[ie]+'</option>';
+                                }else{
+                                    if(ie==ea){
+                                        h += '<option value="'+ie+'" selected disabled>'+plur_status_n[ie]+'</option>';
+                                    }else{
+                                        h += '<option value="'+ie+'" disabled>'+plur_status_n[ie]+'</option>';
+                                    }
+
+                                }
+                                var tt = u_team_product_id+'-'+ea;
+                                data.elem.title = tt;
+
+
+                            }
+                            sel_plur_status.html(h);
+                            form.render();
+                            */
+                            window.location.reload()
+                        });
+
+                    });
+                    btn.find('.layui-layer-btn1').on('click',function(){
+                        $(data.elem).val(e_plur_status);
+                        form.render();
+                    });
+                }
+            });
+
+        });
+
+
+        //成团
+        var chentuan_button;
+        $('.chengtuan').click(function(){
+            layer.load(2);
+            var team_product_number =  $(this).data('info');
+            var team_product_id = $(this).data('info2');
+//            alert(team_product_number);
+            chentuan_button = $(this);
+            $.post('/product/chengTuan',{team_product_number:team_product_number,team_product_id:team_product_id},function(){
+                layer.closeAll();
+                chentuan_button.parent().parent().find('th').eq(1).html('{$language_tag.index_product_showRouteOwnExpenseAdd_conglomerate}');
+                chentuan_button.remove();
+            });
+
+
+        });
+
+        //全选
+        form.on('checkbox(all_checkbox_id)', function(data){
+            var child = $(data.elem).parents('thead').siblings("tbody").find('th input[type="checkbox"]');
+            child.each(function(index, item){
+                item.checked = data.elem.checked;
+            });
+            form.render('checkbox');
+        });
+
+
+        $('.pintuan').on('click',function(){
+            var newQ = new Array();
+            $('.checkbox_id').each(function(index, item) {
+                if (item.checked == true) {
+                    newQ.push(item.value);
+                }
+            });
+            if(newQ.length<=1){
+                layer.msg('{$language_tag.index_product_ShowPlanTour_placeholderConglomeration}');
+                return;
+            }
+            layer.load(2);
+            $.post('/product/ConglomerationAjax',{'newQ':newQ},function(a){
+                layer.closeAll('loading'); //关闭loading
+                console.log(a);
+                if(a.code==400){
+                    layer.msg('{$language_tag.index_product_ShowPlanTour_placeholderConglomeration}');
+                    return;
+                }
+
+                var html = $('#T-PinTuan').html();
+                laytpl(html).render(a.data, function(htmll){
+                    layer.open({
+                        title:'',
+                        type: 1,
+                        area: ['60%','600px'],
+                        content: htmll //这里content是一个普通的String
+                    });
+                });
+
+                //取消
+                $('.cancel').on('click',function(){
+                    layer.closeAll();
+                });
+
+                //确认
+                $('.confirm').on('click',function(){
+                    layer.load(2);
+                    $.post('/product/ConfirmConglomerationAjax',$('#F-PinTuan').serializeArray(),function(a){
+                        layer.closeAll('loading'); //关闭loading
+                        if(a.code==400){
+                            layer.msg('{$language_tag.index_public_verificationFailure}');
+                        }else{
+                            layer.msg('{$language_tag.index_public_success}',{time:1});
+                            layer.closeAll();
+                        }
+                        return;
+                    },'json');
+                });
+
+
+
+            },'json');
+        });
+
+        /*按钮*/
+        button()
+        $(window).resize(function () {
+            button()
+        });
+        function button() {
+            var planHeight=$(".plan-tour-form").height();
+            if(planHeight<=43){
+                $(".plan-tour-form").css("padding-bottom","45px")
+            }
+        }
+
+    }();
+
+</script>
+
+</body>
+</html>

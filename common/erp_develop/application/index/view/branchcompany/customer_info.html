@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {include file='public/head' /}
+    <title>{$language_tag.index_branchcompany_showCustomerEdit_edit_customer}</title>
+
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+
+    <div class="layui-header">
+        {include file='public/header' /}
+    </div>
+
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll">
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            {include file='public/left_menu' /}
+        </div>
+    </div>
+
+    <div class="layui-body">
+
+        <!-- 内容主体区域 -->
+        <div style="padding: 15px;">
+            <div class='layui-form-item'>
+		   		<span class="layui-breadcrumb" lay-separator="-">
+                    <a>{$language_tag.index_public_homepage}</a>
+                    <a>{$language_tag.index_branchcompany_showBranchProductManage_branchManagement}</a>
+					<a>{$language_tag.index_branchcompany_showCustomerManage_customerManagement}</a>
+					<a><cite>{$language_tag.index_branchcompany_showCustomerManage_customerInfo}</cite></a>
+				</span>
+            </div>
+            <br/>
+            <br/>
+            <form class="layui-form layui-row all-detail" id="form1" onSubmit="return edit()">
+                <div class="layui-form-item">
+                    <div class="layui-col-md4">
+                        <label class="layui-form-label">{$language_tag.index_public_type}:</label>
+                        <div class="layui-input-block all-select">
+                            <select disabled name="customer_type" required lay-verify="required" class="layui-input" >
+                                <option> </option>
+                                {foreach $CustomerAr as $ky=>$Vl}
+                                <option></option>
+                                <option value="1" {$CustomerAr.customer_type==1?'selected':''} >{$language_tag.index_branchcompany_showBranchProductManage_growUp}</option>
+                                <option value="2" {$CustomerAr.customer_type==2?'selected':''} >{$language_tag.index_branchcompany_showBranchProductManage_childrenInBed}</option>
+                                <option value="3" {$CustomerAr.customer_type==3?'selected':''} >{$language_tag.index_branchcompany_showBranchProductManage_childrenNotInBed}</option>
+                                <option value="4" {$CustomerAr.customer_type==4?'selected':''} >{$language_tag.index_branchcompany_showBranchProductManage_oldMan}</option>
+                                {/foreach}
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <div class="layui-col-md4">
+                        <label class="layui-form-label">{$language_tag.index_branchcompany_showBranchProductManage_name}:</label>
+                        <div class="layui-input-block">
+                            {$CustomerAr.customer_first_name}
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-col-md4">
+                        <label class="layui-form-label">{$language_tag.index_branchcompany_showBranchProductManage_surname}:</label>
+                        <div class="layui-input-block">
+                            {$CustomerAr.customer_last_name}
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-col-md4">
+                        <label class="layui-form-label">{$language_tag.index_branchcompany_showBranchProductManage_sex}:</label>
+                        <div class="layui-input-block all-select">
+                            <select disabled name="gender"  required lay-verify="required" >
+                                <option> </option>
+                                <option value="1" {$CustomerAr.gender==1?'selected':''} >{$language_tag.index_branchcompany_showBranchProductManage_boy}</option>
+                                <option value="2" {$CustomerAr.gender==2?'selected':''}>{$language_tag.index_branchcompany_showBranchProductManage_girl}</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-col-md4">
+                        <label class="layui-form-label">{$language_tag.index_branchcompany_showBranchProductManage_nationality}:</label>
+                        <div class="layui-input-block all-select">
+                            <select disabled name="country_id"  required lay-verify="required" >
+                                <option> </option>
+                                {foreach $CountryList as $CountryListV}
+                                <option value="{$CountryListV.country_id}" {$CustomerAr.country_id==$CountryListV.country_id?"selected":""}>{$CountryListV.country_name}</option>
+                                {/foreach}
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-col-md4">
+                        <label class="layui-form-label ">{$language_tag.index_branchcompany_showCompanyOrderManage_birthday}：</label>
+                        <div class="layui-input-block all-select">
+                            <input disabled {if condition="$CustomerAr.birthday neq ''"}value="<?=date('Y-m-d',$CustomerAr['birthday']);?>"  {/if}
+                            name="birthday" id='birthday' class="layui-input sales-date" />
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-col-md4">
+                        <label class="layui-form-label">{$language_tag.index_branchcompany_showBranchProductManage_language}:</label>
+                        <div class="layui-input-block all-select">
+                            <select disabled name="language_id"  required lay-verify="required" >
+                                <option> </option>
+                                {foreach $langList as $langListV}
+                                <option value="{$langListV.language_id}" {$CustomerAr.language_id==$langListV.language_id?"selected":""}>{$MultilingualAll['language-language_name-'.$langListV.language_id.'-'.$Think.session.user.language_id][0]['translate']|default=$langListV.language_name}</option>
+                                {/foreach}
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-col-md4">
+                        <label class="layui-form-label">{$language_tag.index_branchcompany_showBranchProductManage_phone}:</label>
+                        <div class="layui-input-block">
+                            {$CustomerAr.phone}
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-col-md4">
+                        <label class="layui-form-label">{$language_tag.index_branchcompany_showBranchProductManage_email}:</label>
+                        <div class="layui-input-block">
+                            {$CustomerAr.email}
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-col-md4">
+                        <label class="layui-form-label">{$language_tag.index_branchcompany_showBranchProductManage_passport}:</label>
+                        <div class="layui-input-block">
+                            {$CustomerAr.passport_number}
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-col-md4">
+                        <label class="layui-form-label">{$language_tag.index_branchcompany_showCompanyOrderManage_issueData}:</label>
+                        <div class="layui-input-block all-select">
+                            <input disabled  {if condition="$CustomerAr.issuing_date neq ''"}value="<?=date('Y-m-d',$CustomerAr['issuing_date']);?>"  {/if}
+                            name="issuing_date" id="issuing_date"  class="layui-input sales-date" />
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-col-md4">
+                        <label class="layui-form-label">{$language_tag.index_branchcompany_showBranchProductManage_effectiveDate}:</label>
+                        <div class="layui-input-block all-select">
+                            <input disabled   {if condition="$CustomerAr.term_of_validity neq ''"}value="<?=date('Y-m-d',$CustomerAr['term_of_validity']);?>"  {/if}
+                            name="term_of_validity" id="term_of_validity" class="layui-input sales-date" />
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-col-md4">
+                        <label class="layui-form-label">{$language_tag.index_branchcompany_showBranchProductManage_middleName}:</label>
+                        <div class="layui-input-block">
+                            {$CustomerAr.middle_name}
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-col-md4">
+                        <label class="layui-form-label">{$language_tag.index_branchcompany_showCompanyOrderManage_emergencyContact}:</label>
+                        <div class="layui-input-block all-select">
+                            <input name="emergency_contact" disabled id="emergency_contact"  class="layui-input " value='{$CustomerAr.emergency_contact}'/>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-col-md4">
+                        <label class="layui-form-label">{$language_tag.index_branchcompany_showCompanyOrderManage_emergencyContact_phone}:</label>
+                        <div class="layui-input-block all-select">
+                            <input name="emergency_call" disabled id="emergency_call"  class="layui-input " value='{$CustomerAr.emergency_call}' />
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-col-md4">
+                        <label class="layui-form-label">{$language_tag.index_branchcompany_showDistributorManage_address}:</label>
+                        <div class="layui-input-block all-select">
+                            <input name="address" id="address" disabled  class="layui-input"   value='{$CustomerAr.address}' />
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-col-md4">
+                        <label class="layui-form-label">{$language_tag.index_public_mark}:</label>
+                        <div class="layui-input-block all-select">
+                            <textarea disabled name="remark" required lay-verify="required"  class="layui-textarea">{$CustomerAr.remark}</textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <div class="layui-input-block">
+                        <a href="javascript:history.back(-1)"><button type="button" class="layui-btn layui-btn-primary">{$language_tag.index_public_back}</button></a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="layui-footer">
+        <!-- 底部固定区域 -->
+        © layui.com - 底部固定区域
+    </div>
+</div>
+{include file='public/foot_js' /}
+
+
+<script>
+
+</script>
+
+</body>
+</html>

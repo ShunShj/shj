@@ -1,0 +1,168 @@
+      <ul class="layui-nav layui-nav-tree" id="left-nav" lay-filter="test">
+          <li class="layui-nav-item"><a href="/"><i class="iconfont img-homepage_fill"></i><em>{$Think.lang.index_index_controlPanel}</em></a></li>
+        <li {if condition="$controller_name eq 'source'"} class="layui-nav-item layui-nav-itemed"{else/} class="layui-nav-item" {/if}>
+          <a class="" href="javascript:void(0)"><i class="iconfont img-task_fill"></i><em>{$Think.lang.index_nav_source_administrate}</em></a>
+          <dl class="layui-nav-child">
+
+              <dd {in name="function_name" value="showsuppliermanage,showsuppliermanage,showsupplieradd,showsupplieredit,showsupplierinfo" } class="layui-this"{/in}><a href="/source/showSupplierManage?status=1">{$Think.lang.index_public_supplier}</a></dd>
+              <dd {in name="function_name" value="showagentmanage,showagentsource,showagentadd,showagentedit,showagentinfo" } class="layui-this"{/in}><a href="/source/showAgentManage?status=1">{$Think.lang.index_nav_localTravel_agency}</a></dd>
+              <!--<dd {in name="function_name" value="showagencymanage,showagencyadd,showagencyedit,showagencyinfo"} class="layui-this"{/in}><a href="/source/showAgencyManage?status=1">地接社</a></dd>-->
+              <dd {in name="function_name" value="showhotelmanage,showhotelsource,showhoteladd,showhoteledit,showhotelinfo" } class="layui-this"{/in}><a href="/source/showHotelManage?status=1">{$Think.lang.index_finance_showReceivableManage_hotel}</a></dd>
+              <dd {in name="function_name" value="showdiningmanage,showdiningsource,showdiningadd,showdiningedit,showdininginfo" } class="layui-this"{/in}><a href="/source/showDiningManage?status=1">{$Think.lang.index_finance_showReceivableManage_dining}</a></dd>
+              <dd {in name="function_name" value="showflightmanage,showflightsource,showflightadd,showflightedit,showflightinfo" } class="layui-this"{/in}><a href="/source/showFlightManage?status=1">{$Think.lang.index_finance_showReceivableManage_flight}</a></dd>
+
+            <dd {in name="function_name" value="showcruisesmanage,showcruisessourcemanage,showcruisessourceadd,showcruisessourceedit,showcruisessourceinfo" } class="layui-this"{/in}><a href="/source/showCruisesManage?status=1">{$Think.lang.index_finance_showReceivableManage_cruise}</a></dd>
+            <dd {in name="function_name" value="showvisamanage,showvisasourcemanage,showvisasourceadd,showvisasourceedit,showvisasourceinfo" } class="layui-this"{/in}><a href="/source/showVisaManage?status=1">{$Think.lang.index_finance_showReceivableManage_visa}</a></dd>
+            <dd {in name="function_name" value="showscenicspotmanage,showscenicspotsourcemanage,showscenicspotsourceadd,showscenicspotsourceedit,showscenicspotsourceinfo" } class="layui-this"{/in}><a href="/source/showScenicSpotManage?status=1">{$Think.lang.index_finance_showReceivableManage_scenic_spot}</a></dd>
+            <dd {in name="function_name" value="showvehiclemanage,showvehiclesourcemanage,showvehiclesourceadd,showvehiclesourceedit,showvehiclesourceinfo" } class="layui-this"{/in}><a href="/source/showVehicleManage?status=1">{$Think.lang.index_finance_showReceivableManage_vehicle}</a></dd>
+            <dd {in name="function_name" value="showtourguidemanage,showtourguidesourcemanage,showtourguidesourcemanage,showtourguidesourceedit,showtourguidesourceinfo" } class="layui-this"{/in}><a href="/source/showTourGuideManage?status=1">{$Think.lang.index_finance_showReceivableManage_tourguide}</a></dd>
+
+              <dd {in name="function_name" value="showsinglesourcemanage,showsinglesourcesource,showsinglesourceadd,showsinglesourceedit,showsinglesourceinfo" } class="layui-this"{/in}><a href="/source/showSingleSourceManage?status=1">{$Think.lang.index_finance_showReceivableManage_singlesource}</a></dd>
+              <dd {in name="function_name" value="showownexpensemanage,showownexpensesource,showownexpenseadd,showownexpenseedit,showownexpenseinfo" } class="layui-this"{/in}><a href="/source/showOwnExpenseManage?status=1">{$Think.lang.index_finance_showReceivableManage_ownexpense}</a></dd>
+              <dd {in name="function_name" value="showshoppingmanage,showshoppingsource,showshoppingadd,showshoppingedit,showshoppinginfo"} class="layui-this"{/in}><a href="/source/showShoppingManage?status=1">{$Think.lang.index_nav_shoppingShop}</a></dd>
+              {if condition="$Think.session.user.is_supplier eq 1"}
+              <dd {in name="function_name" value="showcompanysource"} class="layui-this"{/in}><a href="/source/showCompanySource">地接分公司</a></dd>
+              {/if}
+          </dl>
+        </li>
+
+        <li {if condition="$controller_name eq 'product'"} class="layui-nav-item layui-nav-itemed"{else/} class="layui-nav-item" {/if}>
+          <a class="" href="javascript:void(0)"><i class="iconfont img-manage_fill"></i><em>{$Think.lang.index_public_product}</em></a>
+        <dl class="layui-nav-child">
+            <dd {in name="function_name" value="showroutetemplatemanage,showroutetemplatemanage,showroutetemplatadd,showroutetemplateedit,showroutetemplateinfo" } class="layui-this"{/in}><a href="/product/showRouteTemplateManage?status=1">{$Think.lang.index_product_showRouteTemplateManage_route_template}</a></dd>
+            <dd {in name="function_name" value="showplantour,showplantouradd,showplantourupdate,planreceivablebranch,plansupplierspayable,planbooking,planbookinginfo" } class="layui-this"{/in}><a href="/product/ShowPlanTour?status=1">{$Think.lang.index_product_ShowPlanTour_resources_teamProduct}</a></dd>
+
+            <dd {in name="function_name" value="showroutetypemanage,showroutetypemanage,showroutetypeadd,showroutetypeedit,showroutetypeinfo" } class="layui-this"{/in}><a href="/product/showRouteTypeManage?status=1&pid=0">{$Think.lang.index_product_showRouteTemplateManage_routeType}</a></dd>
+            <dd {in name="$function_name" value="showreturnreceiptmanage,showreturnreceiptadd,showreturnreceiptedit,showreturnreceiptinfo" } class="layui-this"{/in}><a href="/product/showReturnReceiptManage">{$Think.lang.index_product_showRouteTemplateManage_receiptTemplate}</a></dd>
+
+            <dd><a href="/product/tourStatistics" target="_blank">各线路人数统计</a></dd>
+        </dl>
+
+        </li>
+
+        <li {if condition="$controller_name eq 'branchcompany'  or  $function_name eq 'showcompanyordermanage'  or  $controller_name eq 'operations'"} class="layui-nav-item layui-nav-itemed"{else/} class="layui-nav-item" {/if}>
+        <a class="" href="javascript:void(0)"><i class="iconfont fen-icon img-2fengongsi"></i><em>{$Think.lang.index_branchcompany_showBranchProductManage_branchManagement}</em></a>
+        <dl class="layui-nav-child">
+            <dd {in name="function_name" value="showbranchproductmanage,showbranchproductmanage,showbranchproductadd,showbranchproductedit,showbranchproductinfo"} class="layui-this" {/in} ><a href="/branchcompany/showBranchProductManage?status=1">{$Think.lang.index_branchcompany_showBranchProductManage_branchProduct}</a></dd>
+          	<dd {in name="function_name" value="showbranchproducttypemanage"} class="layui-this" {/in} ><a href="/branchcompany/showBranchProductTypeManage?status=1">{$Think.lang.index_branchcompany_showBranchProductTypeManage_branchCompanyProductType}</a></dd>
+          	<dd {in name="function_name" value="showcompanyordermanage,companyordermanage,showcompanyordercustomerguidereceipt"} class="layui-this" {/in} ><a href="/branchcompany/showCompanyOrderManage?status=1">{$Think.lang.index_branchcompany_showCompanyOrderManage_orderManagement}</a></dd>
+
+            <dd {in name="function_name" value="showcustomermanage,showcustomeradd,showcustomerinfo,showcustomeredit,showcustomerorder"} class="layui-this" {/in} ><a href="/branchcompany/showCustomerManage?status=1">{$Think.lang.index_branchcompany_showCustomerManage_customerManagement}</a></dd>
+
+            <dd {in name="function_name" value="showcustomersourcemanage,showcustomersourceadd,showcustomersourceinfo,showcustomersourceedit"} class="layui-this" {/in} ><a href="/branchcompany/showCustomerSourceManage?status=1">客户来源</a></dd>
+
+            <dd {in name="function_name" value="showdistributormanage,showdistributoradd,showdistributorinfo,showdistributoredit"} class="layui-this" {/in} ><a href="/branchcompany/showDistributorManage?status=1">{$Think.lang.index_branchcompany_showDistributorManage_channelManagement}</a></dd>
+
+            <dd {in name="function_name" value="types,addoperationstypes,upoperationstypes,index,addoperations,upoperations"} class="layui-this" {/in}><a href="/operations/types">待办模板设置</a></dd>
+            <dd {in name="function_name" value="operationsemail,addoperationsemail,upoperationsemail"} class="layui-this" {/in}><a href="/operations/operationsEmail">待办邮件模板设置</a></dd>
+
+        </dl>
+
+        </li>
+        
+        <li {if condition="$controller_name eq 'bookings'"} class="layui-nav-item layui-nav-itemed"{else/} class="layui-nav-item" {/if}>
+          <a class="" href="javascript:void(0)"><i class="iconfont img-dynamic_fill"></i><em>Bookings</em></a>
+          <dl class="layui-nav-child">
+              <dd {in name="function_name" value="showbookinglist"} class="layui-this" {/in} ><a href="/bookings/showBookingList">BookingList</a></dd>
+          
+               <dd {in name="function_name" value="showclientpaymentlist"} class="layui-this" {/in} ><a href="/bookings/showClientPaymentList">ClientPaymentList</a></dd>
+          
+               <dd {in name="function_name" value="showaccountpaymentlist"} class="layui-this" {/in} ><a href="/bookings/showAccountPaymentList">AccountPaymentList</a></dd>
+          
+                <dd {in name="function_name" value="showcostlist"} class="layui-this" {/in} ><a href="/bookings/showCostList">CostList</a></dd>
+          
+               
+          
+          </dl>
+
+        </li>
+        <!--<li {if condition="$controller_name eq 'sale'"} class="layui-nav-item layui-nav-itemed"{else/} class="layui-nav-item" {/if}>-->
+        <!--<a class="" href="javascript:void(0)">b2b管理</a>-->
+        <!--<dl class="layui-nav-child">-->
+          <!---->
+        <!---->
+        <!--</dl>-->
+
+        <!--</li>-->
+
+        <li {if condition="$controller_name eq 'finance'"} class="layui-nav-item layui-nav-itemed"{else/} class="layui-nav-item" {/if}>
+          <a class="" href="javascript:void(0)"><i class="iconfont img-financial_fill"></i><em>{$Think.lang.index_public_finance}</em></a>
+          <dl class="layui-nav-child">
+              <dd {in name="function_name" value="showreceivablemanage,showreceivableallmanage" } class="layui-this"{/in}><a href="/finance/showReceivableManage?status=1">{$Think.lang.index_finance_showReceivableManage_recevible}</a></dd>
+              <!--<dd {in name="function_name" value="showReceivableAllManage"} class="layui-this" {/in} ><a href="/finance/showReceivableAllManage">应收财务-批量</a></dd>-->
+              <dd {in name="function_name" value="showmustpaymanage,showmustpayallmanage" } class="layui-this"{/in}><a href="/finance/showMustPayManage?status=1">{$Think.lang.index_finance_showMustPayManage_cope}</a></dd>
+              <!--<dd {in name="function_name" value="showMustPayAllManage"} class="layui-this" {/in} ><a href="/finance/showMustPayAllManage">应付财务-批量</a></dd>-->
+              <dd {in name="function_name" value="showagentexpensemanage,showagentexpenseadd" } class="layui-this"{/in}><a href="/finance/showAgentExpenseManage?status=1">{$Think.lang.index_finance_showAgentExpenseManage_travel_agency_reimbursement}</a></dd>
+              <dd {in name="function_name" value="costsharinglist,costsharinginfo,establishmentofascaleofassessments,addcostsharing,upcostsharing" } class="layui-this"{/in}><a href="/finance/CostSharingList?status=1">{$Think.lang.index_finance_CostSharingList_apportion_proportion}</a></dd>
+              <dd {in name="function_name" value="salesreportproducts,salesreportagent" } class="layui-this"{/in}><a href="/finance/SalesReportProducts">{$Think.lang.index_nav_salesReport}</a></dd>
+              <!--<dd {in name="function_name" value="costsheet,codedetail"}  class="layui-this"{/in}><a href="/finance/costSheet">成本报表</a></dd>-->
+              <dd {in name="function_name" value="grossprofitstatistics"}  class="layui-this"{/in} ><a href="/finance/grossProfitStatistics?status=1">{$Think.lang.index_nav_gross_profit_statistics}</a></dd>
+              <dd {in name="function_name" value="profitstatement,editprofitstatement"}  class="layui-this"{/in} ><a href="/finance/profitStatement?status=1">{$Think.lang.index_product_PlanSuppliersPayable_incomeStatement}</a></dd>
+              <dd {in name="function_name" value="balancesheet,editbalancesheet"}  class="layui-this"{/in} ><a href="/finance/balanceSheet?status=1">{$Think.lang.index_nav_balanceSheet}</a></dd>
+          </dl>
+
+        </li>
+        <li {if condition="$controller_name eq 'develop'"} class="layui-nav-item layui-nav-itemed"{else/} class="layui-nav-item" {/if}>
+          <a class="" href="javascript:void(0)"><i class="iconfont img-dynamic_fill"></i><em>{$Think.lang.index_nav_development} </em></a>
+          <dl class="layui-nav-child">
+              <dd {in name="function_name" value="showdeveloplemanage,showimportingmanage"} class="layui-this" {/in} ><a href="/develop/showImportingManage">{$Think.lang.index_nav_importFunction}</a></dd>
+          </dl>
+
+        </li>
+
+          <li {if condition="$controller_name eq 'examineandapprove'"} class="layui-nav-item layui-nav-itemed"{else/} class="layui-nav-item" {/if}>
+          <a class="" href="javascript:void(0)"><i class="iconfont img-dynamic_fill"></i><em>{$Think.lang.index_nav_approvalManagement}</em></a>
+          <dl class="layui-nav-child">
+              <dd {in name="function_name" value="tobeapprovedbyme"} class="layui-this" {/in} ><a href="/examine_and_approve/toBeApprovedByMe">{$Think.lang.index_nav_examineAnd_approve}</a></dd>
+          </dl>
+
+          </li>
+
+          <li {if condition="$controller_name eq 'system'"} class="layui-nav-item layui-nav-itemed"{else/} class="layui-nav-item" {/if}>
+          <a class="" href="javascript:void(0)"><i class="iconfont img-setup_fill"></i><em>{$Think.lang.index_public_system}</em></a>
+          <dl class="layui-nav-child">
+              <dd {in name="function_name" value="showcurrencymanage,showcurrencymanage,showcurrencyadd,showcurrencyedit,showcurrencyinfo" } class="layui-this"{/in}><a href="/system/showCurrencyManage?status=1">{$Think.lang.index_system_showCurrencyManage_currency_manage}</a></dd>
+              <dd {in name="function_name" value="showlanguagemanage,showlanguagemanage,showlanguageadd,showlanguageedit,showlanguageinfo" } class="layui-this"{/in}><a href="/system/showLanguageManage?status=1">{$Think.lang.index_system_showLanguageManage_language_manage}</a></dd>
+              <dd {in name="function_name" value="showcountrymanage,showcountrymanage,showcountrystateadd,showcountrycityadd,showcountryzoneadd,showcountryeditmanage,showcountryinfo" } class="layui-this"{/in}><a href="/system/showCountryManage?status=1">{$Think.lang.index_system_showCountryManage_country_manage}</a></dd>
+
+              <dd {in name="function_name" value="showcompanymanage,showcompanymanage,showcompanyadd,showcompanyedit,showcompanyinfo" } class="layui-this"{/in}><a href="/system/showCompanyManage?status=1">{$Think.lang.index_system_showCompanyManage_company_manage}</a></dd>
+              <dd {in name="function_name" value="showdepartmentmanage,showdepartmentmanage,showdepartmentadd,showdepartmentedit,showdepartmentinfo" } class="layui-this"{/in}><a href="/system/showDepartmentManage?status=1">{$Think.lang.index_system_showDepartmentManage_department_manage}</a></dd>
+             <!--  
+				<dd {in name="function_name" value="showjobmanage,showjobmanage,showjobadd,showjobedit,showjobinfo" } class="layui-this"{/in}><a href="/system/showJobManage">职位管理</a></dd>
+			-->
+              <dd {in name="function_name" value="showusermanage,showusermanage,showuseradd,showuseredit,showuserinfo" } class="layui-this"{/in}><a href="/system/showUserManage?status=1">{$Think.lang.index_system_showUserManage_user_manage}</a></dd>
+              <dd {in name="function_name" value="showrolemanage,showrolemanage,showroleadd,showroleedit,showroleinfo,showAuthConfigEdit"} class="layui-this"{/in}><a href="/system/showRoleManage?status=1">{$Think.lang.index_system_showRoleManage_role_manage}</a></dd>
+              <dd {in name="function_name" value="showauthmanage,showauthmanage,showauthadd,showauthedit,showauthinfo" } class="layui-this"{/in}><a href="/system/showAuthManage?status=1">{$Think.lang.index_system_showAuthManage_auth_manage}</a></dd>
+              <dd {in name="function_name" value="showbilltemplatemanage,，showbilltemplateadd，showbilltemplateedit,showbilltemplateinfo" } class="layui-this"{/in}><a href="/system/showBillTemplateManage?status=1">{$Think.lang.index_nav_billManagement}</a></dd>
+              <dd {in name="function_name" value="showtaxmanage" } class="layui-this"{/in}><a href="/system/showTaxManage?status=1">{$Think.lang.index_nav_taxPoint_management}</a></dd>
+              <dd {in name="function_name" value="showcurrencyproportionmanage,，showcurrencyproportionedit" } class="layui-this"{/in}><a href="/system/showCurrencyProportionManage?status=1">{$Think.lang.index_nav_exchangeRate_management}</a></dd>
+              <dd {in name="function_name" value="showtagmanage,showtagedit,showtagadd"} class="layui-this"{/in}><a
+                  href="/system/showTagManage?status=1">{$Think.lang.index_nav_labelManagement}</a></dd>
+
+              <!--<dd><a href="#">邮件模版</a></dd>-->
+              <!--<dd><a href="#">账单模版</a></dd>-->
+              <!--<dd><a href="#">税点</a></dd>-->
+          </dl>
+          </li>
+
+          <li {if condition="$controller_name eq 'remindermanagement'"} class="layui-nav-item layui-nav-itemed"{else/} class="layui-nav-item" {/if}>
+          <a class="" href="javascript:void(0)"><i class="iconfont img-dynamic_fill"></i><em>{$Think.lang.index_nav_reminderManagement}</em> </a>
+          <dl class="layui-nav-child">
+              <dd {in name="function_name" value="systemremindersettings"} class="layui-this" {/in} ><a href="/reminderManagement/SystemReminderSettings">{$Think.lang.index_nav_system_Reminder_settin}</a></dd>
+              <dd {in name="function_name" value="allinstationletter"} class="layui-this" {/in} ><a href="/reminderManagement/allInStationLetter">{$Think.lang.index_nav_allSystem_messa}</a></dd>
+          </dl>
+
+          </li>
+
+        <!--  
+        <li {if condition="$controller_name eq 'language'"} class="layui-nav-item layui-nav-itemed"{else/} class="layui-nav-item" {/if}>
+          <a class="" href="javascript:void(0)">多语管理</a>
+          <dl class="layui-nav-child">
+
+              <dd {in name="function_name" value="showReceivableManage"} class="layui-this" {/in} ><a href="/finance/showReceivableManage">应收财务</a></dd>
+
+          </dl>
+
+        </li>  
+        -->      
+      </ul>

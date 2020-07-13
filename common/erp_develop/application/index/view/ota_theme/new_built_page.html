@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {include file='public/head' /}
+    <title>网站-添加页面</title>
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+
+    <div class="layui-header">
+        {include file='public/header' /}
+        <link rel="stylesheet" href="__STATIC__/bootstrap-wysihtml5/bootstrap-wysihtml5.css">
+    </div>
+
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll">
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            {include file='public/left_menu_web' /}
+        </div>
+    </div>
+
+    <div class="layui-body">
+
+        <!-- 内容主体区域 -->
+        <div style="padding: 15px;">
+            <div class='layui-form-item'>
+		   		<span class="layui-breadcrumb" lay-separator="-">
+                    <a>首页</a>
+                    <a>网站</a>
+                    <a><cite>添加页面</cite></a>
+				</span>
+            </div>
+
+            <br/>
+            <br/>
+            <br/>
+            <form class="layui-form" id="form1" onSubmit="return add()">
+                <div class="layui-row layui-col-space10">
+                    <div class="layui-row">
+                        <div class="layui-col-md12">
+                            <div class="layui-form-item">
+                                <label class="layui-form-label input-required">页面模块:</label>
+                                <div class="layui-input-block layui-form">
+                                    <select lay-filter="ota_theme_module_id" name="ota_theme_module_id" class="layui-select" lay-verify="required" >
+                                        <option value=""></option>
+                                        {foreach $getThemeModule as $v}
+                                            <option value="{$v.ota_theme_module_id}">{$v.title}</option>
+                                        {/foreach}
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="layui-col-md12">
+                            <div class="layui-form-item">
+                                <label class="layui-form-label input-required">状态:</label>
+                                <div class="layui-input-block layui-form">
+                                    <select  name="page_status" class="layui-select"   >
+                                        <option value="1">使用</option>
+                                        <option value="2">不使用</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-col-md12">
+                            <div class="layui-form-item">
+                                <label class="layui-form-label input-required">标题:</label>
+                                <div class="layui-input-block layui-form">
+                                    <input type="text" name="page_title" class="layui-input" lay-verify="required" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-col-md12">
+                            <div class="layui-form-item">
+                                <label class="layui-form-label input-required">页面浏览量PV:</label>
+                                <div class="layui-input-block layui-form">
+                                    <input type="text" name="pv" class="layui-input" lay-verify="number" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-col-md12">
+                            <div class="layui-form-item">
+                                <label class="layui-form-label input-required">排序（小到大）:</label>
+                                <div class="layui-input-block layui-form">
+                                    <input type="text" name="sort" class="layui-input" lay-verify="number">
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div id="d-html">
+
+                </div>
+
+
+                <div class="layui-form-item">
+                    <div class="layui-input-block all-button-center">
+                        <button class="layui-btn nav-submit" lay-submit="" lay-filter="formDemo" id="addBut">提交</button>
+                        <a href="/ota_theme/page_list"><button type="button" class="layui-btn layui-btn-primary">取消</button></a>
+                    </div>
+                </div>
+
+            </form>
+        </div>
+    </div>
+
+
+    <div class="layui-footer">
+        <!-- 底部固定区域 -->
+        © layui.com - 底部固定区域
+    </div>
+</div>
+{include file='public/foot_js' /}
+<script>
+    var layer = layui.layer;
+    var form = layui.form;
+    var laydate = layui.laydate;
+    var it=1;
+
+    !function() {
+        //获取页面模块
+        form.on('select(ota_theme_module_id)', function(data){
+            var ota_theme_module_id = data.value;
+            layer.load(2);
+            $.post('/ota_theme/getPageModuleComponent',{ota_theme_module_id:ota_theme_module_id},function(a){
+                layer.closeAll();
+                $('#d-html').html(a);
+                form.render();
+            });
+
+        });
+
+
+    }();
+
+
+    function add() {
+        layer.load(2);
+        $.ajax({
+            type: "POST",
+            url: '/ota_theme/newBuiltPageAjax?ota_theme_id={$_GET["ota_theme_id"]}',
+            data: $('#form1').serializeArray(),
+            success: function (data) {
+                layer.closeAll();
+                if(data.code!=200){
+                    layer.msg(data.msg)
+                    return false;
+                }else if(data.code==200){
+                    layer.msg('{$language_tag.index_public_success}',{time:1,end : function(layero, index){
+                        location.href = '/ota_theme/page_list';
+                    }
+                    });
+                }
+            },
+            error:function(XMLHttpRequest, textStatus, errorThrown){
+                layer.closeAll();
+                //console.log(errorThrown)
+                layer.msg('{$language_tag.index_public_verificationFailure}')
+
+            }
+        });
+        return false;
+    }
+</script>
+
+
+<script>
+    // opener.addHotel();
+</script>
+
+</body>
+</html>
+

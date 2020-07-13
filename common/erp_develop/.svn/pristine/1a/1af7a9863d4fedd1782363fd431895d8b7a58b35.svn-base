@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {include file='public/head' /}
+    <title>language-manage</title>
+    <link href="__STATIC__/css/source.css" rel="stylesheet">
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+    <div class="layui-header">
+        {include file='public/header' /}
+    </div>
+
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll">
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            {include file='public/left_menu' /}
+        </div>
+    </div>
+
+    <div class="layui-body">
+
+        <!-- 内容主体区域 -->
+        <div class="agent-source" style="padding: 15px;">
+            <div class='layui-form-item'>
+			<span class="layui-breadcrumb" lay-separator="-">
+                <a>{$language_tag.index_public_homepage}</a>
+				<a>{$language_tag.index_source_showSupplierManage_supplier_administrate}</a>
+                <a>{$language_tag.index_source_showAgentManage_manage_agent}</a>
+				<a><cite>{$language_tag.index_source_showAgentSource_agent_content_set}</cite></a>
+			</span>
+            </div>
+            <div class="layui-tab" lay-filter="test1">
+                <ul class="layui-tab-title" id="list">
+                    <li class="layui-this" lay-id="2">{$language_tag.index_finance_showReceivableManage_hotel}</li>
+                    <li lay-id="3">{$language_tag.index_finance_showReceivableManage_dining}</li>
+                    <li lay-id="4">{$language_tag.index_finance_showReceivableManage_flight}</li>
+                    <li lay-id="5">{$language_tag.index_finance_showReceivableManage_cruise}</li>
+                    <li lay-id="6">{$language_tag.index_finance_showReceivableManage_visa}</li>
+                    <li lay-id="7">{$language_tag.index_finance_showReceivableManage_scenic_spot}</li>
+                    <li lay-id="8">{$language_tag.index_finance_showReceivableManage_vehicle}</li>
+                    <li lay-id="9">{$language_tag.index_finance_showReceivableManage_tourguide}</li>
+                    <li lay-id="10">{$language_tag.index_finance_showReceivableManage_singlesource}</li>
+                    <li lay-id="11">{$language_tag.index_finance_showReceivableManage_ownexpense}</li>
+                </ul>
+                <div class="layui-tab-content">
+                    <div class="layui-tab-item layui-show">
+                        <span style="{:action('index/auth/check_auth',['role_id'=>'177'])}"><a href='/source/showHotelAdd?id={$_GET["supplier_id"]}'>
+                            <button class="layui-btn nav-add">{$language_tag.index_source_showHotelSource_add_source_hotel}</button>
+                        </a></span>
+                        <div class="table-nont">
+                            <table class="layui-table" id="language-table">
+                                <thead>
+                                    <tr>
+                                    <th>{$language_tag.index_source_showHotelSource_id}</th>
+                                    <th>{$language_tag.index_source_showHotelSource_supplier}</th>
+                                    <th>{$language_tag.index_source_showHotelSource_level}</th>
+                                    <th>{$language_tag.index_source_showHotelSource_room_name}</th>
+                                    <th>{$language_tag.index_product_showRouteTemplateManage_resources_costPrice}</th>
+                                    <th>{$language_tag.index_branchcompany_showBranchProductManage_settlementPrice}</th>
+                                    <th>{$language_tag.index_public_status}</th>
+                                    <th class="layui-table-width">{$language_tag.index_source_showHotelManage_operation}</th>
+                                </tr>
+                                </thead>
+                                <tbody id="hotel"></tbody>
+                            </table>
+                        </div>
+                        <div class="listButtom">
+                            {include file='public/page' /}
+                        </div>
+                    </div>
+                    <div class="layui-tab-item">
+                        <span style="{:action('index/auth/check_auth',['role_id'=>'182'])}"><a href='/source/showDiningAdd?id={$_GET["supplier_id"]}'><button class="layui-btn nav-add">{$language_tag.index_source_showDiningSource_add_source_}</button></a></span>
+                        <table class="layui-table" id="language-table">
+                            <thead>
+                            <tr>
+                                <th>{$language_tag.index_source_showDiningSource_id}</th>
+                                <th>{$language_tag.index_source_showDiningSource_supplier}</th>
+                                <th>{$language_tag.index_source_showDiningSource_level}</th>
+                                <th>{$language_tag.index_source_showDiningSource_dining_name}</th>
+                                <th>{$language_tag.index_product_showRouteTemplateManage_resources_costPrice}</th>
+                                <th>{$language_tag.index_branchcompany_showBranchProductManage_settlementPrice}</th>
+                                <th>{$language_tag.index_public_status}</th>
+                                <th class="layui-table-width">{$language_tag.index_source_operation}</th>
+                            </tr>
+                            </thead>
+                            <tbody id="dining"></tbody>
+
+                        </table>
+
+                    </div>
+                    <div class="layui-tab-item">
+                        <span style="{:action('index/auth/check_auth',['role_id'=>'187'])}"><a href='/source/showFlightAdd?id={$_GET["supplier_id"]}'><button class="layui-btn nav-add">{$language_tag.index_source_showFlightSourceManage_add_flight_source}</button></a></span>
+                        <table class="layui-table" id="language-table">
+                            <thead>
+                            <tr>
+                                <th>{$language_tag.index_source_showFlightSourceManage_id}</th>
+                                <th>{$language_tag.index_source_showFlightSourceManage_supplier}</th>
+                                <th>{$language_tag.index_source_showFlightSourceManage_shipping_space}</th>
+                                <th>{$language_tag.index_source_showFlightSourceManage_name}</th>
+                                <th>{$language_tag.index_source_showFlightSourceManage_airplane_type_name}</th>
+                                <th>{$language_tag.index_source_showFlightSourceManage_start}</th>
+                                <th>{$language_tag.index_source_showFlightSourceManage_end}</th>
+                                <th>{$language_tag.index_product_showRouteTemplateManage_resources_costPrice}</th>
+                                <th>{$language_tag.index_branchcompany_showBranchProductManage_settlementPrice}</th>
+                                <th>{$language_tag.index_public_status}</th>
+                                <th class="layui-table-width">{$language_tag.index_source_showFlightSourceManage_operation}</th>
+                            </tr>
+                            </thead>
+
+                            <tbody id="flight">
+                            </tbody>
+
+                        </table>
+                    </div>
+                    <div class="layui-tab-item">
+                        <span style="{:action('index/auth/check_auth',['role_id'=>'192'])}"><a href='/source/showCruisesSourceAdd?id={$_GET["supplier_id"]}'><button class="layui-btn nav-add">{$language_tag.index_source_showCruisesManage_source_add}</button></a></span>
+                        <table class="layui-table" id="language-table">
+                            <thead>
+                            <tr>
+                                <th>{$language_tag.index_source_showCruisesSourceManage_id}</th>
+                                <th>{$language_tag.index_source_showCruisesSourceManage_Supplier}</th>
+                                <th>{$language_tag.index_source_showCruisesManage_CruisesName}</th>
+                                <th>{$language_tag.index_source_showCruisesManage_room_name}</th>
+                                <th>{$language_tag.index_source_showCruisesSourceManage_Deck}</th>
+                                <th>{$language_tag.index_product_showRouteTemplateManage_resources_costPrice}</th>
+                                <th>{$language_tag.index_branchcompany_showBranchProductManage_settlementPrice}</th>
+                                <th>{$language_tag.index_source_showCruisesSourceManage_state}</th>
+                                <!--<th>{$language_tag.index_source_showCruisesSourceManage_FinalOperationTime}</th>-->
+                                <!--<th>{$language_tag.index_source_showCruisesSourceManage_Operator}</th>-->
+                                <th class="layui-table-width">{$language_tag.index_source_showCruisesSourceManage_operation}</th>
+                            </tr>
+                            </thead>
+
+                            <tbody id="cruise">
+                            </tbody>
+
+                        </table>
+                    </div>
+                    <div class="layui-tab-item">
+                        <span style="{:action('index/auth/check_auth',['role_id'=>'197'])}"><a href='/source/showVisaSourceAdd?id={$_GET["supplier_id"]}'><button class="layui-btn nav-add">{$language_tag.index_source_showVisaManage_add_source}</button></a></span>
+                        <table class="layui-table" id="language-table">
+                            <thead>
+                            <tr>
+                                <th>{$language_tag.index_source_showVisaSourceManage_id}</th>
+                                <th>{$language_tag.index_source_showVisaSourceManage_supplier}</th>
+                                <th>{$language_tag.index_source_showVisaSourceManage_visa_name}</th>
+                                <th>{$language_tag.index_source_showVisaSourceManage_related_data}</th>
+                                <th>{$language_tag.index_product_showRouteTemplateManage_resources_costPrice}</th>
+                                <th>{$language_tag.index_branchcompany_showBranchProductManage_settlementPrice}</th>
+                                <th>{$language_tag.index_public_status}</th>
+                                <!--<th>最后操作时间</th>-->
+                                <!--<th>操作人</th>-->
+                                <th class="layui-table-width">{$language_tag.index_source_operation}</th>
+                            </tr>
+                            </thead>
+                            <tbody id="visa">
+                            </tbody>
+
+                        </table>
+                    </div>
+                    <div class="layui-tab-item">
+                        <span style="{:action('index/auth/check_auth',['role_id'=>'202'])}"><a href='/source/showScenicSpotSourceAdd?id={$_GET["supplier_id"]}'><button class="layui-btn nav-add">{$language_tag.index_source_showScenicSpotSourceManage_add_source}</button></a></span>
+                        <table class="layui-table" id="language-table">
+                            <thead>
+                            <tr>
+                                <th>{$language_tag.index_source_showScenicSpotManage_id}</th>
+                                <th>{$language_tag.index_source_showScenicSpotManage_supplier}</th>
+                                <th>{$language_tag.index_source_showScenicSpotSourceManage_source_level}</th>
+                                <th>{$language_tag.index_source_showScenicSpotSourceManage_scenicspot_name}</th>
+                                <th>{$language_tag.index_source_showScenicSpotSourceManage_zone}</th>
+                                <th>{$language_tag.index_product_showRouteTemplateManage_resources_costPrice}</th>
+                                <th>{$language_tag.index_branchcompany_showBranchProductManage_settlementPrice}</th>
+                                <th>{$language_tag.index_public_status}</th>
+                                <!--<th>最后操作时间</th>-->
+                                <!--<th>操作人</th>-->
+                                <th class="layui-table-width">{$language_tag.index_source_operation}</th>
+                            </tr>
+                            </thead>
+                            <tbody id="scenic_spot">
+                            </tbody>
+
+                        </table>
+                    </div>
+                    <div class="layui-tab-item">
+                        <span style="{:action('index/auth/check_auth',['role_id'=>'207'])}"><a href='/source/showVehicleSourceAdd?id={$_GET["supplier_id"]}'><button class="layui-btn nav-add">{$language_tag.index_source_showVehicleSourceManage_add_source}</button></a></span>
+                        <table class="layui-table" id="language-table">
+                            <thead>
+                            <tr>
+                                <th>{$language_tag.index_source_showVehicleManage_id}</th>
+                                <th>{$language_tag.index_source_showVehicleManage_supplier_name}</th>
+                                <th>{$language_tag.index_source_showVehicleSourceManage_vehicle_name}</th>
+                                <th>{$language_tag.index_source_showVehicleSourceManage_driver_name}</th>
+                                <th>{$language_tag.index_source_showVehicleSourceManage_vehicle_number}</th>
+                                <th>{$language_tag.index_source_showVehicleSourceManage_vehicle_load}</th>
+                                <th>{$language_tag.index_product_showRouteTemplateManage_resources_costPrice}</th>
+                                <th>{$language_tag.index_branchcompany_showBranchProductManage_settlementPrice}</th>
+                                <th>{$language_tag.index_public_status}</th>
+                                <!--<th>最后操作时间</th>-->
+                                <!--<th>操作人</th>-->
+                                <th class="layui-table-width">{$language_tag.index_source_operation}</th>
+                            </tr>
+                            </thead>
+                            <tbody id="vehicle">
+
+                            </tbody>
+
+                        </table>
+                    </div>
+                    <div class="layui-tab-item">
+                        <span style="{:action('index/auth/check_auth',['role_id'=>'212'])}"><a href='/source/showTourGuideSourceAdd?id={$_GET["supplier_id"]}'><button class="layui-btn nav-add">{$language_tag.index_source_showTourGuideManage_add_source}</button></a></span>
+                        <table class="layui-table" id="language-table">
+                            <thead>
+                            <tr>
+                                <th>{$language_tag.index_source_showTourGuideManage_id}</th>
+                                <th>{$language_tag.index_public_supplier}</th>
+                                <th>{$language_tag.index_source_showTourGuideSourceManage_tourguide_name}</th>
+                                <th>{$language_tag.index_source_showTourGuideSourceManage_phone_number}</th>
+                                <th>{$language_tag.index_source_showTourGuideSourceManage_guide_id_card}</th>
+                                <th>{$language_tag.index_product_showRouteTemplateManage_resources_costPrice}</th>
+                                <th>{$language_tag.index_branchcompany_showBranchProductManage_settlementPrice}</th>
+                                <th>{$language_tag.index_public_status}</th>
+                                <!--<th>{$language_tag.index_finance_showReceivableManage_currency_name}</th>-->
+                                <!--<th>{$language_tag.index_public_price}</th>-->
+                                <!--<th>最后操作时间</th>-->
+                                <!--<th>操作人</th>-->
+                                <th class="layui-table-width">{$language_tag.index_source_operation}</th>
+                            </tr>
+                            </thead>
+
+                            <tbody id="tour_guide">
+                            </tbody>
+
+                        </table>
+                    </div>
+                    <div class="layui-tab-item">
+                        <span style="{:action('index/auth/check_auth',['role_id'=>'217'])}"><a href='/source/showSingleSourceAdd?id={$_GET["supplier_id"]}'><button class="layui-btn nav-add">{$language_tag.index_source_showSingleSourceManage_add_source}</button></a></span>
+                        <table class="layui-table" id="language-table">
+                            <thead>
+                            <tr>
+                                <th>{$language_tag.index_source_showSingleSourceManage_id}</th>
+                                <th>{$language_tag.index_source_showSingleSourceManage_supplier_name}</th>
+                                <th>{$language_tag.index_source_showSingleSourceSource_single_source_name}</th>
+                                <th>{$language_tag.index_product_showRouteTemplateManage_resources_costPrice}</th>
+                                <th>{$language_tag.index_branchcompany_showBranchProductManage_settlementPrice}</th>
+                                <th>{$language_tag.index_public_status}</th>
+                                <th>{$language_tag.index_source_operation}</th>
+                            </tr>
+                            </thead>
+
+                            <tbody id="single_source">
+                            </tbody>
+
+                        </table>
+                    </div>
+                    <div class="layui-tab-item">
+                        <span style="{:action('index/auth/check_auth',['role_id'=>'222'])}"><a href='/source/showOwnExpenseAdd?id={$_GET["supplier_id"]}'><button class="layui-btn nav-add">{$language_tag.index_source_showOwnExpenseManage_add_source}</button></a></span>
+                        <table class="layui-table" id="language-table">
+                            <thead>
+                            <tr>
+                                <th>{$language_tag.index_source_showOwnExpenseManage_id}</th>
+                                <th>{$language_tag.index_source_showOwnExpenseManage_supplier_name}</th>
+                                <th>{$language_tag.index_source_showOwnExpenseSource_own_expense_name}</th>
+                                <th>{$language_tag.index_product_showRouteTemplateManage_resources_costPrice}</th>
+                                <th>{$language_tag.index_branchcompany_showBranchProductManage_settlementPrice}</th>
+                                <th>{$language_tag.index_public_status}</th>
+                                <th class="layui-table-width">{$language_tag.index_source_operation}</th>
+                            </tr>
+                            </thead>
+                            <tbody id="own_expense">
+                            </tbody>
+
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <div class="layui-input-block agent-save">
+                    <a href='/source/showAgentManage'><button type="button" class="layui-btn layui-btn-primary">{$language_tag.index_public_back}</button></a>
+                </div>
+            </div>
+        </div>
+    </div>
+        <input type="hidden" value="{$Think.get.supplier_type_id}" id="view_supplier_type_id" />
+    <script id="hotel_data" type="text/html">
+        {{#  layui.each(d, function(index, item){ }}
+        <tr>
+            <th>{{ item.hotel_id}}</th>
+            <th>{{$MultilingualAll['supplier-supplier_name-'.item.supplier_id.'-'.$Think.session.user
+                .language_id][0]['translate']|default=item.supplier_name}}</th>
+            <!--<th>{$MultilingualAll['hotel-level_name-'.$vo.hotel_id.'-'.$Think.session.user.language_id][0]['translate']|default=$vo.level_name}</th>-->
+            <!--<th>{$MultilingualAll['hotel-room_name-'.$vo.hotel_id.'-'.$Think.session.user.language_id][0]['translate']|default=$vo.room_name}</th>-->
+            <!--<th>{$vo.normal_price}</th>-->
+            <!--<th>{$vo.normal_settlement_price}</th>-->
+            <!--<th>{if condition="$vo.status eq 1"}{$language_tag.index_public_show}{else/}{$language_tag.index_public_disabled}{/if}-->
+            <!--</th>-->
+            <!--<th>-->
+                            <!--<span style="{:action('index/auth/check_auth',['role_id'=>'178'])}"><a href='/source/showHotelEdit?hotel_id={$vo.hotel_id}'>-->
+                                <!--<button class="layui-btn layui-btn-sm hover-edit layui-btn-primary">-->
+                                    <!--{$language_tag.index_public_update}-->
+                                <!--</button>-->
+                            <!--</a></span>-->
+                <!--<span style="{:action('index/auth/check_auth',['role_id'=>'179'])}"><a href='/source/showHotelInfo?hotel_id={$vo.hotel_id}'>-->
+                                <!--<button class="layui-btn layui-btn-sm hover-details layui-btn-primary">-->
+                                    <!--{$language_tag.index_public_info}-->
+                                <!--</button>-->
+                            <!--</a></span>-->
+                <!--&lt;!&ndash;<a href='/source/showHotelEditLanguage?source_number={$vo.source_number}'><button class="layui-btn layui-btn-sm hover-polylingual layui-btn-primary">{$language_tag.index_public_language}</button></a>&ndash;&gt;-->
+            <!--</th>-->
+        </tr>
+        {{#  }); }}
+    </script>
+
+    <div class="layui-footer">
+        <!-- 底部固定区域 -->
+        © layui.com - 底部固定区域
+    </div>
+</div>
+{include file='public/foot_js' /}
+<script src='__STATIC__/javascript/system/source.js'>
+</script>
+<script>
+
+
+    layui.use(['element','laytpl'], function(){
+        var element = layui.element;
+        var laytpl = layui.laytpl;
+        var view_supplier_type_id = $('#view_supplier_type_id').val()
+        $('#list li').eq(view_supplier_type_id-2).addClass("layui-this").siblings('li').removeClass("layui-this");
+
+        //监听Tab切换，以改变地址hash值
+        element.on('tab(test1)', function(){
+            var supplier_type_id = this.getAttribute('lay-id');
+            location.href='/source/showAgentSource?supplier_id=1&supplier_type_id='+supplier_type_id;
+            // $.ajax({
+            //     type: "post",
+            //     url: "/source/showAgentSource",
+            //     data: {
+            //         supplier_id: 1,
+            //         supplier_type_id: supplier_type_id,
+            //     },
+            //     dataType: "json",
+            //     success: function (result) {
+            //
+            //     },
+            //     error : function(errorMsg) {
+            //         //请求失败时执行该函数
+            //         alert("请求失败")
+            //     }
+            // })
+        });
+    });
+</script>
+</body>
+</html>
+

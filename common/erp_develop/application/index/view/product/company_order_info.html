@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {include file='public/head' /}
+    <title>{$language_tag.index_product_showRouteTemplateManage_receiptTemplate}</title>
+    <style>
+        .order_tab{
+            display: none;
+            background:rgba(0,0,0,0);
+            width:90%;
+            height:42px;
+            position: absolute;
+            top:0px;left:95px
+        }
+    </style>
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+    <div class="layui-header">
+        {include file='public/header' /}
+    </div>
+
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll">
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            {include file='public/left_menu' /}
+        </div>
+    </div>
+
+    <div class="layui-body">
+
+        <!-- 内容主体区域 -->
+        <div style="padding: 15px;">
+            <div class='layui-form-item'>
+                <span class="layui-breadcrumb" lay-separator="-">
+                    <a>{$language_tag.index_public_homepage}</a>
+                    <a>{$language_tag.index_branchcompany_showBranchProductManage_branchManagement}</a>
+                    <a>{$language_tag.index_branchcompany_showCompanyOrderManage_orderManagement}</a>
+                    <a><cite>{$language_tag.index_branchcompany_showCompanyOrderManage_newOrder}</cite></a>
+                </span>
+                <div style="display:inline-block;width:88%;"></div>
+                <span><button class="layui-btn" onclick="all_array_submit();">{$language_tag.index_product_showCompanyOrderBaseInfo_large_arrays_submit}</button></span>
+            </div>
+            <div class="layui-tab layui-tab-brief" lay-filter="companyOrder" style="position: relative">
+                <ul class="layui-tab-title layui-tab-url info">
+                    <li class="layui-this">{$language_tag.index_product_showRouteTemplateManage_information}</li>
+                    <li>{$language_tag.index_branchcompany_showCompanyOrderManage_addEdit_touristInformation}</li>
+                    <li>{$language_tag.index_branchcompany_showCompanyOrderManage_addEdit_product}</li>
+                    <li>{$language_tag.index_branchcompany_showCompanyOrderManage_addEdit_primeCost}</li>
+                    <li>{$language_tag.index_finance_showReceivableManage_receivable_money}/{$language_tag.index_product_showRouteTemplateManage_resources_quotedPrice}</li>
+                    <li>{$language_tag.index_branchcompany_showCompanyOrderManage_addEdit_salesReceipts}</li>
+                </ul>
+                <div class="order_tab" onclick="orderTab()"></div>
+                <br>
+                <div class="layui-tab-content">
+                    <div class="layui-tab-item layui-show">
+                        <div class="layui-form " action="">
+                            <div class="layui-row">
+                                <div class="layui-col-md4">
+                                    <div class="layui-form-item">
+                                        <label class="layui-form-label">W/R</label>
+                                        <div class="layui-input-block">
+                                            <select name="order_wr" id="order_wr" disabled>
+                                                <option value=""></option>
+                                                <option value="1" {if condition="1 eq $base_edit_result.wr"}selected="seleted"{/if}>retail</option>
+                                                <option value="2" {if condition="2 eq $base_edit_result.wr"}selected="seleted"{/if}>wholesale</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="layui-col-md4">
+                                    <div class="layui-form-item">
+                                        <label class="layui-form-label">ClientSource</label>
+                                        <div class="layui-input-block">
+                                            <select name="order_cs" id="order_cs" disabled>
+                                                <option value=""></option>
+                                                <option value="1" {if condition="1 eq $base_edit_result.clientsource"}selected="seleted"{/if}>List Item1</option>
+                                                <option value="2" {if condition="2 eq $base_edit_result.clientsource"}selected="seleted"{/if}>List Item2</option>
+                                                <option value="3" {if condition="3 eq $base_edit_result.clientsource"}selected="seleted"{/if}>List Item3</option>
+                                                <option value="4" {if condition="4 eq $base_edit_result.clientsource"}selected="seleted"{/if}>List Item4</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="layui-col-md4">
+                                    <div class="layui-form-item">
+                                        <div class="layui-input-block" disabled>
+                                            <input type="radio" name="orderGroup" value="{$language_tag.index_product_showCompanyOrderBaseInfo_distributor}" title="{$language_tag.index_product_showCompanyOrderBaseInfo_distributor}" checked>
+                                            <input type="radio" name="orderGroup" value="{$language_tag.index_branchcompany_showCompanyOrderManage_addEdit_straightGuest}" title="{$language_tag.index_branchcompany_showCompanyOrderManage_addEdit_straightGuest}">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <hr>
+                            <div id="show_tp1">
+                                <div class="layui-row">
+                                    <div class="layui-col-md4">
+                                        <div class="layui-form-item">
+                                            <label class="layui-form-label">Company</label>
+                                            <div class="layui-input-block">
+                                                <select name="orderCompany" id="distributor_id" lay-filter="orderCountry" disabled>
+                                                    <option value=""></option>
+                                                    {volist name="distri_butor" id="vo"}
+                                                    <option value="{$vo.distributor_id}" {if condition="$vo.distributor_id eq $base_edit_result.distributor_id"}selected="seleted"{/if}>{$vo.distributor_name}</option>
+                                                    {/volist}
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="layui-col-md4">
+                                        <div class="layui-form-item">
+                                            <label class="layui-form-label">City</label>
+                                            <div class="layui-input-block">
+                                                <input type="text" id="orderCity" name="orderCity" placeholder="{$language_tag.index_public_placeHolder}" autocomplete="off" class="layui-input" value="{$distri_butor_edit_result.city_name}" disabled>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="layui-col-md4">
+                                        <div class="layui-form-item">
+                                            <label class="layui-form-label">Language</label>
+                                            <div class="layui-input-block">
+                                                <input type="text" id="orderLanguage" name="orderLanguage" placeholder="{$language_tag.index_public_placeHolder}" autocomplete="off" class="layui-input" value="{$distri_butor_edit_result.language_name}" disabled>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="layui-row">
+                                    <div class="layui-col-md4">
+                                        <div class="layui-form-item">
+                                            <label class="layui-form-label">associate</label>
+                                            <div class="layui-input-block">
+                                                <select name="orderAssociate" id="orderAssociate" disabled>
+                                                    <option value=""></option>
+                                                    <option value="1" {if condition="1 eq $distri_butor_edit_result.associate_type"}selected="seleted"{/if}>List Item1</option>
+                                                    <option value="2" {if condition="2 eq $distri_butor_edit_result.associate_type"}selected="seleted"{/if}>List Item2</option>
+                                                    <option value="3" {if condition="3 eq $distri_butor_edit_result.associate_type"}selected="seleted"{/if}>List Item3</option>
+                                                    <option value="4" {if condition="4 eq $distri_butor_edit_result.associate_type"}selected="seleted"{/if}>List Item4</option>
+                                                    <option value="5" {if condition="5 eq $distri_butor_edit_result.associate_type"}selected="seleted"{/if}>List Item5</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="layui-col-md4">
+                                        <div class="layui-form-item">
+                                            <label class="layui-form-label">Pro/State</label>
+                                            <div class="layui-input-block">
+                                                <input type="text" id="orderProState" name="orderProState" placeholder="{$language_tag.index_public_placeHolder}" autocomplete="off" class="layui-input" value="{$distri_butor_edit_result.province_name}" disabled>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="layui-col-md4">
+                                        <div class="layui-form-item">
+                                            <label class="layui-form-label">Address</label>
+                                            <div class="layui-input-block">
+                                                <input type="text" id="orderAddress" name="orderAddress" placeholder="{$language_tag.index_public_placeHolder}" autocomplete="off" class="layui-input" value="{$distri_butor_edit_result.address}" disabled>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="layui-row">
+                                    <div class="layui-col-md4">
+                                        <div class="layui-form-item">
+                                            <label class="layui-form-label">contect name</label>
+                                            <div class="layui-input-block">
+                                                <input type="text" id="orderCountryName" name="orderCountryName" placeholder="{$language_tag.index_public_placeHolder}" autocomplete="off" class="layui-input" value="{$distri_butor_edit_result.contect}" disabled>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="layui-col-md4">
+                                        <div class="layui-form-item">
+                                            <label class="layui-form-label">Country</label>
+                                            <div class="layui-input-block">
+                                                <input type="text" id="orderCountry" name="orderCountry" placeholder="{$language_tag.index_public_placeHolder}" autocomplete="off" class="layui-input" value="{$distri_butor_edit_result.country_name}" disabled>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="layui-col-md4">
+                                        <div class="layui-form-item">
+                                            <label class="layui-form-label">PostCode</label>
+                                            <div class="layui-input-block">
+                                                <input type="text" id="orderPostCode" name="orderPostCode" placeholder="{$language_tag.index_public_placeHolder}" autocomplete="off" class="layui-input" value="{$distri_butor_edit_result.zip_code}" disabled>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="layui-row">
+                                    <div class="layui-col-md4">
+                                        <div class="layui-form-item">
+                                            <label class="layui-form-label">Tel</label>
+                                            <div class="layui-input-block">
+                                                <input type="text" id="orderTel" name="orderTel" placeholder="{$language_tag.index_public_placeHolder}" autocomplete="off" class="layui-input" value="{$distri_butor_edit_result.tel}" disabled>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="layui-col-md4">
+                                        <div class="layui-form-item">
+                                            <label class="layui-form-label">Depart Date</label>
+                                            <div class="layui-input-block">
+                                                <input type="text" id="orderStartDate" name="orderStartDate" class="layui-input layui-input-date" id="DepartDate" required placeholder="{$language_tag.index_public_placeHolder}" autocomplete="off" disabled>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="layui-col-md4">
+                                        <div class="layui-form-item">
+                                            <label class="layui-form-label">End Date</label>
+                                            <div class="layui-input-block">
+                                                <input type="text" id="orderEndDate" name="orderEndDate" class="layui-input layui-input-date" id="EndDate" required placeholder="{$language_tag.index_public_placeHolder}" autocomplete="off" disabled>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="layui-row">
+                                    <div class="layui-col-md4">
+                                        <div class="layui-form-item">
+                                            <label class="layui-form-label">Email</label>
+                                            <div class="layui-input-block">
+                                                <input type="text" id="orderEmail" name="orderEmail" placeholder="{$language_tag.index_public_placeHolder}" autocomplete="off" class="layui-input" value="{$distri_butor_edit_result.email}" disabled>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!--<div class="layui-col-md4">-->
+                                    <!--<div class="layui-form-item layui-form-text">-->
+                                    <!--<label class="layui-form-label">Description</label>-->
+                                    <!--<div class="layui-input-block">-->
+                                    <!--<textarea name="orderDescription" placeholder="请输入内容" class="layui-textarea"></textarea>-->
+                                    <!--</div>-->
+                                    <!--</div>-->
+                                    <!--</div>-->
+                                    <div class="layui-col-md4">
+                                        <div class="layui-form-item layui-form-text">
+                                            <label class="layui-form-label">Remark</label>
+                                            <div class="layui-input-block">
+                                                <textarea name="orderRemark" id="order_remark" placeholder="{$language_tag.index_public_placeHolder}{$language_tag.index_product_showRouteTypeManage_content}" class="layui-textarea" disabled>{$base_edit_result.remark}</textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <br>
+                            <div id="show_tp2" style="display:none;">
+                                <div class="layui-row">
+                                    <div class="layui-col-md4">
+                                        <div class="layui-form-item">
+                                            <label class="layui-form-label">contect name</label>
+                                            <div class="layui-input-block">
+                                                <input type="text" id="direct_guest_name" name="orderCountryName" placeholder="{$language_tag.index_public_placeHolder}" autocomplete="off" class="layui-input" value="{$base_edit_result.contect_name}" disabled>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="layui-col-md4">
+                                        <div class="layui-form-item layui-form-text">
+                                            <label class="layui-form-label">Description</label>
+                                            <div class="layui-input-block">
+                                                <textarea id="direct_guest_description" name="orderDescription" placeholder="{$language_tag.index_public_placeHolder}{$language_tag.index_product_showRouteTypeManage_content}" class="layui-textarea" disabled>{$base_edit_result.description}</textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="layui-col-md4">
+                                        <div class="layui-form-item layui-form-text">
+                                            <label class="layui-form-label">Remark</label>
+                                            <div class="layui-input-block">
+                                                <textarea id="direct_guest_remark" name="orderRemark" placeholder="{$language_tag.index_public_placeHolder}{$language_tag.index_product_showRouteTypeManage_content}" class="layui-textarea" disabled>{$base_edit_result.remark}</textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="layui-row">
+                                    <div class="layui-col-md4">
+                                        <div class="layui-form-item">
+                                            <label class="layui-form-label">Tel</label>
+                                            <div class="layui-input-block">
+                                                <input type="text" id="direct_guest_tel" name="orderTel" placeholder="{$language_tag.index_public_placeHolder}" autocomplete="off" class="layui-input" value="{$base_edit_result.tel}" disabled>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="layui-col-md4"></div>
+                                    <div class="layui-col-md4"></div>
+                                </div>
+                                <div class="layui-row">
+                                    <div class="layui-col-md4">
+                                        <div class="layui-form-item">
+                                            <label class="layui-form-label">Email</label>
+                                            <div class="layui-input-block">
+                                                <input type="text" id="direct_guest_email" name="orderEmail" placeholder="{$language_tag.index_public_placeHolder}" autocomplete="off" class="layui-input" value="{$base_edit_result.email}" disabled>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="layui-col-md4"></div>
+                                    <div class="layui-col-md4"></div>
+                                </div>
+                            </div>
+                            <div class="layui-row">
+                                <div class="layui-form-button" style="text-align: center">
+                                    <button class="layui-btn nav-submit" lay-submit="" lay-filter="companySubmit">{$language_tag.index_public_submit}</button>
+                                    <a href="javascript:history.back(-1)">
+                                        <button type="button" class="layui-btn layui-btn-primary">{$language_tag.index_public_back}</button>
+                                    </a>
+                                </div>
+                            </div>
+                            </form>
+                        </div><!--基本信息-->
+                    </div>
+                </div>
+            </div>
+        </div>
+        <input type="hidden" id="template_do" value="1">
+        <input type="hidden" id="base_edit" value="">
+        <div class="layui-footer">
+            <!-- 底部固定区域 -->
+            © layui.com - 底部固定区域
+        </div>
+    </div>
+    {include file='public/foot_js' /}
+    <script src='__STATIC__/javascript/product/all.js'></script>
+    <script src='__STATIC__/javascript/product/base.js'></script>
+</body>
+</html>

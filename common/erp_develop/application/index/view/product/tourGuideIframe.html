@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en" style="height: 100%">
+<head>
+    {include file='public/head' /}
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link href="__STATIC__/css/product.css" rel="stylesheet">
+    <style rel="stylesheet">
+        .containers{width: 1000px;margin: 0 auto;font-size: 16px;}
+        .fl{float: left}
+        .fr{float: right}
+        .header{
+            overflow: hidden;
+            padding-top: 30px;
+        }
+        .header_left{
+            font-size: 22px;
+            line-height: 34px;
+            width: 650px;
+        }
+        .header_right{
+            font-size: 15px;
+            text-align: right;
+            line-height: 22px;
+        }
+        .header-right-bold{
+            font-weight: bold;
+            margin-right: 20px;
+        }
+        .voucher_title{
+            font-size: 26px;
+            font-weight: 600;
+            color: #1379BC;
+            border-bottom: 7px solid #1379BC;
+            padding-bottom:5px;
+        }
+        .plan_list{
+            margin:10px 0px 20px;
+        }
+        .plan_list .voucher_title img,.other_title img{
+            vertical-align: bottom;
+        }
+        .div_clear{overflow: hidden;font-size: 22px;line-height: 32px;}
+        .div_clear .fl{
+            margin-right: 40px;
+        }
+        .tour_Voucher{position: relative;}
+        .tour_Voucher .w{
+            width: 200px;
+        }
+        .tour_Voucher .t{
+            width: 120px;
+        }
+        .tour-pos{position: absolute;right: 0px;top:70px;line-height: 22px;text-align: right;font-size: 14px;}
+        .other_title{
+            color: #25AAE1;
+            font-size: 26px;
+            font-weight: 600;
+        }
+        .other_title_border{
+            border-bottom: 7px solid #25AAE1;
+        }
+        table,table th,table td{border: none}
+        table{width: 100%}
+        thead{;text-align: left;background: #25A9E0;color: #fff;font-size: 16px;}
+        th{padding: 5px 25px;font-weight: normal}
+        .layui-input-block{
+            line-height: 38px!important;
+            margin-left: 0px !important;
+        }
+        .voucher_title{
+            font-size: 26px;
+            font-weight: 600;
+            color: #1379BC;
+            border-bottom: 7px solid #1379BC;
+            padding-bottom:5px;
+        }
+        thead {
+            display: table-row-group;
+            word-wrap: break-word;
+        }
+        tr {
+            page-break-before: always;
+            page-break-after: always;
+            page-break-inside: avoid;
+        }
+        table td {
+            word-break: break-all;
+            padding:5px 10px;
+        }
+    </style>
+</head>
+<body id="container" style="height: 100%;">
+<div class="layui-layout layui-layout-admin">
+    <div class="containers">
+        <div class="plan_list" style="margin-top:0px!important;padding-top:30px">
+            <div class="voucher_title"><img src="__STATIC__/image/branchcompany/Tour_Voucher.png" />行程单</div>
+            <div class="tour_Voucher">
+                <div class="layui-row">
+                    <label class="layui-form-label">团名:</label>
+                    <span class="layui-input-block" id="team_product_name">
+
+                                    </span>
+                </div>
+                <div class="layui-row">
+                    <label class="layui-form-label">产品编号:</label>
+                    <span class="layui-input-block" id="team_product_number">
+
+                                    </span>
+                </div>
+                <div class="layui-row">
+                    <label class="layui-form-label">出发日期:</label>
+                    <span class="layui-input-block" id="begin_time">
+
+                                    </span>
+                </div>
+                <div class="layui-row">
+                    <label class="layui-form-label">操作日志:</label>
+                    <textarea class="layui-input-block" id="operational_log" style="border:none;width: 70%;resize: none">
+
+                                    </textarea>
+                </div>
+            </div>
+        </div><!--行程单-->
+        <div class="plan_list">
+            <div class="other_title"><img src="__STATIC__/image/branchcompany/Itinerary.png" />行程</div>
+            <table>
+                <thead>
+                <tr>
+                    <th style="width: 110px">日期</th>
+                    <th style="width:130px">行程标题</th>
+                    <th style="width:190px">景点</th>
+                    <th class="eats" style="width: 100px">用餐</th>
+                    <th style="width: 100px">酒店</th>
+                    <th style="width: 50px">人数</th>
+                    <th style="width: 150px">用房数</th>
+                    <th style="width: 130px">备注</th>
+                </tr>
+                </thead>
+                <tbody id="team_product_journey"></tbody>
+            </table>
+        </div><!--住宿-->
+        <div class="plan_list">
+            <div class="other_title"><img src="__STATIC__/image/branchcompany/Travellers.png" />客人名单</div>
+            <table>
+                <thead>
+                <tr>
+                    <th style="min-width: 80px">游客编号</th>
+                    <!--<th>{$language_tag.index_public_type}</th>-->
+                    <th>姓</th>
+                    <th>名</th>
+                    <th>性别</th>
+                    <th>年龄</th>
+                    <th>国籍</th>
+                    <th>护照</th>
+                    <!--<th>{$language_tag.index_branchcompany_showBranchProductManage_phone}</th>-->
+                    <th>有效期</th>
+                    <th>语言</th>
+                </tr>
+                </thead>
+                <tbody id="order_customers"></tbody>
+            </table>
+        </div><!--客人名单-->
+        <div class="plan_list">
+            <div class="other_title"><img src="__STATIC__/image/branchcompany/Hotel_Accommodation.png" />住宿信息</div>
+            <table>
+                <thead>
+                <tr>
+                    <th>游客编号</th>
+                    <th>姓</th>
+                    <th>名</th>
+                    <th>房型</th>
+                    <th>入住</th>
+                    <th>退房</th>
+                </tr>
+                </thead>
+                <tbody id="information"></tbody>
+            </table>
+        </div><!--住宿-->
+        <div class="plan_list">
+            <div class="other_title"><img src="__STATIC__/image/branchcompany/Transfer_Service.png" />接送机</div>
+            <table>
+                <thead>
+                <tr>
+                    <th>航班</th>
+                    <th>日期</th>
+                    <th>出发地</th>
+                    <th>目的地</th>
+                    <th>时间</th>
+                    <th>人数</th>
+                    <th style="max-width: 23%">接送机名单</th>
+                    <th style="max-width: 180px">备注</th>
+                </tr>
+                </thead>
+                <tbody id="team_product_flight"></tbody>
+            </table>
+        </div><!--接送机服务-->
+        <div class="plan_list">
+            <div class="other_title other_title_border"><img src="__STATIC__/image/branchcompany/Tour_Option.png" />自费项目</div>
+            <table>
+                <thead>
+                <tr>
+                    <th>产品</th>
+                    <!--<th>{$language_tag.index_product_showRouteTemplateManage_resources_currency}</th>
+                    <th>{$language_tag.index_product_showRouteTemplateManage_resources_price}</th>-->
+                    <th style="min-width:23%">游客</th>
+                </tr>
+                </thead>
+                <tbody id="team_product_single_source"></tbody>
+            </table>
+        </div><!--自费-->
+        <div class="plan_list">
+            <div class="other_title other_title_border"><img src="__STATIC__/image/branchcompany/Remark.png" />特殊要求</div>
+            <table>
+                <thead>
+                <tr>
+                    <th>游客编号</th>
+                    <th>姓</th>
+                    <th>名</th>
+                    <th>特殊要求</th>
+                </tr>
+                </thead>
+                <tbody id="special_claim"></tbody>
+            </table>
+        </div><!--特殊要求-->
+        <div id="return_receipt"></div>
+    </div>
+    <input type="hidden" name="number" value="{$number}" id="number" />
+    <input type="hidden" name="number" value="{$team_product_id}" id="team_product_id" />
+</div>
+<script id="demo" type="text/html">
+    {{#  layui.each(d, function(index, item){ }}
+    <div class="plan_list">
+        <div class="other_title other_title_border"><img src="__STATIC__/image/branchcompany/Notice.png" />{{item.title}}</div>
+        <div class="infomation-list-line">
+            {{item.content}}
+        </div>
+    </div>
+    {{#  }); }}
+</script>
+{include file='public/foot_js' /}
+<script type="text/javascript" src="__STATIC__/javascript/data.js"></script>
+<script type="text/javascript" src="__STATIC__/javascript/product/tourGuideIframe.js"></script>
+<script type="text/javascript" src="__STATIC__/javascript/product/all.js"></script>
+<script>
+    var breakfast = '{$language_tag.index_public_breakfast}';
+    var lunch = '{$language_tag.index_public_lunch}';
+    var supper = '{$language_tag.index_public_dinner}';
+</script>
+</body>
+</html>

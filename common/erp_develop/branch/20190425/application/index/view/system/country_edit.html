@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {include file='public/head' /}
+    <title>currency-manage-edit</title>
+    <style>
+        .layui-form .layui-form-label {
+            width: 115px;
+        }
+        .layui-form .layui-input-block {
+            margin-left: 145px;
+        }
+    </style>
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+
+    <div class="layui-header">
+        {include file='public/header' /}
+    </div>
+
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll">
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            {include file='public/left_menu' /}
+        </div>
+    </div>
+
+    <div class="layui-body">
+
+        <!-- 内容主体区域 -->
+        <div style="padding: 15px;">
+            <div class='layui-form-item'>
+		   		<span class="layui-breadcrumb" lay-separator="-">
+                    <a>{$Think.lang.index_public_homepage}</a>
+					<a>{$Think.lang.index_public_system}</a>
+					<a>{$Think.lang.index_system_showCountryManage_country_manage}</a>
+					<a><cite>{if condition="$Think.get.level eq 1"}{$Think.lang.index_system_showCountryManage_edit_country}{/if}
+                        {if condition="$Think.get.level eq 2"}{$Think.lang.index_system_showCountryManage_edit_city}{/if}
+                        {if condition="$Think.get.level eq 3"}{$Think.lang.index_system_showCountryManage_edit_zone}{/if}
+
+                    </cite></a>
+				</span>
+            </div>
+            <br/>
+            <br/>
+            <div class="layui-row">
+                <form class="layui-form layui-col-md4" onSubmit="return country_edit()">
+                    <div class="layui-form-item" id="country" >
+                        <label class="layui-form-label input-required">{$Think.lang.index_system_showCountryManage_own_country}:</label>
+                        <div class="layui-input-block layui-form" >
+                            <select id='country_id' lay-search>
+                                {foreach name="country_level1_result" item='vo'}
+
+                                <option {if condition="$data.pid eq $vo.country_id"} selected {/if} value="{$vo.country_id}">{$vo.country_name}</option>
+
+                                {/foreach}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="layui-form-item" id="city">
+                        <label class="layui-form-label input-required">{$Think.lang.index_system_showCountryManage_own_country_city}:</label>
+                        <div class="layui-input-block layui-form" >
+                            <select id='province_id' lay-search>
+                                {foreach name="country_level2_result" item='vo'}
+
+                                <option {if condition="$data.pid eq $vo.province_id"} selected {/if} value="{$vo.province_id}">{$vo.country_name}-{$vo.province_name}</option>
+
+                                {/foreach}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label input-required">{$Think.lang.index_system_showCountryManage_name}:</label>
+                        <div class="layui-input-block layui-form" >
+                            <input id="edit_ct_country_name" name="country_name" required="" lay-verify="required" placeholder="{$Think.lang.index_system_showCountryManage_input_name}" autocomplete="off" class="layui-input" type="text" value="{$data.country_name}">
+                            <i class="iconfont icon-fanyifuwu" style="position: absolute;width: 38px;height: 38px;top: 0px;right: 0px;font-size:
+                                   35px;cursor:pointer;"
+                                   onclick="MultilingualSetting('edit_ct_country_name','country','country_name',{$_GET['country_id']})"></i>
+                        </div>
+                    </div>
+                    {if condition="$data.level eq 1"}
+                    <div class="layui-form-item">
+                        <label class="layui-form-label input-required">{$Think.lang.index_system_showCountryManage_country_code}:</label>
+                        <div class="layui-input-block">
+                            <input id="edit_ct_code" name="country_code" required="" lay-verify="required" placeholder="{$Think.lang.index_system_showCountryManage_input_country_code}" autocomplete="off" class="layui-input" type="text" value="{$data.country_code}">
+                        </div>
+                    </div>
+                    {/if}
+                    <input id="edit_ct_level" name="level" type="hidden" value="{$data.level}" required="" lay-verify="required" placeholder="{$Think.lang.index_system_showCountryManage_input_level}" autocomplete="off" class="layui-input"  >
+                    {if condition="$data.level eq 3"}
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">{$Think.lang.index_system_showCountryManage_currency}:</label>
+                        <div class="layui-input-block layui-form" >
+                            <select id="edit_ct_currency_name" name="currency_name"   lay-filter="country_name" lay-search>
+                                {foreach name='data_currency'  item='vo'}
+                                <option value="{$vo.currency_id}" {if condition="$vo.currency_id eq $data.currency_id"}selected{/if}>{$vo.currency_name}</option>
+                                {/foreach}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">{$Think.lang.index_system_showCountryManage_language}:</label>
+                        <div class="layui-input-block layui-form" >
+                            <select id="edit_ct_language_name" name="language_name"   lay-filter="country_name" lay-search>
+                                {{foreach name='data_language'  item='vo'}
+                                <option value="{$vo.language_id}" {if condition="$vo.language_id eq $data.language_id"}selected{/if}>{$vo.language_name}</option>
+                                {/foreach}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">{$Think.lang.index_system_showCountryManage_time_zone}:</label>
+                        <div class="layui-input-block">
+                            <input id="edit_ct_timezone" name="timezone"  placeholder="{$Think.lang.index_system_showCountryManage_input_time_zone}" autocomplete="off" class="layui-input" type="text" value="{$data.timezone}">
+                        </div>
+                    </div>
+                    {/if}
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">{$Think.lang.index_public_status}:</label>
+                        <div class="layui-input-block">
+                            <select name="status" id="edit_ct_status" lay-filter="required" >
+                                {if condition="$data.status eq 1"}
+                                <option value="1" selected>{$Think.lang.index_public_show}</option>
+                                <option value="2">{$Think.lang.index_public_disabled}</option>
+                                {else}
+                                <option value="1">{$Think.lang.index_public_show}</option>
+                                <option value="2" selected>{$Think.lang.index_public_disabled}</option>
+                                {/if}
+                            </select>
+                        </div>
+                    </div>
+                    <br/>
+                    <div class="layui-form-item">
+                        <div class="layui-input-block">
+                            <button class="layui-btn nav-submit" lay-submit="" lay-filter="formDemo" id="country_edit_button">{$Think.lang.index_public_submit}</button>
+                            <a href='/system/showCountryManage'><button type="button" class="layui-btn layui-btn-primary">{$Think.lang.index_public_back}</button></a>
+                            <input type="hidden" id="country_id_hidden" name="country_id" value="{$data.country_id}">
+                            <input type="hidden" id="country_level_hidden" value="{$Think.get.level}">
+
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="layui-footer">
+        <!-- 底部固定区域 -->
+        © layui.com - 底部固定区域
+    </div>
+</div>
+{include file='public/foot_js' /}
+<script src='__STATIC__/javascript/system/system.js'></script>
+</body>
+</html>
+

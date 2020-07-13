@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {include file='public/head' /}
+    <title>{$language_tag.index_public_add}{$language_tag.index_public_channel}</title>
+
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+
+    <div class="layui-header">
+        {include file='public/header' /}
+    </div>
+
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll">
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            {include file='public/left_menu_booknexus' /}
+        </div>
+    </div>
+
+    <div class="layui-body">
+
+        <!-- 内容主体区域 -->
+        <div style="padding: 15px;">
+            <div class='layui-form-item'>
+		   		<span class="layui-breadcrumb" lay-separator="-">
+                    <a>{$language_tag.index_public_homepage}</a>
+                    <a>B2B</a>
+					<a>{$language_tag.index_branchcompany_showDistributorManage_channelManagement}</a>
+					<a><cite>{$language_tag.index_branchcompany_showDistributorManage_addChannel}</cite></a>
+				</span>
+            </div>
+            <br/>
+            <br/>
+            <form class="layui-form" id="form1" onSubmit="return add()">
+                <div class="layui-form-item">
+                    <div class="layui-col-md4">
+                        <label class="layui-form-label input-required">{$language_tag.index_branchcompany_showDistributorManage_channelName}:</label>
+                        <div class="layui-input-block">
+                            <input name="distributor_name" required lay-verify="required" autocomplete="off" class="layui-input" />
+                        </div>
+                    </div>
+                    <div class="layui-col-md4">
+                        <label class="layui-form-label input-required">Company Code:</label>
+                        <div class="layui-input-block">
+                            <input name="distributor_code" required lay-verify="required" autocomplete="off" class="layui-input" />
+                        </div>
+                    </div>
+                    <div class="layui-col-md4">
+                        <label class="layui-form-label input-required">{$language_tag.index_branchcompany_showDistributorManage_associateType}:</label>
+                        <div class="layui-input-block">
+                            <select name="distributor_type"  required lay-verify="required" >
+                                <option value="">{$language_tag.index_public_select}</option>
+                                {foreach name='result'  item='vo'}
+                                <option value="{$vo.distributor_type_id}">{$vo.distributor_type_name}</option>
+                                {/foreach}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="layui-col-md4">
+                        <label class="layui-form-label">Company Name Chinese:</label>
+                        <div class="layui-input-block">
+                            <input name="distributor_name_chinese"  autocomplete="off" class="layui-input" />
+                        </div>
+                    </div>
+                    <div class="layui-col-md4">
+                        <label class="layui-form-label">Licence:</label>
+                        <div class="layui-input-block">
+                            <input name="licence"  autocomplete="off" class="layui-input" />
+                        </div>
+                    </div>
+                    <div class="layui-col-md4">
+                        <label class="layui-form-label">TCF:</label>
+                        <div class="layui-input-block">
+                            <input name="tcf"  autocomplete="off" class="layui-input" />
+                        </div>
+                    </div>
+                    <div class="layui-col-md4">
+                        <label class="layui-form-label">ABN:</label>
+                        <div class="layui-input-block">
+                            <input name="abn"  autocomplete="off" class="layui-input" />
+                        </div>
+                    </div>
+                    <div class="layui-col-md4">
+                        <label class="layui-form-label">Manager:</label>
+                        <div class="layui-input-block">
+                            <input name="manager"  autocomplete="off" class="layui-input" />
+                        </div>
+                    </div>
+                    <div class="layui-col-md4">
+                        <label class="layui-form-label">Accountant:</label>
+                        <div class="layui-input-block">
+                            <input name="accountant"  autocomplete="off" class="layui-input" />
+                        </div>
+                    </div>
+                    <div class="layui-col-md4">
+                        <label class="layui-form-label">Email1:</label>
+                        <div class="layui-input-block">
+                            <input name="emailone"  autocomplete="off" class="layui-input" />
+                        </div>
+                    </div>
+                    <div class="layui-col-md4">
+                        <label class="layui-form-label">Email2:</label>
+                        <div class="layui-input-block">
+                            <input name="emailtwo"  autocomplete="off" class="layui-input" />
+                        </div>
+                    </div>
+                    <div class="layui-col-md4">
+                        <label class="layui-form-label">Email3:</label>
+                        <div class="layui-input-block">
+                            <input name="emailthree"  autocomplete="off" class="layui-input" />
+                        </div>
+                    </div>
+
+                    <div class="layui-col-md4">
+                        <label class="layui-form-label">Phone:</label>
+                        <div class="layui-input-block">
+                            <input name="phone"  autocomplete="off" class="layui-input" />
+                        </div>
+                    </div>
+                    <div class="layui-col-md4">
+                        <label class="layui-form-label">Fax:</label>
+                        <div class="layui-input-block">
+                            <input name="fax"  autocomplete="off" class="layui-input" />
+                        </div>
+                    </div>
+                    <div class="layui-col-md4">
+                        <label class="layui-form-label">Emergency Contact:</label>
+                        <div class="layui-input-block">
+                            <input name="emergency_contact"  autocomplete="off" class="layui-input" />
+                        </div>
+                    </div>
+                    <div class="layui-col-md4">
+                        <label class="layui-form-label">Website:</label>
+                        <div class="layui-input-block">
+                            <input name="website"  autocomplete="off" class="layui-input" />
+                        </div>
+                    </div>
+                    <div class="layui-col-md4">
+                        <label class="layui-form-label ">Logo：</label>
+                        <div class="layui-input-block bill-picture">
+                            <button type="button" class="layui-btn" id="pic">
+                                <i class="layui-icon">&#xe67c;</i>上传图片
+                            </button>
+                            <div class="upload-hide" onclick="submit_add(this)"></div>
+                        </div>
+                        <div id="u-img1" style="padding: 10px; margin-left: 100px">
+                        </div>
+                        <input name="logo" id="logo" type="hidden" autocomplete="off" class="layui-input" />
+                    </div>
+                    <div class="layui-col-md4">
+                        <label class="layui-form-label">Address1:</label>
+                        <div class="layui-input-block">
+                            <input name="addressone"  autocomplete="off" class="layui-input" />
+                        </div>
+                    </div>
+                    <div class="layui-col-md4">
+                        <label class="layui-form-label">Address2:</label>
+                        <div class="layui-input-block">
+                            <input name="addresstwo"  autocomplete="off" class="layui-input" />
+                        </div>
+                    </div>
+                    <div class="layui-col-md4">
+                        <label class="layui-form-label">Suburb:</label>
+                        <div class="layui-input-block">
+                            <input name="suburb"  autocomplete="off" class="layui-input" />
+                        </div>
+                    </div>
+                    <div class="layui-col-md4">
+                        <label class="layui-form-label">State:</label>
+                        <div class="layui-input-block">
+                            <input name="state"  autocomplete="off" class="layui-input" />
+                        </div>
+                    </div>
+                    <div class="layui-col-md4">
+                        <label class="layui-form-label">Postcode:</label>
+                        <div class="layui-input-block">
+                            <input name="postcode"  autocomplete="off" class="layui-input" />
+                        </div>
+                    </div>
+                    <div class="layui-col-md4">
+                        <label class="layui-form-label">Country:</label>
+                        <div class="layui-input-block">
+                            <input name="country"  autocomplete="off" class="layui-input" />
+                        </div>
+                    </div>
+                    <div class="layui-col-md4">
+                        <label class="layui-form-label">BankName:</label>
+                        <div class="layui-input-block">
+                            <input name="bankname"  autocomplete="off" class="layui-input" />
+                        </div>
+                    </div>
+                    <div class="layui-col-md4">
+                        <label class="layui-form-label">BSB:</label>
+                        <div class="layui-input-block">
+                            <input name="bsb"  autocomplete="off" class="layui-input" />
+                        </div>
+                    </div>
+                    <div class="layui-col-md4">
+                        <label class="layui-form-label">Account Number:</label>
+                        <div class="layui-input-block">
+                            <input name="account_number"  autocomplete="off" class="layui-input" />
+                        </div>
+                    </div>
+                    <div class="layui-col-md4">
+                        <label class="layui-form-label">Account Name:</label>
+                        <div class="layui-input-block">
+                            <input name="account_name"  autocomplete="off" class="layui-input" />
+                        </div>
+                    </div>
+                    <div class="layui-col-md4">
+                        <label class="layui-form-label">Swift Code:</label>
+                        <div class="layui-input-block">
+                            <input name="swift_code"  autocomplete="off" class="layui-input" />
+                        </div>
+                    </div>
+                    <div class="layui-col-md4">
+                        <label class="layui-form-label">Username:</label>
+                        <div class="layui-input-block">
+                            <input name="username"  autocomplete="off" class="layui-input" />
+                        </div>
+                    </div>
+                    <div class="layui-col-md4">
+                        <label class="layui-form-label">Password:</label>
+                        <div class="layui-input-block">
+                            <input name="password" autocomplete="off" class="layui-input" />
+                        </div>
+                    </div>
+                    <div class="layui-col-md4">
+                        <label class="layui-form-label">Is Commission:</label>
+                        <div class="layui-input-block">
+                            <select name="is_commission">
+                                <option value="1">是</option>
+                                <option value="0">否</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="layui-col-md4">
+                        <label class="layui-form-label">Is Latest Mews:</label>
+                        <div class="layui-input-block">
+                            <select name="is_latest_news">
+                                <option value="1">是</option>
+                                <option value="0">否</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="layui-col-md4">
+                        <label class="layui-form-label">{$language_tag.index_public_status}:</label>
+                        <div class="layui-input-block">
+                            <select name="status"  >
+                                <option value="1">{$language_tag.index_public_show}</option>
+                                <option value="0">{$language_tag.index_public_disabled}</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!--<div class="layui-form-item">-->
+                    <!--<div class="layui-col-md4">-->
+                        <!--<label class="layui-form-label">{$language_tag.index_branchcompany_showDistributorManage_city}:</label>-->
+                        <!--<div class="layui-input-block">-->
+                            <!--<select name="city_id"  lay-search>-->
+                                <!--<option value="">{$language_tag.index_source_showSupplier_choose_own_zone}</option>-->
+                                <!--{foreach $cityList as $vo}-->
+                                <!--<option value="{$vo.id}">{$vo.cpc_name}</option>-->
+                                <!--{/foreach}-->
+                            <!--</select>-->
+                        <!--</div>-->
+                    <!--</div>-->
+                    <!--<div class="layui-col-md4">-->
+                        <!--<label class="layui-form-label">{$language_tag.index_branchcompany_showDistributorManage_contacts}:</label>-->
+                        <!--<div class="layui-input-block">-->
+                            <!--<input name="contect"  class="layui-input" />-->
+                        <!--</div>-->
+                    <!--</div>-->
+                    <!--<div class="layui-col-md4">-->
+                        <!--<label class="layui-form-label">{$language_tag.index_branchcompany_showBranchProductManage_phone}:</label>-->
+                        <!--<div class="layui-input-block">-->
+                            <!--<input name="tel"  class="layui-input" />-->
+                        <!--</div>-->
+                    <!--</div>-->
+                <!--</div>-->
+                <!--<div class="layui-form-item">-->
+                    <!--<div class="layui-col-md4">-->
+                        <!--<label class="layui-form-label">{$language_tag.index_branchcompany_showDistributorManage_zipCode}:</label>-->
+                        <!--<div class="layui-input-block">-->
+                            <!--<input name="zip_code"  class="layui-input" />-->
+                        <!--</div>-->
+                    <!--</div>-->
+                    <!--<div class="layui-col-md4">-->
+                        <!--<label class="layui-form-label">{$language_tag.index_branchcompany_showDistributorManage_address}:</label>-->
+                        <!--<div class="layui-input-block">-->
+                            <!--<input name="address"  class="layui-input" />-->
+                        <!--</div>-->
+                    <!--</div>-->
+                    <!--<div class="layui-col-md4">-->
+                        <!--<label class="layui-form-label">{$language_tag.index_branchcompany_showBranchProductManage_email}:</label>-->
+                        <!--<div class="layui-input-block">-->
+                            <!--<input name="email"  class="layui-input" />-->
+                        <!--</div>-->
+                    <!--</div>-->
+                <!--</div>-->
+
+                <!--<div class="layui-form-item">-->
+                    <!--<div class="layui-col-md4">-->
+                        <!--<label class="layui-form-label">{$language_tag.index_branchcompany_showBranchProductManage_language}:</label>-->
+                        <!--<div class="layui-input-block">-->
+                            <!--<select name="language_id"  lay-search >-->
+                            <!--<option></option>-->
+                            <!--{foreach $langList as $langListV}-->
+                            <!--<option value="{$langListV.language_id}">{$MultilingualAll['language-language_name-'.$langListV.language_id.'-'.$Think.session.user.language_id][0]['translate']|default=$langListV.language_name}</option>-->
+                            <!--{/foreach}-->
+                            <!--</select>-->
+                        <!--</div>-->
+                    <!--</div>-->
+                <!--</div>-->
+                <!--<br>-->
+                <div class="layui-form-item">
+                    <div class="all-button-center">
+                        <button class="layui-btn nav-submit" lay-submit="" lay-filter="formDemo" id="language_add_button">{$language_tag.index_public_submit}</button>
+                        <!--<button type="reset" class="layui-btn layui-btn-primary">{$language_tag.index_product_showRouteTemplateManage_reload}</button>-->
+                        <a href="javascript:history.back(-1)"><button type="button" class="layui-btn layui-btn-primary">{$language_tag.index_public_back}</button></a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="layui-footer">
+        <!-- 底部固定区域 -->
+        © layui.com - 底部固定区域
+    </div>
+</div>
+{include file='public/foot_js' /}
+
+
+<script>
+
+    layui.use('upload', function(){
+        var upload = layui.upload;
+
+        //头部图片
+        var uploadInst = upload.render({
+            elem: '#pic' //绑定元素
+            ,url: '/demo/uploadFile', //上传接口
+            multiple:false,
+            drag:'true'
+            ,acceptMime:'image/*'
+            ,accept:'images'
+            ,before: function(obj){ //obj参数包含的信息，跟 choose回调完全一致，可参见上文。
+                layer.load(); //上传loading
+            }
+            ,done: function(res){
+                //上传完毕回调
+                // console.log(res);
+                layer.closeAll('loading'); //关闭loading
+                if(res.code == 200){
+                    var h = '<div style="padding: 5px;width: 110px;float: left" class="img_list"><div><img src="'+res.data+'" height="100" width="100" /><input type="hidden" value="'+res.data+'" name="title-picture" /></div><div><a class="layui-btn layui-btn-danger r-journey-img nav-edit" onclick="del(this)">删除</a></div></div>';
+                    $('#u-img1').append(h);
+                    $("#pic").siblings(".upload-hide").show();
+                    document.getElementById('logo').value=res.data;
+                }
+            }
+            ,error: function(res){
+                //请求异常回调
+                console.log(res);
+                layer.closeAll('loading'); //关闭loading
+            }
+        });
+    });
+    function del(obj){
+        $(obj).parents("#u-img1").siblings(".bill-picture").find(".upload-hide").hide();
+        $(obj).parents(".img_list").remove();
+    }
+    function submit_add(a){
+        if($("#u-img1 .img_list").length==1){
+            layer.msg('只能上传一张图片');
+        }
+    }
+
+
+
+    function add() {
+
+        $.ajax({
+            type: "POST",
+            url: '/distributor/addDistributorAjax',
+            data: $('#form1').serializeArray(),
+            success: function (data) {
+                if(data.code!=200){
+                    layer.msg(data.msg)
+                    return false;
+                }else if(data.code==200){
+                    layer.msg('success',{time:1,end : function(layero, index){
+                        history.back(-1);
+                    }
+                    });
+                }
+            },
+            error:function(XMLHttpRequest, textStatus, errorThrown){
+                //console.log(errorThrown)
+                layer.msg('{$language_tag.index_public_verificationFailure}')
+
+            }
+        });
+        return false;
+    }
+</script>
+
+</body>
+</html>

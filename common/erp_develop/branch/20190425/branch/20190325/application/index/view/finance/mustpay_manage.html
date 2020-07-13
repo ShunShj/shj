@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {include file='public/head' /}
+    <title>应付</title>
+    <link href="__STATIC__/css/product.css" rel="stylesheet">
+    <link href="__STATIC__/css/finance.css" rel="stylesheet">
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+    <div class="layui-header">
+        {include file='public/header' /}
+    </div>
+
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll">
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            {include file='public/left_menu' /}
+        </div>
+    </div>
+
+    <div class="layui-body">
+
+        <!-- 内容主体区域 -->
+        <div style="padding: 15px 15px 0px;">
+            <div class="body-top">
+                <div class='layui-form-item'>
+                <span class="layui-breadcrumb" lay-separator="-">
+                    <a>{$Think.lang.index_public_homepage}</a>
+                    <a>{$Think.lang.index_public_finance}</a>
+                    <a><cite>{$Think.lang.index_finance_showMustPayManage_cope}</cite></a>
+                </span>
+                </div>
+                <br>
+                <div class='layui-block input-inline'>
+                    <form class="layui-form"  method='get' action='/finance/showMustPayManage'>
+                        <div class='layui-input-inline'>
+                            <input type="text" id="" name="team_product_number"  placeholder="{$Think.lang.index_finance_showMustPayManage_team_product_number}"  value="{$Think.get.team_product_number}"  class="layui-input">
+                        </div>
+                        <div class='layui-input-inline'>
+                            <input type="text" id="" name="cope_number"  placeholder="{$Think.lang.index_finance_showMustPayManage_cope_number}"  value="{$Think.get.cope_number}"  class="layui-input">
+                        </div>
+                        <div class='layui-input-inline'>
+                            <input type="text" id="" name="supplier_name"  placeholder="{$Think.lang.index_finance_showMustPayManage_supplier_name}"  value="{$Think.get.supplier_name}"  class="layui-input">
+                        </div>
+                        <div class='layui-input-inline'>
+                            <input type="text" id="" name="product_name"  placeholder="{$Think.lang.index_finance_showMustPayManage_product_name}"  value="{$Think.get.product_name}"  class="layui-input">
+                        </div>
+                        <!--<div class='layui-input-inline'>-->
+                            <!--<input type="text" id="" name="mustpayAgent"  placeholder="操作人" class="layui-input">-->
+                        <!--</div>-->
+                        <!--<div class='layui-input-inline'>-->
+                            <!--<input type="text" id="" name="mustpayBill"  placeholder="发票日期" class="layui-input layui-input-date">-->
+                        <!--</div>-->
+                        <!--<div class='layui-input-inline'>-->
+                            <!--<input type="text" id="" name="mustpayFound"  placeholder="创建日期" class="layui-input layui-input-date">-->
+                        <!--</div>-->
+                        <div class='layui-button-inline layui-search-inline'>
+                            <button class="layui-btn nav-search" >{$Think.lang.index_public_search}</button>
+                        </div>
+                    </form>
+                    <div class='layui-button-inline'>
+                        <!-- <button class="layui-btn nav-add" onclick="mustpayTips('add')">新增应付</button> -->
+                        <span style="{:action('index/auth/check_auth',['role_id'=>'260'])}"><a href="/finance/showMustpayAllManage"><button class="layui-btn nav-add">{$Think.lang.index_finance_showMustpayAllManage}</button></a></span>
+                    </div>
+                </div>
+                <hr><br>
+            </div>
+            <div class="table-nont table-input-none user-manage pageHeight">
+                <table class="layui-table layui-form table-product" style="table-layout:fixed" id="">
+                    <colgroup>
+                        <col width="180">
+                        <col width="180">
+                        <col width="180">
+                        <col width="160">
+                        <col width="160">
+                        <col width="180">
+                        <col width="180">
+                        <col width="180">
+                        <col width="120">
+                        <col width="120">
+                        <col width="120">
+                        <col width="240">
+                        <col width="160">
+                        <col width="100">
+                        <col width="160">
+                    </colgroup>
+                    <thead>
+                    <tr>
+                        <th>{$Think.lang.index_finance_showMustPayManage_team_product_number}</th>
+                        <th>{$Think.lang.index_finance_showMustPayManage_cope_number}</th>
+                        <th>{$Think.lang.index_finance_showMustPayManage_receivable_object_name}</th>
+                        <th>{$Think.lang.index_finance_showMustPayManage_receivable_invoice_number}</th>
+                        <th>{$Think.lang.index_finance_showMustPayManage_receivable_invoice_time}</th>
+                        <th>{$Think.lang.index_finance_showMustPayManage_fee_type_name}</th>
+                        <th>{$Think.lang.index_finance_showMustPayManage_product_name}</th>
+                        <th>{$Think.lang.index_finance_showMustPayManage_currency_name}</th>
+                        <th>{$Think.lang.index_finance_showMustPayManage_cope_money}</th>
+                        <th>{$Think.lang.index_finance_showMustPayManage_true_receipt}</th>
+                        <th>{$Think.lang.index_finance_showMustPayManage_unpaid}</th>
+                        <th>{$Think.lang.index_finance_showMustPayManage_remake}</th>
+                        <th>{$Think.lang.index_finance_showMustPayManage_create_time}</th>
+                        <th>{$Think.lang.index_finance_showMustPayManage_create_user_name}</th>
+                        <th>{$Think.lang.index_source_operation}</th>
+                    </tr>
+                    </thead>
+
+                    <tbody>
+                    {foreach name='data' item='vo'}
+	                    {if condition="($Think.get.supplier_name == '') or ($vo.receivable_object_name == $Think.get.supplier_name)"}
+	                    <tr>
+	                        <td><a href="javascript:void(0)">{$vo.team_product_number}</a></td>
+	                        <td class="cope_number">{$vo.cope_number}</td>
+	                        <td>
+	                            <input type="text" name="mustpaySupplier" placeholder="" class="layui-input" value='{$vo.receivable_object_name}'  >
+	                        </td>
+	                        <td>
+	                            <input type="text" name="mustpaySpinv" placeholder="" class="layui-input invoice_number" disabled value="{$vo.invoice_number}">
+	                        </td>
+	                        <td><input type="text" name="mustpaySpinvDate" placeholder="" class="layui-input invoice_time" disabled {if condition="$vo.invoice_time eq ''"}{else/}value="{$vo.invoice_time|date='Y-m-d',###}"{/if}  ></td>
+	 
+							<td>{$vo.fee_type_name}</td>
+	
+	                        <td><input type="text" name="mustpayItem" placeholder="" class="layui-input product_name" disabled value="{$vo.product_name}"></td>
+	                        <td class="currency_id"> {$vo.currency_name}</td>
+	                        <input class="cope_currency_id" value="{$vo.cope_currency_id}" type="hidden"/>
+	                        <td><input type="text" name="mustpayPayableTwo" placeholder="" class="layui-input cope_money " disabled value="{$vo.cope_money}"></td>
+	                        <td><input type="text" name="mustpayPocket" placeholder="" class="layui-input" disabled value="{$vo.true_receipt}"></td>
+	                        <td><input type="text" name="mustpayNotPay" placeholder="" class="layui-input" disabled value="{$vo.cope_money-$vo.true_receipt}"></td>
+	                        <td>
+	                            <textarea name="mustpayNote" placeholder="{$Think.lang.index_finance_showMustPayManage_remake}" class="layui-textarea remark" style="min-height: 32px!important;position: relative;top: 8px" disabled>{$vo.remark}</textarea>
+	                        </td>
+	                        <td>{$vo.create_time|date='Y-m-d',###}</td>
+	                        <td>{$vo.create_user_name}</td>
+	                        <td>
+	                            {if condition="$vo.resource_type eq 2"}<button class="layui-btn layui-btn-sm hover-edit layui-btn-primary" onclick="mustpayTips('edit',this)">{$Think.lang.index_public_update}</button>{/if}
+	
+	                            {if condition="$vo.resource_type eq 2"}                            <button class="layui-btn layui-btn-sm hover-details layui-btn-primary" onclick="copeDel(this)">{$Think.lang.index_public_del}</button>
+	                             {/if}
+	                        </td>
+	                        <td><input type="hidden"  class="receivable_company_id" value="{$vo.receivable_company_id}"></td>
+	                        <td><input type="hidden"  class="product_type" value="{$vo.product_type}"></td>
+	                        <td><input type="hidden"  class="cope_number" value="{$vo.cope_number}"></td>
+	                        <td><input type="hidden"  class="resource_type" value="{$vo.resource_type}"></td>
+	                    </tr>
+	                    {/if}
+                    {/foreach}
+                    </tbody>
+                </table>
+            </div>
+            <div class="listButtom">
+                <!--加载分页-->
+                {include file='public/page' /}
+            </div>
+        </div>
+    </div>
+    <div class="layui-footer">
+        <!-- 底部固定区域 -->
+        © layui.com - 底部固定区域
+    </div>
+</div>
+<!--应付汇总--》点击新增应付弹出-->
+<script id="mustpayTips" type="text/html">
+    <form class="layui-form popReceivable">
+        <div class="layui-row">
+            <div class="layui-inline layui-col-md6">
+                <label class="layui-form-label input-required">{$Think.lang.index_finance_showMustPayManage_receivable_object_name}:</label>
+                <div class="layui-input-block">
+                    <select name="receivable_company_id" id="company_id" lay-verify="required">
+                        <option value=""></option>
+                        {volist name="$company_data" id="company_data"}
+                        <option value="{$company_data.company_id}">{$company_data.company_name}</option>
+                        {/volist}
+                    </select>
+                </div>
+            </div>
+            <div class="layui-inline layui-col-md6">
+                <label class="layui-form-label input-required">{$Think.lang.index_finance_showMustPayManage_receivable_invoice_number}:</label>
+                <div class="layui-input-block">
+                    <input type="text" id="invoice_number" name="invoice_number" placeholder="{$Think.lang.index_finance_showMustPayManage_input}" class="layui-input" lay-verify="required" >
+                </div>
+            </div>
+        </div>
+        <div class="layui-inline layui-col-md6">
+            <label class="layui-form-label input-required">{$Think.lang.index_finance_showMustPayManage_receivable_invoice_time}:</label>
+            <div class="layui-input-block">
+                <input type="text" id="invoice_time" name="invoice_time" placeholder="{$Think.lang.index_finance_showMustPayManage_input}" class="layui-input layui-input-date" >
+            </div>
+        </div>
+        <div class="layui-inline layui-col-md6">
+            <label class="layui-form-label input-required">{$Think.lang.index_finance_showMustPayManage_fee_type_name}:</label>
+            <div class="layui-input-block" >
+                <select name="product_type" id="product_type" lay-verify="required">
+                    <option value=""></option>
+                    <option value=""></option>
+                    <option value="1">{$Think.lang.index_finance_showReceivableManage_teamproduct}</option>
+                    <option value="2">{$Think.lang.index_finance_showReceivableManage_hotel}</option>
+                    <option value="3">{$Think.lang.index_finance_showReceivableManage_dining}</option>
+                    <option value="4">{$Think.lang.index_finance_showReceivableManage_flight}</option>
+                    <option value="5">{$Think.lang.index_finance_showReceivableManage_cruise}</option>
+                    <option value="6">{$Think.lang.index_finance_showReceivableManage_visa}</option>
+                    <option value="7">{$Think.lang.index_finance_showReceivableManage_scenic_spot}</option>
+                    <option value="8">{$Think.lang.index_finance_showReceivableManage_vehicle}</option>
+                    <option value="9">{$Think.lang.index_finance_showReceivableManage_tourguide}</option>
+                    <option value="10">{$Think.lang.index_finance_showReceivableManage_singlesource}</option>
+                    <option value="11">{$Think.lang.index_finance_showReceivableManage_ownexpense}</option>
+                    <option value="0">{$Think.lang.index_finance_showReceivableManage_other}</option>
+                </select>
+            </div>
+        </div>
+        <div class="layui-inline layui-col-md6">
+            <label class="layui-form-label input-required">{$Think.lang.index_finance_showMustPayManage_product_name}:</label>
+            <div class="layui-input-block">
+                <input type="text" id="product_name" name="product_name" placeholder="{$Think.lang.index_finance_showMustPayManage_input}" class="layui-input" lay-verify="required">
+            </div>
+        </div>
+        <div class="layui-inline layui-col-md6">
+            <label class="layui-form-label input-required">{$Think.lang.index_finance_showMustPayManage_currency_name}:</label>
+            <div class="layui-input-block">
+                <select name="cope_currency_id" id="cope_currency_id" lay-verify="required">
+                    <<option value=""></option>
+                    {foreach name='currency_data_result' item='v'}
+                    <option value="{$v.currency_id}">{$v.currency_name}</option>
+                    {/foreach}
+                </select>
+            </div>
+        </div>
+        <div class="layui-inline layui-col-md6">
+            <label class="layui-form-label input-required">{$Think.lang.index_finance_showMustPayManage_cope_money}:</label>
+            <div class="layui-input-block">
+                <input type="text" id="cope_money" name="cope_money" placeholder="{$Think.lang.index_finance_showMustPayManage_input}" class="layui-input" required lay-verify="required|number">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">{$Think.lang.index_finance_showMustPayManage_remake}:</label>
+            <div class="layui-input-block">
+                <textarea id="remark" name="remark" placeholder="{$Think.lang.index_finance_showMustPayManage_remake}" class="layui-textarea" ></textarea>
+            </div>
+        </div>
+        <div class="layui-inline layui-col-md6" style="display: none">
+            <label class="layui-form-label ">{$Think.lang.index_finance_showMustPayManage_cope_money}:</label>
+            <div class="layui-input-block">
+                <input type="text" id="cope_number" name="cope_number" placeholder="{$Think.lang.index_finance_showMustPayManage_input}" class="layui-input" >
+            </div>
+        </div>
+        <div class="layui-row all-button-center all-button">
+            <a class="layui-btn nav-submit" lay-submit onclick="subs()">{$Think.lang.index_public_submit}</a>
+            <button type="button" class="layui-btn layui-btn-primary" onclick="cancel()">{$Think.lang.index_finance_showMustPayManage_cancel}</button>
+        </div>
+    </form>
+</script>
+{include file='public/foot_js' /}
+<script src='__STATIC__/javascript/product/all.js'></script>
+<script src='__STATIC__/javascript/finance/mustpay.js'></script>
+</body>
+</html>

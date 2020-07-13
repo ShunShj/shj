@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<head>
+    {include file='public/head' /}
+    <title>layout 后台大布局 - Layui</title>
+
+    <style>
+        .nav {
+            display: inline-block;
+            position: relative;
+            height: 54px;
+            font-size: 15px;
+        }
+
+        .nav > * {
+            display: inline-block;
+        }
+
+        .nav > .t {
+            position: absolute;
+            top: 0;
+            background: rgb(208, 210, 211);
+            /* Skew */
+            -webkit-transform: skew(30deg);
+            -moz-transform: skew(30deg);
+            -o-transform: skew(30deg);
+            transform: skew(30deg);
+        }
+
+        .nav > .b {
+            position: absolute;
+            bottom: 0;
+            background: rgb(208, 210, 211);
+            /* Skew */
+            -webkit-transform: skew(-30deg);
+            -moz-transform: skew(-30deg);
+            -o-transform: skew(-30deg);
+            transform: skew(-30deg);
+        }
+
+        .tab .nav>.t,.tab .nav>.b{
+            -webkit-transform: none;
+            -moz-transform: none;
+            -o-transform: none;
+            transform: none;
+        }
+
+
+        .nav > a {
+            /*position:absolute;
+            top:0;*/
+            margin-left: 13px;
+            vertical-align: middle;
+            text-align: center;
+            text-decoration: none;
+            cursor: default;
+            font-weight: bold;
+            color: #77787b !important;
+        }
+
+        .nav.hover>a{
+            color: #ffffff !important;
+        }
+
+        .nav.hover > span {
+            background-color: #3376ba;
+            cursor: pointer;
+        }
+
+        .nav.done_step.hover>span{
+            background-color: #3376ba;
+        }
+
+        .nav.hover > a {
+            cursor: pointer;
+        }
+
+        .ab_position {
+            position: absolute;
+        }
+
+        .nav > .first_mark {
+            position: absolute;
+            top: 0;
+            z-index: 1;
+            width: 16px;
+            height: 100%;
+            background-color: #ffffff;
+            left: -8px;
+        }
+
+        .nav.done_step>a,.nav.active_step>a{
+            color: #ffffff !important;
+        }
+
+        .nav.done_step>.t,.nav.done_step>.b{
+            background-color: #767780;
+        }
+
+        .nav.active_step>.t,.nav.active_step>.b{
+            background-color: #3376ba;
+        }
+
+        .tab_border{
+            height: 2px;
+            background-color: #767780;
+            margin-left: 8px;
+            margin-top: -4px;
+        }
+
+    </style>
+
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+    <div class="layui-header">
+        {include file='public/header' /}
+    </div>
+
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll">
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            {include file='public/left_menu_booknexus' /}
+        </div>
+    </div>
+
+    <div class="layui-body">
+
+        <!-- 内容主体区域 -->
+        <div style="padding: 15px 15px 0px;">
+            <div class='layui-row'>
+		   		<span class="layui-breadcrumb" lay-separator="-">
+                    <a>首页</a>
+                    <a>B2B</a>
+					<a>创建产品</a>
+				</span>
+            </div>
+            <br>
+            {include file='booknexus_tour/menu' /}
+
+                <div class="layui-row layui-col-space12" style="padding: 20px 10px">
+                    <div class="layui-col-md8">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label ">ROOM:</label>
+                            <div class="layui-input-block layui-form">
+                                <select class="layui-select add-s" id="add-room">
+                                    <option value="1">单人房</option>
+                                    <option value="2">双人房</option>
+                                    <option value="3">大床房</option>
+                                    <option value="4">三人房</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-col-md8">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label ">CAPACITY:</label>
+                            <div class="layui-input-block layui-form ">
+                                <input class="layui-input add-s" value="" id="add-capacity" >
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-col-md8">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label ">PRICE:</label>
+                            <div class="layui-input-block layui-form">
+                                <input class="layui-input add-s" id="add-price" >
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            <div class="layui-col-md8"  style="text-align: center">
+                <a class="layui-btn layui-btn-sm layui-btn-primary add-room">Add Room</a>
+            </div>
+            <br>
+
+            <form class="layui-form" id="form1" onSubmit="return add()">
+                <div class="layui-row layui-col-space12" style="padding: 10px;font-size: 14px;font-weight: bold">Added Rooms</div>
+
+                <div class="layui-row layui-col-space12" id="sel-addRoom">
+                    {empty name='$Think.session.addTourRoomForm.room'}
+                        <!--单人-->
+                        <div  class="layui-row layui-col-space8 d-rooms" style="border-bottom: 1px solid #000;margin-bottom: 20px">
+                            <div class="layui-col-md8">
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label ">ROOM:</label>
+                                    <div class="layui-input-block layui-form">
+                                        <select class="layui-select room-0" name="room[0][room]" >
+                                            <option value="1" selected>单人房</option>
+                                            <option value="2">双人房</option>
+                                            <option value="3">大床房</option>
+                                            <option value="4">三人房</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-col-md8">
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label ">CAPACITY:</label>
+                                    <div class="layui-input-block layui-form">
+                                        <input class="layui-input capacity-0" value="1" name="room[0][capacity]" >
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-col-md8">
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label ">PRICE:</label>
+                                    <div class="layui-input-block layui-form">
+                                        <input class="layui-input price-0" name="room[0][price]" value="0">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-col-md8">
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label "></label>
+                                    <div class="layui-input-block layui-form">
+                                        <a  class="layui-btn layui-btn-sm layui-btn-primary romove">Romove</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!--双人房-->
+                        <div  class="layui-row layui-col-space8 d-rooms" style="border-bottom: 1px solid #000;margin-bottom: 20px">
+                            <div class="layui-col-md8">
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label ">ROOM:</label>
+                                    <div class="layui-input-block layui-form">
+                                        <select class="layui-select room-1" name="room[1][room]" >
+                                            <option value="1" >单人房</option>
+                                            <option value="2" selected>双人房</option>
+                                            <option value="3">大床房</option>
+                                            <option value="4">三人房</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-col-md8">
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label ">CAPACITY:</label>
+                                    <div class="layui-input-block layui-form">
+                                        <input class="layui-input capacity-1" value="2" name="room[1][capacity]" >
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-col-md8">
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label ">PRICE:</label>
+                                    <div class="layui-input-block layui-form">
+                                        <input class="layui-input price-1" name="room[1][price]" value="0" >
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-col-md8">
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label "></label>
+                                    <div class="layui-input-block layui-form">
+                                        <a  class="layui-btn layui-btn-sm layui-btn-primary romove">Romove</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!--大床房-->
+                        <div  class="layui-row layui-col-space8 d-rooms" style="border-bottom: 1px solid #000;margin-bottom: 20px">
+                            <div class="layui-col-md8">
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label ">ROOM:</label>
+                                    <div class="layui-input-block layui-form">
+                                        <select class="layui-select room-2" name="room[2][room]" >
+                                            <option value="1" >单人房</option>
+                                            <option value="2" >双人房</option>
+                                            <option value="3" selected>大床房</option>
+                                            <option value="4">三人房</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-col-md8">
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label ">CAPACITY:</label>
+                                    <div class="layui-input-block layui-form">
+                                        <input class="layui-input capacity-2" value="2" name="room[2][capacity]" >
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-col-md8">
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label ">PRICE:</label>
+                                    <div class="layui-input-block layui-form">
+                                        <input class="layui-input price-2" name="room[2][price]" value="0" >
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-col-md8">
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label "></label>
+                                    <div class="layui-input-block layui-form">
+                                        <a  class="layui-btn layui-btn-sm layui-btn-primary romove">Romove</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!--三人房-->
+                        <div  class="layui-row layui-col-space8 d-rooms" style="border-bottom: 1px solid #000;margin-bottom: 20px">
+                            <div class="layui-col-md8">
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label ">ROOM:</label>
+                                    <div class="layui-input-block layui-form">
+                                        <select class="layui-select room-3" name="room[3][room]" >
+                                            <option value="1" >单人房</option>
+                                            <option value="2" >双人房</option>
+                                            <option value="3" >大床房</option>
+                                            <option value="4" selected>三人房</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-col-md8">
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label ">CAPACITY:</label>
+                                    <div class="layui-input-block layui-form">
+                                        <input class="layui-input capacity-3" value="3" name="room[3][capacity]" >
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-col-md8">
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label ">PRICE:</label>
+                                    <div class="layui-input-block layui-form">
+                                        <input class="layui-input price-3" name="room[3][price]" value="0" >
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-col-md8">
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label "></label>
+                                    <div class="layui-input-block layui-form">
+                                        <a  class="layui-btn layui-btn-sm layui-btn-primary romove">Romove</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {else}
+
+                    <?php $kk=0; ?>
+                    {foreach $Think.session.addTourRoomForm.room as $k=>$v}
+                        <div  class="layui-row layui-col-space8 d-rooms" style="border-bottom: 1px solid #000;margin-bottom: 20px">
+                            <div class="layui-col-md8">
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label ">ROOM:</label>
+                                    <div class="layui-input-block layui-form">
+                                        <select class="layui-select room-{$kk}" name="room[{$kk}][room]" >
+                                            <option value="1" {$v.room==1?'selected':''}>单人房</option>
+                                            <option value="2" {$v.room==2?'selected':''}>双人房</option>
+                                            <option value="3" {$v.room==3?'selected':''}>大床房</option>
+                                            <option value="4" {$v.room==4?'selected':''}>三人房</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-col-md8">
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label ">CAPACITY:</label>
+                                    <div class="layui-input-block layui-form">
+                                        <input class="layui-input capacity-{$kk}" value="{$v.capacity}" name="room[{$kk}][capacity]" >
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-col-md8">
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label ">PRICE:</label>
+                                    <div class="layui-input-block layui-form">
+                                        <input class="layui-input price-{$kk}" name="room[{$kk}][price]" value="{$v.price}" >
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-col-md8">
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label "></label>
+                                    <div class="layui-input-block layui-form">
+                                        <a  class="layui-btn layui-btn-sm layui-btn-primary romove">Romove</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    <?php $kk++; ?>
+                    {/foreach}
+
+
+
+
+                    {/empty}
+                </div>
+
+                <div class="layui-col-md8" style="padding: 20px;font-weight: bold;font-size:14px;text-align: center">
+                    <button   class="layui-btn nav-submit" >Save & Next</button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+
+
+    <div class="hinnd-div" style="display: none">
+        <div  class="layui-row layui-col-space8 d-rooms" style="border-bottom: 1px solid #000;margin-bottom: 20px">
+            <div class="layui-col-md8">
+                <div class="layui-form-item">
+                    <label class="layui-form-label ">ROOM:</label>
+                    <div class="layui-input-block layui-form">
+                        <select class="layui-select room-ii" name="room[ii][room]" >
+                            <option value="1">单人房</option>
+                            <option value="2">双人房</option>
+                            <option value="3">大床房</option>
+                            <option value="4">三人房</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-col-md8">
+                <div class="layui-form-item">
+                    <label class="layui-form-label ">CAPACITY:</label>
+                    <div class="layui-input-block layui-form">
+                        <input class="layui-input capacity-ii" value="" name="room[ii][capacity]" >
+                    </div>
+                </div>
+            </div>
+            <div class="layui-col-md8">
+                <div class="layui-form-item">
+                    <label class="layui-form-label ">PRICE:</label>
+                    <div class="layui-input-block layui-form">
+                        <input class="layui-input price-ii" name="room[ii][price]" >
+                    </div>
+                </div>
+            </div>
+            <div class="layui-col-md8">
+                <div class="layui-form-item">
+                    <label class="layui-form-label "></label>
+                    <div class="layui-input-block layui-form">
+                        <a  class="layui-btn layui-btn-sm layui-btn-primary romove">Romove</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+    <div class="layui-footer">
+        <!-- 底部固定区域 -->
+        © layui.com - 底部固定区域
+    </div>
+</div>
+{include file='public/foot_js' /}
+<script>
+    //JavaScript代码区域
+    var layer = layui.layer;
+    var form = layui.form;
+    var laydate = layui.laydate;
+
+    {empty name='$Think.session.addTourRoomForm.room'}
+    var ii = 4;
+    {else /}
+    var ii = {$Think.session.addTourRoomForm.room|count};
+    {/empty}
+
+
+    $('.add-room').click(function(){
+        var room = $('#add-room').val();
+        var capacity = $('#add-capacity').val();
+        var price = $('#add-price').val();
+
+        var html = $('.hinnd-div').html();
+        console.log(html);
+        for(var ij=0;ij<10;ij++){
+            html = html.replace('ii',ii);
+        }
+        $('#sel-addRoom').append(html);
+
+        $('.room-'+ii).val(room);
+        $('.capacity-'+ii).val(capacity);
+        $('.price-'+ii).val(price);
+        $('.add-s').val('');
+        form.render();
+        ii++;
+
+        $('.romove').click(function(){
+            $(this).parents('.d-rooms').remove();
+        });
+
+    });
+
+
+    $('.romove').click(function(){
+        $(this).parents('.d-rooms').remove();
+    });
+
+    function add(){
+        $.ajax({
+            type: "POST",
+            url: '/booknexus_tour/addTourRoomFormAjax',
+            data:  $('#form1').serializeArray(),
+            success: function(data){
+                //console.log(data);
+                if(data.code!=200){
+                    layer.msg(data.msg);
+                    return false;
+                }else if(data.code==200) {
+                    layer.msg('操作成功',{time:2000,end : function(layero, index){
+                         location.href="/booknexus_tour/addTourTransferForm";
+                    }
+                    });
+                }
+            },
+            error:function(XMLHttpRequest, textStatus, errorThrown){
+                layer.msg('验证失败')
+            }
+        });
+        return false;
+    }
+
+
+</script>
+
+</body>
+</html>

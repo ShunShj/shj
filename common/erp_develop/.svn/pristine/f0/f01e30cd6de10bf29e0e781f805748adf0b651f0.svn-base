@@ -1,0 +1,230 @@
+{if ($settlement_type==1)}
+<!--一口价-->
+<div class="layui-row">
+    <div></div>
+    <div class="layui-col-md12">
+        <table class="layui-table">
+            <thead>
+            <tr>
+                <th>{$Think.lang.index_product_ShowPlanTour_resources_teamProduct}</th>
+                <th>{$Think.lang.index_product_showRouteTemplateManage_resources_settlementPrice}</th>
+                <th width="30%">{$Think.lang.index_product_showRouteTemplateManage_resources_currency}</th>
+                <th class="input-required" width="30%"><i>*</i>{$Think.lang.index_product_showRouteTemplateManage_resources_quotedPrice}</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <!--<th>标准报价<br>(<a style="cursor: pointer;color: #130dec;" class="unify">统一修改为标准价格</a>)</th>-->
+                <th>{$Think.lang.index_product_showRouteTemplateManage_resources_referenceQuotation}<br><a style="cursor: pointer;color: #130dec;font-size: 12px" class="unify">{$Think.lang.index_product_showRouteTemplateManage_resources_setUpAsReferenceQuotation}</a></th>
+                <th>{$Think.session.user.unit} {$yiKouJia}</th>
+                <th>
+                    {$Think.session.user.company_currency_name}
+                    <input class="OneBitePriceCurrency-0" type="hidden" name="OneBitePriceCurrency[0]" value="{$Think.session.user.company_currency_id}" />
+                </th>
+                <th class="all-select">
+                    <input class="layui-input OneBitePrice-0" name="OneBitePrice[0]" value="{$yiKouJia}"  lay-verify="required|number"  />
+                    <input type="hidden" name="team_product_once_price_id[0]" value="{$TeamProductPrice[0][0]['team_product_once_price_id']}">
+                </th>
+            </tr>
+            {foreach $use_company_id as $vl}
+            <tr>
+                <th>{$vl.name}</th>
+                <th>{$Think.session.user.unit} {$yiKouJia}</th>
+                <th>
+                <select class="OneBitePriceCurrency" name="OneBitePriceCurrency[{$vl.val}]" lay-search>
+                    {foreach $CurrencyList as $currencyV}
+                    <option value="{$currencyV.currency_id}" {$TeamProductPrice[$vl.val][0]['team_price_currency_id']?$TeamProductPrice[$vl.val][0]['team_price_currency_id']==$currencyV.currency_id?"selected":"":$currencyV.currency_id==$Think.session.user.company_currency_id?"selected":""} >{$currencyV.currency_name}</option>
+                    {/foreach}
+                </select>
+                </th>
+                <th>
+                    <input class="layui-input  OneBitePrice" name="OneBitePrice[{$vl.val}]" value="{$TeamProductPrice[$vl.val][0]['total_price']?:$yiKouJia}" lay-verify="required|number"/>
+                    <input type="hidden" name="team_product_once_price_id[{$vl.val}]" value="{$TeamProductPrice[$vl.val][0]['team_product_once_price_id']}">
+                </th>
+            </tr>
+            {/foreach}
+            <tbody>
+        </table>
+    </div>
+
+    {else /}
+
+    <div  class="layui-row">
+        <div class="layui-col-md12 table-nont">
+            <table class="layui-table plan-table">
+                <thead>
+                <tr>
+                    <th width="8%">{$Think.lang.index_product_showRouteTemplateManage_resource_whatDay}</th>
+                    <th width="10%">{$Think.lang.index_public_type}</th>
+                    <th width="15%">{$Think.lang.index_public_supplier}</th>
+                    <th width="15%">{$Think.lang.index_product_showRouteTemplateManage_resourceAllocation}</th>
+                    <th width="10%">{$Think.lang.index_product_showRouteTemplateManage_resources_settlementPrice}</th>
+                    <th width="10%">{$Think.lang.index_product_showRouteTemplateManage_resources_currency}</th>
+                    <th width="20%">{$Think.lang.index_product_showRouteTemplateManage_resources_price}</th>
+                </tr>
+                </thead>
+                <tbody>
+                <!--第几天-->
+                {assign name='s1' value='0'}
+                {foreach $zt as $k1=>$v1}
+                {assign name='s2' value='0'}
+                {foreach $v1['data'] as $k2=>$v2}
+                {foreach $v2['data'] as $k3=>$v3}
+                {assign name='s3' value='0'}
+                {foreach $v3['data'] as $k4=>$v4}
+                <tr>
+                    {if ($s1!=$k1)}
+                    <td rowspan="{$v1['count']}">第{$k1}天</td>
+                    {assign name='s1' value='$k1'}
+                    {/if}
+
+                    {if ($s2!=$k2)}
+                    <td rowspan="{$v2['count']}">{$SupplierType[$k2][0]['supplier_type_name']}</td>
+                    {assign name='s2' value='$k2'}
+                    {/if}
+
+                    {if ($s3!=$k3)}
+                    <td rowspan="{$v3['count']}">{$v3['data'][0]['supplier_name']}</td>
+                    {assign name='s3' value='$k3'}
+                    {/if}
+
+                    <td>{$v4['resource_name']}</td>
+                    <td>{$v4['symbol']}{$v4['quantity']*$v4['unit_price']}</td>
+                    <td>
+                        <select name="tourCurrency[{$v4['resource_type']}][{$v4['resource_id']}]">
+                            {foreach $CurrencyList as $CurrencyListKy=>$CurrencyListVl}
+                            <option value="{$CurrencyListVl.currency_id}" {$CurrencyListVl.currency_id==$v4['currency']?'selected':''}>{$CurrencyListVl.currency_name}</option>
+                            {/foreach}
+                            <option></option>
+                        </select>
+                    </td>
+                    <td><input class="layui-input tourPrice" name="tourPrice[{$v4['resource_type']}][{$v4['resource_id']}]" value="{$v4['total']}" lay-verify="required|number"></td>
+                </tr>
+                {/foreach}
+                {/foreach}
+                {/foreach}
+                {/foreach}
+                </tbody>
+            </table>
+            <table class="layui-table plan-table">
+                {foreach $monetarySum as $k=>$v}
+                <tr>
+                    <td colspan="6">{$CurrencyAr[$k][0]['currency_name']}合计：</td>
+                    <td class="monetarySum-{$k}">{$v}</td>
+                </tr>
+                {/foreach}
+
+            </table>
+        </div>
+    </div>
+
+
+    {/if}
+
+    {notempty name='$zt_OwnExpense_resource'}
+    <div  class="layui-row">
+        <div class="layui-col-md12 table-nont">
+            <table class="layui-table plan-table">
+                <thead>
+                <tr>
+                    <th width="8%">{$Think.lang.index_product_showRouteTemplateManage_resource_whatDay}</th>
+                    <th width="10%">{$Think.lang.index_public_type}</th>
+                    <th width="15%">{$Think.lang.index_public_supplier}</th>
+                    <th width="15%">{$Think.lang.index_product_showRouteTemplateManage_resourceAllocation}</th>
+                    <th width="10%">{$Think.lang.index_product_showRouteTemplateManage_resources_settlementPrice}</th>
+                    <th width="10%">{$Think.lang.index_product_showRouteTemplateManage_resources_currency}</th>
+                    <th width="20%">{$Think.lang.index_product_showRouteTemplateManage_resources_price}</th>
+                </tr>
+                </thead>
+                <tbody>
+                <!--第几天-->
+                {assign name='s1' value='0'}
+                {foreach $zt_OwnExpense_resource as $k1=>$v1}
+                {assign name='s2' value='0'}
+                {foreach $v1['data'] as $k2=>$v2}
+                {foreach $v2['data'] as $k3=>$v3}
+                {assign name='s3' value='0'}
+                {foreach $v3['data'] as $k4=>$v4}
+                <tr>
+                    {if ($s1!=$k1)}
+                    <td rowspan="{$v1['count']}">第{$k1}天</td>
+                    {assign name='s1' value='$k1'}
+                    {/if}
+
+                    {if ($s2!=$k2)}
+                    <td rowspan="{$v2['count']}">{$SupplierType[$k2][0]['supplier_type_name']}</td>
+                    {assign name='s2' value='$k2'}
+                    {/if}
+
+                    {if ($s3!=$k3)}
+                    <td rowspan="{$v3['count']}">{$v3['data'][0]['supplier_name']}</td>
+                    {assign name='s3' value='$k3'}
+                    {/if}
+
+                    <td>{$v4['resource_name']}</td>
+                    <td>{$v4['symbol']}{$v4['quantity']*$v4['unit_price']}</td>
+                    <td>
+                        <select name="tourCurrency[{$v4['resource_type']}][{$v4['resource_id']}]">
+                            {foreach $CurrencyList as $CurrencyListKy=>$CurrencyListVl}
+                            <option value="{$CurrencyListVl.currency_id}" {$CurrencyListVl.currency_id==$v4['currency']?'selected':''}>{$CurrencyListVl.currency_name}</option>
+                            {/foreach}
+                            <option></option>
+                        </select>
+                    </td>
+                    <td><input class="layui-input tourPrice" name="tourPrice[{$v4['resource_type']}][{$v4['resource_id']}]" value="{$v4['total']}" lay-verify="required|number"></td>
+                </tr>
+                {/foreach}
+                {/foreach}
+                {/foreach}
+                {/foreach}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    {/notempty}
+
+    <script>
+//        var monetarySum = <?=json_encode($monetarySum);?>;
+
+
+        !function() {
+            var layer = layui.layer;
+            var form = layui.form;
+
+            $('.tourPrice').on("blur",function () {
+                var total = 0;
+                $('.tourPrice').each(function(){
+                    var v = parseFloat($(this).val());
+                    total = total+v;
+                });
+                $('.tourPrice-total').html(total.toFixed(2));
+            });
+
+            $('.tourPrice-OwnExpense').on('blur',function(){
+                var total = 0;
+                $('.tourPrice-OwnExpense').each(function(){
+                    var v = parseFloat($(this).val());
+                    total = total+v;
+                });
+                $('.tourPrice-OwnExpense-total').html(total.toFixed(2));
+            });
+
+            $('.unify').on('click',function(){
+                var n = $('.OneBitePrice-0').val();
+                var nn = $('.OneBitePriceCurrency-0').val();
+                $('.OneBitePrice').each(function(){
+                    $(this).val(n);
+                });
+                $('.OneBitePriceCurrency').each(function(){
+                    $(this).val(nn);
+                    form.render();
+                });
+
+            });
+
+        }();
+
+
+
+
+    </script>

@@ -1,0 +1,746 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {include file='public/head' /}
+    <title>{$language_tag.index_product_ShowPlanTour_resources_teamProduct}-收供应商</title>
+
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+    <div class="layui-header">
+        {include file='public/header' /}
+    </div>
+
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll">
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            {include file='public/left_menu' /}
+        </div>
+    </div>
+
+    <div class="layui-body">
+
+        <!-- 内容主体区域 -->
+        <div style="padding: 15px;">
+            <div class='layui-form-item'>
+			<span class="layui-breadcrumb" lay-separator="-">
+                <a>{$language_tag.index_public_homepage}</a>
+                <a>{$language_tag.index_public_product}</a>
+				<a>{$language_tag.index_product_ShowPlanTour_resources_teamProduct}</a>
+                <a><cite>{$language_tag.index_product_ShowPlanTour_suppliersPayable}</cite></a>
+			</span>
+            </div>
+            <br/>
+            <div class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief">
+                <table  class="layui-table" style="text-align: center;width: 600px;">
+                    <tr>
+                        <td colspan="3" style="font-weight: bold;background-color: #5897fb">{$language_tag.index_product_public_receivable}</td>
+                        <td colspan="2">{$language_tag.index_product_public_copeWith}</td>
+                        <td rowspan="2" ><a href="/product/profitStatement?plan_id={$_GET['plan_id']}&number={$_GET['number']}">{$language_tag.index_product_PlanSuppliersPayable_incomeStatement}</a></td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight: bold;background-color: #5897fb"><a href="/product/supplierReceivable?plan_id={$_GET['plan_id']}&number={$_GET['number']}">{$language_tag.index_product_public_ReceiveSupplier}</a></td>
+                        <td><a href="/product/PlanReceivableBranch?plan_id={$_GET['plan_id']}&number={$_GET['number']}">{$language_tag.index_product_public_ReceiveBranch}</a></td>
+                        <td><a href="/product/ReceivableDirectPassengerAgent?plan_id={$_GET['plan_id']}&number={$_GET['number']}">{$language_tag.index_product_public_receiveDirectOrAgent}</a></td>
+                        <td ><a href="/product/PlanSuppliersPayable?plan_id={$_GET['plan_id']}&number={$_GET['number']}" >{$language_tag.index_product_public_PaymentSupplier}</a></td>
+                        <td><a href="/product/payableBranch?plan_id={$_GET['plan_id']}&number={$_GET['number']}">{$language_tag.index_product_public_PayBranch}</a></td>
+                    </tr>
+                </table>
+
+                <!--<ul class="layui-tab-title">-->
+                    <!--<li><a href="/product/PlanSuppliersPayable?plan_id={$_GET['plan_id']}&number={$_GET['number']}">{$language_tag.index_product_PlanSuppliersPayable_payableToSuppliers}</a></li>-->
+                    <!--<li class="layui-this">{$language_tag.index_product_PlanReceivableBranch_receivable_branch}</li>-->
+                    <!--<li><a href="/product/PlanReceivableBranch?plan_id={$_GET['plan_id']}&number={$_GET['number']}">{$language_tag.index_product_PlanSuppliersPayable_receivableBranch}</a></li>-->
+                    <!--<li><a href="/product/payableBranch?plan_id={$_GET['plan_id']}&number={$_GET['number']}">{$language_tag.index_product_PlanSuppliersPayable_payable_branch}</a></li>-->
+                    <!--<li><a href="/product/profitStatement?plan_id={$_GET['plan_id']}&number={$_GET['number']}">{$language_tag.index_product_PlanSuppliersPayable_incomeStatement}</a></li>-->
+                <!--</ul>-->
+                <br/>
+
+                <div class="layui-tab-content">
+                    <form  class="layui-form" id="form1" onSubmit="return add()" >
+                        <table class="layui-table" >
+                            <thead>
+                            <tr style="text-align: center">
+                                <td rowspan="2"></td>
+                                <td rowspan="2" width="14%">{$language_tag.index_public_type}</td>
+                                <td rowspan="2" width="15%">{$language_tag.index_public_supplier}</td>
+                                <td colspan="6" width="50%">{$language_tag.index_product_PlanSuppliersPayable_detail}</td>
+                                <td rowspan="2" width="11%">{$language_tag.index_source_operation}</td>
+                            </tr>
+                            <tr style="text-align: center">
+                                <td width="10%">应收编号</td>
+                                <td width="10%">{$language_tag.index_product_PlanSuppliersPayable_name}</td>
+                                <td width="10%">{$language_tag.index_product_showRouteTemplateManage_resources_currency}</td>
+                                <td width="10%">{$language_tag.index_public_price}</td>
+                                <td width="10%">{$language_tag.index_product_showRouteTemplateManage_resource_number}</td>
+                                <td width="10%">{$language_tag.index_product_PlanSuppliersPayable_total}</td>
+                            </tr>
+                            </thead>
+                            <tbody id="tb">
+
+
+                            <!--应收供应商-->
+                            {notempty name='$list["团费"]'}
+                            {assign name='s1' value='1'}
+                            {assign name='s2' value='1'}
+                            {assign name='ss2' value='1'}
+                            {assign name='s3' value='1'}
+                            {assign name='u1' value=''}
+                            <!--类型-->
+                            {assign name='u2' value=''}
+                            <!--供应商-->
+                            {assign name='u3' value='0'}
+                            {assign name='bl' value='1'}
+                            {foreach $list['团费']['data'] as $k1=>$v1}
+                            {foreach $v1['data'] as $k2=>$v2}
+                            {foreach $v2 as $k3=>$v3}
+                            <tr>
+                                {if ($bl==1)}
+                                <td id="r-1" rowspan="{$list['团费']['count']}">{$language_tag.index_product_PlanSuppliersPayable_teamCoping}</td>
+                                {assign name='bl' value='0'}
+                                {/if}
+
+                                {if ($u2!=$k1)}
+                                {assign name='ss2' value='1'}
+                                <td class="layui-form type" id="r-1-{$s1}" rowspan="{$v1['count']}" >
+                                    {if $getTeamProductBase['plur_status']>1}
+                                        <select disabled>
+                                            {foreach $types as $ky=>$vl}
+                                            <option value="{$ky}" {$ky==$k1?"selected":''}><?php echo $language_tag[$vl];?></option>
+                                            {/foreach}
+                                        </select>
+                                        <input type="hidden" value="{$k1}" name="team_coping_type[{$s1}]" data-ky="{$s1}" class="team_coping_type team_coping_type-{$s1}" />
+                                    {else}
+                                        <select name="team_coping_type[{$s1}]" lay-filter="team_coping_type" data-ky="{$s1}" class="team_coping_type team_coping_type-{$s1}" lay-search>
+                                            {foreach $types as $ky=>$vl}
+                                            <option value="{$ky}" {$ky==$k1?"selected":''}><?php echo $language_tag[$vl];?></option>
+                                            {/foreach}
+                                        </select>
+                                    {/if}
+                                    <a class="layui-btn layui-btn-sm r-add nav-add" style="width: 100%;margin-top:10px;{if (count($list['团费']['data'])!=$s1) }display: none{/if}" >{$language_tag.index_public_add}</a>
+                                </td>
+                                {assign name='s1' value='$s1+1'}
+                                {/if}
+
+                                {if ($u3!=$k2 || $u2!=$k1) }
+                                <td class="layui-form supplier" id="r-2-{$s2}" rowspan="{$v2|count}">
+                                    {if $getTeamProductBase['plur_status']>1}
+                                        <select disabled>
+                                            <option></option>
+                                            {foreach $SupplierArr[$k1] as $vv}
+                                            <option value="{$vv['supplier_id']}" {$vv["supplier_id"]==$k2?"selected":""}>{$vv['supplier_name']}</option>
+                                            {/foreach}
+                                        </select>
+                                        <input type="hidden" name="team_coping_supplier[{$s1-1}][{$s2}]" class="team_coping_supplier  ab-{$s1-1} ac-{$s1-1}-{$s2}" value="{$k2}" />
+                                    {else}
+                                        <select name="team_coping_supplier[{$s1-1}][{$s2}]" class="team_coping_supplier  ab-{$s1-1} ac-{$s1-1}-{$s2}" lay-filter="team_coping_supplier" lay-search>
+                                            <option></option>
+                                            {foreach $SupplierArr[$k1] as $vv}
+                                            <option value="{$vv['supplier_id']}" {$vv["supplier_id"]==$k2?"selected":""}>{$vv['supplier_name']}</option>
+                                            {/foreach}
+                                        </select>
+                                    {/if}
+                                    <a class="layui-btn layui-btn-sm r-add2 nav-add" style="width: 100%;margin-top:10px;{if (count($v1['data'])!=$ss2)}display: none{/if}" data-info="{$s1-1}">{$language_tag.index_public_add}</a>
+
+                                </td>
+                                {assign name='s2' value='$s2+1'}
+                                {assign name='ss2' value='$ss2+1'}
+                                {/if}
+
+                                <td {if $v3.company_order_status===0}style="text-decoration: line-through"{/if}>
+                                    {$v3.receivable_number}
+                                    <input name="team_coping_number[{$s1-1}][{$s2-1}][{$s3}]" type="hidden" class="layui-input" value="{$v3.receivable_number}" />
+                                </td>
+                                <td>
+                                    {if $v3.true_receipt>0 || $v3.true_receipt<0 || $getTeamProductBase['plur_status']>1}
+                                        <input disabled type="text" class="layui-input" value="{$v3.product_name|default='-'}" />
+                                        <input name="team_coping_item[{$s1-1}][{$s2-1}][{$s3}]" type="hidden" class="layui-input" value="{$v3.product_name|default='-'}" />
+                                    {else}
+                                        <input name="team_coping_item[{$s1-1}][{$s2-1}][{$s3}]" type="text" class="layui-input" value="{$v3.product_name|default='-'}" />
+                                    {/if}
+                                 </td>
+                                <td class="layui-form">
+                                    {if $v3.true_receipt>0 || $v3.true_receipt<0 || $getTeamProductBase['plur_status']>1}
+                                        <select disabled>
+                                            <option></option>
+                                            {foreach $Currency as $kv}
+                                            <option value="{$kv.currency_id}" {$kv.currency_id==$v3.receivable_currency_id?'selected':''}>{$kv.currency_name}</option>
+                                            {/foreach}
+                                        </select>
+                                        <input type="hidden" value="{$v3.receivable_currency_id}"  name="team_coping_currency[{$s1-1}][{$s2-1}][{$s3}]]" />
+                                    {else}
+                                        <select name="team_coping_currency[{$s1-1}][{$s2-1}][{$s3}]]"  lay-search>
+                                            <option></option>
+                                            {foreach $Currency as $kv}
+                                            <option value="{$kv.currency_id}" {$kv.currency_id==$v3.receivable_currency_id?'selected':''}>{$kv.currency_name}</option>
+                                            {/foreach}
+                                        </select>
+                                    {/if}
+                                </td>
+                                <td>
+                                    {if $v3.true_receipt>0 || $v3.true_receipt<0 || $getTeamProductBase['plur_status']>1}
+                                        <input class="layui-input" value="{$v3.price}" disabled />
+                                        <input name="team_coping_price[{$s1-1}][{$s2-1}][{$s3}]"  class="layui-input team_coping_price" value="{$v3.price}" type="hidden"/>
+                                    {else}
+                                        <input name="team_coping_price[{$s1-1}][{$s2-1}][{$s3}]"  class="layui-input team_coping_price" value="{$v3.price}" />
+                                    {/if}
+                                </td>
+                                <td>
+                                    {if $v3.true_receipt>0 || $v3.true_receipt<0 || $getTeamProductBase['plur_status']>1}
+                                        <input type="number" class="layui-input"  value="{$v3.unit}" disabled/>
+                                        <input name="team_coping_quantity[{$s1-1}][{$s2-1}][{$s3}]" type="hidden" class="layui-input team_coping_quantity"  value="{$v3.unit}"/>
+                                    {else}
+                                         <input name="team_coping_quantity[{$s1-1}][{$s2-1}][{$s3}]" type="number" class="layui-input team_coping_quantity"  value="{$v3.unit}"/>
+                                    {/if}
+                                </td>
+                                <td><input name="team_coping_cope_money[{$s1-1}][{$s2-1}][{$s3}]"   class="layui-input team_coping_cope_money"  value="{$v3.receivable_money}" readonly></td>
+                                <td>
+                                    {if $v3.true_receipt==0  && $getTeamProductBase['plur_status']<=1}
+                                    <a class="layui-btn layui-btn-sm r-del hover-edit layui-btn-primary" data-info="{$s1-1}" data-info2="{$s2-1}">{$language_tag.index_public_del}</a>
+                                    {/if}
+                                    <a class="layui-btn layui-btn-sm r-add3 hover-add layui-btn-primary" data-info="{$s1-1}" data-info2="{$s2-1}">{$language_tag.index_public_add}</a>
+                                </td>
+
+                                {assign name='s3' value='$s3+1'}
+
+                                {assign name='u2' value='$k1'}
+                                {assign name='u3' value='$k2'}
+                            </tr>
+                            {/foreach}
+                            {/foreach}
+                            {/foreach}
+                            {else/}
+
+                            <tr>
+                                <td id="r-1" rowspan="1">{$language_tag.index_product_PlanReceivableBranch_receivable_branch}</td>
+                                <td class="layui-form type" id="r-1-1" rowspan="1" >
+                                    <select name="team_coping_type[1]" lay-filter="team_coping_type" data-ky="1" class="team_coping_type team_coping_type-1" lay-search>
+                                        {foreach $types as $ky=>$vl}
+                                        <option value="{$ky}"><?php echo $language_tag[$vl];?></option>
+                                        {/foreach}
+                                    </select>
+                                    <a class="layui-btn layui-btn-sm r-add nav-add" style="width: 100%;margin-top:10px" >{$language_tag.index_public_add}</a>
+                                </td>
+                                <td class="layui-form supplier" id="r-2-1" rowspan="1">
+                                    <select name="team_coping_supplier[1][1]" class="team_coping_supplier  ab-1 ac-1-1" lay-filter="team_coping_supplier" lay-search>
+                                        <option>{$language_tag.index_public_select}</option>
+                                    </select>
+                                    <a class="layui-btn layui-btn-sm r-add2 nav-add" style="width: 100%;margin-top:10px" data-info="1">{$language_tag.index_public_add}</a>
+                                </td>
+                                <td>{$language_tag.index_branchcompany_showBranchProductManage_number}</td>
+                                <td><input name="team_coping_item[1][1][1]" type="text" class="layui-input" /></td>
+                                <td class="layui-form">
+                                    <select name="team_coping_currency[1][1][1]" lay-search  >
+                                        <option>{$language_tag.index_public_select}</option>
+                                        {foreach $Currency as $kv}
+                                        <option value="{$kv.currency_id}" >{$kv.currency_name}</option>
+                                        {/foreach}
+                                    </select>
+                                </td>
+                                <td><input name="team_coping_price[1][1][1]"   class="layui-input team_coping_price" /></td>
+                                <td><input name="team_coping_quantity[1][1][1]" type="number" class="layui-input team_coping_quantity" /></td>
+                                <td class="all-select"><input name="team_coping_cope_money[1][1][1]"   class="layui-input team_coping_cope_money" readonly></td>
+                                <td>
+                                    <a class="layui-btn layui-btn-sm r-del hover-edit layui-btn-primary" data-info="1" data-info2="1">{$language_tag.index_public_del}</a>
+                                    <a class="layui-btn layui-btn-sm r-add3 hover-add layui-btn-primary" data-info="1" data-info2="1">{$language_tag.index_public_add}</a>
+                                </td>
+                            </tr>
+                            {/notempty}
+
+
+                            <!--应收供应商 END-->
+
+                            <!--暂不用-->
+                            <tr style="display: none"><td  id="v-1"></td></tr>
+
+                            </tbody>
+                        </table>
+                        <br><br>
+                        <div class="layui-form-item">
+                            <div class="all-button-center">
+                                <input type='hidden' name='travel_agency_reimbursement_number' value="{$travel_agency_reimbursement_number}" id='travel_agency_reimbursement_number'>
+                                {if $getTeamProductBase['plur_status']<=2 }
+                                    <button class="layui-btn nav-submit" lay-submit="" lay-filter="formDemo" id="language_add_button">{$language_tag.index_public_submit}</button>
+                                {/if}
+       							<a href="javascript:location.reload()" class="layui-btn layui-btn-primary">{$language_tag.index_product_showRouteTemplateManage_reload}</a>
+                                <a href="/product/ShowPlanTour"><button type="button" class="layui-btn layui-btn-primary">{$language_tag.index_public_back}</button></a>
+                                
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                
+                <div {if condition="$is_approve eq 0"} style="display:none"{/if} >
+                
+                	<table class='layui-table'>
+							<thead>
+                          <tr style='text-align: center'>
+                              <td  width='14%'>类型</td>
+                              <td  width='15%'>供应商</td>
+                              <td width='10%'>应收编号</td>
+                              <td width='10%'>名称</td>
+                            
+                              <td width='10%'>单价</td>
+                              <td width='10%'>数量</td>
+                              <td width='10%'>总价</td>
+                          </tr>
+                          </thead>
+                          <tbody id='tb'>
+                          	{foreach name='result' item='val'}
+						   <tr style='text-align: center'>           
+						   
+						    
+								<td class='layui-form type'>
+								     <select lay-filter="team_coping_type" disabled class="team_coping_type team_coping_type-1" lay-search>
+                                        {foreach $types as $ky=>$vl}
+                                        <option value="{$ky}" {if condition="$ky eq $val.source_type_id"}selected {/if}><?php echo $language_tag[$vl];?></option>
+                                        {/foreach}
+                                    </select>
+								
+								
+								</td>
+                                <td class='layui-form supplier'>{$val.supplier_name}</td>
+                              
+                               <td>{$val.receivable_number}</td>
+                               <td>{$val.product_name}</td>
+                         
+                               <td>{$val.price}{$val.currency_unit}</td>
+                               <td>{$val.unit}</td>
+                               <td>{$val.receivable_money}{$val.currency_unit}</td>
+         
+
+                          	</tr>
+                          	{/foreach}
+						</tbody>
+					</table>
+                
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+
+    <!--应收供应商-类型按钮-->
+    <table  style="display: none">
+        <tbody class="r1">
+        <tr>
+            <td class="layui-form type" id="r-1-ctv" rowspan="1" >
+                <select name="team_coping_type[ctv]" lay-filter="team_coping_type" data-ky="ctv" class="team_coping_type team_coping_type-ctv" lay-search>
+                    {foreach $types as $ky=>$vl}
+                    <option value="{$ky}"><?php echo $language_tag[$vl];?></option>
+                    {/foreach}
+                </select>
+                <a class="layui-btn layui-btn-sm r-add nav-add" style="width: 100%;margin-top:10px" >{$language_tag.index_public_add}</a>
+            </td>
+            <td class="layui-form supplier" id="r-2-ctu" rowspan="1">
+                <select name="team_coping_supplier[ctv][ctu]" class="team_coping_supplier ab-ctv ac-ctv-ctu" lay-filter="team_coping_supplier"  lay-search>
+                    <option>{$language_tag.index_public_select}</option>
+                </select>
+                <a class="layui-btn layui-btn-sm r-add2 nav-add" style="width: 100%;margin-top:10px" data-info="ctv">{$language_tag.index_public_add}</a>
+            </td>
+            <td>{$language_tag.index_branchcompany_showBranchProductManage_number}</td>
+            <td><input name="team_coping_item[ctv][ctu][cte]" type="text" class="layui-input" /></td>
+            <td class="layui-form">
+                <select name="team_coping_currency[ctv][ctu][cte]" lay-search>
+                    <option>{$language_tag.index_public_select}</option>
+                    {foreach $Currency as $kv}
+                    <option value="{$kv.currency_id}" >{$kv.currency_name}</option>
+                    {/foreach}
+                </select>
+            </td>
+            <td><input name="team_coping_price[ctv][ctu][cte]"  class="layui-input team_coping_price"></td>
+            <td><input name="team_coping_quantity[ctv][ctu][cte]" type="number" class="layui-input team_coping_quantity" /></td>
+            <td class="all-select"><input name="team_coping_cope_money[ctv][ctu][cte]"   class="layui-input team_coping_cope_money" readonly></td>
+            <td>
+                <a class="layui-btn layui-btn-sm r-del hover-edit layui-btn-primary" data-info="ctv" data-info2="ctu">{$language_tag.index_public_del}</a>
+                <a class="layui-btn layui-btn-sm r-add3 hover-add layui-btn-primary" data-info="ctv" data-info2="ctu">{$language_tag.index_public_add}</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <!--应收供应商-供应商类型-->
+    <table  style="display: none">
+        <tbody class="r2">
+        <tr>
+            <td class="layui-form supplier" id="r-2-ctu"  rowspan="1">
+                <select name="team_coping_supplier[ctv][ctu]" class="team_coping_supplier ab-ctv ac-ctv-ctu" lay-filter="team_coping_supplier" lay-search>
+                    <option>{$language_tag.index_public_select}</option>
+                </select>
+                <a class="layui-btn layui-btn-sm r-add2 nav-add" style="width: 100%;margin-top:10px" data-info="ctv">{$language_tag.index_public_add}</a>
+            </td>
+            <td>{$language_tag.index_branchcompany_showBranchProductManage_number}</td>
+            <td><input name="team_coping_item[ctv][ctu][cte]" type="text" class="layui-input" /></td>
+            <td class="layui-form">
+                <select name="team_coping_currency[ctv][ctu][cte]" lay-search>
+                    <option>{$language_tag.index_public_select}</option>
+                    {foreach $Currency as $kv}
+                    <option value="{$kv.currency_id}" >{$kv.currency_name}</option>
+                    {/foreach}
+                </select>
+            </td>
+            <td><input name="team_coping_price[ctv][ctu][cte]"   class="layui-input team_coping_price"></td>
+            <td><input name="team_coping_quantity[ctv][ctu][cte]" type="number" class="layui-input team_coping_quantity" /></td>
+            <td class="all-select"><input name="team_coping_cope_money[ctv][ctu][cte]"   class="layui-input team_coping_cope_money" readonly></td>
+            <td>
+                <a class="layui-btn layui-btn-sm r-del hover-edit layui-btn-primary" data-info="ctv" data-info2="ctu">{$language_tag.index_public_del}</a>
+                <a class="layui-btn layui-btn-sm r-add3 hover-add layui-btn-primary" data-info="ctv" data-info2="ctu">{$language_tag.index_public_add}</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <!--应收供应商-操作-->
+    <table  style="display: none">
+        <tbody class="r3">
+        <tr>
+            <td>{$language_tag.index_branchcompany_showBranchProductManage_number}</td>
+            <td><input name="team_coping_item[ctv][ctu][cte]" type="text" class="layui-input" /></td>
+            <td class="layui-form">
+                <select name="team_coping_currency[ctv][ctu][cte]" lay-search >
+                    <option>{$language_tag.index_public_select}</option>
+                    {foreach $Currency as $kv}
+                    <option value="{$kv.currency_id}" >{$kv.currency_name}</option>
+                    {/foreach}
+                </select>
+            </td>
+            <td><input name="team_coping_price[ctv][ctu][cte]" class="layui-input team_coping_price"></td>
+            <td><input name="team_coping_quantity[ctv][ctu][cte]" type="number" class="layui-input team_coping_quantity" /></td>
+            <td class="all-select"><input name="team_coping_cope_money[ctv][ctu][cte]"   class="layui-input team_coping_cope_money" readonly></td>
+            <td>
+                <a class="layui-btn layui-btn-sm r-del hover-edit layui-btn-primary" data-info="ctv" data-info2="ctu">{$language_tag.index_public_del}</a>
+                <a class="layui-btn layui-btn-sm r-add3 hover-add layui-btn-primary" data-info="ctv" data-info2="ctu">{$language_tag.index_public_add}</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+
+
+    <div class="layui-footer">
+        <!-- 底部固定区域 -->
+        © layui.com - 底部固定区域
+    </div>
+</div>
+{include file='public/foot_js' /}
+<script>
+    //JavaScript代码区域
+    !function(){
+        var layer = layui.layer ;
+        var form = layui.form;
+        var laydate = layui.laydate;
+
+        var r_1 = {$s1?$s1-1:1}; //团队应付类型
+        var r_2 = {$s2?$s2-1:1}; //团队应付供应商
+        var r_3 = {$s3?$s3-1:1}; //团体应付明细
+
+        var tr;
+        var class_sel;
+        //根据类型获取供应商
+        form.on('select(team_coping_type)', function(data) {
+            console.log(data);
+            tr = $(this).parent().parent().parent().parent();
+            class_sel = tr.find('.team_coping_type').data('ky');
+            var SupplierTypeId = data.value;
+            if(SupplierTypeId==0 || SupplierTypeId=='a'){
+                var h = '<option></option>';
+                $('.ab-'+class_sel).html('');
+                $('.ab-'+class_sel).html(h);
+                form.render();
+            }else{
+                layer.load(2);
+                $.post('/product/SupplierBySupplierTypeIdAjax',{SupplierTypeId:SupplierTypeId},function(a){
+                    layer.closeAll('loading');
+                    var h = '<option></option>';
+                    $('.ab-'+class_sel).html('');
+                    for(var x in a){
+                        h += '<option value="'+a[x]['supplier_id']+'">'+a[x]['supplier_name']+'</option>';
+                    }
+                    $('.ab-'+class_sel).html(h);
+                    form.render();
+                },'json');
+            }
+        });
+
+        $('#tb').delegate('.r-add','click',function(){
+            r_1++;r_2++;r_3++;
+            $(this).hide();
+            var rowspan = parseInt($('#r-1').attr('rowspan'))+1;
+            $('#r-1').attr('rowspan',rowspan);
+            var h = $('.r1').html();
+            for(var ii=0;ii<20;ii++){
+                h = h.replace('ctv',r_1);
+            }
+            for(var ii=0;ii<20;ii++){
+                h = h.replace('ctu',r_2);
+            }
+            for(var ii=0;ii<20;ii++){
+                h = h.replace('cte',r_3);
+            }
+
+//            $('#tb').append(h);
+            $('#v-1').parent().before(h);
+            form.render();
+        });
+
+        var rr;
+        $('#tb').delegate('.r-add2','click',function(){
+            r_2++;r_3++;
+            $(this).hide();
+            var r1 = $(this).data('info');
+            rr = r1;
+            var eq =  parseInt($('#tb').find('.r-add2').index(this))+1;
+            console.log(eq);
+
+            var tr = $('#tb').find('.r-add2').eq(eq).parent().parent();
+            console.log(tr);
+
+            // $(this).hide();
+            var rowspan = parseInt($('#r-1').attr('rowspan'))+1;
+            $('#r-1').attr('rowspan',rowspan);
+            var rowspan = parseInt($('#r-1-'+r1).attr('rowspan'))+1;
+            $('#r-1-'+r1).attr('rowspan',rowspan);
+
+            var h = $('.r2').html();
+            for(var ii=0;ii<20;ii++){
+                h = h.replace('ctv',r1);
+            }
+            for(var ii=0;ii<20;ii++){
+                h = h.replace('ctu',r_2);
+            }
+            for(var ii=0;ii<20;ii++){
+                h = h.replace('cte',r_3);
+            }
+
+//            console.log(tr.length);
+            if(tr.length){
+                tr.before(h);
+            }else{
+//                $('#tb').append(h);
+                $('#v-1').parent().before(h);
+            }
+            form.render();
+
+            var SupplierTypeId =$('.team_coping_type-'+r1).val();
+            if(SupplierTypeId>0){
+                layer.load(2);
+                $.post('/product/SupplierBySupplierTypeIdAjax',{SupplierTypeId:SupplierTypeId},function(a){
+                    layer.closeAll('loading');
+                    var h = '<option></option>';
+                    $('.ac-'+rr+'-'+r_2).html(h);
+                    for(var x in a){
+                        h += '<option value="'+a[x]['supplier_id']+'">'+a[x]['supplier_name']+'</option>';
+                    }
+                    $('.ac-'+rr+'-'+r_2).html(h);
+                    form.render();
+                },'json');
+            }
+
+        });
+
+
+        $('#tb').delegate('.r-add3','click',function(){
+            r_3++;
+            var r1 = $(this).data('info');
+            var r2 = $(this).data('info2');
+            var tr = $(this).parent().parent().next();
+
+            var rowspan = parseInt($('#r-1').attr('rowspan'))+1;
+            $('#r-1').attr('rowspan',rowspan);
+            var rowspan = parseInt($('#r-1-'+r1).attr('rowspan'))+1;
+            $('#r-1-'+r1).attr('rowspan',rowspan);
+            var rowspan = parseInt($('#r-2-'+r2).attr('rowspan'))+1;
+            $('#r-2-'+r2).attr('rowspan',rowspan);
+
+            var h = $('.r3').html();
+            for(var ii=0;ii<20;ii++){
+                h = h.replace('ctv',r1);
+            }
+            for(var ii=0;ii<20;ii++){
+                h = h.replace('ctu',r2);
+            }
+            for(var ii=0;ii<20;ii++){
+                h = h.replace('cte',r_3);
+            }
+
+            if(tr.length){
+                tr.before(h);
+            }else{
+//                $('#tb').append(h);
+                $('#v-1').parent().before(h);
+            }
+            form.render();
+        });
+
+        $('#tb').delegate('.r-del','click',function(){
+            var tr = $(this).parent().parent();
+            var r1 = $(this).data('info');
+            var r2 = $(this).data('info2');
+
+            var td = tr.find('#r-1');
+            var td1 = tr.find('#r-1-'+r1);
+            var td2 = tr.find('#r-2-'+r2);
+
+            if(td.length==0 && td1.length==0  && td2.length==0 ){
+                var rowspan = parseInt($('#r-1').attr('rowspan'))-1;
+                $('#r-1').attr('rowspan',rowspan);
+                var rowspan = parseInt($('#r-1-'+r1).attr('rowspan'))-1;
+                $('#r-1-'+r1).attr('rowspan',rowspan);
+                var rowspan = parseInt($('#r-2-'+r2).attr('rowspan'))-1;
+                $('#r-2-'+r2).attr('rowspan',rowspan);
+                $(this).parent().parent().remove();
+            }
+
+            if(td.length==0 && td1.length==0 && td2.length==1){
+                if($(this).parent().parent().next().find('.type').length==1){
+                    var tt = $(this).parent().parent().prev();
+                    while(1){
+                        if(tt.find('.supplier').length==1){
+                            tt.find('.supplier').find('a').show();break;
+                        }else{
+                            tt = tt.prev();
+                        }
+                    }
+                }
+
+                var rowspan = parseInt($('#r-1').attr('rowspan'))-1;
+                $('#r-1').attr('rowspan',rowspan);
+                var rowspan = parseInt($('#r-1-'+r1).attr('rowspan'))-1;
+                $('#r-1-'+r1).attr('rowspan',rowspan);
+                var rowspan = parseInt($('#r-2-'+r2).attr('rowspan'))-1;
+                $('#r-2-'+r2).attr('rowspan',rowspan);
+
+                var tr_next = $(this).parent().parent().next();
+                var td_supplier = tr_next.find('.supplier');
+                if(td_supplier.length==0){
+                    tr_next.prepend(td2);
+                    $(this).parent().parent().remove();
+                }else{
+                    $(this).parent().parent().remove();
+                }
+            }
+
+            if(td.length==0 && td1.length==1 && td2.length==1){
+                if($(this).parent().parent().next().find('#v-1').length==1){
+                    var tt = $(this).parent().parent().prev();
+                    while(1){
+                        if(tt.find('.type').length==1){
+                            tt.find('.type').find('a').show();
+                            break;
+                        }else{
+                            tt = tt.prev();
+                        }
+                    }
+                }
+                var rowspan = parseInt($('#r-1').attr('rowspan'))-1;
+                $('#r-1').attr('rowspan',rowspan);
+                var rowspan = parseInt($('#r-1-'+r1).attr('rowspan'))-1;
+                $('#r-1-'+r1).attr('rowspan',rowspan);
+                var rowspan = parseInt($('#r-2-'+r2).attr('rowspan'))-1;
+                $('#r-2-'+r2).attr('rowspan',rowspan);
+
+                var tr_next = $(this).parent().parent().next();
+                var td_type = tr_next.find('.type');
+                var td_supplier = tr_next.find('.supplier');
+
+                if(td_type.length==0 && td_supplier.length==0){
+                    tr_next.prepend(td2);
+                    tr_next.prepend(td1);
+                    $(this).parent().parent().remove();
+                }else if(td_type.length==0 && td_supplier.length==1){
+                    tr_next.prepend(td1);
+                    $(this).parent().parent().remove();
+                }else{
+                    $(this).parent().parent().remove();
+                }
+
+            }
+
+            if(td.length==1 && td1.length==1 && td2.length==1){
+                var rowspan = parseInt($('#r-1').attr('rowspan'))-1;
+                if(rowspan==0){
+                    $(this).parent().parent().find('input').val('');
+                    $(this).parent().parent().find('select').val('a');
+                    return;
+                }
+                $('#r-1').attr('rowspan',rowspan);
+                var rowspan = parseInt($('#r-1-'+r1).attr('rowspan'))-1;
+                $('#r-1-'+r1).attr('rowspan',rowspan);
+                var rowspan = parseInt($('#r-2-'+r2).attr('rowspan'))-1;
+                $('#r-2-'+r2).attr('rowspan',rowspan);
+
+                var tr_next = $(this).parent().parent().next();
+                var td_supplier = tr_next.find('.supplier');
+                var td_type = tr_next.find('.type');
+
+
+                if(td_supplier.length==0){
+                    tr_next.prepend(td2);
+                    tr_next.prepend(td1);
+                    tr_next.prepend(td);
+                }
+                if(td_type.length==0 && td_supplier.length==1){
+                    tr_next.prepend(td1);
+                    tr_next.prepend(td);
+                }
+                if(td_type.length==1 && td_supplier.length==1) {
+                    tr_next.prepend(td);
+                }
+                $(this).parent().parent().remove();
+
+            }
+
+        });
+
+
+        $('#tb').delegate('.team_coping_price','blur',function(){
+            var team_coping_price = $(this).val();
+            var team_coping_quantity = $(this).parent().parent().find('.team_coping_quantity').val();
+            var team_coping_cope_money = team_coping_price*team_coping_quantity;
+            $(this).parent().parent().find('.team_coping_cope_money').val(team_coping_cope_money.toFixed(2));
+        });
+
+        $('#tb').delegate('.team_coping_quantity','blur',function(){
+            var team_coping_price = $(this).parent().parent().find('.team_coping_price').val();
+            var team_coping_quantity = $(this).parent().parent().find('.team_coping_quantity').val();
+            var team_coping_cope_money = team_coping_price*team_coping_quantity;
+            $(this).parent().parent().find('.team_coping_cope_money').val(team_coping_cope_money.toFixed(2));
+        });
+
+    }();
+    function add() {
+        layer.load(2);
+        $.ajax({
+            type: "POST",
+            url: '/product/addSupplierReceivableAjax?number={$_GET["number"]}&plan_id={$_GET["plan_id"]}',
+            data: $('#form1').serializeArray(),
+            success: function (data) {
+                layer.closeAll('loading');
+                if(data.code!=200){
+                    layer.msg(data.msg)
+                    return false;
+                }else if(data.code==200){
+                    layer.msg('{$language_tag.index_public_success}',{time:1,end : function(layero, index){
+                        location.reload();
+                    }
+                    });
+                }
+            },
+            error:function(XMLHttpRequest, textStatus, errorThrown){
+                layer.closeAll('loading');
+                //console.log(errorThrown)
+                layer.msg('{$language_tag.index_public_verificationFailure}')
+
+            }
+        });
+        return false;
+    }
+</script>
+</body>
+</html>
+
+<script>
+
+
+</script>

@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {include file='public/head' /}
+    <title>提醒管理 - 系统提醒设置</title>
+
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+
+    <div class="layui-header">
+        {include file='public/header' /}
+    </div>
+
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll">
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            {include file='public/left_menu' /}
+        </div>
+    </div>
+
+    <div class="layui-body">
+
+        <!-- 内容主体区域 -->
+        <div style="padding: 15px;">
+            <div class='layui-form-item'>
+		   		<span class="layui-breadcrumb">
+					<a href="#">首页</a>
+					<a href="#">提醒管理</a>
+					<a href="#"><cite>系统提醒设置</cite></a>
+				</span>
+            </div>
+            <br/>
+            <br/>
+            <br/>
+            <form class="layui-form" >
+                <div class='layui-input-inline'>
+                    <div class="layui-form">
+                        <select name="status">
+                            <option value="0" selected="">状态</option>
+                            <option value="1" {if condition="$Think.get.status eq 1"}selected='selected' {/if}>启用</option>
+                            <option value="2" {if condition="$Think.get.status eq 2"}selected='selected' {/if}>禁用</option>
+                        </select>
+                    </div>
+                </div>
+                <div class='layui-input-inline'>
+                     <select name="system_alert_event_id" lay-search>
+                         <option value="">全部事件</option>
+                         {foreach $getSystemAlertEvent as $v}
+                            <option value="{$v.system_alert_event_id}" {$v.system_alert_event_id==$_GET['system_alert_event_id']?"selected":""}>{$v.event_name}</option>
+                         {/foreach}
+                     </select>
+                </div>
+                <div class='layui-button-inline layui-search-inline'>
+                    <button class="layui-btn nav-search" >搜索</button>
+                </div>
+
+                <div class='layui-button-inline layui-search-inline'>
+                    <a class="layui-btn" id="batch_enabled" >批量启用</a>
+                </div>
+                <div class='layui-button-inline layui-search-inline'>
+                    <a class="layui-btn" id="batch_disable" >批量禁用</a>
+                </div>
+
+            </form>
+
+            <div class="table-nont user-manage pageHeight">
+                <table  class="layui-table layui-form"  id="language-table">
+                    <thead>
+                    <tr>
+                        <th width="80"><input class="" type="checkbox" title=""  lay-skin="primary" lay-filter="all_checkbox_id"/></th>
+                        <th width="150">类型</th>
+                        <th width="250">事件</th>
+                        <th width="80">状态</th>
+                        <th>操作</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {foreach $system_alert_event as $system_alert_event_v}
+                        <tr>
+                            <th><input class="checkbox_id" value="{$system_alert_event_v.system_alert_setting_id}" type="checkbox" title="" lay-skin="primary" /></th>
+                            <th>{$system_alert_event_v.event_type==1?'系统提醒':''}</th>
+                            <th>{$system_alert_event_v.event_name|default='-'}</th>
+                            <th>
+                                <select  lay-filter="edit-status" class="edit-status" >
+                                    <option value="1-{$system_alert_event_v.system_alert_setting_id}" {$system_alert_event_v.system_alert_setting_status==1?'selected':''}>启用</option>
+                                    <option value="2-{$system_alert_event_v.system_alert_setting_id}" {$system_alert_event_v.system_alert_setting_status==2?'selected':''}>禁用</option>
+                                </select>
+                            </th>
+                            <th>
+                                {if $system_alert_event_v.system_alert_setting_status==1}
+                                <a class="layui-btn layui-btn-sm hover-edit layui-btn-primary edit-system-alert-setting"   data-info="{$system_alert_event_v.system_alert_setting_id}">编辑</a>
+                                {/if}
+                            </th>
+                        </tr>
+                    {/foreach}
+
+
+                    </tbody>
+                </table>
+             </div>
+
+
+        </div>
+    </div>
+
+    <div class="layui-footer">
+        <!-- 底部固定区域 -->
+        © layui.com - 底部固定区域
+    </div>
+</div>
+{include file='public/foot_js' /}
+<script src='__STATIC__/javascript/system/language.js'></script>
+
+<script>
+    !function() {
+        var layer = layui.layer;
+        var form = layui.form;
+        var laydate = layui.laydate;
+        var table = layui.table;
+        var laytpl = layui.laytpl;
+
+        form.on('select(edit-status)',function(data){
+            var v = data.value;
+            $.ajax({
+                type: "POST",
+                url: '/reminderManagement/EditSystemReminderState',
+                data: {"system_alert_setting_id":v},
+                success: function (data) {
+                    if(data.code==200){
+                        layer.msg('success',{time:1,end : function(layero, index){
+                            location.reload();
+                        }
+                        });
+                    }else{
+                        layer.msg('无可修改数据');
+                        return;
+                    }
+                },
+                error:function(XMLHttpRequest, textStatus, errorThrown){
+                    //console.log(errorThrown)
+                    layer.msg('验证失败')
+
+                }
+            });
+        });
+
+
+        //全选
+        form.on('checkbox(all_checkbox_id)', function(data){
+            var child = $(data.elem).parents('thead').siblings("tbody").find('th input[type="checkbox"]');
+            child.each(function(index, item){
+                item.checked = data.elem.checked;
+            });
+            form.render('checkbox');
+        });
+
+        $('#batch_enabled').on('click',function(){
+            var newQ = new Array();
+            $('.checkbox_id').each(function(index, item) {
+                if (item.checked == true) {
+                    newQ.push(item.value);
+                }
+            });
+            if(newQ.length<1){
+                layer.msg('至少选择一条数据处理');
+                return;
+            }
+            console.log(newQ);
+            layer.load(2);
+            $.post('/reminderManagement/batchEditSystemReminderState',{'system_alert_setting_id':newQ,'status':1},function(data){
+                layer.closeAll();
+                if(data.code==200){
+                    layer.msg('success',{time:1,end : function(layero, index){
+                        location.reload();
+                        }
+                    });
+                }else{
+                    layer.msg('无可修改数据');
+                    return;
+                }
+            });
+
+        });
+
+        $('#batch_disable').on('click',function(){
+            var newQ = new Array();
+            $('.checkbox_id').each(function(index, item) {
+                if (item.checked == true) {
+                    newQ.push(item.value);
+                }
+            });
+            if(newQ.length<1){
+                layer.msg('至少选择一条数据处理');
+                return;
+            }
+            console.log(newQ);
+            layer.load(2);
+            $.post('/reminderManagement/batchEditSystemReminderState',{'system_alert_setting_id':newQ,'status':2},function(data){
+                layer.closeAll();
+                if(data.code==200){
+                    layer.msg('success',{time:1,end : function(layero, index){
+                        location.reload();
+                    }
+                    });
+                }else{
+                    layer.msg('无可修改数据');
+                    return;
+                }
+            });
+
+        });
+
+        $('.edit-system-alert-setting').on('click',function(){
+            var system_alert_setting_id = $(this).data('info');
+            open = layer.open({
+                title:'',
+                type: 2,
+                area: ['65%','600px'],
+                content: ['/reminderManagement/editSystemAlertSetting?system_alert_setting_id='+system_alert_setting_id] //这里content是一个URL，如果你不想让iframe出现滚动条，你还可以content: ['http://sentsin.com', 'no']
+            });
+        });
+
+
+
+
+    }();
+
+    function openClose(){
+        layer.close(open);
+    }
+
+</script>
+
+</body>
+</html>

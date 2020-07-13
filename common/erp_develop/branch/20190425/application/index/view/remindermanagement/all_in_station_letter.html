@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {include file='public/head' /}
+    <title>全部系统消息</title>
+    <link href="__STATIC__/css/product.css" rel="stylesheet">
+    <style>
+        .layui-body{
+            overflow: hidden;
+        }
+        .layui-body .layui-table-main{
+            overflow: auto;
+            height:350px;
+            margin-top:10px;
+            border-top:1px solid #e6e6e6;
+        }
+        .layui-body table{
+            margin:0px;
+        }
+        @media screen and (min-width:1680px){
+            .layui-body .layui-table-main{
+                height:580px;
+            }
+        }
+    </style>
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+    <div class="layui-header">
+        {include file='public/header' /}
+    </div>
+
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll">
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            {include file='public/left_menu' /}
+        </div>
+    </div>
+
+    <div class="layui-body layui-body-bg">
+
+        <!-- 内容主体区域 -->
+        <div style="padding: 15px 15px 0px;">
+            <div class="body-top">
+                <div class='layui-form-item'>
+                    <span class="layui-breadcrumb" lay-separator="-">
+                        <a>首页</a>
+                        <a>提醒管理</a>
+                        <a><cite>全部系统消息</cite></a>
+                    </span>
+                </div>
+                <div class='layui-block all-search-bg'>
+                    <form class="layui-form" action="" method="get" >
+                        <div class="layui-row">
+                            <div class="layui-col-md4">
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">创建日期:</label>
+                                    <div class="layui-input-block">
+                                        <div class="layui-input-inline date-width">
+                                            <input type="text" value="{$_GET['sDate']}" name="sDate" id="sDate" placeholder="年/月/日"  class="layui-input" >
+                                        </div>
+                                        <div class="date-and">-</div>
+                                        <div class="layui-input-inline date-width">
+                                            <input type="text" value="{$_GET['eDate']}" name="eDate" id="eDate" placeholder="年/月/日"  class="layui-input" >
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="layui-col-md4">
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">状态:</label>
+                                    <div class="layui-input-block">
+                                         <select name="status">
+                                             <option value="0">全部</option>
+                                             <option value="1">未读</option>
+                                             <option value="2">已读</option>
+                                         </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="layui-row">
+                            <div class="layui-col-md4 layui-col-md-offset4">
+                                <div class='input-inline all-button-center pages-search-margin'>
+                                    <button class="layui-btn nav-search">{$Think.lang.index_public_search}</button>
+                                </div>
+                            </div>
+                        </div>
+
+
+                    </form>
+
+                </div>
+            </div>
+            <div class="content-bg">
+                   <div  class="table-nont user-manage newBg-pageHeight" style="display: block;">
+                    <table class="layui-table layui-form" id="language-table" style="table-layout:fixed;">
+
+                        <thead>
+                        <tr>
+                            <th width="15%">项目</th>
+                            <th width="30%">内容</th>
+                            <th width="10%">状态</th>
+                            <th width="20%">日期</th>
+                            <th width="20%">操作</th>
+                        </tr>
+                        </thead>
+
+                        <tbody>
+                        {foreach $getInStationLetter as $v}
+                            <tr>
+                                <td>{$getSystemAlertEventGrpup[$v.system_alert_event_id][0]['event_name']|default='-'}</td>
+                                <td>{$v.content}</td>
+                                <td>{$v.status==1?'未读':'已读'}</td>
+                                <td><?php echo date('Y-m-d H:i:s',$v['create_time']); ?></td>
+                                <td><a class="layui-btn layui-btn-sm hover-edit layui-btn-primary aUrl" data-href="{$v.url}" data-id="{$v.in_station_letter_id}"   onclick="Aurl(this)" >查看</a></td>
+                            </tr>
+                        {/foreach}
+                        </tbody>
+
+                    </table>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="layui-footer">
+        <!-- 底部固定区域 -->
+        © layui.com - 底部固定区域
+    </div>
+</div>
+{include file='public/foot_js' /}
+
+
+
+<script>
+    //JavaScript代码区域
+    !function(){
+        var layer = layui.layer ;
+        var form = layui.form;
+        var laydate = layui.laydate;
+        var table=layui.table;
+        var laytpl=layui.laytpl;
+
+        //常规用法
+        laydate.render({
+            elem: '#sDate'
+            ,lang: 'zn'
+        });
+        laydate.render({
+            elem: '#eDate'
+            ,lang: 'zn'
+        });
+
+
+
+    }();
+
+</script>
+</body>
+</html>

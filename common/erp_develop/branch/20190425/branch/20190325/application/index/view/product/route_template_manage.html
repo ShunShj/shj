@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {include file='public/head' /}
+    <title>线路模板</title>
+
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+    <div class="layui-header">
+        {include file='public/header' /}
+    </div>
+
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll">
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            {include file='public/left_menu' /}
+        </div>
+    </div>
+
+    <div class="layui-body layui-body-bg">
+
+        <!-- 内容主体区域 -->
+        <div style="padding: 15px 15px 0px;">
+            <div class="body-top">
+                <div class='layui-form-item'>
+                    <span class="layui-breadcrumb" lay-separator="-">
+                        <a>{$Think.lang.index_public_homepage}</a>
+                        <a>{$Think.lang.index_public_product}</a>
+                        <a><cite>{$Think.lang.index_product_showRouteTemplateManage_route_template}</cite></a>
+                    </span>
+                </div>
+                <div class='layui-block all-search-bg'>
+                    <form class="layui-form" method='get' action='/product/showRouteTemplateManage'>
+                        <div class="layui-row">
+                            <div class="layui-col-md4">
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">{$Think.lang.index_product_showRouteTemplateManage_id}:</label>
+                                    <div class="layui-input-block">
+                                        <input type="text" id="" autocomplete="off" name="route_template_id"  placeholder="{$Think.lang.index_product_showRouteTemplateManage_id}" class="layui-input" value="{$_GET['route_template_id']}">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-col-md4">
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">{$Think.lang.index_public_status}:</label>
+                                    <div class="layui-input-block">
+                                        <select name="status">
+
+                                            <option value="" {$_GET['status']==''?'selected':''} >{$Think.lang.index_product_showRouteTemplateManage_status}</option>
+                                            <option value="0" {$_GET['status']=='0'?'selected':''}>{$Think.lang.index_public_disabled}</option>
+
+                                            <option value="1" {$_GET['status']==1?'selected':''}>{$Think.lang.index_public_show}</option>
+                                            <!--<option value="2">审批中</option>
+                                            <option value="3">修改完成</option>-->
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-col-md4">
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">{$Think.lang.index_product_showRouteTemplateManage_routName}:</label>
+                                    <div class="layui-input-block">
+                                        <input type="text" id="" name="route_name" autocomplete="off"  placeholder="{$Think.lang.index_product_showRouteTemplateManage_routName}" class="layui-input" value="{$_GET['route_name']}" >
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-row">
+                            <div class="layui-col-md4 layui-col-md-offset4">
+                                <div class='input-inline all-button-center pages-search-margin'>
+                                    <button class="layui-btn nav-search" >{$Think.lang.index_public_search}</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                    <!--<div class='layui-button-inline'>
+                        <a href='/product/showRouteTemplateAdd'><button class="layui-btn nav-add">新建线路模板</button></a>
+                    </div>-->
+                </div>
+            </div>
+            <div class="content-bg">
+                <span style="{:action('index/auth/check_auth',['role_id'=>'225'])}"><a href='/product/showRouteTemplateAdd'><button class="layui-btn nav-add layui-btn-sm">{$Think.lang.index_product_showRouteTemplateManage_newRouteTemplate}</button></a></span>
+                <hr>
+                <div class="table-nont user-manage newBg-pageHeight">
+                    <table class="layui-table" id="language-table">
+                        <thead>
+                        <tr>
+
+                            <th>{$Think.lang.index_product_showRouteTemplateManage_id}</th>
+                            <th>{$Think.lang.index_product_showRouteTemplateManage_newRouteTemplate_name}</th>
+                            <th>{$Think.lang.index_product_showRouteTemplateManage_routeType}</th>
+                            <th>{$Think.lang.index_product_showRouteTemplateManage_days}</th>
+                            <th>{$Think.lang.index_product_showRouteTemplateManage_updateTime}</th>
+                            <th>{$Think.lang.index_product_showRouteTemplateManage_userName}</th>
+                            <th>{$Think.lang.index_public_status}</th>
+                            <th class="layui-table-width">{$Think.lang.index_source_operation}</th>
+                        </tr>
+                        </thead>
+
+                        <tbody>
+                        {foreach name="data" item="vo" }
+                        <tr>
+
+                            <th>{$vo.route_template_id}</th>
+                            <th>{$vo.route_name}</th>
+                            <th>{$vo.route_type_name}</th>
+                            <th>{$vo.days}</th>
+                            <th>{$vo.update_time|date='Y-m-d H:i:s',###}</th>
+                            <th>{$vo.route_user_name}</th>
+                            <th><span>{if condition="$vo.status eq 1"}{$Think.lang.index_public_show}{else/}{$Think.lang.index_public_disabled}{/if}</span></th>
+                            <th><span style="{:action('index/auth/check_auth',['role_id'=>'226'])}"><a href='/product/showRouteTemplateEdit?route_template_id={$vo.route_template_id}'><button class="layui-btn layui-btn-sm hover-edit layui-btn-primary">{$Think.lang.index_public_update}</button></a></span>
+                                <span style="{:action('index/auth/check_auth',['role_id'=>'227'])}"><a href='/product/showRouteTemplateInfo?route_template_id={$vo.route_template_id}'><button class="layui-btn layui-btn-sm hover-edit layui-btn-primary">{$Think.lang.index_public_info}</button></a></span>
+                                <!--<a href='/product/showRouteTemplateInfo?route_template_id={$vo.route_template_id}'><button class="layui-btn layui-btn-sm hover-details layui-btn-primary">详情</button></a>-->
+                            </th>
+                        </tr>
+                        {/foreach}
+                        </tbody>
+
+                    </table>
+                </div>
+            </div>
+            <div class="listButtom">
+                {include file='public/page' /}
+            </div>
+        </div>
+    </div>
+
+    <div class="layui-footer">
+        <!-- 底部固定区域 -->
+        © layui.com - 底部固定区域
+    </div>
+</div>
+{include file='public/foot_js' /}
+
+</body>
+</html>
+     

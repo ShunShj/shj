@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    {include file='public/head' /}
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>{$language_tag.index_public_homepage}</title>
+    <link rel="stylesheet" href="__STATIC__/css/index.css">
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+    <div class="layui-header">
+        {include file='public/header' /}
+    </div>
+
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll">
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            {include file='public/left_menu' /}
+        </div>
+    </div>
+
+    <div class="layui-body layui-body-bg">
+        <div style="padding: 15px 15px 0px;">
+            <div class="body-top">
+                <div class='layui-form-item'>
+                    <span class="layui-breadcrumb" lay-separator="-">
+                        <a>{$language_tag.index_public_homepage}</a>
+                        <a><cite>{$language_tag.index_index_controlPanel}</cite></a>
+                    </span>
+                </div>
+            </div>
+            <div class="table-nont">
+                <div class="control-top">
+                    <div class="layui-row layui-col-space10">
+                        <div class="layui-col-md6">
+                            <div class="layui-row layui-col-space10">
+                                <div class="layui-col-md3" >
+                                    <div class="bg-one bg-one-img">
+                                        <a href="/product/ShowPlanTour">
+                                            <div>{$language_tag.index_index_receiveVisitorsToday}({$language_tag.index_index_people})</div>
+                                            <h4 id="today_customer_count">0</h4>
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="layui-col-md3">
+                                    <div class="bg-two bg-one-img">
+                                        <a href="/product/ShowPlanTour">
+                                            <div>{$language_tag.index_index_numberOfGroupsOutToday}</div>
+                                            <h4 id="today_team_product_count">0</h4>
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="layui-col-md3">
+                                    <div class="bg-three bg-img-edu">
+                                        <a href="/branchcompany/showCompanyOrderManage">
+                                            <div>{$language_tag.index_index_turnoverToday}(RMB)</div>
+                                            <h4 id="today_receivable">0</h4>
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="layui-col-md3">
+                                    <div class="bg-four bg-one-img">
+                                        <a href="/product/ShowPlanTour">
+                                            <div>{$language_tag.index_index_receiveVisitorsThisMonth}({$language_tag.index_index_people})</div>
+                                            <h4 id="month_customer_count">0</h4>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-col-md6">
+                            <div class="layui-row layui-col-space10">
+                                <div class="layui-col-md3 bg-img-tuan" >
+                                    <div class="bg-one bg-one-img">
+                                        <a href="product/ShowPlanTour">
+                                            <div>{$language_tag.index_index_numberOfToursThisMonth}</div>
+                                            <h4 id="month_team_product_count">0</h4>
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="layui-col-md3">
+                                    <div class="bg-two bg-img-edu">
+                                        <a href="/branchcompany/showCompanyOrderManage">
+                                            <div>{$language_tag.index_index_turnoverThisMonth}(RMB)</div>
+                                            <h4 id="month_receivable">0</h4>
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="layui-col-md3">
+                                    <div class="bg-three bg-img-ying">
+                                        <a href="finance/showReceivableManage">
+                                            <div>{$language_tag.index_index_accountsReceivable}(RMB)</div>
+                                            <h4 id="all_receivable">0</h4>
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="layui-col-md3">
+                                    <div class="bg-four bg-img-yishou">
+                                        <a href="finance/showReceivableManage">
+                                            <div>{$language_tag.index_index_accountsReceived}(RMB)</div>
+                                            <h4 id="all_receivable_info">0</h4>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div><!--top-->
+                <div class="control-chart-one">
+                    <div class="layui-row layui-col-space10">
+                        <div class="layui-col-md8 control-oneChart-left">
+                            <div>
+                                <h4 class="clear">
+                                    <div class="fl">{$language_tag.index_index_passengerStatisticsTable}</div>
+                                    <div class="fr layui-btn-group one-button">
+                                        <button class="layui-btn layui-btn-xs layui-btn-primary index-one-button" onclick="chartList('7','chartOne',this)">{$language_tag.index_index_last_7_days}</button>
+                                        <button class="layui-btn layui-btn-xs layui-btn-primary" onclick="chartList('30','chartOne',this)">{$language_tag.index_index_last_30_days}</button>
+                                        <button class="layui-btn layui-btn-xs layui-btn-primary" onclick="chartList('90','chartOne',this)">{$language_tag.index_index_last_90_days}</button>
+                                    </div>
+                                </h4>
+                                <div id="chartOne" style="width: 100%;height:340px;margin-top:25px">
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-col-md4 control-oneChart-right ">
+                            <div class="contorl-boards">
+                                <div class="contorl-boards-title">{$language_tag.index_index_systemAnnouncement}</div>
+                                <div class="contorl-boards-box" id="contorl-boards-box">
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div><!--收客统计////系统公告-->
+                <div class="control-chart-one">
+                    <div class="layui-row layui-col-space10">
+                        <div class="layui-col-md8 control-oneChart-left">
+                            <div>
+                                <h4 class="clear">
+                                    <div class="fl">{$language_tag.index_index_statisticsDorecastOfSales}</div>
+                                    <div class="fr layui-btn-group two-button">
+                                        <button class="layui-btn layui-btn-xs layui-btn-primary" onclick="chartList('7-2','chartTwo',this)">{$language_tag.index_index_last_7_days}</button>
+                                        <button class="layui-btn layui-btn-xs layui-btn-primary index-two-button" onclick="chartList('30-2','chartTwo',this)">{$language_tag.index_index_last_30_days}</button>
+                                        <button class="layui-btn layui-btn-xs layui-btn-primary" onclick="chartList('90-2','chartTwo',this)">{$language_tag.index_index_last_90_days}</button>
+                                    </div>
+                                </h4>
+                                <div id="chartTwo" style="width: 100%;height:340px;margin-top:25px">
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-col-md4 control-oneChart-right ">
+                            <div class="contorl-boards">
+                                <div class="contorl-boards-title">{$language_tag.index_index_myApproval}</div>
+                                <div class="contorl-boards-box" id="contorl-boards-box2">
+                                    <div class="contorl-boards-list clear">
+                                        <div class="fl"><span class="list-bg-one"></span>{$language_tag.index_index_pendingMyApproval}</div>
+                                        <div class="fr"><i>0</i>({$language_tag.index_index_number})</div>
+                                    </div>
+                                    <div class="contorl-boards-list clear">
+                                        <div class="fl"><span class="list-bg-two"></span>{$language_tag.index_index_iStartedIt}</div>
+                                        <div class="fr"><i>0</i>({$language_tag.index_index_number})</div>
+                                    </div>
+                                    <div class="contorl-boards-list clear">
+                                        <div class="fl"><span class="list-bg-three"></span>{$language_tag.index_index_approved}</div>
+                                        <div class="fr"><i>0</i>({$language_tag.index_index_number})</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div><!--销售额///审批-->
+                <div class="control-last">
+                    <div class="layui-row layui-col-space10">
+                        <div class="layui-col-md8 control-last-list">
+                            <div>
+                                <div class="contorl-boards-title clear"><span class="fl">{$language_tag.index_index_serviceReminder}</span><span class="fr layui-icon layui-icon-more-vertical"></span></div>
+                                <!--<div class="contorl-boards-box contorl-last-scroll">-->
+                                <div id="service-reminder" class="table-nont" style="height:365px;overflow: auto;padding-top:10px;">
+                                    <!--<div class="clear">
+                                        <a href="#">
+                                            <div class="fl">aaaaaaaaaaaa</div>
+                                            <div class="fr">{$language_tag.index_reminderManagement_allInStationLetter_unread}</div>
+                                            <div class="fr">2018-06-01</div>
+                                        </a>
+                                    </div>-->
+                                  <!--  {empty name='service_reminder'}
+                                        <div class="index-none">{$language_tag.index_public_noData}</div>
+                                    {else /}
+                                    <table class="layui-table">
+                                        <thead>
+                                        <tr>
+                                            <th>{$language_tag.index_public_finish}</th>
+                                            <th>{$language_tag.index_finance_showReceivableManage_order_number}</th>
+                                            <th>事件</th>
+                                            <th>{$language_tag.index_index_email_template}</th>
+                                            <th>{$language_tag.index_public_send}</th>
+                                            <th>{$language_tag.index_index_remind_date}</th>
+                                            <th>{$language_tag.index_index_remind_object}</th>
+                                            <th>{$language_tag.index_product_showRouteTemplateManage_resources_enclosure}</th>
+                                            <th>{$language_tag.index_public_mark}</th>
+                                        </tr>
+                                        </thead>
+
+                                        {foreach $service_reminder as $value}
+                                        <tr>
+                                            <th><input type="checkbox" value="{$value.id}" title=""></th>
+                                            <th>{$value.company_order_number}</th>
+                                            <th>{$value.operation_name}</th>
+                                            <th>{$value.email_template_id}</th>
+                                            <th>
+                                                {if condition="$value.is_email_sent eq 1"}
+                                                <button class="layui-btn layui-btn-sm hover-edit layui-btn-primary">已发送</button>
+                                                {elseif condition="$value.is_email_sent eq 0"/}
+                                                <a href=''><button class="layui-btn layui-btn-sm hover-details layui-btn-primary">{$language_tag.index_public_send}</button></a>
+                                                {/if}
+                                            </th>
+                                            <th>{$value.remind_at}</th>
+                                            <th>{$value.remind_to_nickname}</th>
+                                            <th>{$value.remind_to}</th>
+                                            <th>{$value.remark}</th>
+                                        </tr>
+                                        {/foreach}
+                                        {/empty}
+                                        </tbody>
+
+                                    </table>-->
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-col-md4 control-last-list">
+                            <div>
+                                <div class="contorl-boards-title clear"><span class="fl">{$language_tag.index_index_uncollectedAccountsRanking}</span><span class="fr layui-icon layui-icon-more-vertical"></span></div>
+                                <div class="contorl-boards-box contorl-last-scroll" id="miss_payment_company">
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="layui-footer">
+        <!-- 底部固定区域 -->
+        © layui.com - 底部固定区域
+    </div>
+    <script id="demo" type="text/html">
+        {{#  layui.each(d, function(index, item){ }}
+        <div class="clear">
+            <div class="fl">{{item.content}}</div>
+            <div class="fr">{{item.date}}</div>
+        </div>
+        {{#  }); }}
+    </script>
+</div>
+{include file='public/foot_js' /}
+<script type="text/javascript" src="__STATIC__/javascript/index/echarts.js"></script>
+<script type="text/javascript" src="__STATIC__/javascript/index/index.js"></script>
+<script>
+    var layer = layui.layer;
+    var form = layui.form;
+    var upload = layui.upload;
+    $.ajax({
+        type : 'post',
+        url : '/operations/getgetServiceReminderListAjax',
+        data:{},
+        dataType: 'json',
+        success:function (data) {
+            if (data.code == 200 && data.data.length != 0) {
+                var user_arr = data.data[0].user_arr;
+                console.log(data.data);
+                /*业务提醒*/
+                var html = "";
+                html += '<table class="layui-table layui-form" style="margin:0px 10px;table-layout:fixed;"><colgroup><col width="60px" /><col width="150px" /><col width="150px" /><col width="150px" /><col width="150px" /><col width="150px" /><col width="150px" /><col width="200px" /><col width="150px" /><col width="150px" /></colgroup><thead><tr><th>{$language_tag.index_public_finish}</th><th>{$language_tag.index_finance_showReceivableManage_order_number}</th><th>{$language_tag.index_index_incident}</th><th>{$language_tag.index_index_email_template}</th><th>{$language_tag.index_public_send}</th><th>{$language_tag.index_index_remind_date}</th><th>{$language_tag.index_index_remind_object}</th><th>{$language_tag.index_product_showRouteTemplateManage_resources_enclosure}</th><th>{$language_tag.index_product_loadFlight_upload_accessory}</th><th>{$language_tag.index_public_mark}</th></tr></thead><tbody>';
+
+                for(var i=0;i<data.data.length;i++) {
+                    //完成
+                    html +='<th><input type="checkbox" lay-skin="primary" lay-filter="company_order_operations_status" value="' + data.data[i].id + '" title=""></th>';
+
+                    //{$language_tag.index_finance_showReceivableManage_order_number}
+                    html +='<th>'+data.data[i].company_order_number+ '</th>';
+                    //事件
+                    html +='<th>'+data.data[i].operation_name+ '</th><th>';
+
+                    //邮件模板
+                    if (data.data[i].operations_email_templates.length != 0)
+                    {
+                        var email_template_id = data.data[i].email_template_id;
+                        html += '<select lay-filter="operations-email_template_id" data-info="' + data.data[i].id + '" >';
+                        for(var t=0;t<data.data[i].operations_email_templates.length;t++) {
+                            var select_email_template_id = data.data[i].operations_email_templates[t].id;
+                            var selected  = select_email_template_id == email_template_id ? 'selected = "selected"' : '';
+                            html += '<option value="' + select_email_template_id + '" '+ selected +'>' + data.data[i].operations_email_templates[t].name + '</option>'
+                        }
+                        html += '</select>';
+                    }
+                    html += '</th><th>';
+
+                    //发送
+                    if (data.data[i].is_email_sent == 1) {
+                        html += '<button class="layui-btn layui-btn-sm hover-edit layui-btn-primary dispatch-operationsEmail" data-info="' + data.data[i].id + '">{$language_tag.index_public_send}</button>';
+                    }
+
+
+                    //提醒日期
+                    html +='</th><th>' + data.data[i].remind_at + '</th><th>';
+
+                    //提醒对象
+                    if (user_arr.length != 0)
+                    {
+                        var remind_to_id = data.data[i].remind_to;
+
+                        html += '<select lay-filter="operations-user_id" data-info="' + data.data[i].id + '" >';
+                        for(var u = 0 ; u < user_arr.length ; u++) {
+                            var select_remind_to_id = user_arr[u].user_id;
+                            var selected  = remind_to_id == select_remind_to_id ? 'selected = "selected"' : '';
+                            html += '<option value="' + select_remind_to_id + '" '+ selected +'>' + user_arr[u].nickname + '</option>'
+                        }
+                        html += '</select>';
+                    }
+
+                    //附件
+                    html +='</th><th id="upload-' + data.data[i].id + '">';
+                    if (data.data[i].attachments.length != 0) {
+                        for(var j=0;j<data.data[i].attachments.length;j++) {
+                            html += '<div><a href="' + data.data[i].attachments[j].savepath + '">'+ data.data[i].attachments[j].name +'</a><a class="layui-btn layui-btn-xs layui-btn-primary del-attachments" data-info="'+ data.data[i].attachments[j].id +'">{$language_tag.index_public_del}</a></div>'
+                        }
+                    }
+
+                    //上传附件
+                    html += '</th><th><button class="layui-btn layui-btn-sm hover-details layui-btn-primary upload" data-info=' + data.data[i].id  + ' data-order_id='+ data.data[i].company_order_id +'>{$language_tag.index_public_upload}</button></th>';
+
+                    //备注
+                    html +='<th><textarea class="layui-textarea  operations-remark" data-info="' + data.data[i].id + '">' + data.data[i].remark + '</textarea></th>';
+
+                    html +='</tr>';
+                }
+                html += '</tbody></table>';
+                $("#service-reminder").html(html);
+                upStatus(); //修改订单状态
+                uploadReminder();//上传附件
+                del_company_order_operations_attachments(); //附件删除
+                edit_email_template_id(); //修改待办邮件模板
+                edit_remark();  //修改代办备注
+                editRemindTo(); //修改订单提醒谁
+                dispatchOperationsEmail(); //待办邮件发送
+                form.render();
+            }
+            else {
+                $("#service-reminder").html('<div class="index-none">{$language_tag.index_public_noData}</div>')
+            }
+        }
+    });
+
+
+
+    //修改新单待办状态
+    function upStatus(){
+        form.on('checkbox(company_order_operations_status)', function(data){
+            var s = 1;
+            if(data.elem.checked){
+                var s = 2;
+            }
+            var company_order_operations_id = data.value;
+            $.post('/operations/upStatus',{company_order_operations_id:company_order_operations_id,status:s},function(a){
+                layer.closeAll('loading');
+            });
+
+        });
+    }
+
+    function uploadReminder() {
+        $('.upload').each(function(){
+            alert
+            upload.render({
+                elem: this
+                ,url: '/operations/upload_operations_attachments/?company_order_operations_id='+$(this).data('info')+'&company_order_id='+$(this).data('order_id')
+                ,accept: 'file'
+                ,done: function(res){
+                    console.log(res)
+                    if(res.code == 200){
+                        var h = '<div><a href="'+res.data+'" target="_blank">'+res.image_name+'</a>&nbsp;<a class="layui-btn layui-btn-xs layui-btn-primary del-attachments" data-info="'+res.data+'">{$language_tag.index_public_del}</a></div>';
+                        console.log('#upload-'+res.get.company_order_operations_id);
+                        $('#upload-'+res.get.company_order_operations_id).append(h);
+                        del_company_order_operations_attachments(); //附件删除
+                    }
+                }
+            });
+        });
+    }
+
+
+    var d_attachments;
+    //附件删除
+    function del_company_order_operations_attachments(){
+        $('.del-attachments').on('click',function(){
+
+            layer.load(2);
+            var company_order_operations_attachments_id = $(this).data('info');
+            console.log(company_order_operations_attachments_id);
+            d_attachments  = $(this);
+            $.post('/operations/delCompanyOrderOperationsAttachmentsAjax',{company_order_operations_attachments_id:company_order_operations_attachments_id},function(a){
+                d_attachments.parent().remove();
+                layer.closeAll('loading');
+            });
+            form.render();
+
+        });
+    }
+
+    //修改待办邮件模板
+    function edit_email_template_id(){
+        form.on('select(operations-email_template_id)', function(data){
+
+            var company_order_operations_id = $(data.elem).data('info');
+
+            var v = data.value;
+            layer.load(2);
+            $.post('/operations/upEmailTemplateIdAjax',{company_order_operations_id:company_order_operations_id,email_template_id:v},function(a){
+                layer.closeAll('loading');
+            });
+
+        });
+    }
+
+    //修改待办备注
+    function edit_remark(){
+        $('.operations-remark').on('blur',function(){
+            var remark = $(this).val();
+            var company_order_operations_id = $(this).data('info');
+            layer.load(2);
+            $.post('/operations/upRemarkAjax',{company_order_operations_id:company_order_operations_id,remark:remark},function(a){
+                layer.closeAll('loading');
+            });
+
+        });
+    }
+
+
+    //修改订单提醒谁
+    function editRemindTo(){
+        form.on('select(operations-user_id)', function (data) {
+            var remind_to = data.value;
+            var company_order_operations_id = $(data.elem).data('info');
+            layer.load(2);
+            $.post('/operations/upRemindTo',{company_order_operations_id:company_order_operations_id,remind_to:remind_to},function(a){
+                layer.closeAll('loading');
+            });
+
+        });
+    }
+
+
+
+    //待办邮件发送
+    function dispatchOperationsEmail(){
+        $('.dispatch-operationsEmail').on('click',function(){
+            var company_order_operations_id = $(this).data('info');
+            layer.open({
+                title: '发送邮件'
+                ,type: 2
+                ,content: '/operations/dispatchOperationsEmail?company_order_operations_id='+company_order_operations_id+'&company_order_number={$_GET["company_order_number"]}'
+                ,area: ['800px', '500px']
+            });
+        });
+
+    }
+
+    //关闭发送邮件窗口
+    function close_emali(){
+        layer.closeAll();
+    }
+
+</script>
+
+</body>
+</html>

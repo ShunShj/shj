@@ -1,0 +1,60 @@
+
+/*all--input宽度*/
+form .layui-form-select{
+    width: 100%!important;
+}
+/*应收*/
+.popReceivable{
+    margin-right:40px;
+}
+.popReceivable .layui-inline{
+    margin:8px 0px;
+}
+.table-product-poper tbody tr td:nth-last-of-type(9) a{
+    color: #5897fb;
+    text-decoration: underline;
+}
+/*应付--一级搜索条件样式*/
+.finance-form{
+    position: relative;
+}
+.finance-form .mustpay-form .layui-search-inline{
+    margin-top:-5px;
+    position: absolute;
+    right: 277px;
+    bottom: 10px;
+}
+.finance-form>.layui-button-inline{
+    position:absolute ;
+    right:85px;
+    bottom:5px;
+}
+
+/*应付*/
+/*.mustpay-form .layui-input-inline{
+    margin-bottom:10px;
+}*/
+.mustpay-form .layui-form-select{
+    width:150px;
+}
+.finance-form .layui-input-inline{
+    margin-bottom: 5px;
+}
+
+/*地接*/
+.agentExpenseWidth{
+    width:240px;
+}
+#agentExpenseTable .layui-btn .layui-icon{
+    margin:0px;
+}
+.look{
+    color: #5897fb;
+    text-decoration: underline;
+    cursor:pointer;
+}
+/*弹窗按钮*/
+#open_window2 .layui-layer-btn a:first-child{
+    background-color: #FF5700!important;
+    border:1px solid #FF5700!important;
+}

@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {include file='public/head' /}
+    <title>{$language_tag.index_branchcompany_showCustomerManaget_customer_manage}</title>
+
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+    <div class="layui-header">
+        {include file='public/header' /}
+    </div>
+
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll">
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            {include file='public/left_menu' /}
+        </div>
+    </div>
+
+    <div class="layui-body layui-body-bg">
+
+        <!-- 内容主体区域 -->
+        <div style="padding: 15px;">
+            <div class="body-top">
+                <div class='layui-form-item'>
+                <span class="layui-breadcrumb" lay-separator="-">
+                    <a>{$language_tag.index_public_homepage}</a>
+                    <a>{$language_tag.index_branchcompany_showBranchProductManage_branchManagement}</a>
+                    <a><cite>{$language_tag.index_branchcompany_showCustomerManage_customerManagement}</cite></a>
+                </span>
+                </div>
+                <div class='layui-block all-search-bg'>
+                    <form class="layui-form" action="/branchcompany/showCustomerManage" method="get" >
+                        <div class="layui-row">
+                            <div class="layui-col-md2">
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">{$language_tag.index_public_status}:</label>
+                                    <div class="layui-input-block">
+                                        <select name="status">
+                                            <option value="2" {if condition="$Think.get.status eq 2"} selected='selected' {/if}{$language_tag.index_public_all}/option>
+                                            <option value="1" {if condition="$Think.get.status eq 1"} selected='selected' {/if}>{$language_tag.index_branchcompany_showCustomerAdd_normal}</option>
+                                            <option value="0" {if condition="$Think.get.status eq 0"} selected='selected' {/if}>{$language_tag.index_branchcompany_showCustomerAdd_backlist}</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-col-md2">
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">ID:</label>
+                                    <div class="layui-input-block">
+                                        <input type="text" name="customer_id" value="{$Think.get.customer_id}" placeholder="请输入ID" class="layui-input">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-col-md3">
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">{$language_tag.index_branchcompany_showBranchProductManage_number}:</label>
+                                    <div class="layui-input-block">
+                                        <input type="text" name="customer_number" value="{$Think.get.customer_number}" placeholder="{$language_tag.index_branchcompany_showBranchProductManage_number}" class="layui-input">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-col-md3">
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">{$language_tag.index_branchcompany_showBranchProductManage_phone}:</label>
+                                    <div class="layui-input-block">
+                                        <input type="text" name="phone" value="{$Think.get.phone}"  placeholder="{$language_tag.index_branchcompany_showBranchProductManage_phone}" class="layui-input">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-col-md2">
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">{$language_tag.index_branchcompany_showCustomerManage_customerName}:</label>
+                                    <div class="layui-input-block">
+                                        <input type="text" name="customer_name" value="{$Think.get.customer_name}"  placeholder="{$language_tag.index_branchcompany_showCustomerManage_customerName}" class="layui-input">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!--<div class='layui-input-inline'>-->
+                        <!--<input type="text" name="search_Name" value="{$setCustomerManage.search_Name}" placeholder="名称" class="layui-input">-->
+                        <!--</div>-->
+                        <div class="layui-row">
+                            <div class="layui-col-md4 layui-col-md-offset4">
+                                <div class='input-inline all-button-center pages-search-margin'>
+                                    <button class="layui-btn nav-search">{$language_tag.index_public_search}</button>
+                                </div>
+                            </div>
+                        </div>
+                        <!--<div class='layui-button-inline layui-search-inline'>
+                            <button class="layui-btn nav-search">{$language_tag.index_public_search}</button>
+                            <a href="/sale/clearCustomerManage" class="layui-btn layui-btn-primary">清除</a>
+                            </div>-->
+                    </form>
+                </div>
+            </div>
+            <div class="content-bg">
+                <span style="{:action('index/auth/check_auth',['role_id'=>'252'])}"><a href='/branchcompany/showCustomerAdd'><button class="layui-btn nav-add layui-btn-sm">{$language_tag.index_branchcompany_showCustomerManage_addCustomer}</button></a></span>
+                <hr>
+                <div class="table-nont user-manage company-pageHeight">
+                    <table class="layui-table" id="language-table">
+                        <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>{$language_tag.index_branchcompany_showBranchProductManage_visitorNumber}</th>
+                            <th>{$language_tag.index_branchcompany_showCustomerManage_customerName}</th>
+                            <th>{$language_tag.index_source_showSupplierManage_own_company}</th>
+                            <th>{$language_tag.index_branchcompany_showBranchProductManage_phone}</th>
+                            <th>{$language_tag.index_branchcompany_showBranchProductManage_email}</th>
+                            <th>{$language_tag.index_public_status}</th>
+                            <th class="layui-table-width">{$language_tag.index_source_operation}</th>
+                        </tr>
+                        </thead>
+
+                        {empty name='data'}
+
+                        {else /}
+                        {foreach name='data' item='CustomerListV'}
+                        <tr>
+                            <th>{$CustomerListV.customer_id}</th>
+                            <th>{$CustomerListV.customer_number}</th>
+                            <th>{$CustomerListV.customer_first_name} {$CustomerListV.customer_last_name}</th>
+                            <th>{$CustomerListV.company_name}</th>
+                            <th>{$CustomerListV.phone}</th>
+                            <th>{$CustomerListV.email}</th>
+                            <th>{if condition="$CustomerListV.status eq 1"}{$language_tag.index_branchcompany_showCustomerAdd_normal}{else/}{$language_tag.index_branchcompany_showCustomerAdd_backlist}{/if}</th>
+                            <th>
+                                <span style="{:action('index/auth/check_auth',['role_id'=>'253'])}"><a href='/branchcompany/showCustomerEdit?id={$CustomerListV.customer_id}'><button class="layui-btn layui-btn-sm hover-edit layui-btn-primary">{$language_tag.index_public_update}</button></a></span>
+                                <span style="{:action('index/auth/check_auth',['role_id'=>'254'])}"><a href='/branchcompany/showCustomerInfo?id={$CustomerListV.customer_id}'><button class="layui-btn layui-btn-sm hover-details layui-btn-primary">{$language_tag.index_public_info}</button></a></span>
+                                <span><a href='/branchcompany/showCustomerOrder?id={$CustomerListV.customer_id}'><button class="layui-btn layui-btn-sm hover-details layui-btn-primary">{$language_tag.index_product_PlanBooking_order}</button></a></span>
+                            </th>
+                        </tr>
+                        {/foreach}
+                        {/empty}
+                        </tbody>
+
+                    </table>
+                </div>
+               <div class="listButtom">
+
+                <!--加载分页-->
+                {include file='public/page' /}
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="layui-footer">
+        <!-- 底部固定区域 -->
+        © layui.com - 底部固定区域
+    </div>
+</div>
+{include file='public/foot_js' /}
+<script>
+    //JavaScript代码区域
+    !function(){
+        var layer = layui.layer ;
+        var form = layui.form;
+
+    }();
+
+</script>
+</body>
+</html>
+
+<script>
+
+
+</script>

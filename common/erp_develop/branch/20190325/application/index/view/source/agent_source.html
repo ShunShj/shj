@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {include file='public/head' /}
+    <title>language-manage</title>
+    <link href="__STATIC__/css/source.css" rel="stylesheet">
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+    <div class="layui-header">
+        {include file='public/header' /}
+    </div>
+
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll">
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            {include file='public/left_menu' /}
+        </div>
+    </div>
+
+    <div class="layui-body">
+
+        <!-- 内容主体区域 -->
+        <div class="agent-source" style="padding: 15px;">
+            <div class='layui-form-item'>
+			<span class="layui-breadcrumb" lay-separator="-">
+                <a>首页</a>
+				<a>资源管理</a>
+                <a>地接管理</a>
+				<a><cite>地接内容设置</cite></a>
+			</span>
+            </div>
+            <br/>
+            <div class="table-nont">
+                <table class="layui-table">
+                    <colgroup>
+                        <col width="200px">
+                        <col width="240px">
+                        <col width="200px">
+                        <col width="200px">
+                        <col width="200px">
+                        <col width="160px">
+                    </colgroup>
+                    <thead>
+                    <tr>
+                        <th>资源供应商</th>
+                        <th>资源名称</th>
+                        <th>地接重命名</th>
+                        <th>地接单价</th>
+                        <th>币种</th>
+                        <th>操作</th>
+                    </tr>
+                    </thead>
+
+                    <tbody>
+
+                    <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+                        <legend>酒店</legend>
+                    </fieldset>
+                    {foreach name="hotel_result" item="vo" }
+                    <tr>
+                        <th>{$vo.belong_supplier_name}</th>
+                        <th>{$vo.room_name}</th>
+                        <th><input type="text" class="layui-input room_name" ></th>
+                        <th>
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">统价</label>
+                                <div class="layui-input-block">
+                                    <input name="name" value="{$vo.normal_settlement_price}" required="" lay-verify="required" placeholder="请输入名称" autocomplete="off" class="layui-input hotel1" type="text">
+                                </div>
+                            </div>
+                            <!--<div class="layui-form-item">-->
+                            <!--<label class="layui-form-label">成人</label>-->
+                            <!--<div class="layui-input-block">-->
+                            <!--<input id="" name="name" value="{$vo.adult_settlement_price}" required="" lay-verify="required" placeholder="请输入名称" autocomplete="off" class="layui-input hotel2" type="text">-->
+                            <!--</div>-->
+                            <!--</div>-->
+                            <!--<div class="layui-form-item">-->
+                            <!--<label class="layui-form-label">占床儿童</label>-->
+                            <!--<div class="layui-input-block">-->
+                            <!--<input id="" name="name" value="{$vo.child_bed_settlement_price}" required="" lay-verify="required" placeholder="请输入名称" autocomplete="off" class="layui-input hotel3" type="text">-->
+                            <!--</div>-->
+                            <!--</div>-->
+                            <!--<div class="layui-form-item">-->
+                            <!--<label class="layui-form-label">老人</label>-->
+                            <!--<div class="layui-input-block">-->
+                            <!--<input id="" name="name" value="{$vo.old_settlement_price}" required="" lay-verify="required" placeholder="请输入名称" autocomplete="off" class="layui-input hotel4" type="text">-->
+                            <!--</div>-->
+                            <!--</div>-->
+                            <!--<div class="layui-form-item">-->
+                            <!--<label class="layui-form-label">不占床儿童</label>-->
+                            <!--<div class="layui-input-block">-->
+                            <!--<input id="" name="name" value="{$vo.child_settlement_price}" required="" lay-verify="required" placeholder="请输入名称" autocomplete="off" class="layui-input hotel5" type="text">-->
+                            <!--</div>-->
+                            <!--</div>-->
+                            <!--<div class="layui-form-item">-->
+                            <!--<label class="layui-form-label">单房差</label>-->
+                            <!--<div class="layui-input-block">-->
+                            <!--<input id="" name="name" value="{$vo.single_settlement_price}" required="" lay-verify="required" placeholder="请输入名称" autocomplete="off" class="layui-input hotel6" type="text">-->
+                            <!--</div>-->
+                            <!--</div>-->
+                            <input type="hidden" class="hotel_id" value="{$vo.hotel_id}">
+                            <input type="hidden" class="supplier_id" value="{$vo.supplier_id}">
+                        </th>
+                        <th>{$vo.currency_name}</th>
+                        <th><a href='javascript:void(0);'><button class="layui-btn layui-btn-sm layui-btn-primary table-save" onclick="agentEdd(this,2)">保存</button></a></th>
+                    </tr>
+                    {/foreach}
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="table-nont">
+                <table class="layui-table">
+                    <colgroup>
+                        <col width="200px">
+                        <col width="240px">
+                        <col width="200px">
+                        <col width="200px">
+                        <col width="200px">
+                        <col width="160px">
+                    </colgroup>
+                    <thead>
+                    <tr>
+                        <th>资源供应商</th>
+                        <th>资源名称</th>
+                        <th>地接重命名</th>
+                        <th>地接单价</th>
+                        <th>币种</th>
+                        <th>操作</th>
+                    </tr>
+                    </thead>
+
+                    <tbody>
+                    <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+                        <legend>用餐</legend>
+                    </fieldset>
+                    {foreach name="dining_result" item="vo" }
+                    <tr>
+                        <th>{$vo.belong_supplier_name}</th>
+                        <th>{$vo.dining_name}</th>
+                        <th><input type="text" class="layui-input dining_name" ></th>
+                        <th>
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">统价</label>
+                                <div class="layui-input-block">
+                                    <input name="name" value="{$vo.normal_settlement_price}" required="" lay-verify="required" placeholder="请输入名称" autocomplete="off" class="layui-input dining" type="text">
+                                </div>
+                                <input type="hidden" class="dining_id" value="{$vo.dining_id}">
+                                <input type="hidden" class="supplier_id" value="{$vo.supplier_id}">
+                            </div>
+                        </th>
+                        <th>{$vo.currency_name}</th>
+                        <th><a href='javascript:void(0);'><button class="layui-btn layui-btn-sm layui-btn-primary table-save" onclick="agentEdd(this,3)">保存</button></a></th>
+                    </tr>
+                    {/foreach}
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="table-nont">
+                <table class="layui-table">
+                    <colgroup>
+                        <col width="200px">
+                        <col width="240px">
+                        <col width="200px">
+                        <col width="200px">
+                        <col width="200px">
+                        <col width="160px">
+                    </colgroup>
+                    <thead>
+                    <tr>
+                        <th>资源供应商</th>
+                        <th>资源名称</th>
+                        <th>地接重命名</th>
+                        <th>地接单价</th>
+                        <th>币种</th>
+                        <th>操作</th>
+                    </tr>
+                    </thead>
+
+                    <tbody>
+                    <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+                        <legend>航班</legend>
+                    </fieldset>
+                    {foreach name="flight_result" item="vo" }
+                    <tr>
+                        <th>{$vo.belong_supplier_name}</th>
+                        <th>{$vo.flight_number}</th>
+                        <th><input type="text" class="layui-input flight_name" ></th>
+                        <th>
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">统价</label>
+                                <div class="layui-input-block">
+                                    <input name="name" value="{$vo.normal_settlement_price}" required="" lay-verify="required" placeholder="请输入名称" autocomplete="off" class="layui-input flight" type="text">
+                                </div>
+                                <input type="hidden" class="flight_id" value="{$vo.flight_id}">
+                                <input type="hidden" class="supplier_id" value="{$vo.supplier_id}">
+                            </div>
+                        </th>
+                        <th>{$vo.currency_name}</th>
+                        <th><a href='javascript:void(0);'><button class="layui-btn layui-btn-sm layui-btn-primary table-save" onclick="agentEdd(this,4)">保存</button></a></th>
+                    </tr>
+                    {/foreach}
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="table-nont">
+                <table class="layui-table">
+                    <colgroup>
+                        <col width="200px">
+                        <col width="240px">
+                        <col width="200px">
+                        <col width="200px">
+                        <col width="200px">
+                        <col width="160px">
+                    </colgroup>
+                    <thead>
+                    <tr>
+                        <th>资源供应商</th>
+                        <th>资源名称</th>
+                        <th>地接重命名</th>
+                        <th>地接单价</th>
+                        <th>币种</th>
+                        <th>操作</th>
+                    </tr>
+                    </thead>
+
+                    <tbody>
+                    <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+                        <legend>邮轮</legend>
+                    </fieldset>
+                    {foreach name="cruise_result" item="vo" }
+                    <tr>
+                        <th>{$vo.belong_supplier_name}</th>
+                        <th>{$vo.cruise_name}</th>
+                        <th><input type="text" class="layui-input cruise_room_name" ></th>
+                        <th>
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">统价</label>
+                                <div class="layui-input-block">
+                                    <input name="name" value="{$vo.normal_settlement_price}" required="" lay-verify="required" placeholder="请输入名称" autocomplete="off" class="layui-input cruise" type="text">
+                                </div>
+                                <input type="hidden" class="cruise_id" value="{$vo.cruise_id}">
+                                <input type="hidden" class="supplier_id" value="{$vo.supplier_id}">
+                            </div>
+                        </th>
+                        <th>{$vo.currency_name}</th>
+                        <th><a href='javascript:void(0);'><button class="layui-btn layui-btn-sm layui-btn-primary table-save" onclick="agentEdd(this,5)">保存</button></a></th>
+                    </tr>
+                    {/foreach}
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="table-nont">
+                <table class="layui-table">
+                    <colgroup>
+                        <col width="200px">
+                        <col width="240px">
+                        <col width="200px">
+                        <col width="200px">
+                        <col width="200px">
+                        <col width="160px">
+                    </colgroup>
+                    <thead>
+                    <tr>
+                        <th>资源供应商</th>
+                        <th>资源名称</th>
+                        <th>地接重命名</th>
+                        <th>地接单价</th>
+                        <th>币种</th>
+                        <th>操作</th>
+                    </tr>
+                    </thead>
+
+                    <tbody>
+                    <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+                        <legend>签证</legend>
+                    </fieldset>
+                    {foreach name="visa_result" item="vo" }
+                    <tr>
+                        <th>{$vo.belong_supplier_name}</th>
+                        <th>{$vo.visa_name}</th>
+                        <th><input type="text" class="layui-input visa_name" ></th>
+                        <th>
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">统价</label>
+                                <div class="layui-input-block">
+                                    <input name="name" value="{$vo.normal_settlement_price}" required="" lay-verify="required" placeholder="请输入名称" autocomplete="off" class="layui-input visa" type="text">
+                                </div>
+                                <input type="hidden" class="visa_id" value="{$vo.visa_id}">
+                                <input type="hidden" class="supplier_id" value="{$vo.supplier_id}">
+                            </div>
+                        </th>
+                        <th>{$vo.currency_name}</th>
+                        <th><a href='javascript:void(0);'><button class="layui-btn layui-btn-sm layui-btn-primary table-save" onclick="agentEdd(this,6)">保存</button></a></th>
+                    </tr>
+                    {/foreach}
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="table-nont">
+                <table class="layui-table">
+                    <colgroup>
+                        <col width="200px">
+                        <col width="240px">
+                        <col width="200px">
+                        <col width="200px">
+                        <col width="200px">
+                        <col width="160px">
+                    </colgroup>
+                    <thead>
+                    <tr>
+                        <th>资源供应商</th>
+                        <th>资源名称</th>
+                        <th>地接重命名</th>
+                        <th>地接单价</th>
+                        <th>币种</th>
+                        <th>操作</th>
+                    </tr>
+                    </thead>
+
+                    <tbody>
+                    <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+                        <legend>景点</legend>
+                    </fieldset>
+                    {foreach name="scenic_spot_result" item="vo" }
+                    <tr>
+                        <th>{$vo.belong_supplier_name}</th>
+                        <th>{$vo.scenic_spot_name}</th>
+                        <th><input type="text" class="layui-input scenic_spot_name" ></th>
+                        <th>
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">统价</label>
+                                <div class="layui-input-block">
+                                    <input name="name" value="{$vo.normal_settlement_price}" required="" lay-verify="required" placeholder="请输入名称" autocomplete="off" class="layui-input scenic_spot" type="text">
+                                </div>
+                                <input type="hidden" class="scenic_spot_id" value="{$vo.scenic_spot_id}">
+                                <input type="hidden" class="supplier_id" value="{$vo.supplier_id}">
+                            </div>
+                        </th>
+                        <th>{$vo.currency_name}</th>
+                        <th><a href='javascript:void(0);'><button class="layui-btn layui-btn-sm layui-btn-primary table-save" onclick="agentEdd(this,7)">保存</button></a></th>
+                    </tr>
+                    {/foreach}
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="table-nont">
+                <table class="layui-table">
+                    <colgroup>
+                        <col width="200px">
+                        <col width="240px">
+                        <col width="200px">
+                        <col width="200px">
+                        <col width="200px">
+                        <col width="160px">
+                    </colgroup>
+                    <thead>
+                    <tr>
+                        <th>资源供应商</th>
+                        <th>资源名称</th>
+                        <th>地接重命名</th>
+                        <th>地接单价</th>
+                        <th>币种</th>
+                        <th>操作</th>
+                    </tr>
+                    </thead>
+
+                    <tbody>
+                    <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+                        <legend>车辆</legend>
+                    </fieldset>
+                    {foreach name="vehicle_result" item="vo" }
+                    <tr>
+                        <th>{$vo.belong_supplier_name}</th>
+                        <th>{$vo.vehicle_name}</th>
+                        <th><input type="text" class="layui-input vehicle_name" ></th>
+                        <th>
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">统价</label>
+                                <div class="layui-input-block">
+                                    <input name="name" value="{$vo.normal_settlement_price}" required="" lay-verify="required" placeholder="请输入名称" autocomplete="off" class="layui-input vehicle" type="text">
+                                </div>
+                                <input type="hidden" class="vehicle_id" value="{$vo.vehicle_id}">
+                                <input type="hidden" class="supplier_id" value="{$vo.supplier_id}">
+                            </div>
+                        </th>
+                        <th>{$vo.currency_name}</th>
+                        <th><a href='javascript:void(0);'><button class="layui-btn layui-btn-sm layui-btn-primary table-save" onclick="agentEdd(this,8)">保存</button></a></th>
+                    </tr>
+                    {/foreach}
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="table-nont">
+                <table class="layui-table">
+                    <colgroup>
+                        <col width="200px">
+                        <col width="240px">
+                        <col width="200px">
+                        <col width="200px">
+                        <col width="200px">
+                        <col width="160px">
+                    </colgroup>
+                    <thead>
+                    <tr>
+                        <th>资源供应商</th>
+                        <th>资源名称</th>
+                        <th>地接重命名</th>
+                        <th>地接单价</th>
+                        <th>币种</th>
+                        <th>操作</th>
+                    </tr>
+                    </thead>
+
+                    <tbody>
+                    <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+                        <legend>导游</legend>
+                    </fieldset>
+                    {foreach name="tour_guide_result" item="vo" }
+                    <tr>
+                        <th>{$vo.belong_supplier_name}</th>
+                        <th>{$vo.tour_guide_name}</th>
+                        <th><input type="text" class="layui-input tour_guide_name" ></th>
+                        <th>
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">统价</label>
+                                <div class="layui-input-block">
+                                    <input name="name" value="{$vo.normal_settlement_price}" required="" lay-verify="required" placeholder="请输入名称" autocomplete="off" class="layui-input tour_guide" type="text">
+                                </div>
+                                <input type="hidden" class="tour_guide_id" value="{$vo.tour_guide_id}">
+                                <input type="hidden" class="supplier_id" value="{$vo.supplier_id}">
+                            </div>
+                        </th>
+                        <th>{$vo.currency_name}</th>
+                        <th><a href='javascript:void(0);'><button class="layui-btn layui-btn-sm layui-btn-primary table-save" onclick="agentEdd(this,9)">保存</button></a></th>
+                    </tr>
+                    {/foreach}
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="table-nont">
+                <table class="layui-table">
+                    <colgroup>
+                        <col width="200px">
+                        <col width="240px">
+                        <col width="200px">
+                        <col width="200px">
+                        <col width="200px">
+                        <col width="160px">
+                    </colgroup>
+                    <thead>
+                    <tr>
+                        <th>资源供应商</th>
+                        <th>资源名称</th>
+                        <th>地接重命名</th>
+                        <th>地接单价</th>
+                        <th>币种</th>
+                        <th>操作</th>
+                    </tr>
+                    </thead>
+
+                    <tbody>
+                    <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+                        <legend>单项资源</legend>
+                    </fieldset>
+                    {foreach name="single_source_result" item="vo" }
+                    <tr>
+                        <th>{$vo.belong_supplier_name}</th>
+                        <th>{$vo.single_source_name}</th>
+                        <th><input type="text" class="layui-input single_source_name" ></th>
+                        <th>
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">统价</label>
+                                <div class="layui-input-block">
+                                    <input name="name" value="{$vo.normal_settlement_price}" required="" lay-verify="required" placeholder="请输入名称" autocomplete="off" class="layui-input single_source" type="text">
+                                </div>
+                                <input type="hidden" class="single_source_id" value="{$vo.single_source_id}">
+                                <input type="hidden" class="supplier_id" value="{$vo.supplier_id}">
+                            </div>
+                        </th>
+                        <th>{$vo.currency_name}</th>
+                        <th><a href='javascript:void(0);'><button class="layui-btn layui-btn-sm" onclick="agentEdd(this,10)">&nbsp;变&nbsp;更&nbsp;</button></a></th>
+                    </tr>
+                    {/foreach}
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="table-nont">
+                <table class="layui-table">
+                    <colgroup>
+                        <col width="200px">
+                        <col width="240px">
+                        <col width="200px">
+                        <col width="200px">
+                        <col width="200px">
+                        <col width="160px">
+                    </colgroup>
+                    <thead>
+                    <tr>
+                        <th>资源供应商</th>
+                        <th>资源名称</th>
+                        <th>地接重命名</th>
+                        <th>地接单价</th>
+                        <th>币种</th>
+                        <th>操作</th>
+                    </tr>
+                    </thead>
+
+                    <tbody>
+                    <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+                        <legend>自费</legend>
+                    </fieldset>
+                    {foreach name="own_expense_result" item="vo" }
+                    <tr>
+                        <th>{$vo.belong_supplier_name}</th>
+                        <th>{$vo.own_expense_name}</th>
+                        <th><input type="text" class="layui-input own_expense_name" ></th>
+                        <th>
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">统价</label>
+                                <div class="layui-input-block">
+                                    <input name="name" value="{$vo.normal_settlement_price}" required="" lay-verify="required" placeholder="请输入名称" autocomplete="off" class="layui-input own_expense" type="text">
+                                </div>
+                                <input type="hidden" class="own_expense_id" value="{$vo.own_expense_id}">
+                                <input type="hidden" class="supplier_id" value="{$vo.supplier_id}">
+                            </div>
+                        </th>
+                        <th>{$vo.currency_name}</th>
+                        <th><a href='javascript:void(0);'><button class="layui-btn layui-btn-sm" onclick="agentEdd(this,11)">&nbsp;变&nbsp;更&nbsp;</button></a></th>
+                    </tr>
+                    {/foreach}
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="layui-form-item">
+                <div class="layui-input-block agent-save">
+                    <a href='/source/showAgentManage'><button type="button" class="layui-btn layui-btn-primary">返回</button></a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="layui-footer">
+        <!-- 底部固定区域 -->
+        © layui.com - 底部固定区域
+    </div>
+</div>
+{include file='public/foot_js' /}
+<script src='__STATIC__/javascript/system/source.js'></script>
+
+</body>
+</html>
+

@@ -1,0 +1,82 @@
+//JavaScript代码区域
+;!function(){
+    var layer = layui.layer
+        ,form = layui.form;
+
+
+}();
+
+//添加货币
+function add(){
+    var add_name = $("#add_name").val();
+    var add_sign = $("#add_sign").val();
+    var add_unit = $("#add_unit").val();
+    var add_status = $("#add_cr_status").val();
+
+    $.ajax({
+        type: "POST",
+        url: '/system/addCurrencyAjax',
+        dataType: "json",
+        data: {
+            'currency_name': add_name,
+            'symbol': add_sign,
+            'unit': add_unit,
+            'status': add_status
+        },
+        success: function (data) {
+            if(data.code!=200){
+                layer.msg(data.msg);
+                return false;
+            }else if(data.code==200){
+                layer.msg('操作成功',{time:1,end : function(layero, index){
+                        location.href='/system/showCurrencyManage';
+                    }
+                });
+            }
+        },
+        error: function (XMLHttpRequest, textStatus, errorThrown) {
+            //console.log(errorThrown)
+            layer.msg('验证失败');
+
+        }
+    });
+    return false;
+}
+
+//编辑货币
+function edit(){
+    var read_name = $('#edit_cr_name').val();
+    var read_sign = $("#edit_cr_sign").val();
+    var read_unit = $("#edit_cr_unit").val();
+    var read_status = $("#edit_cr_status").val();
+    var currency_id = $("#currency_id_hidden").val();
+
+    $.ajax({
+        type: "POST",
+        url: '/system/editCurrencyManage',
+        dataType: "json",
+        data: {
+            'currency_id': currency_id,
+            'currency_name' : read_name,
+            'symbol' : read_sign,
+            'unit' : read_unit,
+            'status' : read_status
+        },
+        success: function(data){
+        	
+            if(data.code!=200){
+                layer.msg(data.msg);
+                return false;
+            }else if(data.code==200){
+                layer.msg('操作成功',{time:1,end : function(layero, index){
+                        location.href='/system/showCurrencyManage';
+                    }
+                });
+            }
+        },
+        error:function(XMLHttpRequest, textStatus, errorThrown){
+            layer.msg('验证失败')
+        }
+    });
+    return false;
+}

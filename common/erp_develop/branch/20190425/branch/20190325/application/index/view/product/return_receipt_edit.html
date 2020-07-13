@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {include file='public/head' /}
+    <title>修改回执单模板</title>
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+
+    <div class="layui-header">
+        {include file='public/header' /}
+    </div>
+
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll">
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            {include file='public/left_menu' /}
+        </div>
+    </div>
+
+    <div class="layui-body">
+
+        <!-- 内容主体区域 -->
+        <div style="padding: 15px;">
+            <div class='layui-form-item'>
+		   		<span class="layui-breadcrumb" lay-separator="-">
+                    <a>{$Think.lang.index_public_homepage}</a>
+                    <a>{$Think.lang.index_public_product}</a>
+					<a>{$Think.lang.index_product_showRouteTemplateManage_receiptTemplate}</a>
+                    <a><cite>{$Think.lang.index_product_showRouteTypeManage_editReceiptTemplate}</cite></a>
+				</span>
+            </div>
+            <br/>
+            <br/>
+            <form class="layui-form" id="form1" onSubmit="return edit()">
+
+                <div class="layui-form-item">
+                    <div class="layui-col-md9">
+                        <label class="layui-form-label input-required">{$Think.lang.index_product_showReturnReceiptManage_receiptName}:</label>
+                        <div class="layui-input-block">
+                            <input type="text" id="edit_return_receipt_name" value="{$ReturnReceiptList.return_receipt_name}" class="layui-input"
+                                   required lay-verify="required" name="return_receipt_name">
+                            <i class="iconfont icon-fanyifuwu" style="position: absolute;width: 38px;height: 38px;top: 0px;right: 0px;font-size:
+                                   35px;cursor:pointer;"
+                               onclick="MultilingualSetting('edit_return_receipt_name','return_receipt','return_receipt_name',{$_GET.id})"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <div class="layui-col-md9">
+                        <label class="layui-form-label">{$Think.lang.index_public_status}:</label>
+                        <div class="layui-input-block">
+                            <select id="status" name="status"  >
+                                <option value="1" {$ReturnReceiptList.status==1?'selected':''}>{$Think.lang.index_public_show}</option>
+                                <option value="2" {$ReturnReceiptList.status==2?'selected':''}>{$Think.lang.index_public_disabled}</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="layui-container" class="div_info">
+                    <?php $num = 0; ?>
+                    {foreach $ReturnReceiptInfoList as $ReturnReceiptInfoListV}
+                    <div class="layui-row">
+                        <div class="layui-col-md3">
+                            <label class="layui-form-label" style="line-height:19px"><div class="input-required">{$Think.lang.index_product_showRouteTemplateManage_title}:</div><br><br><div class="input-required">{$Think.lang.index_product_showRouteTemplateManage_sort}:</div></label>
+                            <div class="layui-input-block">
+                                <input type="text" class="layui-input"  required lay-verify="required" placeholder="{$Think.lang.index_product_showRouteTemplateManage_title}" name="title[{$num}]" value="{$ReturnReceiptInfoListV.title}" ><br>
+                                <input type="text" class="layui-input"  required lay-verify="required" placeholder="{$Think.lang.index_product_showRouteTemplateManage_sort}({$Think.lang.index_product_showRouteTemplateManage_orderFromSort})" name="sorting[{$num}]" value="{$ReturnReceiptInfoListV.sorting}" >
+                            </div>
+                        </div>
+
+                        <div class="layui-col-md6 " style="margin-left:10px;margin-bottom: 10px">
+                            <textarea required   class="layui-textarea " name="content[{$num}]"  >{$ReturnReceiptInfoListV.content}</textarea>
+                        </div>
+
+                        <div  class="layui-col-md2" style="margin-left:10px ">
+                            <a  class="layui-btn nav-edit del">{$Think.lang.index_public_del}</a>
+                        </div>
+                        <input type="hidden" class="del_return_receipt_info_id" name="return_receipt_info_id[{$num}]" value="{$ReturnReceiptInfoListV.return_receipt_info_id}" />
+                        <hr>
+                    </div>
+                    <?php $num++; ?>
+                   {/foreach}
+                </div>
+                <div class="layui-col-md-offset9">
+                    <a class="layui-btn add nav-add" style="margin-left:20px">{$Think.lang.index_public_add}</a>
+                </div>
+
+                <br><br><br>
+                <div class="layui-form-item">
+                    <div class="layui-input-block">
+                        <button class="layui-btn nav-submit" lay-submit="" lay-filter="formDemo" id="language_add_button">{$Think.lang.index_public_submit}</button>
+                        <a href="javascript:history.back(-1)"><button type="button" class="layui-btn layui-btn-primary">{$Think.lang.index_public_back}</button></a>
+                    </div>
+                </div>
+                <input type="hidden" id="del_return_receipt_info_id" name="del_return_receipt_info_id" value="" />
+            </form>
+        </div>
+    </div>
+
+    <div style="display: none" id="add_div">
+        <div class="layui-row" >
+            <div class="layui-col-md3">
+                <label class="layui-form-label" style="line-height:19px"><div class="input-required">标题:</div><br><br><div class="input-required">{$Think.lang.index_product_showRouteTemplateManage_sort}:</div></label>
+                <div class="layui-input-block">
+                    <input type="text" class="layui-input"  required lay-verify="required" placeholder="标题" name="title[num]"><br>
+                    <input type="text" class="layui-input"  required lay-verify="required" placeholder="{$Think.lang.index_product_showRouteTemplateManage_sort}({$Think.lang.index_product_showRouteTemplateManage_orderFromSort})" name="sorting[num]">
+                </div>
+            </div>
+            <div class="layui-col-md6" style="margin-left:10px;margin-bottom: 10px">
+                <textarea required lay-verify="required"  class="layui-textarea" name="content[num]"></textarea>
+            </div>
+            <div  class="layui-col-md2" style="margin-left:10px ">
+                <a  class="layui-btn nav-edit del">{$Think.lang.index_public_del}</a>
+            </div>
+            <br><hr>
+        </div>
+    </div>
+    <div class="layui-footer">
+        <!-- 底部固定区域 -->
+        © layui.com - 底部固定区域
+    </div>
+</div>
+{include file='public/foot_js' /}
+
+
+<script>
+    var num = {$num};
+
+    $(function(){
+        $('.del').on('click',function(){
+            var o = $(this).parent().parent();
+            var del_return_receipt_info_id = $('#del_return_receipt_info_id').val();
+            del_return_receipt_info_id = del_return_receipt_info_id+','+ o.find('.del_return_receipt_info_id').val();
+            $('#del_return_receipt_info_id').val(del_return_receipt_info_id);
+            o.remove();
+        });
+
+        $('.add').on('click',function(){
+            var html = $('#add_div').html();
+            for(var ii =1; ii<5; ii++){
+                html = html.replace('num',num);
+            }
+            $('.div_info').append(html);
+
+            $('.del').on('click',function(){
+                var o = $(this).parent().parent();
+                o.remove();
+            });
+
+            num++;
+        });
+
+    });
+
+    function edit() {
+
+        $.ajax({
+            type: "POST",
+            url: '/product/editShowReturnReceiptAjax?id={$_GET["id"]}',
+            data: $('#form1').serializeArray(),
+            success: function (data) {
+                if(data.code!=200){
+                    layer.msg(data.msg)
+                    return false;
+                }else if(data.code==200){
+                    layer.msg('success',{time:1,end : function(layero, index){
+                        history.back(-1);
+                    }
+                    });
+                }
+            },
+            error:function(XMLHttpRequest, textStatus, errorThrown){
+                //console.log(errorThrown)
+                layer.msg('{$Think.lang.index_public_verificationFailure}')
+
+            }
+        });
+        return false;
+    }
+</script>
+
+</body>
+</html>

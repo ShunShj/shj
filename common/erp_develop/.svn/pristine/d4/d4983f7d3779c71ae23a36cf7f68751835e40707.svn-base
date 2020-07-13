@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {include file='public/head' /}
+    <title>{$language_tag.index_branchcompany_showCustomerManaget_customer_manage}</title>
+    <link href="__STATIC__/css/product.css" rel="stylesheet">
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+    <div class="layui-header">
+        {include file='public/header' /}
+    </div>
+
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll">
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            {include file='public/left_menu' /}
+        </div>
+    </div>
+
+    <div class="layui-body layui-body-bg">
+
+        <!-- 内容主体区域 -->
+        <div style="padding: 15px;">
+            <div class="body-top">
+                <div class='layui-form-item'>
+                <span class="layui-breadcrumb" lay-separator="-">
+                    <a>{$language_tag.index_public_homepage}</a>
+                    <a>{$language_tag.index_public_finance}</a>
+                    <a><cite>{$language_tag.index_finance_agentStatistics_agentCount}</cite></a>
+                </span>
+                </div>
+                <div class='layui-block all-search-bg'>
+                    <form class="layui-form" action="/finance/agentStatistics" method="get" >
+                        <div class="layui-row">
+                            <div class="layui-col-md4">
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">{$language_tag.index_branchcompany_showCompanyOrderManage_orderTime}:</label>
+                                    <div class="layui-input-block">
+                                        <div class="layui-input-inline date-width">
+                                            <input type="text" name="begin_create_time" placeholder="{$language_tag.index_branchcompany_showDistributorManage_pleaseSelectTheDate}" autocomplete="off" value="{$Think.get.begin_create_time}" class="layui-input sales-date">
+                                        </div>
+                                        <div class="date-and">-</div>
+                                        <div class="layui-input-inline date-width">
+                                            <input type="text" name="end_create_time" placeholder="{$language_tag.index_branchcompany_showDistributorManage_pleaseSelectTheDate}" autocomplete="off" value="{$Think.get.end_create_time}" class="layui-input sales-date">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-col-md4">
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">{$language_tag.index_product_visitor_goTime}:</label>
+                                    <div class="layui-input-block">
+                                        <div class="layui-input-inline date-width">
+                                            <input type="text" name="begin_begin_time" placeholder="{$language_tag.index_branchcompany_showDistributorManage_pleaseSelectTheDate}" autocomplete="off" value="{$Think.get.begin_begin_time}" class="layui-input sales-date">
+                                        </div>
+                                        <div class="date-and">-</div>
+                                        <div class="layui-input-inline date-width">
+                                            <input type="text" name="end_begin_time" placeholder="{$language_tag.index_branchcompany_showDistributorManage_pleaseSelectTheDate}" autocomplete="off" value="{$Think.get.end_begin_time}" class="layui-input sales-date">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-col-md4">
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">{$language_tag.index_branchcompany_showCompanyOrderManage_creater}:</label>
+                                    <div class="layui-input-block">
+                                        <input type="text" name="create_user_name" value="{$Think.get.create_user_name}" placeholder="{$language_tag.index_branchcompany_showCompanyOrderManage_creater}"
+                                               autocomplete="off" class="layui-input">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-row">
+                            <div class="layui-col-md4 layui-col-md-offset4">
+                                <div class='input-inline all-button-center pages-search-margin'>
+                                    <button class="layui-btn nav-search">{$language_tag.index_public_search}</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="content-bg">
+                <div class="table-nont user-manage company-pageHeight">
+                    <table class="layui-table" id="language-table">
+                        <thead>
+                        <tr>
+                            <th>{$language_tag.index_finance_showReceivableManage_order_number}</th>
+                            <th>{$language_tag.index_public_agent}</th>
+                            <th>{$language_tag.index_finance_SalesReportProducts_total_sales}（{$language_tag.index_product_public_receivable}）</th>
+                            <th>{$language_tag.index_finance_showMustpayAllManage_money}（{$language_tag.index_finance_showReceivableManage_true_receipt}）</th>
+                            <th>{$language_tag.index_branchcompany_showCompanyOrderManage_orderTime}</th>
+                            <th>{$language_tag.index_product_visitor_goTime}</th>
+                            <th>{$language_tag.index_branchcompany_showCompanyOrderManage_creater}</th>
+                        </tr>
+                        </thead>
+
+                        {empty name='data'}
+
+                        {else /}
+                        {foreach name='data' item='vo'}
+                        <tr>
+                            <th>{$vo.company_order_number}</th>
+                            <th>{$vo.distributor_name}</th>
+                            <th>{$vo.receivable_money_count}</th>
+                            <th>{$vo.payment_money_count}</th>
+                            <th>{$vo.create_time|date="y-m-d",###}</th>
+                            <th>{$vo.begin_time|date="y-m-d",###}</th>
+                            <th>{$vo.create_user_name}</th>
+                        </tr>
+                        {/foreach}
+                        {/empty}
+                        </tbody>
+
+                    </table>
+                </div>
+               <div class="listButtom">
+
+                <!--加载分页-->
+                {include file='public/page' /}
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="layui-footer">
+        <!-- 底部固定区域 -->
+        © layui.com - 底部固定区域
+    </div>
+</div>
+{include file='public/foot_js' /}
+<script src='__STATIC__/javascript/product/all.js'></script>
+
+<script>
+
+    lay('.sales-date').each(function(){
+        laydate.render({
+            elem: this
+            ,trigger: 'click'
+            //,type:'datetime'
+            ,done: function(value, date){
+                console.log(date)
+            }
+        });
+    });
+</script>
+</body>
+</html>

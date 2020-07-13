@@ -1,0 +1,160 @@
+var layer = layui.layer ;
+var form = layui.form;
+var element=layui.element;
+var laydate=layui.laydate;
+var table=layui.table;
+var laytpl=layui.laytpl;
+
+$("#order_wr").val("");
+$(".layui-tab-url li").each(function(index,item){
+    if($(item).html()==localStorage.getItem("list")){
+        $(item).addClass("layui-this").siblings().removeClass("layui-this");
+        $(".layui-tab-content .layui-tab-item").eq(index).addClass("layui-show").siblings().removeClass("layui-show");
+    }
+});
+
+all_company_order_array = [];
+add_base = [];
+edit_base = [];
+
+form.on('submit(companySubmit)', function(data){
+
+    if(data.field.orderGroup=="分销商"){
+        //分销商提交
+        var order_wr = $("#order_wr").val();
+        var order_cs = $("#order_cs").val();
+        var distributor_id = $("#distributor_id").val();
+
+        $.ajax({
+            type: "POST",
+            url: '/branchcompany/addCompanyOrderBaseAjax',
+            data: {
+                wr: order_wr,
+                clientsource: order_cs,
+                distributor_id: distributor_id,
+                channel_type: 1
+            },
+            success: function (data) {
+                // console.log(data);
+
+                // all_company_order_array.push({"add_base":data});
+                // localStorage.setItem("company_order_base",JSON.stringify(all_company_order_array[0]));
+
+                if (data.code != 200) {
+                    layer.msg(data.msg);
+                    return false;
+                } else if (data.code == 200) {
+                    layer.msg('操作成功', {
+                        time:1,end: function (layero, index) {
+                        // location.href='/branchcompany/showCompanyOrderBaseAdd?company_order_number='+data.data;
+                        // element.tabChange('companyOrder', '11'); //切换到：游客信息
+                            $("#company_order_number_hidden").val(data.data);
+                        }
+                    });
+                }
+            }, error: function (XMLHttpRequest, textStatus, errorThrown) {
+                //  alert(XMLHttpRequest.status);
+                // alert(XMLHttpRequest.readyState);
+                // alert(textStatus);
+            }
+        });
+    }else{
+        //直客提交
+        var order_wr = $("#order_wr").val();
+        var order_cs = $("#order_cs").val();
+        var direct_guest_name = $("#direct_guest_name").val();
+        var direct_guest_description = $("#direct_guest_description").val();
+        var direct_guest_remark = $("#direct_guest_remark").val();
+        var direct_guest_tel = $("#direct_guest_tel").val();
+        var direct_guest_email = $("#direct_guest_email").val();
+
+        $.ajax({
+            type: "POST",
+            url: '/branchcompany/addCompanyOrderBaseAjax',
+            data: {
+                wr: order_wr,
+                clientsource: order_cs,
+                contect_name: direct_guest_name,
+                description: direct_guest_description,
+                remark: direct_guest_remark,
+                tel: direct_guest_tel,
+                email: direct_guest_email,
+                channel_type: 2
+            },
+            success: function (data) {
+
+                // all_company_order_array.push({"add_base":data});
+                // localStorage.setItem("company_order_base",JSON.stringify(all_company_order_array[0]));
+
+                if (data.code != 200) {
+                    layer.msg(data.msg);
+                    return false;
+                } else if (data.code == 200) {
+                    layer.msg('操作成功', {
+                        time:1,end: function (layero, index) {
+                            $("#company_order_number_hidden").val(data.data);
+                        }
+                    });
+                }
+            }
+        });
+    }
+    return false;
+});
+
+form.on('select(orderCountry)', function(data){
+
+    var distributor_id = data.value; //得到被选中的值
+
+    $.ajax({
+        type: "POST",
+        url: '/product/CompanyInfoAjax',
+        data: {
+            distributor_id:distributor_id
+        },
+        success: function(data){
+         
+
+            $("#orderCity").val(data[0]['city_name']);
+            $("#orderCity").attr("readonly","readonly");
+            $("#orderLanguage").val(data[0]['language_name']);
+            $("#orderLanguage").attr("readonly","readonly");
+            $("#orderAssociate").val(data[0]['associate_type']);
+            $("#orderAssociate").attr("disabled","disabled");
+            $("#orderProState").val(data[0]['province_name']);
+            $("#orderProState").attr("disabled","disabled");
+            $("#orderAddress").val(data[0]['address']);
+            $("#orderAddress").attr("disabled","disabled");
+            $("#orderCountryName").val(data[0]['contect']);
+            $("#orderCountryName").attr("disabled","disabled");
+            $("#orderCountry").val(data[0]['country_name']);
+            $("#orderCountry").attr("disabled","disabled");
+            $("#orderPostCode").val(data[0]['zip_code']);
+            $("#orderPostCode").attr("disabled","disabled");
+
+            $("#orderTel").val(data[0]['tel']);
+            $("#orderTel").attr("disabled","disabled");
+            $("#orderStartDate").val(data[0]['tel']);
+            $("#orderStartDate").attr("disabled","disabled");
+            $("#orderEndDate").val(data[0]['tel']);
+            $("#orderEndDate").attr("disabled","disabled");
+            $("#orderEmail").val(data[0]['email']);
+            $("#orderEmail").attr("disabled","disabled");
+            $("#orderRemark").val(data[0]['remark']);
+            $("#orderRemark").attr("disabled","disabled");
+
+            form.render();
+        }
+    });
+});
+
+form.on('radio', function (data) {
+    if(data.value=="分销商"){
+        $("#show_tp1").show();
+        $("#show_tp2").hide();
+    }else if(data.value=="直客"){
+        $("#show_tp1").hide();
+        $("#show_tp2").show();
+    }
+});
+

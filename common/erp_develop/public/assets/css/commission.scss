@@ -1,0 +1,112 @@
+$titles: (#ff0000 #de8b2b #1d2d85 #5a4a77 #7f9145 #31839b #4470eb);
+$tables: (
+                (#ff0000 #ff9999 #feceba)
+                (#ff57a5 #ffffff #ff9fc9)
+                (#a44512 #e5660d #e5b381)
+                (#f78c1a #f9bf8f #fce9da)
+                (#133687 #4da2e3 #dbe5f1)
+                (#5f497a #e5dfed #b1a1c6)
+                (#ffffff #78023f #e795b9)
+                (#76923d #c2d69b #eaf2dd)
+                (#b95be3 #c78be8 #e8d4f4)
+                (#31849b #ffffff #92cddc)
+                (#008001 #9bdb8f #e7ffdf)
+                (#1871ef #97cdf1 #e4f8ff)
+
+);
+.commission-table {
+  font-family: "lihei-pro", sans-serif;
+  @for $i from 0 to length($titles) {
+    .color-#{$i+1}-li {
+      &, & a {
+        background-color: nth($titles, $i+1);
+      }
+
+      &.ui-tabs-active a {
+        background-color: lighten(nth($titles, $i+1), 20%);
+      }
+    }
+  }
+
+  @for $i from 0 to length($tables) {
+    $table: nth($tables, $i+1);
+    .pattern-#{$i+1} {
+      @for $j from 0 to length($table) {
+        .heading-#{$j+1} {
+          background-color: nth($table, $j+1);
+        }
+      }
+    }
+  }
+
+  @for $i from 1 to 51 {
+    .col-#{$i} {
+      width: $i / 50 * 98%;
+      min-width: $i / 50 * 98%;
+    }
+  }
+
+  table {
+    width: 100%;
+    font-size: 11px;
+    border-collapse: collapse;
+    text-align: center;
+    font-family: "lihei-pro", sans-serif;
+  }
+
+  td {
+    padding: 2px;
+    border: #000 0.1em solid;
+
+  }
+
+  .heading-1 {
+    padding: 5px 0 5px;
+    font-size: 2.4em;
+    border: 0;
+    font-weight: 800;
+    color: #fff;
+    img {
+      height: 20px;
+      width: auto;
+    }
+  }
+
+  .heading-2 {
+    padding: 3px 0 3px;
+    font-size: 1.7em;
+    font-weight: 800;
+  }
+
+  header table {
+    margin: 0 0 20px 0;
+    td {
+      border: 0;
+      padding: 0;
+    }
+
+    color: #00a1d9;
+  }
+
+  #title {
+    font-size: 2.4em;
+    font-weight: bolder;
+    font-family: "myriad-pro", sans-serif;
+    vertical-align: bottom;
+  }
+
+  #company-info {
+    text-align: right;
+    font-size: 0.8em;
+    vertical-align: bottom;
+  }
+
+  .content table {
+    font-size: 44%;
+    vertical-align: middle;
+  }
+
+  .page-break {
+    page-break-after: always;
+  }
+}

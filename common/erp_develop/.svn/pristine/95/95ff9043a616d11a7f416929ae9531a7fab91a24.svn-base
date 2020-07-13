@@ -1,0 +1,103 @@
+//修改订单-成本
+var lang_team_product = $('#lang_team_product').val();
+var lang_own_expense = $('#lang_own_expense').val();
+var lang_diy = $('#lang_diy').val();
+function edit_cost(obj){
+
+    var company_order_number = (window.location.search).split("=")[1];
+    var team_product_number = $(obj).parents("tr").find("td[class='ll']").html();
+    var company_order_number = (window.location.search).split("=")[1];
+    var branch_product_number = $(obj).parents("tr").find("td[class='mm']").html();
+    var company_order_product_source_id = $(obj).parents("tr").find("td[class='lll']").html();
+    var company_order_product_diy_number = $(obj).parents("tr").find("td[class='llll']").html();
+
+    var type = $(obj).parents("tr").find("td[class='bb']").html();
+    if(type==lang_team_product){
+        type_number=1;
+    }else if(type==lang_own_expense){
+    	type_number=2;
+    }else if(type==lang_diy){
+    	type_number=3;
+        company_order_product_source_id="";
+    }
+   
+  
+    var invoice_number = $(obj).closest("tr").find("input[class='layui-input invoice-number']").val();
+    var invoice_time = $(obj).closest("tr").find("input[class='layui-input layui-input-date invoice-time']").val()
+
+    $.ajax({
+        type: "POST",
+        url: '/product/CompanyOrderCostEditAjax',
+        data: {
+            type:type_number,
+            company_order_number:company_order_number,
+            team_product_number:team_product_number,
+            branch_product_number:branch_product_number,
+            invoice_number:invoice_number,
+            invoice_time:invoice_time,
+            company_order_product_source_id:company_order_product_source_id,
+            company_order_product_diy_number:company_order_product_diy_number
+        },
+        success: function(data){
+            // console.log(data);
+
+            if(data.code!=200){
+                layer.msg(data.msg);
+                return false;
+            }else if(data.code==200) {
+                layer.msg('操作成功',{time:1,end : function(layero, index){
+                        location.href='/product/showCompanyOrderCostEdit?company_order_number='+company_order_number;
+
+                    }
+                });
+            }
+        }
+    });
+}
+$('.visitorList3').click(function(){
+    //首先把当前div_id存入隐藏域
+    $('#div_id').val($(this).attr('div_id'))
+
+    //首先把所有input都设为未选中
+    var key = $(this).attr('key');
+    if(key==1){
+        $('#update_customer').hide();
+        $('#choose_all').hide();
+        $("input[name='productCheckbox1']").each(function(item,index){
+
+            $(this).prop('checked','checked')
+            $(this).prop('disabled','true')
+        });
+    }else{
+        $('#update_customer').show();
+        $('#choose_all').show();
+        //首先获得 当前行的 游客ID
+        var customer_id = $(this).attr('customer_str');
+
+        //开始循环INPUT 来判断 是否存在 存在则checked
+        $("input[name='productCheckbox1']").each(function(item,index){
+            var c_customer = $(this).val()
+            //开始做判断如果c_customer 在customer_id中则checkbox为选中
+            if(customer_id.indexOf(c_customer) >= 0){
+                $(this).prop('checked','checked')
+            }else{
+                $(this).prop('checked',false)
+            }
+
+            ;
+
+        });
+    }
+
+    form.render();
+    $('#han_test').show(500);
+
+})
+$('#close_div').click(function(){
+    $('#han_test').hide(500);
+})
+$(".table-select-none tr").hover(function () {
+    $(this).find(".table-input-none .layui-input,.table-input-none .layui-select,.table-input-none .layui-textarea").css("background","#f2f2f2");
+},function () {
+    $(this).find(".table-input-none .layui-input,.table-input-none .layui-select,.table-input-none .layui-textarea").css("background","#fff");
+})

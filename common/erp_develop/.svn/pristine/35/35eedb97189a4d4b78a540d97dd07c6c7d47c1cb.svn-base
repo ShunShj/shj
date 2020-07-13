@@ -1,0 +1,19 @@
+<?php
+// +----------------------------------------------------------------------
+// | ThinkPHP [ WE CAN DO IT JUST THINK ]
+// +----------------------------------------------------------------------
+// | Copyright (c) 2006-2016 http://thinkphp.cn All rights reserved.
+// +----------------------------------------------------------------------
+// | Licensed ( http://www.apache.org/licenses/LICENSE-2.0 )
+// +----------------------------------------------------------------------
+// | Author: 流年 <liu21st@gmail.com>
+// +----------------------------------------------------------------------
+use app\common\help\Help;
+
+// 应用公共文件
+function getProportionOneToOne(){
+    $firstday = date("Y-m");
+    $data['proportion_time'] = date('Ymd',strtotime("$firstday +1 month -1 day"));
+   $getProportionOneToOne = Help::callSoaErp('post','/system/getProportionOneToOne',$data);
+//   var_dump($getProportionOneToOne);exit;
+}

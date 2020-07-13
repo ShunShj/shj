@@ -1,0 +1,1143 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {include file='public/head' /}
+    <title>添加线路模板</title>
+    <style>
+        .text_align {
+            text-align: right;
+            padding-right: 20px;
+            vertical-align:middle;
+            line-height: 38px;
+        }
+    </style>
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+
+    <div class="layui-header">
+        {include file='public/header' /}
+    </div>
+
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll">
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            {include file='public/left_menu' /}
+        </div>
+    </div>
+
+    <div class="layui-body">
+
+        <!-- 内容主体区域 -->
+        <div style="padding: 15px;">
+            <div class='layui-row'>
+                <span class="layui-breadcrumb">
+                    <a href="#">产品</a>
+                    <a href="/product/showRouteTemplateManage">线路模板</a>
+                    <a href="#">修改线路模板</a>
+                </span>
+            </div>
+
+
+               <form class="layui-form" id="form1" onSubmit="return edit()">
+                <div class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief">
+                    <ul class="layui-tab-title">
+                        <li  >基本信息</li>
+                        <li class="layui-this">行程内容</li>
+                        <li >资源配置</li>
+                    </ul>
+                    <div class="layui-tab-content" >
+                        <!--基本信息-->
+
+                        <div class="layui-tab-item  ">
+
+                            <div class="layui-form-item">
+                                <label class="layui-form-label"><span style="color:red;">*</span>&nbsp;线路模板名称</label>
+                                <div class="layui-input-block">
+                                    <input id="route_name" name="route_name" value="{$route_type_result.route_name}" required="required" lay-verify="required" placeholder="请输入团名称" autocomplete="off" class="layui-input" type="text">
+                                 </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">线路类型</label>
+                                <div class="layui-input-inline" >
+
+                                    <select name="route_type_id" id='route_type_id'  lay-verify="required">
+
+
+                                           {foreach name='route_type_data_result'  item='vo'}
+                                            	<option value="{$vo.route_type_id}" {if condition="$vo.route_type_id eq $route_type_result.route_type_id"}selected="seleted"{/if}
+                                            		>{if condition="$vo.type eq 1"}华人团-{else/}老外团-{/if}{$vo.route_type_name}</option>
+                                           {/foreach}
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">负责人</label>
+                                <div class="layui-input-block">
+                                    <select  id='route_user_id' lay-verify="required">
+                                    {foreach name='route_type_user_result' item='vo'}
+                                   		<option value="{$vo.user_id}" {if condition="$vo.user_id eq $route_type_result.route_user_id"}selected="seleted"{/if}>{$vo.nickname}</option>
+                                    {/foreach}
+                                    </select>
+                                </div>
+                            </div>
+                             <div class="layui-form-item">
+                                <label class="layui-form-label">状态</label>
+                                <div class="layui-input-block">
+                                    <select name="status" id='edit_flight_status' lay-verify="required">
+                                        <option value="1" {if condition="1 eq $route_type_result['status']"}selected="seleted"{/if}>启用</option>
+                                        <option value="2" {if condition="2 eq $route_type_result['status']"}selected="seleted"{/if}>禁用</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <input type='hidden' id='route_template_id' value="{$Think.get.route_template_id}" />
+			               <div class="layui-row">
+			                    <div class="layui-input-block">
+			                        <button class="layui-btn" lay-submit="" lay-filter="formDemo" id="edit_submit">修改
+			                        </button>
+
+			                        <a href="/product/showRouteTemplateManage">
+			                            <button type="button" class="layui-btn layui-btn-primary">返回</button>
+			                        </a>
+			                    </div>
+			                </div>
+
+                        </div>
+
+                        <!--行程内容-->
+                        <div class="layui-tab-item layui-show">
+                            <div class="layui-collapse" lay-accordion>
+                                <div class="layui-colla-item" id=''>
+                                    <h2 class="layui-colla-title">航班信息</h2>
+                                   <div class="layui-colla-content layui-show"  >
+                                        <div><a class="layui-btn" id="add_transfer_flight">添加航班</a></div>
+                                        	<div class="d_transfer">
+                                        	{foreach name='flight_result' item="vo"}
+		                                        <div  style="border: 1px solid #e8e6e6;padding: 10px;margin-top: 10px;">
+											        <div  class="layui-row">
+											            <div class="layui-col-md4">
+											                <div class="layui-form-item">
+											                    <label class="layui-form-label">航班号</label>
+											                    <div class="layui-input-block">
+											                        <input type="text" value="{$vo.flight_number}" class="layui-input" id="flight_number_{$vo.route_flight_id}" name="flight_number_{$vo.route_flight_id}" />
+											                    </div>
+											                </div>
+											            </div>
+											            <div class="layui-col-md4">
+											                <div class="layui-form-item">
+											                    <label class="layui-form-label">第几天</label>
+											                    <div class="layui-input-block">
+											                        <input type="text" value="{$vo.the_days}" id="the_days_{$vo.route_flight_id}" class="layui-input" lay-verify="required" name="the_days" />
+											                    </div>
+											                </div>
+											            </div>
+											            <div class="layui-col-md4">
+											                <div class="layui-form-item">
+											                    <label class="layui-form-label">接送机</label>
+											                    <div class="layui-input-block">
+											                        <input type="radio" name="flight_type_{$vo.route_flight_id}" value="1" title="接机"  {if condition="$vo.flight_type eq 1"}checked{/if} >
+											                        <input type="radio" name="flight_type_{$vo.route_flight_id}" value="2" title="送机"  {if condition="$vo.flight_type eq 2"}checked{/if} >
+											                    </div>
+											                </div>
+											            </div>
+											        </div>
+											        <div class="layui-row">
+											            <div class="layui-col-md4">
+											                <div class="layui-form-item">
+											                    <label class="layui-form-label">出发地</label>
+											                    <div class="layui-input-block">
+											                        <input type="text" value='{$vo.start_city}' id="start_city_{$vo.route_flight_id}" class="layui-input" name="start_city[ii]" />
+											                    </div>
+											                </div>
+											            </div>
+											            <div class="layui-col-md4">
+											                <div class="layui-form-item">
+											                    <label class="layui-form-label">驶出时间</label>
+											                    <div class="layui-input-block">
+											                        <input type="text" value="{$vo.start_time|date='Y-m-d H:i:s',###}" id="start_time_{$vo.route_flight_id}" class="layui-input fight_time" name="start_time[ii]" placeholder="" />
+											                    </div>
+											                </div>
+											            </div>
+											        </div>
+											        <div class="layui-row">
+											            <div class="layui-col-md4">
+											                <div class="layui-form-item">
+											                    <label class="layui-form-label">目的地</label>
+											                    <div class="layui-input-block">
+											                        <input type="text" value='{$vo.end_city}' class="layui-input" id="end_city_{$vo.route_flight_id}" name="end_city[ii]"/>
+											                    </div>
+											                </div>
+											            </div>
+											            <div class="layui-col-md4">
+											                <div class="layui-form-item">
+											                    <label class="layui-form-label">到达时间</label>
+											                    <div class="layui-input-block">
+											                        <input type="text" value="{$vo.end_time|date='Y-m-d H:i:s',###}" id="end_time_{$vo.route_flight_id}" class="layui-input fight_time" name="end_time[ii]" placeholder="" />
+											                    </div>
+											                </div>
+											            </div>
+											        </div>
+											        <input type="hidden" id="fight-the-days-ii" name="fight_the_days[ii]">
+											        <div>
+											        	<button type="button" class="layui-btn layui-btn-primary  edit_flight"  key_id="{$vo.route_flight_id}">保存</button>
+											        	<button type="button" class="layui-btn layui-btn-primary  del_flight"  key_id="{$vo.route_flight_id}">删除</button>
+											        </div>
+									        </div>
+									        {/foreach}
+									        <div  style="border: 1px solid #e8e6e6;padding: 10px;margin-top: 10px;display:none" id='flight_template'>
+										        <div  class="layui-row">
+										            <div class="layui-col-md4">
+										                <div class="layui-form-item">
+										                    <label class="layui-form-label">航班号</label>
+										                    <div class="layui-input-block">
+										                        <input type="text" class="layui-input" id='flight_number' name="flight_number[ii]" />
+										                    </div>
+										                </div>
+										            </div>
+										            <div class="layui-col-md4">
+										                <div class="layui-form-item">
+										                    <label class="layui-form-label">第几天</label>
+										                    <div class="layui-input-block">
+										                        <input type="text" class="layui-input" id='the_days' name="" />
+										                    </div>
+										                </div>
+										            </div>
+										            <div class="layui-col-md4">
+										                <div class="layui-form-item">
+										                    <label class="layui-form-label">接送机</label>
+										                    <div class="layui-input-block">
+										                        <input type="radio" name="flight_type" value="1" title="接机"  checked>
+										                        <input type="radio" name="flight_type" value="2" title="送机"  >
+										                    </div>
+										                </div>
+										            </div>
+										        </div>
+										        <div class="layui-row">
+										            <div class="layui-col-md4">
+										                <div class="layui-form-item">
+										                    <label class="layui-form-label">出发地</label>
+										                    <div class="layui-input-block">
+										                        <input type="text" class="layui-input" id='start_city' name="fight_start_city[ii]" />
+										                    </div>
+										                </div>
+										            </div>
+										            <div class="layui-col-md4">
+										                <div class="layui-form-item">
+										                    <label class="layui-form-label">驶出时间</label>
+										                    <div class="layui-input-block">
+										                        <input type="text" class="layui-input fight_time_ii" id='start_time' name="fight_start_time[ii]" placeholder="" />
+										                    </div>
+										                </div>
+										            </div>
+										        </div>
+										        <div class="layui-row">
+										            <div class="layui-col-md4">
+										                <div class="layui-form-item">
+										                    <label class="layui-form-label">目的地</label>
+										                    <div class="layui-input-block">
+										                        <input type="text" class="layui-input" id='end_city' name="fight_end_city[ii]"/>
+										                    </div>
+										                </div>
+										            </div>
+										            <div class="layui-col-md4">
+										                <div class="layui-form-item">
+										                    <label class="layui-form-label">到达时间</label>
+										                    <div class="layui-input-block">
+										                        <input type="text" class="layui-input fight_time_ii" id='end_time' name="end_time[ii]" placeholder="" />
+										                    </div>
+										                </div>
+										            </div>
+										        </div>
+
+										        <div>
+										           <button class="layui-btn" lay-submit="" lay-filter="formDemo" onclick="submit_flight_template()" >添加</button>
+									        		<button type="button" class="layui-btn layui-btn-primary r_transfer del_flight_template"  >删除</button>
+									        	</div>
+									        </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="layui-colla-item">
+                                    <h2 class="layui-colla-title">行程信息</h2>
+                                    <div class="layui-colla-content layui-show"  >
+										<div><a class="layui-btn" id="add_transfer_journey">添加行程</a></div>
+										{volist name='journey_result' id="vo" }
+                                        <div class="d_journey">
+									        <div id="" style="border: 1px solid #e8e6e6;padding: 10px;margin-top: 10px;">
+												<div class="layui-row">
+									                <div class="layui-col-md2">DAY {$i}</div>
+									                <input type="hidden" name="journey_the_days" value="ii" />
+									            </div>
+												<div class="layui-row">
+													<div class="layui-col-md2 text_align">行程天数</div>
+													<div class="layui-col-md6">
+														<div class="layui-form-item">
+														<input type="text" id="the_days_{$vo.route_journey_id}" class="layui-input" name="journey_the_days[ii]" value="{$vo.the_days}" style="width: 50px" >
+														</div>
+													</div>
+												</div>
+									            <div class="layui-row">
+									                <div class="layui-col-md2 text_align">行程标题</div>
+									                <div class="layui-col-md6">
+									                    <div class="layui-form-item">
+									                        <input type="text" id="journey_title_{$vo.route_journey_id}" class="layui-input"  name="journey_title[ii]" value="{$vo.route_journey_title}">
+									                    </div>
+									                </div>
+									            </div>
+									            <div class="layui-row">
+									                <div class="layui-col-md2 text_align">行程内容</div>
+									                <div class="layui-col-md6">
+									                    <div class="layui-form-item">
+									                        <textarea id="journey_content_{$vo.route_journey_id}" class="layui-textarea" name="journey_content[ii]">{$vo.route_journey_content}</textarea>
+									                    </div>
+									                </div>
+									            </div>
+									            <div class="layui-row">
+									                <div class="layui-col-md2 text_align">交通</div>
+									                <div class="layui-col-md6">
+									                    <div class="layui-form-item">
+									                        <input type="text" id="journey_traffic_{$vo.route_journey_id}" class="layui-input"  name="journey_traffic[ii]" value="{$vo.route_journey_traffic}">
+									                    </div>
+									                </div>
+									            </div>
+									            <div class="layui-row">
+									                <div class="layui-col-md2 text_align">住宿</div>
+									                <div class="layui-col-md6">
+									                    <div class="layui-form-item">
+									                        <input type="text" id="journey_stay_{$vo.route_journey_id}" class="layui-input"  name="journey_stay[ii]" value="{$vo.route_journey_stay}">
+									                    </div>
+									                </div>
+									            </div>
+									            <div class="layui-row">
+									                <div class="layui-col-md2 text_align">用餐</div>
+									                <div class="layui-col-md6">
+									                    <div class="layui-row">
+									                        <div class="layui-form-item">
+									                            <div class="layui-col-md2"><input type="checkbox" name="eat_mark_{$vo.route_journey_id}" title="早餐" lay-skin="primary" {php} if(substr_count($vo['eat_mark'],1)>0){echo 'checked';}{/php} value="1" > </div>
+									                            <div class="layui-col-md8"><input type="text" id="journey_breakfast_{$vo.route_journey_id}" class="layui-input"  name="journey_breakfast[ii]" value="{$vo.route_journey_breakfast}"></div>
+									                        </div>
+									                    </div>
+									                    <div class="layui-row">
+									                        <div class="layui-form-item">
+									                            <div class="layui-col-md2"><input type="checkbox" name="eat_mark_{$vo.route_journey_id}" title="午餐" lay-skin="primary" {php} if(substr_count($vo['eat_mark'],2)>0){echo 'checked';}{/php} value="2"></div>
+									                            <div class="layui-col-md8"><input type="text" id="journey_lunch_{$vo.route_journey_id}" class="layui-input"  name="journey_lunch[ii]" value="{$vo.route_journey_lunch}"></div>
+									                        </div>
+									                    </div>
+									                    <div class="layui-row">
+									                        <div class="layui-form-item">
+									                            <div class="layui-col-md2"><input type="checkbox" name="eat_mark_{$vo.route_journey_id}" title="晚餐" lay-skin="primary" {php} if(substr_count($vo['eat_mark'],3)>0){echo 'checked';}{/php} value="3"></div>
+									                            <div class="layui-col-md8"><input type="text" id="journey_dinner_{$vo.route_journey_id}" class="layui-input"  name="journey_dinner[ii]" value="{$vo.route_journey_dinner}"></div>
+									                        </div>
+									                    </div>
+									                </div>
+									            </div>
+									            <div class="layui-row">
+									                <div class="layui-col-md2 text_align">景点</div>
+									                <div class="layui-col-md6">
+									                    <div class="layui-form-item">
+									                        <input type="text" id="journey_scenic_sport_{$vo.route_journey_id}" class="layui-input" name="journey_scenic_sport[ii]" value="{$vo.route_journey_scenic_sport}">
+									                    </div>
+									                </div>
+									            </div>
+									            <div class="layui-row">
+									                <div class="layui-col-md2 text_align">行程图片</div>
+									                <div class="layui-col-md8">
+									                    <div class="layui-form-item">
+									                        <button type="button" img_id={$i} class="layui-btn journey_picture" id="journey_picture_{$i}">
+									                            <i class="layui-icon">&#xe67c;</i>上传图片
+									                        </button>
+									                    </div>
+									                    <div id="journey-img-{$i}" style="padding: 10px">
+															<div>
+																{volist name="vo.img_list" id='vv'}
+																<div>
+																	<div><img src="{$vv}" id="journey_picture" alt="" style="width:150px;height:80px;"></div>
+																	<div class="layui-btn layui-btn-danger r-journey-img del_img">删除</div>
+																</div>
+																{/volist}
+															</div>
+														</div>
+									                </div>
+									            </div>
+									            <div class="layui-row">
+									                <div class="layui-col-md2 text_align">备注</div>
+									                <div class="layui-col-md6">
+									                    <div class="layui-form-item">
+									                        <textarea class="layui-textarea" id="journey_remark_{$vo.route_journey_id}">{$vo.route_journey_remark}</textarea>
+									                    </div>
+									                </div>
+									            </div>
+												<input type="hidden" id="route_journey_id_{$vo.route_journey_id}" name="" value="{$vo.route_journey_id}">
+												<div>
+													<button type="button" class="layui-btn layui-btn-primary  edit_journey"  key_id="{$vo.route_journey_id}" i={$i}>保存</button>
+													<button type="button" class="layui-btn layui-btn-primary  del_journey"  key_id="{$vo.route_journey_id}">删除</button>
+												</div>
+									        </div>
+                                        </div>
+										{/volist}
+
+
+
+										 <div id="jounery_template" style="border: 1px solid #e8e6e6;padding: 10px;margin-top: 10px;display:none">
+												<div class="layui-row">
+									                <div class="layui-col-md2">NEW DAY</div>
+									                <input type="hidden" name="journey_the_days" value="ii" />
+									            </div>
+												<div class="layui-row">
+													<div class="layui-col-md2 text_align">行程天数</div>
+													<div class="layui-col-md6">
+														<div class="layui-form-item">
+														<input type="text" id="journey_the_days" class="layui-input" name="journey_the_days[ii]" value="" style="width: 50px" >
+														</div>
+													</div>
+												</div>
+									            <div class="layui-row">
+									                <div class="layui-col-md2 text_align">行程标题</div>
+									                <div class="layui-col-md6">
+									                    <div class="layui-form-item">
+									                        <input type="text" id="journey_title" class="layui-input"  name="journey_title[ii]" value="">
+									                    </div>
+									                </div>
+									            </div>
+									            <div class="layui-row">
+									                <div class="layui-col-md2 text_align">行程内容</div>
+									                <div class="layui-col-md6">
+									                    <div class="layui-form-item">
+									                        <textarea id="journey_content" class="layui-textarea" name="journey_content[ii]"></textarea>
+									                    </div>
+									                </div>
+									            </div>
+									            <div class="layui-row">
+									                <div class="layui-col-md2 text_align">交通</div>
+									                <div class="layui-col-md6">
+									                    <div class="layui-form-item">
+									                        <input type="text" id="journey_traffic" class="layui-input"  name="journey_traffic[ii]" value="">
+									                    </div>
+									                </div>
+									            </div>
+									            <div class="layui-row">
+									                <div class="layui-col-md2 text_align">住宿</div>
+									                <div class="layui-col-md6">
+									                    <div class="layui-form-item">
+									                        <input type="text" id="journey_stay" class="layui-input"  name="journey_stay[ii]" value="">
+									                    </div>
+									                </div>
+									            </div>
+									            <div class="layui-row">
+									                <div class="layui-col-md2 text_align">用餐</div>
+									                <div class="layui-col-md6">
+									                    <div class="layui-row">
+									                        <div class="layui-form-item">
+									                            <div class="layui-col-md2"><input type="checkbox" name="eat_mark" title="早餐" lay-skin="primary" {if condition="$vo.eat_mark eq '1'"}checked{/if} value="1"></div>
+									                            <div class="layui-col-md8"><input type="text" id="journey_breakfast" class="layui-input"  name="journey_breakfast[ii]" value=""></div>
+									                        </div>
+									                    </div>
+									                    <div class="layui-row">
+									                        <div class="layui-form-item">
+									                            <div class="layui-col-md2"><input type="checkbox" name="eat_mark" title="午餐" lay-skin="primary" {if condition="$vo.eat_mark eq '2'"}checked{/if} value="2"></div>
+									                            <div class="layui-col-md8"><input type="text" id="journey_lunch" class="layui-input"  name="journey_lunch[ii]" value=""></div>
+									                        </div>
+									                    </div>
+									                    <div class="layui-row">
+									                        <div class="layui-form-item">
+									                            <div class="layui-col-md2"><input type="checkbox" name="eat_mark" title="晚餐" lay-skin="primary" {if condition="$vo.eat_mark eq '3'"}checked{/if} value="3"></div>
+									                            <div class="layui-col-md8"><input type="text" id="journey_dinner" class="layui-input"  name="journey_dinner[ii]" value=""></div>
+									                        </div>
+									                    </div>
+									                </div>
+									            </div>
+									            <div class="layui-row">
+									                <div class="layui-col-md2 text_align">景点</div>
+									                <div class="layui-col-md6">
+									                    <div class="layui-form-item">
+									                        <input type="text" id="journey_scenic_sport" class="layui-input" name="journey_scenic_sport[ii]" value="">
+									                    </div>
+									                </div>
+									            </div>
+									            <div class="layui-row">
+									                <div class="layui-col-md2 text_align">行程图片</div>
+									                <div class="layui-col-md8">
+									                    <div class="layui-form-item">
+									                        <!-- <button type="button" class="layui-btn" id="journey_picture">
+									                            <i class="layui-icon">&#xe67c;</i>上传图片
+									                        </button> -->
+									                        <div class="htmleaf-container">
+															  <button type="button" class="layui-btn" id="test2">
+															    <i class="layui-icon">&#xe67c;</i>上传附件
+															  </button>
+															</div>
+									                    </div>
+									                    <blockquote class="layui-elem-quote layui-quote-nm" style="margin-top: 10px;">
+													    	预览图：
+													      <div class="layui-upload-list" id="demo2">
+
+
+														  </div>
+
+													    </blockquote>
+
+													    <input type='hidden' id='img_list' value=""/>
+									                </div>
+									            </div>
+									            <div class="layui-row">
+									                <div class="layui-col-md2 text_align">备注</div>
+									                <div class="layui-col-md6">
+									                    <div class="layui-form-item">
+									                        <textarea class="layui-textarea" id="journey_remark"></textarea>
+									                    </div>
+									                </div>
+									            </div>
+												<div>
+													<button type="button" class="layui-btn layui-btn-primary  put_journey"  key_id="{$vo.route_journey_id}">提交</button>
+												</div>
+									        </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                            </div>
+
+                        <!--资源配置-->
+                        <div class="layui-tab-item">
+                            <table class="layui-table" id="language-table">
+                                <thead>
+                                    <tr>
+                                        <th>资源项目</th>
+                                        <th>资源配置状态</th>
+                                        <th>操作</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <th>酒店</th>
+                                        <th>{php} if(count($source_data_result['hotel'])==0){echo "未设置";}else{echo "已设置";} {/php}</th>
+                                        <th>
+                                        <a href="/product/showRouteHotelAdd?route_template_id={$Think.get.route_template_id}" target="_blank" class="layui-btn layui-btn-sm ">&nbsp;更改配置&nbsp;</a>
+
+                                        </th>
+                                    </tr>
+                                     <tr>
+                                        <th>用餐</th>
+                                        <th>{php} if(count($source_data_result['dining'])==0){echo "未设置";}else{echo "已设置";} {/php}</th>
+                                         <th>
+                                         	<a href="/product/showRouteDiningAdd?route_template_id={$Think.get.route_template_id}" target="_blank" class="layui-btn layui-btn-sm ">&nbsp;更改资源&nbsp;</a>
+
+                                        </th>
+                                    </tr>
+                                     <tr>
+                                        <th>航班</th>
+                                        <th>{php} if(count($source_data_result['flight'])==0){echo "未设置";}else{echo "已设置";} {/php}</th>
+                                        <th>
+                                         	<a href="/product/showRouteFlightAdd?route_template_id={$Think.get.route_template_id}" target="_blank" class="layui-btn layui-btn-sm ">&nbsp;更改资源&nbsp;</a>
+
+                                        </th>
+                                    </tr>
+                                     <tr>
+                                        <th>邮轮</th>
+                                        <th>{php} if(count($source_data_result['cruise'])==0){echo "未设置";}else{echo "已设置";} {/php}</th>
+                                        <th>
+                                         	<a href="/product/showRouteCruiseAdd?route_template_id={$Think.get.route_template_id}" target="_blank" class="layui-btn layui-btn-sm ">&nbsp;更改资源&nbsp;</a>
+
+                                        </th>
+                                    </tr>
+                                     <tr>
+                                        <th>签证</th>
+                                        <th>{php} if(count($source_data_result['visa'])==0){echo "未设置";}else{echo "已设置";} {/php}</th>
+                                        <th>
+                                         	<a href="/product/showRouteVisaAdd?route_template_id={$Think.get.route_template_id}" target="_blank" class="layui-btn layui-btn-sm ">&nbsp;更改资源&nbsp;</a>
+
+                                        </th>
+                                    </tr>
+                                     <tr>
+                                        <th>景点</th>
+                                        <th>{php} if(count($source_data_result['scenic_spot'])==0){echo "未设置";}else{echo "已设置";} {/php}</th>
+                                        <th>
+                                         	<a href="/product/showRouteScenicSpotAdd?route_template_id={$Think.get.route_template_id}" target="_blank" class="layui-btn layui-btn-sm ">&nbsp;更改资源&nbsp;</a>
+
+                                        </th>
+                                    </tr>
+                                     <tr>
+                                        <th>车辆</th>
+                                        <th>{php} if(count($source_data_result['vehicle'])==0){echo "未设置";}else{echo "已设置";} {/php}</th>
+                                        <th>
+                                         	<a href="/product/showRouteVehicleAdd?route_template_id={$Think.get.route_template_id}" target="_blank" class="layui-btn layui-btn-sm ">&nbsp;更改资源&nbsp;</a>
+
+										</th>
+                                    </tr>
+                                    <tr>
+                                        <th>导游</th>
+                                        <th>{php} if(count($source_data_result['tour_guide'])==0){echo "未设置";}else{echo "已设置";} {/php}</th>
+                                        <th>
+                                        	<a href="/product/showRouteTourGuideAdd?route_template_id={$Think.get.route_template_id}" target="_blank" class="layui-btn layui-btn-sm ">&nbsp;更改资源&nbsp;</a>
+
+                                        </th>
+                                    </tr>
+                                    <tr>
+                                        <th>单项资源</th>
+                                        <th>{php} if(count($source_data_result['single_source'])==0){echo "未设置";}else{echo "已设置";} {/php}</th>
+                                        <th>
+                                         	<a href="/product/showRouteSingleSourceAdd?route_template_id={$Think.get.route_template_id}" target="_blank" class="layui-btn layui-btn-sm ">&nbsp;更改资源&nbsp;</a>
+
+                                        </th>
+                                    </tr>
+									<tr>
+										<th>自费</th>
+										<th>{php} if(count($source_data_result['own_expense'])==0){echo "未设置";}else{echo "已设置";} {/php}</th>
+										<th>
+											<a href="/product/showRouteOwnExpenseAdd?route_template_id={$Think.get.route_template_id}" target="_blank" class="layui-btn layui-btn-sm ">&nbsp;更改资源&nbsp;</a>
+
+										</th>
+									</tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+   </form>
+                <br><br><br>
+
+
+
+
+        </div>
+    </div>
+
+
+<!--行程信息模板-->
+    <div id="t_journey" style="display: none">
+        <div id="day-journey-ii" style="border: 1px solid #e8e6e6;padding: 10px;margin-top: 10px;">
+            <div class="layui-row">
+                <div class="layui-col-md2">DAY ii</div>
+                <input type="hidden" name="journey_the_days" value="ii" />
+            </div>
+            <div class="layui-row">
+                <div class="layui-col-md2 text_align">行程标题</div>
+                <div class="layui-col-md6">
+                    <div class="layui-form-item">
+                        <input type="text" class="layui-input"  name="journey_title[ii]">
+                    </div>
+                </div>
+            </div>
+            <div class="layui-row">
+                <div class="layui-col-md2 text_align">行程内容</div>
+                <div class="layui-col-md6">
+                    <div class="layui-form-item">
+                        <textarea class="layui-textarea" name="journey_content[ii]"></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-row">
+                <div class="layui-col-md2 text_align">交通</div>
+                <div class="layui-col-md6">
+                    <div class="layui-form-item">
+                        <input type="text" class="layui-input"  name="journey_traffic[ii]">
+                    </div>
+                </div>
+            </div>
+            <div class="layui-row">
+                <div class="layui-col-md2 text_align">住宿</div>
+                <div class="layui-col-md6">
+                    <div class="layui-form-item">
+                        <input type="text" class="layui-input"  name="journey_stay[ii]">
+                    </div>
+                </div>
+            </div>
+            <div class="layui-row">
+                <div class="layui-col-md2 text_align">用餐</div>
+                <div class="layui-col-md6">
+                    <div class="layui-row">
+                        <div class="layui-form-item">
+                            <div class="layui-col-md2"><input type="checkbox" name="eat_mark[ii][]" title="早餐" lay-skin="primary"{if condition="$vo.eat_mark eq '1'"}checked{/if} value="1" ></div>
+                            <div class="layui-col-md8"><input type="text" class="layui-input"  name="journey_breakfast[ii]"></div>
+                        </div>
+                    </div>
+                    <div class="layui-row">
+                        <div class="layui-form-item">
+                            <div class="layui-col-md2"><input type="checkbox" name="eat_mark[ii][]" title="午餐" lay-skin="primary"{if condition="$vo.eat_mark eq '2'"}checked{/if} value="2" ></div>
+                            <div class="layui-col-md8"><input type="text" class="layui-input"  name="journey_lunch[ii]"></div>
+                        </div>
+                    </div>
+                    <div class="layui-row">
+                        <div class="layui-form-item">
+                            <div class="layui-col-md2"><input type="checkbox" name="eat_mark[ii][]" title="晚餐" lay-skin="primary"{if condition="$vo.eat_mark eq '3'"}checked{/if} value="3" ></div>
+                            <div class="layui-col-md8"><input type="text" class="layui-input"  name="journey_dinner[ii]"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-row">
+                <div class="layui-col-md2 text_align">景点</div>
+                <div class="layui-col-md6">
+                    <div class="layui-form-item">
+                        <input type="text" class="layui-input"  name="journey_scenic_sport[ii]">
+                    </div>
+                </div>
+            </div>
+            <div class="layui-row">
+                <div class="layui-col-md2 text_align">行程图片</div>
+                <div class="layui-col-md8">
+                    <div class="layui-form-item">
+                        <button type="button" class="layui-btn" id="journey-picture-ii">
+                            <i class="layui-icon">&#xe67c;</i>上传图片
+                        </button>
+                    </div>
+                    <div id="u-img-ii" style="padding: 10px">
+
+ <input type="hidden" id="route_template_id" value="{$Think.get.route_template_id}">
+
+
+
+
+
+    <div class="layui-footer">
+        <!-- 底部固定区域 -->
+        © layui.com - 底部固定区域
+    </div>
+</div>
+{include file='public/foot_js' /}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.2/moment.min.js"></script>
+
+<script>
+    !function() {
+        var layer = layui.layer;
+        var form = layui.form;
+        var laydate = layui.laydate;
+        var upload = layui.upload;
+
+
+        form.render('select'); //重新渲染、
+        laydate.render({
+            elem: '#start_time'
+            ,trigger: 'click'
+            ,type:'datetime'
+
+        });
+        laydate.render({
+            elem: '#end_time'
+            ,trigger: 'click'
+            ,type:'datetime'
+
+        });
+        form.render();
+        $('.fight_time').each(function(){
+            laydate.render({
+                elem: this
+                ,trigger: 'click'
+                ,type:'datetime'
+
+            });
+        });
+
+        //上传图片
+        upload.render({
+            elem: '#test2',
+            url: '/upload/uploadFile',
+            multiple: true,
+            exts: 'gif|png|jpg|jpeg|svg',
+            before: function(obj){
+
+            },
+            done: function(res,index){
+
+                //上传完毕
+                $('#demo2').append('<div><div><img src="'+ res.data +'" alt="'+ res.data +'" class="layui-upload-img" id="journey_picture_'+index+'" style="width:150px;height:80px;"></div><div class="layui-btn layui-btn-danger r-journey-img add_img">删除</div></div>');
+
+            }
+        });
+
+        //修改上传图片
+        //for(var i=1;i<1000;i++){
+        	upload.render({
+	            elem: '.journey_picture',
+	            url: '/upload/uploadFile',
+	            multiple: true,
+	            exts: 'gif|png|jpg|jpeg|svg',
+	            before: function(obj){
+
+	            },
+	            done: function(res,index,upload){
+	                var item = this.item;
+	                var kk = item.context.attributes[1].nodeValue
+
+	                //上传完毕
+	                 $("#journey-img-"+kk).append('<div><div><img src="'+ res.data +'" alt="'+ res.data +'" class="layui-upload-img" id="journey_picture_'+index+'" style="width:150px;height:80px;"></div><div class="layui-btn layui-btn-danger r-journey-img add_img">删除</div></div>');
+
+	            }
+	        });
+       // }
+
+
+        //航班信息
+        var transfer_ii = 0;
+		//删除航班
+        $('.del_flight').on('click',function(){
+            //获取当前的key_id
+            var route_flight_id = $(this).attr('key_id');
+        	data = {route_flight_id:route_flight_id,status:0}
+        	var thiss = $(this);
+            $.ajax({
+                type: "post",
+                url: "/product/editRouteFlightAjax",
+                data: data,
+                dataType: "json",
+                success: function(data){
+                	console.log(data)
+
+                	if(data.code!=200){
+                		layer.msg(data.msg)
+                		return false;
+                	}else if(data.code==200){
+    					layer.msg('操作成功',{time:1})
+   						thiss.parent().parent().remove();
+
+    					return false;
+    					//拿到 ID之后放开后续 2个TAB页面
+    					//$('#tab_ul').children('li').show()
+                	}
+
+               },
+               error:function(XMLHttpRequest, textStatus, errorThrown){
+            	   layer.msg('验证失败')
+               }
+            });
+        });
+        //修改航班
+        $('.edit_flight').on('click',function(){
+
+            //获取当前的key_id
+            var route_flight_id = $(this).attr('key_id');
+            var start_time = $("#start_time_"+route_flight_id).val();
+            var end_time = $("#end_time"+route_flight_id).val();
+            var start_city = $("#start_city_"+route_flight_id).val();
+            var end_city = $("#end_city_"+route_flight_id).val();
+            var the_days = $("#the_days_"+route_flight_id).val();
+            var flight_number = $("#flight_number_"+route_flight_id).val();
+            var flight_type = $('input:radio[name="flight_type_'+route_flight_id+'"]:checked').val();
+        	data = {route_flight_id:route_flight_id,start_time:start_time,end_time:end_time,start_city:start_city,
+        			end_city:end_city,the_days:the_days,flight_number:flight_number,flight_type:flight_type
+        		}
+
+            $.ajax({
+                type: "post",
+                url: "/product/editRouteFLightAjax",
+                data: data,
+                dataType: "json",
+                success: function(data){
+                	console.log(data)
+
+                	if(data.code!=200){
+                		layer.msg(data.msg)
+                		return false;
+                	}else if(data.code==200){
+    					layer.msg('操作成功',{time:1})
+   						window.location.reload()
+
+    					return false;
+    					//拿到 ID之后放开后续 2个TAB页面
+    					//$('#tab_ul').children('li').show()
+                	}
+
+               },
+               error:function(XMLHttpRequest, textStatus, errorThrown){
+            	   layer.msg('验证失败')
+               }
+            });
+        });
+        //修改行程
+        $('.edit_journey').on('click',function(){
+        	var i = $(this).attr('i');
+			var route_journey_picture = '';
+        	$("#journey-img-"+i+" img").each(function(index){
+        		if(index==0){
+					$common="";
+				}else{
+					$common=",";
+				}
+				route_journey_picture+=$common+$(this).attr("src");
+			});
+
+        	var eat_mark_value="";
+            // //获取当前的key_id
+            var route_journey_id = parseInt($(this).attr('key_id'));
+            var the_days = $("#the_days_"+route_journey_id).val();
+            var route_journey_title = $("#journey_title_"+route_journey_id).val();
+            var route_journey_content = $("#journey_content_"+route_journey_id).val();
+            var route_journey_traffic = $("#journey_traffic_"+route_journey_id).val();
+            var route_journey_stay = $("#journey_stay_"+route_journey_id).val();
+            var eat_mark = '';
+			$('input:checkbox[name="eat_mark_'+route_journey_id+'"]:checked').each(function () {
+				 eat_mark+=','+$(this).val();
+			})
+
+
+			eat_mark.substring(1);
+
+
+            // $("#id").append().attr("title",test);
+            var route_journey_breakfast = $("#journey_breakfast_"+route_journey_id).val();
+			var route_journey_lunch = $("#journey_lunch_"+route_journey_id).val();
+			var route_journey_dinner = $("#journey_dinner_"+route_journey_id).val();
+
+			var route_journey_scenic_sport = $("#journey_scenic_sport_"+route_journey_id).val();
+			//var route_journey_picture = $("#journey_picture_"+route_journey_id).attr("src");
+			var route_journey_remark = $("#journey_remark_"+route_journey_id).val();
+
+            data = {route_journey_id:route_journey_id,the_days:the_days,route_journey_title:route_journey_title,
+            	route_journey_content:route_journey_content,route_journey_traffic:route_journey_traffic,
+            	route_journey_traffic:route_journey_traffic,route_journey_stay:route_journey_stay,
+            	eat_mark:eat_mark,route_journey_breakfast:route_journey_breakfast,route_journey_lunch:route_journey_lunch,
+            	route_journey_dinner:route_journey_dinner,route_journey_scenic_sport:route_journey_scenic_sport,
+            	route_journey_picture:route_journey_picture,route_journey_remark:route_journey_remark
+            }
+
+            $.ajax({
+                type: "post",
+                url: "/product/editRouteJourneyAjax",
+                data: data,
+                dataType: "json",
+                success: function(data){
+
+
+                    if(data.code!=200){
+                        layer.msg(data.msg)
+                        return false;
+                    }else if(data.code==200){
+                        layer.msg('操作成功',{time:1})
+                         window.location.reload()
+
+                    //     return false;
+                    //     //拿到 ID之后放开后续 2个TAB页面
+                    //     //$('#tab_ul').children('li').show()
+                    }
+
+                },
+                error:function(XMLHttpRequest, textStatus, errorThrown){
+                    layer.msg('验证失败')
+                }
+            });
+        });
+        //删除行程
+        $('.del_journey').on('click',function(){
+
+            //获取当前的key_id
+            var route_journey_id = $(this).attr('key_id');
+        	data = {route_journey_id:route_journey_id,status:0}
+        	var thiss = $(this);
+            $.ajax({
+                type: "post",
+                url: "/product/editRouteJourneyAjax",
+                data: data,
+                dataType: "json",
+                success: function(data){
+                	console.log(data)
+
+                	if(data.code!=200){
+                		layer.msg(data.msg)
+                		return false;
+                	}else if(data.code==200){
+    					layer.msg('操作成功',{time:1})
+   						thiss.parent().parent().remove();
+
+    					return false;
+    					//拿到 ID之后放开后续 2个TAB页面
+    					//$('#tab_ul').children('li').show()
+                	}
+
+               },
+               error:function(XMLHttpRequest, textStatus, errorThrown){
+            	   layer.msg('验证失败')
+               }
+            });
+        });
+
+        //添加新的航班界面
+        $("#add_transfer_flight").on("click",function(){
+            $("#flight_template").show();
+        });
+
+        //添加新的行程界面
+		$("#add_transfer_journey").on("click",function(){
+			$("#jounery_template").show();
+        });
+
+		//添加新的行程
+        $(".put_journey").on("click",function(){
+        	var route_journey_picture='';
+        	var eat_mark_value="";
+        	var route_template_id = $("#route_template_id").val();
+        	var the_days = $("#journey_the_days").val();
+            var route_journey_title = $("#journey_title").val();
+            var route_journey_content = $("#journey_content").val();
+            var route_journey_traffic = $("#journey_traffic").val();
+            var route_journey_stay = $("#journey_stay").val();
+            var eat_mark = $('input:checkbox[name="eat_mark"]:checked').val();
+
+            $('input:checkbox[name="eat_mark"]:checked').each(function() {
+				eat_mark_value += $(this).val()+",";
+			});
+			eat_mark=eat_mark_value.substring(0,eat_mark_value.length-1);
+
+			var route_journey_breakfast = $("#journey_breakfast").val();
+			var route_journey_lunch = $("#journey_lunch").val();
+			var route_journey_dinner = $("#journey_dinner").val();
+
+			var route_journey_scenic_sport = $("#journey_scenic_sport").val();
+			//var route_journey_picture = $("#img_list").val();
+
+			var img_l = $('#demo2').children('img').length;
+
+        	$("#demo2 img").each(function(index){
+        		if(index==0){
+					$common="";
+				}else{
+					$common=",";
+				}
+				route_journey_picture+=$common+$(this).attr("src");
+			});
+
+			var route_journey_remark = $("#journey_remark").val();
+			var status = 1;
+
+            data = {the_days:the_days,route_journey_title:route_journey_title,
+            	route_journey_content:route_journey_content,route_journey_traffic:route_journey_traffic,
+            	route_journey_traffic:route_journey_traffic,route_journey_stay:route_journey_stay,
+            	eat_mark:eat_mark,route_journey_breakfast:route_journey_breakfast,route_journey_lunch:route_journey_lunch,
+            	route_journey_dinner:route_journey_dinner,route_journey_scenic_sport:route_journey_scenic_sport,
+            	route_journey_picture:route_journey_picture,route_journey_remark:route_journey_remark,route_template_id:route_template_id,status:status
+            }
+
+            $.ajax({
+                type: "post",
+                url: "/product/addRouteJourneyAjax",
+                data: data,
+                dataType: "json",
+                success: function(data){
+                    console.log(data)
+
+                    if(data.code!=200){
+                        layer.msg(data.msg)
+                        return false;
+                    }else if(data.code==200){
+                        layer.msg('操作成功',{time:1})
+                         window.location.reload()
+
+                    //     return false;
+                    //     //拿到 ID之后放开后续 2个TAB页面
+                    //     //$('#tab_ul').children('li').show()
+                    }
+
+                },
+                error:function(XMLHttpRequest, textStatus, errorThrown){
+                    layer.msg('验证失败')
+                }
+            });
+        });
+
+		//删除航班按钮
+	    $('.d_transfer').delegate('.del_flight_template','click',function(){
+			$('#flight_template').hide();
+	    })
+    }();
+    $('#edit_submit').click(function(){
+		var route_name = $('#route_name').val();
+		var route_type_id = $('#route_type_id').val();
+		var route_user_id = $('#route_user_id').val();
+
+		var status = $('#edit_flight_status').val();
+		var route_template_id = $('#route_template_id').val();
+    	data = {route_template_id:route_template_id,route_name:route_name,route_type_id:route_type_id,status:status,route_user_id:route_user_id}
+
+        $.ajax({
+            type: "post",
+            url: "/product/editRouteTemplateAjax",
+            data: data,
+            dataType: "json",
+            success: function(data){
+            	console.log(data)
+
+            	if(data.code!=200){
+            		layer.msg(data.msg)
+            		return false;
+            	}else if(data.code==200){
+					layer.msg('操作成功',{time:1})
+
+            	}
+
+           },
+           error:function(XMLHttpRequest, textStatus, errorThrown){
+        	   layer.msg('验证失败')
+           }
+        });
+		return false;
+
+    })
+	function edit(){
+		return false;
+
+	}
+	//添加航班
+    function submit_flight_template(){
+        var route_template_id = $('#route_template_id').val();
+        var the_days = $('#the_days').val();
+        var start_city = $('#start_city').val();
+        var end_city = $('#end_city').val();
+        var start_time = $('#start_time').val();
+        var end_time = $('#end_time').val();
+        var flight_number = $('#flight_number').val();
+        var status = 1;
+        var flight_type = $('input:radio[name="flight_type"]:checked').val();
+        data = {the_days:the_days,start_city:start_city,end_city:end_city,start_time:start_time,end_time:end_time,
+            flight_number:flight_number,flight_type:flight_type,status:status,route_template_id:route_template_id}
+        $.ajax({
+            type: "post",
+            url: "/product/addRouteFlightAjax",
+            data: data,
+            dataType: "json",
+            success: function(data){
+                console.log(data)
+
+                if(data.code!=200){
+                    layer.msg(data.msg)
+                    return false;
+                }else if(data.code==200){
+                    layer.msg('操作成功',{time:1})
+					window.location.reload()
+                    // route_template_id = data.data
+                    //拿到 ID之后放开后续 2个TAB页面
+                    // $('#tab_ul').children('li').show()
+                }
+
+           },
+           error:function(XMLHttpRequest, textStatus, errorThrown){
+               layer.msg('验证失败')
+           }
+        });
+    }
+
+	//删除图片
+    // function del_img(aaa){
+    //
+	// 	var bbb = $(aaa).closest("tr").find("img[class='layui-upload-img']").attr("alt");
+    	// $("img[class='layui-upload-img']")
+    // }
+    //删除图片
+    $("#demo2").on('click','.add_img',function(){
+
+    	$(this).parent().remove();
+
+    })
+
+    $(document).on('click','.del_img',function(){
+
+        $(this).parent().remove();
+
+    })
+
+
+
+</script>
+
+</body>
+</html>

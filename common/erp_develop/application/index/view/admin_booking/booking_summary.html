@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<head>
+    {include file='public/head' /}
+    <title>layout 后台大布局 - Layui</title>
+
+    <style>
+        .nav {
+            display: inline-block;
+            position: relative;
+            height: 54px;
+            font-size: 15px;
+        }
+
+        .nav > * {
+            display: inline-block;
+        }
+
+        .nav > .t {
+            position: absolute;
+            top: 0;
+            background: rgb(208, 210, 211);
+            /* Skew */
+            -webkit-transform: skew(30deg);
+            -moz-transform: skew(30deg);
+            -o-transform: skew(30deg);
+            transform: skew(30deg);
+        }
+
+        .nav > .b {
+            position: absolute;
+            bottom: 0;
+            background: rgb(208, 210, 211);
+            /* Skew */
+            -webkit-transform: skew(-30deg);
+            -moz-transform: skew(-30deg);
+            -o-transform: skew(-30deg);
+            transform: skew(-30deg);
+        }
+
+        .tab .nav>.t,.tab .nav>.b{
+            -webkit-transform: none;
+            -moz-transform: none;
+            -o-transform: none;
+            transform: none;
+        }
+
+
+        .nav > a {
+            /*position:absolute;
+            top:0;*/
+            margin-left: 13px;
+            vertical-align: middle;
+            text-align: center;
+            text-decoration: none;
+            cursor: default;
+            font-weight: bold;
+            color: #77787b !important;
+        }
+
+        .nav.hover>a{
+            color: #ffffff !important;
+        }
+
+        .nav.hover > span {
+            background-color: #3376ba;
+            cursor: pointer;
+        }
+
+        .nav.done_step.hover>span{
+            background-color: #3376ba;
+        }
+
+        .nav.hover > a {
+            cursor: pointer;
+        }
+
+        .ab_position {
+            position: absolute;
+        }
+
+        .nav > .first_mark {
+            position: absolute;
+            top: 0;
+            z-index: 1;
+            width: 16px;
+            height: 100%;
+            background-color: #ffffff;
+            left: -8px;
+        }
+
+        .nav.done_step>a,.nav.active_step>a{
+            color: #ffffff !important;
+        }
+
+        .nav.done_step>.t,.nav.done_step>.b{
+            background-color: #767780;
+        }
+
+        .nav.active_step>.t,.nav.active_step>.b{
+            background-color: #3376ba;
+        }
+
+        .tab_border{
+            height: 2px;
+            background-color: #767780;
+            margin-left: 8px;
+            margin-top: -4px;
+        }
+
+    </style>
+    <link href="/assets/css/admin_booking.css" type="text/css" media="all" rel="stylesheet"/>
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+    <div class="layui-header">
+        {include file='public/header' /}
+    </div>
+
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll">
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            {include file='public/left_menu_booknexus' /}
+        </div>
+    </div>
+
+    <div class="layui-body">
+
+        <!-- 内容主体区域 -->
+        <div style="padding: 15px 15px 0px;">
+            <div class='layui-row'>
+		   		<span class="layui-breadcrumb" lay-separator="-">
+                    <a>首页</a>
+                    <a>B2B</a>
+					<a>创建订单</a>
+				</span>
+            </div>
+            <br>
+            {include file='admin_booking/create_booking_menu' /}
+
+            <div class="layui-row layui-col-space12" style="padding: 20px 10px">
+                <form class="layui-form" id="form1" onSubmit="return add()">
+                    <h2 class="top_icn">
+                        <span class="top_icn_text">6</span>
+                        <img src="/assets/images/booking_summary_icn.png" alt="Select Tour - Step 1">
+                        <span class="top_text"></span>
+                    </h2>
+
+                    <div id="sum_type_1_form">
+                        <hr>
+                        <h3 style="color: #3376BB;font-size: 18px;font-weight: bold">Emergency Contact Details <span style="color: #6D6E71;font-size: 12px;font-weight: 400;margin-left: 20px;">Not a tour participant</span></h3>
+                        <table width="700px" style="margin-top: 20px" >
+                            <tr>
+                                <th width="35%" style="padding: 0 10px"><input type="text" name="emergecy_name" id="emergecy_name" class="layui-input" placeholder="Name" value="{$Think.session.adminBooking_service_booking_summaryAjax.emergecy_name}"></th>
+                                <th width="35%" style="padding: 0 10px"><input type="text" name="emergecy_phone" id="emergecy_phone" class="layui-input" placeholder="Phone No." value="{$Think.session.adminBooking_service_booking_summaryAjax.emergecy_phone}" maxlength="14"></th>
+                                <th width="35%" style="padding: 0 10px"><input type="text" name="emergecy_email" id="emergecy_email" class="layui-input" placeholder="Email" value="{$Think.session.adminBooking_service_booking_summaryAjax.emergecy_email}"></th>
+                            </tr>
+                        </table>
+                    </div>
+                    <hr>
+                    <h3 style="color: #3376BB;font-size: 18px;font-weight: bold">Reference Info</h3>
+                    <table width="700px" style="margin-top: 20px" >
+                        <tr>
+                            <th width="35%" style="padding: 0 10px"><input type="text" name="reference_no" id="reference_no" class="layui-input" placeholder="My Reference No." value="{$Think.session.adminBooking_service_booking_summaryAjax.reference_no}"></th>
+                            <th width="35%" style="padding: 0 10px">
+                                <select name="consultant_name" id="consultant_name" class="layui-select" placeholder="My Consultant Name.">
+                                    <option value="-1">--- Select a Consultant ---</option>
+                                </select>
+                            </th>
+                        </tr>
+                    </table>
+                    <hr>
+                    <h3 style="color: #3376BB;font-size: 18px;font-weight: bold">Tiping Info</h3>
+                    <p style="line-height: 20px;padding-left: 5px;margin-top: 20px">
+                        <label class="combo_label" style="font-size: 16px;">Is Tip prepaid?</label>
+                        <input type="checkbox" style="width: 20px;height: 20px;vertical-align: bottom;margin: 0 0 0 10px;" name="is_prepaid_tip" value="1" lay-skin="primary"  {$Think.session.adminBooking_service_booking_summaryAjax.is_prepaid_tip?'checked':''}>
+                    </p>
+                    <hr>
+                    <h3 style="color: #3376BB;font-size: 18px;font-weight: bold">Upload Passports <span id="add_btn"></span></h3>
+                    <div id="passports_wrapper" style="padding-left: 5px;">
+                        {foreach $Think.session.adminBooking_service_booking_summaryAjax.passports as $k=>$v}
+                        <div class="layui-form up-div" style="padding: 5px">
+                            <input class="layui-input" id="passports-{$k+1}" lay-verify="required" name="passports[]" style="width: 400px;float: left" value="{$v}">
+                            <button type="button" class="layui-btn" id="pdf_flyer-{$k+1}"><i class="layui-icon"></i>上传文件</button>
+                            <input class="layui-upload-file" type="file" accept="undefined" name="file"><span class="remove_btn" style="margin-top:4px"></span>
+                        </div>
+                        {/foreach}
+                    </div>
+
+
+
+                    <div class="layui-col-md8" style="padding: 20px;font-weight: bold;font-size:14px;text-align: center">
+                       <button   class="layui-btn nav-submit" lay-submit  >Next</button>
+                    </div>
+                </form>
+            </div>
+
+
+        </div>
+
+
+
+
+        <div class="layui-footer">
+            <!-- 底部固定区域 -->
+            © layui.com - 底部固定区域
+        </div>
+    </div>
+    {include file='public/foot_js' /}
+    <script>
+        //JavaScript代码区域
+        var layer = layui.layer;
+        var form = layui.form;
+        var laydate = layui.laydate;
+        var up = <?=session('adminBooking_service_booking_summaryAjax')['passports']?count(session('adminBooking_service_booking_summaryAjax')['passports'])+1:1;?>;
+        var upload = layui.upload;
+
+        $('.remove_btn').click(function(){
+            $(this).parents('.up-div').remove();
+        });
+
+
+        for(var iit=1;iit<up;iit++){
+            upload.render({
+                elem: '#pdf_flyer-'+iit,
+                url:'/upload/uploadFileAll?index='+iit,
+                accept:'file',
+                size:20480,
+                before: function(obj){ //obj参数包含的信息，跟 choose回调完全一致，可参见上文。
+                    layer.load(); //上传loading
+                },
+                done: function(res, index, upload){
+                    layer.closeAll('loading'); //关闭loading
+                    console.log(res);
+                    if(res.code == 200){
+                        //do something （比如将res返回的图片链接保存到表单的隐藏域）
+                        $('#passports-'+res.get.index).val(res.data);
+                        layer.closeAll('loading'); //关闭loading
+                    }
+                },error: function(index, upload){
+                    layer.closeAll('loading'); //关闭loading
+                }
+            });
+        }
+
+
+        $('#add_btn').click(function(){
+            var h = '<div class="layui-form up-div" style="padding: 5px">';
+            h += '<input class="layui-input" id="passports-'+up+'" lay-verify="required" name="passports[]" style="width: 400px;float: left" value="{$Think.session.createTourForm.pdf_flyer}">';
+            h += '<button type="button" class="layui-btn" id="pdf_flyer-'+up+'"><i class="layui-icon"></i>上传文件</button><span class="remove_btn" style="margin-top:4px"></span>';
+            h += '</div>';
+            $('#passports_wrapper').append(h);
+            upload.render({
+                elem: '#pdf_flyer-'+up,
+                url:'/upload/uploadFileAll?index='+up,
+                accept:'file',
+                size:20480,
+                before: function(obj){ //obj参数包含的信息，跟 choose回调完全一致，可参见上文。
+                    layer.load(); //上传loading
+                },
+                done: function(res, index, upload){
+                    layer.closeAll('loading'); //关闭loading
+                    console.log(res);
+                    if(res.code == 200){
+                        //do something （比如将res返回的图片链接保存到表单的隐藏域）
+                        $('#passports-'+res.get.index).val(res.data);
+                        layer.closeAll('loading'); //关闭loading
+                    }
+                },error: function(index, upload){
+                    layer.closeAll('loading'); //关闭loading
+                }
+            });
+
+            $('.remove_btn').click(function(){
+                $(this).parents('.up-div').remove();
+            });
+
+
+            up++;
+        });
+
+
+        function add(){
+            $.ajax({
+                type: "POST",
+                url: '/admin_booking/booking_summaryAjax',
+                data:  $('#form1').serializeArray(),
+                success: function(data){
+                    //console.log(data);
+                    if(data.code!=200){
+                        layer.msg(data.msg);
+                        return false;
+                    }else if(data.code==200) {
+                        layer.msg('操作成功',{time:2000,end : function(layero, index){
+                            location.href="/admin_booking/index";
+                        }
+                        });
+                    }
+                },
+                error:function(XMLHttpRequest, textStatus, errorThrown){
+                    layer.msg('验证失败')
+                }
+            });
+            return false;
+        }
+
+
+    </script>
+
+</body>
+</html>

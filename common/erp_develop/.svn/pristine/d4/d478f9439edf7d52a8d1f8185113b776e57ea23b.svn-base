@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    {include file='public/head' /}
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>{$language_tag.index_public_finance}-{$language_tag.index_nav_balanceSheet}</title>
+    <style>
+        #page-content th,#page-content td{
+            text-align: center;
+            line-height: 30px;
+            padding:10px;
+        }
+        #page-content th{
+            font-weight: bold;
+        }
+        .tr-none{
+            display: none;
+        }
+
+    </style>
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+    <div class="layui-header">
+        {include file='public/header' /}
+    </div>
+
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll">
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            {include file='public/left_menu' /}
+        </div>
+    </div>
+
+    <div class="layui-body layui-body-bg">
+        <div style="padding: 15px 15px 0px;">
+            <div class="body-top">
+                <div class='layui-form-item'>
+                    <span class="layui-breadcrumb" lay-separator="-">
+                        <a>{$language_tag.index_public_homepage}</a>
+                        <a>{$language_tag.index_public_finance}</a>
+                        <a><cite>{$language_tag.index_nav_balanceSheet}</cite></a>
+                    </span>
+                </div>
+
+            </div>
+            <div class="content-bg">
+                <form id="form1" class="layui-form"  onSubmit="return add()">
+                    <input type="hidden" name="balance_sheet_id" value="{$balanceSheetList.balance_sheet_id}" />
+                <div class="table-nont" id="page-content" style="width: 100%;margin:0px auto">
+                    <table class="layui-table" id="table-list" style="width:100%;margin-bottom:20px;border-collapse: collapse;border:none">
+                        <thead>
+                        <tr align="left" class="tr-none" style="background:#fff;border:none;">
+                            <th colspan="5"><img src="__STATIC__/image/login/login-logo.png" style="width:100%" id="aa"></th>
+                        </tr>
+                        <tr align="left" style="background:#f2f2f2">
+                            <th colspan="3">{$Think.session.user.company_name}<br>{$_GET['year_month']} </th>
+                        </tr>
+                        <tr align="left" style="background:#f2f2f2">
+                            <th width="30%">{$language_tag.index_finance_balanceSheet_property}</th>
+                            <th  width="60%">{$Currency[0]['unit']}</th>
+                        </tr>
+                        </thead>
+                        <tbody style="border:1px solid #e6e6e6">
+                        <tr>
+                            <td>{$language_tag.index_finance_balanceSheet_monetary_resources}</td>
+                            <td><input type="text" class="layui-input input-text" name="monetary_resources" value="{$balanceSheetList.monetary_resources}" ></td>
+                        </tr>
+                        <tr>
+                            <td>{$language_tag.index_finance_balanceSheet_current_investment}</td>
+                            <td><input type="text" class="layui-input input-text" name="short_term_investment" value="{$balanceSheetList.short_term_investment}" ></td>
+                        </tr>
+                        <tr>
+                            <td>{$language_tag.index_finance_balanceSheet_dividends_receivable}</td>
+                            <td><input type="text" class="layui-input input-text" name="dividends_receivable" value="{$balanceSheetList.dividends_receivable}" ></td>
+                        </tr>
+                        <tr>
+                            <td>{$language_tag.index_index_accountsReceivable}</td>
+                            <td><input type="text" class="layui-input input-text" name="accounts_receivable" value="{$balanceSheetList.accounts_receivable}" ></td>
+                        </tr>
+                        <tr>
+                            <td>{$language_tag.index_finance_balanceSheet_other_receivable}</td>
+                            <td><input type="text" class="layui-input input-text" name="other_receivables" value="{$balanceSheetList.other_receivables}" ></td>
+                        </tr>
+                        <tr>
+                            <td>{$language_tag.index_finance_balanceSheet_prepayment}</td>
+                            <td><input type="text" class="layui-input input-text" name="advance_payment" value="{$balanceSheetList.advance_payment}" ></td>
+                        </tr>
+                        <tr>
+                            <td>{$language_tag.index_finance_balanceSheet_unamortized_expense}</td>
+                            <td><input type="text" class="layui-input input-text" name="deferred_expenses" value="{$balanceSheetList.deferred_expenses}" ></td>
+                        </tr>
+                        <tr>
+                            <td>{$language_tag.index_finance_balanceSheet_pending_expense_current_assets_netloss}</td>
+                            <td><input type="text" class="layui-input input-text" name="net_loss_of_current_assets_to_be_processed" value="{$balanceSheetList.net_loss_of_current_assets_to_be_processed}" ></td>
+                        </tr>
+                        <tr>
+                            <td>{$language_tag.index_finance_balanceSheet_year_expire_longtime_bond_investment}</td>
+                            <td><input type="text" class="layui-input input-text" name="investments_in_longterm_bonds_maturing_in_one_year" value="{$balanceSheetList.investments_in_longterm_bonds_maturing_in_one_year}" ></td>
+                        </tr>
+                        <tr>
+                            <td>{$language_tag.index_finance_balanceSheet_other_current_assets}</td>
+                            <td><input type="text" class="layui-input input-text" name="other_current_assets" value="{$balanceSheetList.other_current_assets}" ></td>
+                        </tr>
+                        <tr>
+                            <td style="color: red">{$language_tag.index_finance_balanceSheet_total_current_assets}</td>
+                            <td  style="text-align: left" ><font id="f-total_current_assets">{$balanceSheetList.total_current_assets|default=0.00}</font>
+                                <input type="hidden" class="layui-input input-text" name="total_current_assets" value="{$balanceSheetList.total_current_assets}"  >
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>{$language_tag.index_finance_balanceSheet_longtime_equity_investment}</td>
+                            <td><input type="text" class="layui-input input-text" name="long_term_equity_investment" value="{$balanceSheetList.long_term_equity_investment}" ></td>
+                        </tr>
+                        <tr>
+                            <td>{$language_tag.index_finance_balanceSheet_longtime_credit_investment}</td>
+                            <td><input type="text" class="layui-input input-text" name="long_term_debt_investment" value="{$balanceSheetList.long_term_debt_investment}" ></td>
+                        </tr>
+                        <tr>
+                            <td>{$language_tag.index_finance_balanceSheet_minus}:{$language_tag.index_finance_balanceSheet_longtime_investment_value_ready}</td>
+                            <td><input type="text" class="layui-input input-text" name="long_term_investment_impairment_provision" value="{$balanceSheetList.long_term_investment_impairment_provision}" ></td>
+                        </tr>
+                        <tr>
+                            <td  style="color: red">{$language_tag.index_finance_balanceSheet_longtime_net_investment}</td>
+                            <td  style="text-align: left" ><font id="f-net_long_term_investment">{$balanceSheetList.net_long_term_investment|default=0.00}</font>
+                                <input type="hidden" class="layui-input input-text" name="net_long_term_investment" value="{$balanceSheetList.net_long_term_investment}" >
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>{$language_tag.index_finance_balanceSheet_fixed_assets_original_price}</td>
+                            <td><input type="text" class="layui-input input-text" name="original_value_of_fixed_assets" value="{$balanceSheetList.original_value_of_fixed_assets}" ></td>
+                        </tr>
+                        <tr>
+                            <td>{$language_tag.index_finance_balanceSheet_minus}:{$language_tag.index_finance_balanceSheet_accumulated_depreciation}</td>
+                            <td><input type="text" class="layui-input input-text" name="accumulated_depreciation" value="{$balanceSheetList.accumulated_depreciation}" ></td>
+                        </tr>
+                        <tr>
+                            <td  style="color: red">{$language_tag.index_finance_balanceSheet_fixed_assets_net_value}</td>
+                            <td  style="text-align: left" ><font id="f-fixed_assetsnet_value">{$balanceSheetList.fixed_assetsnet_value|default=0.00}</font>
+                                <input type="hidden" class="layui-input input-text" name="fixed_assetsnet_value" value="{$balanceSheetList.fixed_assetsnet_value}" >
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>{$language_tag.index_finance_balanceSheet_minus}:{$language_tag.index_finance_balanceSheet_fixed_assets_depreciation_reserves}</td>
+                            <td><input type="text" class="layui-input input-text" name="Provision_for_impairment_of_fixed_assets" value="{$balanceSheetList.Provision_for_impairment_of_fixed_assets}" ></td>
+                        </tr>
+                        <tr>
+                            <td  style="color: red">{$language_tag.index_finance_balanceSheet_net_fixed_assets}</td>
+                            <td  style="text-align: left" ><font id="f-net_fixed_assets">{$balanceSheetList.net_fixed_assets|default=0.00}</font>
+                                <input type="hidden" class="layui-input input-text" name="net_fixed_assets" value="{$balanceSheetList.net_fixed_assets}" >
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>{$language_tag.index_finance_balanceSheet_intangible_assets}</td>
+                            <td><input type="text" class="layui-input input-text" name="immaterial_assets" value="{$balanceSheetList.immaterial_assets}" ></td>
+                        </tr>
+                        <tr>
+                            <td>{$language_tag.index_finance_balanceSheet_minus}:{$language_tag.index_finance_balanceSheet_reserve_for_intangible_assets_impairment}</td>
+                            <td><input type="text" class="layui-input input-text" name="provision_for_impairment_of_intangible_assets" value="{$balanceSheetList.provision_for_impairment_of_intangible_assets}" ></td>
+                        </tr>
+                        <tr>
+                            <td  style="color: red">{$language_tag.index_finance_balanceSheet_net_intangible_assets}</td>
+                            <td  style="text-align: left" ><font id="f-net_intangible_assets">{$balanceSheetList.net_intangible_assets|default=0.00}</font>
+                                <input type="hidden" class="layui-input input-text" name="net_intangible_assets" value="{$balanceSheetList.net_intangible_assets}" >
+                            </td>
+                        </tr>
+                        <tr>
+                            <td  style="color: red">{$language_tag.index_finance_balanceSheet_not_total_current_assets}</td>
+                            <td  style="text-align: left" ><font id="f-total_noncurrent_assets">{$balanceSheetList.total_noncurrent_assets|default=0.00}</font>
+                                <input type="hidden" class="layui-input input-text" name="total_noncurrent_assets" value="{$balanceSheetList.total_noncurrent_assets}" >
+                            </td>
+                        </tr>
+                        <tr>
+                            <td  style="color: red">{$language_tag.index_finance_balanceSheet_total_assets}</td>
+                            <td  style="text-align: left" ><font id="f-total_assets">{$balanceSheetList.total_assets|default=0.00}</font>
+                                <input type="hidden" class="layui-input input-text" name="total_assets" value="{$balanceSheetList.total_assets}" >
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>{$language_tag.index_finance_balanceSheet_short_borrow_money}</td>
+                            <td><input type="text" class="layui-input input-text" name="overnight_money" value="{$balanceSheetList.overnight_money}" ></td>
+                        </tr>
+                        <tr>
+                            <td>{$language_tag.index_finance_balanceSheet_accounts_payable}</td>
+                            <td><input type="text" class="layui-input input-text" name="payable_in_account" value="{$balanceSheetList.payable_in_account}" ></td>
+                        </tr>
+                        <tr>
+                            <td>{$language_tag.index_finance_balanceSheet_received_credit}</td>
+                            <td><input type="text" class="layui-input input-text" name="deposit_received" value="{$balanceSheetList.deposit_received}" ></td>
+                        </tr>
+                        <tr>
+                            <td>{$language_tag.index_finance_balanceSheet_employee_pay_payable}</td>
+                            <td><input type="text" class="layui-input input-text" name="pay_payable_to_staff_and_workers" value="{$balanceSheetList.pay_payable_to_staff_and_workers}" ></td>
+                        </tr>
+                        <tr>
+                            <td>{$language_tag.index_finance_balanceSheet_dividends_payable}</td>
+                            <td><input type="text" class="layui-input input-text" name="dividends_payable" value="{$balanceSheetList.dividends_payable}" ></td>
+                        </tr>
+                        <tr>
+                            <td>{$language_tag.index_finance_balanceSheet_tax_payable}</td>
+                            <td><input type="text" class="layui-input input-text" name="due_taxes_and_fees" value="{$balanceSheetList.due_taxes_and_fees}" ></td>
+                        </tr>
+                        <tr>
+                            <td>{$language_tag.index_finance_balanceSheet_other_fees_payable}</td>
+                            <td><input type="text" class="layui-input input-text" name="other_accounts_payable" value="{$balanceSheetList.other_accounts_payable}" ></td>
+                        </tr><tr>
+                            <td>{$language_tag.index_finance_balanceSheet_other_payables}</td>
+                            <td><input type="text" class="layui-input input-text" name="accounts_payable_others" value="{$balanceSheetList.accounts_payable_others}" ></td>
+                        </tr><tr>
+                            <td>{$language_tag.index_finance_balanceSheet_year_expire_longtime_liabilities}</td>
+                            <td><input type="text" class="layui-input input-text" name="longterm_liabilities_due_within_one_year" value="{$balanceSheetList.longterm_liabilities_due_within_one_year}" ></td>
+                        </tr><tr>
+                            <td>{$language_tag.index_finance_balanceSheet_other_current_liability}</td>
+                            <td><input type="text" class="layui-input input-text" name="other_current_liabilities" value="{$balanceSheetList.other_current_liabilities}" ></td>
+                        </tr><tr>
+                            <td style="color: red">{$language_tag.index_finance_balanceSheet_current_liability_total}</td>
+                            <td  style="text-align: left" ><font id="f-total_current_liabilities">{$balanceSheetList.total_current_liabilities|default=0.00}</font>
+                                <input type="hidden" class="layui-input input-text" name="total_current_liabilities" value="{$balanceSheetList.total_current_liabilities}" >
+                            </td>
+                        </tr><tr>
+                            <td>{$language_tag.index_finance_balanceSheet_longtime_loan}</td>
+                            <td><input type="text" class="layui-input input-text" name="money_borrowed_for_long_term" value="{$balanceSheetList.money_borrowed_for_long_term}" ></td>
+                        </tr><tr>
+                            <td>{$language_tag.index_finance_balanceSheet_bonds_payable}</td>
+                            <td><input type="text" class="layui-input input-text" name="bond_payable" value="{$balanceSheetList.bond_payable}" ></td>
+                        </tr><tr>
+                            <td>{$language_tag.index_finance_balanceSheet_longtime_account_payable}</td>
+                            <td><input type="text" class="layui-input input-text" name="long_term_accounts_payable" value="{$balanceSheetList.long_term_accounts_payable}" ></td>
+                        </tr><tr>
+                            <td>{$language_tag.index_finance_balanceSheet_special_account_payable}</td>
+                            <td><input type="text" class="layui-input input-text" name="account_payable_special_funds" value="{$balanceSheetList.account_payable_special_funds}" ></td>
+                        </tr><tr>
+                            <td>{$language_tag.index_finance_balanceSheet_other_longtime_liabilities}</td>
+                            <td><input type="text" class="layui-input input-text" name="other_long_term_liabilities" value="{$balanceSheetList.other_long_term_liabilities}" ></td>
+                        </tr><tr>
+                            <td  style="color: red">{$language_tag.index_finance_balanceSheet_longtime_liabilities_total}</td>
+                            <td  style="text-align: left" ><font id="f-total_long_term_liabilities">{$balanceSheetList.total_long_term_liabilities|default=0.00}</font>
+                                <input type="hidden" class="layui-input input-text" name="total_long_term_liabilities" value="{$balanceSheetList.total_long_term_liabilities}" >
+                            </td>
+                        </tr><tr>
+                            <td style="color: red">{$language_tag.index_finance_balanceSheet_total_liability}</td>
+                            <td  style="text-align: left" ><font id="f-total_liabilities">{$balanceSheetList.total_liabilities|default=0.00}</font>
+                                <input type="hidden" class="layui-input input-text" name="total_liabilities" value="{$balanceSheetList.total_liabilities}" >
+                            </td>
+                        </tr><tr>
+                            <td>{$language_tag.index_finance_balanceSheet_paiclup_capital_or_equity}</td>
+                            <td><input type="text" class="layui-input input-text" name="paid_in_capital_or_share_capital" value="{$balanceSheetList.paid_in_capital_or_share_capital}" ></td>
+                        </tr><tr>
+                            <td>{$language_tag.index_finance_balanceSheet_capital_reserve}</td>
+                            <td><input type="text" class="layui-input input-text" name="capital_reserve" value="{$balanceSheetList.capital_reserve}" ></td>
+                        </tr><tr>
+                            <td>{$language_tag.index_finance_balanceSheet_surplus_public_accumulation}</td>
+                            <td><input type="text" class="layui-input input-text" name="earned_surplus" value="{$balanceSheetList.earned_surplus}" ></td>
+                        </tr><tr>
+                            <td>{$language_tag.index_finance_balanceSheet_undistributed_profit}</td>
+                            <td><input type="text" class="layui-input input-text" name="undistributed_profit" value="{$balanceSheetList.undistributed_profit}" ></td>
+                        </tr><tr>
+                            <td>{$language_tag.index_finance_balanceSheet_translation_reserve}</td>
+                            <td><input type="text" class="layui-input input-text" name="foreign_currency_statement_translation_difference" value="{$balanceSheetList.foreign_currency_statement_translation_difference}" ></td>
+                        </tr><tr>
+                            <td  style="color: red">{$language_tag.index_finance_balanceSheet_ownership_interest_or_equity_total}</td>
+                            <td  style="text-align: left" ><font id="f-total_owners_equity_or_shareholders_equity">{$balanceSheetList.total_owners_equity_or_shareholders_equity|default=0.00}</font>
+                                <input type="hidden" class="layui-input input-text" name="total_owners_equity_or_shareholders_equity" value="{$balanceSheetList.total_owners_equity_or_shareholders_equity}" ></td>
+                        </tr><tr>
+                            <td  style="color: red">{$language_tag.index_finance_balanceSheet_liabilities_and_owner_equity_or_equity_total}</td>
+                            <td  style="text-align: left" ><font id="f-total_liabilities_and_owners_equity_or_shareholders_equity">{$balanceSheetList.total_liabilities_and_owners_equity_or_shareholders_equity|default=0.00}</font>
+                                <input type="hidden" class="layui-input input-text" name="total_liabilities_and_owners_equity_or_shareholders_equity" value="{$balanceSheetList.total_liabilities_and_owners_equity_or_shareholders_equity}" >
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                    <div class="all-button-center">
+                        <div class="">
+                            <button type="submit" class="layui-btn nav-submit layui-number-inline">{$language_tag.index_public_save}</button>
+                            <!--<button class="layui-btn layui-btn-primary layui-number-inline">{$language_tag.index_public_back}</button>-->
+                            <a class="layui-btn layui-btn-primary layui-number-inline" href="javascript:history.back(-1)">{$language_tag.index_public_back}</a>
+                        </div>
+                    </div>
+                    <br>
+                    </form>
+            </div>
+        </div>
+    </div>
+    <div class="layui-footer">
+        <!-- 底部固定区域 -->
+        © layui.com - 底部固定区域
+    </div>
+    <script id="demo" type="text/html">
+
+    </script>
+</div>
+{include file='public/foot_js' /}
+<script type="text/javascript" src="__STATIC__/javascript/product/all.js"></script>
+<script type="text/javascript" src="__STATIC__/javascript/finance/tableExport.min.js"></script>
+<script>
+    $(function () {
+        var layer = layui.layer;
+
+
+        $("#table-list tbody tr").each(function (index, item) {
+            if ($(item).find("td").length == 0) {
+                $(item).remove();
+            }
+        });
+
+        $('.input-text').on('blur',function() {
+            var _name = $(this).attr('name');
+
+            //流动资产合计
+            if(_name=='monetary_resources' || _name=='short_term_investment' || _name=='dividends_receivable' || _name=='accounts_receivable' || _name=='other_receivables' || _name=='advance_payment' || _name=='deferred_expenses' || _name=='net_loss_of_current_assets_to_be_processed' || _name=='investments_in_longterm_bonds_maturing_in_one_year' || _name=='other_current_assets' ){
+                var _monetary_resources = $("input[name='monetary_resources']").val().replace(/(^\s*)|(\s*$)/g, "")?$("input[name='monetary_resources']").val().replace(/(^\s*)|(\s*$)/g, ""):0;
+                var _short_term_investment = $("input[name='short_term_investment']").val().replace(/(^\s*)|(\s*$)/g, "")?$("input[name='short_term_investment']").val().replace(/(^\s*)|(\s*$)/g, ""):0;
+                var _dividends_receivable = $("input[name='dividends_receivable']").val().replace(/(^\s*)|(\s*$)/g, "")?$("input[name='dividends_receivable']").val().replace(/(^\s*)|(\s*$)/g, ""):0;
+                var _accounts_receivable = $("input[name='accounts_receivable']").val().replace(/(^\s*)|(\s*$)/g, "")?$("input[name='accounts_receivable']").val().replace(/(^\s*)|(\s*$)/g, ""):0;
+                var _other_receivables = $("input[name='other_receivables']").val().replace(/(^\s*)|(\s*$)/g, "")?$("input[name='other_receivables']").val().replace(/(^\s*)|(\s*$)/g, ""):0;
+                var _advance_payment = $("input[name='advance_payment']").val().replace(/(^\s*)|(\s*$)/g, "")?$("input[name='advance_payment']").val().replace(/(^\s*)|(\s*$)/g, ""):0;
+                var _deferred_expenses = $("input[name='deferred_expenses']").val().replace(/(^\s*)|(\s*$)/g, "")?$("input[name='deferred_expenses']").val().replace(/(^\s*)|(\s*$)/g, ""):0;
+                var _net_loss_of_current_assets_to_be_processed = $("input[name='net_loss_of_current_assets_to_be_processed']").val().replace(/(^\s*)|(\s*$)/g, "")?$("input[name='net_loss_of_current_assets_to_be_processed']").val().replace(/(^\s*)|(\s*$)/g, ""):0;
+                var _investments_in_longterm_bonds_maturing_in_one_year = $("input[name='investments_in_longterm_bonds_maturing_in_one_year']").val().replace(/(^\s*)|(\s*$)/g, "")?$("input[name='investments_in_longterm_bonds_maturing_in_one_year']").val().replace(/(^\s*)|(\s*$)/g, ""):0;
+                var _other_current_assets = $("input[name='other_current_assets']").val().replace(/(^\s*)|(\s*$)/g, "")?$("input[name='other_current_assets']").val().replace(/(^\s*)|(\s*$)/g, ""):0;
+
+                var _total_current_assets = parseFloat(_monetary_resources)+parseFloat(_short_term_investment)+parseFloat(_dividends_receivable)+parseFloat(_accounts_receivable)+parseFloat(_other_receivables)+parseFloat(_advance_payment)+parseFloat(_deferred_expenses)+parseFloat(_net_loss_of_current_assets_to_be_processed)+parseFloat(_investments_in_longterm_bonds_maturing_in_one_year)+parseFloat(_other_current_assets);
+                $("input[name='total_current_assets']").val(_total_current_assets.toFixed(2));
+                $('#f-total_current_assets').html(_total_current_assets.toFixed(2));
+
+                jsTotalAssets(); //资产总计
+            }
+
+            //长期投资净额
+            if(_name=='long_term_equity_investment' || _name=='long_term_debt_investment' || _name=='long_term_investment_impairment_provision'){
+                var _long_term_equity_investment = $("input[name='long_term_equity_investment']").val().replace(/(^\s*)|(\s*$)/g, "")?$("input[name='long_term_equity_investment']").val().replace(/(^\s*)|(\s*$)/g, ""):0;
+                var _long_term_debt_investment = $("input[name='long_term_debt_investment']").val().replace(/(^\s*)|(\s*$)/g, "")?$("input[name='long_term_debt_investment']").val().replace(/(^\s*)|(\s*$)/g, ""):0;
+                var _long_term_investment_impairment_provision = $("input[name='long_term_investment_impairment_provision']").val().replace(/(^\s*)|(\s*$)/g, "")?$("input[name='long_term_investment_impairment_provision']").val().replace(/(^\s*)|(\s*$)/g, ""):0;
+
+                var _net_long_term_investment = parseFloat(_long_term_equity_investment)+parseFloat(_long_term_debt_investment)-parseFloat(_long_term_investment_impairment_provision);
+                $("input[name='net_long_term_investment']").val(_net_long_term_investment.toFixed(2));
+                $('#f-net_long_term_investment').html(_net_long_term_investment.toFixed(2));
+
+                jsTotalNoncurrentAssets(); //非流动资产合计
+            }
+
+            //{$language_tag.index_finance_balanceSheet_fixed_assets_net_value}
+            if(_name=='original_value_of_fixed_assets' || _name=='accumulated_depreciation'){
+                var _original_value_of_fixed_assets = $("input[name='original_value_of_fixed_assets']").val().replace(/(^\s*)|(\s*$)/g, "")?$("input[name='original_value_of_fixed_assets']").val().replace(/(^\s*)|(\s*$)/g, ""):0;
+                var _accumulated_depreciation = $("input[name='accumulated_depreciation']").val().replace(/(^\s*)|(\s*$)/g, "")?$("input[name='accumulated_depreciation']").val().replace(/(^\s*)|(\s*$)/g, ""):0;
+
+                var _fixed_assetsnet_value = parseFloat(_original_value_of_fixed_assets)-parseFloat(_accumulated_depreciation);
+                $("input[name='fixed_assetsnet_value']").val(_fixed_assetsnet_value.toFixed(2));
+                $('#f-fixed_assetsnet_value').html(_fixed_assetsnet_value.toFixed(2));
+
+                jsNetFixedAssets(); //固定资产净额
+            }
+
+            //固定资产净额
+            if(_name=='net_fixed_assets'){
+                jsNetFixedAssets(); //固定资产净额
+                jsTotalNoncurrentAssets(); //非流动资产合计
+            }
+
+            //无形资产净额
+            if(_name=='immaterial_assets' || _name=='provision_for_impairment_of_intangible_assets'){
+                var _immaterial_assets = $("input[name='immaterial_assets']").val().replace(/(^\s*)|(\s*$)/g, "")?$("input[name='immaterial_assets']").val().replace(/(^\s*)|(\s*$)/g, ""):0;
+                var _provision_for_impairment_of_intangible_assets = $("input[name='provision_for_impairment_of_intangible_assets']").val().replace(/(^\s*)|(\s*$)/g, "")?$("input[name='provision_for_impairment_of_intangible_assets']").val().replace(/(^\s*)|(\s*$)/g, ""):0;
+
+                var _net_intangible_assets = parseFloat(_immaterial_assets)-parseFloat(_provision_for_impairment_of_intangible_assets);
+                $("input[name='net_intangible_assets']").val(_net_intangible_assets.toFixed(2));
+                $('#f-net_intangible_assets').html(_net_intangible_assets.toFixed(2));
+
+                jsTotalNoncurrentAssets(); //非流动资产合计
+            }
+
+            //流动负债合计
+            if(_name=='overnight_money' || _name=='payable_in_account' || _name=='deposit_received' || _name=='pay_payable_to_staff_and_workers' || _name=='dividends_payable' || _name=='due_taxes_and_fees' || _name=='other_accounts_payable' || _name=='accounts_payable_others' || _name=='longterm_liabilities_due_within_one_year' || _name=='other_current_liabilities' ){
+                var _overnight_money = $("input[name='overnight_money']").val().replace(/(^\s*)|(\s*$)/g, "")?$("input[name='overnight_money']").val().replace(/(^\s*)|(\s*$)/g, ""):0;
+                var _payable_in_account = $("input[name='payable_in_account']").val().replace(/(^\s*)|(\s*$)/g, "")?$("input[name='payable_in_account']").val().replace(/(^\s*)|(\s*$)/g, ""):0;
+                var _deposit_received = $("input[name='deposit_received']").val().replace(/(^\s*)|(\s*$)/g, "")?$("input[name='deposit_received']").val().replace(/(^\s*)|(\s*$)/g, ""):0;
+                var _pay_payable_to_staff_and_workers = $("input[name='pay_payable_to_staff_and_workers']").val().replace(/(^\s*)|(\s*$)/g, "")?$("input[name='pay_payable_to_staff_and_workers']").val().replace(/(^\s*)|(\s*$)/g, ""):0;
+                var _dividends_payable = $("input[name='dividends_payable']").val().replace(/(^\s*)|(\s*$)/g, "")?$("input[name='dividends_payable']").val().replace(/(^\s*)|(\s*$)/g, ""):0;
+                var _due_taxes_and_fees = $("input[name='due_taxes_and_fees']").val().replace(/(^\s*)|(\s*$)/g, "")?$("input[name='due_taxes_and_fees']").val().replace(/(^\s*)|(\s*$)/g, ""):0;
+                var _other_accounts_payable = $("input[name='other_accounts_payable']").val().replace(/(^\s*)|(\s*$)/g, "")?$("input[name='other_accounts_payable']").val().replace(/(^\s*)|(\s*$)/g, ""):0;
+                var _accounts_payable_others = $("input[name='accounts_payable_others']").val().replace(/(^\s*)|(\s*$)/g, "")?$("input[name='accounts_payable_others']").val().replace(/(^\s*)|(\s*$)/g, ""):0;
+                var _longterm_liabilities_due_within_one_year = $("input[name='longterm_liabilities_due_within_one_year']").val().replace(/(^\s*)|(\s*$)/g, "")?$("input[name='longterm_liabilities_due_within_one_year']").val().replace(/(^\s*)|(\s*$)/g, ""):0;
+                var _other_current_liabilities = $("input[name='other_current_liabilities']").val().replace(/(^\s*)|(\s*$)/g, "")?$("input[name='other_current_liabilities']").val().replace(/(^\s*)|(\s*$)/g, ""):0;
+
+                var _total_current_liabilities = parseFloat(_overnight_money)+parseFloat(_payable_in_account)+parseFloat(_deposit_received)+parseFloat(_pay_payable_to_staff_and_workers)+parseFloat(_dividends_payable)+parseFloat(_due_taxes_and_fees)+parseFloat(_other_accounts_payable)+parseFloat(_accounts_payable_others)+parseFloat(_longterm_liabilities_due_within_one_year)+parseFloat(_other_current_liabilities);
+                $("input[name='total_current_liabilities']").val(_total_current_liabilities.toFixed(2));
+                $('#f-total_current_liabilities').html(_total_current_liabilities.toFixed(2));
+
+                jsTotalLiabilities(); //负债合计
+            }
+
+            //长期负债合计
+            if(_name=='money_borrowed_for_long_term' || _name=='bond_payable' || _name=='long_term_accounts_payable' || _name=='account_payable_special_funds' || _name=='other_long_term_liabilities'){
+                var _money_borrowed_for_long_term = $("input[name='money_borrowed_for_long_term']").val().replace(/(^\s*)|(\s*$)/g, "")?$("input[name='money_borrowed_for_long_term']").val().replace(/(^\s*)|(\s*$)/g, ""):0;
+                var _bond_payable = $("input[name='bond_payable']").val().replace(/(^\s*)|(\s*$)/g, "")?$("input[name='bond_payable']").val().replace(/(^\s*)|(\s*$)/g, ""):0;
+                var _long_term_accounts_payable = $("input[name='long_term_accounts_payable']").val().replace(/(^\s*)|(\s*$)/g, "")?$("input[name='long_term_accounts_payable']").val().replace(/(^\s*)|(\s*$)/g, ""):0;
+                var _account_payable_special_funds = $("input[name='account_payable_special_funds']").val().replace(/(^\s*)|(\s*$)/g, "")?$("input[name='account_payable_special_funds']").val().replace(/(^\s*)|(\s*$)/g, ""):0;
+                var _other_long_term_liabilities = $("input[name='other_long_term_liabilities']").val().replace(/(^\s*)|(\s*$)/g, "")?$("input[name='other_long_term_liabilities']").val().replace(/(^\s*)|(\s*$)/g, ""):0;
+
+                var _total_long_term_liabilities = parseFloat(_money_borrowed_for_long_term)+parseFloat(_bond_payable)+parseFloat(_long_term_accounts_payable)+parseFloat(_account_payable_special_funds)+parseFloat(_other_long_term_liabilities);
+                $("input[name='total_long_term_liabilities']").val(_total_long_term_liabilities.toFixed(2));
+                $('#f-total_long_term_liabilities').html(_total_long_term_liabilities.toFixed(2));
+
+                jsTotalLiabilities(); //负债合计
+            }
+
+            //所有者权益(或股东权益)合计
+            if(_name=='paid_in_capital_or_share_capital' || _name=='capital_reserve' || _name=='earned_surplus' || _name=='undistributed_profit' || _name=='foreign_currency_statement_translation_difference' ){
+                var _paid_in_capital_or_share_capital = $("input[name='paid_in_capital_or_share_capital']").val().replace(/(^\s*)|(\s*$)/g, "")?$("input[name='paid_in_capital_or_share_capital']").val().replace(/(^\s*)|(\s*$)/g, ""):0;
+                var _capital_reserve = $("input[name='capital_reserve']").val().replace(/(^\s*)|(\s*$)/g, "")?$("input[name='capital_reserve']").val().replace(/(^\s*)|(\s*$)/g, ""):0;
+                var _earned_surplus = $("input[name='earned_surplus']").val().replace(/(^\s*)|(\s*$)/g, "")?$("input[name='earned_surplus']").val().replace(/(^\s*)|(\s*$)/g, ""):0;
+                var _undistributed_profit = $("input[name='undistributed_profit']").val().replace(/(^\s*)|(\s*$)/g, "")?$("input[name='undistributed_profit']").val().replace(/(^\s*)|(\s*$)/g, ""):0;
+                var _foreign_currency_statement_translation_difference = $("input[name='foreign_currency_statement_translation_difference']").val().replace(/(^\s*)|(\s*$)/g, "")?$("input[name='foreign_currency_statement_translation_difference']").val().replace(/(^\s*)|(\s*$)/g, ""):0;
+
+                var _total_owners_equity_or_shareholders_equity = parseFloat(_paid_in_capital_or_share_capital)+parseFloat(_capital_reserve)+parseFloat(_earned_surplus)+parseFloat(_undistributed_profit)+parseFloat(_foreign_currency_statement_translation_difference);
+                $("input[name='total_owners_equity_or_shareholders_equity']").val(_total_owners_equity_or_shareholders_equity.toFixed(2));
+                $('#f-total_owners_equity_or_shareholders_equity').html(_total_owners_equity_or_shareholders_equity.toFixed(2));
+
+                jsTotalLiabilitiesAndOwnersEquityOrShareholdersEquity(); //负债及所有者权益(或股东权益)总计
+            }
+
+            if(_name=='Provision_for_impairment_of_fixed_assets'){
+                jsNetFixedAssets(); //固定资产净额
+            }
+
+        });
+
+    });
+
+    //负债及所有者权益(或股东权益)总计 负债合计+  所有者权益(或股东权益)合计
+    function jsTotalLiabilitiesAndOwnersEquityOrShareholdersEquity(){
+        var _total_liabilities = $("input[name='total_liabilities']").val().replace(/(^\s*)|(\s*$)/g, "")?$("input[name='total_liabilities']").val().replace(/(^\s*)|(\s*$)/g, ""):0;
+        var _total_owners_equity_or_shareholders_equity = $("input[name='total_owners_equity_or_shareholders_equity']").val().replace(/(^\s*)|(\s*$)/g, "")?$("input[name='total_owners_equity_or_shareholders_equity']").val().replace(/(^\s*)|(\s*$)/g, ""):0;
+
+        var _total_liabilities_and_owners_equity_or_shareholders_equity = parseFloat(_total_liabilities)+parseFloat(_total_owners_equity_or_shareholders_equity);
+        $("input[name='total_liabilities_and_owners_equity_or_shareholders_equity']").val(_total_liabilities_and_owners_equity_or_shareholders_equity.toFixed(2));
+        $('#f-total_liabilities_and_owners_equity_or_shareholders_equity').html(_total_liabilities_and_owners_equity_or_shareholders_equity.toFixed(2));
+    }
+
+    //负债合计 流动负债合计 +  长期负债合计
+    function jsTotalLiabilities(){
+        var _total_current_liabilities = $("input[name='total_current_liabilities']").val().replace(/(^\s*)|(\s*$)/g, "")?$("input[name='total_current_liabilities']").val().replace(/(^\s*)|(\s*$)/g, ""):0;
+        var _total_long_term_liabilities = $("input[name='total_long_term_liabilities']").val().replace(/(^\s*)|(\s*$)/g, "")?$("input[name='total_long_term_liabilities']").val().replace(/(^\s*)|(\s*$)/g, ""):0;
+
+        var _total_liabilities = parseFloat(_total_current_liabilities)+parseFloat(_total_long_term_liabilities);
+        $("input[name='total_liabilities']").val(_total_liabilities.toFixed(2));
+        $('#f-total_liabilities').html(_total_liabilities.toFixed(2));
+
+        jsTotalLiabilitiesAndOwnersEquityOrShareholdersEquity(); //负债及所有者权益(或股东权益)总计
+    }
+
+
+    //非流动资产合计  长期投资净额+  固定资产净额+  无形资产净额
+    function jsTotalNoncurrentAssets(){
+        var _net_long_term_investment = $("input[name='net_long_term_investment']").val().replace(/(^\s*)|(\s*$)/g, "")?$("input[name='net_long_term_investment']").val().replace(/(^\s*)|(\s*$)/g, ""):0;
+        var _net_fixed_assets = $("input[name='net_fixed_assets']").val().replace(/(^\s*)|(\s*$)/g, "")?$("input[name='net_fixed_assets']").val().replace(/(^\s*)|(\s*$)/g, ""):0;
+        var _net_intangible_assets = $("input[name='net_intangible_assets']").val().replace(/(^\s*)|(\s*$)/g, "")?$("input[name='net_intangible_assets']").val().replace(/(^\s*)|(\s*$)/g, ""):0;
+
+        var _total_noncurrent_assets = parseFloat(_net_long_term_investment)+parseFloat(_net_fixed_assets)+parseFloat(_net_intangible_assets);
+        $("input[name='total_noncurrent_assets']").val(_total_noncurrent_assets.toFixed(2));
+        $('#f-total_noncurrent_assets').html(_total_noncurrent_assets.toFixed(2));
+
+        jsTotalAssets(); //资产总计
+    }
+
+    // 资产总计  非流动资产合计+  流动资产合计
+    function jsTotalAssets(){
+        var _total_current_assets = $("input[name='total_current_assets']").val().replace(/(^\s*)|(\s*$)/g, "")?$("input[name='total_current_assets']").val().replace(/(^\s*)|(\s*$)/g, ""):0;
+        var _total_noncurrent_assets = $("input[name='total_noncurrent_assets']").val().replace(/(^\s*)|(\s*$)/g, "")?$("input[name='total_noncurrent_assets']").val().replace(/(^\s*)|(\s*$)/g, ""):0;
+
+        var _total_assets = parseFloat(_total_current_assets)+parseFloat(_total_noncurrent_assets);
+        $("input[name='total_assets']").val(_total_assets.toFixed(2));
+        $('#f-total_assets').html(_total_assets.toFixed(2));
+    }
+
+
+    //固定资产净额
+    function jsNetFixedAssets(){
+        var _fixed_assetsnet_value = $("input[name='fixed_assetsnet_value']").val().replace(/(^\s*)|(\s*$)/g, "")?$("input[name='fixed_assetsnet_value']").val().replace(/(^\s*)|(\s*$)/g, ""):0;
+        var _Provision_for_impairment_of_fixed_assets = $("input[name='Provision_for_impairment_of_fixed_assets']").val().replace(/(^\s*)|(\s*$)/g, "")?$("input[name='Provision_for_impairment_of_fixed_assets']").val().replace(/(^\s*)|(\s*$)/g, ""):0;
+
+        var _net_fixed_assets = parseFloat(_fixed_assetsnet_value)-parseFloat(_Provision_for_impairment_of_fixed_assets);
+        $("input[name='net_fixed_assets']").val(_net_fixed_assets.toFixed(2));
+        $('#f-net_fixed_assets').html(_net_fixed_assets.toFixed(2));
+    }
+
+
+        function add(){
+        layer.load(2);
+        $.ajax({
+            type: "POST",
+            url: '/finance/editBalanceSheetAjax?year_month={$_GET["year_month"]}',
+            data: $('#form1').serializeArray(),
+            success: function (data) {
+                layer.closeAll();
+                if(data.code!=200){
+                    layer.msg(data.msg)
+                    return false;
+                }else if(data.code==200){
+                    layer.msg('{$language_tag.index_public_success}',{time:1,end : function(layero, index){
+                        window.history.go(-1);
+                    }
+                    });
+                }
+            },
+            error:function(XMLHttpRequest, textStatus, errorThrown){
+                layer.closeAll();
+                //console.log(errorThrown)
+                layer.msg('{$language_tag.index_public_verificationFailure}')
+            }
+        });
+
+        return false;
+    }
+</script>
+
+
+</body>
+</html>

@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    {include file='public/head' /}
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>首页</title>
+    <link rel="stylesheet" href="__STATIC__/css/index.css">
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+    <div class="layui-header">
+        {include file='public/header' /}
+    </div>
+
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll">
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            {include file='public/left_menu' /}
+        </div>
+    </div>
+
+    <div class="layui-body layui-body-bg">
+        <div style="padding: 15px 15px 0px;">
+            <div class="body-top">
+                <div class='layui-form-item'>
+                    <span class="layui-breadcrumb" lay-separator="-">
+                        <a>{$Think.lang.index_public_homepage}</a>
+                        <a><cite>{$Think.lang.index_index_controlPanel}</cite></a>
+                    </span>
+                </div>
+            </div>
+            <div class="table-nont">
+                <div class="control-top">
+                    <div class="layui-row layui-col-space10">
+                        <div class="layui-col-md6">
+                            <div class="layui-row layui-col-space10">
+                                <div class="layui-col-md3" >
+                                    <div class="bg-one bg-one-img">
+                                        <a href="/product/ShowPlanTour">
+                                            <div>{$Think.lang.index_index_receiveVisitorsToday}({$Think.lang.index_index_people})</div>
+                                            <h4 id="today_customer_count">0</h4>
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="layui-col-md3">
+                                    <div class="bg-two bg-one-img">
+                                        <a href="/product/ShowPlanTour">
+                                            <div>{$Think.lang.index_index_numberOfGroupsOutToday}</div>
+                                            <h4 id="today_team_product_count">0</h4>
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="layui-col-md3">
+                                    <div class="bg-three bg-img-edu">
+                                        <a href="/branchcompany/showCompanyOrderManage">
+                                            <div>{$Think.lang.index_index_turnoverToday}(RMB)</div>
+                                            <h4 id="today_receivable">0</h4>
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="layui-col-md3">
+                                    <div class="bg-four bg-one-img">
+                                        <a href="/product/ShowPlanTour">
+                                            <div>{$Think.lang.index_index_receiveVisitorsThisMonth}({$Think.lang.index_index_people})</div>
+                                            <h4 id="month_customer_count">0</h4>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-col-md6">
+                            <div class="layui-row layui-col-space10">
+                                <div class="layui-col-md3 bg-img-tuan" >
+                                    <div class="bg-one bg-one-img">
+                                        <a href="product/ShowPlanTour">
+                                            <div>{$Think.lang.index_index_numberOfToursThisMonth}</div>
+                                            <h4 id="month_team_product_count">0</h4>
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="layui-col-md3">
+                                    <div class="bg-two bg-img-edu">
+                                        <a href="/branchcompany/showCompanyOrderManage">
+                                            <div>{$Think.lang.index_index_turnoverThisMonth}(RMB)</div>
+                                            <h4 id="month_receivable">0</h4>
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="layui-col-md3">
+                                    <div class="bg-three bg-img-ying">
+                                        <a href="finance/showReceivableManage">
+                                            <div>{$Think.lang.index_index_accountsReceivable}(RMB)</div>
+                                            <h4 id="all_receivable">0</h4>
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="layui-col-md3">
+                                    <div class="bg-four bg-img-yishou">
+                                        <a href="finance/showReceivableManage">
+                                            <div>{$Think.lang.index_index_accountsReceived}(RMB)</div>
+                                            <h4 id="all_receivable_info">0</h4>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div><!--top-->
+                <div class="control-chart-one">
+                    <div class="layui-row layui-col-space10">
+                        <div class="layui-col-md8 control-oneChart-left">
+                            <div>
+                                <h4 class="clear">
+                                    <div class="fl">{$Think.lang.index_index_passengerStatisticsTable}</div>
+                                    <div class="fr layui-btn-group one-button">
+                                        <button class="layui-btn layui-btn-xs layui-btn-primary index-one-button" onclick="chartList('7','chartOne',this)">{$Think.lang.index_index_last_7_days}</button>
+                                        <button class="layui-btn layui-btn-xs layui-btn-primary" onclick="chartList('30','chartOne',this)">{$Think.lang.index_index_last_30_days}</button>
+                                        <button class="layui-btn layui-btn-xs layui-btn-primary" onclick="chartList('90','chartOne',this)">{$Think.lang.index_index_last_90_days}</button>
+                                    </div>
+                                </h4>
+                                <div id="chartOne" style="width: 100%;height:340px;margin-top:25px">
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-col-md4 control-oneChart-right ">
+                            <div class="contorl-boards">
+                                <div class="contorl-boards-title">{$Think.lang.index_index_systemAnnouncement}</div>
+                                <div class="contorl-boards-box" id="contorl-boards-box">
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div><!--收客统计////系统公告-->
+                <div class="control-chart-one">
+                    <div class="layui-row layui-col-space10">
+                        <div class="layui-col-md8 control-oneChart-left">
+                            <div>
+                                <h4 class="clear">
+                                    <div class="fl">{$Think.lang.index_index_statisticsDorecastOfSales}</div>
+                                    <div class="fr layui-btn-group two-button">
+                                        <button class="layui-btn layui-btn-xs layui-btn-primary" onclick="chartList('7-2','chartTwo',this)">{$Think.lang.index_index_last_7_days}</button>
+                                        <button class="layui-btn layui-btn-xs layui-btn-primary index-two-button" onclick="chartList('30-2','chartTwo',this)">{$Think.lang.index_index_last_30_days}</button>
+                                        <button class="layui-btn layui-btn-xs layui-btn-primary" onclick="chartList('90-2','chartTwo',this)">{$Think.lang.index_index_last_90_days}</button>
+                                    </div>
+                                </h4>
+                                <div id="chartTwo" style="width: 100%;height:340px;margin-top:25px">
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-col-md4 control-oneChart-right ">
+                            <div class="contorl-boards">
+                                <div class="contorl-boards-title">{$Think.lang.index_index_myApproval}</div>
+                                <div class="contorl-boards-box" id="contorl-boards-box2">
+                                    <div class="contorl-boards-list clear">
+                                        <div class="fl"><span class="list-bg-one"></span>{$Think.lang.index_index_pendingMyApproval}</div>
+                                        <div class="fr"><i>0</i>({$Think.lang.index_index_number})</div>
+                                    </div>
+                                    <div class="contorl-boards-list clear">
+                                        <div class="fl"><span class="list-bg-two"></span>{$Think.lang.index_index_iStartedIt}</div>
+                                        <div class="fr"><i>0</i>({$Think.lang.index_index_number})</div>
+                                    </div>
+                                    <div class="contorl-boards-list clear">
+                                        <div class="fl"><span class="list-bg-three"></span>{$Think.lang.index_index_approved}</div>
+                                        <div class="fr"><i>0</i>({$Think.lang.index_index_number})</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div><!--销售额///审批-->
+                <div class="control-last">
+                    <div class="layui-row layui-col-space10">
+                        <div class="layui-col-md8 control-last-list">
+                            <div>
+                                <div class="contorl-boards-title clear"><span class="fl">{$Think.lang.index_index_serviceReminder}</span><span class="fr layui-icon layui-icon-more-vertical"></span></div>
+                                <div class="contorl-boards-box contorl-last-scroll">
+                                    <!--<div class="clear">
+                                        <a href="#">
+                                            <div class="fl">aaaaaaaaaaaa</div>
+                                            <div class="fr">未读</div>
+                                            <div class="fr">2018-06-01</div>
+                                        </a>
+                                    </div>-->
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-col-md4 control-last-list">
+                            <div>
+                                <div class="contorl-boards-title clear"><span class="fl">{$Think.lang.index_index_uncollectedAccountsRanking}</span><span class="fr layui-icon layui-icon-more-vertical"></span></div>
+                                <div class="contorl-boards-box contorl-last-scroll" id="miss_payment_company">
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="layui-footer">
+        <!-- 底部固定区域 -->
+        © layui.com - 底部固定区域
+    </div>
+    <script id="demo" type="text/html">
+        {{#  layui.each(d, function(index, item){ }}
+        <div class="clear">
+            <div class="fl">{{item.content}}</div>
+            <div class="fr">{{item.date}}</div>
+        </div>
+        {{#  }); }}
+    </script>
+</div>
+{include file='public/foot_js' /}
+<script type="text/javascript" src="__STATIC__/javascript/index/echarts.js"></script>
+<script type="text/javascript" src="__STATIC__/javascript/index/index.js"></script>
+
+
+</body>
+</html>

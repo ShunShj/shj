@@ -1,0 +1,240 @@
+laytpl=layui.laytpl;
+var boards=[{content:"发布版本V1.1.1",date:"2018-06-11"}];
+boards.unshift({content:"发布版本V2.2.2",date:"2018-12-01"});
+var day7_customer_date=[];//七天收客日期
+var day30_customer_date=[];//30天收客日期
+var day90_customer_date=[];//90天收客日期
+
+var day7_customer_datas=[];//七天收客数据
+var day7_receivable_datas=[];//七天销售额数据
+var day30_customer_datas=[];//30天收客数据
+var day30_receivable_datas=[];//30天销售额数据
+var day90_customer_datas=[];//90天收客数据
+var day90_receivable_datas=[];//90天销售额数据
+var getTpl=$("#demo").html();
+laytpl(getTpl).render(boards, function(html){
+    $("#contorl-boards-box").html(html);
+});
+
+
+
+$.ajax({
+    type : "post",
+    url : "system/getDashboardAjax",
+    data : {},
+    dataType : "json",
+    success : function(result) {
+        console.log(result.data)
+        var datas=result.data;
+        $("#today_customer_count").html(datas.today_customer_count);//今日收客人数
+        $("#today_team_product_count").html(datas.today_team_product_count);//今日出团数
+        $("#today_receivable").html(datas.today_receivable);//今日营业额
+        $("#month_customer_count").html(datas.month_customer_count);//本月收客
+        $("#month_team_product_count").html(datas.month_team_product_count);//本月出团数
+        $("#month_receivable").html(datas.month_receivable);//本月营业额
+        $("#all_receivable").html(datas.all_receivable);//应收账款
+        $("#all_receivable_info").html(datas.all_receivable_info);//已收账款
+
+        /*折线图*/
+        for(var i=0;i<datas.day7_customer_info.length;i++){
+            day7_customer_date.unshift(datas.day7_customer_info[i].the_days);
+            day7_customer_datas.unshift(datas.day7_customer_info[i].customer_count);
+        }
+        for(var i=0;i<datas.day7_receivable_info.length;i++){
+            day7_receivable_datas.unshift(datas.day7_receivable_info[i].receivable_money);
+
+        }
+        for(var i=0;i<datas.day30_customer_info.length;i++){
+            day30_customer_date.unshift(datas.day30_customer_info[i].the_days);
+            day30_customer_datas.unshift(datas.day30_customer_info[i].customer_count);
+        }
+        for(var i=0;i<datas.day30_receivable_info.length;i++){
+            day30_receivable_datas.unshift(datas.day30_receivable_info[i].receivable_money);
+
+        }
+        for(var i=0;i<datas.day90_customer_info.length;i++){
+            day90_customer_date.unshift(datas.day90_customer_info[i].the_days);
+            day90_customer_datas.unshift(datas.day90_customer_info[i].customer_count);
+        }
+        for(var i=0;i<datas.day90_receivable_info.length;i++){
+            day90_receivable_datas.unshift(datas.day90_receivable_info[i].receivable_money);
+
+        }
+        chartList('7','chartOne');
+        chartList('30-2','chartTwo');
+
+        /*未付帐款公司*/
+        var html = "";
+        for(var i=0;i<datas.miss_payment_company.length;i++){
+            html +='<div class="clear">' +
+                '<a href="#">' +
+                '<div class="fl">'+datas.miss_payment_company[i].company_name+'</div>' +
+                '<div class="fr">'+datas.miss_payment_company[i].miss_money+'(RMB)</div>' +
+                '</a>' +
+                '</div>'
+        }
+        $("#miss_payment_company").html(html);
+
+        $(".contorl-last-scroll").each(function (index,item) {
+            if($(item).find(".clear").length==0){
+                $(item).html('<div class="index-none">暂无数据</div>')
+            }
+        })
+    },
+    error : function(errorMsg) {
+        //请求失败时执行该函数
+        /*layer.open({
+            type: 1
+            ,content: '<div style="padding: 20px 100px;">数据请求错误!</div>'
+            ,btn: '确定'
+            ,btnAlign: 'c' //按钮居中
+            ,shade: 0
+            ,yes: function(){
+                layer.closeAll();
+                location.href='/'
+            }
+        });*/
+    }
+})
+
+
+/*图表显示共用方法*/
+function chartList(num,chartId,addClass) {
+    var dom = document.getElementById(chartId);
+    var myChart = echarts.init(dom);
+    option = null;
+    option = {
+        tooltip: {
+            trigger: 'axis',
+            backgroundColor:'rgba(0,0,0,.5)',
+            axisPointer: {
+                type: 'line',
+                lineStyle: {
+                    type: 'dashed',
+                    color: 'rgb(40,102,185)'
+                }
+            },
+            formatter: function (params) {
+                var htmlStr ='<div>';
+                if(chartId=='chartOne'){
+                    htmlStr += params[0].name+'<br/>';//x轴的名称
+                    htmlStr += '收客统计表：'+params[0].value+ '人';
+                    htmlStr += '</div>';
+                    return htmlStr;
+                }else{
+                    htmlStr += params[0].name+'<br/>';//x轴的名称
+                    htmlStr += '销售总额：'+params[0].value+ '(RMB)';
+                    htmlStr += '</div>';
+                    return htmlStr;
+                }
+
+            }//提示
+        },
+        /*dataZoom: [{
+            show: true,
+            realtime: true,
+            start: 20,
+            end: 80
+        }, {
+            type: 'inside',
+            realtime: true,
+            start: 20,
+            end: 80
+        }],*/
+        xAxis: {
+            type: 'category',
+            boundaryGap: false,
+            data:getDates(num),
+            axisLine: {
+                lineStyle: {
+                    color: '#333'
+                }
+            }
+        },
+        yAxis: {
+            type: 'value',
+            splitLine: {
+                lineStyle: {
+                    color: ['#eee']
+                }
+            },//图中横线颜色
+            axisLine: {
+                lineStyle: {
+                    color: '#333'
+                }
+            }
+        },
+        series: [{
+            data:numList(num),
+            type: 'line',
+            //smooth: true,//曲线
+            /*markPoint: {
+                data: [
+                    {type: 'max', name: '最大值'},
+                    {type: 'min', name: '最小值'}
+                ]
+            },
+            markLine: {
+                data: [
+                    {type: 'average', name: '平均值'}
+                ]
+            },*/
+            itemStyle : {
+                normal : color(chartId,'one')
+            },
+            areaStyle: {
+                normal: {
+                    color:color(chartId,'two')
+                }
+            }
+        }]
+    };
+    if(chartId=='chartOne'){
+        $(addClass).addClass("index-one-button").siblings("button").removeClass("index-one-button");
+    }else{
+        $(addClass).addClass("index-two-button").siblings("button").removeClass("index-two-button");
+    }
+    if (option && typeof option === "object") {
+        myChart.setOption(option, true);
+    }
+}
+function color(chartId,sort) {
+    if(chartId=='chartOne'&&sort=='one'){
+        return {color:'#2AC4C8',lineStyle:{color:'#2AC4C8'}};//第一个折线折点颜色
+    }else if(chartId=='chartTwo'&&sort=='one'){
+        return {color:'#7592E8',lineStyle:{color:'#7592E8'}};//第er个折线折点颜色
+    }else if(chartId=='chartOne'&&sort=='two'){
+            return 'rgba(134,224,227, .7)';
+    }else if(chartId=='chartTwo'&&sort=='two'){
+            return 'rgba(162,185,247, .7)';
+    }
+}
+
+/*折线图数据*/
+function numList(num) {
+    var numList = [];
+    if(num=='7'){
+        return numList=day7_customer_datas;
+    }else if(num=='7-2'){
+        return numList=day7_receivable_datas;
+    }else if(num=='30'){
+        return numList=day30_customer_datas;
+    }else if(num=='30-2'){
+        return numList=day30_receivable_datas;
+    }else if(num=='90'){
+        return numList=day90_customer_datas;
+    }else{
+        return numList=day90_receivable_datas;
+    }
+}
+/*折线图日期*/
+function getDates(num) {
+    var dates = [];
+    if(num=='7'||num=='7-2'){
+        return dates=day7_customer_date;
+    }else if(num=='30'||num=='30-2'){
+        return dates=day30_customer_date;
+    }else{
+        return dates=day90_customer_date;
+    }
+}

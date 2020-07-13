@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html>
+<head>
+	{include file='public/head' /}
+  	<title>layout 后台大布局 - Layui</title>
+ 
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+	
+	<div class="layui-header">
+	{include file='public/header' /}
+	</div>
+  
+	 <div class="layui-side layui-bg-black">
+	   <div class="layui-side-scroll">
+	     <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+		{include file='public/left_menu' /}
+	   </div>
+	 </div>
+  
+	<div class="layui-body">
+	 
+		<!-- 内容主体区域 -->
+		<div style="padding: 15px;">
+			<div class='layui-form-item'>
+		   		<span class="layui-breadcrumb" lay-separator="-">
+					<a>{$language_tag.index_public_homepage}</a>
+					<a>{$language_tag.index_public_system}</a>
+					<a>{$language_tag.index_system_showUserManage_user_manage}</a>
+					<a><cite>{$language_tag.index_system_showUserManage_add_user}</cite></a>
+				</span>
+			</div>
+			<br><br>
+			<div class="layui-row">
+				<form class="layui-form layui-col-md4"  onSubmit="return userAdd()">
+					<div class="layui-form-item">
+						<label class="layui-form-label input-required">{$language_tag.index_system_showCompanyManage_company_name}：</label>
+						<div class="layui-input-block">
+							<select name="company_id" id='company_id' lay-verify="required" lay-filter="system_company_id">
+								<option value="">- - {$language_tag.index_public_select} - -</option>
+								{foreach name='company_data_result'  item='vo'}
+								<option value="{$vo.company_id}">{$vo.company_name}</option>
+
+								{/foreach}
+
+							</select>
+						</div>
+					</div>
+					<div class="layui-form-item">
+						<label class="layui-form-label input-required">{$language_tag.index_system_showJobManage_department}：</label>
+						<div class="layui-input-block">
+							<select name="department_id" id='department_id' lay-verify="required" lay-filter="system_department_id">
+
+
+							</select>
+						</div>
+					</div>
+					<div class="layui-form-item">
+						<label class="layui-form-label ">{$language_tag.index_system_showJobManage_job_name}：</label>
+						<div class="layui-input-block">
+							<input name="job_name" id='job_name' class="layui-input"  >
+
+						
+						</div>
+					</div>
+					<div class="layui-form-item">
+						<label class="layui-form-label input-required">{$language_tag.index_system_showUserManage_root}：</label>
+						<div class="layui-input-block">
+							<input name="username"   placeholder="{$language_tag.index_public_placeHolder}{$language_tag.index_system_showUserManage_root}" lay-verify="required" autocomplete="off" class="layui-input" type="text">
+						</div>
+					</div>
+					<div class="layui-form-item">
+						<label class="layui-form-label input-required ">{$language_tag.index_public_password}：</label>
+						<div class="layui-input-block">
+							<input name="password"   placeholder="{$language_tag.index_public_placeHolder}{$language_tag.index_public_password}" autocomplete="off" class="layui-input" type="password">
+						</div>
+					</div>
+					<div class="layui-form-item">
+						<label class="layui-form-label input-required">{$language_tag.index_system_showUserManage_name}：</label>
+						<div class="layui-input-block">
+							<input name="nickname"   placeholder="{$language_tag.index_system_showUserManage_input_user_name}" lay-verify="required" autocomplete="off" class="layui-input" type="text">
+						</div>
+					</div>
+					<div class="layui-form-item">
+						<label class="layui-form-label">{$language_tag.index_system_showUserManage_phone}：</label>
+						<div class="layui-input-block">
+							<input name="phone"   placeholder="{$language_tag.index_system_showDepartmentManage_input_phone}" autocomplete="off" class="layui-input" type="text">
+						</div>
+					</div>
+					<div class="layui-form-item">
+						<label class="layui-form-label">{$language_tag.index_system_showUserManage_email}：</label>
+						<div class="layui-input-block">
+							<input name="email"   placeholder="{$language_tag.index_public_placeHolder}{$language_tag.index_system_showUserManage_email}" autocomplete="off" class="layui-input" type="text">
+						</div>
+					</div>
+					<div class="layui-form-item">
+						<label class="layui-form-label input-required">{$language_tag.index_system_showCountryManage_language}：</label>
+						<div class="layui-input-block">
+							<select name="language_id" id="language_id" lay-verify='required'>
+								<option value="">- - {$language_tag.index_public_select} - -</option>
+								{foreach name='language_data_result'  item='vo'}
+								<option value="{$vo.language_id}">{$MultilingualAll['language-language_name-'.$vo.language_id.'-'.$Think.session.user.language_id][0]['translate']|default=$vo.language_name}</option>
+
+								{/foreach}
+
+							</select>
+						</div>
+					</div>
+					<div class="layui-form-item">
+						<label class="layui-form-label input-required">{$language_tag.index_public_role}：</label>
+						<div class="layui-input-block">
+							<select name="role_id" id="role_id" lay-verify="required" >
+								<option value="">- - {$language_tag.index_public_select} - -</option>
+								{foreach name='role_data_result'  item='vo'}
+								<option value="{$vo.role_id}">{$vo.role_name}</option>
+
+								{/foreach}
+
+							</select>
+						</div>
+					</div>
+					<div class="layui-form-item">
+						<div class="layui-input-block">
+							<button class="layui-btn nav-submit" lay-submit="" lay-filter="formDemo" >{$language_tag.index_branchcompany_showCompanyOrderManage_addEdit_submit}</button>
+							<a href="javascript:history.back(-1)"><button type="button" class="layui-btn layui-btn-primary">{$language_tag.index_public_back}</button></a>
+						</div>
+					</div>
+				</form>
+			</div>
+		 
+		</div>
+	</div>
+  
+  <div class="layui-footer">
+    <!-- 底部固定区域 -->
+    © layui.com - 底部固定区域
+  </div>
+</div>
+{include file='public/foot_js' /}
+
+<script src='__STATIC__/javascript/system/system.js'></script>
+
+</body>
+</html>

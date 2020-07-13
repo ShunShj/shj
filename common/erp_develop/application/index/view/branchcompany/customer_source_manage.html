@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {include file='public/head' /}
+    <title>{$language_tag.index_branchcompany_showCustomerManaget_customer_manage}</title>
+
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+    <div class="layui-header">
+        {include file='public/header' /}
+    </div>
+
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll">
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            {include file='public/left_menu' /}
+        </div>
+    </div>
+
+    <div class="layui-body layui-body-bg">
+
+        <!-- 内容主体区域 -->
+        <div style="padding: 15px;">
+            <div class="body-top">
+                <div class='layui-form-item'>
+                <span class="layui-breadcrumb" lay-separator="-">
+                    <a>{$language_tag.index_public_homepage}</a>
+                    <a>{$language_tag.index_branchcompany_showBranchProductManage_branchManagement}</a>
+                    <a><cite>{$language_tag.index_branchcompany_showCompanyOrderManage_addEdit_customerSource}</cite></a>
+                </span>
+                </div>
+                <div class='layui-block all-search-bg'>
+                    <form class="layui-form" action="/branchcompany/showCustomerSourceManage" method="get" >
+                        <div class="layui-row">
+                            <div class="layui-col-md4">
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">{$language_tag.index_public_status}:</label>
+                                    <div class="layui-input-block">
+                                        <select name="status">
+                                            <option value="2" {$_GET['status']=='2'?'selected':''} >{$language_tag.index_product_showRouteTemplateManage_status}</option>
+                                            <option value="1" {$_GET['status']=='1'?'selected':''} }>{$language_tag.index_public_show}</option>
+                                            <option value="0" {$_GET['status']=='0'?'selected':''}>{$language_tag.index_public_disabled}</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-col-md4">
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">{$language_tag.index_branchcompany_showCompanyOrderManage_addEdit_customerSource}{$language_tag.index_source_showHotelSource_name}:</label>
+                                    <div class="layui-input-block">
+                                        <input type="text" name="customer_source_name" value="{$_GET['customer_source_name']}" placeholder="" class="layui-input">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-row">
+                            <div class="layui-col-md4 layui-col-md-offset4">
+                                <div class='input-inline all-button-center pages-search-margin'>
+                                    <button class="layui-btn nav-search">{$language_tag.index_public_search}</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="content-bg">
+                <span><a href='/branchcompany/showCustomerSourceAdd'><button class="layui-btn nav-add layui-btn-sm">{$language_tag.index_public_add}{$language_tag.index_branchcompany_showCompanyOrderManage_addEdit_customerSource}</button></a></span>
+                <hr>
+                <div class="table-nont user-manage company-pageHeight">
+                    <table class="layui-table layui-form" id="language-table">
+                        <thead>
+                        <tr>
+                            <th>{$language_tag.index_branchcompany_showBranchProductManage_number}{$language_tag.index_source_showHotelSource_id}</th>
+                            <th>{$language_tag.index_source_showSupplierManage_own_company}</th>
+                            <th>{$language_tag.index_branchcompany_showCompanyOrderManage_addEdit_customerSource}{$language_tag.index_source_showHotelSource_name}</th>
+                            <th>{$language_tag.index_system_showCurrencyManage_create_time}</th>
+                            <th>{$language_tag.index_public_status}</th>
+                            <th>{$language_tag.index_branchcompany_showDistributorManage_operationUser}</th>
+                            <th class="layui-table-width">{$language_tag.index_source_operation}</th>
+                        </tr>
+                        </thead>
+
+                        {empty name='data'}
+
+                        {else /}
+                        {foreach name='data' item='vo'}
+                        <tr>
+                            <th class="customer_source_id">{$vo.customer_source_id}</th>
+                            <th>{$vo.company_name}</th>
+                            <th>{$vo.customer_source_name}</th>
+                            <th>{$vo.create_time|date='Y-m-d',###}</th>
+                            <th>
+                                {if condition="in_array('246',$auth_id) OR $Think.session.user.role_id eq 1"}<input type="checkbox" {if condition="$vo.status eq 1"}checked=""{else/}{/if} name="open" lay-skin="switch" lay-filter="switchTest" lay-text="{$language_tag.index_public_show}|{$language_tag.index_public_disabled}">{else/}{if condition="$vo.status eq 1"}{$language_tag.index_public_show}{else}{$language_tag.index_public_disabled}{/if}{/if}
+                            </th>
+                            <th>{$vo.update_username}</th>
+                            <th>
+                                <span><a href='/branchcompany/showCustomerSourceEdit?customer_source_id={$vo.customer_source_id}'><button class="layui-btn layui-btn-sm hover-edit layui-btn-primary">{$language_tag.index_public_update}</button></a></span>
+                                <span><a href='/branchcompany/showCustomerSourceInfo?customer_source_id={$vo.customer_source_id}'><button class="layui-btn layui-btn-sm hover-details layui-btn-primary">{$language_tag.index_public_info}</button></a></span>
+                            </th>
+                        </tr>
+                        {/foreach}
+                        {/empty}
+                        </tbody>
+
+                    </table>
+                </div>
+               <div class="listButtom">
+
+                <!--加载分页-->
+                {include file='public/page' /}
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="layui-footer">
+        <!-- 底部固定区域 -->
+        © layui.com - 底部固定区域
+    </div>
+</div>
+{include file='public/foot_js' /}
+<script>
+    var layer = layui.layer;
+
+    var form = layui.form;
+    form.on('switch(switchTest)', function(data){
+        var table_id = $(data.elem).parents("tr").children(".customer_source_id").html();
+        var table_id_name = "customer_source_id";
+        var table_name = "customer_source";
+        if(this.checked == true){
+            var status = 1;
+        }else{
+            var status = 0;
+        }
+
+        $.ajax({
+            type: "POST",
+            url: '/index/changeStatus',
+            data: {
+                table_id:table_id,
+                table_id_name:table_id_name,
+                table_name:table_name,
+                status:status,
+            },
+            success: function(data){
+                //console.log(data);
+                if(data.code!=200){
+                    layer.msg(data.msg);
+                    return false;
+                }else if(data.code==200) {
+                    layer.msg('操作成功',{time:1,end : function(layero, index){
+
+                        }
+                    });
+                }
+            },
+            error:function(XMLHttpRequest, textStatus, errorThrown){
+                layer.msg('验证失败')
+            }
+        });
+    });
+
+
+</script>
+</body>
+</html>

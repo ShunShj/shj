@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {include file='public/head' /}
+    <title>待办类型</title>
+    <link href="__STATIC__/css/product.css" rel="stylesheet">
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+    <div class="layui-header">
+        {include file='public/header' /}
+    </div>
+
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll">
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            {include file='public/left_menu' /}
+        </div>
+    </div>
+
+    <div class="layui-body layui-body-bg">
+
+        <!-- 内容主体区域 -->
+        <div style="padding: 15px 15px 0px;">
+            <div class="body-top">
+                <div class='layui-form-item'>
+                    <span class="layui-breadcrumb" lay-separator="-">
+                        <a>首页</a>
+                        <a>分公司管理</a>
+                        <a><cite>待办类型</cite></a>
+                    </span>
+                </div>
+            </div>
+            <div class="content-bg">
+                <a href='/operations/addOperationsTypes/'><button class="layui-btn nav-add layui-btn-sm">创建待办类型</button></a>
+                <hr>
+                <div class="table-nont user-manage newBg-pageHeight">
+                    <table class="layui-table layui-form" id="language-table">
+                        <thead>
+                        <tr>
+                            <th>待办类型</th>
+                            <th>状态</th>
+                            <th>操作</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {foreach $OperationsType as $v}
+                        <tr>
+                            <td>{$v.name}</td>
+                            <td>{$v.status==1?'开启':'关闭'}</td>
+                            <td>
+                                <span><a class="layui-btn layui-btn-sm hover-edit layui-btn-primary" href="/operations/upOperationsTypes?id={$v.id}">修改</a></span>
+                                <span><a class="layui-btn layui-btn-sm hover-edit layui-btn-primary" href="/operations/index?operations_type_id={$v.id}">模板</a></span>
+                            </td>
+                        </tr>
+                        {/foreach}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <div class="layui-footer">
+        <!-- 底部固定区域 -->
+        © layui.com - 底部固定区域
+    </div>
+</div>
+
+
+
+
+{include file='public/foot_js' /}
+<script src='__STATIC__/javascript/product/all.js'></script>
+<script src='__STATIC__/javascript/product/company_order.js'></script>
+
+<script>
+    !function() {
+        var layer = layui.layer;
+        var form = layui.form;
+        var laydate = layui.laydate;
+        var id;
+        $('.del-operations').on('click',function(){
+            var tit = $(this).data('tit');
+            id = $(this).data('info');
+
+            layer.confirm('确定要删除<font style="color: red">'+tit+'</font>么？', {icon:3, title:'提示'}, function(index){
+                console.log(id);
+                layer.load(2);
+                $.post('/operations/delOperationsAjax',{id:id},function(a){
+                    layer.closeAll();
+                    location.reload();
+                });
+
+                layer.close(index);
+            });
+        });
+
+        //选择邮件模板
+        form.on('select(operations_email_templates_id)', function(data){
+            var t = $(data.elem);
+            var idd = t.data('info');
+            var operations_email_templates_id = t.val();
+            layer.load(2);
+            $.post('/operations/ModifyMailTemplateSelection',{id:idd,operations_email_templates_id:operations_email_templates_id},function(){
+                layer.closeAll();
+            });
+
+        });
+
+
+    }();
+</script>
+
+
+</body>
+</html>

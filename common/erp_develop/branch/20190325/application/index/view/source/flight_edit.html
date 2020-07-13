@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {include file='public/head' /}
+    <title>flight-manage-edit</title>
+
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+
+    <div class="layui-header">
+        {include file='public/header' /}
+    </div>
+
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll">
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            {include file='public/left_menu' /}
+        </div>
+    </div>
+
+    <div class="layui-body">
+
+        <!-- 内容主体区域 -->
+        <div style="padding: 15px;">
+            <div class='layui-form-item'>
+		   		<span class="layui-breadcrumb" lay-separator="-">
+					<a>{$Think.lang.index_public_homepage}</a>
+					<a>{$Think.lang.index_source_showFlightSourceManage_source_administrate}</a>
+					<a>{$Think.lang.index_source_showFlightSourceManage_flight_administrate}</a>
+					<a>{$Think.lang.index_source_showFlightSource_source}</a>
+					<a><cite>{$Think.lang.index_source_showFlightSource_edit}</cite></a>
+				</span>
+            </div>
+            <br/>
+            <br/>
+            <form class="layui-form" onSubmit="return flightEdit()">
+                <div class="layui-row layui-col-space10">
+                    <div class="layui-col-md4">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label input-required">{$Think.lang.index_source_showFlightSourceManage_flight_administrate}:</label>
+                            <div class="layui-input-block">
+                                <select name="supplier_id" id='edit_flight_supplier_id' lay-verify="required" disabled>
+                                    {foreach name='data' item='vo'}
+                                    <option value="{$vo.supplier_id}" {if condition="$vo.supplier_id eq $flight_result.belong_supplier_id"}selected="seleted"{/if}>{$MultilingualAll['supplier-supplier_name-'.$vo.supplier_id.'-'.$Think.session.user.language_id][0]['translate']|default=$vo.supplier_name}</option>
+                                    {/foreach}
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    {if condition="$flight_result.supplier_id neq $flight_result.belong_supplier_id"}
+                    <div class="layui-col-md4">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label input-required">{$Think.lang.index_source_showFlightSourceManage_own_agent}:</label>
+                            <div class="layui-input-block">
+                                <select name="agent_id" id="edit_flight_agent_id" lay-search="" disabled >
+                                    {foreach name='data_agent' item='vo'}
+                                    <option value="{$vo.supplier_id}" {if condition="$vo.supplier_id eq $flight_result.supplier_id"} selected="seleted"{/if}>{$MultilingualAll['supplier-supplier_name-'.$vo.supplier_id.'-'.$Think.session.user.language_id][0]['translate']|default=$vo.supplier_name}</option>
+                                    {/foreach}
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    {/if}
+                    <div class="layui-col-md4">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">{$Think.lang.index_public_status}:</label>
+                            <div class="layui-input-block">
+                                <select name="status" id='edit_flight_status' lay-verify="required">
+                                    <option value="1" {if condition="1 eq $flight_result['status']"}selected="seleted"{/if}>{$Think.lang.index_public_show}</option>
+                                    <option value="2" {if condition="2 eq $flight_result['status']"}selected="seleted"{/if}>{$Think.lang.index_public_disabled}</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-row layui-col-space10">
+                    <div class="layui-col-md4">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label input-required">{$Think.lang.index_source_showFlightSourceManage_number}:</label>
+                            <div class="layui-input-block">
+                                <input name="flight_number" id="flight_number" value="{$flight_result.flight_number}" lay-verify="required" placeholder="{$Think.lang.index_source_showFlightSourceManage_input_number}" autocomplete="off" class="layui-input" type="text">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-col-md4">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label input-required">{$Think.lang.index_source_showFlightSourceManage_start}:</label>
+                            <div class="layui-input-block">
+                                <select name="begin_country_id" id="edit_flight_begin_country_id"
+                                        lay-verify="required" lay-search>
+                                    {foreach name='country_s3_result'  item='vo'}
+                                    <option value="{$vo.country_id}" {if condition="$vo.country_id eq $flight_result.begin_country_id"}selected="seleted"{/if}>{$MultilingualAll['country-country_name-'.$vo.country_id.'-'.$Think.session.user.language_id][0]['translate']|default=$vo.country_name}</option>
+                                    {/foreach}
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-col-md4">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label input-required">{$Think.lang.index_source_showFlightSourceManage_end}:</label>
+                            <div class="layui-input-block">
+                                <select name="end_country_id" id="edit_flight_end_country_id" lay-verify="required" lay-search>
+                                    {foreach name='country_s3_result'  item='vo'}
+                                    <option value="{$vo.country_id}" {if condition="$vo.country_id eq $flight_result.end_country_id"}selected="seleted"{/if}>{$MultilingualAll['country-country_name-'.$vo.country_id.'-'.$Think.session.user.language_id][0]['translate']|default=$vo.country_name}</option>
+                                    {/foreach}
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-row layui-col-space10">
+                    <div class="layui-col-md4">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label input-required">{$Think.lang.index_public_company}:</label>
+                            <div class="layui-input-block">
+                                <select {$Think.session.user.company_id!=1?'disabled':''} name="choose_company_id" id="choose_company_id" lay-verify="required" >
+                                    <option value="0">{$Think.lang.index_source_showFlightSourceManage_choose_company}</option>
+                                    {foreach name='company_result'  item='vo'}
+                                    <option value="{$vo.company_id}" {if condition="$vo.company_id eq  $flight_result.company_id"} selected='selected'{/if}>{$MultilingualAll['company-company_name-'.$vo.company_id.'-'.$Think.session.user.language_id][0]['translate']|default=$vo.company_name}</option>
+                                    {/foreach}
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-col-md4">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">{$Think.lang.index_source_showFlightSourceManage_airplane_type_name}:</label>
+                            <div class="layui-input-block">
+                                <input name="airplane_type_name" id="edit_airplane_type_name" value="{$flight_result.airplane_type_name}"  placeholder="{$Think.lang.index_source_showFlightSourceManage_input_airplane_type_name}" autocomplete="off" class="layui-input" type="text">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-col-md4">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label input-required">{$Think.lang.index_source_showFlightSourceManage_shipping_space}:</label>
+                            <div class="layui-input-block">
+                                <input name="shipping_space" id="edit_flight_shipping_space" value="{$flight_result.shipping_space}" lay-verify="required" placeholder="{$Think.lang.index_source_showFlightSourceManage_input_shipping_space}" autocomplete="off" class="layui-input" type="text">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <br/>
+                <hr/>
+                <br/>
+                <div class="layui-row layui-col-space10">
+                    <div class="layui-form-item">
+                        <div class="layui-col-md4">
+                            <label class="layui-form-label input-required">{$Think.lang.index_source_showFlightSourceManage_currency}:</label>
+                            <div class="layui-input-block">
+                                <select name="payment_currency_type" id="payment_currency_type" lay-verify="required">
+                                    {foreach name='currency_data_result '  item='vo'}
+                                    <option  value="{$vo.currency_id}" {if condition="$vo.currency_id eq $flight_result.payment_currency_type"} selected="seleted"{/if}>{$MultilingualAll['currency-currency_name-'.$vo.currency_id.'-'.$Think.session.user.language_id][0]['translate']|default=$vo.currency_name}</option>
+                                    {/foreach}
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-col-md4">
+
+                    </div>
+                </div>
+                <div class="layui-row layui-col-space10">
+                    <div class="layui-col-md4">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label input-required">{$Think.lang.index_source_showFlightSourceManage_UnitPrice}:</label>
+                            <div class="layui-input-block">
+                                <table class="layui-table">
+                                    <colgroup>
+                                        <col width="20%">
+                                        <col width="20%">
+                                        <col width="25%">
+                                        <!--<col width="20%">-->
+                                    </colgroup>
+                                    <thead>
+                                    <tr>
+                                        <th>{$Think.lang.index_source_showFlightSourceManage_UnitPrice_Type}</th>
+                                        <th>{$Think.lang.index_public_costprice}</th>
+                                        <th>{$Think.lang.index_public_settlementprice}</th>
+                                        <!--<th>建议客户售价</th>-->
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr>
+                                        <td>{$Think.lang.index_source_showFlightSourceManage_All_UnitPrice}:</td>
+                                        <td>
+                                            <input type="text" name="normal_price" id="edit_flight_normal_price" value="{$flight_result.normal_price}" lay-verify="required" autocomplete="off" class="layui-input">
+                                        </td>
+                                        <td>
+                                            <input type="text" name="normal_settlement_price" id="edit_flight_normal_settlement_price" value="{$flight_result.normal_settlement_price}" lay-verify="required" autocomplete="off" class="layui-input">
+                                        </td>
+                                        <!-- <td>
+                                            <input type="text" name="normal_retail_price" id="edit_flight_normal_retail_price" value="{$flight_result.normal_retail_price}" lay-verify="required" autocomplete="off" class="layui-input">
+                                        </td> -->
+                                    </tr>
+                                    <!-- <tr>
+                                        <td>成人:</td>
+                                        <td>
+                                            <input type="text" name="adult_price" id="edit_flight_adult_price" value="{$flight_result.adult_price}" lay-verify="" autocomplete="off" class="layui-input">
+                                        </td>
+                                        <td>
+                                            <input type="text" name="adult_settlement_price" id="edit_flight_adult_settlement_price" value="{$flight_result.adult_settlement_price}" lay-verify="" autocomplete="off" class="layui-input">
+                                        </td>
+                                        <td>
+                                            <input type="text" name="adult_retail_price" id="edit_flight_adult_retail_price" value="{$flight_result.adult_retail_price}" lay-verify="" autocomplete="off" class="layui-input">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>占床儿童:</td>
+                                        <td>
+                                            <input type="text" name="child_bed_price" id="edit_flight_child_bed_price" value="{$flight_result.child_bed_price}" lay-verify="" autocomplete="off" class="layui-input">
+                                        </td>
+                                        <td>
+                                            <input type="text" name="child_bed_settlement_price" id="edit_flight_child_bed_settlement_price" value="{$flight_result.child_bed_settlement_price}" lay-verify="" autocomplete="off" class="layui-input">
+                                        </td>
+                                        <td>
+                                            <input type="text" name="child_bed_retail_price" id="edit_flight_child_bed_retail_price" value="{$flight_result.child_bed_retail_price}" lay-verify="" autocomplete="off" class="layui-input">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>老人:</td>
+                                        <td>
+                                            <input type="text" name="old_price" id="edit_flight_old_price" value="{$flight_result.old_price}" lay-verify="" autocomplete="off" class="layui-input">
+                                        </td>
+                                        <td>
+                                            <input type="text" name="old_settlement_price" id="edit_flight_old_settlement_price" value="{$flight_result.old_settlement_price}" lay-verify="" autocomplete="off" class="layui-input">
+                                        </td>
+                                        <td>
+                                            <input type="text" name="old_retail_price" id="edit_flight_old_retail_price" value="{$flight_result.old_retail_price}" lay-verify="" autocomplete="off" class="layui-input">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>不占床儿童:</td>
+                                        <td>
+                                            <input type="text" name="child_price" id="edit_flight_child_price" value="{$flight_result.child_price}" lay-verify="" autocomplete="off" class="layui-input">
+                                        </td>
+                                        <td>
+                                            <input type="text" name="child_settlement_price" id="edit_flight_child_settlement_price" value="{$flight_result.child_settlement_price}" lay-verify="" autocomplete="off" class="layui-input">
+                                        </td>
+                                        <td>
+                                            <input type="text" name="child_retail_price" id="edit_flight_child_retail_price" value="{$flight_result.child_retail_price}" lay-verify="" autocomplete="off" class="layui-input">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>单房差:</td>
+                                        <td>
+                                            <input type="text" name="single_price" id="edit_flight_single_price" value="{$flight_result.single_price}" lay-verify="" autocomplete="off" class="layui-input">
+                                        </td>
+                                        <td>
+                                            <input type="text" name="single_settlement_price" id="edit_flight_single_settlement_price" value="{$flight_result.single_settlement_price}" lay-verify="" autocomplete="off" class="layui-input">
+                                        </td>
+                                        <td>
+                                            <input type="text" name="single_retail_price" id="edit_flight_single_retail_price" value="{$flight_result.single_retail_price}" lay-verify="" autocomplete="off" class="layui-input">
+                                        </td>
+                                    </tr> -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <br/>
+                <br/>
+                <br/>
+                <!--<div class="layui-form-item layui-form-text">-->
+                    <!--<label class="layui-form-label">说明:</label>-->
+                    <!--<div class="layui-input-block">-->
+                        <!--<textarea id="edit_flight_remark" name="remark" placeholder="请输入内容" class="layui-textarea">{$flight_result.remark}-->
+                        <!--</textarea>-->
+                    <!--</div>-->
+                <!--</div>-->
+                <div class="layui-form-item">
+                    <div class="all-button-center">
+                        <button class="layui-btn nav-submit" lay-submit="" lay-filter="formDemo" id="flight_add_button">{$Think.lang.index_public_submit}</button>
+                        <a href='javascript:history.back(-1)'><button type="button" class="layui-btn layui-btn-primary">{$Think.lang.index_public_back}</button></a>
+                        <input type="hidden" id="flight_hidden_flight_id" value="{$flight_result.flight_id}">
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="layui-footer">
+        <!-- 底部固定区域 -->
+        © layui.com - 底部固定区域
+    </div>
+</div>
+{include file='public/foot_js' /}
+<script src='__STATIC__/javascript/system/source.js'></script>
+</body>
+</html>

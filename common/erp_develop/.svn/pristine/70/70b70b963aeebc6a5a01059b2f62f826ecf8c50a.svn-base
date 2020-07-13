@@ -1,0 +1,46 @@
+
+/*供应商*/
+.source-form{
+    position: relative;
+    padding-bottom:42px;
+}
+.source-form .layui-search-inline button{
+    margin-top:-5px;
+    position: absolute;
+    right:112px;
+    bottom:5px;
+}
+.source-form .layui-button-inline{
+    position:absolute ;
+    right:65px;
+    bottom:0px;
+}
+.source-form .layui-input-inline{
+    margin-bottom:5px;
+}
+.source-form .layui-search-inline{
+    width: 106px;
+}
+
+
+/*地接*/
+table .source-button-width{
+    width:100px;
+}
+/*资源管理*/
+.agent-source .layui-form-item{
+    margin:0px;
+}
+.agent-source .layui-form-label{
+    width: 30px;
+}
+.agent-source .layui-input-block{
+    margin-left:60px;
+}
+.agent-source table .layui-table{
+    margin-bottom:40px;
+}
+.agent-save{
+    text-align: center;
+    margin-top:40px;
+}

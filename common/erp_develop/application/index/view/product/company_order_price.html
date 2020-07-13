@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {include file='public/head' /}
+    <title>{$language_tag.index_product_showRouteTemplateManage_receiptTemplate}</title>
+    <link href="__STATIC__/css/product.css" rel="stylesheet">
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+    <div class="layui-header">
+        {include file='public/header' /}
+    </div>
+
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll">
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            {include file='public/left_menu' /}
+        </div>
+    </div>
+
+    <div class="layui-body">
+
+        <!-- 内容主体区域 -->
+        <div style="padding: 15px;">
+            <div class='layui-form-item'>
+                <span class="layui-breadcrumb" lay-separator="-">
+                    <a>{$language_tag.index_public_homepage}</a>
+                    <a>{$language_tag.index_branchcompany_showBranchProductManage_branchManagement}</a>
+                    <a>{$language_tag.index_branchcompany_showCompanyOrderManage_orderManagement}</a>
+                    <a><cite>{$language_tag.index_branchcompany_showCompanyOrderManage_addEdit_quotedPrice}</cite></a>
+                </span>
+                <div style="display:inline-block;width:88%;"></div>
+                <span><button class="layui-btn nav-submit" onclick="all_array_submit();">{$language_tag.index_branchcompany_showCompanyOrderManage_addEdit_submit}</button></span>
+                <a href="/branchcompany/showCompanyOrderManage">
+                    <button type="button" class="layui-btn layui-btn-primary">{$language_tag.index_branchcompany_showCompanyOrderManage_addEdit_temporaryStorage}</button>
+                </a>
+            </div>
+            <div class="layui-tab layui-tab-brief" lay-filter="companyOrder">
+                <ul class="layui-tab-title layui-tab-url">
+                    <li>{$language_tag.index_product_showRouteTemplateManage_information}</li>
+                    <li>{$language_tag.index_branchcompany_showCompanyOrderManage_addEdit_touristInformation}</li>
+                    <li>{$language_tag.index_branchcompany_showCompanyOrderManage_addEdit_product}</li>
+                    <li>{$language_tag.index_branchcompany_showCompanyOrderManage_addEdit_primeCost}</li>
+                    <li class="layui-this">{$language_tag.index_branchcompany_showCompanyOrderManage_addEdit_quotedPrice}</li>
+                    <li>{$language_tag.index_branchcompany_showCompanyOrderManage_addEdit_salesReceipts}</li>
+                </ul>
+                <br>
+                <div class="layui-tab-content">
+                    <div class="layui-tab-item layui-show">
+                        <!--<fieldset class="layui-elem-field layui-field-title">
+                            <legend>{$language_tag.index_finance_showReceivableManage_receivable_number}:111111</legend>
+                        </fieldset>-->
+                        <div class="table-nont">
+                            <table class="layui-table table-product layui-form layui-price">
+                                <thead>
+                                <tr>
+                                    <th>{$language_tag.index_public_type}</th>
+                                    <th>{$language_tag.index_product_PlanBooking_order_product}</th>
+                                    <th>{$language_tag.index_product_visitor_order_visitor}</th>
+                                    <th>{$language_tag.index_product_showRouteTemplateManage_resources_currency}</th>
+                                    <th>{$language_tag.index_product_showRouteTemplateManage_resources_price}</th>
+                                   <!--  <td>{$language_tag.index_source_operation}</td> -->
+                                </tr>
+                                </thead>
+                                
+                                <tbody id='company_order_product'>
+                                {volist name="order_produt_result['company_order_product']" id="vo_p"}
+                                <tr>
+                                    <td class="aa">{$language_tag.index_branchcompany_showBranchProductManage_branchProduct}</td>
+                                    <td>{$vo_p.branch_product_name}</td>
+                                    <td>{$vo_p.count}</td>
+                                    <td>
+                                        <select name="priceCurrency" class="price_currency_id">
+                                            {volist name="currency_result_data" id="currency"}
+                                            <option value="{$currency.currency_id}" {if condition="$currency.currency_id eq $vo_p.price_currency_id"}selected="seleted"{/if}>{$currency.currency_name}</option>
+                                            {/volist}
+                                        </select>
+                                    </td>
+                                    <td><input type="text" name="priceInput"  placeholder="" value="{$vo_p.branch_product_price}" class="layui-input tpp"></td>
+                                    <!-- <td><a href="#" class="layui-btn layui-btn-sm hover-edit layui-btn-primary" onclick="edit_cost(this)">{$language_tag.index_public_save}</a></td> -->
+                             
+                                    <td class="mm" style="display:none">{$vo_p.branch_product_number}</td>
+                                    <td class="nn" style="display:none">{$vo_p.company_order_product_id}</td>
+                                    <td  style="display:none">4</td>
+                                    
+                                </tr>
+                                 {/volist}
+                                </tbody>
+                               
+
+
+                                 	<tbody  id='company_order_product_source'>
+                                 	 	 {volist name="company_order_product_source" id="vo_p"}
+                               			 {if condition='$vo_p.supplier_type_id eq 11'} 
+		                                <tr>
+		                                    <td class="aa">{$language_tag.index_finance_showReceivableManage_ownexpense}</td>
+		                                    <td>{$vo_p.source_name}</td>
+		                                    <td>{$vo_p.count}</td>
+		                                    <td>
+		                                        <select name="priceCurrency" class="price_currency_id">
+		                                            {volist name="currency_result_data" id="currency"}
+		                                            <option value="{$currency.currency_id}" {if condition="$currency.currency_id eq $vo_p.price_currency_id"}selected="seleted"{/if}>{$currency.currency_name}</option>
+		                                            {/volist}
+		                                        </select>
+		                                    </td>
+		                                    <td><input type="text" name="priceInput"  placeholder="" value="{$vo_p.source_price}" class="layui-input sp"></td>
+		                                   <!--  <td><a href="#" class="layui-btn layui-btn-sm hover-edit layui-btn-primary" onclick="edit_cost(this)">{$language_tag.index_public_save}</a></td> -->
+		                                    <td class="lll" style="display:none">{$vo_p.company_order_product_source_id}</td>
+		                                    <td class="mm" style="display:none">{$vo_p.branch_product_number}</td>
+		                                    <td  style="display:none">2</td>
+		                                </tr>
+		                             {/if}
+
+                               		 {/volist}
+	                                </tbody>
+
+
+                               
+                                <tbody id='company_order_product_diy'>
+                                 {volist name="company_order_product_diy" id="vo_p"}
+                                <tr>
+                                    <td class="aa">{$language_tag.index_branchcompany_showCompanyOrderManage_addEdit_customProduct}</td>
+                                    <td>{$vo_p.diy_name}</td>
+                                    <td>{$vo_p.count}</td>
+                                    <td>
+                                        <select name="priceCurrency" class="price_currency_id">
+                                            {volist name="currency_result_data" id="currency"}
+                                            <option value="{$currency.currency_id}" {if condition="$currency.currency_id eq $vo_p.price_currency_id"}selected="seleted"{/if}>{$currency.currency_name}</option>
+                                            {/volist}
+                                        </select>
+                                    </td>
+                                    <td><input type="text" name="priceInput"  placeholder="" value="{$vo_p.diy_price}" class="layui-input dp"></td>
+                                   <!--  <td><a href="#" class="layui-btn layui-btn-sm hover-edit layui-btn-primary" onclick="edit_cost(this)">{$language_tag.index_public_save}</a></td> -->
+                                    <td class="llll" style="display:none">{$vo_p.company_order_product_diy_number}</td>
+                                    <td class="mm" style="display:none">{$vo_p.branch_product_number}</td>
+                                    <td  style="display:none">3</td>
+                                </tr>
+                                 {/volist}
+                                </tbody>
+                               
+
+                                <tfoot>
+                                <tr>
+                                    <!--<td colspan="6" align="center">总计：<span id="total_all">100000</span></td>-->
+                                </tr>
+                                </tfoot>
+                            </table>
+                             <div style='text-align:center'><button class="layui-btn nav-submit" onclick="edit_cost_all();">{$language_tag.index_branchcompany_showCompanyOrderManage_addEdit_saveQuotation}</button></div>
+                            <input type="hidden" id="receivable_number_hidden" value="{$receivable_number}">
+                        </div>
+                        <br>
+                        <!--<button class="layui-btn nav-submit" onclick="getReceivablePrice()">{$language_tag.index_branchcompany_showCompanyOrderManage_addEdit_submit}</button>-->
+                    </div><!--应收/报价-->
+                </div>
+            </div>
+        </div>
+    </div>
+    <div  class="layui-layer layui-layer-dialog" id="han_test" type="dialog" times="1" showtime="0" contype="string" style="display:none;z-index: 19891015; width: 450px; height: 380px; top: 169.5px; left: 735px;">
+        <div class="layui-layer-title" style="cursor: move;">{$language_tag.index_finance_showReceivableManage_choose_customer}</div>
+        <div id="" class="layui-layer-content" style="height: 244px;">
+            <form class="layui-form visitorListTips">
+
+                <div class="checkboxList" id="'visitorList3">
+                    {foreach name='company_order_customer' item='vo'}
+                    <input type="checkbox" name="productCheckbox1" value="{$vo.customer_id}" title="{$vo.customer_first_name}{$vo.customer_last_name}" lay-skin="primary" class="productCheckbox">
+                    {/foreach}
+
+
+                </div>
+            </form>
+        </div>
+
+        <div class="layui-layer-btn layui-layer-btn-c">
+            <a class="layui-layer-btn1 layui-btn-primary" id="close_div">{$language_tag.index_public_cancel}</a>
+        </div>
+
+    </div>
+    <div class="layui-footer">
+        <!-- 底部固定区域 -->
+        © layui.com - 底部固定区域
+    </div>
+    <input type="hidden" id="template_do" value="5">
+</div>
+<!--游客选择-->
+<script id="visitorListTips" type="text/html">
+    <form class="layui-form visitorListTips">
+        <div><input type="checkbox" name="productCheckboxAll" title="{$language_tag.index_finance_showReceivableManage_choose_all}" lay-skin="primary" lay-filter="checkboxAll"></div>
+        <br>
+        <div class="checkboxList">
+            <input type="checkbox" name="productCheckbox" title="1" lay-skin="primary" class="productCheckbox">
+            <input type="checkbox" name="productCheckbox1" title="2" lay-skin="primary" class="productCheckbox">
+        </div>
+    </form>
+</script>
+{include file='public/foot_js' /}
+<script src='__STATIC__/javascript/product/all.js'></script>
+<script src="__STATIC__/javascript/product/order_price.js"></script>
+
+</body>
+</html>

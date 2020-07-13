@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {include file='public/head' /}
+    <title>{$language_tag.index_finance_showReceivableManage_recevible}</title>
+    <link href="__STATIC__/css/product.css" rel="stylesheet">
+    <link href="__STATIC__/css/finance.css" rel="stylesheet">
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+    <div class="layui-header">
+        {include file='public/header' /}
+    </div>
+
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll">
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            {include file='public/left_menu' /}
+        </div>
+    </div>
+
+    <div class="layui-body">
+
+        <!-- 内容主体区域 -->
+        <div style="padding: 15px 15px 0px;">
+            <div class="body-top">
+                <div class='layui-form-item'>
+                <span class="layui-breadcrumb" lay-separator="-">
+                    <a>{$language_tag.index_public_homepage}</a>
+                    <a>{$language_tag.index_public_finance}</a>
+                    <a><cite>{$language_tag.index_finance_showReceivableManage_recevible}</cite></a>
+                </span>
+                </div>
+                <br>
+                <div class='layui-block input-inline'>
+                    <form class="layui-form" method='get' action='/finance/showReceivableManage'>
+                        <div class='layui-input-inline'>
+                            <input type="text" id="" name="order_number"  placeholder="{$language_tag.index_finance_showReceivableManage_order_number}" value="{$Think.get.order_number}" class="layui-input">
+                        </div>
+                        <div class='layui-input-inline'>
+                            <input type="text" id="" name="team_product_number"  placeholder="{$language_tag.index_finance_showReceivableManage_team_product_number}"  value="{$Think.get.team_product_number}" class="layui-input">
+                        </div>
+                        <div class='layui-input-inline'>
+                            <input type="text" id="" name="receivable_number"  placeholder="{$language_tag.index_finance_showReceivableManage_receivable_number}" value="{$Think.get.receivable_number}" class="layui-input">
+                        </div>
+
+                        <div class='layui-input-inline'>
+                            <input type="text" id="" name="product_name"  placeholder="{$language_tag.index_finance_showReceivableManage_product_name}"  value="{$Think.get.product_name}" class="layui-input">
+                        </div>
+                        
+                        <div class='layui-input-inline'>
+						    <div class="layui-input-inline">
+						      	<select name="object_type" id='object_type' lay-verify="required"  lay-filter="object_type">
+									<option value=''>请选择</option>
+						        	<option value='1' {if condition="$Think.get.object_type eq 1"} selected='selected'{/if}>公司</option>
+						        	<option value='2' {if condition="$Think.get.object_type eq 2"} selected='selected'{/if}>供应商</option>
+						        	<option value='3' {if condition="$Think.get.object_type eq 3"} selected='selected'{/if}>代理</option>
+						        	<option value='4' {if condition="$Think.get.object_type eq 4"} selected='selected'{/if}>直客</option>
+						    
+							
+								</select>
+						    </div>   
+                   
+                        </div>
+                         <div {if condition="$Think.get.object_type lt 4"} {else/} style='display:none'{/if} class="layui-input-inline layui-form" lay-filter="selFilter" id='object_id_diy' >
+					      	<select name="object_id" id='object_id'  lay-search="" lay-verify="required">
+						
+					
+					    
+						
+							</select>
+						  </div>      
+                        <div class='layui-button-inline layui-search-inline'>
+                            <button class="layui-btn nav-search" >{$language_tag.index_public_search}</button>
+                        </div>
+                    </form>
+                    <div class='layui-button-inline'>
+                        <button class="layui-btn nav-add" onclick="newReceivable('add')">新增应收</button>
+                        <!--  
+                        <span style="{:action('index/auth/check_auth',['role_id'=>'259'])}"><a href="/finance/showReceivableAllManage"><button class="layui-btn nav-add" onclick="batchReceivable()">{$language_tag.index_finance_showReceivableAllManage}</button></a></span>
+                   		 -->
+                    </div>
+                </div>
+                <hr><br>
+            </div>
+            <div class="table-nont table-input-none user-manage pageHeight">
+                <table class="layui-table layui-form table-product" style="table-layout:fixed" id="">
+                    <colgroup>
+                        <col width="180">
+                        <col width="180">
+                        <col width="180">
+                        <col width="100">
+                        <col width="130">
+                        <col width="240">
+                        <col width="200">
+                        <col width="140">
+                        <col width="100">
+                        <col width="100">
+                        <col width="100">
+                        <col width="240">
+                        <col width="150">
+                        <col width="100">
+                        <col width="160">
+                    </colgroup>
+                    <thead>
+                    <tr>
+                     	<th>{$language_tag.index_finance_showReceivableManage_order_number}</th>
+                        <th>{$language_tag.index_finance_showReceivableManage_team_product_number}</th>
+                        <th>{$language_tag.index_finance_showReceivableManage_receivable_number}</th>
+                        <th >{$language_tag.index_finance_showReceivableManage_customer_number}</th>
+                        <th>{$language_tag.index_finance_showReceivableManage_fee_type_name}</th>
+                        <th>{$language_tag.index_finance_showReceivableManage_product_name}</th>
+                        <th>{$language_tag.index_finance_showReceivableManage_payment_object_name}</th>
+                        <th>{$language_tag.index_finance_showReceivableManage_currency_name}</th>
+                        <th>{$language_tag.index_finance_showReceivableManage_receivable_money}</th>
+                        <th>{$language_tag.index_finance_showReceivableManage_true_receipt}</th>
+                        <th>{$language_tag.index_finance_showReceivableManage_uncollected}</th>
+                        <th>{$language_tag.index_finance_showReceivableManage_receivable_remake}</th>
+                        <th>{$language_tag.index_finance_showReceivableManage_receivable_create_time}</th>
+                        <th>{$language_tag.index_finance_showReceivableManage_create_user_name}</th>
+                        <th>{$language_tag.index_source_operation}</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {foreach name='data' item='vo'}
+                    <tr>
+                     	<td><a href="javascript:void(0)">{$vo.order_number}</a></td>
+                        <td><a href="javascript:void(0)">{$vo.team_product_number}</a></td>
+                        <td class="receivable_number">{$vo.receivable_number}</td>
+               
+                        <td align="center"><a {if condition="$vo.is_auto eq 2"}class="look2" {else/}class="look2"{/if}  href='javascript:void(0)' company_order_number='{$vo.order_number}' receivable_number="{$vo.receivable_number}" onclick="">{$language_tag.index_finance_showReceivableManage_look}</a></td>
+						<td>
+							{$vo.fee_type_name}
+						</td>
+                        <td><input type="text" name="item" placeholder="" class="layui-input product_name" disabled value="{$vo.product_name}"></td>
+                        <td class="company_name">{$vo.payment_object_name}</td>
+                        <input class="payment_company_id" value="{$vo.payment_company_id}" type="hidden"/>
+                        <td class="currency_id">{$vo.currency_name}</td>
+                        <input class="pay_currency_id" value="{$vo.currency_id}" type="hidden"/>
+                        <td><input type="text" name="total" placeholder="" class="layui-input receivable_money" disabled  value="{$vo.receivable_money}"></td>
+                        <td><input type="text" name="actualCollection" placeholder="" class="layui-input" disabled value="{$vo.true_receipt}"></td>
+                        <td><input type="text" name="uncollected" placeholder="" class="layui-input" disabled value="{$vo.receivable_money-$vo.true_receipt}"></td>
+                        <td>
+                            <textarea name="note" placeholder="" class="layui-textarea remark" style="min-height:32px;position: relative;top: 8px" disabled>{$vo.remark}</textarea>
+                        </td>
+                        <td>{$vo.create_time|date='Y-m-d',###}</td>
+                        <td>{$vo.create_user_name}</td>
+                        <td>
+                        	{if condition="$vo.resource_type eq 2"}
+                        		<button class="layui-btn layui-btn-sm hover-edit layui-btn-primary" onclick="newReceivable('edit',this)">{$language_tag.index_public_update}</button>
+                        		
+                        	 {/if}
+                        	{if condition="$vo.resource_type eq 2"}
+                           		 <button class="layui-btn layui-btn-sm nav-del layui-btn-primary" onclick="receivableDel(this)">{$language_tag.index_public_del}</button>
+                        		
+                        	 {/if}
+                        </td>
+                        <td><input type="hidden"  class="product_type" value="{$vo.product_type}"></td>
+                        <td><input type="hidden"  class="receivable_number" value="{$vo.receivable_number}"></td>
+                    </tr>
+                    {/foreach}
+                    
+                    
+                     <tr>
+                     	<td></td>
+                        <td></td>
+                        <td class="receivable_number"></td>
+               
+                        <td align="center"></td>
+						<td>
+							
+						</td>
+                        <td></td>
+                        <td class="company_name"></td>
+                   
+                        <td>{$Think.session.user.company_currency_name}</td>
+                     
+                        <td>{$yingshou}</td>
+                        <td>{$shishou}</td>
+                        <td>{$weishou} </td>
+                        <td>
+                        </td>
+                        <td></td>
+                        <td></td>
+                        <td>
+
+                        </td>
+                        <td><input type="hidden"  class="product_type" value="{$vo.product_type}"></td>
+                        <td><input type="hidden"  class="receivable_number" value="{$vo.receivable_number}"></td>
+                    </tr>
+                    
+                    </tbody>
+
+                </table>
+            </div>
+            
+            <div class="listButtom">
+                <!--加载分页-->
+                {include file='public/page' /}
+            </div>
+        </div>
+    </div>
+<div  class="layui-layer layui-layer-dialog" id="open_window" type="1" times="1" showtime="0" contype="string" style="display:none;z-index: 19891015; width: 450px; height: 380px; top: 169.5px; left: 735px;">
+    <div class="layui-layer-title" style="cursor: move;">{$language_tag.index_finance_showReceivableManage_choose_customer}</div>
+        <div id="" class="layui-layer-content" style="height: 244px;">
+            <form class="layui-form visitorListTips">
+                <div id="choose_all">
+                    <input type="checkbox" name="productCheckboxAll" title="{$language_tag.index_finance_showReceivableManage_choose_all}" lay-skin="primary" lay-filter="checkboxAll">
+                    <div class="layui-unselect layui-form-checkbox" lay-skin="primary">
+                        <span>{$language_tag.index_finance_showReceivableManage_choose_all}</span><i class="layui-icon layui-icon-ok"></i>
+                    </div>
+                </div> <br>
+                <div class="checkboxList" id="insert_input">
+                <!-- 
+                    {foreach name='customer_result' item='vo'}
+                    <input type="checkbox" name="productCheckbox1" value="{$vo.customer_number}" title="{$vo.customer_first_name}{$vo.customer_last_name}" lay-skin="primary" class="productCheckbox">
+                   {/foreach}
+                 -->
+                </div>
+            </form>
+        </div>
+
+    <div class="layui-layer-btn layui-layer-btn-c">
+    	<input type='hidden' id='update_company_order_number' value='' />
+    	<input type='hidden' id='update_receivable_number' value='' />
+        <a class="layui-layer-btn0" id="update_customer" >{$language_tag.index_finance_showReceivableManage_sure}</a>
+        <a class="layui-layer-btn1" id="close_div">{$language_tag.index_finance_showReceivableManage_cancel}</a>
+    </div>
+    <span class="layui-layer-resize"></span>
+</div>      
+
+<div  class="layui-layer layui-layer-dialog" id="open_window2" type="1" times="1" showtime="0" contype="string" style="display:none;z-index: 19891015; width: 450px; height: 380px; top: 169.5px; left: 735px;">
+    <div class="layui-layer-title" style="cursor: move;">{$language_tag.index_finance_showReceivableManage_choose_customer}</div>
+        <div id="" class="layui-layer-content" style="height: 244px;">
+            <form class="layui-form visitorListTips">
+                <div class="checkboxList" id="visitorList3">
+
+                </div>
+            </form>
+        </div>
+
+    <div class="layui-layer-btn layui-layer-btn-c">
+      <a class="layui-layer-btn0 close_div2"  >{$language_tag.index_finance_showReceivableManage_sure}</a>
+        <a class="layui-layer-btn1" id="close_div2">{$language_tag.index_finance_showReceivableManage_cancel}</a>
+    </div>
+    <span class="layui-layer-resize"></span>
+</div>  
+
+	<input type='hidden' id='object_id1' value="{$Think.get.object_id}" />
+	<input type='hidden' id='object_type' value="{$Think.get.object_type}" />
+    <div class="layui-footer">
+        <!-- 底部固定区域 -->
+        © layui.com - 底部固定区域
+    </div>
+</div>
+<!--应收汇总--》点击汇总应收弹出-->
+<script id="receivableTips" type="text/html">
+    <form class="layui-form popReceivable">
+        <div class="layui-inline layui-col-md6">
+            <label class="layui-form-label input-required">{$language_tag.index_finance_showReceivableManage_payment_object_name}:</label>
+            <div class="layui-input-block">
+                <select name="payment_company_id" id="company_id"lay-verify="required" >
+                    <option value=""></option>
+                    {foreach name='company_data_result'  item='vo'}
+                    <option value="{$vo.company_id}" {if condition="$company_data.company_id eq $Think.session.user.company_id"}disabled{/if} >{$vo.company_name}</option>
+                    {/foreach}
+                </select>
+            </div>
+        </div>
+
+
+        <div class="layui-inline layui-col-md6">
+            <label class="layui-form-label input-required">{$language_tag.index_finance_showReceivableManage_product_name}:</label>
+            <div class="layui-input-block">
+                <input type="text" id="product_name" name="product_name" placeholder="{$language_tag.index_finance_showReceivableManage_input}" class="layui-input" lay-verify="required" >
+            </div>
+        </div>
+        <div class="layui-inline layui-col-md6">
+            <label class="layui-form-label input-required">{$language_tag.index_finance_showReceivableManage_currency_name}:</label>
+            <div class="layui-input-block">
+                <select name="currency_id" id="currency_id" class=layui-input-inline" required lay-verify="required">
+                    <option value=""></option>
+					{foreach name='currency_data_result' item='v'}
+                    <option value="{$v.currency_id}">{$v.currency_name}</option>
+					{/foreach}
+                </select>
+            </div>
+        </div>
+        <div class="layui-inline layui-col-md6">
+            <label class="layui-form-label input-required">{$language_tag.index_finance_showReceivableManage_receivable_money}:</label>
+            <div class="layui-input-block">
+                <input type="text" id="receivable_money" name="receivable_money" placeholder="{$language_tag.index_finance_showReceivableManage_input}" class="layui-input" required lay-verify="required|number" >
+            </div>
+        </div>
+
+
+        <div class="layui-inline layui-col-md6">
+            <label class="layui-form-label">{$language_tag.index_finance_showReceivableManage_fee_type_name}:</label>
+            <div class="layui-input-block">
+                <select name="product_type" id="product_type" class=layui-input-inline">
+                    <option value=""></option>
+                    <option value="1">{$language_tag.index_finance_showReceivableManage_teamproduct}</option>
+                    <option value="2">{$language_tag.index_finance_showReceivableManage_hotel}</option>
+                    <option value="3">{$language_tag.index_finance_showReceivableManage_dining}</option>
+                    <option value="4">{$language_tag.index_finance_showReceivableManage_flight}</option>
+                    <option value="5">{$language_tag.index_finance_showReceivableManage_cruise}</option>
+                    <option value="6">{$language_tag.index_finance_showReceivableManage_visa}</option>
+                    <option value="7">{$language_tag.index_finance_showReceivableManage_scenic_spot}</option>
+                    <option value="8">{$language_tag.index_finance_showReceivableManage_vehicle}</option>
+                    <option value="9">{$language_tag.index_finance_showReceivableManage_tourguide}</option>
+                    <option value="10">{$language_tag.index_finance_showReceivableManage_singlesource}</option>
+                    <option value="11">{$language_tag.index_finance_showReceivableManage_ownexpense}</option>
+                    <option value="0">{$language_tag.index_finance_showReceivableManage_other}</option>
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">{$language_tag.index_finance_showReceivableManage_receivable_remake}:</label>
+            <div class="layui-input-block">
+                <textarea  id="receivable_remark" name="remark" placeholder="{$language_tag.index_finance_showReceivableManage_receivable_remake}" class="layui-textarea"></textarea>
+            </div>
+        </div>
+        <div class="layui-row all-button-center all-button">
+            <a class="layui-btn nav-submit" lay-submit onclick="subs()">{$language_tag.index_public_submit}</a>
+            <button type="button" class="layui-btn layui-btn-primary" onclick="cancel()">{$language_tag.index_finance_showReceivableManage_cancel}</button>
+        </div>
+    </form>
+</script>
+
+		<!-- 
+        <div class="layui-inline layui-col-md6">
+            <label class="layui-form-label ">{$language_tag.index_finance_showReceivableManage_order_number}:</label>
+            <div class="layui-input-block">
+                <select name="order_number" id="order_number" lay-filter="orderNumber" lay-search  >
+                    <option value=""></option>
+                    {foreach name='order_data_result'  item='vo'}
+                    <option value="{$vo.company_order_number}">{$vo.company_order_number}</option>
+                    {/foreach}
+                </select>
+            </div>
+        </div>
+        <div class="layui-inline layui-col-md10">
+            <div class="layui-form-label text_align">{$language_tag.index_finance_showReceivableManage_customer_number}:</div>
+            <div class="layui-input-block">
+                <select id="customer_number" class="customer_number"  name="customer_number" xm-select="example10_1" xm-select-search="" xm-select-search-type="dl" >
+                    <option value="" > </option>
+
+                </select>
+            </div>
+        </div>
+		-->
+
+<script id="visitorListTips" type="text/html">
+    <form class="layui-form visitorListTips">
+        <div>
+            <input type="checkbox" name="productCheckboxAll" title="{$language_tag.index_finance_showReceivableManage_choose_all}" lay-skin="primary" lay-filter="checkboxAll"></div>
+        <br>
+        <div class="checkboxList">
+                {{# layui.each(d.list, function(index, item){ }}
+                    {{#  if(item.customer_name!=null){ }}
+                        <input type="checkbox"  name="productCheckbox2{{d.id}}" title="{{item.customer_name}}" value="{{item.customer_number}}" lay-skin="primary" class="productCheckbox2">
+                    {{#  } }}
+                {{# }); }}
+        </div>
+    </form>
+</script>
+{include file='public/foot_js' /}
+<script src='__STATIC__/javascript/product/all.js'></script>
+<script src='__STATIC__/javascript/finance/receivable.js'></script>
+<script>
+var layer = layui.layer;
+var form = layui.form;
+var upload = layui.upload; //得到 upload 对象
+var laydate = layui.laydate;
+var table=layui.table;
+var laytpl=layui.laytpl;
+    function aaa() {
+        var company_order_number = formSelects.value('company_order_number');
+        console.log(formSelects.value('company_order_number'));
+    }
+
+    var company_id = $('#user_company_id').val()
+    var object_id = $('#object_id1').val();
+    
+
+    form.on('select(object_type)',function(data){
+    	var object_type = data.value;
+    	var url = '';
+    	if(object_type==2){ //供应商
+    		url = '/system/getSupplierAjax';
+    			//分公司
+    	}else if(object_type==1){
+    		url = '/system/getCompanyAjax'
+    			//代理
+    	}else if(object_type ==3){
+    		url = '/branchcompany/getDistributorAjax'
+    	}else if(object_type ==4){
+    		$('#object_id').html('')
+    		$('#object_id_diy').hide(500);
+    		return false;
+    	}
+        $.ajax({
+            type: "POST",
+            url: url,
+            dataType: "json",
+            data: {
+    		
+    			status:1
+            },
+            success: function (data) {
+				
+            	$('#object_id').html('')
+    			if(object_type==2){
+    				
+    				var data = data.data
+    			
+    				$('#object_id_diy').show(500);
+    	
+    				var l = data.length
+    				
+    				$('#object_id').append("<option value=''>请选择</option>")
+    				for(var i=0;i<l;i++){
+   
+    						$('#object_id').append("<option value='"+data[i].supplier_id+"'>"+data[i].supplier_name+"</option>")
+    					
+    					
+    				}
+    			}else if(object_type==3){
+    				var data = data.data
+    				$('#object_id_diy').show(500);
+    	
+    				var l = data.length
+    				
+    				$('#object_id').append("<option value=''>请选择</option>")
+    				for(var i=0;i<l;i++){
+    				
+    					$('#object_id').append("<option value='"+data[i].distributor_id+"'>"+data[i].distributor_name+"</option>")
+    				}
+    			}else if(object_type==1){
+    				var data = data.data
+    			
+    				$('#object_id_diy').show(500);
+    				var l = data.length
+    				
+    				$('#object_id').append("<option value=''>请选择</option>")
+    				for(var i=0;i<l;i++){
+
+   						if(object_id == data[i].company_id ){
+   							$('#object_id').append("<option selected value='"+data[i].company_id+"'>"+data[i].company_name+"</option>")
+   						}else{
+   							$('#object_id').append("<option value='"+data[i].company_id+"'>"+data[i].company_name+"</option>")
+   						}
+    						
+    					
+    					
+    				}
+    			}
+    			
+    			form.render('select','selFilter');
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                //console.log(errorThrown)
+                layer.msg('验证失败');
+
+            }
+        });
+
+    	//开始调取接口信息
+    	
+    })
+    
+    	
+    	var object_type = $('#object_type').val()
+   
+    	if(object_type !=''){
+    		
+        	var url = '';
+        	if(object_type==2){ //供应商
+        		url = '/system/getSupplierAjax';
+        			//分公司
+        	}else if(object_type==1){
+        		url = '/system/getCompanyAjax'
+        			//代理
+        	}else if(object_type ==3){
+        		url = '/branchcompany/getDistributorAjax'
+        	}else if(object_type==4){
+        		
+        		$('#object_id').html('')
+        	}
+            $.ajax({
+                type: "POST",
+                url: url,
+                dataType: "json",
+                data: {
+        		
+        			status:1
+                },
+                success: function (data) {
+
+                	$('#object_id').html('')
+        			if(object_type==2){
+        				
+        				var data = data.data
+        				$('#object_id_diy').show(500);
+        	
+        				var l = data.length
+        				
+        				$('#object_id').append("<option value=''>请选择</option>")
+        				for(var i=0;i<l;i++){
+        					if(object_id == data[i].supplier_id ){
+        						$('#object_id').append("<option selected='selected' value='"+data[i].supplier_id+"'>"+data[i].supplier_name+"</option>")
+        					}else{
+        						$('#object_id').append("<option value='"+data[i].supplier_id+"'>"+data[i].supplier_name+"</option>")
+        					}
+        					
+        				}
+        			}else if(object_type==3){
+        				var data = data.data
+        				$('#object_id_diy').show(500);
+        	
+        				var l = data.length
+        				
+        				$('#object_id').append("<option value=''>请选择</option>")
+        				for(var i=0;i<l;i++){
+        				if(object_id == data[i].distributor_id ){
+        					$('#object_id').append("<option selected value='"+data[i].distributor_id+"'>"+data[i].distributor_name+"</option>")
+        				}else{
+        					$('#object_id').append("<option value='"+data[i].distributor_id+"'>"+data[i].distributor_name+"</option>")
+        					
+        				}	
+        			}
+        			}else if(object_type==1){
+        				var data = data.data
+        			
+        	
+        				var l = data.length
+        				
+        				$('#object_id').append("<option value=''>请选择</option>")
+        				    
+  
+        				for(var i=0;i<l;i++){
+
+       						if(object_id == data[i].company_id ){
+       							$('#object_id').append("<option selected value='"+data[i].company_id+"'>"+data[i].company_name+"</option>")
+       						}else{
+       							$('#object_id').append("<option value='"+data[i].company_id+"'>"+data[i].company_name+"</option>")
+       						}
+        				
+        					
+        				}
+        			}
+        			
+        			form.render('select','selFilter');
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    //console.log(errorThrown)
+                    layer.msg('验证失败');
+
+                }
+            });      		
+    	}
+    	
+    	
+
+</script>
+</body>
+</html>

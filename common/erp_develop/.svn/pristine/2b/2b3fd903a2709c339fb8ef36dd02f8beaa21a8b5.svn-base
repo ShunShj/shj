@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<head>
+    {include file='public/head' /}
+    <title>layout 后台大布局 - Layui</title>
+
+    <link href="/static/css/select2.min.css" rel="stylesheet">
+
+
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+    <div class="layui-header">
+        {include file='public/header' /}
+    </div>
+
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll">
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            {include file='public/left_menu_booknexus' /}
+        </div>
+    </div>
+
+
+    <div class="layui-body">
+
+        <!-- 内容主体区域 -->
+        <div style="padding: 15px 15px 0px;">
+            <div class='layui-row'>
+		   		<span class="layui-breadcrumb" lay-separator="-">
+                    <a>首页</a>
+                    <a>B2B</a>
+					<a>编辑订单</a>
+				</span>
+            </div>
+            <br>
+            {include file='admin_booking/menu' /}
+            <style>
+                .layui-form .layui-form-label{
+                    width: 150px;
+                    text-align: right;
+                }
+                .layui-form .layui-input-block{
+                    margin-left: 160px;
+                }
+                .layui-form-item{
+                    padding: 0 5px;
+                }
+            </style>
+
+
+
+            <form class="layui-form" id="form1" onSubmit="return add()">
+                <div class="layui-col-md12" style="margin-top: 20px">
+                    <div class="layui-col-md6">
+                        <table class="layui-table" >
+                            <tr><th>Invoice</th><td><input type="text" class="layui-input" name="" required /></td></tr>
+                            <tr><th>Account Code</th><td><input type="text" class="layui-input" name="" required /></td></tr>
+                            <tr><th>Myob Sales</th><td><input type="text" class="layui-input" name="" required /></td></tr>
+                            <tr><th>Myob Cost</th><td><input type="text" class="layui-input" name="" required /></td></tr>
+                            <tr><th>Balance Due</th><td><input type="text" class="layui-input" name="" required /></td></tr>
+                            <tr><th>Due Date</th><td><input type="text" class="layui-input" name="" required /></td></tr>
+                            <tr><th>Terms</th><td><input type="text" class="layui-input" name="" required /></td></tr>
+                            <tr>
+                                <th>Invoice Type</th>
+                                <td>
+                                    <select class="layui-select">
+                                        <option value="" >Choose One</option>
+                                        <option value="1" >Quote</option>
+                                        <option value="2" >Pro-forma Invoice</option>
+                                        <option value="3" >Invoice</option>
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>Status</th>
+                                <td>
+                                    <select class="layui-select">
+                                        <option value="" >Choose One</option>
+                                        <option value="1" >Awaiting Payment </option>
+                                        <option value="2" >Completed </option>
+                                        <option value="3" >Cancelled </option>
+                                        <option value="4" >Refund </option>
+                                        <option value="5" >Credit </option>
+                                        <option value="6" >Overdue </option>
+                                        <option value="7" >Credit Deposited </option>
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>Is Ready</th>
+                                <td>
+                                    <select class="layui-select">
+                                        <option value="1" >Yes </option>
+                                        <option value="2" >No</option>
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr><th>Cost</th><td><input type="text" class="layui-input" name="" required /></td></tr>
+                            <tr><th>Approval</th><td><input type="text" class="layui-input" name="" required /></td></tr>
+                        </table>
+                    </div>
+                    <div class="layui-col-md6" style="position: absolute;bottom: 10px;right: -5px">
+                        <div style="font-weight: bold;font-size: 15px" >Invoice Note</div>
+                        <div><textarea class="layui-textarea" name=""></textarea></div>
+                    </div>
+                </div>
+
+                <div class="layui-col-md8" style="font-weight: bold;font-size:15px;text-align: center;margin-top: 20px">
+                    <button type="submit" class="layui-btn layui-btn-sm layui-btn-primary" >Update</button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+
+    <div class="layui-footer">
+        <!-- 底部固定区域 -->
+        © layui.com - 底部固定区域
+    </div>
+</div>
+{include file='public/foot_js' /}
+<script src='__STATIC__/javascript/public/select2.min.js'></script>
+<script>
+    //JavaScript代码区域
+    var layer = layui.layer;
+    var form = layui.form;
+    var upload = layui.upload;
+
+
+    function add(){
+        $.ajax({
+            type: "POST",
+            url: '/booknexus_tour/createTourFormAjax',
+            data:  $('#form1').serializeArray(),
+            success: function(data){
+                //console.log(data);
+                if(data.code!=200){
+                    layer.msg(data.msg);
+                    return false;
+                }else if(data.code==200) {
+                    layer.msg('操作成功',{time:2000,end : function(layero, index){
+                        location.href="/booknexus_tour/addTourDatesForm";
+                    }
+                    });
+                }
+            },
+            error:function(XMLHttpRequest, textStatus, errorThrown){
+                layer.msg('验证失败')
+            }
+        });
+        return false;
+    }
+
+
+
+</script>
+
+</body>
+</html>

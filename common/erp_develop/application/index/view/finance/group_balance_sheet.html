@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    {include file='public/head' /}
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>{$language_tag.index_public_finance}-{$language_tag.index_examineAndApprove_toBeApprovedByMe_group_balance_sheet}</title>
+    <style>
+        #page-content th,#page-content td{
+            text-align: center;
+            line-height: 30px;
+            padding:10px;
+        }
+        #page-content th{
+            font-weight: bold;
+        }
+        .tr-none{
+            display: none;
+        }
+    </style>
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+    <div class="layui-header">
+        {include file='public/header' /}
+    </div>
+
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll">
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            {include file='public/left_menu' /}
+        </div>
+    </div>
+
+    <div class="layui-body layui-body-bg">
+        <div style="padding: 15px 15px 0px;">
+            <div class="body-top">
+                <div class='layui-form-item'>
+                    <span class="layui-breadcrumb" lay-separator="-">
+                        <a>{$language_tag.index_public_homepage}</a>
+                        <a>{$language_tag.index_public_finance}</a>
+                        <a><cite>{$language_tag.index_examineAndApprove_toBeApprovedByMe_group_balance_sheet}</cite></a>
+                    </span>
+                </div>
+                <div class='layui-block all-search-bg'>
+                    <br/>
+                    <form class="layui-form" method='get'>
+
+                        <div class="layui-row">
+                            <div class="layui-col-md4">
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">{$language_tag.index_public_select}{$language_tag.index_public_company}:</label>
+                                    <div class="layui-input-block">
+                                        <select name="company_id">
+                                            <option value=""></option>
+                                            {foreach $getCompany as $v}{
+                                            {if $v.company_id!=1}
+                                            <option value="{$v.company_id}" {$_GET['company_id']==$v.company_id?'selected':''}>{$v.company_name}</option>
+                                            {/if}
+                                            {/foreach}
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="layui-col-md4">
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">{$language_tag.index_examineAndApprove_toBeApprovedByMe_year_month}:</label>
+                                    <div class="layui-input-block">
+                                        <input type="text" id="tableMonths" name="year_month" value="{$year_month}" placeholder="{$language_tag.index_examineAndApprove_please_select_year_month}" class="layui-input">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-col-md4">
+                                <div class='input-inline button-marginLeft'>
+                                    <button class="layui-btn nav-search" >{$language_tag.index_public_search}</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="content-bg">
+                <a class="layui-btn word-export layui-search-inline nav-add layui-btn-sm" onclick="upload()">{$language_tag.index_public_download}</a>
+                {if $Think.session.user.company_id!=1}
+                <a href='/finance/editBalanceSheet?year_month={$year_month}' class="layui-btn nav-search layui-btn-sm">{$language_tag.index_public_update}</a>
+                {/if}
+                <hr>
+                <div class="table-nont" id="page-content" style="width: 100%;margin:0px auto">
+                    <h3>{$language_tag.index_finance_showReceivableManage_currency_name}：{$Currency[0]['unit']}</h3><br>
+                    <table class="layui-table" id="table-list" style="width:100%;margin-bottom:20px;border-collapse: collapse;border:none">
+
+                        <thead>
+                        <tr align="left" class="tr-none" style="background:#fff;border:none;">
+                            <th colspan="5"><img src="__STATIC__/image/login/login-logo.png" style="width:100%" id="aa"></th>
+                        </tr>
+
+                        <tr align="left" style="background:#f2f2f2">
+                            <th width="20%">{$language_tag.index_finance_balanceSheet_property}</th>
+                            {foreach $balanceSheet as $k=>$v}
+                            <th >{$companyList[$k][0]['company_name']}</th>
+                            {/foreach}
+                        </tr>
+                        </thead>
+                        <tbody style="border:1px solid #e6e6e6">
+                        <tr>
+                            <td>{$language_tag.index_finance_balanceSheet_monetary_resources}</td>
+                            {foreach $balanceSheet as $k=>$v}
+                            <th >{$v['monetary_resources']|number_format=2}</th>
+                            {/foreach}
+
+
+                        </tr>
+                        <tr>
+                            <td>{$language_tag.index_finance_balanceSheet_current_investment}</td>
+                            {foreach $balanceSheet as $k=>$v}
+                            <th >{$v['short_term_investment']|number_format=2}</th>
+                            {/foreach}
+
+                        </tr>
+                        <tr>
+                            <td>{$language_tag.index_finance_balanceSheet_dividends_receivable}</td>
+                            {foreach $balanceSheet as $k=>$v}
+                            <th >{$v['dividends_receivable']|number_format=2}</th>
+                            {/foreach}
+
+                        </tr>
+                        <tr>
+                            <td>{$language_tag.index_index_accountsReceivable}</td>
+                            {foreach $balanceSheet as $k=>$v}
+                            <th >{$v['accounts_receivable']|number_format=2}</th>
+                            {/foreach}
+
+                        </tr>
+                        <tr>
+                            <td>{$language_tag.index_finance_balanceSheet_other_receivable}</td>
+                            {foreach $balanceSheet as $k=>$v}
+                            <th >{$v['other_receivables']|number_format=2}</th>
+                            {/foreach}
+
+                        </tr>
+                        <tr>
+                            <td>{$language_tag.index_finance_balanceSheet_prepayment}</td>
+                            {foreach $balanceSheet as $k=>$v}
+                            <th >{$v['advance_payment']|number_format=2}</th>
+                            {/foreach}
+
+                        </tr>
+                        <tr>
+                            <td>{$language_tag.index_finance_balanceSheet_unamortized_expense}</td>
+                            {foreach $balanceSheet as $k=>$v}
+                            <th >{$v['deferred_expenses']|number_format=2}</th>
+                            {/foreach}
+
+                        </tr>
+                        <tr>
+                            <td>{$language_tag.index_finance_balanceSheet_pending_expense_current_assets_netloss}</td>
+                            {foreach $balanceSheet as $k=>$v}
+                            <th >{$v['net_loss_of_current_assets_to_be_processed']|number_format=2}</th>
+                            {/foreach}
+
+                        </tr>
+                        <tr>
+                            <td>{$language_tag.index_finance_balanceSheet_year_expire_longtime_bond_investment}</td>
+                            {foreach $balanceSheet as $k=>$v}
+                            <th >{$v['investments_in_longterm_bonds_maturing_in_one_year']|number_format=2}</th>
+                            {/foreach}
+
+                        </tr>
+                        <tr>
+                            <td>{$language_tag.index_finance_balanceSheet_other_current_assets}</td>
+                            {foreach $balanceSheet as $k=>$v}
+                            <th >{$v['other_current_assets']|number_format=2}</th>
+                            {/foreach}
+
+                        </tr>
+                        <tr>
+                            <td style="color: red">{$language_tag.index_finance_balanceSheet_total_current_assets}</td>
+                            {foreach $balanceSheet as $k=>$v}
+                            <th >{$v['total_current_assets']|number_format=2}</th>
+                            {/foreach}
+
+                        </tr>
+                        <tr>
+                            <td>{$language_tag.index_finance_balanceSheet_longtime_equity_investment}</td>
+                            {foreach $balanceSheet as $k=>$v}
+                            <th >{$v['long_term_equity_investment']|number_format=2}</th>
+                            {/foreach}
+
+                        </tr>
+                        <tr>
+                            <td>{$language_tag.index_finance_balanceSheet_longtime_credit_investment}</td>
+                            {foreach $balanceSheet as $k=>$v}
+                            <th >{$v['long_term_debt_investment']|number_format=2}</th>
+                            {/foreach}
+
+                        </tr>
+                        <tr>
+                            <td>{$language_tag.index_finance_balanceSheet_minus}:{$language_tag.index_finance_balanceSheet_longtime_investment_value_ready}</td>
+                            {foreach $balanceSheet as $k=>$v}
+                            <th >{$v['long_term_investment_impairment_provision']|number_format=2}</th>
+                            {/foreach}
+
+                        </tr>
+                        <tr>
+                            <td  style="color: red">{$language_tag.index_finance_balanceSheet_longtime_net_investment}</td>
+                            {foreach $balanceSheet as $k=>$v}
+                            <th >{$v['net_long_term_investment']|number_format=2}</th>
+                            {/foreach}
+
+                        </tr>
+                        <tr>
+                            <td>{$language_tag.index_finance_balanceSheet_fixed_assets_original_price}</td>
+                            {foreach $balanceSheet as $k=>$v}
+                            <th >{$v['original_value_of_fixed_assets']|number_format=2}</th>
+                            {/foreach}
+
+                        </tr>
+                        <tr>
+                            <td>{$language_tag.index_finance_balanceSheet_minus}:{$language_tag.index_finance_balanceSheet_accumulated_depreciation}</td>
+                            {foreach $balanceSheet as $k=>$v}
+                            <th >{$v['accumulated_depreciation']|number_format=2}</th>
+                            {/foreach}
+
+                        </tr>
+                        <tr>
+                            <td  style="color: red">{$language_tag.index_finance_balanceSheet_fixed_assets_net_value}</td>
+                            {foreach $balanceSheet as $k=>$v}
+                            <th >{$v['fixed_assetsnet_value']|number_format=2}</th>
+                            {/foreach}
+
+                        </tr>
+                        <tr>
+                            <td>{$language_tag.index_finance_balanceSheet_minus}:{$language_tag.index_finance_balanceSheet_fixed_assets_depreciation_reserves}</td>
+                            {foreach $balanceSheet as $k=>$v}
+                            <th >{$v['Provision_for_impairment_of_fixed_assets']|number_format=2}</th>
+                            {/foreach}
+
+                        </tr>
+                        <tr>
+                            <td  style="color: red">{$language_tag.index_finance_balanceSheet_net_fixed_assets}</td>
+                            {foreach $balanceSheet as $k=>$v}
+                            <th >{$v['net_fixed_assets']|number_format=2}</th>
+                            {/foreach}
+
+                        </tr>
+                        <tr>
+                            <td>{$language_tag.index_finance_balanceSheet_intangible_assets}</td>
+                            {foreach $balanceSheet as $k=>$v}
+                            <th >{$v['immaterial_assets']|number_format=2}</th>
+                            {/foreach}
+
+                        </tr>
+                        <tr>
+                            <td>{$language_tag.index_finance_balanceSheet_minus}:{$language_tag.index_finance_balanceSheet_reserve_for_intangible_assets_impairment}</td>
+                            {foreach $balanceSheet as $k=>$v}
+                            <th >{$v['provision_for_impairment_of_intangible_assets']|number_format=2}</th>
+                            {/foreach}
+
+                        </tr>
+                        <tr>
+                            <td  style="color: red">{$language_tag.index_finance_balanceSheet_net_intangible_assets}</td>
+                            {foreach $balanceSheet as $k=>$v}
+                            <th >{$v['net_intangible_assets']|number_format=2}</th>
+                            {/foreach}
+
+                        </tr>
+                        <tr>
+                            <td  style="color: red">{$language_tag.index_finance_balanceSheet_not_total_current_assets}</td>
+                            {foreach $balanceSheet as $k=>$v}
+                            <th >{$v['total_noncurrent_assets']|number_format=2}</th>
+                            {/foreach}
+
+                        </tr>
+                        <tr>
+                            <td  style="color: red">{$language_tag.index_finance_balanceSheet_total_assets}</td>
+                            {foreach $balanceSheet as $k=>$v}
+                            <th >{$v['total_assets']|number_format=2}</th>
+                            {/foreach}
+
+                        </tr>
+                        <tr>
+                            <td>{$language_tag.index_finance_balanceSheet_short_borrow_money}</td>
+                            {foreach $balanceSheet as $k=>$v}
+                            <th >{$v['overnight_money']|number_format=2}</th>
+                            {/foreach}
+
+                        </tr>
+                        <tr>
+                            <td>{$language_tag.index_finance_balanceSheet_accounts_payable}</td>
+                            {foreach $balanceSheet as $k=>$v}
+                            <th >{$v['payable_in_account']|number_format=2}</th>
+                            {/foreach}
+
+                        </tr>
+                        <tr>
+                            <td>{$language_tag.index_finance_balanceSheet_received_credit}</td>
+                            {foreach $balanceSheet as $k=>$v}
+                            <th >{$v['deposit_received']|number_format=2}</th>
+                            {/foreach}
+
+                        </tr>
+                        <tr>
+                            <td>{$language_tag.index_finance_balanceSheet_employee_pay_payable}</td>
+                            {foreach $balanceSheet as $k=>$v}
+                            <th >{$v['pay_payable_to_staff_and_workers']|number_format=2}</th>
+                            {/foreach}
+
+                        </tr>
+                        <tr>
+                            <td>{$language_tag.index_finance_balanceSheet_dividends_payable}</td>
+                            {foreach $balanceSheet as $k=>$v}
+                            <th >{$v['dividends_payable']|number_format=2}</th>
+                            {/foreach}
+
+                        </tr>
+                        <tr>
+                            <td>{$language_tag.index_finance_balanceSheet_tax_payable}</td>
+                            {foreach $balanceSheet as $k=>$v}
+                            <th >{$v['due_taxes_and_fees']|number_format=2}</th>
+                            {/foreach}
+
+                        </tr>
+                        <tr>
+                            <td>{$language_tag.index_finance_balanceSheet_other_fees_payable}</td>
+                            {foreach $balanceSheet as $k=>$v}
+                            <th >{$v['other_accounts_payable']|number_format=2}</th>
+                            {/foreach}
+
+                        </tr><tr>
+                            <td>{$language_tag.index_finance_balanceSheet_other_payables}</td>
+                            {foreach $balanceSheet as $k=>$v}
+                            <th >{$v['accounts_payable_others']|number_format=2}</th>
+                            {/foreach}
+
+                        </tr><tr>
+                            <td>{$language_tag.index_finance_balanceSheet_year_expire_longtime_liabilities}</td>
+                            {foreach $balanceSheet as $k=>$v}
+                            <th >{$v['longterm_liabilities_due_within_one_year']|number_format=2}</th>
+                            {/foreach}
+
+                        </tr><tr>
+                            <td>{$language_tag.index_finance_balanceSheet_other_current_liability}</td>
+                            {foreach $balanceSheet as $k=>$v}
+                            <th >{$v['other_current_liabilities']|number_format=2}</th>
+                            {/foreach}
+
+                        </tr><tr>
+                            <td style="color: red">{$language_tag.index_finance_balanceSheet_current_liability_total}</td>
+                            {foreach $balanceSheet as $k=>$v}
+                            <th >{$v['total_current_liabilities']|number_format=2}</th>
+                            {/foreach}
+
+                        </tr><tr>
+                            <td>{$language_tag.index_finance_balanceSheet_longtime_loan}</td>
+                            {foreach $balanceSheet as $k=>$v}
+                            <th >{$v['money_borrowed_for_long_term']|number_format=2}</th>
+                            {/foreach}
+
+                        </tr><tr>
+                            <td>{$language_tag.index_finance_balanceSheet_bonds_payable}</td>
+                            {foreach $balanceSheet as $k=>$v}
+                            <th >{$v['bond_payable']|number_format=2}</th>
+                            {/foreach}
+
+                        </tr><tr>
+                            <td>{$language_tag.index_finance_balanceSheet_longtime_account_payable}</td>
+                            {foreach $balanceSheet as $k=>$v}
+                            <th >{$v['long_term_accounts_payable']|number_format=2}</th>
+                            {/foreach}
+
+                        </tr><tr>
+                            <td>{$language_tag.index_finance_balanceSheet_special_account_payable}</td>
+                            {foreach $balanceSheet as $k=>$v}
+                            <th >{$v['account_payable_special_funds']|number_format=2}</th>
+                            {/foreach}
+
+                        </tr><tr>
+                            <td>{$language_tag.index_finance_balanceSheet_other_longtime_liabilities}</td>
+                            {foreach $balanceSheet as $k=>$v}
+                            <th >{$v['other_long_term_liabilities']|number_format=2}</th>
+                            {/foreach}
+
+                        </tr><tr>
+                            <td  style="color: red">{$language_tag.index_finance_balanceSheet_longtime_liabilities_total}</td>
+                            {foreach $balanceSheet as $k=>$v}
+                            <th >{$v['total_long_term_liabilities']|number_format=2}</th>
+                            {/foreach}
+
+                        </tr><tr>
+                            <td style="color: red">{$language_tag.index_finance_balanceSheet_total_liability}</td>
+                            {foreach $balanceSheet as $k=>$v}
+                            <th >{$v['total_liabilities']|number_format=2}</th>
+                            {/foreach}
+
+                        </tr><tr>
+                            <td>{$language_tag.index_finance_balanceSheet_paiclup_capital_or_equity}</td>
+                            {foreach $balanceSheet as $k=>$v}
+                            <th >{$v['paid_in_capital_or_share_capital']|number_format=2}</th>
+                            {/foreach}
+
+                        </tr><tr>
+                            <td>{$language_tag.index_finance_balanceSheet_capital_reserve}</td>
+                            {foreach $balanceSheet as $k=>$v}
+                            <th >{$v['capital_reserve']|number_format=2}</th>
+                            {/foreach}
+
+                        </tr><tr>
+                            <td>{$language_tag.index_finance_balanceSheet_surplus_public_accumulation}</td>
+                            {foreach $balanceSheet as $k=>$v}
+                            <th >{$v['earned_surplus']|number_format=2}</th>
+                            {/foreach}
+
+                        </tr><tr>
+                            <td>{$language_tag.index_finance_balanceSheet_undistributed_profit}</td>
+                            {foreach $balanceSheet as $k=>$v}
+                            <th >{$v['undistributed_profit']|number_format=2}</th>
+                            {/foreach}
+
+                        </tr><tr>
+                            <td>{$language_tag.index_finance_balanceSheet_translation_reserve}</td>
+                            {foreach $balanceSheet as $k=>$v}
+                            <th >{$v['foreign_currency_statement_translation_difference']|number_format=2}</th>
+                            {/foreach}
+
+                        </tr><tr>
+                            <td  style="color: red">{$language_tag.index_finance_balanceSheet_ownership_interest_or_equity_total}</td>
+                            {foreach $balanceSheet as $k=>$v}
+                            <th >{$v['total_owners_equity_or_shareholders_equity']|number_format=2}</th>
+                            {/foreach}
+
+                        </tr><tr>
+                            <td  style="color: red">{$language_tag.index_finance_balanceSheet_liabilities_and_owner_equity_or_equity_total}</td>
+                            {foreach $balanceSheet as $k=>$v}
+                            <th >{$v['total_liabilities_and_owners_equity_or_shareholders_equity']|number_format=2}</th>
+                            {/foreach}
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="layui-footer">
+        <!-- 底部固定区域 -->
+        © layui.com - 底部固定区域
+    </div>
+    <script id="demo" type="text/html">
+
+    </script>
+</div>
+{include file='public/foot_js' /}
+<script type="text/javascript" src="__STATIC__/javascript/product/all.js"></script>
+<script type="text/javascript" src="__STATIC__/javascript/finance/tableExport.min.js"></script>
+<script>
+    layui.use(['layer', 'form','laydate'], function(){
+        var layer = layui.layer
+                ,laydate=layui.laydate
+                ,form = layui.form;
+
+
+        laydate.render({
+            elem: '#tableMonths'
+            ,type: 'month'
+        });//月份选择
+
+        $("#table-list tbody tr").each(function(index,item){
+            if($(item).find("td").length==0){
+                $(item).remove();
+            }
+        })
+    });
+    function upload() {
+        $('#table-list').tableExport({
+            fileName: '{$language_tag.index_examineAndApprove_toBeApprovedByMe_group_balance_sheet}{$year_month}',
+            type: 'excel',
+            escape:'true'
+        });
+    }
+</script>
+
+
+</body>
+</html>

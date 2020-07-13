@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {include file='public/head' /}
+    <title>language-manage-add</title>
+
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+
+    <div class="layui-header">
+        {include file='public/header' /}
+    </div>
+
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll">
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            {include file='public/left_menu' /}
+        </div>
+    </div>
+
+    <div class="layui-body">
+
+        <!-- 内容主体区域 -->
+        <div style="padding: 15px;">
+            <div class='layui-form-item'>
+		   		<span class="layui-breadcrumb" lay-separator="-">
+                    <a>{$Think.lang.index_public_homepage}</a>
+                    <a>{$Think.lang.index_source_showSingleSourceManage_source_administrate}</a>
+                    <a>{$Think.lang.index_source_showSingleSourceManage_single_source_administrate}</a>
+                    <a>{$Think.lang.index_source_showSingleSourceSource_all_source}</a>
+					<a><cite>修改单项资源</cite></a>
+				</span>
+            </div>
+            <br/>
+            <br/>
+            <form class="layui-form" onSubmit="return single_source_Edit()">
+                <div class="layui-row layui-col-space10">
+                    <div class="layui-col-md4">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label input-required">{$Think.lang.index_public_supplier}:</label>
+                            <div class="layui-input-block"  >
+                                <select name="supplier_id" id='edit_single_source_supplier_id' lay-verify="required" disabled>
+                                    {foreach name='data' item='vo'}
+                                    <option value="{$vo.supplier_id}" {if condition="$vo.supplier_id eq $single_source_result.belong_supplier_id"} selected="seleted"{/if}>{$MultilingualAll['supplier-supplier_name-'.$vo.supplier_id.'-'.$Think.session.user.language_id][0]['translate']|default=$vo.supplier_name}</option>
+                                    {/foreach}
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-col-md4">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label input-required">{$Think.lang.index_source_showSingleSourceSource_single_source_name}:</label>
+                            <div class="layui-input-block">
+                                <input name="single_source_name" id="edit_single_source_name" value="{$single_source_result.single_source_name}" lay-verify="required" placeholder="{$Think.lang.index_source_showSingleSourceSource_input_single_source_name}" autocomplete="off" class="layui-input" type="text">
+                                <i class="iconfont icon-fanyifuwu" style="position: absolute;width: 38px;height: 38px;top: 0px;right: 0px;font-size:
+                                   35px;cursor:pointer;"onclick="MultilingualSetting('edit_single_source_name','single_source','single_source_name',{$_GET['single_source_id']})"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-col-md4">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">{$Think.lang.index_public_status}:</label>
+                            <div class="layui-input-block">
+                                <select name="status" id="edit_single_source_status" lay-filter="required" >
+                                    <option value="1" {if condition="1 eq $single_source_result['status']"}selected="seleted"{/if}>{$Think.lang.index_public_show}</option>
+                                    <option value="2" {if condition="2 eq $single_source_result['status']"}selected="seleted"{/if}>{$Think.lang.index_public_disabled}</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="layui-row layui-col-space10">
+                    {if condition="$single_source_result.supplier_id neq $single_source_result.belong_supplier_id"}
+                    <div class="layui-col-md4">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label input-required">{$Think.lang.index_source_showSingleSourceSource_own_agent}:</label>
+                            <div class="layui-input-block" disabled >
+                                <select name="agent_id" id="edit_single_source_agent_id" lay-search="" disabled  >
+                                    {foreach name='data_agent' item='vo'}
+                                    <option value="{$vo.supplier_id}" {if condition="$vo.supplier_id eq $single_source_result.supplier_id"} selected="seleted"{/if}>{$MultilingualAll['supplier-supplier_name-'.$vo.supplier_id.'-'.$Think.session.user.language_id][0]['translate']|default=$vo.supplier_name}</option>
+                                    {/foreach}
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    {/if}
+                    <div class="layui-col-md4">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label input-required">{$Think.lang.index_public_company}:</label>
+                            <div class="layui-input-block">
+                                <select {$Think.session.user.company_id!=1?'disabled':''} name="choose_company_id" id="choose_company_id" lay-verify="required" >
+                                    <option value="0">{$Think.lang.index_source_showSingleSourceSource_choose_own_company}</option>
+                                    {foreach name='company_result'  item='vo'}
+                                    <option value="{$vo.company_id}" {if condition="$vo.company_id eq  $single_source_result.company_id"} selected='selected'{/if}>{$MultilingualAll['company-company_name-'.$vo.company_id.'-'.$Think.session.user.language_id][0]['translate']|default=$vo.company_name}</option>
+                                    {/foreach}
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <br/>
+                <hr/>
+                <br/>
+                <div class="layui-row layui-col-space10">
+                    <div class="layui-form-item">
+                        <div class="layui-col-md4">
+                            <label class="layui-form-label input-required">{$Think.lang.index_source_showSingleSourceSource_payment_currency_type}:</label>
+                            <div class="layui-input-block">
+                                <select name="payment_currency_type" id="payment_currency_type" lay-verify="required">
+                                    {foreach name='currency_data_result '  item='vo'}
+                                    <option  value="{$vo.currency_id}" {if condition="$vo.currency_id eq $single_source_result.payment_currency_type"} selected="seleted"{/if}>{$MultilingualAll['currency-currency_name-'.$vo.currency_id.'-'.$Think.session.user.language_id][0]['translate']|default=$vo.currency_name}</option>
+                                    {/foreach}
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="layui-row layui-col-space10">
+                    <div class="layui-col-md4">
+                        <label class="layui-form-label input-required">{$Think.lang.index_public_price}:</label>
+                        <div class="layui-input-block table-nont">
+                            <table class="layui-table">
+                                <colgroup>
+                                    <col width="20%">
+                                    <col width="20%">
+                                    <col width="25%">
+                                    <!--<col width="20%">-->
+                                </colgroup>
+                                <thead>
+                                <tr>
+                                    <th>{$Think.lang.index_public_type_price}</th>
+                                    <th>{$Think.lang.index_public_costprice}</th>
+                                    <th>{$Think.lang.index_public_settlementprice}</th>
+                                    <!--<th>建议客户售价</th>-->
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td>{$Think.lang.index_public_count_price}:</td>
+                                    <td>
+                                        <input type="text" name="normal_price" id="edit_single_source_normal_price" value="{$single_source_result.normal_price}" lay-verify="required" autocomplete="off" class="layui-input">
+                                    </td>
+                                    <td>
+                                        <input type="text" name="normal_settlement_price" id="single_source_normal_settlement_price" value="{$single_source_result.normal_settlement_price}" lay-verify="required" autocomplete="off" class="layui-input">
+                                    </td>
+                                    <!--<td>-->
+                                    <!--<input type="text" name="normal_retail_price" id="flight_normal_retail_price" lay-verify="required" autocomplete="off" class="layui-input">-->
+                                    <!--</td>-->
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <br/>
+                <br/>
+                <br/>
+                <!--<div class="layui-form-item layui-form-text">-->
+                    <!--<label class="layui-form-label">说明:</label>-->
+                    <!--<div class="layui-input-block">-->
+                        <!--<textarea id="edit_single_source_remark" name="remark" placeholder="请输入内容" class="layui-textarea">{$single_source_result.remark}</textarea>-->
+                    <!--</div>-->
+                <!--</div>-->
+                <br/>
+                <div class="layui-form-item">
+                    <div class="layui-input-block all-button-center">
+                        <button class="layui-btn nav-submit" lay-submit="" lay-filter="formDemo" id="single_source_edit_button">{$Think.lang.index_public_submit}</button>
+                        <a href='javascript:history.back(-1)'><button type="button" class="layui-btn layui-btn-primary">{$Think.lang.index_public_back}</button></a>
+                        <input type="hidden" id="single_source_hidden_single_source_id" value="{$single_source_result.single_source_id}">
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="layui-footer">
+        <!-- 底部固定区域 -->
+        © layui.com - 底部固定区域
+    </div>
+</div>
+{include file='public/foot_js' /}
+<script src='__STATIC__/javascript/system/source.js'></script>
+</body>
+</html>

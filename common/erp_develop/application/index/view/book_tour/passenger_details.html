@@ -1,0 +1,522 @@
+{include file='/book_tour/includes/header' /}
+{include file='/book_tour/includes/top_nav' /}
+
+
+<!--
+	This is view/booktour/passenger_details.php
+-->
+<style type="text/css" ref="stylesheet">
+    #booktour_step2 span.error {
+        color: red;
+        padding-left: 5px;
+    }
+
+    .passenger_form_input {
+        padding: 5px 0px 5px 5px;
+    }
+
+    select#passenger_form_select_nation {
+        width: 160px;
+        margin-left: 18px;
+    }
+
+    p.missing_passport {
+        position: absolute;
+        font-size: 13px;
+        font-weight: bold;
+        top: 162px;
+    }
+
+
+    /*@media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
+       #sidebar {
+        margin-left: 650px;
+
+      }
+      #content {
+        width: 720px;
+      }
+    }*/
+</style>
+<section id="content">
+    <section id="booktour">
+        <article>
+            <h1><img src="<?php echo base_url('assets/images/passenger_details.png'); ?>" width="700"
+                     alt="Passenger Details"/></h1>
+
+            <h2 class="top_icn">
+                <div class="top_icn_text">3</div>
+                <img src="<?php echo base_url('assets/images/passenger_details_icn.png'); ?>"
+                     alt="Passenger Details - Step 3"/>
+
+                <div class="top_text">Passenger details must appear exactly as per passport/s. *Maxmium 20 passengers.
+                </div>
+            </h2>
+           
+            <div id="errorMessage"><?php echo session('message'); ?></div>
+            <form action="/book_tour/passenger_details_check" method="post" accept-charset="utf-8" id="booktour_step3">
+            <div id="passenger_details"><!-- passenger details -->
+                <ul>
+                    <li>
+                        Enter number of Passenger/s
+                    </li>
+                    <li>
+                        <input type="text" id="num_pax_input" size="2" name="num_pax" value=""
+                               placeholder="Please enter a number" style="width:150px;"/>
+                    </li>
+                    <li>
+                        <span class="pax-btn" id="add-btn"><i class="fa fa-plus" aria-hidden="true"></i> Add Pax</span>
+                    </li>
+                    <!--li style="float:right; margin-top:5px;">
+                        <span class="pax-btn" id="copy-btn" style="display: none; background-color: #3376bb; color:#fff;" title="Copy Button: Copy the first passenger details to the following passenger."><i class="fa fa-files-o" aria-hidden="true"></i> Copy the First Pax</span>
+                    </li-->
+                </ul>
+                <span class="message-pax" style=""></span>
+            </div>
+            <!-- end passenger details -->
+            <hr/>
+            <div id="passenger_form">
+                <?php if (session('passenger_info')['lname']) {
+                $lname_arr = session('passenger_info')['lname'];
+                $fname_arr = session('passenger_info')['fname'];
+                $dob_arr = session('passenger_info')['dob'];
+                $passport_arr = session('passenger_info')['passport'];
+                $nation_arr = session('passenger_info')['nationality'];
+                $ethn_arr = session('passenger_info')['ethnicity'];
+                $gender_arr = session('passenger_info')['gender'];
+                $speaking_arr = session('passenger_info')['speaking'];
+
+                for ($i = 0; $i < session('pax_num')['pax']; $i++) {
+                // Set pax number
+                $a = $i + 1;
+                //echo session('lname[$i]');
+
+                ?>
+                <fieldset id="<?php echo $a; ?>" style="position: relative;">
+                    <span id="pax1"><?php echo $a; ?></span>
+                    <input type="text" class="passenger_form_input" size="18" id="lname"
+                           name="lname[]" value="<?php echo $lname_arr[$i]; ?>" placeholder="Last Name"/>
+                    <!-- input -->
+
+                    <input type="text" class="passenger_form_input" size="18" id="fname"
+                           name="fname[]" value="<?php echo $fname_arr[$i]; ?>" placeholder="First Name"/>
+                    <!-- input -->
+
+                    <input type="text" class="datepick" id="datepick<?php echo $a; ?>" size="18"
+                           name="dob[]" value="<?php echo $dob_arr[$i]; ?>" placeholder="Date of Birth"/>
+                    <!-- input -->
+
+                    <input type="text" class="passenger_form_input" size="18" id="passport"
+                           name="passport[]" value="<?php echo $passport_arr[$i]; ?>"
+                           placeholder="Passport No"/> <!-- input -->
+
+                    <select id="passenger_form_select_nation" class="select_nation" name="nationality[]">
+                        <!-- input -->
+                        <option value="">-- Citizen -- / -- PR --</option>
+                        <?php foreach ($all_nations as $key => $nation) { ?>
+                        <option value="<?php echo ucfirst($all_nations[$key]['country_name']); ?>" <?php if (strtoupper($all_nations[$key]['country_name']) == strtoupper($nation_arr[$i])) { echo 'selected="selected"'; } ?>>
+                        <?php echo ucfirst($all_nations[$key]['country_name']); ?>
+                        </option>
+                        <?php }; ?>
+                    </select>
+                    <select id="passenger_form_select_ethn" class="select_ethn" name="ethnicity[]">
+                        <!-- input -->
+                        <option value="">-- Ethnicity --</option>
+                        <option value="Chinese" <?php if ($ethn_arr[$i] == "Chinese") {
+                                    echo 'selected="selected"';
+                                }; ?>>Chinese
+                        </option>
+                        <option value="Non-chinese" <?php if ($ethn_arr[$i] == "Non-chinese") {
+                                    echo 'selected="selected"';
+                                }; ?>>Non-Chinese
+                        </option>
+                    </select>
+
+                    <select id="passenger_form_select_gender" class="select_gender" name="gender[]">
+                        <!-- input -->
+                        <option value="">-- Gender --</option>
+                        <option value="Male" <?php if ($gender_arr[$i] == "Male") {
+                                    echo 'selected="selected"';
+                                }; ?> >Male
+                        </option>
+                        <option value="Female" <?php if ($gender_arr[$i] == "Female") {
+                                    echo 'selected="selected"';
+                                }; ?> >Female
+                        </option>
+                    </select>
+                    <select id="passenger_form_select_speaking" class="select_speaking" name="speaking[]">
+                        <!-- input -->
+                        <option value="">-- Speaking --</option>
+                        <option value="Fluent" <?php if ($speaking_arr[$i] == "Fluent") {
+                                    echo 'selected="selected"';
+                                }; ?> >Fluent-Chinese
+                        </option>
+                        <option value="Non-fluent" <?php if ($speaking_arr[$i] == "Non-fluent") {
+                                    echo 'selected="selected"';
+                                }; ?> >Non-Fluent-Chinese
+                        </option>
+                    </select>
+
+                    <div id="single_add_btn"><span class="remove_btn"
+                                                   style="margin-top:-50px; margin-left:670px"></span></div>
+
+                    <hr/>
+
+                </fieldset>
+                <?php
+                    }
+                }
+                ?>
+                <!--p class="missing_passport"><span>* Please be aware that all passengers must be able to provide their passport details/copy in order to make a booking. <br/> &nbsp;&nbsp;&nbsp;System errors may occur for incorrect passport information. </span></p>
+                <p class="missing_passport"><input type="checkbox" name="missing_passport" id="missing_passport"
+                                                   value="0"/><span> I do not have all passengers passport detail. (Please leave the Passport No field blank.) </span>
+                </p-->
+
+            </div>
+            <!-- end passenger form -->
+
+            <div id="page_nav">
+                <p>
+                    <!--input type="submit" name="submit" value="back" class="page_nav_left"/-->
+                    <a href="<?php echo base_url('book_tour/select_date?btb_tour_id='
+                        . session('select_tour')['btb_tour_id']
+                    ); ?>" class="page_nav_left">Left
+                    </a>
+                    <input type="submit" name="submit" value="next" class="page_nav_right"/>
+                    <input type="hidden" name="back" value="select_date"/>
+                    <input type="hidden" name="next" value="room_config"/>
+                    <input type="hidden" name="process" value="passenger_details"/>
+                </p>
+            </div>
+            <!-- end page nav -->
+           </form>
+
+        </article>
+
+    </section>
+    <!-- end booktour section -->
+</section><!-- end content -->
+<script src="<?php echo base_url("assets/js/jquery.maskedinput.min.js") ?>"></script>
+<script type="application/javascript">
+
+        jQuery(document).ready(function ($) {
+            /**** Set the div height of content same as booking summary ****/
+            divSidebarH = $('#sidebar').height();
+            divContentH = $('#content').height();
+            if (divSidebarH > divContentH) {
+                divContentH = divSidebarH + 150;
+                $('#content').height(divContentH)
+                        .css({});
+            }
+
+            var samePassport = false;
+            var isError = false;
+// Get input value :: How many passenger in the form ?
+            var paxLength = $('fieldset').length;
+            if (paxLength != 0) {
+                var total = paxLength;
+                var display = paxLength + 1;
+            } else {
+                var total = 0;
+                var display = 1;
+            }
+
+            var warning = $(".message-pax");
+
+            $('form').on('click', '.remove_btn', function () {
+                $('fieldset').last().remove();
+
+                total--;
+                display--;
+
+                console.log('removed: ' + total);
+                if ($("fieldset").size() <= 1) {
+                    $("#copy-btn").css("display","none");
+                }
+                return false;
+
+            });
+
+            $('#add-btn').click(function () {
+                $('div#errorMessage').html("");
+                $('div#errorMessage').css("display", "none");
+                // Add Btn Clicked for Creating Forms
+                var test = isNumber($('#num_pax_input').val());
+                if (test != 0) {
+                    warning.addClass("success").removeClass("error").html("");
+                    var numPaxInput = $('#num_pax_input').val();
+                } else {
+                    warning.addClass("error").removeClass("success").html("You must enter a number !");
+                    return false;
+                }
+                // Check is there is error happened
+                if (isError == true) {
+                    alert("Please make sure passenger details is correct or contact us for assitances.");
+                    return false;
+                }
+                // Get value from Add passenger Input
+
+                total = parseInt(total) + parseInt(numPaxInput);                                      // Caculate total passengers
+
+                if (total > 30) {
+                    warning.addClass("error").removeClass("success").html("Maxmium 30 passengers !");  // show error message remove success message
+                    total = parseInt(total) - parseInt(numPaxInput);                                   // Calculate total passengers
+                    return false;
+                } else {
+                    warning.addClass("success").removeClass("error").html("");
+                    for (varCount = 1; varCount <= numPaxInput; varCount++) {                                  // Create numbers of Form
+                        console.log('Form: ' + display);
+                        var $paxForm = '<fieldset id="' + display + '">';
+                        $paxForm += '<span id="pax' + display + '">' + display + '</span>';
+                        $paxForm += '<input type="text" class="passenger_form_input" size="18" id="lname" name="lname[]" value="" placeholder="Last Name" />';
+                        $paxForm += '<input type="text" class="passenger_form_input" size="18" id="fname" name="fname[]" value="" placeholder="First Name" />';
+                        $paxForm += '<input type="text" class="datepick" id="datepick' + display + '" size="18" name="dob[]" value="" placeholder="Date of Birth" />';
+                        $paxForm += '<input type="text" class="passenger_form_input" size="18" id="passport" name="passport[]" value="" placeholder="Passport No" />';
+                        $paxForm += '<select id="passenger_form_select_nation" class="select_nation" name="nationality[]" >';
+                        $paxForm += '<option value="">-- Citizen -- / -- PR --</option>';
+                        <?php foreach($all_nations as $nation){ $nation_name = ucfirst($nation['country_name']);  ?>
+                            $paxForm += '<option value="<?php echo $nation_name; ?>" ><?php echo $nation_name; ?></option>';
+                        <?php } ?>
+
+                        $paxForm += '</select>';
+                        $paxForm += '<select id="passenger_form_select_ethn" class ="select_ethn" name="ethnicity[]" >';
+                        $paxForm += '<option value=""  >-- Ethnicity --</option>';
+                        $paxForm += '<option value="Chinese">Chinese</option>';
+                        $paxForm += '<option value="Non-chinese"  >Non-Chinese</option>';
+                        $paxForm += '</select>';
+                        $paxForm += '<select id="passenger_form_select_gender" class="select_gender" name="gender[]">';
+
+
+                        $paxForm += '<option value="">-- Gender --</option>';
+                        $paxForm += '<option value="Male" >Male</option>';
+                        $paxForm += '<option value="Female" >Female</option>';
+                        $paxForm += '</select>';
+                        $paxForm += '<select id="passenger_form_select_speaking" class="select_speaking" name="speaking[]">';
+
+
+                        $paxForm += '<option value="" >-- Speaking --</option>';
+                        $paxForm += '<option value="Fluent" >Fluent-Chinese</option>';
+                        $paxForm += '<option value="Non-fluent" >Non-Fluent-Chinese</option>';
+                        $paxForm += '</select>';
+                        $paxForm += '<div id="single_add_btn"><span class="remove_btn" style="margin-top:-50px; margin-left:660px"></span></div>';
+                        $paxForm += '<hr />';
+                        $paxForm += '</fieldset>';
+
+                        $('#passenger_form').append($paxForm);
+
+                        //Datepicker for dob
+                        $('#datepick' + display + '').each(function () {
+                            $(this).datepicker({
+                                changeMonth: true,
+                                changeYear: true,
+                                yearRange: '-100:+0',
+                                dateFormat: default_date_format||"yy-mm-dd",
+                                constrainInput: true,
+                                maxDate: new Date
+                            }).mask(default_date_mask||"9999-99-99");
+                        });
+                        display++;
+                    }
+                }
+                if ($("fieldset").size() > 1) {
+                    $("#copy-btn").css("display","inline");
+                }
+                console.log('customer input numPax: ' + numPaxInput);
+                console.log('passenger total: ' + total);
+            }); // End #pax_num_btn span.add_btn click function
+
+            $("#copy-btn").click(function(){
+
+                var txt;
+                var r = confirm("Are you sure you want to copy details from the first pax ?");
+
+                if (r == true) {
+                    var firstForm = $("fieldset:first :input");
+                    var data = [];
+
+                    $.each(firstForm, function(i,v){
+                        if (v.id == 'datepick1') {
+                            data['datepick'] = v.value;
+                        } else {
+                            data[v.id] = v.value;
+                        }
+                    });
+
+                    var count = 1;
+                    //console.log(data);
+                    $.each($("fieldset"),function(index,fields){
+                        if (index != 0) { // do not replace for the first customers
+                            $("fieldset#"+count+" input#fname.passenger_form_input").val(data.fname);
+                            $("fieldset#"+count+" input#lname.passenger_form_input").val(data.lname);
+                            $("fieldset#"+count+" #datepick"+count).val(data.datepick);
+                            $("fieldset#"+count+" input#passport.passenger_form_input").val(data.passport);
+                            $("fieldset#"+count+" select#passenger_form_select_nation.select_nation").val(data.passenger_form_select_nation);
+                            $("fieldset#"+count+" select#passenger_form_select_ethn.select_ethn").val(data.passenger_form_select_ethn);
+                            $("fieldset#"+count+" select#passenger_form_select_gender.select_gender").val(data.passenger_form_select_gender);
+                            $("fieldset#"+count+" select#passenger_form_select_speaking.select_speaking").val(data.passenger_form_select_speaking);
+                        }
+                        count++;
+                    });
+                }
+            });
+
+
+
+            $('input[name="submit"]').click(function () {
+                var passportArr = [];
+                /*if(samePassport == true) {
+                 warning.addClass("error").removeClass("success").html("You cannot have same passport number on the same tour and date !");
+                 return false;
+                 }*/
+                if (total == 0) {
+                    //warning.addClass("error").removeClass("success").html("Please hit to process"); // Error message if there is no number entered
+                    jQuery("div#errorMessage").css({ // css is only set for div #add_note tour itinerary
+                        "position": "absolute",
+                        "top": "125" + "px",
+                        "left": "400" + "px",
+                        "width": "300" + "px",
+                        "padding": "10" + "px",
+                        "background": "rgba(255,0,0,0.65)",
+                        "color": "#fff",
+                        "font-size": "16" + "px",
+                        "font-weight": "bold",
+                        "zIndex": 1
+                    });
+                    $('div#errorMessage').hide().html("<< Please hit this button to process").fadeIn();
+                    $('div#errorMessage')
+                            .css({
+                                borderTopLeftRadius: 10,
+                                borderTopRightRadius: 10,
+                                borderBottomLeftRadius: 10,
+                                borderBottomRightRadius: 10,
+                                WebkitBorderTopLeftRadius: 10,
+                                WebkitBorderTopRightRadius: 10,
+                                WebkitBorderBottomLeftRadius: 10,
+                                WebkitBorderBottomRightRadius: 10,
+                                MozBorderRadius: 10
+                            });
+
+                    return false;
+                } else {
+                    warning.addClass("success").removeClass("error").html("");
+                    var paxinput = new Object();
+                    var chkValue = new String();
+                    var isMissingPassportSelected = false;
+                    if ($("#missing_passport").is(':checked')) {
+                        isMissingPassportSelected = true;
+                    } else {
+                        isMissingPassportSelected = false;
+                    }
+                    for (a = 0; a < total; a++) {    // Looping the
+                        num = a + 1;
+
+                        paxinput.fname = $('fieldset#' + num + ' input#fname.passenger_form_input').val();
+                        paxinput.lname = $('fieldset#' + num + ' input#lname.passenger_form_input').val();
+                        paxinput.dob = $('fieldset#' + num + ' input#datepick' + num + '').val()
+                        paxinput.passport = $('fieldset#' + num + ' input#passport.passenger_form_input').val();
+                        passportArr[a] = $('fieldset#' + num + ' input#passport.passenger_form_input').val();
+                        paxinput.nationValue = $('fieldset#' + num + ' .select_nation').val();
+                        paxinput.ethnValue = $('fieldset#' + num + ' .select_ethn').val();
+                        paxinput.genderValue = $('fieldset#' + num + ' .select_gender').val();
+                        paxinput.speakValue = $('fieldset#' + num + '  .select_speaking').val();
+                        paxinput.num = num;
+
+                        if (paxinput.fname == "") {
+                            warning.addClass("error").removeClass("success").html("Please fill in First Name details for passenger #" + num + ".");
+                            return false;
+                        }
+                        if (paxinput.lname == "") {
+                            warning.addClass("error").removeClass("success").html("Please fill in Last Name details for passenger #" + num + ".");
+                            return false;
+                        }
+                        if (paxinput.dob == "") {
+                            warning.addClass("error").removeClass("success").html("Please fill in Date of Birth details for passenger #" + num + ".");
+                            return false;
+                        }
+                        if (isMissingPassportSelected == true) {
+                            if (paxinput.passport != "") {
+                                //warning.addClass("error").removeClass("success").html("Please leave passport details blank for passenger #"+num+".");
+                                alert("Please leave passport details blank for passenger #" + num + ".");
+                                return false;
+                            }
+                        } else {
+                            if (paxinput.passport == "") {
+                                warning.addClass("error").removeClass("success").html("Please fill in passport details for passenger #" + num + ".");
+                                return false;
+                            }
+                        }
+                        if (paxinput.nationValue == "") {
+                            warning.addClass("error").removeClass("success").html("Please choose Citizen / PR for passenger #" + num + ".");
+                            return false;
+                        }
+                        if (paxinput.ethnValue == "") {
+                            warning.addClass("error").removeClass("success").html("Please choose Ethnicity for passenger #" + num + ".");
+                            return false;
+                        }
+                        if (paxinput.genderValue == "") {
+                            warning.addClass("error").removeClass("success").html("Please select Gender for passenger #" + num + ".");
+                            return false;
+                        }
+                        if (paxinput.speakValue == "") {
+                            warning.addClass("error").removeClass("success").html("Please select Speaking for passenger #" + num + ".");
+                            return false;
+                        }
+                    } // End For loop
+                    //return false;
+                    if (isError == true) {
+                        alert("Please make sure passenger details are correct or contact us for assitances.");
+                        return false;
+                    }
+
+                    if (isMissingPassportSelected == false) {
+                        var sorted_arr = passportArr.sort();  // Define the comparing function here.  // JS by default uses a crappy string compare. // Check if there is any double passport no
+                        passportArrLength = passportArr.length;
+                        if (passportArrLength > 1) {
+                            passportArrLength = passportArr.length - 1;
+                        }
+                        for (var i = 0; i < passportArrLength; i++) {
+                            if (sorted_arr[i + 1] == sorted_arr[i]) {
+                                warning.addClass("error").removeClass("success").html("You cannot have same passport numbers !");
+                                return false;
+                            } else {
+                               
+                            } // end if
+                        } // end for loop
+                    }
+                    //console.log(same_value);
+                    //alert(passportArr);
+
+                }
+
+            });
+
+            function isNumber(n) {
+                return !isNaN(parseFloat(n)) && isFinite(n); // return isNan if not a number
+            }
+
+            function sameValueInArray(variable, array) {
+                return $.inArray(variable, array); // return -1 if no same value or 0
+            }
+
+        });//End jQuery document ready
+
+
+<?php if(session('pax')>0):?>
+//if we have stored pax no. in session, we need to render pax information edit section for user.
+$('.datepick').each(function(){
+    $(this).datepicker({
+        changeMonth: true,
+        changeYear: true,
+        yearRange: '-100:+0',
+        dateFormat: default_date_format||'yy-mm-dd',
+        constrainInput:true,
+        maxDate: new Date
+    });
+}).mask(default_date_mask||"9999-99-99");
+<?php endif; ?>
+        </script>
+
+
+
+{include file='/book_tour/aside_booking_summary' /}
+{include file='/book_tour/includes/footer' /}

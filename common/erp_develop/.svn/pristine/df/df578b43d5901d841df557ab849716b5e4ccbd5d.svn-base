@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {include file='public/head' /}
+    <title>{$supplierName}景点资源添加</title>
+
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+
+    <div class="layui-header">
+        {include file='public/header' /}
+    </div>
+
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll">
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            {include file='public/left_menu' /}
+        </div>
+    </div>
+
+    <div class="layui-body">
+
+        <!-- 内容主体区域 -->
+        <div style="padding: 15px;">
+            <div class='layui-form-item'>
+		   		<span class="layui-breadcrumb" lay-separator="-">
+					<a>{$language_tag.index_public_homepage}</a>
+				    <a>{$language_tag.index_source_showScenicSpotManage_source_administrate}</a>
+				    <a>{$language_tag.index_source_showScenicSpotManage_scenicspot_administrate}</a>
+                    <a>{$language_tag.index_source_showScenicSpotSourceManage_scenicspot_source}</a>
+					<a><cite>{$language_tag.index_source_showScenicSpotSourceManage_add_scenicspot}</cite></a>
+				</span>
+            </div>
+            <br/>
+            <div class="layui-row layui-col-space10">
+                <div class="layui-col-md4 layui-col-md-offset4" style="position: relative;left: 10px;top: 50px;">
+					<span><a href='/source/showSupplierAdd'><button
+                            class="layui-btn nav-add layui-btn-sm">{$language_tag.index_source_showSupplierManage_add_supplier}</button></a></span>
+                </div>
+            </div>
+            <br/>
+            <form class="layui-form" id="form1" onSubmit="return add()">
+
+                <div class="layui-form-item">
+                    <div class="layui-col-md4">
+                        <label class="layui-form-label input-required">{$language_tag.index_public_supplier}:</label>
+                        <div class="layui-input-block">
+                            <select  name="supplier_id" required lay-verify="required" lay-search>
+                                <option value="">{$language_tag.index_public_select}</option>
+                                {foreach $ScenicSpotSupplierAr as $ScenicSpotSupplierArV}
+                                <option value="{$ScenicSpotSupplierArV.supplier_id}" {$_GET['id']==$ScenicSpotSupplierArV.supplier_id?'selected':''}>{$MultilingualAll['supplier-supplier_name-'.$ScenicSpotSupplierArV.supplier_id.'-'.$Think.session.user.language_id][0]['translate']|default=$ScenicSpotSupplierArV.supplier_name}</option>
+                                {/foreach}
+                            </select>
+                            <!--<a style="cursor:pointer " href="/source/showSupplierAdd?supplier_type_id=7"><u>添加供应商</u></a>-->
+                        </div>
+                    </div>
+                    <!--<div class="layui-col-md4">-->
+                        <!--<label class="layui-form-label input-required">所属代理商:</label>-->
+                        <!--<div class="layui-input-block">-->
+                            <!--<select name="agent_id" id="agent_id" lay-search >-->
+                                <!--<option></option>-->
+                                <!--{foreach $agentAr as $agentArV}-->
+                                <!--<option value="{$agentArV.supplier_id}">{$agentArV.supplier_name}</option>-->
+                                <!--{/foreach}-->
+                            <!--</select>-->
+                        <!--</div>-->
+                    <!--</div>-->
+
+                </div>
+
+                <div class="layui-form-item">
+
+                    <div class="layui-col-md4">
+                        <label class="layui-form-label input-required">{$language_tag.index_source_showScenicSpotSourceManage_own_zone}:</label>
+                        <div class="layui-input-block">
+                            <select name="country_id" id="country_id"  lay-filter='country_id' lay-search required lay-verify="required">
+                                <option value="">{$language_tag.index_source_showSupplier_choose_own_zone}</option>
+                                {foreach name='country_result'  item='vo'}
+                                <option value="{$vo.id}">{$vo.cpc_name}</option>
+                                {/foreach}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="layui-col-md4">
+                        <label class="layui-form-label input-required">{$language_tag.index_source_showScenicSpotSourceManage_scenicspot_name}:</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="scenic_spot_name" maxlength="300" placeholder="{$language_tag.index_source_showScenicSpotSourceManage_input_scenicspot_name}"  class="layui-input" required lay-verify="required">
+                        </div>
+                    </div>
+                    <div class="layui-col-md4">
+                        <label class="layui-form-label">{$language_tag.index_source_showScenicSpotSourceManage_source_level}:</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="level_name"    placeholder=""   class="layui-input" >
+                        </div>
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <div class="layui-col-md4">
+                        <label class="layui-form-label">{$language_tag.index_source_showScenicSpotSourceManage_linkman}:</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="linkman"    placeholder=""   class="layui-input" >
+                        </div>
+                    </div>
+                    <div class="layui-col-md4">
+                        <label class="layui-form-label">{$language_tag.index_source_showScenicSpotSourceManage_phone}:</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="phone"   placeholder=""   class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-col-md4">
+                        <label class="layui-form-label">{$language_tag.index_source_showScenicSpotSourceManage_addess}:</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="addess"    placeholder=""   class="layui-input">
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-col-md4">
+                        <div class="">
+                            <label class="layui-form-label input-required">{$language_tag.index_public_company}:</label>
+                            <div class="layui-input-block">
+                                <select {$Think.session.user.company_id!=1?'disabled':''} name="choose_company_id" id="choose_company_id" lay-verify="required">
+                                    <option value="0">{$language_tag.index_source_showScenicSpotSourceManage_choose_own_company}</option>
+                                    {foreach name='company_result'  item='vo'}
+                                    <option value="{$vo.company_id}" {if condition="$vo.company_id eq  $Think.session.user.company_id"} selected='selected'{/if}>{$MultilingualAll['company-company_name-'.$vo.company_id.'-'.$Think.session.user.language_id][0]['translate']|default=$vo.company_name}</option>
+                                    {/foreach}
+                                </select>
+                                <input type="hidden" name="choose_company_id" value="{$Think.session.user.company_id}" >
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-col-md4">
+                        <label class="layui-form-label">{$language_tag.index_source_showScenicSpotSourceManage_email}:</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="email"    placeholder=""   class="layui-input"  >
+                        </div>
+                    </div>
+                    <div class="layui-col-md4">
+                        <label class="layui-form-label">{$language_tag.index_source_showScenicSpotSourceManage_website}:</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="website"    placeholder=""   class="layui-input"  >
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-col-md4">
+                        <label class="layui-form-label">{$language_tag.index_public_status}:</label>
+                        <div class="layui-input-block">
+                            <select id="status" name="status"  >
+                                <option value="1" >{$language_tag.index_public_show}</option>
+                                <option value="2">{$language_tag.index_public_disabled}</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <!--<div class="layui-form-item">-->
+                    <!--<div class="layui-col-md9">-->
+                        <!--<label class="layui-form-label">备注:</label>-->
+                        <!--<div class="layui-input-block">-->
+                            <!--<textarea name="remark"   class="layui-textarea" required lay-verify="required"></textarea>-->
+                        <!--</div>-->
+                    <!--</div>-->
+                <!--</div>-->
+
+                <hr>
+                <div class="layui-inline">
+                    <label class="layui-form-label input-required">{$language_tag.index_source_showScenicSpotSourceManage_payment_currency_type}</label>
+                    <div class="layui-input-inline">
+                        <select name="payment_currency_type" id="payment_currency_type"  class=layui-input-inline" required lay-verify="required" >
+                            <option value="">{$language_tag.index_source_showScenicSpotSourceManage_choose}</option>
+                            {foreach name='currency_data_result '  item='vo'}
+                            <option  value="{$vo.currency_id}">{$MultilingualAll['currency-currency_name-'.$vo.currency_id.'-'.$Think.session.user.language_id][0]['translate']|default=$vo.currency_name}</option>
+                            {/foreach}
+                        </select>
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <div class="layui-col-md4">
+                        <label class="layui-form-label input-required">{$language_tag.index_public_price}:</label>
+                        <div class="layui-input-block table-nont">
+                            <table class="layui-table">
+                                <colgroup>
+                                    <col width="20%">
+                                    <col width="20%">
+                                    <col width="25%">
+                                </colgroup>
+                                <thead>
+                                <tr>
+                                    <th>{$language_tag.index_public_type_price}</th>
+                                    <th>{$language_tag.index_public_costprice}</th>
+                                    <th>{$language_tag.index_public_settlementprice}</th>
+                                    <!--<th>零售价</th>-->
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <th>{$language_tag.index_public_count_price}:</th>
+                                    <th><input type="" name="normal_price" id="normal_price" class="layui-input" required lay-verify="required|number"/></th>
+                                    <th><input type="" name="normal_settlement_price" id="normal_settlement_price" class="layui-input" required lay-verify="required|number"/></th>
+                                    <!--<th><input type="" name="normal_retail_price" id="normal_retail_price" class="layui-input" required lay-verify="required|number"/></th>-->
+                                </tr>
+                                <!--<tr>-->
+                                    <!--<th>成人:</th>-->
+                                    <!--<th><input type="" name="adult_settlement_price" id="adult_settlement_price" class="layui-input" /></th>-->
+                                    <!--<th><input type="" name="adult_price"   class="layui-input" /></th>-->
+                                    <!--&lt;!&ndash;<th><input type="" name="adult_retail_price"   class="layui-input" /></th>&ndash;&gt;-->
+                                <!--</tr>-->
+                                <!--<tr>-->
+                                    <!--<th>占床儿童:</th>-->
+                                    <!--<th><input type="" name="child_bed_settlement_price"   class="layui-input" /></th>-->
+                                    <!--<th><input type="" name="child_bed_price"   class="layui-input" /></th>-->
+                                    <!--&lt;!&ndash;<th><input type="" name="child_bed_retail_price"   class="layui-input" /></th>&ndash;&gt;-->
+                                <!--</tr>-->
+                                <!--<tr>-->
+                                    <!--<th>老人:</th>-->
+                                    <!--<th><input type="" name="old_settlement_price"   class="layui-input" /></th>-->
+                                    <!--<th><input type="" name="old_price"   class="layui-input" /></th>-->
+                                    <!--&lt;!&ndash;<th><input type="" name="old_retail_price"   class="layui-input" /></th>&ndash;&gt;-->
+                                <!--</tr>-->
+                                <!--<tr>-->
+                                    <!--<th>不占床儿童:</th>-->
+                                    <!--<th><input type="" name="child_settlement_price"   class="layui-input" /></th>-->
+                                    <!--<th><input type="" name="child_price"   class="layui-input" /></th>-->
+                                    <!--&lt;!&ndash;<th><input type="" name="child_retail_price"   class="layui-input" /></th>&ndash;&gt;-->
+                                <!--</tr>-->
+                                <!--<tr>-->
+                                    <!--<th>单房差:</th>-->
+                                    <!--<th><input type="" name="single_settlement_price"   class="layui-input" /></th>-->
+                                    <!--<th><input type="" name="single_price"   class="layui-input" /></th>-->
+                                    <!--&lt;!&ndash;<th><input type="" name="single_retail_price"   class="layui-input" /></th>&ndash;&gt;-->
+                                <!--</tr>-->
+                                </tbody>
+
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!--<div class="layui-form-item">-->
+                <!--<div class="layui-col-md9">-->
+                <!--<label class="layui-form-label">说明:</label>-->
+                <!--<div class="layui-input-block">-->
+                <!--<textarea name=""  class="layui-textarea"></textarea>-->
+                <!--</div>-->
+                <!--</div>-->
+                <!--</div>-->
+                <br>
+                <div class="layui-form-item">
+                    <div class="layui-input-block all-button-center">
+                        <button class="layui-btn nav-submit" lay-submit="" lay-filter="formDemo" id="language_add_button">{$language_tag.index_public_submit}</button>
+                        <a href="javascript:history.back(-1)"><button type="button" class="layui-btn layui-btn-primary">{$language_tag.index_public_back}</button></a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="layui-footer">
+        <!-- 底部固定区域 -->
+        © layui.com - 底部固定区域
+    </div>
+</div>
+{include file='public/foot_js' /}
+
+
+<script>
+    $(function(){
+        var layer = layui.layer  ,form = layui.form;
+        //选择国家更新城市
+        form.on('select(nation)',function(data){
+            var cid = data.value;
+            $.ajax({
+                type: "POST",
+                url: '/source/getCityAjax',
+                data: {
+                    'cid': cid,
+                },
+                'dataType':'json',
+                success: function (a) {
+//                    console.log(a);
+                    var data = a.data;
+                    console.log(data);
+                    $('#country_id').html('');
+                    var h = "<option ></option>";
+                    for(i in data){
+                        h += "<option value='"+data[i]['country_id']+"'>"+data[i]['country_name']+"</option>";
+                    }
+                    $('#country_id').html(h);
+                    form.render();
+
+                },
+                error:function(XMLHttpRequest, textStatus, errorThrown){
+                    //console.log(errorThrown)
+                    layer.msg('{$language_tag.index_public_verificationFailure}')
+
+                }
+            });
+        });
+
+
+    });
+
+    function add() {
+        $.ajax({
+            type: "POST",
+            url: '/source/addScenicSpotSourceAjax',
+            data: $('#form1').serializeArray(),
+            success: function (data) {
+                if(data.code!=200){
+                    layer.msg(data.msg)
+                    return false;
+                }else if(data.code==200){
+                    layer.msg('{$language_tag.index_public_success}',{time:1,end : function(layero, index){
+                        history.back(-1);
+                    }
+                    });
+                }
+            },
+            error:function(XMLHttpRequest, textStatus, errorThrown){
+                //console.log(errorThrown)
+                layer.msg('{$language_tag.index_public_verificationFailure}');
+            }
+        });
+        return false;
+    }
+</script>
+<script>
+    var company_id = $("#company_id").val();
+    if(company_id!=1){
+        $("#company_id").attr('disabled',"disabled");
+        form.render();
+    }
+</script>
+
+</body>
+</html>

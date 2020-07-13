@@ -1,0 +1,73 @@
+
+
+#layui-layer11 .layui-layer-content{
+    padding:10px 10px 0px!important;
+}
+.lay-tab-box{
+    height: 286px;
+    overflow: auto;
+    margin-top:10px;
+    border-top:1px solid #e6e6e6;
+}
+.lay-tab-box table{
+    margin:0px;
+}
+.layui-layer-dialog .layui-layer-btn a{
+    height: 34px;
+    line-height: 34px;
+    padding: 0 18px;
+    white-space: nowrap;
+    text-align: center;
+    font-size: 14px;
+}
+.abc tr td:first-child a{
+    text-decoration: underline!important;
+    color:#5897fb!important;
+}
+/*创建产品表单*/
+.branch-top{
+    position: relative;
+    margin-bottom:45px;
+}
+.branch-btn{
+    position: absolute;
+    left:48%;
+    bottom:-30px;
+    height:30px;
+    line-height: 30px;
+    border:1px solid #e6e6e6;
+    border-radius: 4px;
+    border-top:none;
+    background:#fff;
+    padding:0px 20px;
+    cursor: pointer;
+}
+.branch-btn:hover{
+    color:#2866B9;
+}
+.two-tr td{
+    background:#F8F8F8!important;
+    font-size:13px;
+}
+.branchInfo .all-select input,.all-select textarea{
+    border:none;
+    background: none;
+    color:#333!important;
+    cursor: auto!important;
+    padding-left:0px;
+    resize:none
+}
+.branchInfo .all-select input:hover{
+    color:#333!important;
+    cursor: auto!important;
+}
+.branchInfo .all-select .layui-edge{
+    display: none;
+}
+/*弹窗样式无数据*/
+.branch_none{
+    text-align: center;
+    line-height: 80px;
+    font-size:16px;
+    color: #8D8D8D;
+}

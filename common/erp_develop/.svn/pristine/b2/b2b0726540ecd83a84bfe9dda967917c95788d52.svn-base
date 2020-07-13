@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {include file='public/head' /}
+    <title>渠道管理</title>
+
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+    <div class="layui-header">
+        {include file='public/header' /}
+    </div>
+
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll">
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            {include file='public/left_menu' /}
+        </div>
+    </div>
+
+    <div class="layui-body layui-body-bg">
+
+        <!-- 内容主体区域 -->
+        <div style="padding: 15px;">
+            <div class="body-top">
+                <div class='layui-form-item'>
+                    <span class="layui-breadcrumb" lay-separator="-">
+                        <a>{$Think.lang.index_public_homepage}</a>
+                        <a>{$Think.lang.index_branchcompany_showBranchProductManage_branchManagement}</a>
+                        <a><cite>{$Think.lang.index_branchcompany_showDistributorManage_channelManagement}</cite></a>
+                    </span>
+                </div>
+                <div class='layui-block all-search-bg'>
+                    <form class="layui-form" action="/branchcompany/setDistributorManage" method="post" >
+                        <div class="layui-row">
+                            <div class="layui-col-md4">
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">{$Think.lang.index_branchcompany_showDistributorManage_id}:</label>
+                                    <div class="layui-input-block">
+                                        <input type="text" id="search_Id" name="search_Id" autocomplete="off" value="{$setDistributorManage.search_Id}" placeholder="{$Think.lang.index_branchcompany_showDistributorManage_id}" class="layui-input">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-col-md4">
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">{$Think.lang.index_branchcompany_showDistributorManage_channelName}:</label>
+                                    <div class="layui-input-block">
+                                        <input type="text" id="search_Name" name="search_Name" autocomplete="off" value="{$setDistributorManage.search_Name}"  placeholder="{$Think.lang.index_branchcompany_showDistributorManage_channelName}" class="layui-input">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-col-md4">
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">{$Think.lang.index_public_status}:</label>
+                                    <div class="layui-input-block">
+                                        <select  id="search_status" name="search_status">
+                                            <option value="0" {$setDistributorManage.search_status==0?'selected':''} >-{$Think.lang.index_public_search_type}-</option>
+                                            <option value="1" selected >{$Think.lang.index_public_show}</option>
+                                            <option value="2" {$setDistributorManage.search_status==2?'selected':''} >{$Think.lang.index_public_disabled}</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-row">
+                            <div class="layui-col-md4 layui-col-md-offset4">
+                                <div class='input-inline all-button-center pages-search-margin'>
+                                    <button class="layui-btn nav-search">{$Think.lang.index_public_search}</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                    <!--<div class='layui-button-inline'>
+                        <a href='/branchcompany/showDistributorAdd'><button class="layui-btn nav-add">添加渠道商</button></a>
+                    </div>-->
+                </div>
+            </div>
+
+            <div class="content-bg">
+                <span style="{:action('index/auth/check_auth',['role_id'=>'255'])}"><a href='/branchcompany/showDistributorAdd'><button class="layui-btn nav-add layui-btn-sm">{$Think.lang.index_branchcompany_showDistributorManage_addChannel}</button></a></span>
+                <hr>
+                <div class="table-nont user-manage company-pageHeight">
+                    <table class="layui-table" id="language-table">
+                        <thead>
+                        <tr>
+                            <th>{$Think.lang.index_branchcompany_showDistributorManage_id}</th>
+                            <th>{$Think.lang.index_branchcompany_showDistributorManage_channelName}</th>
+                            <th>{$Think.lang.index_branchcompany_showDistributorManage_editCustomer}</th>
+                            <th>{$Think.lang.index_public_status}</th>
+                            <th>{$Think.lang.index_branchcompany_showDistributorManage_lastOperateTime}</th>
+                            <th>{$Think.lang.index_branchcompany_showDistributorManage_operationUser}</th>
+                            <th class="layui-table-width">{$Think.lang.index_source_operation}</th>
+                        </tr>
+                        </thead>
+
+
+                        {foreach name='data' item='vo'}
+                        <tr>
+                            <th>{$vo.distributor_id}</th>
+                            <th>{$vo.distributor_name}</th>
+                            <th>{$vo.company_name}</th>
+                            <th>{$vo.status==1?'启用':'禁用'}</th>
+                            <th><?=date("Y-m-d H:i:s", strtotime("0 hour",$vo['update_time']))?></th>
+                            <th>{$vo.update_user_name}</th>
+                            <th>
+                                <span style="{:action('index/auth/check_auth',['role_id'=>'256'])}"><a href='/branchcompany/showDistributorEdit?id={$vo.distributor_id}'><button class="layui-btn layui-btn-sm hover-edit layui-btn-primary">{$Think.lang.index_public_update}</button></a></span>
+                                <span style="{:action('index/auth/check_auth',['role_id'=>'257'])}"><a href='/branchcompany/showDistributorInfo?id={$vo.distributor_id}'><button class="layui-btn layui-btn-sm hover-details layui-btn-primary">{$Think.lang.index_public_info}</button></a></span>
+                           		<span style="{:action('index/auth/check_auth',['role_id'=>'258'])}"><a href='/branchcompany/showDistributorTemplateManage?id={$vo.distributor_id}'><button class="layui-btn layui-btn-sm hover-details layui-btn-primary">{$Think.lang.index_branchcompany_showDistributorManage_bill}</button></a></span>
+                            </th>
+                        </tr>
+                        {/foreach}
+                     
+                        </tbody>
+
+                    </table>
+                </div>
+                <div class="listButtom">
+                    {include file='public/page' /}
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+
+    <div class="layui-footer">
+        <!-- 底部固定区域 -->
+        © layui.com - 底部固定区域
+    </div>
+</div>
+{include file='public/foot_js' /}
+<script>
+    //JavaScript代码区域
+    !function(){
+        var layer = layui.layer ;
+        var form = layui.form;
+
+    }();
+
+</script>
+</body>
+</html>
+
+<script>
+
+
+</script>

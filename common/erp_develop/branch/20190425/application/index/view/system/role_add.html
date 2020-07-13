@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+	{include file='public/head' /}
+  	<title>神油后台管理1.0</title>
+ 
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+	
+	<div class="layui-header">
+	{include file='public/header' /}
+	</div>
+  
+	 <div class="layui-side layui-bg-black">
+	   <div class="layui-side-scroll">
+	     <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+		{include file='public/left_menu' /}
+	   </div>
+	 </div>
+  
+	<div class="layui-body">
+	 
+		<!-- 内容主体区域 -->
+		<div style="padding: 15px;">
+			<div class='layui-form-item'>
+		   		<span class="layui-breadcrumb" lay-separator="-">
+					<a>{$Think.lang.index_public_homepage}</a>
+					<a>{$Think.lang.index_public_system}</a>
+					<a>{$Think.lang.index_system_showRoleManage_role_manage}</a>
+					<a><cite>{$Think.lang.index_system_showRoleManage_add_role}</cite></a>
+				</span>
+			</div>
+			<br><br>
+			<div class="layui-row">
+				<form class="layui-form layui-col-md4"  onSubmit="return RoleAdd()">
+					<div class="layui-form-item">
+						<label class="layui-form-label input-required">{$Think.lang.index_system_showRoleManage_role_name}：</label>
+						<div class="layui-input-block">
+							<input name="company_name" id='role_add_name'  lay-verify="required" placeholder="{$Think.lang.index_system_showRoleManage_input_role_name}" autocomplete="off" class="layui-input" type="text">
+						</div>
+					</div>
+
+					<br>
+					<div class="layui-form-item">
+						<div class="layui-input-block">
+							<button class="layui-btn nav-submit" lay-submit="" lay-filter="formDemo" id='company_add'>{$Think.lang.index_public_submit}</button>
+
+							<a href="javascript:history.back(-1)"><button type="button" class="layui-btn layui-btn-primary">{$Think.lang.index_public_back}</button></a>
+						</div>
+					</div>
+				</form>
+			</div>
+
+		</div>
+	</div>
+  
+  <div class="layui-footer">
+    <!-- 底部固定区域 -->
+    © layui.com - 底部固定区域
+  </div>
+</div>
+{include file='public/foot_js' /}
+
+<script src='__STATIC__/javascript/system/role.js'></script>
+
+</body>
+</html>

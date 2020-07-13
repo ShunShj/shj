@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {include file='public/head' /}
+    <title>回执单模板</title>
+    <style>
+        .order_tab{
+            display: none;
+            background:rgba(0,0,0,0);
+            width:90%;
+            height:42px;
+            position: absolute;
+            top:0px;left:95px
+        }
+    </style>
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+    <div class="layui-header">
+        {include file='public/header' /}
+    </div>
+
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll">
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            {include file='public/left_menu' /}
+        </div>
+    </div>
+
+    <div class="layui-body">
+
+        <!-- 内容主体区域 -->
+        <div style="padding: 15px;">
+            <div class='layui-form-item'>
+                <span class="layui-breadcrumb" lay-separator="-">
+                    <a>{$Think.lang.index_public_homepage}</a>
+                    <a>{$Think.lang.index_branchcompany_showBranchProductManage_branchManagement}</a>
+                    <a>{$Think.lang.index_branchcompany_showCompanyOrderManage_orderManagement}</a>
+                    <a><cite>{$Think.lang.index_product_showRouteTemplateManage_information}</cite></a>
+                </span>
+                <div style="display:inline-block;width:88%;"></div>
+                <span><button class="layui-btn nav-submit" onclick="all_array_submit();">{$Think.lang.index_branchcompany_showCompanyOrderManage_addEdit_submit}</button></span>
+                <a href="/branchcompany/showCompanyOrderManage">
+                    <button type="button" class="layui-btn layui-btn-primary">{$Think.lang.index_public_back}</button>
+                </a>
+            </div>
+            <div class="layui-tab layui-tab-brief" lay-filter="companyOrder" style="position: relative">
+                <ul class="layui-tab-title layui-tab-url">
+                    <li class="layui-this">{$Think.lang.index_product_showRouteTemplateManage_information}</li>
+                    {if condition="$Think.get.company_order_number neq ''"}
+                    <li>{$Think.lang.index_branchcompany_showCompanyOrderManage_addEdit_touristInformation}</li>
+                    <li>{$Think.lang.index_branchcompany_showCompanyOrderManage_addEdit_product}</li>
+                    <li>{$Think.lang.index_branchcompany_showCompanyOrderManage_addEdit_primeCost}</li>
+                    <li>{$Think.lang.index_branchcompany_showCompanyOrderManage_addEdit_quotedPrice}</li>
+                    <li>{$Think.lang.index_branchcompany_showCompanyOrderManage_addEdit_salesReceipts}</li>
+                    {/if}
+
+                </ul>
+                <div class="order_tab" onclick="orderTab()"></div>
+                <br>
+                <div class="layui-tab-content">
+                    <div class="layui-tab-item layui-show">
+                        <div class="layui-form " action="">
+                            <div class="layui-row">
+                                <div class="layui-col-md4">
+                                    <div class="layui-form-item">
+                                        <label class="layui-form-label input-required">{$Think.lang.index_branchcompany_showCompanyOrderManage_retail}/{$Think.lang.index_branchcompany_showCompanyOrderManage_wholeSale}:</label>
+                                        <div class="layui-input-block">
+                                            <select name="order_wr" id="order_wr" lay-verify="required">
+                                                <option value=""></option>
+                                                <option value="1" {if condition="1 eq $base_edit_result.wr"}selected="seleted"{/if}>retail</option>
+                                                <option value="2" {if condition="2 eq $base_edit_result.wr"}selected="seleted"{/if}>wholesale</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="layui-col-md4">
+                                    <div class="layui-form-item">
+                                        <label class="layui-form-label input-required">{$Think.lang.index_branchcompany_showCompanyOrderManage_addEdit_customerSource}:</label>
+                                        <div class="layui-input-block">
+                                            <select name="order_cs" id="order_cs" lay-verify="required">
+                                                <option value=""></option>
+                                                <option value="1" {if condition="1 eq $base_edit_result.clientsource"}selected="seleted"{/if}>toronto star</option>
+                                                <option value="2" {if condition="2 eq $base_edit_result.clientsource"}selected="seleted"{/if}>fairchild radio</option>
+                                                <option value="3" {if condition="3 eq $base_edit_result.clientsource"}selected="seleted"{/if}>repeat client</option>
+                                                <option value="4" {if condition="4 eq $base_edit_result.clientsource"}selected="seleted"{/if}>nexus web</option>
+                                                <option value="4" {if condition="5 eq $base_edit_result.clientsource"}selected="seleted"{/if}>singtao newspaper</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="layui-col-md4">
+                                    <div class="layui-form-item">
+                                        <label class="layui-form-label"></label>
+                                        <div class="layui-input-block">
+                                            <input type="radio" id='qudaoshang' name="orderGroup" value="{$Think.lang.index_branchcompany_showCompanyOrderManage_channel}" title="{$Think.lang.index_branchcompany_showCompanyOrderManage_channel}" {if condition="$base_edit_result.channel_type eq 1 or $base_edit_result.channel_type eq ''"} checked {/if}>
+                                            <input type="radio" id='zhike' name="orderGroup" value="{$Think.lang.index_branchcompany_showCompanyOrderManage_addEdit_straightGuest}" title="{$Think.lang.index_branchcompany_showCompanyOrderManage_addEdit_straightGuest}" {if condition="$base_edit_result.channel_type eq 2"} checked {/if}>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-row">
+                                <div class="layui-col-md4">
+                                    <div class="layui-form-item">
+                                        <label class="layui-form-label input-required">{$Think.lang.index_branchcompany_showBranchProductManage_startDate}:</label>
+                                        <div class="layui-input-block">
+                                            <input type="text" id="orderStartDate" name="begin_time" lay-verify="required" class="layui-input layui-input-date" value="{$base_edit_result.begin_time}" required placeholder="{$Think.lang.index_branchcompany_showBranchProductManage_startDate}" autocomplete="off">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="layui-col-md4">
+                                    <div class="layui-form-item">
+                                        <label class="layui-form-label input-required">{$Think.lang.index_branchcompany_showBranchProductManage_endDate}:</label>
+                                        <div class="layui-input-block">
+                                            <input type="text" id="orderEndDate" name="end_time" lay-verify="required" class="layui-input layui-input-date" value="{$base_edit_result.end_time}" required placeholder="{$Think.lang.index_branchcompany_showBranchProductManage_endDate}" autocomplete="off">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="layui-col-md4">
+
+                                </div>
+                            </div>
+                            <div class="layui-row">
+                                <div class="layui-col-md4">
+                                    <div class="layui-form-item layui-form-text">
+                                        <label class="layui-form-label">{$Think.lang.index_public_mark}:</label>
+                                        <div class="layui-input-block">
+                                            <textarea name="orderRemark" id="order_remark" placeholder="{$Think.lang.index_public_mark}" class="layui-textarea">{$base_edit_result.remark}</textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="layui-col-md4">
+
+                                </div>
+                                <div class="layui-col-md4">
+
+                                </div>
+                            </div>
+                            <hr>
+                            <div id="show_tp1" {if condition="$base_edit_result.channel_type eq 2"} style='display:none' {/if}>
+                                <div class="layui-row">
+                                    <div class="layui-col-md4">
+                                        <div class="layui-form-item">
+                                            <label class="layui-form-label input-required">{$Think.lang.index_branchcompany_showDistributorManage_channelName}:</label>
+                                            <div class="layui-input-block">
+                                                <select name="orderCompany" id="distributor_id" lay-filter="orderCountry" lay-verify="required">
+                                                    <option value="">{$Think.lang.index_public_select}</option>
+                                                    {volist name="distri_butor" id="vo"}
+                                                    <option value="{$vo.distributor_id}" {if condition="$vo.distributor_id eq $base_edit_result.distributor_id"}selected="seleted"{/if}>{$vo.distributor_name}</option>
+                                                    {/volist}
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="layui-col-md4">
+                                        <div class="layui-form-item">
+                                            <label class="layui-form-label">{$Think.lang.index_branchcompany_showDistributorManage_city}:</label>
+                                            <div class="layui-input-block">
+                                                <input type="text" id="orderCity" name="orderCity" placeholder="{$Think.lang.index_branchcompany_showDistributorManage_city}" autocomplete="off" class="layui-input" value="{$distri_butor_edit_result.city_name}">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="layui-col-md4">
+                                        <div class="layui-form-item">
+                                            <label class="layui-form-label">{$Think.lang.index_branchcompany_showBranchProductManage_language}:</label>
+                                            <div class="layui-input-block">
+                                                <input type="text" id="orderLanguage" name="orderLanguage" placeholder="{$Think.lang.index_branchcompany_showBranchProductManage_language}" autocomplete="off" class="layui-input" value="{$distri_butor_edit_result.language_name}">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="layui-row">
+                                    <div class="layui-col-md4">
+                                        <div class="layui-form-item">
+                                            <label class="layui-form-label">{$Think.lang.index_branchcompany_showDistributorManage_associateType}:</label>
+                                            <div class="layui-input-block">
+                                                <select name="orderAssociate" id="orderAssociate">
+                                                    <option value=""></option>
+                                                    <option value="1" {if condition="1 eq $distri_butor_edit_result.associate_type"}selected="seleted"{/if}>assembled</option>
+                                                    <option value="2" {if condition="2 eq $distri_butor_edit_result.associate_type"}selected="seleted"{/if}>not assembled</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="layui-col-md4">
+                                        <div class="layui-form-item">
+                                            <label class="layui-form-label">{$Think.lang.index_branchcompany_showCompanyOrderManage_addEdit_provincialState}:</label>
+                                            <div class="layui-input-block">
+                                                <input type="text" id="orderProState" name="orderProState" placeholder="{$Think.lang.index_branchcompany_showCompanyOrderManage_addEdit_provincialState}" autocomplete="off" class="layui-input" value="{$distri_butor_edit_result.province_name}">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="layui-col-md4">
+                                        <div class="layui-form-item">
+                                            <label class="layui-form-label">{$Think.lang.index_branchcompany_showDistributorManage_address}:</label>
+                                            <div class="layui-input-block">
+                                                <input type="text" id="orderAddress" name="orderAddress" placeholder="{$Think.lang.index_branchcompany_showDistributorManage_address}" autocomplete="off" class="layui-input" value="{$distri_butor_edit_result.address}">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="layui-row">
+                                    <div class="layui-col-md4">
+                                        <div class="layui-form-item">
+                                            <label class="layui-form-label">{$Think.lang.index_branchcompany_showDistributorManage_contacts}:</label>
+                                            <div class="layui-input-block">
+                                                <input type="text" id="orderCountryName" name="orderCountryName" placeholder="{$Think.lang.index_branchcompany_showDistributorManage_contacts}" autocomplete="off" class="layui-input" value="{$distri_butor_edit_result.contect}">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="layui-col-md4">
+                                        <div class="layui-form-item">
+                                            <label class="layui-form-label">{$Think.lang.index_branchcompany_showCompanyOrderManage_addEdit_country}:</label>
+                                            <div class="layui-input-block">
+                                                <input type="text" id="orderCountry" name="orderCountry" placeholder="{$Think.lang.index_branchcompany_showCompanyOrderManage_addEdit_country}" autocomplete="off" class="layui-input" value="{$distri_butor_edit_result.country_name}">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="layui-col-md4">
+                                        <div class="layui-form-item">
+                                            <label class="layui-form-label">{$Think.lang.index_branchcompany_showDistributorManage_zipCode}:</label>
+                                            <div class="layui-input-block">
+                                                <input type="text" id="orderPostCode" name="orderPostCode" placeholder="{$Think.lang.index_branchcompany_showDistributorManage_zipCode}" autocomplete="off" class="layui-input" value="{$distri_butor_edit_result.zip_code}">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="layui-row">
+                                    <div class="layui-col-md4">
+                                        <div class="layui-form-item">
+                                            <label class="layui-form-label">{$Think.lang.index_branchcompany_showCompanyOrderManage_addEdit_tel}:</label>
+                                            <div class="layui-input-block">
+                                                <input type="text" id="orderTel" name="orderTel" placeholder="{$Think.lang.index_branchcompany_showCompanyOrderManage_addEdit_tel}" autocomplete="off" class="layui-input" value="{$distri_butor_edit_result.tel}">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="layui-col-md4">
+                                        <div class="layui-form-item">
+                                            <label class="layui-form-label">{$Think.lang.index_branchcompany_showBranchProductManage_email}:</label>
+                                            <div class="layui-input-block">
+                                                <input type="text" id="orderEmail" name="orderEmail" placeholder="{$Think.lang.index_branchcompany_showBranchProductManage_email}" autocomplete="off" class="layui-input" value="{$distri_butor_edit_result.email}">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="layui-col-md4">
+
+                                    </div>
+                                </div>
+                                <div class="layui-row">
+                                    <div class="layui-col-md4">
+
+                                    </div>
+                                    <!--<div class="layui-col-md4">-->
+                                    <!--<div class="layui-form-item layui-form-text">-->
+                                    <!--<label class="layui-form-label">Description:</label>-->
+                                    <!--<div class="layui-input-block">-->
+                                    <!--<textarea name="orderDescription" placeholder="请输入内容" class="layui-textarea"></textarea>-->
+                                    <!--</div>-->
+                                    <!--</div>-->
+                                    <!--</div>-->
+                                </div>
+                            </div>
+                            <br>
+                            <div id="show_tp2" {if condition="$base_edit_result.channel_type eq 1 or $base_edit_result.channel_type eq ''"} style='display:none' {/if}>
+                                <div class="layui-row">
+                                    <div class="layui-col-md4">
+                                        <div class="layui-form-item">
+                                            <label class="layui-form-label">{$Think.lang.index_branchcompany_showDistributorManage_contacts}:</label>
+                                            <div class="layui-input-block">
+                                                <input type="text" id="direct_guest_name" name="orderCountryName" placeholder="{$Think.lang.index_branchcompany_showDistributorManage_contacts}" autocomplete="off" class="layui-input" value="{$base_edit_result.contect_name}">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="layui-col-md4">
+                                        <div class="layui-form-item">
+                                            <label class="layui-form-label">{$Think.lang.index_branchcompany_showCompanyOrderManage_addEdit_tel}:</label>
+                                            <div class="layui-input-block">
+                                                <input type="text" id="direct_guest_tel" name="orderTel" placeholder="{$Think.lang.index_branchcompany_showCompanyOrderManage_addEdit_tel}" autocomplete="off" class="layui-input" value="{$base_edit_result.tel}">
+                                            </div>
+                                        </div>
+                                        <!--<div class="layui-form-item layui-form-text">-->
+                                            <!--<label class="layui-form-label">Description:</label>-->
+                                            <!--<div class="layui-input-block">-->
+                                                <!--<textarea id="direct_guest_description" name="orderDescription" placeholder="请输入内容" class="layui-textarea">{$base_edit_result.description}</textarea>-->
+                                            <!--</div>-->
+                                        <!--</div>-->
+                                    </div>
+                                    <div class="layui-col-md4">
+                                        <div class="layui-form-item">
+                                            <label class="layui-form-label">{$Think.lang.index_branchcompany_showBranchProductManage_email}:</label>
+                                            <div class="layui-input-block">
+                                                <input type="text" id="direct_guest_email" name="orderEmail" placeholder="{$Think.lang.index_branchcompany_showBranchProductManage_email}" autocomplete="off" class="layui-input" value="{$base_edit_result.email}">
+                                            </div>
+                                        </div>
+                                        <!--<div class="layui-form-item layui-form-text">-->
+                                            <!--<label class="layui-form-label">Remark:</label>-->
+                                            <!--<div class="layui-input-block">-->
+                                                <!--<textarea id="direct_guest_remark" name="orderRemark" placeholder="请输入内容" class="layui-textarea">{$base_edit_result.remark}</textarea>-->
+                                            <!--</div>-->
+                                        <!--</div>-->
+                                    </div>
+                                </div>
+                                <div class="layui-row">
+                                    <div class="layui-col-md4">
+
+                                    </div>
+                                    <div class="layui-col-md4"></div>
+                                    <div class="layui-col-md4"></div>
+                                </div>
+                                <div class="layui-row">
+                                    <div class="layui-col-md4">
+
+                                    </div>
+                                    <div class="layui-col-md4"></div>
+                                    <div class="layui-col-md4"></div>
+                                </div>
+                            </div>
+                            <div class="layui-row">
+                                <div class="layui-form-button" style="text-align: center">
+                                    <button class="layui-btn nav-submit" lay-submit="" id='add_submit' lay-filter="companySubmit" >{$Think.lang.index_branchcompany_showCompanyOrderManage_addEdit_preserve}</button>
+
+                                </div>
+                            </div>
+                            </div>
+                        </div><!--基本信息-->
+                    </div>
+                </div>
+            </div>
+        </div>
+        <input type="hidden" id="template_do" value="1">
+        <input type="hidden" id="base_edit" value="">
+        <div class="layui-footer">
+            <!-- 底部固定区域 -->
+            © layui.com - 底部固定区域
+        </div>
+    </div>
+    {include file='public/foot_js' /}
+    <script src='__STATIC__/javascript/product/all.js'></script>
+    <script src='__STATIC__/javascript/product/base.js'></script>
+</body>
+</html>

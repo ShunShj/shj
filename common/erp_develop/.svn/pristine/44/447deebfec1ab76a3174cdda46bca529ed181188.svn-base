@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {include file='public/head' /}
+    <title>{$language_tag.index_branchcompany_showBranchProductManage_branchManagement}</title>
+    <link href="__STATIC__/css/branchcompany.css" rel="stylesheet">
+
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+    <div class="layui-header">
+        {include file='public/header' /}
+    </div>
+
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll">
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            {include file='public/left_menu' /}
+        </div>
+    </div>
+
+    <div class="layui-body">
+
+        <!-- 内容主体区域 -->
+        <div style="padding: 15px;">
+            <div class='layui-form-item'>
+			<span class="layui-breadcrumb" lay-separator="-">
+				<a>{$language_tag.index_public_homepage}</a>
+                <a>{$language_tag.index_branchcompany_showBranchProductManage_branchManagement}</a>
+				<a>{$language_tag.index_branchcompany_showBranchProductManage_branchProduct}</a>
+                <a><cite>{$language_tag.index_branchcompany_showBranchProductManage_editProduct}</cite></a>
+			</span>
+            </div>
+            <br/>
+            <br/>
+
+            <form class="layui-form" onSubmit="return companyproductEdit()" >
+                <div class="branch-top">
+                    {foreach name='$branch_product_result'  item='vo'}
+                    <div class="layui-form-item">
+                        <label class="layui-form-label input-required">{$language_tag.index_product_ShowPlanTour_regimentName}:</label>
+                        <div class="layui-input-block">
+                            <input id="edit_team_name" name="team_name" value="{$vo.team_name}" required="required" lay-verify="required" placeholder="{$language_tag.index_branchcompany_showBranchProductManage_placeholderTeamName}" autocomplete="off" class="layui-input" type="text">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label input-required">{$language_tag.index_product_visitor_goTime}:</label>
+                        <div class="layui-input-block">
+                            <input id="edit_branch_product_begin_time" name="branch_product_begin_time" value="{$vo.branch_product_begin_time|date='Y-m-d',###}" required="required" lay-verify="required" placeholder="" autocomplete="off"  class="layui-input layui-input-date layui-form-danger" type="text">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label input-required">{$language_tag.index_product_visitor_endTime}:</label>
+                        <div class="layui-input-block">
+                            <input id="edit_branch_product_end_time" name="branch_product_end_time" value="{$vo.branch_product_end_time|date='Y-m-d',###}" required="required" lay-verify="required" placeholder="" autocomplete="off"  class="layui-input layui-input-date layui-form-danger" type="text">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">{$language_tag.index_branchcompany_showBranchProductManage_describe}:</label>
+                        <div class="layui-input-block">
+                            <textarea class="layui-textarea" id="edit_remark" name="remark">{$vo.remark}</textarea>
+                        </div>
+                    </div>
+                    {/foreach}
+                    <div class="branch-btn">{$language_tag.index_branchcompany_showBranchProductEdit_pack_up}</div>
+                </div>
+                <!--<div class="layui-form-item">-->
+                    <!--<div class="layui-input-block">-->
+                        <!--<button class="layui-btn" lay-submit="" lay-filter="formDemo" id="">确定</button>-->
+                        <!--<a href='/branchcompany/showBranchProductManage'><button type="button" class="layui-btn layui-btn-primary">{$language_tag.index_public_cancel}</button></a>-->
+                        <!--<input type="hidden" id="branch_product_hidden_branch_product_number" value="{$vo.branch_product_number}">-->
+                    <!--</div>-->
+                <!--</div>-->
+
+            <div id="add-product layui-row">
+                <a class="layui-btn nav-add" onclick="addBranchCompany();" >{$language_tag.index_public_add}</a>
+            </div>
+                <input type="hidden" id="branch_product_number_hidden" value="{$Think.get.branch_product_number}">
+            <div>
+                <br>
+                <fieldset class="layui-elem-field layui-field-title">
+                    <legend>{$language_tag.index_finance_showReceivableManage_teamproduct}</legend>
+                </fieldset>
+                <div class="table-nont">
+                    <table class="layui-table layui-form table-branchcompany-poper abc" id="" style="table-layout:fixed">
+                        <thead>
+                        <tr>
+                            <th style="width:150px">{$language_tag.index_branchcompany_showBranchProductManage_productNumber}</th>
+                            <th>{$language_tag.index_branchcompany_showBranchProductManage_productType}</th>
+                            <th>{$language_tag.index_public_supplier}</th>
+                            <th>{$language_tag.index_branchcompany_showBranchProductManage_productName}</th>
+                            <!--<th>可选/必选商品</th>-->
+                            <th>{$language_tag.index_branchcompany_showBranchProductManage_startDate}</th>
+                            <th>{$language_tag.index_product_showRouteTemplateManage_plan_custom_number}</th>
+                            <th>{$language_tag.index_product_ShowPlanTour_receivedVisitors}</th>
+                            <th>{$language_tag.index_branchcompany_showCompanyOrderManage_curreny}</th>
+                            <th>{$language_tag.index_branchcompany_showCompanyOrderManage_addEdit_quotedPrice}</th>
+                            <th>{$language_tag.index_source_operation}</th>
+                            <th style="display:none;">cost</th>
+                        </tr>
+                        </thead>
+                        <tbody id="new">
+                            {volist name='branch_product_team_result' id='v' key="k"}
+                            <tr>
+                                <td style="display:none" type="1">{$v.branch_product_team_id}</td>
+                                <td>{$v.team_product_number}</td>
+                                <td>{$language_tag.index_finance_showReceivableManage_teamproduct}</td>
+                                <td>{$v.supplier_name}</td>
+                                <td>{$v.team_product_name}</td>
+                                <!--<td>-</td>-->
+                                <td>{$v.begin_time|date='Y-m-d',###}</td>
+                                <td>{$v.plan_custom_number}</td>
+                                <td>-</td>
+                                <td>
+                                    <select name="interest" lay-filter="aihao">
+                                        {volist name="currency_result_data" id="cc"}
+                                        <option value="{$cc.currency_id}" {if condition="$cc.currency_id eq $v.price_currency_id"}selected{/if}>{$cc.currency_name}</option>
+                                        {/volist}
+                                    </select>
+                                </td>
+                                <td><input type="text" class="layui-input" value="{$v.branch_price}"></td>
+                                {if condition="v.own_expense_array neq ''"}
+                                <td rowspan="{php}echo count($v['own_expense_array'])+1;{/php}"><a href="javascript:(0)" class='layui-btn layui-btn-sm del_team hover-edit layui-btn-primary' team_product_number="{$v.team_product_number}" branch_product_number="{$v.branch_product_number}">{$language_tag.index_public_del}</a></td>
+                                {else/}
+                                <td rowspan="1"><a href="javascript:(0)" class='layui-btn layui-btn-sm del_team hover-edit layui-btn-primary' team_product_number="{$v.team_product_number}" branch_product_number="{$v.branch_product_number}">{$language_tag.index_public_del}</a></td>
+                                {/if}
+                                <td class="cost" style="display:none;">{$v.branch_cost}</td>
+                                <td class="currency" style="display:none;">{$v.cost_currency_id}</td>
+                            </tr>
+                                {volist name="v.own_expense_array" id="v_result"}
+
+                                    <tr>
+                                    <td style="display:none" type="2">{$v_result.branch_product_source_id}</td>
+                                    <td>{$v_result.branch_product_number}</td>
+                                    <td>{$language_tag.index_finance_showReceivableManage_ownexpense}</td>
+                                    <td>{$v_result.supplier_name}</td>
+                                    <td>{$v_result.source_name}</td>
+                                    <td>-</td>
+                                    <td>-</td>
+                                    <td>-</td>
+                                    <td>
+                                        <select name="interest" lay-filter="aihao">
+                                            {volist name="currency_result_data" id="cc"}
+                                            <option value="{$cc.currency_id}" {if condition="$cc.currency_id eq $v_result.price_currency_id"}selected{/if}>{$cc.currency_name}</option>
+                                            {/volist}
+                                        </select>
+                                    </td>
+                                    <td><input type="text" class="layui-input" value="{$v_result.source_price}"></td>
+                                    <th style="display:none;">{$v_result.source_id}</th>
+                                    <td class="cost" style="display:none;">{$v_result.source_cost}</td>
+                                    <td class="currency" style="display:none;">{$v_result.cost_currency_id}</td>
+
+                                    </tr>
+                                {/volist}
+                            {/volist}
+                        </tbody>
+                    </table>
+                </div>
+                <br><br>
+                <fieldset class="layui-elem-field layui-field-title">
+                    <legend>{$language_tag.index_public_source}</legend>
+                </fieldset>
+                <div class="table-nont">
+                    <table class="layui-table layui-form table-branchcompany-poper eee" id="" style="table-layout:fixed">
+                        <thead>
+                        <tr>
+                            <th style="width:150px">{$language_tag.index_branchcompany_showBranchProductManage_productNumber}</th>
+                            <th>{$language_tag.index_branchcompany_showBranchProductManage_productType}</th>
+                            <th>{$language_tag.index_public_supplier}</th>
+                            <th>{$language_tag.index_branchcompany_showBranchProductManage_productName}</th>
+                            <th>{$language_tag.index_branchcompany_showBranchProductManage_startDate}</th>
+                            <th>{$language_tag.index_product_showRouteTemplateManage_plan_custom_number}</th>
+                            <th>{$language_tag.index_product_ShowPlanTour_receivedVisitors}</th>
+                            <th>{$language_tag.index_branchcompany_showCompanyOrderManage_curreny}</th>
+                            <th>{$language_tag.index_branchcompany_showCompanyOrderManage_addEdit_quotedPrice}</th>
+                            <th>{$language_tag.index_source_operation}</th>
+                            <th style="display:none;">cost</th>
+                        </tr>
+                        </thead>
+
+                        <tbody id="newTwo">
+                            {foreach name='branch_source_result' item='v'}
+                                <tr>
+                                    <td style="display:none" type="2">{$v.branch_product_source_id}</td>
+                                    <td>{$v.source_number}</td>
+                                    <td>
+                                        {php}
+                                            if($v['supplier_type_id']==2){
+                                                echo $language_tag.index_finance_showReceivableManage_hotel;
+                                            }else if($v['supplier_type_id']==3){
+                                                echo $language_tag.index_finance_showReceivableManage_dining;
+                                            }else if($v['supplier_type_id']==4){
+                                                echo $language_tag.index_finance_showReceivableManage_flight;
+                                            }else if($v['supplier_type_id']==5){
+                                                echo $language_tag.index_finance_showReceivableManage_cruise;
+                                            }else if($v['supplier_type_id']==6){
+                                                echo $language_tag.index_finance_showReceivableManage_visa;
+                                            }else if($v['supplier_type_id']==7){
+                                                echo $language_tag.index_finance_showReceivableManage_scenic_spot;
+                                            }else if($v['supplier_type_id']==8){
+                                                echo $language_tag.index_finance_showReceivableManage_vehicle;
+                                            }else if($v['supplier_type_id']==9){
+                                                echo $language_tag.index_finance_showReceivableManage_tourguide;
+                                            }else if($v['supplier_type_id']==10){
+                                                echo $language_tag.index_finance_showReceivableManage_singlesource;
+                                            }else if($v['supplier_type_id']==11){
+                                                echo $language_tag.index_finance_showReceivableManage_ownexpense;
+                                            }
+
+                                            else{
+                                                echo '';
+                                            }
+
+
+
+                                        {/php}
+
+                                    </td>
+                                    <td>{$v.supplier_name}</td>
+                                    <td>{$v.source_name}</td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td>
+                                        <select name="interest" lay-filter="aihao">
+                                            {volist name="currency_result_data" id="cc"}
+                                            <option value="{$cc.currency_id}" {if condition="$cc.currency_id eq $v.price_currency_id"}selected{/if}>{$cc.currency_name}</option>
+                                            {/volist}
+                                        </select>
+                                    </td>
+                                    <td><input type="text" class="layui-input" value="{$v.source_price}"></td>
+                                    <td><a href="javascript:void(0)" class='layui-btn layui-btn-sm del_source hover-edit layui-btn-primary' branch_product_source_id="{$v.branch_product_source_id}">{$language_tag.index_public_del}</a></td>
+                                    <td class="cost" style="display:none;">{$v.source_cost}</td>
+                                    <td class="currency" style="display:none;">{$v.cost_currency_id}</td>
+                                </tr>
+                            {/foreach}
+                        </tbody>
+                    </table>
+                </div>
+                <br><br>
+                <div class="layui-form-item">
+                    <div class="all-button-center">
+                        <button class="layui-btn nav-submit" lay-submit="" lay-filter="formDemo" id="">{$language_tag.index_public_submit}</button>
+                        <a href='/branchcompany/showBranchProductManage'><button type="button" class="layui-btn layui-btn-primary">{$language_tag.index_public_back}</button></a>
+                        <input type="hidden" id="branch_product_hidden_branch_product_number" value="{$vo.branch_product_number}">
+                    </div>
+                </div>
+            </form>
+            </div>
+        </div>
+    </div>
+    <br>
+    <br>
+    <input type="text" id="cc_op" hidden="edit">
+    <div class="layui-footer">
+        <!-- 底部固定区域 -->
+        © layui.com - 底部固定区域
+    </div>
+    <script id="abcTable" type="text/html">
+        {{#  layui.each(d, function(index, item){ }}
+        <tbody class="layui-form new" data-value="{{index}}">
+        <tr>
+            <td>{{item.team_product_number}}</td>
+            <td>{$language_tag.index_finance_showReceivableManage_teamproduct}</td>
+            <td>{{item.supplier_name}}</td>
+            <td>{{item.team_product_name}}</td>
+            <td>-</td>
+            <td>{{item.begin_time}}</td>
+            <td>{{item.plan_custom_number}}</td>
+            <td>
+                <select name="interest" lay-filter="aihao">
+                    {volist name="currency_result_data" id="cc"}
+                    {{#  if(item.price_currency_id){ }}
+                    <option value="{$cc.currency_id}" selected>{$cc.currency_name}</option>
+                    {{#  } else { }}
+                    <option value="{$cc.currency_id}">{$cc.currency_name}</option>
+                    {{#  } }}
+                    {/volist}
+                </select>
+            </td>
+            <td><input type="text" class="layui-input" value="{{item.branch_price}}"></td>
+            {{#  if(item.own_expense_array){ }}
+            <td rowspan="{{item.own_expense_array.length+1}}"><button class="layui-btn layui-btn-sm hover-edit layui-btn-primary" onclick="abcTable(this)">{$language_tag.index_public_del}</button></td>
+            {{#  } else { }}
+            <td rowspan="1"><button class="layui-btn layui-btn-sm hover-edit layui-btn-primary" onclick="abcTable(this)">{$language_tag.index_public_del}</button></td>
+            {{#  } }}
+            <td class="cost" style="display:none;">{{item.branch_cost}}</td>
+            <td class="currency" style="display:none;">{{item.cost_currency_id}}</td>
+        </tr>
+        {{#  if(item.own_expense_array){ }}
+        {{#  layui.each(item.own_expense_array, function(indexs, items){ }}
+        <tr class="child">
+            <td>{{items.source_number}}</td>
+            <td>{$language_tag.index_finance_showReceivableManage_ownexpense}</td>
+            <td>{{items.supplier_name}}</td>
+            <td>{{items.source_name}}</td>
+            <td></td>
+            <td>-</td>
+            <td>-</td>
+            <td>
+                <select name="interest" lay-filter="aihao">
+                    {volist name="currency_result_data" id="cc"}
+                    {{#  if(items.price_currency_id=={$cc.currency_id}){ }}
+                    <option value="{$cc.currency_id}" selected>{$cc.currency_name}</option>
+                    {{#  } else { }}
+                    <option value="{$cc.currency_id}">{$cc.currency_name}</option>
+                    {{#  } }}
+                    {/volist}
+                </select>
+            </td>
+            <td><input type="text" class="layui-input" value="{{items.source_price}}"></td>
+            <th style="display:none;">{{items.source_id}}</th>
+            <td class="cost" style="display:none;">{{items.source_cost}}</td>
+            <td class="currency" style="display:none;">{{items.cost_currency_id}}</td>
+        </tr>
+        {{#  }); }}
+        {{#  } }}
+        </tbody>
+        {{#  }); }}
+    </script>
+    <script id="abcTableTwo" type="text/html">
+        {{#  layui.each(d, function(index, item){ }}
+        <tbody class="layui-form newTwo" data-value="{{index}}">
+        <tr>
+            <td>{{item.source_number}}</td>
+            <td>{{item.supplier_type_name}}</td>
+            <td>{{item.supplier_name}}</td>
+            <td>{{item.source_name}}</td>
+            <td>-</td>
+            <td>-</td>
+            <td>-</td>
+            <td>
+                <select name="interest" lay-filter="aihao">
+                    {volist name="currency_result_data" id="cc"}
+                    {{#  if(item.price_currency_id=={$cc.currency_id}){ }}
+                    <option value="{$cc.currency_id}" selected>{$cc.currency_name}</option>
+                    {{#  } else { }}
+                    <option value="{$cc.currency_id}">{$cc.currency_name}</option>
+                    {{#  } }}
+                    {/volist}
+                </select>
+            </td>
+            <td><input type="text" class="layui-input" value="{{item.source_price}}"></td>
+            <td><button class="layui-btn layui-btn-sm hover-edit layui-btn-primary" onclick="abcTable(this)">{$language_tag.index_public_del}</button></td>
+            <td class="cost" style="display:none;">{{item.source_cost}}</td>
+            <td class="currency" style="display:none;">{{item.cost_currency_id}}</td>
+        </tr>
+        </tbody>
+        {{#  }); }}
+    </script>
+
+    <!--添加弹出表格-->
+    <script id="branchTips" type="text/html">
+        <form class="layui-form">
+            <div class='layui-input-inline'>
+                <select name="branchcompanyType" id="branchcompanytype_search" lay-filter="branchcompanyType">
+                    <option value="">{$language_tag.index_public_select}{$language_tag.index_branchcompany_showBranchProductManage_productType}</option>
+                    <option value="0">{$language_tag.index_finance_showReceivableManage_teamproduct}</option>
+                    <option value="1">{$language_tag.index_public_source}</option>
+                </select>
+            </div>
+            <div class='layui-input-inline layui-input-hide' style="display:none;">
+                <select name="branchcompanyRouteType" id="branchroutetype_search">
+                    <option value="">{$language_tag.index_branchcompany_showBranchProductManage_placeholdSourceType}</option>
+
+                    <option value="2">{$language_tag.index_finance_showReceivableManage_hotel}</option>
+                    <option value="3">{$language_tag.index_public_dining}</option>
+                    <option value="4">{$language_tag.index_finance_showReceivableManage_flight}</option>
+                    <option value="5">{$language_tag.index_finance_showReceivableManage_cruise}</option>
+                    <option value="6">{$language_tag.index_finance_showReceivableManage_visa}</option>
+                    <option value="7">{$language_tag.index_finance_showReceivableManage_scenic_spot}</option>
+                    <option value="8">{$language_tag.index_finance_showReceivableManage_vehicle}</option>
+                    <option value="9">{$language_tag.index_finance_showReceivableManage_tourguide}</option>
+                    <option value="10">{$language_tag.index_finance_showReceivableManage_singlesource}</option>
+                    <option value="11">{$language_tag.index_finance_showReceivableManage_ownexpense}</option>
+                </select>
+            </div>
+            <!--<div class='layui-input-inline layui-input-hide' style="display:none;">-->
+                <!--<input type="text" id="" name="source_number_search"  placeholder="{$language_tag.index_branchcompany_showBranchProductManage_productNumber}" class="layui-input">-->
+            <!--</div>-->
+            <!--<div class='layui-input-inline layui-input-hide' style="display:none;">-->
+                <!--<input type="text" id="" name="source_name_search"  placeholder="{$language_tag.index_branchcompany_showBranchProductManage_productName}" class="layui-input">-->
+            <!--</div>-->
+            <!--<div class='layui-input-inline layui-input-hide' style="display:none;">-->
+            <!--<input type="text" id="" name="productPopel"  placeholder="{$language_tag.index_finance_showReceivableManage_create_user_name}、联系人" class="layui-input">-->
+            <!--</div>-->
+            <div class='layui-input-inline'>
+                <a href="javascript:void(0);" class="layui-btn nav-submit" onclick="team_product_search('edit');">{$language_tag.index_public_search}</a>
+            </div>
+        </form>
+        <div class="lay-tab-box">
+            <div class="table-nont">
+                <table class="layui-table layui-form table-branchcompany-poper" id="poperTable" style="table-layout:fixed;display:none;">
+                    <colgroup>
+                        <col width="50">
+                        <col width="180">
+                        <col width="180">
+                        <col width="160">
+                        <col width="200">
+                        <col width="120">
+                        <col width="180">
+                        <col width="120">
+                        <col width="100">
+                        <col width="120">
+                        <col width="120">
+                        <col width="120">
+                    </colgroup>
+                    <thead>
+                    <tr>
+                        <th><input type="checkbox" name="branchcompanyCheckboxTable" lay-skin="primary" lay-filter="poperCheckboxAll"></th>
+                        <th>{$language_tag.index_branchcompany_showBranchProductManage_productNumber}</th>
+                        <th>{$language_tag.index_branchcompany_showBranchProductManage_productType}</th>
+                        <th>{$language_tag.index_public_supplier}</th>
+                        <th>{$language_tag.index_branchcompany_showBranchProductManage_productName}</th>
+                        <th>{$language_tag.index_finance_showAgentExpenseManage_the_days}</th>
+                        <th>{$language_tag.index_product_showRouteTemplateManage_routeType}</th>
+                        <th>{$language_tag.index_branchcompany_showBranchProductManage_startDate}</th>
+                        <th>{$language_tag.index_product_showRouteTemplateManage_plan_custom_number}</th>
+                        <th>{$language_tag.index_product_ShowPlanTour_receivedVisitors}</th>
+                        <th>{$language_tag.index_branchcompany_showCompanyOrderManage_curreny}</th>
+                        <th>{$language_tag.index_branchcompany_showCompanyOrderManage_addEdit_quotedPrice}</th>
+                    </tr>
+                    </thead>
+                    {volist name="team_product_source_result" id="vo"}
+                    <tbody class="branchcompanyPoper">
+                    <tr>
+                        <td><input type="checkbox" {php} if(is_numeric(array_search($vo['team_product_number'],array_column($branch_product_team_result,"team_product_number")))){echo "checked='checked' disabled";} {/php} name="productCheckboxTable" lay-skin="primary" value="{$vo.team_product_number}"></td>
+                        <td class="a">{$vo.team_product_number}</td>
+                        <td class="b">{$language_tag.index_finance_showReceivableManage_teamproduct}</td>
+                        <td class="c">{$vo.company_name}</td>
+                        <td class="d">{$vo.team_product_name}</td>
+                        <td>{$vo.base_count}</td>
+                        <td>{$vo.route_type_name}</td>
+                        <td class="e">{$vo.begin_time}</td>
+                        <td class="f">{$vo.plan_custom_number}</td>
+                        <td> - </td>
+                        <td class="currency_id">{$language_tag.index_finance_CostSharingList_add_chinese_money}</td>
+                        <td class="l">{if condition="$vo.settlement_type eq 1"}{$vo.once_price}{else}{$vo.real_price}{/if}</td>
+                    </tr>
+                    </tbody>
+                    <tbody class="branchcompanyPoper two-tr">
+                    {volist name="vo.own_expens_source_array" id="vv" key='k'}
+                    <tr>
+                        {php}if(count($vo['own_expens_source_array'])>1 ){{/php}
+                        {if condition="$k eq 1"}
+                        <td class="one" rowspan="{php}echo count($vo['own_expens_source_array']);{/php}"></td>
+                        {else}{/if}
+                        {php}}else{{/php}
+                        <td class="one" rowspan="1"></td>
+                        {php}}{/php}
+                        <td class="a">{$vv.source_number}</td>
+                        <td class="b">{$language_tag.index_finance_showReceivableManage_ownexpense}</td>
+                        <td class="c">{$vv.supplier_name}</td>
+                        <td class="d">{$vv.own_expense_name}</td>
+                        <td class="e">-</td>
+                        <td class="f">-</td>
+                        <td class="g">-</td>
+                        <td class="h" style="display:none;">{$vv.source_id}</td>
+                        <td class="i">-</td>
+                        <td class="">-</td>
+                        <td class="currency_id" data-value="{$vv.payment_currency_id}">{$vv.currency_name}</td>
+                        <td class="l">{$vv.source_total_price}</td>
+                    </tr>
+                    {/volist}
+                    </tbody>
+                    {/volist}
+                </table>
+            </div>
+
+            <div class="table-nont">
+                <table class="layui-table layui-form table-branchcompany-poper" id="sourceTable" style="table-layout:fixed;display:none;">
+                    <colgroup>
+                        <col width="50">
+                        <col width="180">
+                        <col width="180">
+                        <col width="160">
+                        <col width="200">
+                        <col width="120">
+                        <col width="180">
+                        <col width="120">
+                        <col width="100">
+                        <col width="120">
+                        <col width="120">
+                        <col width="120">
+                    </colgroup>
+                    <thead>
+                    <tr>
+                        <th><input type="checkbox" name="branchcompanyCheckboxTable" lay-skin="primary" lay-filter="poperCheckboxAllTwo"></th>
+                        <th>{$language_tag.index_branchcompany_showBranchProductManage_productNumber}</th>
+                        <th>{$language_tag.index_branchcompany_showBranchProductManage_productType}</th>
+                        <th>{$language_tag.index_public_supplier}</th>
+                        <th>{$language_tag.index_branchcompany_showBranchProductManage_productName}</th>
+                        <th>{$language_tag.index_finance_showAgentExpenseManage_the_days}</th>
+                        <th>{$language_tag.index_product_showRouteTemplateManage_routeType}</th>
+                        <th>{$language_tag.index_branchcompany_showBranchProductManage_startDate}</th>
+                        <th>{$language_tag.index_product_showRouteTemplateManage_plan_custom_number}</th>
+                        <th>{$language_tag.index_product_ShowPlanTour_receivedVisitors}</th>
+                        <th>{$language_tag.index_branchcompany_showCompanyOrderManage_curreny}</th>
+                        <th>{$language_tag.index_branchcompany_showCompanyOrderManage_addEdit_quotedPrice}</th>
+                    </tr>
+                    </thead>
+                    {volist name="team_product_source_result" id="vo"}
+                    <tbody class="branchcompanyPoperTwo">
+                    <tr>
+                    </tr>
+                    </tbody>
+                    {/volist}
+                </table>
+            </div>
+            <div class="branch_none">
+                {$language_tag.index_public_noData}，{$language_tag.index_public_select}<span>{$language_tag.index_branchcompany_showBranchProductManage_productType}</span>
+            </div>
+        </div>
+    </script>
+{include file='public/foot_js' /}
+<script src='__STATIC__/javascript/branchcompany/all.js'></script>
+<script src='__STATIC__/javascript/branchcompany/branchcompany.js'></script>
+</body>
+</html>
+
+<script>
+
+
+</script>

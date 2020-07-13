@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+<head>
+	{include file='public/head' /}
+  	<title>layout 后台大布局 - Layui</title>
+ 
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+	
+	<div class="layui-header">
+	{include file='public/header' /}
+	</div>
+  
+	 <div class="layui-side layui-bg-black">
+	   <div class="layui-side-scroll">
+	     <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+		{include file='public/left_menu' /}
+	   </div>
+	 </div>
+  
+	<div class="layui-body">
+	 
+		<!-- 内容主体区域 -->
+		<div style="padding: 15px;">
+			<div class='layui-form-item'>
+		   		<span class="layui-breadcrumb" lay-separator="-">
+					<a>{$language_tag.index_public_homepage}</a>
+					<a>{$language_tag.index_public_system}</a>
+					<a>{$language_tag.index_nav_taxPoint_management}</a>
+					<a><cite>{$language_tag.index_system_showTaxAdd_add_tax_point}</cite></a>
+				</span>
+			</div>
+			<br><br>
+			<div class="layui-row">
+				<form class="layui-form layui-col-md4"  onSubmit="return taxAdd()">
+					<div class="layui-form-item">
+						<label class="layui-form-label input-required">{$language_tag.index_system_showCompanyManage_company_name}:</label>
+						<div class="layui-input-block">
+
+							<select  id='choose_company_id' {if condition='$Think.session.user.company_id neq 1'}disabled{/if}  name="company_id" lay-verify="required" >
+								<option value="" >- - {$language_tag.index_public_select} - -</option>
+								{foreach name='company_result'  item='vo'}
+	
+								<option {if condition='$Think.session.user.company_id eq $vo.company_id'}selected{/if} value="{$vo.company_id}">{$vo.company_name}</option>
+							
+								{/foreach}
+							</select>
+						</div>
+					</div>
+					<div class="layui-form-item">
+						<label class="layui-form-label input-required">TxCd:</label>
+						<div class="layui-input-block">
+							<input id="tx_cd"   placeholder="{$language_tag.index_system_showTaxEdit_please_entet_tax_number}" autocomplete="off" class="layui-input" type="text" lay-verify="required">
+
+
+						</div>
+					</div>
+					<div class="layui-form-item">
+						<label class="layui-form-label input-required">{$language_tag.index_system_showTaxManage_GSTRate}:</label>
+						<div class="layui-input-block">
+							<input id="gst_rate"   placeholder="{$language_tag.index_system_showTaxEdit_please_entet_GSC}(%)" autocomplete="off" class="layui-input" type="text" lay-verify="required">
+						</div>
+					</div>
+					<div class="layui-form-item">
+						<label class="layui-form-label input-required">{$language_tag.index_system_showTaxManage_PSTRate}:</label>
+						<div class="layui-input-block">
+							<input id="pst_rate"   placeholder="{$language_tag.index_system_showTaxEdit_please_entet_provincial_tax}(%)" autocomplete="off" class="layui-input" type="text" lay-verify="required">
+
+
+							
+						</div>
+					</div>
+					<div class="layui-form-item">
+						<label class="layui-form-label input-required">{$language_tag.index_system_showTaxManage_HSTRate}:</label>
+						<div class="layui-input-block">
+							<input id="hst_rate"   placeholder="{$language_tag.index_system_showTaxEdit_please_entet_harmonized_sales_tax}(%)" autocomplete="off" class="layui-input" type="text" lay-verify="required">
+						</div>
+					</div>
+					<div class="layui-form-item">
+						<label class="layui-form-label input-required">{$language_tag.index_system_showTaxManage_otx}:</label>
+						<div class="layui-input-block" >
+							<input id="otx"   placeholder="{$language_tag.index_system_showTaxEdit_tax_name}(%)" autocomplete="off" class="layui-input" type="text" lay-verify="required">
+						</div>
+			
+					</div>
+					<div class="layui-form-item">
+						<label class="layui-form-label input-required">{$language_tag.index_system_showTaxManage_note}:</label>
+						<div class="layui-input-block">
+							<input id="note"   placeholder="{$language_tag.index_public_mark}" autocomplete="off" class="layui-input" type="text" lay-verify="required">
+						</div>
+					</div>
+					<div class="layui-form-item">
+						<div class="layui-input-block">
+							<button class="layui-btn nav-submit" lay-submit="" lay-filter="formDemo" >{$language_tag.index_branchcompany_showCompanyOrderManage_addEdit_submit}</button>
+							<!--<button type="reset" class="layui-btn layui-btn-primary">{$language_tag.index_product_showRouteTemplateManage_reload}</button>-->
+							<a href="/system/showTaxManage"><button type="button" class="layui-btn layui-btn-primary">{$language_tag.index_public_back}</button></a>
+						</div>
+					</div>
+				</form>
+			</div>
+		 
+		</div>
+	</div>
+  
+  <div class="layui-footer">
+    <!-- 底部固定区域 -->
+    © layui.com - 底部固定区域
+  </div>
+</div>
+{include file='public/foot_js' /}
+
+<script src='__STATIC__/javascript/system/system.js'></script>
+
+</body>
+</html>

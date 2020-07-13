@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+<head>
+	{include file='public/head' /}
+  	<title>country-manage-add</title>
+
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+
+	<div class="layui-header">
+	{include file='public/header' /}
+	</div>
+
+	 <div class="layui-side layui-bg-black">
+	   <div class="layui-side-scroll">
+	     <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+		{include file='public/left_menu' /}
+	   </div>
+	 </div>
+
+	<div class="layui-body">
+
+		<!-- 内容主体区域 -->
+		<div style="padding: 15px;">
+			<div class='layui-form-item'>
+		   		<span class="layui-breadcrumb" lay-separator="-">
+					<a>{$language_tag.index_public_homepage}</a>
+					<a>{$language_tag.index_public_system}</a>
+					<a>{$language_tag.index_system_showCountryManage_country_manage}</a>
+					<a><cite>{$language_tag.index_system_showCountryManage_add_country}</cite></a>
+				</span>
+			</div>
+			<br/>
+			<fieldset class="layui-elem-field">
+				<legend>第一步:选择国家</legend>
+				<div class="layui-field-box">
+					<form class="layui-form" onSubmit="return countryAdd()">
+						<label class="layui-form-label" lay-verify="required">国家：</label>
+						<div class="layui-input-block layui-form" >
+							<select id="country_name_d1" name="country_name_d1" lay-verify="required"   lay-filter="country_name_d1">
+								<option value="">--请选择--</option>
+								<option value="0">国家名称</option>
+								{foreach name="country_data_result" item='vo'}
+								<option value="{$vo.country_id}">{$vo.country_name}</option>
+								{/foreach}
+							</select>
+						</div>
+						<br/>
+						<div class="layui-form-item" style='display:none' id='country_name_zdy_d1_show'>
+							<label class="layui-form-label lay-verify="required"">自定义国家：</label>
+							<div class="layui-input-inline">
+								<input id="country_name_zdy_d1" name="country_name_zdy_d1" lay-verify="required" placeholder="请输入自定义国家" autocomplete="off" class="layui-input" type="text">
+							</div>
+							<div class="layui-form-mid layui-word-aux">优先选择自定义国家，如为空则选择 下拉框</div>
+						</div>
+						<div class="layui-form-item">
+							<label class="layui-form-label lay-verify="required"">国家代号：</label>
+							<div class="layui-input-block">
+								<input id="country_code" name="country_code" lay-verify="required" placeholder="请输入国家代号" autocomplete="off" class="layui-input" type="text">
+							</div>
+						</div>
+						<div class="layui-form-item">
+							<div class="layui-input-block">
+								<button class="layui-btn nav-submit" lay-submit="" lay-filter="formDemo" id="currency_add_sp1_button">{$language_tag.index_public_submit}</button>
+							</div>
+						</div>
+					</form>
+				</div>
+			</fieldset>
+
+			<fieldset class="layui-elem-field">
+				<legend>第二步:选择省市</legend>
+				<div class="layui-field-box">
+					<form class="layui-form" onSubmit="return countryAdd2()">
+						<label class="layui-form-label">省市：</label>
+						<div class="layui-input-block layui-form" lay-filter="d2" >
+							<select id="country_name_d2" name="country_name" lay-verify="required"  lay-filter="country_name_d2">
+								<option value="">--请选择--</option>
+
+								{foreach name="country_data_result" item='vo'}
+								<option value="{$vo.country_id}">{$vo.country_name}</option>
+								{/foreach}
+							</select>
+						</div>
+						<br/>
+						<div class="layui-form-item country_name_zdy_d2_show" >
+							<label class="layui-form-label">省市：</label>
+							<div class="layui-input-block">
+								<input id="" name="name" required="" lay-verify="required" placeholder="请输入省市" autocomplete="off" class="layui-input" type="text">
+							</div>
+						</div>
+
+						<div class="layui-form-item">
+							<div class="layui-input-block">
+								<button class="layui-btn nav-submit" lay-submit="" lay-filter="formDemo" type="button" id="currency_add_button">{$language_tag.index_public_submit}</button>
+							</div>
+						</div>
+					</form>
+				</div>
+			</fieldset>
+
+			<fieldset class="layui-elem-field">
+				<legend>第三步:选择地区</legend>
+				<div class="layui-field-box">
+					<form class="layui-form" >
+						<div class="layui-form-item">
+							<label class="layui-form-label">名称：</label>
+							<div class="layui-input-block">
+								<input id="" name="name"  lay-verify="required" placeholder="请输入名称" autocomplete="off" class="layui-input" type="text">
+							</div>
+						</div>
+						<br/>
+						<div class="layui-form-item">
+							<label class="layui-form-label">符号：</label>
+							<div class="layui-input-block">
+								<input id="" name="sign"  lay-verify="required" placeholder="请输入符号" autocomplete="off" class="layui-input" type="text">
+							</div>
+						</div>
+						<div class="layui-form-item">
+							<div class="layui-input-block">
+								<button class="layui-btn nav-submit" lay-submit="" lay-filter="formDemo" type="button" id="currency_add_button">{$language_tag.index_public_submit}</button>
+							</div>
+						</div>
+					</form>
+				</div>
+			</fieldset>
+		</div>
+	</div>
+
+  <div class="layui-footer">
+    <!-- 底部固定区域 -->
+    © layui.com - 底部固定区域
+  </div>
+</div>
+{include file='public/foot_js' /}
+<!--<script src='__STATIC__/javascript/system/system.js'></script>-->
+</body>
+</html>

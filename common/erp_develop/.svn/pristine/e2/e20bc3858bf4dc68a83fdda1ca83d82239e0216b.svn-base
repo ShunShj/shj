@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {include file='public/head' /}
+    <title>待办模板</title>
+    <link href="__STATIC__/css/product.css" rel="stylesheet">
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+    <div class="layui-header">
+        {include file='public/header' /}
+    </div>
+
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll">
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            {include file='public/left_menu' /}
+        </div>
+    </div>
+
+    <div class="layui-body layui-body-bg">
+
+        <!-- 内容主体区域 -->
+        <div style="padding: 15px 15px 0px;">
+            <div class="body-top">
+                <div class='layui-form-item'>
+                    <span class="layui-breadcrumb" lay-separator="-">
+                        <a>首页</a>
+                        <a>分公司管理</a>
+                        <a><cite>待办邮件模板</cite></a>
+                    </span>
+                </div>
+            </div>
+            <div class="content-bg">
+                <a href='/operations/addOperationsEmail/'><button class="layui-btn nav-add layui-btn-sm">创建待办邮件模板</button></a>
+                <hr>
+
+                <form method='get' action='/operations/operationsEmail' class="layui-form">
+                    <div class="layui-row">
+                        <div class="layui-col-md4">
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">待办模板:</label>
+                                <div class="layui-input-block">
+                                    <select name='search_operation_id' lay-search >
+                                        <option value=""></option>
+                                        {foreach $operationsList as $vl}
+                                        <option value="{$vl.id}" {$vl.id==$_GET['search_operation_id']?'selected':''}>{$vl.name}</option>
+                                        {/foreach}
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-row">
+                        <div class="layui-col-md4 layui-col-md-offset4">
+                            <div class='input-inline all-button-center pages-search-margin'>
+                                <button class="layui-btn nav-search">{$Think.lang.index_public_search}</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+                <br/>
+                <div class="table-nont user-manage newBg-pageHeight">
+                    <table class="layui-table" id="language-table">
+                        <thead>
+                        <tr>
+                            <th>待办模板</th>
+                            <th>标题</th>
+                            <th>副标题</th>
+                            <th>操作</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {foreach $OperationsEmail as $v}
+                        <tr>
+                            <td>{$v.operations_name}</td>
+                            <td>{$v.name}</td>
+                            <td>{$v.subject}</td>
+                            <td>
+                                <span><a class="layui-btn layui-btn-sm hover-edit layui-btn-primary" href="/operations/upOperationsEmail?id={$v.id}">修改</a></span>
+                                <span><a class="layui-btn layui-btn-sm hover-edit layui-btn-primary del-operations" data-tit="{$v.name}" data-info="{$v.id}" >删除</a></span>
+                            </td>
+                        </tr>
+                        {/foreach}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <div class="layui-footer">
+        <!-- 底部固定区域 -->
+        © layui.com - 底部固定区域
+    </div>
+</div>
+
+
+
+
+{include file='public/foot_js' /}
+<script src='__STATIC__/javascript/product/all.js'></script>
+<script src='__STATIC__/javascript/product/company_order.js'></script>
+
+<script>
+    !function() {
+        var layer = layui.layer;
+        var form = layui.form;
+        var laydate = layui.laydate;
+        var id;
+        $('.del-operations').on('click',function(){
+            var tit = $(this).data('tit');
+            id = $(this).data('info');
+
+            layer.confirm('确定要删除<font style="color: red">'+tit+'</font>么？', {icon:3, title:'提示'}, function(index){
+                console.log(id);
+                layer.load(2);
+                $.post('/operations/delOperationsEmail',{id:id},function(a){
+                    layer.closeAll();
+                    location.reload();
+                });
+
+                layer.close(index);
+            });
+        });
+
+
+    }();
+</script>
+
+</body>
+</html>

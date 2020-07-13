@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {include file='public/head' /}
+    <title>修改客户</title>
+
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+
+    <div class="layui-header">
+        {include file='public/header' /}
+    </div>
+
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll">
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            {include file='public/left_menu' /}
+        </div>
+    </div>
+
+    <div class="layui-body">
+
+        <!-- 内容主体区域 -->
+        <div style="padding: 15px;">
+            <div class='layui-form-item'>
+		   		<span class="layui-breadcrumb">
+					<a href="#">销售管理</a>
+					<a href="/sale/showCustomerManage">客户管理</a>
+					<a href="#"><cite>修改客户</cite></a>
+				</span>
+            </div>
+            <br/>
+            <br/>
+            <br/>
+            <form class="layui-form" id="form1" onSubmit="return edit()">
+                <div class="layui-form-item">
+                    <div class="layui-col-md6">
+                        <label class="layui-form-label">类型</label>
+                        <div class="layui-input-block">
+                            <select disabled name="customer_type" required lay-verify="required" class="layui-input" >
+                                <option></option>
+                                {foreach $customer_type as $ky=>$Vl}
+                                <option value="{$ky}" {$CustomerAr.customer_type==$ky?'selected':''}>{$Vl}</option>
+                                {/foreach}
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <div class="layui-col-md4">
+                        <label class="layui-form-label">姓名</label>
+                        <div class="layui-input-block">
+                            <input disabled value="{$CustomerAr.customer_name}" name="customer_name" required lay-verify="required" class="layui-input" />
+                        </div>
+                    </div>
+                    <div class="layui-col-md4">
+                        <label class="layui-form-label">性别</label>
+                        <div class="layui-input-block">
+                            <select disabled name="gender"  required lay-verify="required" >
+                                <option></option>
+                                <option value="1" {$CustomerAr.gender==1?'selected':''} >男</option>
+                                <option value="2" {$CustomerAr.gender==2?'selected':''}>女</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="layui-col-md4">
+                        <label class="layui-form-label">国籍</label>
+                        <div class="layui-input-block">
+                            <select disabled name="country_id"  required lay-verify="required" lay-search >
+                                <option></option>
+                                {foreach $CountryList as $CountryListV}
+                                <option value="{$CountryListV.country_id}" {$CustomerAr.country_id==$CountryListV.country_id?"selected":""}>{$CountryListV.country_name}</option>
+                                {/foreach}
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <div class="layui-col-md4">
+                        <label class="layui-form-label">语言</label>
+                        <div class="layui-input-block">
+                            <select disabled name="language_id"  required lay-verify="required" lay-search >
+                                <option></option>
+                                {foreach $langList as $langListV}
+                                <option value="{$langListV.language_id}" {$CustomerAr.language_id==$langListV.language_id?"selected":""}>{$langListV.language_name}</option>
+                                {/foreach}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="layui-col-md4">
+                        <label class="layui-form-label">手机</label>
+                        <div class="layui-input-block">
+                            <input disabled value="{$CustomerAr.phone}" name="phone" required lay-verify="required" class="layui-input" />
+                        </div>
+                    </div>
+                    <div class="layui-col-md4">
+                        <label class="layui-form-label">邮箱</label>
+                        <div class="layui-input-block">
+                            <input disabled value="{$CustomerAr.email}" name="email" required lay-verify="required|email" class="layui-input" />
+                        </div>
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <div class="layui-col-md4">
+                        <label class="layui-form-label">证件类型</label>
+                        <div class="layui-input-block">
+                            <select disabled name="card_type"  required lay-verify="required" lay-search >
+                                <option></option>
+                                {foreach $card_type as $ky=>$vl}
+                                <option value="{$ky}" {$CustomerAr.card_type==$ky?'selected':''}>{$vl}</option>
+                                {/foreach}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="layui-col-md4">
+                        <label class="layui-form-label">证件号码</label>
+                        <div class="layui-input-block">
+                            <input disabled value="{$CustomerAr.card_number}" name="card_number" required lay-verify="required" class="layui-input" />
+                        </div>
+                    </div>
+                    <div class="layui-col-md4">
+                        <label class="layui-form-label">有效期</label>
+                        <div class="layui-input-block">
+                            <input disabled value="<?=date('Y-m-d',$CustomerAr['term_of_validity']);?>" name="term_of_validity" id="term_of_validity" required lay-verify="required" class="layui-input" />
+                        </div>
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <div class="layui-col-md10">
+                        <label class="layui-form-label">备注</label>
+                        <div class="layui-input-block">
+                            <textarea disabled name="remark" required lay-verify="required"  class="layui-textarea">{$CustomerAr.remark}</textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <div class="layui-input-block">
+                        <a href="javascript:history.back(-1)"><button type="button" class="layui-btn layui-btn-primary">返回</button></a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="layui-footer">
+        <!-- 底部固定区域 -->
+        © layui.com - 底部固定区域
+    </div>
+</div>
+{include file='public/foot_js' /}
+
+
+<script>
+
+</script>
+
+</body>
+</html>

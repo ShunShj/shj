@@ -1,0 +1,33 @@
+$(function(){
+	
+	//首先获取url的参数
+	var url_params = $('#url_params').val();
+	var page_url = $('#page_url').val();
+	var total_page = $('#total_page').val();
+	
+	$('.page_href').click(function(){
+		
+		
+		var page = $(this).attr('data-page')
+		
+		location.href=page_url+'?'+url_params+'&page='+page
+	})	
+	
+	$('#page_button').click(function(){
+		var page = $('#page_value').val()
+		
+		var page = parseInt(page);//如果变量val是字符类型的数则转换为int类型 如果不是则ival为NaN
+	 
+	    if(!isNaN(page)){
+	    	if(page<0 || page > total_page){
+	    		alert('超出分页页数');
+	    	}else{
+	    		location.href=page_url+'?'+url_params+'&page='+page
+	    	}
+	    	
+	    } else{
+	        alert(page +"不是数字");
+	    }
+		
+	})
+})

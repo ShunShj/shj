@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {include file='public/head' /}
+    <title>language-manage</title>
+
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+    <div class="layui-header">
+        {include file='public/header' /}
+    </div>
+
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll">
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            {include file='public/left_menu' /}
+        </div>
+    </div>
+
+    <div class="layui-body">
+
+        <!-- 内容主体区域 -->
+        <div style="padding: 15px;">
+            <div class='layui-form-item'>
+                <span class="layui-breadcrumb" lay-separator="-">
+                    <a>{$language_tag.index_public_homepage}</a>
+                    <a>{$language_tag.index_public_system}</a>
+                    <a><cite>季节管理</cite></a>
+                </span>
+            </div>
+            <br/><br/>
+            <div class='layui-block input-inline'>
+                <form method='get' action='/system/showSeasonManage'>
+                    <div class='layui-input-inline'>
+                        <div class="layui-form">
+                            <select id="" name="status">
+                                <option value="2" selected="">{$language_tag.index_public_status}</option>
+                                <option value="1" {if condition="$Think.get.status eq 1"}selected='selected' {/if}>{$language_tag.index_public_show}</option>
+                                <option value="0" {if condition="$Think.get.status eq 0"}selected='selected' {/if}>{$language_tag.index_public_disabled}</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class='layui-input-inline'>
+                        <input type="text" id="" name="season_name" value="{$Think.get.season_name}"  placeholder="季节名称" class="layui-input">
+                    </div>
+                    <div class='layui-button-inline layui-number-inline'>
+                        <button class="layui-btn nav-search" >{$language_tag.index_public_search}</button>
+                    </div>
+                </form>
+                <div class='layui-button-inline'>
+                    <a href='/system/showSeasonAdd'><button class="layui-btn nav-add">添加季节</button></a>
+                </div>
+            </div>
+            <hr><br>
+            <div class="table-nont">
+                <table class="layui-table layui-form" id="language-table">
+                    <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>SEASON</th>
+                        <th>{$language_tag.index_public_status}</th>
+                        <th class="layui-table-width">{$language_tag.index_source_operation}</th>
+                    </tr>
+                    </thead>
+
+                    <tbody>
+                    {foreach name="data" item="vo" }
+                    <tr>
+                        <th class="season_id">{$vo.season_id}</th>
+                        <th>{$MultilingualAll['season-season_name-'.$vo.season_id.'-'.$Think.session.user.language_id][0]['translate']|default=$vo.season_name}</th>
+                        <th>
+                            {if condition="in_array('1',$auth_id) OR $Think.session.user.role_id eq 1"}<input type="checkbox" {if condition="$vo.status eq 1"}checked=""{else/}{/if} name="open" lay-skin="switch" lay-filter="switchTest" lay-text="{$language_tag.index_public_show}|{$language_tag.index_public_disabled}">{else/}{if condition="$v0.status eq 1"}{$language_tag.index_public_show}{else}{$language_tag.index_public_disabled}{/if}{/if}
+                        </th>
+                        <th>
+                            <a href='/system/showSeasonEdit?season_id={$vo.season_id}'><button class="layui-btn layui-btn-sm hover-edit layui-btn-primary">{$language_tag.index_public_update}</button></a>
+                            <a class="layui-btn layui-btn-sm hover-edit layui-btn-primary del-operations" data-tit="{$vo.season_name}" data-id="{$vo.season_id}">{$language_tag.index_public_del}</a>
+                        </th>
+                    </tr>
+                    {/foreach}
+                    </tbody>
+
+                </table>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<div class="layui-footer">
+    <!-- 底部固定区域 -->
+    © layui.com - 底部固定区域
+</div>
+</div>
+{include file='public/foot_js' /}
+
+<script>
+
+    var layer = layui.layer;
+
+    var form = layui.form;
+    form.on('switch(switchTest)', function(data){
+        var table_id = $(data.elem).parents("tr").children(".season_id").html();
+        var table_id_name = "season_id";
+        var table_name = "season";
+        if(this.checked == true){
+            var status = 1;
+        }else{
+            var status = 0;
+        }
+
+        $.ajax({
+            type: "POST",
+            url: '/index/changeStatus',
+            data: {
+                table_id:table_id,
+                table_id_name:table_id_name,
+                table_name:table_name,
+                status:status,
+            },
+            success: function(data){
+                //console.log(data);
+                if(data.code!=200){
+                    layer.msg(data.msg);
+                    return false;
+                }else if(data.code==200) {
+                    layer.msg('操作成功',{time:1,end : function(layero, index){
+
+                        }
+                    });
+                }
+            },
+            error:function(XMLHttpRequest, textStatus, errorThrown){
+                layer.msg('验证失败')
+            }
+        });
+    });
+
+
+    !function() {
+        var layer = layui.layer;
+        var season_id;
+        $('.del-operations').on('click',function(){
+            var tit = $(this).data('tit');
+            season_id = $(this).data('id');
+
+            layer.confirm('确定要删除<font style="color: red">'+tit+'</font>么？', {icon:3, title:'提示'}, function(index){
+                $.ajax({
+                    type: "POST",
+                    url: '/system/delSeasonAjax',
+                    data: {
+                        season_id:season_id,
+                    },
+                    success: function(data){
+                        //console.log(data);
+                        if(data.code!=200){
+                            layer.msg(data.msg);
+                            return false;
+                        }else if(data.code==200) {
+                            layer.msg('操作成功',{time:1,end : function(layero, index){
+                                    layer.closeAll();
+                                    location.reload();
+                                }
+                            });
+                        }
+                    },
+                    error:function(XMLHttpRequest, textStatus, errorThrown){
+                        layer.msg('验证失败')
+                    }
+                });
+                layer.close(index);
+            });
+        });
+
+    }();
+</script>
+
+
+</body>
+</html>

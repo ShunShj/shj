@@ -1,0 +1,460 @@
+<!--
+  This is view/booktour/aside_booking_summarys.php
+-->
+<aside>
+    <div id="sidebar"><!-- sidebar -->
+        <h3><img src="<?php echo base_url('assets/images/aside_booking_summary_icn.png'); ?>" alt="Nexus Latest News"/>Booking
+            Summary</h3>
+        <table id="aside_booking_summary_table" border="0" cellpadding="0">
+            <tr>
+                <td class="head">Tour Name</td>
+                <td><?php if (session('select_tour')['tour_name']): echo session('select_tour')['tour_name']; endif; ?>
+                    <br/>
+                    <?php if (session('select_tour')['tour_name_ch']): echo session('select_tour')['tour_name_ch']; endif; ?>
+                </td>
+                <td>&nbsp;</td>
+            </tr>
+            <tr>
+                <td class="head">Duration</td>
+                <td><?php if (session('select_tour')['length_days']): echo session('select_tour')['length_days']; endif; ?> Days</td>
+                <td>&nbsp;</td>
+            </tr>
+            <tr>
+                <td class="head">Tour Date</td>
+                <td>
+                    <div id="tour_date"><?php if (session('select_date2')['tour_date']) {
+                        echo session('select_date2')['tour_date'];
+                        } else {
+                        echo "N/A";
+                        } ?></div>
+                </td>
+                <td class="side_price"><?php if (session('select_date2')['date_season']) {
+                    echo session('select_date2')['date_season'] . " Season";
+                    } else {
+                    echo "&nbsp;";
+                    } ?></td>
+            </tr>
+            <tr>
+                <td class="head">Tour Language</td>
+                <td colspan="2">
+                    <div id="tour_lang"><?php if (session('select_date2')['tour_lang']) {
+                        echo session('select_date2')['tour_lang'];
+                        } else {
+                        echo "N/A";
+                        } ?></div>
+                </td>
+            </tr>
+            <tr>
+                <td class="head">No. of Pax</td>
+                <td><?php if (session('pax_num')['pax']) {
+                    echo session('pax_num')['pax'];
+                    } else {
+                    echo "N/A";
+                    } ?></td>
+                <td class="side_price"> <?php if (session('pax_price_total') || session('pax_price_total') == 0) {
+                    echo session('currency') . number_format(session('pax_price_total'));
+                    } else {
+                    echo "N/A";
+                    } ?></td>
+            </tr>
+            <tr>
+                <td class="head">Passenger/s</td>
+                <td>
+                    <div id="tour_pax">
+                        <?php if (session('passenger_info')['lname']) {
+                        for ($i = 0; $i < session('pax_num')['pax']; $i++) {
+                        // Set name
+                        $lname_arr = session('passenger_info')['lname'];
+                        $fname_arr = session('passenger_info')['fname'];
+                        $age_cat_arr = session('passenger_info')['age_cat'];
+                        $name = ucfirst($lname_arr[$i] . " " . $fname_arr[$i]);
+                        // Set pax number
+                        $a = $i + 1;
+                        echo '<span>' . $a . '. </span> ';
+                        echo $name . " (" . $age_cat_arr[$i] . ")";
+                        echo '<br />';
+                        }
+                        } else {
+                        echo "N/A";
+                        }
+                        ?>
+                    </div>
+                </td>
+                <td class="side_price"></td>
+            </tr>
+            <tr>
+                <td class="head">No. of Room/s</td>
+                <td>
+                    <div id="room_pax">
+                        <?php if (session('t_info')['room_type']) {
+                        for ($i = 0; $i < count(session('t_info')['room_type']); $i++) {
+                        $room_type_arr = session('t_info')['room_type'];
+                        // Set name
+                        echo $room_type_arr[$i]['type'] . " x " . $room_type_arr[$i]['num'];
+                        echo "<br />";
+                        }
+                        } else {
+                        echo "N/A";
+                        }
+                        ?>
+                    </div>
+                <td class="side_price">&nbsp;</td>
+                </td>
+            </tr>
+            <tr>
+                <td class="head">Hotel Transfer</td>
+                <td>
+                    <div id="hotel_transfer">
+                        <?php
+            $hotel_transfer_charge = 0;
+            $charge = TRUE;
+            $charge_arr = array();
+            if (session('h_info')['hotel_transfer_info']) {
+                        $hotel_transfer_info_arr = session('h_info')['hotel_transfer_info'];
+                        for ($i = 0; $i < count($hotel_transfer_info_arr); $i++) {
+                        // Set name
+                        $charge = $hotel_transfer_info_arr[$i]['charge'];
+                        if ($charge != NULL) {
+                        $charge_arr[$i] = session('currency') . number_format(session('transfer_charge') * count($hotel_transfer_info_arr[$i]['pax']));
+                        $hotel_transfer_charge += session('transfer_charge') * count($hotel_transfer_info_arr[$i]['pax']);
+                        } else {
+                        $charge_arr[$i] = "Complimentary";
+                        }
+                        echo $hotel_transfer_info_arr[$i]['date'] . " " . $hotel_transfer_info_arr[$i]['flight'] . " " . $hotel_transfer_info_arr[$i]['time'];
+                        echo "<br />(";
+                        // Get number of pax in the transfer
+                        $num_pax = count($hotel_transfer_info_arr[$i]['pax']);
+                        // Get number of pax in the booking
+                        $total_pax = count(session('passenger_info')['lname']);
+                        $fname_pax_arr = session('passenger_info')['fname'];
+                        $lname_pax_arr = session('passenger_info')['lname'];
+                        // Check if transfer pax are match with pax in the booking by looping though two arrays
+                        for ($z = 0; $z < $total_pax; $z++) {
+                        $name = ucfirst($lname_pax_arr[$z] . " " . $fname_pax_arr[$z]);
+                        $temp_id = "";
+                        // Get it's temp id if match
+                        for ($k = 0; $k < $num_pax; $k++) {
+                        //echo session('hotel_transfer_info')[$i]['pax'][$k];
+                        if ($name == ucfirst($hotel_transfer_info_arr[$i]['pax'][$k])) {
+                        $temp_arr = session('passenger_info')['temp_id'];
+                        $temp_id .= $temp_arr[$z];
+                        $index = $k + 1;
+
+                        if ($num_pax != $index) {
+                        $temp_id .= ",";
+                        }
+                        } // end if
+                        } // end for $num_pax
+                        echo $temp_id;
+                        } // end for $total_pax
+                        echo ")<br/>";
+                        }
+                        } else {
+                        echo "N/A";
+                        }
+                        ?>
+                    </div>
+                </td>
+                <td class="side_price">
+                    <?php
+        if (!empty($charge_arr)) {
+            for ($i = 0; $i < count($charge_arr); $i++) {
+                echo $charge_arr[$i];
+                echo "<br />";
+                    echo "<br />";
+                    }
+                    } else {
+                    echo "N/A";
+                    }
+                    ?>
+                </td>
+            </tr>
+            <tr>
+                <td class="head">Airport Transfer</td>
+                <td>
+                    <div id="airport_transfer">
+                        <?php
+            $a_charge = TRUE;
+            $a_charge_arr = array();
+            $air_transfer_charge = 0;
+            if (session('a_info')['airport_transfer_info']) {
+                        $airport_transfer_info_arr = session('a_info')['airport_transfer_info'];
+                        for ($i = 0; $i < count($airport_transfer_info_arr); $i++) {
+                        // Set name
+                        $a_charge = $airport_transfer_info_arr[$i]['charge'];
+                        if ($a_charge != NULL) {
+                        $air_transfer_charge += session('transfer_charge') * count($airport_transfer_info_arr[$i]['pax']);
+                        $a_charge_arr[$i] = session('currency') . number_format(session('transfer_charge') * count($airport_transfer_info_arr[$i]['pax']));
+                        } else {
+                        $a_charge_arr[$i] = "Complimentary";
+                        }
+                        echo $airport_transfer_info_arr[$i]['date'] . " " . $airport_transfer_info_arr[$i]['flight'] . " " . $airport_transfer_info_arr[$i]['time'];
+
+                        echo "<br />(";
+                        // Get number of pax in the transfer
+                        $num_pax = count($airport_transfer_info_arr[$i]['pax']);
+                        // Get number of pax in the booking
+                        $total_pax = count(session('passenger_info')['lname']);
+                        $fname_pax_arr = session('passenger_info')['fname'];
+                        $lname_pax_arr = session('passenger_info')['lname'];
+                        // Check if transfer pax are match with pax in the booking by looping though two arrays
+                        for ($z = 0; $z < $total_pax; $z++) {
+                        $name = ucfirst($lname_pax_arr[$z] . " " . $fname_pax_arr[$z]);
+                        $temp_id = "";
+                        // Get it's temp id if match
+                        for ($k = 0; $k < $num_pax; $k++) {
+                        //echo session('airport_transfer_info')[$i]['pax'][$k];
+                        if ($name == ucfirst($airport_transfer_info_arr[$i]['pax'][$k])) {
+                        $temp_arr = session('passenger_info')['temp_id'];
+                        $temp_id .= $temp_arr[$z];
+                        $index = $k + 1;
+
+                        if ($num_pax != $index) {
+                        $temp_id .= ",";
+                        }
+                        } // end if
+                        } // end for $num_pax
+                        echo $temp_id;
+                        } // end for $total_pax
+
+                        echo ")<br/>";
+
+                        }
+                        } else {
+                        echo "N/A";
+                        }
+                        ?>
+                    </div>
+                </td>
+                <td class="side_price">
+                    <?php
+        if (!empty($a_charge_arr)) {
+            for ($i = 0; $i < count($a_charge_arr); $i++) {
+                echo $a_charge_arr[$i];
+                echo "<br />";
+                    echo "<br />";
+                    }
+                    } else {
+                    echo "N/A";
+                    }
+                    ?>
+                </td>
+            </tr>
+            <tr>
+                <td class="head">Pre Tour</td>
+                <td>
+                    <div id="pre_tour">
+                        <?php
+            $pre_charge_total = 0;
+            $pre_charge_arr = array();
+            if (session('pre_info')['pre_tour_accommodation_info']) {
+                        $pre_tour_arr = session('pre_info')['pre_tour_accommodation_info'];
+                        $pre_charge_arr = session('pre_charge');
+                        $room_array = array();
+                        for ($i = 0; $i < count($pre_tour_arr); $i++) {
+                        $room_array[$i] = $pre_tour_arr[$i]['room_type'];
+                        $pre_nights[$i] = $pre_tour_arr[$i]['nights'];
+
+                        echo "- " . $pre_tour_arr[$i]['room_type'] . " x " . $pre_nights[$i] . " Nights";
+                        //echo $pre_tour_arr[$i]['room_type'] ." x ". $nights . " Nights";
+                        echo "<br />";
+                        }
+                        /*$room_same_type = array_count_values($room_array);
+                        foreach ($room_same_type as $key => $num)
+                        {
+                        //print_r($room_same_type);
+                        //echo $key ." x ". $num ." (". $nights ." Night/s)";
+                        //echo "<br/>";
+                        }*/
+                        } else {
+                        echo "N/A";
+                        }
+                        ?>
+                    </div>
+                </td>
+                <td class="side_price"><?php
+        if (session('pre_charge')) {
+                    for ($i = 0; $i < count($pre_charge_arr); $i++) {
+                    $pre_charge_total += $pre_charge_arr[$i];
+                    echo session('currency') . number_format($pre_charge_arr[$i]) . "<br/>";
+                    }
+                    } else {
+                    echo "N/A";
+                    }
+                    ?></td>
+            </tr>
+            <tr>
+                <td class="head">Post Tour</td>
+                <td>
+                    <div id="post_tour">
+                        <?php
+            $post_charge_total = 0;
+            $post_charge_array = array();
+            if (session('post_info')['post_tour_accommodation_info']) {
+                        $post_tour_arr = session('post_info')['post_tour_accommodation_info'];
+                        $post_charge_array = session('post_charge');
+                        $room_array = array();
+                        for ($i = 0; $i < count($post_tour_arr); $i++) {
+                        $post_room_array[$i] = $post_tour_arr[$i]['room_type'];
+                        $post_nights[$i] = $post_tour_arr[$i]['nights'];
+                        echo "- " . $post_tour_arr[$i]['room_type'] . " x " . $post_nights[$i] . " Nights";
+                        //echo $pre_tour_arr[$i]['room_type'] ." x ". $nights . " Nights";
+                        echo "<br />";
+                        }
+                        /*$room_same_type = array_count_values($post_room_array);
+                        foreach ($room_same_type as $key => $num)
+                        {
+                        echo $key ." x ". $num ." (". $post_nights ." Night/s)";
+                        echo "<br/>";
+                        }*/
+                        } else {
+                        echo "N/A";
+                        }
+                        ?>
+                    </div>
+                </td>
+                <td class="side_price"><?php
+        if (session('post_charge')) {
+                    for ($z = 0; $z < count($post_charge_array); $z++) {
+                    $post_charge_total += $post_charge_array[$z];
+                    echo session('currency') . number_format($post_charge_array[$z]) . "<br />";
+                    }
+
+                    } else {
+                    echo "N/A";
+                    } ?></td>
+            </tr>
+            <tr>
+                <td class="hr" colspan="3">&nbsp;</td>
+
+            </tr>
+
+            <tr>
+                <td class="head">Booking ID</td>
+                <td colspan="2">
+                    <div id="tour_date"><?php if (session('last_booking_id')) {
+                        echo session('last_booking_id');
+                        } else {
+                        echo "N/A";
+                        } ?></div>
+                </td>
+            </tr>
+            <tr>
+                <td class="head">Tour Code</td>
+                <td colspan="2"><?php if (session('select_tour')['tour_code']): echo session('select_tour')['tour_code']; endif; ?></td>
+            </tr>
+            <tr>
+                <td class="head">Your Ref. No</td>
+                <td colspan="2">
+                    <div id="reference_no"><?php if (session('reference')) {
+                        echo session('reference');
+                        } else {
+                        echo "N/A";
+                        } ?></div>
+                </td>
+            </tr>
+            <tr>
+                <td class="hr" colspan="3">&nbsp;</td>
+
+            </tr>
+            <tr>
+                <td class="price_head" colspan="3">Is Pre-Paid Tip and Compulsory Program ?<span> <?php
+            if (session('is_step4_data')) {
+                if (session('is_tip') && session('is_comp_progm')) {
+                    echo "YES";
+                } else {
+                    echo "NO";
+                }
+            } else {
+                echo "N/A";
+            }
+            ?></span></td>
+            </tr>
+            <tr>
+                <td class="price_head" colspan="3">Tip Total <span> <?php if (session('total_tip')) {
+                echo session('currency') . number_format(session('total_tip'));
+            } else {
+                echo "N/A";
+            } ?></span></td>
+
+            </tr>
+            <tr>
+                <td class="price_head" colspan="3">Compulsory Program Total
+        <span> <?php if (session('total_comp')) {
+                echo session('currency') . number_format(session('total_comp'));
+            } else {
+                echo "N/A";
+            } ?></span></td>
+
+            </tr>
+            <tr>
+                <td class="price_head" colspan="3">Optional Program Total<span> <?php if (session('opt_progm')) {
+                echo session('currency') . number_format(session('opt_progm'));
+            } else {
+                echo "N/A";
+            } ?></span></td>
+            </tr>
+            <tr>
+                <td class="price_head" colspan="3">Triple Room Surcharge
+                    Total<span> <?php if (session('price_triple_surcharge')) {
+                echo session('currency') . number_format(session('price_triple_surcharge') * session('room_triple'));
+            } else {
+                echo "N/A";
+            } ?></span></td>
+            </tr>
+            <tr>
+                <td class="price_head" colspan="3">Single Supplement
+                    Total<span> <?php if (session('price_single_supp')) {
+                echo session('currency') . number_format(session('price_single_supp') * session('room_single_supp'));
+            } else {
+                echo "N/A";
+            } ?></span></td>
+            </tr>
+            <tr>
+                <td class="tour_total" colspan="3">Net Total<span> <?php
+            //if(session('total')) { echo session('currency')  . number_format(session('total')); } else { echo "N/A"; }
+            $total_tip = session('total_tip');
+            $total_triple = session('price_triple_surcharge') * session('room_triple');
+            $total_comp = session('total_comp');
+            $single_supp = session('price_single_supp') * session('room_single_supp');
+            $price_total = session('pax_price_total');
+            //$air_transfer_charge    = session('airport_transfer_charge');
+            //$hotel_transfer_charge  = session('hotel_transfer_charge');
+            //$pre_charge    =0;//= session('pre_charge');
+            //$post_charge  =0;// session('post_charge');
+            $total = $total_tip + $total_comp + $total_triple + $single_supp + $price_total + $air_transfer_charge + $hotel_transfer_charge + $pre_charge_total + $post_charge_total;
+           session('amount_total', $total);
+            echo session('currency') . number_format($total);
+            /*echo "TIP: " . $total_tip;
+            echo "<br/>";
+            echo "Compulsory: " . $comp_progm;
+            echo "<br/>";
+            echo "Triple: " . $triple_surcharge;
+            echo "<br/>";
+            echo "Single Supp: " . $single_supp;
+            echo "<br/>";
+            echo "Pax Total: ". $price_total;
+            echo "<br/>";
+            echo "Air: " . $air_transfer_charge;
+            echo "<br/>";
+            echo "Hotel: " . $hotel_transfer_charge;
+            echo "<br/>";
+            echo "Pre: " . $pre_charge_total;
+            echo "<br/>";
+            echo "Post: " . $post_charge_total;
+            echo "<br/>";
+            echo session('currency')  . number_format($total);
+
+            echo "<br />";*/
+            ?></span></td>
+            </tr>
+            <!--tr>
+                <td>&nbsp;</td>
+                <td class="btn"><span class="print_btn" ></span></td>
+            </tr-->
+        </table>
+    </div>
+    <!-- end sidebar -->
+
+</aside>
+

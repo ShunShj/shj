@@ -1,0 +1,106 @@
+<link rel="stylesheet" href="/static/css/formSelects-v4.css">
+<link rel="stylesheet" href="/static/layui/css/layui.css">
+<!--公共CSS样式-->
+<link rel="stylesheet" href="/static/css/public_style.css">
+<script src='/static/javascript/public/jquery-2.1.1.min.js'></script>
+<link href="/static/css/product.css" rel="stylesheet">
+<link href="/static/css/public.css" rel="stylesheet">
+
+<body style="margin: 0 10%">
+<!--添加游客start-->
+<div class="lay-visitor-add" style="width: 80%;height: 500px" >
+    <fieldset class="layui-elem-field layui-field-title">
+        <legend>{$language_tag.index_index_incident}: <font style="color: red">{$system_alert_event.event_name}</font></legend>
+    </fieldset>
+    <form class="layui-form" id="form1" onSubmit="return save()">
+        <div class="layui-form-item">
+            <label class="layui-form-label">{$language_tag.index_nav_system_Reminder_settin}</label>
+            <div class="layui-input-block">
+                <input type="checkbox" name="is_system_reminder" lay-skin="switch" value="1" lay-text="ON|OFF"  {$system_alert_event.is_system_reminder==1?'checked':''}>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label"></label>
+            <div class="layui-input-block">
+                <textarea  rows="8" cols="80" name="system_reminder_content" style="padding: 5px;">{$system_alert_event.system_reminder_content}</textarea>
+            </div>
+        </div>
+        <hr>
+        <div class="layui-form-item">
+            <label class="layui-form-label">{$language_tag.index_reminderManagement_editSystemAlertSetting_email_remind_setting}</label>
+            <div class="layui-input-block">
+                <input type="checkbox" name="is_email_reminder" lay-skin="switch" value="1" lay-text="ON|OFF" {$system_alert_event.is_email_reminder==1?'checked':''}>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label"></label>
+            <div class="layui-input-block">
+                <textarea  rows="8" cols="80" name="email_reminder_content" style="padding: 5px;">{$system_alert_event.email_reminder_content}</textarea>
+            </div>
+        </div>
+    <br>
+    <div class="layui-row" style="padding-bottom: 50px">
+    <div class="layui-form-button" style="text-align: center">
+        <button class="layui-btn nav-submit" >{$language_tag.index_public_save}</button>
+        <button type="button" class="layui-btn layui-btn-primary" onclick="visitorMessBack()">{$language_tag.index_public_back}</button>
+    </div>
+</div>
+</form>
+</div>
+<!--添加游客end-->
+</body>
+
+
+
+
+<script src="/static/layui/layui.all.js"></script>
+
+<script>
+    var layer = layui.layer;
+    var form = layui.form;
+    var laydate = layui.laydate;
+    var upload = layui.upload;
+    var element = layui.element;
+    var formSelects = layui.formSelects;
+    !function() {
+
+
+
+    }();
+
+    function visitorMessBack(){
+        parent.openClose();
+    }
+
+
+
+    function save(){
+        layer.load(2);
+        $.ajax({
+            type: "POST",
+            url: '/reminderManagement/editSystemAlertSettingAjax?system_alert_setting_id={$_GET["system_alert_setting_id"]}',
+            data: $('#form1').serializeArray(),
+            success: function (data) {
+                layer.closeAll();
+                if(data.code!=200){
+                    layer.msg(data.msg);
+                    return false;
+                }else if(data.code==200){
+                    layer.msg('success',{time:1,end : function(layero, index){
+                        parent.openClose();
+                    }
+                    });
+                }
+            },
+            error:function(XMLHttpRequest, textStatus, errorThrown){
+                //console.log(errorThrown)
+                layer.closeAll();
+                layer.msg('{$language_tag.index_public_verificationFailure}')
+
+            }
+        });
+        return false;
+    }
+
+
+</script>

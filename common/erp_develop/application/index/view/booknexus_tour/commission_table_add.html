@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<head>
+    {include file='public/head' /}
+    <title>language-manage-add</title>
+
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+
+    <div class="layui-header">
+        {include file='public/header' /}
+    </div>
+
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll">
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            {include file='public/left_menu_booknexus' /}
+        </div>
+    </div>
+
+    <div class="layui-body">
+
+        <!-- 内容主体区域 -->
+        <div style="padding: 15px;">
+            <div class='layui-form-item'>
+		   		<span class="layui-breadcrumb" lay-separator="-">
+					<a>{$language_tag.index_public_homepage}</a>
+                    <a>B2B</a>
+                    <a>Tour</a>
+                    <a>Commission Table</a>
+                    <a><cite>Add Commission Table</cite></a>
+				</span>
+            </div>
+            <br/>
+            <br/>
+            <div class="layui-row">
+                <form class="layui-form layui-col-md4" id="form1" onSubmit="return commission_add()">
+                    <div class="layui-form-item">
+                        <label class="layui-form-label input-required">Name：</label>
+                        <div class="layui-input-block">
+                            <input id="name" name="name" required="" lay-verify="required" placeholder="" autocomplete="off" class="layui-input" type="text">
+                        </div>
+                    </div>
+                    <br/>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label input-required">Order：</label>
+                        <div class="layui-input-block">
+                            <input id="order" name="order" required="" lay-verify="required" placeholder="" autocomplete="off" class="layui-input" type="text">
+                        </div>
+                    </div>
+                    <br/>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">Color：</label>
+                        <div class="layui-input-block">
+                            <select name="color" id="color" lay-filter="required" lay-ignore style="width: 450px;height: 40px">
+                                <option value="1" selected="selected"
+                                        style="background-color:#ff0000;line-height: 40px"></option>
+                                <option value="2" style="background-color:#de8b2b"></option>
+                                <option value="3" style="background-color:#1d2d85"></option>
+                                <option value="4" style="background-color:#5a4a77"></option>
+                                <option value="5" style="background-color:#7f9145"></option>
+                                <option value="6" style="background-color:#31839b"></option>
+                                <option value="7" style="background-color:#4470eb"></option>
+                            </select>
+                        </div>
+                    </div>
+                    <br/>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label input-required">内容：</label>
+                        <div class="layui-input-block">
+                            <textarea  type="text"  name="content" id="EditorId" placeholder="请输入内容"></textarea>
+                        </div>
+                    </div>
+                    <script type="text/javascript" charset="utf-8">
+                        window.UEDITOR_HOME_URL = "__STATIC__/ueditor/";
+                        window.onload=function(){
+                            window.UEDITOR_CONFIG.initialFrameHeight=800;
+                            window.UEDITOR_CONFIG.initialFrameWidth=1200;
+                            window.UEDITOR_CONFIG.autoHeightEnabled=false;
+                            window.UEDITOR_CONFIG.autoFloatEnabled=false;
+                            window.UEDITOR_CONFIG.elementPathEnabled=false;
+                            var editor = new UE.ui.Editor({
+                                imageUrl : '',
+                                fileUrl : '',
+                                imagePath : '',
+                                filePath : '',
+                                imageManagerUrl:'',
+                                imageManagerPath:'/static/uploads/images/'
+                            });
+                            editor.render("EditorId");
+                        }
+                    </script>
+                    <br/>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">{$language_tag.index_public_status}：</label>
+                        <div class="layui-input-block">
+                            <select name="status" id="status" lay-filter="required" >
+                                <option value="1" selected="selected">{$language_tag.index_public_show}</option>
+                                <option value="0">{$language_tag.index_public_disabled}</option>
+                            </select>
+                        </div>
+                    </div>
+                    <br/>
+                    <div class="layui-form-item">
+                        <div class="layui-input-block">
+                            <button class="layui-btn nav-submit" lay-submit="" lay-filter="formDemo" id="">{$language_tag.index_public_submit}</button>
+                            <a href="#" onClick="javascript :history.back(-1);"><button type="button" class="layui-btn layui-btn-primary">{$language_tag.index_public_back}</button></a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="layui-footer">
+        <!-- 底部固定区域 -->
+        © layui.com - 底部固定区域
+    </div>
+</div>
+{include file='public/foot_js' /}
+<script>
+
+    $('#color').change(function(){
+        $(this).css('background-color', $(this).children(':selected').css('background-color'));
+    });
+
+    function commission_add(){
+
+        $.ajax({
+            type: "POST",
+            url: '/booknexus_tour/addCommissionAjax',
+            data: $('#form1').serializeArray(),
+            success: function(data){
+                //console.log(data);
+                if(data.code!=200){
+                    layer.msg(data.msg);
+                    return false;
+                }else if(data.code==200) {
+                    layer.msg('操作成功',{time:1,end : function(layero, index){
+                            layer.load(2);
+                            history.back(-1);
+                        }
+                    });
+                }
+            },
+            error:function(XMLHttpRequest, textStatus, errorThrown){
+                layer.msg('验证失败')
+            }
+        });
+        return false;
+
+    }
+</script>
+</body>
+</html>

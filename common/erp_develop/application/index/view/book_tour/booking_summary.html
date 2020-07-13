@@ -1,0 +1,836 @@
+{include file='/book_tour/includes/header' /}
+{include file='/book_tour/includes/top_nav' /}
+
+
+<!--
+	This is view/booktour/room_config.php
+-->
+<style type="text/css" ref="stylesheet">
+
+    /*@media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
+       #sidebar {
+        margin-left: 780px;
+
+      }
+
+    }*/
+
+    .consultant_name{
+        text-transform: capitalize;
+    }
+
+    .action_btn {
+        vertical-align: middle;
+        display: inline-block;
+        width: 25px;
+        height: 25px;
+        cursor: pointer;
+        background-repeat: no-repeat;
+        background-position: top;
+        text-indent: -9999px;
+    }
+
+    .consultant_column_edit_btn {
+        background-image: url(<?php echo base_url("/assets/images/icn_edit_booking.png"); ?>);
+    }
+
+    .consultant_column_delete_btn {
+        background-image: url(<?php echo base_url("/assets/images/remove_btn_25p.png"); ?>);
+    }
+
+    .consultant_column_delete_btn:hover {
+        background-position: bottom;
+    }
+
+    .validateTips {
+        color: red;
+        margin: 10px 0;
+    }
+
+    .consultant_grid_wrapper {
+        margin-left: auto;
+        margin-right: auto;
+        border: 1px solid #e2dfda;
+        width: 600px;
+        padding: 10px;
+    }
+
+    .tablesorter {
+        width: 100%;
+        margin: 5px 0 5px 0;
+    }
+
+    .tablesorter thead tr {
+        height: 34px;
+        background: url(<?php echo base_url("/assets/images/table_sorter_header.png"); ?>) repeat-x;
+        text-align: left;
+        text-indent: 10px;
+        cursor: pointer;
+    }
+
+    .tablesorter td {
+        padding: 15px 10px;
+        margin: 0;
+        border-bottom: 1px dotted #ccc;
+    }
+
+    fieldset.consultant_dialog_fieldset {
+        border-radius: 5px;
+        background: none repeat scroll 0% 0% #F6F6F6;
+        border: 1px solid #CCC;
+        padding: 1% 0%;
+        margin: 10px 0px;
+    }
+
+    fieldset.consultant_dialog_fieldset label {
+        display: block;
+        float: left;
+        width: 200px;
+        height: 25px;
+        line-height: 25px;
+        text-shadow: 0px 1px 0px #FFF;
+        font-weight: bold;
+        padding-left: 10px;
+        margin: -5px 0px 5px;
+        text-transform: uppercase;
+    }
+
+    fieldset.consultant_dialog_fieldset input[type="text"] {
+        border-radius: 5px;
+        border: 1px solid #BBB;
+        height: 20px;
+        color: #666;
+        box-shadow: 0px 2px 2px #CCC inset, 0px 1px 0px #FFF;
+        padding-left: 10px;
+        background-position: 10px 6px;
+        display: block;
+        float: left;
+        width: 80%;
+        margin: 0px 10px 10px 10px;
+    }
+
+
+</style>
+<section id="content">
+
+    <section id="booktour">
+        <article>
+            <h1><img src="<?php echo base_url('assets/images/booking_summary.png'); ?>" width="700"
+                     alt="Service Requests"/></h1>
+
+            <h2 class="top_icn">
+                <div class="top_icn_text">6</div>
+                <img src="<?php echo base_url('assets/images/booking_summary_icn.png'); ?>"
+                     alt="Booking Summary - Step 6"/>
+
+                <div class="top_text" style="width:600px;"><?= session('submit_error'); ?>&nbsp;<span class="message success"></span></div>
+            </h2>
+
+            <?php //$attribute = array('id' => 'booktour_step6');
+            //echo form_open('booktour/save_data', $attribute); ?>
+            <div id="booking_summary"><!-- service request -borrow the css stype from passgener_details -->
+
+                <div id="emergency">
+                    <h3>Upload Passengers Passport<span>(Optional)</span></h3>
+                    <hr/>
+                    <?php
+                    //$attribute = array('id' => 'upload-passport-file');
+                    //echo form_open_multipart('booktour/emergecy_contact_check', $attribute); ?>
+                    <form action="emergecy_contact_check" method="post" enctype="multipart/form-data" target="upload_target" id="upload-passport-file">
+                        <div class="upload-password-table" id="passportField">
+                            <div class="upload-passport" id="passportField-1">
+                                <input class="upload-passport-field" name="file-1" type="file" />
+                                <span class="add_btn" style="margin-top: -3px;background-image: url('/assets/images/add_btn_30p.png')" id="add-passport" ></span>
+                            </div>
+                        </div>
+                    </form>
+                    <?php //echo form_close(); ?>
+                    <hr/>
+                    <h3>Lead Passenger Contact <span style="color: #0000ff;">Must be a tour participant's Australia mobile number</span></h3>
+                    <hr/>
+                    <input type="text" name="lead_pax_mobile" id="lead_pax_mobile" class="mobile" placeholder="Mobile Phone Number"
+                           value="" maxlength="14"/>
+                    <hr/>
+                    <h3>Emergency Contact Details <span style="color: #0000ff;">Not a tour participant</span></h3>
+                    <hr/>
+                    <input type="text" name="emergecy_name" id="emergecy_name" class="name" placeholder="Name"
+                           value=""/>
+                    <input type="text" name="emergecy_phone" id="emergecy_phone" class="phone" placeholder="Phone No."
+                           value="" maxlength="14"/>
+                    <input type="text" name="emergecy_email" id="emergecy_email" class="email" placeholder="Email"
+                           value=""/>
+                    <hr/>
+                    <h3>Terms and Conditions</h3>
+
+                    <div id="terms">
+                        {foreach $ReturnReceiptInfo as $k=>$v}
+                            <p style="color: blue;font-size: 20px;font-weight: bold">{$v.title}</p>
+                            <p style="font-size: 14px;">{$v.content}</p>
+                        {/foreach}
+                    </div>
+                    <input type="checkbox" name="agree_terms" id="tour_checkbox_terms" class="checkbox_terms" value=""/><span>I agree and understand the terms and conditions.</span>
+                    <hr/>
+                    <input type="text" name="reference_no" id="reference_no" class="reference_no"
+                           placeholder="My Reference No." value=""/>
+
+                    <select name="consultant_name" id="consultant_name" class="consultant_name" placeholder="My Consultant Name.">
+                        <option value="-1">--- Select a Consultant ---</option>
+                        <?php foreach($consultant_options as $v){ ?>
+                        <option value="2603">3333</option>
+                       <?php }?>
+                    </select>
+
+
+                    <span id="open_consultant_man_dialog" title="Manage my consultants"><img src="<?php echo base_url("assets/images/icn_add_user.png"); ?>" /></span>
+
+                </div>
+
+                <div id="manage_consultant_dialog" title="Manage consultants">
+                    <div class="consultant_grid_wrapper">
+                        <table class="tablesorter" id="manage_consultants_table" cellspacing="0">
+                            <thead>
+                            <tr>
+                                <th>Consultant ID</th>
+                                <th>Consultant Name</th>
+                                <th>Action</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div style="margin-top: 20px;">
+                        <button id="add_consultant_btn">Add a consultant</button>
+                    </div>
+                </div>
+                <div id="delete_consultant_confirm" title="Delete Consultant?">
+                    <p><span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 20px 0;"></span>This
+                        consultant will be
+                        deleted from our system. Are you sure?</p>
+                </div>
+                <div id="add_consultant_dialog" title="Add a Consultant">
+                    <p class="validateTips">&nbsp;</p>
+
+                    <form>
+                        <fieldset class="consultant_dialog_fieldset">
+                            <label for="name">Name</label>
+                            <input type="text" name="name" id="name" class="text ui-widget-content ui-corner-all">
+                        </fieldset>
+                    </form>
+                </div>
+                <div id="update_consultant_dialog" title="Change consultant name">
+                    <p class="validateTips">&nbsp;</p>
+
+                    <form>
+                        <fieldset class="consultant_dialog_fieldset">
+                            <label for="name">Name</label>
+                            <input type="text" name="name" id="name" class="text ui-widget-content ui-corner-all">
+                        </fieldset>
+                    </form>
+                </div>
+
+                <div id="page_nav">
+                    <hr/>
+                    <p>
+                        <!--input type="submit" name="submit" value="back" class="page_nav_left"/-->
+                        <a href="<?php echo base_url('book_tour/service_requests'); ?>" class="page_nav_left">Left</a>
+                        <!--span class="save_btn" style="margin-top: 4px; margin-left: 360px; margin-right: 30px;"></span-->
+                        <span class="submit_btn" style="margin-top: 1px; margin-left: 495px; margin-right: 3px;"></span>
+                        <!--input type="submit" name="save" value="Save" class="save"/>
+                        <input type="submit" name="submit" value="Submit" class="submit"/-->
+                        <input type="hidden" name="back" value="special_request"/>
+                        <input type="hidden" name="next" value="save_data"/>
+                        <input type="hidden" name="process" value="save_data"/>
+                        <!-- this data is for form process in booktour contorller -->
+
+                    </p>
+                </div>
+                <!-- end page nav -->
+            </div>
+            <!-- end booking summary -->
+            <?php //echo form_close(); ?>
+        </article>
+    </section>
+    <!-- end booktour -->
+</section> <!-- end content -->
+<br class="clear"/>
+<br class="clear"/>
+<br class="clear"/>
+<script type="text/javascript" src="<?php echo base_url('assets/js/jquery.maskedinput.min.js'); ?>"></script>
+<script type="text/javascript">
+    function checkExtension(thisVale) {
+        var ext = thisVale.split('.').pop().toLowerCase();
+        //alert(ext);
+        if($.inArray(ext, ['jpg','jpeg','pdf']) == -1) {
+            alert('invalid extension!');
+            return false;
+        } else {
+            return true;
+        }
+    }
+    jQuery(document).ready(function ($) {
+
+        var i = $('div.upload-passport').size() + 1;
+
+
+        $("span#add-passport").click(function(){
+            var isFalse = false;
+            var uploadBtn =   '<div class="upload-passport" id="passportField-'+i+'"><input class="upload-passport-field" name="file-'+i+'" type="file" width="200"/>'+
+                    ' <span class="remove_btn" id="remove-passport"></span></div>';
+            if(i <= <?php echo session('pax_num')['pax']?:1; ?>) {
+                //var result = checkExtension(thisVale);
+                $('div.upload-passport :input').each(function(i){
+                    if($(this).val() != "") {
+                        var result = checkExtension($(this).val());
+                        if(result == false) {
+                            isFalse = true;
+                            return false;
+                        }
+                    } else {
+                        alert("Please select a file");
+                        isFalse = true;
+                        return false;
+                    }
+                });
+                if(isFalse != true) {
+                    $(uploadBtn).appendTo("div#passportField");
+                    i++;
+                }
+            } else {
+                alert( " Sorry, you cannot upload passport more than the number of passengers ! " );
+                return false;
+            }
+
+            $("span#remove-passport").click(function(){
+                $(this).parents('div.upload-passport').remove();
+                --i;
+                return false;
+            });
+        });
+
+        /**** Set the div height of content same as booking summary ****/
+        /*$this = $("#sidebar");
+         pos = $this.offset({top: 165, left: 1020});
+         $this.animate({
+         left: "-" + pos.left + "px",
+         top:  "-" + pos.top  + "px"
+
+         })*/
+        /**** Set the div height of content same as booking summary ****/
+        divHeight = $('#sidebar').height();
+        divWidth = $('#sidebar').width();
+        divHeight = divHeight + 200;
+        $('#content').height(divHeight)
+                .css({});
+        $('#content').width(divWidth)
+                .css({});
+
+        $('#booking_summary span.save_btn').click(function () {
+            var warning = $(".message");
+            var myObj = {};
+            var array = [];
+            var passportArr = [];
+
+            name = $('input#emergecy_name').val();
+            phone = $('input#emergecy_phone').val();
+            email = $('input#emergecy_email').val();
+            lead_pax_mobile = $('input#lead_pax_mobile').val();
+            reference_no = $('input#reference_no').val();
+            consultant_name = $('select#consultant_name').val();
+
+            var result = checkExtension(false);
+            if(!result) {
+                passportArr = result;
+                console.log(passportArr);
+                return false;
+            }
+
+
+            if ($('input#tour_checkbox_terms').is(':checked')) {
+                if (name.trim() == "") { // Check if date is null
+                    // show error message remove success message
+                    warning.addClass("error").removeClass("success").html("Please enter the name of your emergency contact !");
+                    alert("Please enter the name of your emergency contact !");
+                    return false;
+                } else {
+                    // show success message remove error message
+                    warning.addClass("success").removeClass("error").html("");
+                }
+                if (lead_pax_mobile.trim() == "") {
+                    warning.addClass("error").removeClass("success").html("Please enter the name of your lead pax mobile number !");
+                    alert("Please enter the name of your lead pax mobile number !");
+                    return false;
+                } else {
+                    warning.addClass("success").removeClass("error").html("");
+                }
+                if (phone.trim() == "") { // Check if date is null
+                    // show error message remove success message
+                    warning.addClass("error").removeClass("success").html("Please enter an emergency contact no !");
+                    alert("Please enter an emergency contact no !");
+                    return false;
+                } else {
+                    // show success message remove error message
+                    warning.addClass("success").removeClass("error").html("");
+                }
+//                if (consultant_name.trim() == "" || consultant_name == "-1") { // Check if consultant name is null
+//                    // show error message remove success message
+//                    warning.addClass("error").removeClass("success").html("Please select a consultant !");
+//                    alert("Please select a consultant !");
+//                    return false;
+//                } else {
+//                    // show success message remove error message
+//                    warning.addClass("success").removeClass("error").html("");
+//                }
+                myObj['type'] = 1;
+                myObj['name'] = name;
+                myObj['phone'] = phone;
+                myObj['email'] = email;
+                myObj['mobile'] = lead_pax_mobile;
+                myObj['reference'] = reference_no;
+                myObj['consultant'] = consultant_name;
+                myObj['passport'] = passportArr;
+
+
+                /****** Redirect to the page and allow time for process *************/
+//            var delay = 1000; //Your delay in milliseconds
+//            setTimeout(function () {
+//                window.location = "booking_thankyou";
+//            }, delay);
+
+                    // Prcoess form data from php
+                $.ajax({
+                    type: "POST",
+                    dataType: "json",
+                    data: {get_param_emergecy: JSON.stringify(myObj)},
+                    beforeSend: function (x) {
+                        if (x && x.overrideMimeType) {
+                            x.overrideMimeType("application/json;charet=UTF-8");
+                        }
+                    },
+                    url: 'emergecy_contact_check',
+                    success: function (data) {
+
+                        var delay = 10; //Your delay in milliseconds
+                        setTimeout(function () {
+                            window.location = "<?= base_url('booktour/booking_thankyou')?>";
+                        }, delay);
+                        //window.location.href = "service_requests";
+                        if (data.msg == "success") {
+                        } else {
+                            //alert('nope mate');
+                        }            // 'data' is a JSON object which we can access directly.
+
+                    }
+                });
+            } else {
+                // show error message remove success message
+                warning.addClass("error").removeClass("success").html("Terms and Conditions have not been accepted.");
+                alert("Terms and Conditions have not been accepted.");
+            }
+
+            //console.log(date);
+
+
+        });
+
+
+        $('#booking_summary span.submit_btn').click(function (e) {
+            //e.preventDefault;
+            var warning = $(".message");
+            var myObj = {};
+            var array = [];
+
+            name              = $('input#emergecy_name').val();
+            phone             = $('input#emergecy_phone').val();
+            email             = $('input#emergecy_email').val();
+            lead_pax_mobile = $('input#lead_pax_mobile').val();
+            reference_no      = $('input#reference_no').val();
+            consultant_name   = $('select#consultant_name').val();
+
+//
+
+            if ($('input#tour_checkbox_terms').is(':checked')) {
+                if (name == "") { // Check if date is null
+                    // show error message remove success message
+                    warning.addClass("error").removeClass("success").html("Please enter the name of your emergency contact !");
+                    alert("Please enter the name of your emergency contact !");
+                    return false;
+                } else {
+                    // show success message remove error message
+                    warning.addClass("success").removeClass("error").html("");
+                }
+                if (phone == "") { // Check if date is null
+                    // show error message remove success message
+                    warning.addClass("error").removeClass("success").html("Please enter an emergency contact no !");
+                    alert("Please enter an emergency contact no !");
+                    return false;
+                } else {
+                    // show success message remove error message
+                    warning.addClass("success").removeClass("error").html("");
+                }
+                if (lead_pax_mobile.trim() == "") {
+                    warning.addClass("error").removeClass("success").html("Please enter the name of your lead pax mobile number !");
+                    alert("Please enter the name of your lead pax mobile number !");
+                    return false;
+                } else {
+                    warning.addClass("success").removeClass("error").html("");
+                }
+//                if (consultant_name == "" || consultant_name == "-1") { // Check if consultant name is null
+//                    // show error message remove success message
+//                    warning.addClass("error").removeClass("success").html("Please select a consultant !");
+//                    alert("Please select a consultant !");
+//                    return false;
+//                } else {
+//                    // show success message remove error message
+//                    warning.addClass("success").removeClass("error").html("");
+//                }
+                myObj['type'] = 2;
+                myObj['name'] = name;
+                myObj['phone'] = phone;
+                myObj['email'] = email;
+                myObj['mobile'] = lead_pax_mobile;
+                myObj['reference'] = reference_no;
+                myObj['consultant'] = consultant_name;
+
+//            console.log(myObj);
+                /****** Redirect to the page and allow time for process *************/
+//            var delay = 10; //Your delay in milliseconds
+//            setTimeout(function () {
+//                window.location = "booking_thankyou";
+//            }, delay);
+//            $( "#upload-passport-file" ).submit();
+//
+                var formData  = new FormData();
+                // Loop through each of the selected files.
+
+                var fileTypeCheck=true;
+                $(".upload-passport-field").each(function(index,el){
+                    var files=el.files;
+                    for (var i = 0; i < files.length; i++) {
+                        var file = files[i];
+
+                        // Check the file type.
+                        if (!/\/pdf|jpg|jpeg|png$/.test(file.type||"")) {
+                            fileTypeCheck=false;
+                            break;
+                        }
+                        // Add the file to the request.
+                        formData.append('file_select'+(index+1), file, file.name);
+                    }
+                });
+                if(!fileTypeCheck){
+//                alert("Only pdf/jpg/jpeg/png accepted!");
+                    warning.addClass("error").removeClass("success").html("Passport file type invalid, (pdf/jpg/jpeg/png only)");
+                    return false;
+                }
+
+                formData.append("get_param_emergecy",JSON.stringify(myObj));
+                $("span.submit_btn").css("pointer-events", "none");
+//
+                // Prcoess form data from php
+                $.ajax({
+                            type: "POST",
+                            dataType: "json",
+                            data: formData,
+                            processData: false,
+                            contentType: false,
+
+                            url: '<?= base_url('book_tour/emergecy_contact_check'); ?>',
+                        success: function (data) {
+                    //window.location.href = "service_requests";
+                    if (data.success) {
+                        var delay = 1000; //Your delay in milliseconds
+                        setTimeout(function () {
+                            window.location = "<?= base_url('book_tour/booking_thankyou'); ?>";
+                        }, delay);
+
+                    } else {
+                        alert("Sorry, there are something wrong with the booking, please contact us for assistance.")
+                    }
+                }
+            });
+
+        } else {
+            // show error message remove success message
+            warning.addClass("error").removeClass("success").html("Terms and Conditions have not been accepted.");
+            alert("Terms and Conditions have not been accepted.");
+            return false;
+        }
+
+        //console.log(date);
+
+
+    });
+
+    });
+
+
+
+    /**
+     * if there are not consultants for this agent, pop up a "add-consultant" dialog
+     *
+     */
+
+    var currentRow = null;
+    $(function () {
+
+
+        $("#add_consultant_btn")
+                .button()
+                .click(function (event) {
+                    event.preventDefault();
+                    var dialogDom = $("#add_consultant_dialog");
+                    dialogDom.dialog("open");
+
+                    //clear old status of this dialog
+                    dialogDom.find("input").first().val("");
+                    dialogDom.find(".validateTips").html("&nbsp;");
+
+                });
+
+        $("#open_consultant_man_dialog").button().click(function(e){
+            e.preventDefault();
+            searchConsultants(false);
+            $("#manage_consultant_dialog").dialog("open");
+        });
+
+        $("#manage_consultants_table").delegate(".consultant_column_edit_btn", "click", function (event) {
+            currentRow = $(this).closest("tr");
+
+            var dialogDom = $("#update_consultant_dialog");
+            dialogDom.dialog("open");
+
+            //clear old status of this dialog
+            var val = currentRow.find(".consultant_column_name").first().html() || "";
+            dialogDom.find("input").first().val(val);
+            dialogDom.find(".validateTips").html("&nbsp;");
+
+        });
+
+        $("#manage_consultants_table").delegate(".consultant_column_delete_btn", "click", function (event) {
+            $("#delete_consultant_confirm").dialog("open");
+            currentRow = $(this).closest("tr");
+        });
+
+        function searchConsultants(isClosing) {
+            var postData = {search_consultant_id: '', search_consultant_name: '', agent_id: "<?php echo $agent_id;?>"};
+            var formURL = "<?php echo base_url('myinfo/searchConsultants'); ?>";
+            var isEmpty = true;
+            $.ajax(
+                    {
+                        url: formURL,
+                        type: "POST",
+                        data: postData,
+                        async: !isClosing,
+                        success: function (data, status) {
+                            if (status === "success") {
+                                var obj = $.parseJSON(data);
+
+                                isEmpty = obj.length <= 0;
+                                if (isClosing) {
+                                    var optionsBody = $("#consultant_name"); //dropdown input body
+                                    optionsBody.empty();
+                                    optionsBody.append('<option value="-1">--- Select a Consultant ---</option>');
+                                    $.each(obj, function (index, item) {
+                                        optionsBody.append('<option value="' + item.id + '">' + item.name + '</option>');
+                                    })
+
+                                }else{
+                                    var tableBody = $("#manage_consultants_table").find("tbody");
+                                    tableBody.empty();
+                                    $.each(obj, function (index, item) {
+                                        appendConsultantRow(tableBody, item.id, item.name);
+                                    })
+                                }
+
+                            }
+                        }
+                    });
+
+            return isEmpty;
+        };
+
+        function appendConsultantRow(bodyDom, id, name) {
+            bodyDom.append(
+                    '<tr>' +
+                    '<td class="consultant_column_id">' + id +
+                    '</td>' +
+                    '<td class="consultant_column_name">' + name + '</td>' +
+                    '<td>' +
+                    '<span class="consultant_column_edit_btn action_btn" title="Edit Consultant">' +
+                    '</span>&nbsp;' +
+                    '<span class="consultant_column_delete_btn action_btn" title="Delete Consultant">' +
+                    '</span>' +
+                    '</td>' +
+                    '</tr>'
+            )
+        }
+
+
+        //init delete confirm dialog
+        $("#delete_consultant_confirm").dialog({
+            autoOpen: false,
+            resizable: false,
+            height: 180,
+            modal: true,
+            buttons: {
+                "Delete": function () {
+                    var dialogDom = $(this);
+                    $.post("<?php echo base_url("myinfo/delete_consultant"); ?>",
+                    {
+                        consultant_id: Number(currentRow.find("td.consultant_column_id").first().html())
+                    }, function (data, status) {
+                        if (status === "success" && data.success) {
+                            dialogDom.dialog("close");
+                            //re-search consultants
+//                            $("#consultant_search_div").find("form").submit();
+
+                            currentRow.remove();
+
+                        } else {
+                            var message = (data && data.message) ? data.message : "Error, please try again!";
+                            dialogDom.find(".validateTips").html(message);
+                        }
+
+                    }, 'json');
+
+                    $(this).dialog("close");
+                },
+                Cancel: function () {
+                    $(this).dialog("close");
+                }
+            }
+        });
+
+
+        //init add consultant dialog
+        $("#add_consultant_dialog").dialog({
+            autoOpen: false,
+            resizable: false,
+            height: 240,
+            modal: true,
+            buttons: {
+                "Submit": function () {
+                    var nameValue = $(this).find("input[name='name']").val();
+                    if (isEmptyStr(nameValue)) {
+                        $(this).find(".validateTips").html("Name could not be empty!");
+                    } else {
+                        var dialogDom = $(this);
+
+                        $.post("<?php echo base_url("myinfo/add_consultant"); ?>",
+                                {
+                                    name: nameValue,
+                                    agentID:<?php echo $agent_id?:0; ?>
+                    }, function (data, status) {
+                        if (status === "success" && data.success) {
+                            dialogDom.dialog("close");
+
+                            //re-search consultants
+                            searchConsultants(false);
+
+                        } else {
+                            var message = (data && data.message) ? data.message : "Error, please try again!";
+                            dialogDom.find(".validateTips").html(message);
+
+                        }
+                    }, 'json');
+
+
+                }
+            },
+            Cancel: function () {
+                $(this).dialog("close");
+            }
+        }
+    })
+
+    //init update consultant dialog
+    $("#update_consultant_dialog").dialog({
+        autoOpen: false,
+        resizable: false,
+        height: 240,
+        modal: true,
+        buttons: {
+            "Submit": function () {
+                var nameValue = $(this).find("input[name='name']").val();
+                var nameDom = currentRow.find(".consultant_column_name").first();
+                var oldValue = nameDom.html() || "";
+                if (isEmptyStr(nameValue)) {
+                    $(this).find(".validateTips").html("Name could not be empty!");
+                } else if (nameValue === oldValue) {
+                    $(this).find(".validateTips").html("Name haven't change");
+                } else {
+
+                    var dialogDom = $(this);
+                    $.post(
+                            "<?php echo base_url("myinfo/update_consultant"); ?>",
+                            {
+                                name: nameValue,
+                                consultant_id: Number(currentRow.find("td.consultant_column_id").first().html()),
+                                agentID:<?php echo $agent_id?:0; ?>
+                }, function (data, status) {
+                    if (status === "success" && data.success) {
+                        dialogDom.dialog("close");
+
+                        searchConsultants(false);
+
+                    } else {
+                        var message = (data && data.message) ? data.message : "Error, please try again!";
+                        dialogDom.find(".validateTips").html(message);
+                    }
+
+                }, 'json');
+
+            }
+        },
+        Cancel: function () {
+            $(this).dialog("close");
+        }
+    }
+    })
+
+
+    //init manage consultant dialog
+    $("#manage_consultant_dialog").dialog({
+        autoOpen: false,
+        resizable: false,
+        height: 600,
+        width: 650,
+        modal: true,
+        buttons: {
+            Close: function () {
+                $(this).dialog("close");
+            }
+        },
+        beforeClose: function () {
+            if(searchConsultants(true)){
+                alert("Please at least add one consultant to continue!");
+                return false;
+            }else{
+                return true;
+            }
+        }
+
+    });
+
+    <?php if($needAddConsultant): ?>
+    $("#manage_consultant_dialog").dialog("open");
+    <?php endif; ?>
+
+    });
+
+    function isEmptyStr(value) {
+        if (value == '' || value == null) {
+            return true;
+        } else {
+            var temp = value.replace(/^\s+|\s+$/g, "");
+            return temp.length == 0;
+        }
+    }
+
+</script>
+
+
+
+{include file='/book_tour/aside_booking_summary' /}
+{include file='/book_tour/includes/footer' /}

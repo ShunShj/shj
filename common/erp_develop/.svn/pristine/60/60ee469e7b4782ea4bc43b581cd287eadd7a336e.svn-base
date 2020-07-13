@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {include file='public/head' /}
+    <title>{$language_tag.index_branchcompany_showBranchProductManage_branchManagement}</title>
+    <link href="__STATIC__/css/branchcompany.css" rel="stylesheet">
+
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+    <div class="layui-header">
+        {include file='public/header' /}
+    </div>
+
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll">
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            {include file='public/left_menu' /}
+        </div>
+    </div>
+
+    <div class="layui-body layui-body-bg">
+
+        <!-- 内容主体区域 -->
+        <div style="padding: 15px;">
+            <div class='layui-form-item'>
+                <span class="layui-breadcrumb" lay-separator="-">
+                    <a>{$language_tag.index_public_homepage}</a>
+                    <a>{$language_tag.index_branchcompany_showBranchProductManage_branchManagement}</a>
+                    <a>{$language_tag.index_branchcompany_showBranchProductManage_branchProduct}</a>
+                    <a><cite>{$_GET['branch_product_number']==''?$language_tag.index_branchcompany_showBranchProductManage_add_branchProduct:$language_tag.index_branchcompany_showBranchProductManage_edit_branchProduct}</cite></a>
+                </span>
+            </div>
+            <form class="layui-form">
+                <div class="branch-top all-search-bg">
+                    <div class="layui-row">
+                        <div class="layui-col-md4">
+                            <div class="layui-form-item">
+                                <label class="layui-form-label input-required">{$language_tag.index_branchcompany_showBranchProductManage_branchProduct}:</label>
+                                <div class="layui-input-block">
+                                    <input type="text" id="branch_product_name" name="month" value="" lay-verify="required" autocomplete="off"   placeholder="{$language_tag.index_branchcompany_showBranchProductManage_branchProduct_name}" class="layui-input">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-col-md4">
+                            <div class="layui-form-item">
+                                <label class="layui-form-label input-required">{$language_tag.index_branchcompany_showBranchProductTypeManage_branchCompanyProductType}:</label>
+                                <div class="layui-input-block">
+                                    <select class="layui-select" id="branch_product_type_id" lay-verify="required" lay-search lay-filter="productTypes">
+
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-col-md4">
+                            <div class="layui-form-item">
+                                <label class="layui-form-label input-required">{$language_tag.index_public_status}:</label>
+                                <div class="layui-input-block">
+                                    <select class="layui-select" lay-verify="required" id="status">
+                                        <option value="1">{$language_tag.index_public_show}</option>
+                                        <option value="0">{$language_tag.index_public_disabled}</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--<div class="layui-row">
+                        <div class="layui-col-md4">
+                            <div class="layui-form-item">
+                                <label class="layui-form-label input-required">{$language_tag.index_branchcompany_showBranchProductManage_startDate}:</label>
+                                <div class="layui-input-block">
+                                    <input type="text" name="startDate" id="branch_product_begin_time" placeholder="{$language_tag.index_branchcompany_showDistributorManage_pleaseSelectTheDate}" lay-verify="required" autocomplete="off" class="layui-input layui-input-date sales-date">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-col-md4">
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">{$language_tag.index_branchcompany_showBranchProductManage_endDate}:</label>
+                                <div class="layui-input-block">
+                                    <input type="text" name="endDate" id="branch_product_end_time" placeholder="{$language_tag.index_branchcompany_showDistributorManage_pleaseSelectTheDate}" autocomplete="off" class="layui-input layui-input-date sales-date">
+                                </div>
+                            </div>
+                        </div>
+                    </div>-->
+                    <div class="layui-row">
+                        <div class="layui-col-md8">
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">{$language_tag.index_branchcompany_showBranchProductManage_describe}:</label>
+                                <div class="layui-input-block">
+                                    <textarea class="layui-textarea" id="remark" name="remark"></textarea>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="layui-col-md4">
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">{$language_tag.index_branchcompany_showBranchProductManage_userName}:</label>
+                                <div class="layui-input-block">
+                                    <select id="branch_product_user_id" lay-search>
+                                        <option></option>
+                                        {foreach $UserList as $vl}
+                                        <option value="{$vl.user_id}" {$branch_product_user == $vl.user_id?'selected':''} >{$vl.nickname}</option>
+                                        {/foreach}
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="branch-btn layui-icon layui-icon-up" id="slidUp" data-value="1"></div>
+                </div>
+                <div class="content-bg">
+                    <fieldset class="layui-elem-field layui-field-title">
+                        <legend>{$language_tag.index_product_showRouteTemplateManage_route_template}</legend>
+                    </fieldset>
+                    <div>
+                        <a class="layui-btn nav-add layui-btn-sm" onclick="teamAdd()">{$language_tag.index_public_add}</a>
+                    </div>
+                    <br>
+                    <div class="table-nont">
+                        <table class="layui-table layui-form table-branchcompany-poper abc" id="" style="table-layout:fixed">
+                            <thead>
+                            <!--<tr>
+                                <th style="width:150px">{$language_tag.index_branchcompany_showBranchProductManage_teamProduct_numbers}</th>
+                                <th>{$language_tag.index_branchcompany_showBranchProductManage_teamProduct_names}</th>
+                                <th>{$language_tag.index_public_type}</th>
+                                <th>{$language_tag.index_branchcompany_showBranchProductManage_branch}</th>
+                                <th>{$language_tag.index_branchcompany_showBranchProductManage_startDate}</th>
+                                <th>{$language_tag.index_product_ShowPlanTour_planToReceiveVisitors}</th>
+                                <th>{$language_tag.index_product_ShowPlanTour_receivedVisitors}</th>
+                                <th>{$language_tag.index_public_settlementprice}</th>
+                                <th style="width: 100px">{$language_tag.index_product_showRouteTemplateManage_resources_currency}</th>
+                                <th>{$language_tag.index_branchcompany_showBranchProductManage_direct_price}</th>
+                                <th>{$language_tag.index_branchcompany_showBranchProductManage_agency_price}</th>
+                                <th>{$language_tag.index_source_operation}</th>
+                            </tr>--><!--团队产品-->
+                            <tr>
+                                <th style="width:150px">{$language_tag.index_branchcompany_showBranchProductManage_number}</th>
+                                <th>{$language_tag.index_product_showRouteTemplateManage_newRouteTemplate_name}</th>
+                                <th>{$language_tag.index_public_type}</th>
+                                <th>{$language_tag.index_public_company}</th>
+                                <!--<th>可选/必选</th>
+                                <th>{$language_tag.index_product_showRouteTemplateManage_plan_custom_number}</th>
+                                <th>{$language_tag.index_product_ShowPlanTour_receivedVisitors}</th>-->
+                                <th>{$language_tag.index_product_showRouteTemplateManage_resources_settlementPrice}</th>
+                                <th style="width: 100px">{$language_tag.index_product_showRouteTemplateManage_resources_currency}</th>
+                                <th>{$language_tag.index_branchcompany_showBranchProductManage_direct_price}</th>
+                                <th>{$language_tag.index_branchcompany_showBranchProductManage_agency_price}</th>
+                                <th>{$language_tag.index_source_operation}</th>
+                            </tr>
+                            </thead>
+                            <tbody id="newTeam">
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="content-bg">
+                    <fieldset class="layui-elem-field layui-field-title">
+                        <legend>{$language_tag.index_branchcompany_showBranchProductManage_source}</legend>
+                    </fieldset>
+                    <div>
+
+                        <a class="layui-btn nav-add layui-btn-sm" onclick="productAdd()" >{$language_tag.index_public_add}</a>
+
+                    </div>
+                    <br>
+                    <div class="table-nont">
+                        <table class="layui-table layui-form table-branchcompany-poper eee" id="" style="table-layout:fixed">
+                            <thead>
+                            <tr>
+                                <th style="width:150px">{$language_tag.index_branchcompany_showBranchProductManage_sourceNumber}</th>
+                                <th>{$language_tag.index_branchcompany_showBranchProductManage_sourceName}</th>
+                                <th>{$language_tag.index_branchcompany_showBranchProductManage_sourceType}</th>
+                                <th>{$language_tag.index_public_supplier}</th>
+                                <th>{$language_tag.index_branchcompany_showBranchProductManage_costPrice}</th>
+                                <th>{$language_tag.index_product_showRouteTemplateManage_resources_currency}</th>
+                                <th>{$language_tag.index_branchcompany_showBranchProductManage_direct_price}</th>
+                                <th>{$language_tag.index_branchcompany_showBranchProductManage_agency_price}</th>
+                                <th>{$language_tag.index_source_operation}</th>
+                            </tr>
+                            </thead>
+
+                            <tbody id="newProduct">
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <br><br>
+                <div class="layui-form-item">
+                    <div class="all-button-center">
+                        <a class="layui-btn nav-submit" lay-submit="" lay-filter="formDemo" id="productSubmit">{$language_tag.index_public_submit}</a>
+                        <a href='javascript:history.back(-1)'><button type="button" class="layui-btn layui-btn-primary">{$language_tag.index_public_back}</button></a>
+                        <input type="hidden" id="branch_product_hidden_branch_product_number" value="{$vo.branch_product_number}">
+                    </div>
+                </div>
+
+            </form>
+                
+             <div class=''>
+                &nbsp&nbsp<font style="font-size: 20px;font-weight: bold">{$language_tag.index_public_comment}</font>
+            </div>
+<table class="layui-table layui-form">
+                                <thead>
+                                    <tr>
+                                        <th>{$language_tag.index_public_comment_content}</th>
+                                        <th>{$language_tag.index_public_comment_time}</th>
+                                        <th>{$language_tag.index_public_comment_username}</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="message_board">  
+                                {foreach name='comment_result' item='comment_result'}
+                                	<tr> 
+                                		<td>1{$comment_result.comment}</td>
+                                		<td>{$comment_result.create_time|date='Y-m-d H:i:s',###}</td>
+                                		<td>{$comment_result.username}</td> 
+                                	</tr>
+                                {/foreach}	
+                                </tbody>
+ </table>
+  <div>
+ <textarea rows="" cols="" style='width:100%;height:100px;' id='liuyan'></textarea>
+ <input type='hidden' value="{$Think.get.branch_product_number}" id='branch_product_number' />
+ </div>
+ <div style='text-align:center'>
+ 	<a class='layui-btn nav-add layui-btn-sm' id='tijiaoliuyan'>提交留言</a>
+ </div>
+        
+
+        </div>
+
+    </div>
+
+  <div>
+ <textarea rows="" cols="" style='width:100%;height:100px;' id='liuyan'></textarea>
+ <input type='hidden' value="{$Think.get.route_template_id}" id='route_template_id' />
+ </div>
+ <div style='text-align:center'>
+ 	<a class='layui-btn nav-add layui-btn-sm' id='tijiaoliuyan'>提交留言</a>
+ </div>
+</div>
+<br>
+<br>
+<input type="hidden" value="{$_GET['branch_product_number']}" id="branch_product_number">
+<input type="hidden" value="" id="branchProductType">
+<input type="text" id="cc_op" hidden="edit">
+<input type="hidden" id="user_company_id" value="{$Think.session.user.company_id}" />
+<div class="layui-footer">
+    <!-- 底部固定区域 -->
+    © layui.com - 底部固定区域
+</div>
+
+<!--添加团队弹出窗-->
+<script id="branchPop" type="text/html">
+    <!--<form class="layui-form">
+        <div class='layui-input-inline'>
+            <input type="text" id="team_product_number" name="source_number_search"  placeholder="{$language_tag.index_branchcompany_showBranchProductManage_productNumber}" class="layui-input">
+        </div>
+        <div class='layui-input-inline'>
+            <input type="text" id="team_product_name" name="source_name_search"  placeholder="{$language_tag.index_branchcompany_showBranchProductManage_productName}" class="layui-input">
+        </div>
+        <div class='layui-input-inline'>
+            <select name="chooseCompany" id="choose_company_id" lay-search>
+
+            </select>
+        </div>
+        <div class='layui-input-inline'>
+            <a href="javascript:void(0);" class="layui-btn nav-submit" onclick="team()">{$language_tag.index_public_search}</a>
+        </div>
+    </form>-->
+    <form class="layui-form">
+        <div class='layui-input-inline'>
+            <select name="chooseCompany" id="company_id" lay-search>
+
+            </select>
+        </div>
+        <div class='layui-input-inline'>
+            <input type="text" id="route_number" name="source_number_search"  placeholder="{$language_tag.index_branchcompany_showBranchProductManage_lineTemplate_number}" class="layui-input">
+        </div>
+        <div class='layui-input-inline'>
+            <input type="text" id="route_name" name="source_name_search"  placeholder="{$language_tag.index_product_showRouteTemplateManage_newRouteTemplate_name}" class="layui-input">
+        </div>
+        <div class='layui-input-inline'>
+            <a href="javascript:void(0);" class="layui-btn nav-submit" onclick="team()">{$language_tag.index_public_search}</a>
+        </div>
+    </form>
+    <div class="lay-tab-box">
+        <div class="table-nont">
+            <!--<table class="layui-table layui-form" id="teamTable">团队-->
+            <br>
+                <div class="red">*选路模板只能选择一个，若已选择请删除重新选择！</div>
+                <table class="layui-table layui-form" id="teamplate">
+                <colgroup>
+                    <col width="50">
+                    <col width="180">
+                    <col width="180">
+                    <col width="160">
+                    <col width="200">
+                    <col width="120">
+                    <col width="180">
+                    <!--<col width="120">团队-->
+                </colgroup>
+                <thead>
+                <tr>
+                    <!--团队产品-->
+                    <!--<th><input type="checkbox" name="branchcompanyCheckboxTable" lay-skin="primary" lay-filter="poperCheckboxAll"></th>
+                    <th>{$language_tag.index_branchcompany_showBranchProductManage_productNumber}</th>
+                    <th>{$language_tag.index_branchcompany_showBranchProductManage_productName}</th>
+                    <th>{$language_tag.index_public_type}</th>
+                    <th>{$language_tag.index_branchcompany_showBranchProductManage_branch}</th>
+                    <th>{$language_tag.index_branchcompany_showBranchProductManage_startDate}</th>
+                    <th>{$language_tag.index_product_showRouteTemplateManage_days}</th>
+                    <th>{$language_tag.index_branchcompany_showBranchProductManage_settlementPrice}</th>-->
+                    <!--线路模板-->
+                    <!--<th><input type="checkbox" name="branchcompanyCheckboxTable" lay-skin="primary" lay-filter="poperCheckboxAll"></th>-->
+                    <th></th>
+                    <th>{$language_tag.index_branchcompany_showBranchProductManage_lineTemplate_number}</th>
+                    <th>{$language_tag.index_product_showRouteTemplateManage_newRouteTemplate_name}</th>
+                    <th>{$language_tag.index_public_type}</th>
+                    <th>{$language_tag.index_branchcompany_showBranchProductManage_branch}</th>
+                    <th>{$language_tag.index_product_showRouteTemplateManage_days}</th>
+                    <th>{$language_tag.index_branchcompany_showBranchProductManage_settlementPrice}</th>
+                </tr>
+                </thead>
+                <tbody id="team_table">
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+</script>
+<script id="template_table_pop" type="text/html">
+    {{#  layui.each(d, function(index, item){ }}
+    <tr>
+        <td>
+            {{#  if(d.isDis==1){ }}
+            <input type="checkbox" name="productCheckboxTable" disabled lay-skin="primary" lay-filter="tablePop">
+            {{#  } else { }}
+            <input type="checkbox" name="productCheckboxTable" lay-skin="primary" lay-filter="tablePop">
+            {{#  } }}
+        </td>
+        <td><a href="/product/showRouteTemplateInfo?route_template_id={{item.route_template_id}}&abc=1" target="_blank" class="table-href">{{item.route_number}}</a></td>
+        <td>{{item.route_name}}</td>
+        <td>{{item.route_type_name}}</td>
+        <td>{{item.company_name}}</td>
+        <td>{{item.days}}</td>
+        <td>{{item.unit}} {{item.settlement_type==1?item.once_price:item.settlement_type==2?item.real_price:''}}</td>
+    </tr>
+    {{#  }); }}
+</script>
+<!--<script id="team_table_pop" type="text/html">
+    {{#  layui.each(d, function(index, item){ }}
+    <tr>
+        {{#  if(item.own_expens_source_array.length>0){ }}
+        <td rowspan="{{item.own_expens_source_array.length+1}}"><input type="checkbox" name="productCheckboxTable" lay-skin="primary"></td>
+        {{#  } else { }}
+        <td><input type="checkbox" name="productCheckboxTable" lay-skin="primary"></td>
+        {{#  } }}
+        <td>{{item.team_product_number}}</td>
+        <td>{{item.team_product_name}}</td>
+        <td>{$language_tag.index_branchcompany_showBranchProductManage_team}</td>
+        <td>{{item.company_name}}</td>
+        <td>{{date('Y-m-d',item.begin_time)}}</td>
+        <td>{{item.base_count}}</td>
+        <td>{{item.currency_name}} {{item.settlement_type==1?item.once_price:item.settlement_type==2?item.real_price:''}}</td>
+    </tr>
+    {{#  if(item.own_expens_source_array.length>0){ }}
+    {{#  layui.each(item.own_expens_source_array, function(indexs, items){ }}
+    <tr>
+        <td>{{items.source_number}}</td>
+        <td>{{items.own_expense_name}}</td>
+        <td>{$language_tag.index_finance_showReceivableManage_ownexpense}</td>
+        <td>{{item.company_name}}</td>
+        <td></td>
+        <td></td>
+        <td>{{items.currency_name}} {{items.source_total_price}}</td>
+    </tr>
+    {{#  }); }}
+    {{#  } }}
+    {{#  }); }}
+</script>--><!--团队-->
+<!--添加资源弹出窗-->
+<script id="productPop" type="text/html">
+    <form class="layui-form">
+        <div class='layui-input-inline'>
+            <select name="branchcompanyRouteType" id="supplier_type_id">
+                <option value="">{$language_tag.index_branchcompany_showBranchProductManage_placeholdSourceType}</option>
+                <option value="2">{$language_tag.index_finance_showReceivableManage_hotel}</option>
+                <option value="3">{$language_tag.index_finance_showReceivableManage_dining}</option>
+                <option value="4">{$language_tag.index_finance_showReceivableManage_flight}</option>
+                <option value="5">{$language_tag.index_finance_showReceivableManage_cruise}</option>
+                <option value="6">{$language_tag.index_finance_showReceivableManage_visa}</option>
+                <option value="7">{$language_tag.index_finance_showReceivableManage_scenic_spot}</option>
+                <option value="8">{$language_tag.index_finance_showReceivableManage_vehicle}</option>
+                <option value="9">{$language_tag.index_finance_showReceivableManage_tourguide}</option>
+                <option value="10">{$language_tag.index_finance_showReceivableManage_singlesource}</option>
+                <option value="11">{$language_tag.index_finance_showReceivableManage_ownexpense}</option>
+            </select>
+        </div>
+        <div class='layui-input-inline'>
+            <input type="text" id="supplier_name" name="productPopel"  placeholder="{$language_tag.index_public_supplier}" class="layui-input">
+        </div>
+        <div class='layui-input-inline'>
+            <input type="text" id="source_number" name="source_number_search"  placeholder="{$language_tag.index_branchcompany_showBranchProductManage_sourceNumber}" class="layui-input">
+        </div>
+        <div class='layui-input-inline'>
+            <input type="text" id="source_name" name="source_name_search"  placeholder="{$language_tag.index_branchcompany_showBranchProductManage_sourceName}" class="layui-input">
+        </div>
+        <div class='layui-input-inline'>
+            <a href="javascript:void(0);" class="layui-btn nav-submit" onclick="resource();">{$language_tag.index_public_search}</a>
+        </div>
+    </form>
+    <div class="table-nont">
+        <table class="layui-table layui-form" id="productTable">
+            <colgroup>
+                <col width="50">
+                <col width="180">
+                <col width="180">
+                <col width="160">
+                <col width="200">
+                <col width="120">
+            </colgroup>
+            <thead>
+            <tr>
+                <th><input type="checkbox" name="branchcompanyCheckboxTable" lay-skin="primary" lay-filter="poperCheckboxAllTwo"></th>
+                <th>{$language_tag.index_branchcompany_showBranchProductManage_sourceNumber}</th>
+                <th>{$language_tag.index_branchcompany_showBranchProductManage_sourceName}</th>
+                <th>{$language_tag.index_branchcompany_showBranchProductManage_sourceType}</th>
+                <th>{$language_tag.index_public_supplier}</th>
+                <th>{$language_tag.index_branchcompany_showBranchProductManage_settlementPrice}</th>
+            </tr>
+            </thead>
+            <tbody id="product_tbody">
+
+            </tbody>
+        </table>
+    </div>
+</script>
+<script id="product_table_pop" type="text/html">
+    {{#  layui.each(d, function(index, item){ }}
+    <tr>
+        <td><input type="checkbox" name="branchcompanyCheckboxTable" lay-skin="primary"></td>
+        <td class="layui-table-cell">{{numberA(item.source_number,item.supplier_type_id,item.source_id)}}</td>
+        <td>{{item.source_name}}</td>
+        <td>{{productTypes(item.supplier_type_id)}}</td>
+        <td>{{item.supplier_name}}</td>
+        <td>{{item.unit}}{{item.normal_price}}</td>
+    </tr>
+    {{#  }); }}
+</script>
+
+{include file='public/foot_js' /}
+<script>
+    var please = "{$language_tag.index_public_select}";
+    var MultilingualAll = <?=json_encode($MultilingualAll);?> ;
+    var languageId = {$Think.session.user.language_id};
+    var hotel = '{$language_tag.index_finance_showReceivableManage_hotel}';
+    var dining = '{$language_tag.index_finance_showReceivableManage_dining}';
+    var flight = '{$language_tag.index_finance_showReceivableManage_flight}';
+    var cruise = '{$language_tag.index_finance_showReceivableManage_cruise}';
+    var visa = '{$language_tag.index_finance_showReceivableManage_visa}';
+    var scenic_spot = '{$language_tag.index_finance_showReceivableManage_scenic_spot}';
+    var vehicle = '{$language_tag.index_finance_showReceivableManage_vehicle}';
+    var tourguide = '{$language_tag.index_finance_showReceivableManage_tourguide}';
+    var singlesource = '{$language_tag.index_finance_showReceivableManage_singlesource}';
+    var ownexpense = "{$language_tag.index_finance_showReceivableManage_ownexpense}";
+    var submit = "{$language_tag.index_public_submit}";
+    var cancel = "{$language_tag.index_public_cancel}";
+    var del = "{$language_tag.index_public_del}";
+</script>
+<script src='__STATIC__/javascript/branchcompany/all.js'></script>
+<script src='__STATIC__/javascript/branchcompany/branch_product.js'></script>
+<script src='__STATIC__/javascript/data.js'></script>
+<script>
+$('#tijiaoliuyan').click(function(){
+    layer.load(5, {
+        shade: [0.5,'gray'],
+
+    });
+	var comment = $('#liuyan').val();
+	var branch_product_number = $('#branch_product_number').val();
+  $.ajax({
+      type: "POST",
+      url: '/branchcompany/addBranchProductCommentAjax',
+      data: {
+      	comment:comment,
+      	branch_product_number:branch_product_number
+      	
+      },
+      success: function (data) {
+      	  layer.closeAll();
+      	  window.location.reload()
+      },
+      error:function(XMLHttpRequest, textStatus, errorThrown){
+          //console.log(errorThrown)
+           layer.close(loadIndex);
+          layer.msg('{$language_tag.index_public_verificationFailure}')
+
+      }
+  });
+})
+</script>
+
+
+</body>
+</html>
+

@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {include file='public/head' /}
+    <title>{$language_tag.index_finance_EstablishmentOfAScaleOfAssessments_set_expense_allocation_proportion}</title>
+    <link href="__STATIC__/css/product.css" rel="stylesheet">
+    <link href="__STATIC__/css/finance.css" rel="stylesheet">
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+    <div class="layui-header">
+        {include file='public/header' /}
+    </div>
+
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll">
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            {include file='public/left_menu' /}
+        </div>
+    </div>
+
+    <div class="layui-body">
+        <div style="padding: 15px 15px 0px;">
+            <div class="body-top">
+                <div class='layui-form-item'>
+                <span class="layui-breadcrumb" lay-separator="-">
+                    <a>{$language_tag.index_public_homepage}</a>
+                    <a>{$language_tag.index_public_finance}</a>
+                    <a>{$language_tag.index_finance_CostSharingList_apportion_proportion}</a>
+                    <a><cite>{$language_tag.index_finance_EstablishmentOfAScaleOfAssessments_set_expense_allocation_proportion}</cite></a>
+                </span>
+                </div>
+                <br>
+            </div>
+
+            <form class="layui-form" id="form1" onSubmit="return add()">
+                <div class='layui-block input-inline' style="text-align: right">
+                     <a href="javascript:history.back()" class="layui-btn hover-edit layui-btn-primary">{$language_tag.index_public_cancel}</a>
+                     <button  class="layui-btn nav-submit" >{$language_tag.index_branchcompany_showCompanyOrderManage_addEdit_confirm}</button>
+                </div>
+                <hr><br>
+                <p style="font-size: 14px;font-weight: bold">{$language_tag.index_finance_CostSharingList_set_proportion}</p>
+                <div class="table-nont pageHeight">
+                    <table class="layui-table layui-form"  id="" >
+                        <thead>
+                        <tr>
+                            <td width="65%">{$language_tag.index_public_company}</td>
+                            <td width="30%" >{$language_tag.index_finance_CostSharingList_proportion}</td>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {foreach $Company as $ky=>$vl}
+                        {if $vl.company_id<>1 }
+                        <tr>
+                            <td>{$vl.company_name}</td>
+                            <td style="position: relative" >
+                                <input type="text" name="scale[{$vl.company_id}]" class="layui-input scale" value="{$CompanyApportionProportion[$vl.company_id][0]['apportion_proportion']|default=0}"  lay-verify="required|number" required  />
+                                <div style="position: absolute;top: 18px;right: 40px;font-size: 20px;font-weight: bold">%</div>
+                            </td>
+                        </tr>
+                        {/if}
+                        {/foreach}
+                        </tbody>
+                    </table>
+                </div>
+            </form>
+
+        </div>
+    </div>
+    <div class="layui-footer">
+        <!-- 底部固定区域 -->
+        © layui.com - 底部固定区域
+    </div>
+</div>
+{include file='public/foot_js' /}
+<script src='__STATIC__/javascript/product/all.js'></script>
+<script src='__STATIC__/javascript/finance/receivable.js'></script>
+
+<script>
+    !function() {
+        var layer = layui.layer;
+        var form = layui.form;
+        var laydate = layui.laydate;
+        var upload = layui.upload;
+        var element = layui.element;
+        var formSelects = layui.formSelects;
+
+    }();
+    function add(){
+        var num = 0;
+        $('.scale').each(function(i){
+            num += parseFloat($(this).val());
+        });
+
+        if(num != 100){
+            layer.msg('分摊比例总和必须为100%');
+        }else{
+            layer.load(2);
+            $.ajax({
+                type: "POST",
+                url: '/finance/updateCompanyApportionProportionAjax',
+                data: $('#form1').serializeArray(),
+                success: function (data) {
+                    layer.closeAll();
+                    if(data.code!=200){
+                        layer.msg(data.msg)
+                        return false;
+                    }else if(data.code==200){
+                        layer.msg('{$language_tag.index_public_success}',{time:1,end : function(layero, index){
+                            window.history.go(-1);
+                        }
+                        });
+                    }
+                },
+                error:function(XMLHttpRequest, textStatus, errorThrown){
+                    //console.log(errorThrown)
+                    layer.closeAll();
+                    layer.msg('{$language_tag.index_public_verificationFailure}')
+
+                }
+            });
+        }
+
+        return false;
+    }
+
+</script>
+</body>
+</html>

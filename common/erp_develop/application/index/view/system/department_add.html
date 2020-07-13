@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+	{include file='public/head' /}
+  	<title>layout 后台大布局 - Layui</title>
+ 
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+	
+	<div class="layui-header">
+	{include file='public/header' /}
+	</div>
+  
+	 <div class="layui-side layui-bg-black">
+	   <div class="layui-side-scroll">
+	     <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+		{include file='public/left_menu' /}
+	   </div>
+	 </div>
+  
+	<div class="layui-body">
+	 
+		<!-- 内容主体区域 -->
+		<div style="padding: 15px;">
+			<div class='layui-form-item'>
+		   		<span class="layui-breadcrumb" lay-separator="-">
+					<a>{$language_tag.index_public_homepage}</a>
+					<a>{$language_tag.index_public_system}</a>
+			  		<a>{$language_tag.index_system_showDepartmentManage_department_manage}</a>
+					<a><cite>{$language_tag.index_system_showDepartmentManage_add_department}</cite></a>
+				</span>
+			</div>
+			<br><br>
+			<div class="layui-row">
+				<form class="layui-form layui-col-md4"  onSubmit="return departmentAdd()">
+					<div class="layui-form-item">
+						<label class="layui-form-label input-required">{$language_tag.index_system_showDepartmentManage_department_name}:</label>
+						<div class="layui-input-block">
+							<input name="department_name"  lay-verify="required" placeholder="{$language_tag.index_system_showDepartmentManage_input_department_name}" autocomplete="off" class="layui-input" type="text">
+						</div>
+					</div>
+
+					<div class="layui-form-item">
+						<label class="layui-form-label input-required">{$language_tag.index_system_showDepartmentManage_own_company}:</label>
+						<div class="layui-input-block">
+							<select name="company_id" id='choose_company_id' >
+								{foreach name='company_data_result'  item='vo'}
+								<option value="{$vo.company_id}">{$vo.company_name}</option>
+								{/foreach}
+
+							</select>
+						</div>
+					</div>
+					<div class="layui-form-item">
+						<label class="layui-form-label">{$language_tag.index_system_showDepartmentManage_linkman}:</label>
+						<div class="layui-input-block">
+							<input type="text" name="linkman"   lay-vertype="tips" placeholder="{$language_tag.index_system_showDepartmentManage_input_linkman}" autocomplete="off" class="layui-input" >
+						</div>
+						<!--  <div class="layui-form-mid layui-word-aux">辅助文字</div>-->
+					</div>
+					<div class="layui-form-item">
+						<label class="layui-form-label">{$language_tag.index_system_showDepartmentManage_phone}:</label>
+						<div class="layui-input-block">
+							<input type="text" name="phone"   lay-vertype="tips" placeholder="{$language_tag.index_system_showDepartmentManage_input_phone}" autocomplete="off" class="layui-input" >
+						</div>
+						<!--  <div class="layui-form-mid layui-word-aux">辅助文字</div>-->
+					</div>
+
+					<div class="layui-form-item">
+						<div class="layui-input-block">
+							<button class="layui-btn nav-submit" lay-submit="" lay-filter="formDemo" >{$language_tag.index_public_submit}</button>
+							<a href="javascript:history.back(-1)"><button type="button" class="layui-btn layui-btn-primary">{$language_tag.index_public_back}</button></a>
+						</div>
+					</div>
+				</form>
+			</div>
+
+		</div>
+	</div>
+  
+  <div class="layui-footer">
+    <!-- 底部固定区域 -->
+    © layui.com - 底部固定区域
+  </div>
+</div>
+{include file='public/foot_js' /}
+
+<script src='__STATIC__/javascript/system/system.js'></script>
+
+</body>
+</html>

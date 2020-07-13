@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html>
+<head>
+	{include file='public/head' /}
+  	<title></title>
+ 	<style>
+		#send_email_button{
+			float: left;
+			margin:0px 10px;
+			line-height:38px;
+			text-align: center;
+			padding:0px 15px;
+			border-radius: 3px;
+			color:#fff;
+			cursor: pointer;
+		}
+	</style>
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+	
+	<div class="layui-header">
+	{include file='public/header' /}
+	</div>
+  
+	 <div class="layui-side layui-bg-black">
+	   <div class="layui-side-scroll">
+	     <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+		{include file='public/left_menu' /}
+	   </div>
+	 </div>
+  
+	<div class="layui-body">
+	 
+		<!-- 内容主体区域 -->
+		<div style="padding: 15px;">
+			<div class='layui-form-item'>
+		   		<span class="layui-breadcrumb" lay-separator="-">
+					<a>{$language_tag.index_public_homepage}</a>
+					<a>{$language_tag.index_public_system}</a>
+					<a><cite>{$language_tag.index_public_update}{$language_tag.index_public_password}</cite></a>
+				
+				</span>
+			</div>
+		<form class="layui-form" method='post' onSubmit="return updatePassword()">
+
+       
+	        <!--<div class="layui-form-item">-->
+	        	<!--<label class="layui-form-label">-->
+	        	<!--</label>-->
+				<!--<div class="layui-input-block" id='send_email_downcount' style='display:none'></div>-->
+	        <!--</div>-->
+	                
+	        <!--<div class="layui-form-item">-->
+	          <!--<label class="layui-form-label">验证码：</label>-->
+	          <!--<div class="layui-input-inline">-->
+	            <!--<input name="code" id='code' lay-verify="required" placeholder="请输入验证码" autocomplete="off" class="layui-input" type="text">-->
+	          <!--</div>-->
+				<!--<div class="layui-input-block nav-edit" id='send_email_button' >-->
+					<!--<div  id='snedEmailByChangePassword'>发送邮件</div>-->
+				<!--</div >-->
+	          <!--<div class="layui-form-mid layui-word-aux">在您的个人邮箱中查看验证码</div>-->
+	        <!--</div>-->	
+			<br>
+			<div class="layui-row" id='email_content'>
+				<div class="layui-col-md6" {if condition="$Think.session.user.emial eq '' "}style='display'{else}{/if}>
+					
+					<div class="layui-form-item">
+						<label class="layui-form-label ">{$language_tag.index_public_verify_code}：</label>
+						<div class="layui-input-inline">
+							<input id="verify_code"  lay-verify="required" placeholder="{$language_tag.index_public_verify_code}" autocomplete="off"
+								   class="layui-input" type="text" >
+						</div>
+						<div class="layui-input-inline">
+						<button type="button" class="layui-btn" id='send_email'>
+						{$language_tag.index_public_send}{$language_tag.index_branchcompany_showBranchProductManage_email}
+						</button><span id='daojishi'></span></div>
+					</div>					
+					
+					
+				
+					<div class="layui-form-item">
+						<label class="layui-form-label">{$language_tag.index_public_password}：</label>
+						<div class="layui-input-inline">
+							<input id="password"  lay-verify="required" placeholder="{$language_tag.index_public_placeHolder}{$language_tag.index_public_password}" autocomplete="off"
+								   class="layui-input" type="password">
+						</div>
+						
+						<div  class="layui-input-inline">密码必须6位以上并且包含大小写数字/The password must be more than 6 digits and contain upper and lower case digits</div>
+					</div>
+					<div class="layui-form-item">
+						<label class="layui-form-label">{$language_tag.index_branchcompany_showCompanyOrderManage_addEdit_confirm}{$language_tag.index_public_password}：</label>
+						<div class="layui-input-inline">
+							<input id="password2"  lay-verify="required" placeholder="{$language_tag.index_public_placeHolder}{$language_tag.index_public_password}" autocomplete="off"
+								   class="layui-input" type="password">
+						</div>
+					</div>
+					<div class="layui-form-item">
+						<div class="layui-input-block">
+							<button class="layui-btn nav-submit" lay-submit="" lay-filter="formDemo" >{$language_tag.index_branchcompany_showCompanyOrderManage_addEdit_submit}</button>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<input type='hidden' id='user_id' value="{$Think.session.user.user_id}" />
+			<input type='hidden' id='user_email' value="{$Think.session.user.email}" />
+		</form>
+
+		</div>
+	</div>
+  <input type='hidden' value='{$language_tag.index_public_count_down}' id='count_down' />
+  
+  <input type='hidden' value='{$language_tag.index_public_send}{$language_tag.index_branchcompany_showBranchProductManage_email}' id='send_email_text' />
+  
+  <div class="layui-footer">
+    <!-- 底部固定区域 -->
+   
+  </div>
+</div>
+{include file='public/foot_js' /}
+
+<script src='__STATIC__/javascript/system/system.js'></script>
+<script>
+	$(function(){
+		
+		var send_email = 1;
+		var count_down = $('#count_down').val();
+		var send_email_text = $('#send_email_text').val();
+		$('#send_email').click(function(){
+			if(send_email !=1){
+				   layer.msg('请等待 please wite');
+				return false
+			}
+			var email = $('#user_email').val();
+			if(email.length == 0){
+				$('#email_content').html('请让管理员给你填写邮箱/Please contact the administrator to ask him to set up the mailbox')
+			}else{
+				
+				var to_email  = $('#user_email').val();
+				  
+			    $.ajax({
+			        type: "POST",
+			        url: '/system/sendSystemEmailAjax',
+			        data: {
+						to_email:to_email,
+						type:1
+			        },
+			        success: function(data){
+			          console.log(data)
+			             //成功
+			            if(data.code!=200){
+			            	 console.log('失败')
+			                layer.msg('邮箱发送失败，请重新发送/Email failed to send, please  send again');
+			                return false;
+			            }else if(data.code==200) {
+			            	 console.log('成功')
+			            	 daojishi();
+			                layer.msg('发送成功/send success');
+
+			            }
+			        },
+			        error:function(XMLHttpRequest, textStatus, errorThrown){
+			            layer.msg('验证失败')
+			        }
+			    });
+				
+			}		
+			
+		})
+		
+		function daojishi(){
+			send_email = 2;
+			$('#send_email').html(count_down)
+			var t = 5;
+			var timer = setInterval(function(){
+				$('#daojishi').html(t)
+				t--
+
+				if(t==-1){
+					clearInterval(timer)
+					$('#daojishi').html(' ')
+					send_email =1;
+					$('#send_email').html(send_email_text)
+				}
+				
+			},1000)
+			
+			
+		}
+		
+		
+
+
+	})
+
+</script>
+
+</body>
+</html>

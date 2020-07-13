@@ -1,0 +1,2621 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns="http://www.w3.org/1999/html">
+<head>
+    {include file='public/head' /}
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title></title>
+    <link href="__STATIC__/css/product.css" rel="stylesheet">
+    <style>
+            #receipt_box{
+                background-color:#fff;
+            }
+            #receipt_box div,#receipt_box td{
+                font-size:16px;color: #000;
+            }
+            #receipt_box thead tr{
+                background:#CCCCCC!important;
+                color:#000;
+            }
+            #receipt_box tbody tr:nth-child(even){
+                background:#E0EBFF;
+            }
+            #receipt_box td,th{
+                border:none!important;
+            }
+            #receipt_box table{
+                border:1px solid #333!important;
+            }
+            #receipt_box th{
+                font-weight: bold;
+            }
+            #receipt_box .footer-right span{
+                width:45%;
+                text-align: right!important;
+                display: inline-block;
+                padding-right:10px;
+            }
+            #receipt_box .footer-right em{
+                width:47%;
+                border:1px solid #000;
+                text-align: right!important;
+                display: inline-block;
+            }
+            #receipt_box .footer-right>div{
+                line-height: 26px;
+            }
+            #receipt_box .footer-right{
+                vertical-align: bottom;
+            }
+            #salesTable tr a{
+                text-decoration: underline;
+            }
+            .addMessage-form{
+                margin: 30px;
+            }
+            .addMessage-form a{
+                margin-top: 120px;
+            }
+            .addMessage-form .buttonPost{
+                text-align: center;
+            }
+    </style>
+</head>
+<body class="layui-layout-body">
+<input type='hidden' id='now_user_id' value='{$Think.session.user.user_id}' />
+<div class="layui-layout layui-layout-admin">
+    <div class="layui-header">
+        {include file='public/header' /}
+    </div>
+
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll">
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            {include file='public/left_menu' /}
+        </div>
+    </div>
+
+    <div class="layui-body layui-body-bg">
+        <div style="padding: 15px 15px 0px;">
+            <div class="body-top">
+                <div class='layui-form-item top-bg'>
+                    <span class="layui-breadcrumb" lay-separator="-">
+                        <a>{$language_tag.index_public_homepage}</a>
+                        <a>{$language_tag.index_branchcompany_showBranchProductManage_branchManagement}</a>
+                        <a>{$language_tag.index_branchcompany_showCompanyOrderManage_orderManagement}</a>
+                        <a><cite>{$_GET['company_order_number']==''?$language_tag.index_branchcompany_showCompanyOrderManage_newOrder:$language_tag.index_branchcompany_showCompanyOrderManage_editOrder}</cite></a>
+                    </span>
+                </div>
+                <div class="content-bg clear topSubmit" style="margin:15px 0px!important;">
+                    <div class="fl topSubmit-title">{$_GET["company_order_number"]}</div>
+                    <div class="fr">
+                        <!--<a class="layui-btn nav-cancel orderCancel">{$language_tag.index_public_cancel}</a>-->
+                        <a href="/branchcompany/showCompanyOrderManage?status=1&back=true" class="layui-btn nav-cancel">{$language_tag.index_public_back}</a>
+                        <!--<button class="layui-btn nav-cancel allZan">暂存</button>-->
+                        <a href="/bookings/showBookingList" lay-submit="" class="layui-btn nav-submit allSubmit">{$language_tag.index_branchcompany_showCompanyOrderManage_addEdit_submit}</a>
+                    </div>
+                </div>
+                <form class="layui-form" action="">
+                    <div class='layui-block all-search-bg'>
+                        <br>
+                        <div class="layui-row layui-col-space20">
+                            <div class="layui-col-md8">
+                                <div class="layui-row">
+                                    <div class="layui-col-md4">
+                                        <div class="layui-form-item">
+                                            <label class="layui-form-label input-required">{$language_tag.index_branchcompany_showCompanyOrderManage_retail}/{$language_tag.index_branchcompany_showCompanyOrderManage_wholeSale}:</label>
+                                            <div class="layui-input-block">
+                                                <select name="company" lay-verify="required" id="wr">
+                                                    <option value=""></option>
+                                                    <option value="1">retail</option>
+                                                    <option value="2">wholesale</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="layui-col-md4">
+                                        <div class="layui-form-item">
+                                            <label class="layui-form-label input-required">{$language_tag.index_branchcompany_showBranchProductManage_startDate}:</label><!--出发日期-->
+                                            <div class="layui-input-block">
+                                                <input type="text" id="begin_time" name="begin_time" lay-verify="required" class="layui-input sales-date" value="{$base_edit_result.begin_time}" placeholder="{$language_tag.index_branchcompany_showBranchProductManage_startDate}" autocomplete="off">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="layui-col-md4">
+                                        <div class="layui-form-item">
+                                            <label class="layui-form-label">{$language_tag.index_branchcompany_showBranchProductManage_endDate}:</label>
+                                            <div class="layui-input-block">
+                                                <input type="text" id="end_time" name="end_time" class="layui-input sales-date" value="{$base_edit_result.end_time}" placeholder="{$language_tag.index_branchcompany_showBranchProductManage_endDate}" autocomplete="off">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="layui-row">
+                                    <div class="layui-col-md4">
+                                        <div class="layui-form-item">
+                                            <label class="layui-form-label">{$language_tag.index_branchcompany_showCompanyOrderManage_addEdit_customerSource}:</label>
+                                            <div class="layui-input-block">
+                                                <select name="company" id="clientsource">
+
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="layui-col-md4">
+                                        <div class="layui-form-item">
+                                            <label class="layui-form-label">{$language_tag.index_branchcompany_showCompanyOrderManage_startCity}:</label>
+                                            <div class="layui-input-block">
+                                                <select name="" id="startCity" lay-search="">
+
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="layui-col-md4">
+                                        <div class="layui-form-item">
+                                            <label class="layui-form-label">{$language_tag.index_product_PlanBooking_number}:</label>
+                                            <div class="layui-input-block">
+                                                <input type="text" id="persions_count" name="end_time" class="layui-input" placeholder="{$language_tag.index_product_PlanBooking_number}" autocomplete="off">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="layui-row">
+                                    <div class="layui-col-md4">
+                                        <div class="layui-form-item">
+                                            <label class="layui-form-label input-required">{$language_tag.index_branchcompany_showCompanyOrderManage_orderTime}:</label>
+                                            <div class="layui-input-block">
+                                                <input type="text" value="" id="buy_order_time" class="layui-input sales-date" lay-verify="required" autocomplete="off" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="layui-col-md8">
+                                        <div class="layui-form-item">
+                                            <label class="layui-form-label">{$language_tag.index_branchcompany_showCompanyOrderManage_channelOf_distribution}:</label>
+                                            <div class="layui-input-block orderFroups">
+                                                <input type="radio" id='' name="orderGroup" value="1" lay-filter="branch" title="{$language_tag.index_branchcompany_showCompanyOrderManage_agent}" checked>
+                                                <input type="radio" id='' name="orderGroup" value="2" lay-filter="branch" title="{$language_tag.index_branchcompany_showCompanyOrderManage_addEdit_straightGuest}">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="layui-row">
+                                    <div class="layui-col-md8">
+                                        <div class="layui-form-item layui-form-text">
+                                            <label class="layui-form-label">{$language_tag.index_public_mark}:</label>
+                                            <div class="layui-input-block">
+                                                <textarea name="orderRemark" id="description" placeholder="{$language_tag.index_public_mark}" class="layui-textarea"></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <hr>
+                                <div id="foot_tab">
+
+                                </div>
+                                <input type="hidden" value="" id="ifemail" />
+                                <input type="hidden" value="" id="emailHide" />
+                            </div>
+                            <div class="layui-col-md4">
+                                <div class="layui-row" style="border-left:1px solid #e6e6e6;padding-left:20px">
+                                    <table class="layui-table top-right-table">
+                                        <colgroup>
+                                            <col width="50%">
+                                            <col width="50%">
+                                        </colgroup>
+                                        <tbody>
+                                        <tr>
+                                            <td>{$language_tag.index_branchcompany_showCompanyOrderManage_creater}</td>
+                                            <td id="create_user_nameT">0</td>
+                                        </tr>
+                                        <tr>
+                                            <td>{$language_tag.index_branchcompany_showCompanyOrderManage_addEdit_quotedPrice}</td>
+                                            <td id="price">0</td>
+                                        </tr>
+                                        <tr>
+                                            <td>{$language_tag.index_branchcompany_showCompanyOrderManage_tax}</td>
+                                            <td id="tax">0</td>
+                                        </tr>
+                                        <tr>
+                                            <td>{$language_tag.index_finance_showReceivableManage_receivable_money}</td>
+                                            <td id="total">0</td>
+                                        </tr>
+                                        <tr>
+                                            <td>{$language_tag.index_branchcompany_showCompanyOrderManage_sales_received}</td>
+                                            <td id="sale_receivable">0</td>
+                                        </tr>
+                                        <tr>
+                                            <td>{$language_tag.index_branchcompany_showCompanyOrderManage_financialReceived}</td>
+                                            <td id="finance_receivable">0</td>
+                                        </tr>
+                                        <tr>
+                                            <td>{$language_tag.index_branchcompany_showCompanyOrderManage_sales_outstanding}</td>
+                                            <td id="miss_sale_receivable">0</td>
+                                        </tr>
+                                        <tr>
+                                            <td>{$language_tag.index_branchcompany_showCompanyOrderManage_financial_uncollected}</td>
+                                            <td id="miss_finance_receivable">0</td>
+                                        </tr>
+                                        <tr>
+                                            <td>{$language_tag.index_branchcompany_showCompanyOrderManage_addEdit_primeCost}</td>
+                                            <td id="cost">0</td>
+                                        </tr>
+                                        <tr>
+                                            <td>{$language_tag.index_branchcompany_showCompanyOrderManage_exchange}</td>
+                                            <td id="huiduisunyi">0</td>
+                                        </tr>
+                                        <tr>
+                                            <td>{$language_tag.index_branchcompany_showCompanyOrderManage_gross_profit}</td>
+                                            <td id="maoli">0</td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-block" style="margin-top:25px!important;">
+                            <div class="all-button-center">
+                                <a  lay-submit="" class="layui-btn nav-submit" id="orderSubmit">{$language_tag.index_branchcompany_showCompanyOrderManage_addEdit_submit}</a>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="content-bg content_tabs tabsList">
+                <div class="layui-tab layui-tab-brief" lay-filter="filtertab">
+                    <ul class="layui-tab-title status">
+                        <li class="layui-this">{$language_tag.index_branchcompany_showCompanyOrderManage_addEdit_touristInformation}</li>
+                        <li>{$language_tag.index_branchcompany_showCompanyOrderManage_addEdit_product}</li>
+                        <li>{$language_tag.index_branchcompany_showCompanyOrderManage_addEdit_primeCost}</li>
+                        <li>{$language_tag.index_branchcompany_showCompanyOrderManage_addEdit_quotedPrice}</li>
+                        <li>{$language_tag.index_branchcompany_showCompanyOrderManage_addEdit_salesReceipts}</li>
+                        <li>{$language_tag.index_branchcompany_showCompanyOrderManage_financial_payment}</li>
+                        <li>{$language_tag.index_branchcompany_companyOrderManage_backlog}</li>
+                        <li>留言板</li>
+                        <li>附件</li>
+                    </ul>
+                    <div class="layui-tab-content">
+                        <!--游客信息--start-->
+                        <div class="layui-tab-item layui-show">
+                            <br>
+                            <div class='layui-form-item' id="islocked">
+                                <a><button class="layui-btn nav-add layui-btn-sm">{$language_tag.index_branchcompany_showCompanyOrderManage_bulkImport}</button></a><!--批量导入-->
+                                <a><button class="layui-btn nav-add layui-btn-sm" onclick="visitor('add')">{$language_tag.index_branchcompany_showCompanyOrderManage_addEdit_addVisitor}</button></a>
+                                <span style='color:red'>*{$language_tag.index_branchcompany_showCompanyOrderManage_addEdit_placeChange}</span>
+                            </div>
+                            <div class="table-nont user-manage">
+                                <table class="layui-table" style="table-layout:fixed">
+                                    <colgroup>
+                                        <col width="120">
+                                        <col width="80">
+                                        <col width="150">
+                                        <col width="150">
+                                        <!--<col width="100">-->
+                                        <col width="120">
+                                        <col width="150">
+                                        <col width="170">
+                                        <col width="150">
+                                        <col width="150">
+                                        <col width="200">
+                                        <col width="200">
+                                        <col width="150">
+                                        <col width="150">
+                                        <col width="100">
+                                        <col width="100">
+                                        <col width="170">
+                                    </colgroup>
+                                    <thead>
+                                    <tr>
+                                        <th>{$language_tag.index_branchcompany_showCompanyOrderManage_orderNumber}</th>
+                                        <th>{$language_tag.index_public_status}</th>
+                                        <th>{$language_tag.index_branchcompany_showBranchProductManage_surname}</th>
+                                        <th>{$language_tag.index_branchcompany_showBranchProductManage_name}</th>
+                                        <!--<th>{$language_tag.index_public_type}</th>-->
+                                        <th>{$language_tag.index_branchcompany_showBranchProductManage_sex}</th>
+                                        <th>{$language_tag.index_branchcompany_showBranchProductManage_nationality}</th>
+                                        <th>{$language_tag.index_branchcompany_showBranchProductManage_passport}</th>
+                                        <th>{$language_tag.index_branchcompany_showCompanyOrderManage_issueData}</th>
+                                        <th>{$language_tag.index_branchcompany_showCompanyOrderManage_effectiveData}</th>
+                                        <th>{$language_tag.index_branchcompany_showBranchProductManage_phone}</th>
+                                        <th>{$language_tag.index_branchcompany_showBranchProductManage_email}</th>
+                                        <th>{$language_tag.index_branchcompany_showBranchProductManage_language}</th>
+                                        <th>{$language_tag.index_product_visitor_special_require}</th>
+                                        <th>{$language_tag.index_product_visitor_accommodationInformation}</th>
+                                        <th>{$language_tag.index_public_flightInformation}</th>
+                                        <th>{$language_tag.index_source_operation}</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody id="vTable">
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div><!--游客信息--end-->
+                        <!--产品--start-->
+                        <div class="layui-tab-item">
+                            <div class="layui-form">
+                                <br>
+                                <div class='layui-form-item'>
+                                    <a class="ishide"><button class="layui-btn nav-add layui-btn-sm" onclick="addProductM()">{$language_tag.index_booking_companyOrderManageAdd_addingTeamProducts}</button></a>
+                                </div>
+                                <div class="">
+                                    <fieldset class="layui-elem-field layui-field-title">
+                                        <legend>{$language_tag.index_booking_companyOrderManageAdd_teamProduct}</legend>
+                                    </fieldset>
+                                    <div>
+                                        <table class="layui-table">
+                                            <colgroup>
+                                                <col width="160">
+                                                <col width="160">
+                                                <col width="160">
+                                                <col width="160">
+                                                <col width="160">
+                                                <col width="160">
+                                            </colgroup>
+                                            <thead>
+                                            <tr>
+                                                <th>{$language_tag.index_booking_companyOrderManageAdd_team_product_number}</th>
+                                                <th>{$language_tag.index_booking_companyOrderManageAdd_productName}</th>
+                                                <th>{$language_tag.index_public_type}</th>
+                                                <th>{$language_tag.index_booking_companyOrderManageAdd_arrive_date}</th>
+                                                <th>{$language_tag.index_booking_companyOrderManageAdd_visitor}</th>
+                                                <th class="ishide">{$language_tag.index_source_operation}</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody id="productM">
+
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <br>
+                                    <div class='layui-form-item'>
+                                        <a class="ishide"><button class="layui-btn nav-add layui-btn-sm" onclick="addProduct()">{$language_tag.index_booking_companyOrderManageAdd_addBranchCompanyProduct}</button></a>
+                                        <!--<a class="ishide"><button class="layui-btn nav-add layui-btn-sm" onclick="addOther()">{$language_tag.index_branchcompany_showCompanyOrderManage_addOther}</button></a>-->
+                                    </div>
+                                    <fieldset class="layui-elem-field layui-field-title">
+                                        <legend>{$language_tag.index_booking_companyOrderManageAdd_branchCompanyProduct}</legend>
+                                    </fieldset>
+                                    <table class="layui-table" style="table-layout:fixed">
+                                        <thead>
+                                        <tr>
+                                            <th>{$language_tag.index_branchcompany_showBranchProductManage_productNumber}</th>
+                                            <th>{$language_tag.index_branchcompany_showBranchProductManage_productName}</th>
+                                            <th>{$language_tag.index_public_type}</th>
+                                            <th>{$language_tag.index_product_showRouteTemplateManage_routeType}</th>
+                                            <th>{$language_tag.index_source_showFlightSourceManage_end}{$language_tag.index_product_showshowPlanTourGuideReceipt_date}</th>
+                                            <th class="ishide">{$language_tag.index_source_operation}</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody id="productList">
+
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <br><br>
+                                <div class="all-button-center">
+                                    <button type="button" lay-submit="" class="layui-btn nav-submit ishide" onclick="productSubmit()">{$language_tag.index_branchcompany_showCompanyOrderManage_addEdit_preserve}</button>
+                                </div>
+                            </div>
+                        </div><!--产品--end-->
+                        <!--成本--start-->
+                        <div class="layui-tab-item">
+                            <br>
+                            <fieldset class="layui-elem-field layui-field-title">
+                                <legend>{$language_tag.index_branchcompany_showCompanyOrderManage_addEdit_primeCost}</legend>
+                            </fieldset>
+                            <div class="table-nont user-manage">
+                                <table class="layui-table layui-form" style="table-layout:fixed">
+                                    <colgroup>
+                                        <col width="180">
+                                        <col width="180">
+                                        <col width="120">
+                                        <col width="150">
+                                        <col width="150">
+                                        <col width="130">
+                                        <col width="130">
+                                        <col width="130">
+                                        <col width="130">
+                                        <col width="130">
+                                        <col width="130">
+                                        <col width="130">
+                                        <col width="130">
+                                        <col width="130">
+                                        <col width="150">
+                                        <col width="150">
+                                        <col width="120">
+                                        <col width="120">
+                                        <col width="200">
+                                    </colgroup>
+                                    <thead>
+                                    <tr>
+                                        <th>{$language_tag.index_branchcompany_showCompanyOrderManage_payableNumber}</th>
+                                        <th>{$language_tag.index_branchcompany_showBranchProductManage_productName}</th>
+                                        <th>{$language_tag.index_public_type}</th>
+                                        <!--<th>{$language_tag.index_product_PlanBooking_number}</th>-->
+                                        <th>{$language_tag.index_public_supplier}</th>
+                                        <!--<th>{$language_tag.index_branchcompany_showDistributorManage_editCustomer}</th>-->
+                                        <th>{$language_tag.index_finance_showMustPayManage_receivable_invoice_number}</th>
+                                        <th>{$language_tag.index_finance_showMustPayManage_receivable_invoice_time}</th>
+                                        <th>{$language_tag.index_branchcompany_showCompanyOrderManage_taxes}</th>
+                                        <th>{$language_tag.index_branchcompany_showCompanyOrderManage_netamt}</th>
+                                        <th>{$language_tag.index_branchcompany_showCompanyOrderManage_gst}</th>
+                                        <th>{$language_tag.index_branchcompany_showCompanyOrderManage_pst}</th>
+                                        <th>{$language_tag.index_branchcompany_showCompanyOrderManage_hst}</th>
+                                        <th>{$language_tag.index_system_showTaxManage_otx}</th>
+                                        <th>{$language_tag.index_branchcompany_showCompanyOrderManage_invamt}</th>
+                                        <th>{$language_tag.index_branchcompany_showCompanyOrderManage_estcost}</th>
+                                        <th>{$language_tag.index_branchcompany_showCompanyOrderManage_curreny}</th>
+                                        <th>{$language_tag.index_branchcompany_showCompanyOrderManage_addEdit_primeCost}</th>
+                                        <th>{$language_tag.index_branchcompany_showCompanyOrderManage_paidamt}</th>
+                                        <th>{$language_tag.index_branchcompany_showCompanyOrderManage_balance}</th>
+                                        <th>应付时间</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody id="costTable">
+
+                                    </tbody>
+                                </table>
+                            </div>
+                            <br>
+                            <div class='layui-form-item'>
+                                <a class="ishide"><button class="layui-btn nav-add layui-btn-sm" onclick="addCost()">{$language_tag.index_booking_companyOrderManageAdd_add_custom_cost}</button></a>
+                            </div>
+                            <fieldset class="layui-elem-field layui-field-title">
+                                <legend>{$language_tag.index_booking_companyOrderManageAdd_custom_cost}</legend>
+                            </fieldset>
+                            <div class="user-manage" style="padding-bottom:300px;">
+                                <table class="layui-table layui-form" style="table-layout:fixed">
+                                    <colgroup>
+                                        <col width="180">
+                                        <col width="180">
+                                        <col width="120">
+                                        <col width="150">
+                                        <col width="150">
+                                        <col width="130">
+                                        <col width="130">
+                                        <col width="130">
+                                        <col width="130">
+                                        <col width="130">
+                                        <col width="130">
+                                        <col width="130">
+                                        <col width="130">
+                                        <col width="130">
+                                        <col width="150">
+                                        <col width="150">
+                                        <col width="120">
+                                        <col width="120">
+                                        <col width="200">
+                                        <col width="120">
+                                    </colgroup>
+                                    <thead>
+                                    <tr>
+                                        <th>{$language_tag.index_branchcompany_showCompanyOrderManage_payableNumber}</th>
+                                        <th>{$language_tag.index_branchcompany_showBranchProductManage_productName}</th>
+                                        <th>{$language_tag.index_public_type}</th>
+                                        <!--<th>{$language_tag.index_product_PlanBooking_number}</th>-->
+                                        <th>{$language_tag.index_public_supplier}</th>
+                                        <!--<th>{$language_tag.index_branchcompany_showDistributorManage_editCustomer}</th>-->
+                                        <th>{$language_tag.index_finance_showMustPayManage_receivable_invoice_number}</th>
+                                        <th>{$language_tag.index_finance_showMustPayManage_receivable_invoice_time}</th>
+                                        <th>{$language_tag.index_branchcompany_showCompanyOrderManage_taxes}</th>
+                                        <th>{$language_tag.index_branchcompany_showCompanyOrderManage_netamt}</th>
+                                        <th>{$language_tag.index_branchcompany_showCompanyOrderManage_gst}</th>
+                                        <th>{$language_tag.index_branchcompany_showCompanyOrderManage_pst}</th>
+                                        <th>{$language_tag.index_branchcompany_showCompanyOrderManage_hst}</th>
+                                        <th>{$language_tag.index_system_showTaxManage_otx}</th>
+                                        <th>{$language_tag.index_branchcompany_showCompanyOrderManage_invamt}</th>
+                                        <th>{$language_tag.index_branchcompany_showCompanyOrderManage_estcost}</th>
+                                        <th>{$language_tag.index_branchcompany_showCompanyOrderManage_curreny}</th>
+                                        <th>{$language_tag.index_branchcompany_showCompanyOrderManage_addEdit_primeCost}</th>
+                                        <th>{$language_tag.index_branchcompany_showCompanyOrderManage_paidamt}</th>
+                                        <th>{$language_tag.index_branchcompany_showCompanyOrderManage_balance}</th>
+                                        <th>应付时间</th>
+                                        <th class="ishide">{$language_tag.index_source_operation}</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody id="tableCost">
+
+                                    </tbody>
+                                </table>
+                            </div>
+                            <br><br>
+                            <div class="all-button-center ishide">
+                                <button type="button"  class="layui-btn nav-submit ishide" onclick="costSubmit('cost')">{$language_tag.index_finance_companyOrderManage_add_finance_approval}</button>
+                            </div>
+                        </div><!--成本--end-->
+                        <!--报价--start-->
+                        <div class="layui-tab-item">
+                            <fieldset class="layui-elem-field layui-field-title">
+                                <legend>{$language_tag.index_branchcompany_showCompanyOrderManage_addEdit_quotedPrice}</legend>
+                            </fieldset>
+                            <form class=" layui-form">
+                                <div class="table-nont">
+                                    <table class="layui-table">
+                                        <colgroup>
+                                            <col width="150">
+                                            <col width="150">
+                                            <col width="150">
+                                            <col width="100">
+                                            <col width="170">
+                                            <col width="150">
+                                            <col width="170">
+                                            <col width="100">
+                                            <col width="100">
+                                            <col width="100">
+                                            <col width="100">
+                                            <col width="120">
+                                            <col width="150">
+                                            <col width="230">
+                                        </colgroup>
+                                        <thead>
+                                        <tr>
+                                            <th>{$language_tag.index_finance_showReceivableManage_receivable_number}</th>
+                                            <th>{$language_tag.index_public_type}</th>
+                                            <th>{$language_tag.index_branchcompany_showBranchProductManage_productName}</th>
+                                            <th>{$language_tag.index_product_PlanBooking_number}</th>
+                                            <th>{$language_tag.index_branchcompany_showCompanyOrderManage_curreny}</th>
+                                            <th>{$language_tag.index_finance_showReceivableManage_receivable_money}</th>
+                                            <th>{$language_tag.index_branchcompany_showCompanyOrderManage_taxes}</th>
+                                            <th>GSTRate</th>
+                                            <th>PSTRate</th>
+                                            <th>HSTRate</th>
+                                            <th>OTX</th>
+                                            <th>{$language_tag.index_branchcompany_showCompanyOrderManage_taxQuotation}</th>
+                                            <th>{$language_tag.index_public_mark}</th>
+                                            <th>应付时间</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody id="priceTable">
+
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <br><br>
+                                <div class="all-button-center ishide">
+                                    <button type="button" lay-submit="" class="layui-btn nav-submit" onclick="costSubmit('price')">{$language_tag.index_branchcompany_showCompanyOrderManage_addEdit_preserve}</button>
+                                </div>
+                            </form>
+                        </div><!--报价--end-->
+                        <!--销售收款--start-->
+                        <div class="layui-tab-item">
+                            <fieldset class="layui-elem-field layui-field-title">
+                                <legend>{$language_tag.index_branchcompany_showCompanyOrderManage_addEdit_salesReceipts}</legend>
+                            </fieldset>
+                            <div class='layui-form-item'>
+                                <a><button class="layui-btn nav-add layui-btn-sm" id="buttonAdd" onclick="addSale(this,'add')">{$language_tag.index_public_add}</button></a>
+                            </div>
+                            <div class="table-nont user-manage">
+                                <table class="layui-table table-product layui-form" id="putTable" style="table-layout:fixed">
+                                    <colgroup>
+                                        <col width="120">
+                                        <col width="100">
+                                        <col width="150">
+                                        <col width="150">
+                                        <col width="150">
+                                        <col width="170">
+                                        <col width="180">
+                                        <col width="150">
+                                        <col width="170">
+                                        <col width="150">
+                                        <col width="200">
+                                        <col width="150">
+                                        <col width="100">
+                                        <col width="100">
+                                        <col width="420">
+                                    </colgroup>
+                                    <thead>
+                                    <tr>
+                                        <th>审批状态</th>
+                                        <th>SN</th>
+                                        <th>凭证编号</th>
+                                        <th>凭证日期</th>
+                                        <th>{$language_tag.index_branchcompany_showCompanyOrderManage_paymentType}</th>
+                                        <th>{$language_tag.index_finance_showReceivableManage_currency_name}</th>
+                                        <th>{$language_tag.index_public_supplier}</th>
+                                        <th>{$language_tag.index_branchcompany_showCompanyOrderManage_addEdit_salesReceiptsT}</th>
+                                        <th>{$language_tag.index_branchcompany_showCompanyOrderManage_addEdit_payment}</th>
+                                        <th>{$language_tag.index_system_showCompanyManage_create_user}</th>
+                                        <th>{$language_tag.index_branchcompany_showCompanyOrderManage_corresponding_receivableNumber}</th>
+                                        <th>{$language_tag.index_public_mark}</th>
+                                        <th>附件</th>
+                                        <th>{$language_tag.index_branchcompany_showCompanyOrderManage_paid}</th>
+                                        <th>{$language_tag.index_source_operation}</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody id="salesTable">
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div><!--销售收款--end-->
+
+                        <!--财务收款start-->
+                        <div class="layui-tab-item layui-form">
+                            <fieldset class="layui-elem-field layui-field-title">
+                                <legend>{$language_tag.index_branchcompany_showCompanyOrderManage_financial_payment}</legend>
+                            </fieldset>
+                            <!--<div class='layui-form-item'>
+                                <a><button class="layui-btn nav-add layui-btn-sm" id="" onclick="financialAdd(this,'add')">{$language_tag.index_public_add}</button></a>
+                            </div>-->
+                            <div class="table-nont user-manage" style="height:620px">
+                                <table class="layui-table table-product layui-form" id="financialTable" style="table-layout:fixed">
+                                    <colgroup>
+                                        <col width="100">
+                                        <col width="130">
+                                        <col width="150">
+                                        <col width="170">
+                                        <col width="180">
+                                        <col width="120">
+                                        <col width="200">
+                                        <col width="150">
+                                        <col width="150">
+                                        <col width="150">
+                                        <col width="150">
+                                        <col width="150">
+                                        <col width="150">
+                                        <col width="150">
+                                        <col width="180">
+                                        <col width="200">
+                                    </colgroup>
+                                    <thead>
+                                    <tr>
+                                        <th>SN</th>
+                                        <th>{$language_tag.index_branchcompany_showCompanyOrderManage_paymentType}</th>
+                                        <th>{$language_tag.index_finance_showReceivableManage_currency_name}</th>
+                                        <th>{$language_tag.index_public_supplier}</th>
+                                        <th>{$language_tag.index_branchcompany_showCompanyOrderManage_money}</th>
+                                        <th>{$language_tag.index_branchcompany_showCompanyOrderManage_addEdit_payment}</th>
+                                        <th>{$language_tag.index_finance_showMustpayAllManage_payment_type_number}</th>
+                                        <th>{$language_tag.index_system_showCompanyManage_create_user}</th>
+                                        <th>PTS</th>
+                                        <th>{$language_tag.index_branchcompany_showCompanyOrderManage_paid}</th>
+                                        <th>{$language_tag.index_branchcompany_showCompanyOrderManage_exchange}</th>
+                                        <th>{$language_tag.index_branchcompany_showCompanyOrderManage_addEdit_timeOfPayment}</th>
+                                        <th>{$language_tag.index_public_mark}</th>
+                                        <th>AccountNumber</th>
+                                        <th>{$language_tag.index_branchcompany_showCompanyOrderManage_corresponding_receivableNumber}</th>
+                                        <th>{$language_tag.index_source_operation}</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody id="financial">
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <!--财务收款end-->
+                        <!--待办-->
+                        <div class="layui-tab-item operations layui-form">
+
+                        </div>
+                        <!--待办end-->
+                        <!--邮件-->
+                        <div class="layui-tab-item messageBoard layui-form">
+                            <div class='layui-form-item'>
+                                <a><button class="layui-btn nav-add layui-btn-sm" data-disabled="false" id="buttonBoard" onclick="board(this)">添加留言</button></a>
+                            </div>
+                            <table class="layui-table layui-form">
+                                <thead>
+                                <tr>
+                                    <th>留言内容</th>
+                                    <th>留言时间</th>
+                                    <th>创建人</th>
+                                </tr>
+                                </thead>
+                                <tbody id="message_board">
+
+                                </tbody>
+                            </table>
+                        </div>
+                        <!--邮件--end-->
+                        <!--附件-->
+                        <div class="layui-tab-item attachmentBox layui-form">
+                            <div class='layui-form-item'>
+                                <a><button class="layui-btn nav-add layui-btn-sm" data-disabled="false" id="buttonAttachment" onclick="buttonAttachment(this)">添加附件</button></a>
+                            </div>
+                            <table class="layui-table">
+                                <thead>
+                                <tr>
+                                    <th>文件名</th>
+                                    <th>创建时间</th>
+                                    <th>创建人</th>
+                                    <th>操作</th>
+                                </tr>
+                                </thead>
+                                <tbody id="attachment_tbody">
+
+                                </tbody>
+                            </table>
+                        </div>
+                        <!--附件--end-->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <input type="hidden" id="user_company_id" value="{$Think.session.user.company_id}" />
+    <div class="layui-footer">
+        <!-- 底部固定区域 -->
+        © layui.com - 底部固定区域
+    </div>
+</div>
+<!--选择渠道商时-->
+<script id="qudao" type="text/html">
+    <div class="layui-row">
+        <div class="layui-col-md4">
+            <div class="layui-form-item layui-form-text">
+                <label class="layui-form-label input-required">{$language_tag.index_branchcompany_showCompanyOrderManage_channel}:</label>
+                <div class="layui-input-block">
+                    <select name="company" lay-verify="required" id="agent" lay-search="" lay-filter="agent">
+
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="layui-col-md4">
+            <div class="layui-form-item layui-form-text">
+                <label class="layui-form-label">{$language_tag.index_branchcompany_showDistributorManage_associateType}:</label>
+                <div class="layui-input-block" id="select-border-none">
+                    <select name="company" disabled id="agentType">
+                        <option value=""></option>
+                        <option value="1">assembled</option>
+                        <option value="2">not assembled</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="layui-col-md4">
+            <div class="layui-form-item layui-form-text">
+                <label class="layui-form-label">{$language_tag.index_branchcompany_showBranchProductManage_language}:</label>
+                <div class="layui-input-block">
+                    <input type="text" class="layui-input input-border-none" data-value="" value="" disabled id="language" />
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="layui-row">
+        <div class="layui-col-md4">
+            <div class="layui-form-item layui-form-text">
+                <label class="layui-form-label">{$language_tag.index_branchcompany_showCompanyOrderManage_addEdit_country}:</label>
+                <div class="layui-input-block">
+                    <input type="text" class="layui-input input-border-none" data-value="" value="" disabled id="country" />
+                </div>
+            </div>
+        </div>
+        <div class="layui-col-md4">
+            <div class="layui-form-item layui-form-text">
+                <label class="layui-form-label">{$language_tag.index_branchcompany_showCompanyOrderManage_addEdit_provincialState}:</label>
+                <div class="layui-input-block">
+                    <input type="text" class="layui-input input-border-none" data-value="" value="" disabled id="stateProvince" />
+                </div>
+            </div>
+        </div>
+        <div class="layui-col-md4">
+            <div class="layui-form-item layui-form-text">
+                <label class="layui-form-label">{$language_tag.index_branchcompany_showDistributorManage_city}:</label>
+                <div class="layui-input-block">
+                    <input type="text" class="layui-input input-border-none" data-value="" value="" disabled id="city" />
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="layui-row">
+        <div class="layui-col-md4">
+            <div class="layui-form-item layui-form-text">
+                <label class="layui-form-label">{$language_tag.index_branchcompany_showDistributorManage_contacts}:</label>
+                <div class="layui-input-block">
+                    <input type="text" class="layui-input input-border-none" data-value="" value="" disabled id="contect" />
+                </div>
+            </div>
+        </div>
+        <div class="layui-col-md4">
+            <div class="layui-form-item layui-form-text">
+                <label class="layui-form-label">{$language_tag.index_branchcompany_showCompanyOrderManage_addEdit_tel}:</label>
+                <div class="layui-input-block">
+                    <input type="text" class="layui-input input-border-none" data-value="" value="" disabled id="phone" />
+                </div>
+            </div>
+        </div>
+        <div class="layui-col-md4">
+            <div class="layui-form-item layui-form-text">
+                <label class="layui-form-label">{$language_tag.index_branchcompany_showBranchProductManage_email}:</label>
+                <div class="layui-input-block">
+                    <input type="text" class="layui-input input-border-none" data-value="" value="" disabled id="email" />
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="layui-row">
+        <div class="layui-col-md4">
+            <div class="layui-form-item layui-form-text">
+                <label class="layui-form-label">{$language_tag.index_branchcompany_showDistributorManage_zipCode}:</label>
+                <div class="layui-input-block">
+                    <input type="text" class="layui-input input-border-none" data-value="" value="" disabled id="zipCode" />
+                </div>
+            </div>
+        </div>
+        <div class="layui-col-md8">
+            <div class="layui-form-item layui-form-text">
+                <label class="layui-form-label">{$language_tag.index_branchcompany_showDistributorManage_address}:</label>
+                <div class="layui-input-block">
+                    <textarea class="layui-textarea input-border-none" data-value="" disabled id="address" style="border:none;min-height:72px!important;resize:none"></textarea>
+                </div>
+            </div>
+        </div>
+    </div>
+</script>
+<script id="zhike" type="text/html">
+    <div class="layui-row">
+        <div class="layui-col-md4">
+            <div class="layui-form-item layui-form-text">
+                <label class="layui-form-label">{$language_tag.index_branchcompany_showDistributorManage_contacts}:</label>
+                <div class="layui-input-block">
+                    <input type="text" class="layui-input" data-value="" value="" id="twoContect" />
+                </div>
+            </div>
+        </div>
+        <div class="layui-col-md4">
+            <div class="layui-form-item layui-form-text">
+                <label class="layui-form-label">{$language_tag.index_branchcompany_showCompanyOrderManage_addEdit_tel}:</label>
+                <div class="layui-input-block">
+                    <input type="text" class="layui-input" data-value="" value="" id="twoTel" />
+                </div>
+            </div>
+        </div>
+        <div class="layui-col-md4">
+            <div class="layui-form-item layui-form-text">
+                <label class="layui-form-label">{$language_tag.index_branchcompany_showBranchProductManage_email}:</label>
+                <div class="layui-input-block">
+                    <input type="text" class="layui-input" data-value="" value="" id="twoEmail" />
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="layui-row">
+        <div class="layui-col-md4">
+            <div class="layui-form-item layui-form-text">
+                <label class="layui-form-label">{$language_tag.index_branchcompany_showBranchProductManage_language}:</label>
+                <div class="layui-input-block">
+                    <select id="contect_language_id">
+
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="layui-col-md4">
+            <div class="layui-form-item layui-form-text">
+                <label class="layui-form-label">{$language_tag.index_branchcompany_showDistributorManage_city}:</label>
+                <div class="layui-input-block">
+                    <select id="contect_country_id">
+
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="layui-col-md4">
+            <div class="layui-form-item layui-form-text">
+                <label class="layui-form-label">{$language_tag.index_branchcompany_showDistributorManage_zipCode}:</label>
+                <div class="layui-input-block">
+                    <input type="text" class="layui-input" data-value="" value="" id="content_zip_code" autocomplete="off" />
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="layui-row">
+        <div class="layui-col-md12">
+            <div class="layui-form-item layui-form-text">
+                <label class="layui-form-label">{$language_tag.index_branchcompany_showDistributorManage_address}:</label>
+                <div class="layui-input-block">
+                    <textarea class="layui-textarea" data-value="" id="content_address" style="min-height:72px!important;"></textarea>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</script>
+<script id="visitorTable" type="text/html">
+    {{#  layui.each(d, function(index, item){ }}
+    <tr data-value="{{index}}">
+        {{#  if(item.status==2){ }}
+        <td class="tdOrder" data-ids="{{item.company_order_customer_id}}">{{item.company_order_customer_id}}</td>
+        {{#  } else { }}
+        <td class="tdOrder" data-ids="{{item.company_order_customer_id}}"><a href="/branchcompany/showCustomerInfo?id={{item.customer_id}}" class="table-href">{{item.company_order_customer_id}}</a></td>
+        {{#  } }}
+        <td>
+            {{item.status==0?'{$language_tag.index_public_cancel}':item.status==1?'{$language_tag.index_branchcompany_showCompanyOrderManage_addEdit_unconfirmed}':item.status==2?'{$language_tag.index_branchcompany_showCompanyOrderManage_addEdit_zhanwei}':item.status==3?'{$language_tag.index_branchcompany_showCompanyOrderManage_addEdit_confirmed}':''}}
+        </td>
+        <td>{{item.customer_first_name?item.customer_first_name:''}}</td>
+        <td>{{item.customer_last_name?item.customer_last_name:''}}</td>
+        <!--<td>{{item.customer_type==1?'{$language_tag.index_branchcompany_showBranchProductManage_growUp}':item.customer_type==2?'{$language_tag.index_branchcompany_showBranchProductManage_childrenInBed}':item.customer_type==3?'{$language_tag.index_branchcompany_showBranchProductManage_childrenNotInBed}':item.customer_type==4?'{$language_tag.index_branchcompany_showBranchProductManage_oldMan}':''}}</td>-->
+        <td>{{item.gender==1 ? '{$language_tag.index_branchcompany_showBranchProductManage_boy}': item.gender==2 ? '{$language_tag.index_branchcompany_showBranchProductManage_girl}' :''}}</td>
+        <td>{{item.country_name?item.country_name:''}}</td>
+        <td class="passport">{{item.passport_number?item.passport_number:''}}</td>
+        <td>{{item.issuing_date?date('Y-m-d',item.issuing_date):''}}</td>
+        <td>{{item.term_of_validity?date('Y-m-d',item.term_of_validity):''}}</td>
+        <td>{{item.phone?item.phone:''}}</td>
+        <td>{{item.email?item.email:''}}</td>
+        <td>{{item.language_name?item.language_name:''}}</td>
+        <td>{{item.special_claim==null?'':item.special_claim}}</td>
+        <td><button class="layui-btn layui-btn-sm hover-look layui-btn-primary" onclick="hotelLook(this)">{$language_tag.index_branchcompany_showBranchProductManage_look}</button></td>
+        <td><button class="layui-btn layui-btn-sm hover-look layui-btn-primary" onclick="flightLook(this)">{$language_tag.index_branchcompany_showBranchProductManage_look}</button></a></td>
+        <td>
+            {{#  if(item.status==1||item.status==3||item.status==2){ }}
+            <button class="layui-btn layui-btn-sm hover-edit layui-btn-primary" onclick="visitor('edit',this)" company_order_customer="{$vo.company_order_customer_id}">{$language_tag.index_public_update}</button>
+            {{#  } }}
+            {{#  if(d.locked==0){ }}
+            <button class="layui-btn layui-btn-sm nav-del layui-btn-primary" onclick="delete_customer(this);">{$language_tag.index_public_del}</button>
+            {{#  } }}
+        </td>
+    </tr>
+    {{#  }); }}
+</script>
+<!--住宿信息-->
+<script id="hotelLook" type="text/html">
+    <div class="table-nont" style="max-height:150px;overflow-y: auto">
+        <table class="layui-table">
+            <thead>
+            <tr>
+                <th>{$language_tag.index_product_visitor_roomNumber}</th><th>{$language_tag.index_source_showHotelSource_room_type}</th><th>{$language_tag.index_product_visitor_checkIn}</th><th>{$language_tag.index_product_visitor_checkOut}</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>{{d.room_code?d.room_code:'-'}}</td>
+                <!--<td>
+                    {{d.room_type==1?'{$language_tag.index_source_showHotelSource_doubble_room_name}':d.room_type==2?'{$language_tag.index_source_showHotelSource_big_room_name}':d.room_type==3?'{$language_tag.index_source_showHotelSource_single_room_name}':d.room_type==4?'{$language_tag.index_source_showHotelSource_extra}':'-'}}
+                </td>-->
+                <td>{{roomType(d.room_type)}}</td>
+                <td>
+                    {{d.check_in==1?'{$language_tag.index_branchcompany_showCompanyOrderManage_addEdit_moveUp_one}':d.check_in==2?'{$language_tag.index_branchcompany_showCompanyOrderManage_addEdit_moveUp_two}':d.check_in==3?'{$language_tag.index_branchcompany_showCompanyOrderManage_addEdit_moveUp_three}':d.check_in==4?'{$language_tag.index_branchcompany_showCompanyOrderManage_addEdit_moveUp_four}':d.check_in==5?'{$language_tag.index_branchcompany_showCompanyOrderManage_addEdit_moveUp_five}':'{$language_tag.index_product_visitor_specialRequirements}'}}
+
+                </td>
+                <td>
+                    {{d.check_on==1?'{$language_tag.index_branchcompany_showCompanyOrderManage_addEdit_postpone_one}':d.check_on==2?'{$language_tag.index_branchcompany_showCompanyOrderManage_addEdit_postpone_two}':d.check_on==3?'{$language_tag.index_branchcompany_showCompanyOrderManage_addEdit_postpone_three}':d.check_on==4?'{$language_tag.index_branchcompany_showCompanyOrderManage_addEdit_postpone_four}':d.check_on==5?'{$language_tag.index_branchcompany_showCompanyOrderManage_addEdit_postpone_five}':'{$language_tag.index_product_visitor_specialRequirements}'}}
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</script>
+<!--航班信息-->
+<script id="flightLook" type="text/html">
+    <div class="table-nont" style="max-height:150px;overflow-y: auto">
+        <table class="layui-table">
+            <thead>
+            <tr>
+                <th>{$language_tag.index_finance_showReceivableManage_flight}</th><th>{$language_tag.index_branchcompany_showCompanyOrderManage_addEdit_flightStartTime}</th><th>{$language_tag.index_branchcompany_showCompanyOrderManage_addEdit_flightEndTime}</th><th>{$language_tag.index_public_transportMachine}</th><th>{$language_tag.index_public_startPlace}</th><th>{$language_tag.index_public_endPlace}</th>
+            </tr>
+            </thead>
+            <tbody>
+            {{#  if(d.length>0){ }}
+            {{#  layui.each(d, function(index, item){ }}
+            <tr>
+                <td>{{item.flight_code?item.flight_code:'-'}}</td>
+                <td>{{item.flight_begin_time?date('H:i',item.flight_begin_time):'-'}}</td>
+                <td>{{item.flight_end_time?date('H:i',item.flight_end_time):'-'}}</td>
+                <td>
+                    {{item.flight_type==1?'{$language_tag.index_public_meetAirport}':item.flight_type==2?'{$language_tag.index_public_giveAirport}':'-'}}
+
+                </td>
+                <td>{{item.start_place?item.start_place:'-'}}</td>
+                <td>{{item.end_place?item.end_place:'-'}}</td>
+            </tr>
+            {{#  }); }}
+            {{#  } else { }}
+            <tr>
+                <td>-</td>
+                <td>-</td>
+                <td>-</td>
+                <td>-</td>
+                <td>-</td>
+                <td>-</td>
+            </tr>
+            {{#  } }}
+            </tbody>
+        </table>
+    </div>
+</script>
+<!--添加团队产品-->
+<script id="addProductMPop" type="text/html">
+    <form class="layui-form">
+        <div class='layui-input-inline'>
+            <input type="text" id="team_product_number" name="source_number_search"  placeholder="线路模板编号" class="layui-input">
+        </div>
+        <div class='layui-input-inline'>
+            <input type="text" id="team_product_name" name="source_name_search"  placeholder="线路模板名称" class="layui-input">
+        </div>
+        <div class='layui-input-inline'>
+            <input type="text" id="team_user_name" name="source_name_search"  placeholder="负责人" class="layui-input">
+        </div>
+        <div class='layui-input-inline'>
+            <a href="javascript:void(0);" class="layui-btn nav-submit" onclick="routeTemplates()">{$language_tag.index_public_search}</a>
+        </div>
+    </form>
+    <br>
+    <div class="lay-tab-box">
+        <div class="table-nont">
+            <table class="layui-table layui-form" id="teamMTable">
+                <colgroup>
+                    <col width="50">
+                    <col width="180">
+                    <col width="180">
+                    <col width="160">
+                    <col width="120">
+                    <col width="120">
+                </colgroup>
+                <thead>
+                <tr>
+                    <th><input type="checkbox" name="branchcompanyCheckboxTable" lay-skin="primary" lay-filter="poperCheckboxAllM"></th>
+                    <th>线路模板编号</th>
+                    <th>线路模板名称</th>
+                    <th>线路模板类型</th>
+                    <th>参考价</th>
+                    <th>负责人</th>
+                </tr>
+                </thead>
+                <tbody id="team_M_table">
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+</script>
+<script id="team_M_table_pop" type="text/html">
+    {{#  layui.each(d, function(index, item){ }}
+    <tr>
+        <td><input type="checkbox" name="productCheckboxTable" lay-skin="primary"></td>
+        <td><a href="/product/showRouteTemplateInfo?route_template_id={{item.route_template_id}}" target="_blank" class="table-href number sameNumber">{{item.route_number}}</a></td>
+        <td class="name">{{item.route_name}}</td>
+        <td class="types">{{item.route_type_name}}</td>
+        <td>{{item.unit}}&nbsp;{{item.settlement_type==1?item.once_price:item.real_price}}</td>
+        <td>{{item.route_user_name}}</td>
+        <!--<td>{{item.price_currency_name}} {{d.qudao==1?item.distributor_price:d.qudao==2?item.customer_price:''}}</td>-->
+    </tr>
+    {{#  }); }}
+</script>
+
+<!--添加成本-->
+<script id="addOther" type="text/html">
+    <br>
+    <form class="layui-form saleForm">
+        <div class="layui-form-item">
+            <label class="layui-form-label">{$language_tag.index_branchcompany_showBranchProductManage_productType}：</label>
+            <div class="layui-input-block product-other">
+                {$language_tag.index_branchcompany_showCompanyOrderManage_other}
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">{$language_tag.index_branchcompany_companyOrderManage_teamProduct}：</label>
+            <div class="layui-input-block product-other">
+                <select id="team_product_id" lay-search="">
+
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label input-required">{$language_tag.index_public_supplier}：</label>
+            <div class="layui-input-block product-other" data-values="12">
+                <select id="supplierId" lay-verify="required" lay-search="">
+                    <option value=""></option>
+
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label input-required">{$language_tag.index_branchcompany_showBranchProductManage_productName}：</label>
+            <div class="layui-input-block">
+                <input type="text" id="diyName" name="productName" lay-verify="required" placeholder="{$language_tag.index_branchcompany_showBranchProductManage_productName}" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label input-required">{$language_tag.index_product_showRouteTemplateManage_resources_currency}：</label>
+            <div class="layui-input-block">
+                <select id="costCurrencyId" name="productCurrency" lay-verify="required" class="priceCurreyPop">
+
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label input-required">{$language_tag.index_branchcompany_showCompanyOrderManage_addEdit_primeCost}：</label>
+            <div class="layui-input-block">
+                <input type="text" id="diyCost" name="productProme" lay-verify="required" placeholder="{$language_tag.index_branchcompany_showCompanyOrderManage_addEdit_primeCost}" class="layui-input">
+            </div>
+        </div>
+        <br>
+        <div class="all-button-center">
+            <a class="layui-btn nav-submit" lay-submit="" onclick="otherSubmit()">{$language_tag.index_branchcompany_showCompanyOrderManage_addEdit_submit}</a>
+            <button type="button" class="layui-btn layui-btn-primary" onclick="popBack()">{$language_tag.index_public_back}</button>
+        </div>
+        <br>
+    </form>
+</script>
+
+<!--添加分公司弹出窗-->
+<script id="branchPop" type="text/html">
+    <form class="layui-form">
+        <div class='layui-input-inline'>
+            <select name="chooseCompany" id="branch_product_type_id" lay-search>
+
+            </select>
+        </div>
+        <div class='layui-input-inline'>
+            <input type="text" id="branch_product_number" name="source_number_search"  placeholder="{$language_tag.index_branchcompany_showBranchProductManage_branchProduct_number}" class="layui-input">
+        </div>
+        <div class='layui-input-inline'>
+            <input type="text" id="branch_product_name" name="source_name_search"  placeholder="{$language_tag.index_branchcompany_showBranchProductManage_branchProduct_name}" class="layui-input">
+        </div>
+        <!--<div class='layui-input-inline'>
+            <input type="text" id="create_user_name" name="source_name_search"  placeholder="{$language_tag.index_branchcompany_showBranchProductManage_userName}" class="layui-input">
+        </div>-->
+        <div class='layui-input-inline'>
+            <a href="javascript:void(0);" class="layui-btn nav-submit" onclick="team()">{$language_tag.index_public_search}</a>
+        </div>
+    </form>
+    <br>
+    <div class="lay-tab-box">
+        <div class="table-nont">
+            <table class="layui-table layui-form" id="teamTable">
+                <colgroup>
+                    <col width="50">
+                    <col width="180">
+                    <col width="180">
+                    <col width="160">
+                    <col width="120">
+                    <!--<col width="120">
+                    <col width="120">-->
+                </colgroup>
+                <thead>
+                <tr>
+                    <th><input type="checkbox" name="branchcompanyCheckboxTable" lay-skin="primary" lay-filter="poperCheckboxAll"></th>
+                    <th>{$language_tag.index_branchcompany_showBranchProductManage_branchProduct_number}</th>
+                    <th>{$language_tag.index_branchcompany_showBranchProductManage_branchProduct_name}</th>
+                    <th>{$language_tag.index_branchcompany_showBranchProductTypeManage_branchCompanyProductType}</th>
+                    <!--<th>{$language_tag.index_branchcompany_showBranchProductManage_startDate}</th>
+                    <th>{$language_tag.index_branchcompany_showBranchProductManage_endDate}</th>-->
+                    <th>{$language_tag.index_public_price}</th>
+                </tr>
+                </thead>
+                <tbody id="team_table">
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+</script>
+<script id="team_table_pop" type="text/html">
+    {{#  layui.each(d, function(index, item){ }}
+    {{#  if(item.locked==1){ }}
+    <tr data-index="{{index}}">
+        <td><input type="checkbox" name="productCheckboxTable" lay-skin="primary"></td>
+        <td><a href="/branchcompany/showBranchProductInfo?branch_product_number={{item.branch_product_number}}" target="_blank" class="table-href number sameNumber">{{item.branch_product_number}}</a></td>
+        <td class="name">{{item.branch_product_name}}</td>
+        <td class="types">{{item.branch_product_type_name}}</td>
+        <!--<td>{{date('Y-m-d',item.branch_product_begin_time)}}</td>
+        <td>{{date('Y-m-d',item.branch_product_end_time)}}</td>-->
+        <td>{{item.price_currency_name}} {{d.qudao==1?item.distributor_price:d.qudao==2?item.customer_price:''}}</td>
+    </tr>
+    {{#  } }}
+    {{#  }); }}
+</script>
+<!--<script id="team_table_pop" type="text/html">
+    {{#  layui.each(d, function(index, item){ }}
+    <tr>
+        {{#  if(item.team_product_array.length>0||item.source_array.length>0){ }}
+        <td rowspan="{{item.zum+1}}"><input type="checkbox" name="productCheckboxTable" lay-skin="primary"></td>
+        {{#  } else { }}
+        <td><a><input type="checkbox" name="productCheckboxTable" lay-skin="primary"></a></td>
+        {{#  } }}
+        <td class="number sameNumber">{{item.branch_product_number}}</td>
+        <td class="name">{{item.branch_product_name}}</td>
+        <td class="types">{{item.branch_product_type_name}}</td>
+        <td>{{date('Y-m-d',item.branch_product_begin_time)}}</td>
+        <td>{{date('Y-m-d',item.branch_product_end_time)}}</td>
+        <td>{{item.price_currency_name}} {{d.qudao==1?item.distributor_price:d.qudao==2?item.customer_price:''}}</td>
+    </tr>
+    {{#  if(item.team_product_array.length>0){ }}
+        {{#  layui.each(item.team_product_array, function(indexs, items){ }}
+            {{#  layui.each(items.own_expens_source_array, function(indexss, itemss){ }}
+            <tr>
+                <td class="number"><a>{{itemss.source_number}}</a></td>
+                <td class="name">{{itemss.source_name}}</td>
+                <td>-</td>
+                <td>-</td>
+                <td>-</td>
+                <td>{{itemss.price_currency_name}} {{d.qudao==1?itemss.source_distributor_price:d.qudao==2?itemss.source_customer_price:''}}</td>
+            </tr>
+            {{#  }); }}
+        {{#  }); }}
+    {{#  } }}
+    {{#  if(item.source_array.length>0){ }}
+        {{#  layui.each(item.source_array, function(indexs, items){ }}
+            {{#  if(items.supplier_type_id==11){ }}
+                <tr>
+                    <td class="number"><a>{{items.source_number}}</a></td>
+                    <td class="name">{{items.source_name}}</td>
+                    <td>-</td>
+                    <td>-</td>
+                    <td>-</td>
+                    <td>{{items.price_currency_name}} {{d.qudao==1?items.source_distributor_price:d.qudao==2?items.source_customer_price:''}}</td>
+                </tr>
+            {{#  } }}
+        {{#  }); }}
+    {{#  } }}
+    {{#  }); }}
+</script>-->
+<!--产品列表tr-->
+<script id="productTr" type="text/html">
+    {{#  layui.each(d, function(index, item){ }}
+    <tr data-parent="parent" data-branch="{{item.branch_product_number}}">
+        <td rowspan="{{item.route_teamplate_array.length==0?item.route_teamplate_array.length+1:item.route_teamplate_array.length}}"><a href="/branchcompany/showBranchProductInfo?branch_product_number={{item.branch_product_number}}" target="_blank" class="table-href">{{item.branch_product_number}}</a></td>
+        <td rowspan="{{item.route_teamplate_array.length==0?item.route_teamplate_array.length+1:item.route_teamplate_array.length}}">{{item.branch_product_name}}</td>
+        <td>{$language_tag.index_product_showRouteTemplateManage_route_template}</td>
+        {{#  if(item.route_teamplate_array&&item.route_teamplate_array.length>0){ }}
+        <td>{{item.route_teamplate_array[0].route_name}}</td>
+        <td data-number="{{item.route_teamplate_array[0].route_number}}" data-tims="{{item.route_teamplate_array[0].team_product_id}}">
+            {{#  if(item.route_teamplate_array[0].times){ }}
+            <select lay-filter="test" data-vals="{{index}}" data-ids="0" lay-verify="required">
+                <option> </option>
+                {{#  layui.each(item.route_teamplate_array[0].times, function(indexss, itemss){ }}
+                {{#  if(item.route_teamplate_array[0].team_product_id&&item.route_teamplate_array[0].team_product_id==itemss.team_product_id){ }}
+                <option value="{{itemss.team_product_id}}" selected>{{date('Y-m-d',itemss.begin_time)}}</option>
+                {{#  } else { }}
+                <option value="{{itemss.team_product_id}}">{{date('Y-m-d',itemss.begin_time)}}</option>
+                {{#  } }}
+                {{#  }); }}
+            </select>
+            {{#  } else { }}
+            {{date('Y-m-d',item.route_teamplate_array[0].begin_time)}}
+            {{#  } }}
+        </td>
+        {{#  } else { }}
+        <td></td>
+        <td></td>
+        {{#  } }}
+        {{#  if(d.locked==0){ }}
+            {{#  if(d.addDel){ }}
+            <td rowspan="{{item.route_teamplate_array.length==0?item.route_teamplate_array.length+1:item.route_teamplate_array.length}}" data-ordernumber="{{item.company_order_number}}" data-productnumber="{{item.branch_product_number}}"><button class="layui-btn layui-btn-sm visitorList3 hover-edit layui-btn-primary" onclick="addDel(this)">{$language_tag.index_public_del}</button></td>
+            {{#  } else { }}
+            <td rowspan="{{item.route_teamplate_array.length==0?item.route_teamplate_array.length+1:item.route_teamplate_array.length+item.children.length}}" data-ordernumber="{{item.company_order_number}}" data-productnumber="{{item.branch_product_number}}"><button class="layui-btn layui-btn-sm visitorList3 hover-edit layui-btn-primary" onclick="otherDel(this,'product')">{$language_tag.index_public_del}</button></td>
+            {{#  } }}
+        {{#  } }}
+    </tr>
+    {{#  if(item.route_teamplate_array&&item.route_teamplate_array.length>0){ }}
+    {{#  layui.each(item.route_teamplate_array, function(indexs, items){ }}
+    {{#  if(indexs>0){ }}
+    <tr data-parent="parent" data-branch="{{item.branch_product_number}}">
+        <td>{$language_tag.index_product_showRouteTemplateManage_route_template}</td>
+        <td>{{items.route_name}}</td>
+        <td data-number="{{items.route_number}}" data-tims="{{items.team_product_id}}">
+            {{#  if(items.times){ }}
+            <select lay-filter="test" data-vals="{{index}}" data-ids="{{indexs}}" lay-verify="required">
+                <option> </option>
+                {{#  layui.each(items.times, function(indexss, itemss){ }}
+                {{#  if(items.team_product_id&&items.team_product_id==itemss.team_product_id){ }}
+                <option value="{{itemss.team_product_id}}" selected>{{date('Y-m-d',itemss.begin_time)}}</option>
+                {{#  } else { }}
+                <option value="{{itemss.team_product_id}}">{{date('Y-m-d',itemss.begin_time)}}</option>
+                {{#  } }}
+                {{#  }); }}
+            </select>
+            {{#  } else { }}
+            {{date('Y-m-d',items.begin_time)}}
+            {{#  } }}
+        </td>
+    </tr>
+    {{#  } }}
+    {{#  }); }}
+    {{#  } }}
+    {{#  if(item.children&&item.children.length>0){ }}
+    {{#  layui.each(item.children, function(indexs, items){ }}
+    <tr data-parent="parent">
+        <td>{{items.source_number}}</td>
+        <td>{{items.source_name}}</td>
+        <td>{{supplier(items.supplier_type_id)}}</td>
+        <td colspan="2" data-values="{{index}}" data-childindex="{{indexs}}" data-productid="{{items.company_order_product_source_id}}"><button class="layui-btn layui-btn-sm visitorList3 hover-edit layui-btn-primary" onclick="productLook(this,'children')">{$language_tag.index_branchcompany_showBranchProductManage_look}</button></td>
+    </tr>
+    {{#  }); }}
+    {{#  } }}
+    {{#  }); }}
+</script><!--new-->
+<!--<script id="productTr" type="text/html">
+    {{#  layui.each(d, function(index, item){ }}
+    <tr data-parent="parent">
+        <td>{{item.branch_product_number}}</td>
+        <td>{{item.branch_product_name}}</td>
+        <td></td>
+        <td><button class="layui-btn layui-btn-sm visitorList3 hover-edit layui-btn-primary" onclick="productLook(this,'product')">{$language_tag.index_finance_showReceivableManage_look}</button></td>
+        <td rowspan="{{item.children.length+1}}" data-ordernumber="{{item.company_order_number}}" data-productnumber="{{item.branch_product_number}}"><button class="layui-btn layui-btn-sm visitorList3 hover-edit layui-btn-primary" onclick="otherDel(this,'product')">{$language_tag.index_public_del}</button></td>
+    </tr>
+    {{#  if(item.children&&item.children.length>0){ }}
+        {{#  layui.each(item.children, function(indexs, items){ }}
+        <tr data-parent="parent">
+            <td>{{items.source_number}}</td>
+            <td>{{items.source_name}}</td>
+            <td></td>
+            <td data-values="{{index}}" data-childindex="{{indexs}}" data-productid="{{items.company_order_product_source_id}}"><button class="layui-btn layui-btn-sm visitorList3 hover-edit layui-btn-primary" onclick="productLook(this,'children')">{$language_tag.index_branchcompany_showBranchProductManage_look}</button></td>
+        </tr>
+        {{#  }); }}
+    {{#  } }}
+    {{#  }); }}
+</script>--><!--old-->
+<!--产品其他tr-->
+<script id="productOther" type="text/html">
+    {{#  layui.each(d.company_order_product_diy, function(index, item){ }}
+    <tr data-number="3" data-id="{{item.company_order_product_diy_number}}" data-values="{{index}}">
+        <td>{{item.cope_number==null?'':item.cope_number}}</td>
+        <td>{{item.diy_name}}</td>
+        <td>{$language_tag.index_branchcompany_showCompanyOrderManage_other}</td>
+        <!--<td>{{item.customer_info.length}}</td>-->
+        <td>{{item.supplier_name==null?'':item.supplier_name}}</td>
+        <!--<td>{{item.diy_company_name==null?'':item.diy_company_name}}</td>-->
+        {{#  if(d.locked==0){ }}
+        <td class="invoice_number"><input type="text" class="layui-input costNumber" value="{{item.invoice_number!=null?item.invoice_number:''}}" /></td>
+        <td class="invoice_time"><input type="text" class="layui-input sales-date" value="{{item.invoice_time==null?'':date('Y-m-d',item.invoice_time)}}" /></td>
+        <td class="tax_cd"><input type="text" value="{{isNull(item.tax_cd)}}" class="layui-input" /></td>
+        <td class="netamt"><input type="text" value="{{isNull(item.netamt)}}" class="layui-input" /></td>
+        <td class="gst"><input type="text" value="{{isNull(item.gst)}}" class="layui-input" /></td>
+        <td class="pst"><input type="text" value="{{isNull(item.pst)}}" class="layui-input" /></td>
+        <td class="hst"><input type="text" value="{{isNull(item.hst)}}" class="layui-input" /></td>
+        <td class="p_otx"><input type="text" value="{{isNull(item.p_otx)}}" class="layui-input" /></td>
+        <td class="invamt"><input type="text" value="{{isNull(item.invamt)}}" class="layui-input" /></td>
+        <td class="estcost"><input type="text" value="{{isNull(item.estcost)}}" class="layui-input" /></td>
+        <td>
+            <select class="priceCurrey">
+
+            </select>
+        </td>
+        <td class="diy_cost"><input type="text" value="{{item.diy_cost}}" class="layui-input" /></td>
+        {{#  } else { }}
+        <td>{{item.invoice_number!=null?item.invoice_number:''}}</td>
+        <td>{{item.invoice_time==null?'':date('Y-m-d',item.invoice_time)}}</td>
+        <td>{{isNull(item.tax_cd)}}</td>
+        <td>{{isNull(item.netamt)}}</td>
+        <td>{{isNull(item.gst)}}</td>
+        <td>{{isNull(item.pst)}}</td>
+        <td>{{isNull(item.hst)}}</td>
+        <td>{{isNull(item.p_otx)}}</td>
+        <td>{{isNull(item.invamt)}}</td>
+        <td>{{isNull(item.estcost)}}</td>
+        <td>{{item.cost_currency_id}}</td>
+        <td>{{item.diy_cost}}</td>
+        {{#  } }}
+        <td class="paidamt"><input type="text" value="{{isNull(item.paidamt)}}" class="layui-input" /></td>
+        <td class="balance"><input type="text" value="{{isNull(item.balance)}}" class="layui-input" /></td>
+        <td><input type="text" name="substribe_time" placeholder="Y-m-d" value="{{item.substribe_time==null?'':date('Y-m-d',item.substribe_time)}}" class="layui-input sales-date substribe_time"></td>
+        {{#  if(d.locked==0){ }}
+        <td data-costnumber="{{item.company_order_product_diy_number}}"><button class="layui-btn layui-btn-sm visitorList3 hover-edit layui-btn-primary" onclick="otherDel(this,'cost')">{$language_tag.index_public_del}</button></td>
+        {{#  } }}
+    </tr>
+    {{#  }); }}
+</script>
+
+<!--产品--团队产品-->
+<script id="productTeamM" type="text/html">
+    {{#  layui.each(d, function(index, item){ }}
+    <tr data-route="{{item.route_template_number}}">
+        <td><a href="/product/showRouteTemplateInfo?route_template_id={{subs(item.route_template_id)}}" class="table-href" target="_blank">{{item.route_template_number}}</a></td>
+        <td>{{item.route_name}}</td>
+        <td>线路模板</td>
+        {{#  if(item.times){ }}
+        <td data-number="{{item.route_number}}" data-tims="{{item.route_template_id}}">
+            <select lay-filter="test" data-vals="{{index}}" data-ids="0" lay-verify="required">
+                <option> </option>
+                {{#  layui.each(item.times, function(indexss, itemss){ }}
+                <option value="{{itemss.team_product_id}}">{{date('Y-m-d',itemss.begin_time)}}</option>
+                {{#  }); }}
+            </select>
+        </td>
+        {{#  } else { }}
+        <td rowspan="{{item.children.length+1}}">{{date('Y-m-d',item.begin_time)}}</td>
+        {{#  } }}
+        <td>all</td>
+        {{#  if(d.locked==0){ }}
+        {{#  if(item.isNew==1){ }}
+        <td data-ordernumber="{{item.team_product_id}}" data-productnumber="{{item.branch_product_number}}"><button class="layui-btn layui-btn-sm visitorList3 hover-edit layui-btn-primary" onclick="addTeamDel(this)">{$language_tag.index_public_del}</button></td>
+        {{#  } else { }}
+        <td rowspan="{{item.children.length+1}}" data-ordernumber="{{item.company_order_product_team_id}}" data-productnumber="{{item.branch_product_number}}"><button class="layui-btn layui-btn-sm visitorList3 hover-edit layui-btn-primary" onclick="otherDel(this,'team')">{$language_tag.index_public_del}</button></td>
+        {{#  } }}
+        {{#  } }}
+    </tr>
+    {{#  if(item.children&&item.children.length>0){ }}
+    {{#  layui.each(item.children, function(indexs, items){ }}
+    <tr data-parent="parent">
+        <td>{{isNull(items.source_number)}}</td>
+        <td>{{isNull(items.source_name)}}</td>
+        <td>{{supplier(items.supplier_type_id)}}</td>
+        <td data-values="{{index}}" data-childindex="{{indexs}}" data-productid="{{items.company_order_product_source_id}}"><button class="layui-btn layui-btn-sm visitorList3 hover-edit layui-btn-primary" onclick="productLook(this,'team')">{$language_tag.index_branchcompany_showBranchProductManage_look}</button></td>
+
+    </tr>
+    {{#  }); }}
+    {{#  } }}
+    {{#  }); }}
+</script>
+<!--查看游客-->
+<script id="visitorListTips" type="text/html">
+    <form class="layui-form visitorListTips">
+        {{#  if(d.lei=='children'||d.lei=='team'){ }}
+        {{#  if(d.lei==0){ }}
+        <div><input type="checkbox" name="productCheckboxAll" title="{$language_tag.index_finance_showReceivableManage_choose_all}" lay-skin="primary" lay-filter="checkboxAll"></div>
+        {{#  } }}
+        {{#  } }}
+        <br>
+        <div class="checkboxList">
+            {{#  layui.each(d, function(index, item){ }}
+            {{#  if(d.lei=='children'||d.lei=='team'||d.locked==0){ }}
+            <input type="checkbox" name="productCheckbox" data-selected="{{item.company_order_customer_id}}" title="{{item.customer_name == '占位' ? '{$language_tag.index_branchcompany_showCompanyOrderManage_addEdit_zhanwei}' : item.customer_name}}" data-name="{{item.company_order_customer_id}}" lay-skin="primary" class="productCheckbox">
+            {{#  } else { }}
+            <span class="listWidth">{{index+1}}、{{item.customer_name}}</span>
+            {{#  } }}
+            {{#  }); }}
+        </div>
+        {{#  if(d.lei=='children'||d.lei=='team'||d.locked==0){ }}
+        <div class="all-button-center visitorBottom">
+            <a data-stat="{{d.lei}}" data-vid="{{d.productId}}" data-oid="{{d.productId}}" class="layui-btn nav-submit" lay-submit="" onclick="visitorSubmit(this)">{$language_tag.index_public_ok}</a>
+            <button type="button" class="layui-btn layui-btn-primary" onclick="popBack()">{$language_tag.index_public_back}</button>
+        </div>
+        {{#  } }}
+    </form>
+</script>
+
+<!--成本table-->
+<script id="costTbody" type="text/html">
+    {{#  layui.each(d.company_order_product_team, function(index, item){ }}
+    {{#  if(item.settlement_type==1&&item.is_type==1){ }}
+    <tr data-number="1" data-id="{{item.company_order_product_team_id}}" data-values="{{index}}">
+        <td>{{item.cope_number==null?'':item.cope_number}}</td>
+        <td>{{item.team_product_name}}</td>
+        <td>{$language_tag.index_product_ShowPlanTour_resources_teamProduct}</td>
+        <!--<td>{{item.customer_info.length}}</td>-->
+        <td>{{item.supplier_name}}</td>
+        <!--<td>{{item.team_product_company_name}}</td>-->
+        {{#  if(item.is_own_company==1&&d.locked==0){ }}
+        <td class="invoice_number"><input type="text" class="layui-input costNumber" value="{{item.invoice_number!=null?item.invoice_number:''}}" /></td>
+        <td class="invoice_time"><input type="text" class="layui-input sales-date" value="{{item.invoice_time==null?'':date('Y-m-d',item.invoice_time)}}" /></td>
+        <td class="tax_cd"><input type="text" value="{{isNull(item.tax_cd)}}" class="layui-input" /></td>
+        <td class="netamt"><input type="text" value="{{isNull(item.netamt)}}" class="layui-input" /></td>
+        <td class="gst"><input type="text" value="{{isNull(item.gst)}}" class="layui-input" /></td>
+        <td class="pst"><input type="text" value="{{isNull(item.pst)}}" class="layui-input" /></td>
+        <td class="hst"><input type="text" value="{{isNull(item.hst)}}" class="layui-input" /></td>
+        <td class="p_otx"><input type="text" value="{{isNull(item.p_otx)}}" class="layui-input" /></td>
+        <td class="invamt"><input type="text" value="{{isNull(item.invamt)}}" class="layui-input" /></td>
+        <td class="estcost"><input type="text" value="{{isNull(item.estcost)}}" class="layui-input" /></td>
+        <td>
+            <select class="priceCurrey">
+
+            </select>
+        </td>
+        <td class="source_cost"><input type="text" value="{{isNull(item.team_product_cost)}}" class="layui-input" /></td>
+        <td class="paidamt"><input type="text" value="{{isNull(item.paidamt)}}" class="layui-input" /></td>
+        <td class="balance"><input type="text" value="{{isNull(item.balance)}}" class="layui-input" /></td>
+        {{#  } else { }}
+        <td>{{item.invoice_number!=null?item.invoice_number:''}}</td>
+        <td>{{item.invoice_time==null?'':date('Y-m-d',item.invoice_time)}}</td>
+        <td>{{isNull(item.tax_cd)}}</td>
+        <td>{{isNull(item.netamt)}}</td>
+        <td>{{isNull(item.gst)}}</td>
+        <td>{{isNull(item.pst)}}</td>
+        <td>{{isNull(item.hst)}}</td>
+        <td>{{isNull(item.p_otx)}}</td>
+        <td>{{isNull(item.invamt)}}</td>
+        <td>{{isNull(item.estcost)}}</td>
+        <td currencyid="{{item.cost_currency_id}}">{{item.cost_currency_name}}</td>
+        <td class="team_product_price">{{fn(item.team_product_cost)}}</td>
+        <td>{{isNull(item.paidamt)}}</td>
+        <td>{{isNull(item.balance)}}</td>
+        {{#  } }}
+        <td><input type="text" name="substribe_time" placeholder="Y-m-d" value="{{item.substribe_time==null?'':item.substribe_time==''?'':date('Y-m-d',item.substribe_time)}}" class="layui-input sales-date substribe_time"></td>
+    </tr>
+    {{#  } }}
+    {{#  }); }}
+
+    {{#  layui.each(d.company_order_product_source, function(index, item){ }}
+
+    <tr data-number="2" data-id="{{item.company_order_product_source_id}}" data-values="{{index}}">
+        <td>{{item.cope_number==null?'':item.cope_number}}</td>
+        <td>{{item.source_name==null?'':item.source_name}}</td>
+        <td>{{supplier(item.supplier_type_id)}}</td>
+        <!--<td>{{item.customer_info.length}}</td>-->
+        <td>{{item.supplier_name==null?'':item.supplier_name}}</td>
+        <!--<td>{{item.source_company_name==null?'':item.source_company_name}}</td>-->
+        {{#  if(item.is_own_company==1&&d.locked==0){ }}
+        <td class="invoice_number"><input type="text" class="layui-input costNumber" value="{{item.invoice_number!=null?item.invoice_number:''}}" /></td>
+        <td class="invoice_time"><input type="text" class="layui-input sales-date" value="{{item.invoice_time==null?'':date('Y-m-d',item.invoice_time)}}" /></td>
+        <td class="tax_cd"><input type="text" value="{{isNull(item.tax_cd)}}" class="layui-input" /></td>
+        <td class="netamt"><input type="text" value="{{isNull(item.netamt)}}" class="layui-input" /></td>
+        <td class="gst"><input type="text" value="{{isNull(item.gst)}}" class="layui-input" /></td>
+        <td class="pst"><input type="text" value="{{isNull(item.pst)}}" class="layui-input" /></td>
+        <td class="hst"><input type="text" value="{{isNull(item.hst)}}" class="layui-input" /></td>
+        <td class="p_otx"><input type="text" value="{{isNull(item.p_otx)}}" class="layui-input" /></td>
+        <td class="invamt"><input type="text" value="{{isNull(item.invamt)}}" class="layui-input" /></td>
+        <td class="estcost"><input type="text" value="{{isNull(item.estcost)}}" class="layui-input" /></td>
+        <td>
+            <select class="priceCurrey">
+
+            </select>
+        </td>
+        <td class="source_cost"><input type="text" value="{{item.source_cost}}" class="layui-input" /></td>
+        <td class="paidamt"><input type="text" value="{{isNull(item.paidamt)}}" class="layui-input" /></td>
+        <td class="balance"><input type="text" value="{{isNull(item.balance)}}" class="layui-input" /></td>
+        {{#  } else { }}
+        <td>{{item.invoice_number!=null?item.invoice_number:''}}</td>
+        <td>{{item.invoice_time==null?'':date('Y-m-d',item.invoice_time)}}</td>
+        <td>{{isNull(item.tax_cd)}}</td>
+        <td>{{isNull(item.netamt)}}</td>
+        <td>{{isNull(item.gst)}}</td>
+        <td>{{isNull(item.pst)}}</td>
+        <td>{{isNull(item.hst)}}</td>
+        <td>{{isNull(item.p_otx)}}</td>
+        <td>{{isNull(item.invamt)}}</td>
+        <td>{{isNull(item.estcost)}}</td>
+        <td currencyid="{{item.cost_currency_id}}">{{item.cost_currency_name}}</td>
+        <td class="source_price">{{item.source_cost}}</td>
+        <td>{{isNull(item.paidamt)}}</td>
+        <td>{{isNull(item.balance)}}</td>
+        {{#  } }}
+        <td><input type="text" name="substribe_time" value="{{item.substribe_time==null?'':item.substribe_time==''?'':date('Y-m-d',item.substribe_time)}}" placeholder="Y-m-d" class="layui-input sales-date substribe_time"></td>
+    </tr>
+    {{#  }); }}
+    <!--item.is_type==2&&item.is_receivable_company==2 || item.is_type==1&&item.supplier_type_id==11资源中得判断条件-->
+</script>
+<!--报价-->
+<!--<script id="priceTr" type="text/html">
+    {{#  layui.each(d.company_order_product_team, function(index, item){ }}
+    <tr data-id="{{item.company_order_product_team_id}}" data-values="{{index}}" data-number="1">
+        <td>{{item.receivable_number==null?'':item.receivable_number}}</td>
+        <td>{$language_tag.index_product_ShowPlanTour_resources_teamProduct}</td>
+        <td>{{item.team_product_name}}</td>
+        <td>{{item.customer_info.length}}</td>
+        <td>
+            <select class="priceCurrey" lay-verify="required">
+
+            </select>
+        </td>
+        <td class="sourcePrice" price="{{item.team_product_price}}"><input type="text" lay-verify="required" class="layui-input" value="{{item.team_product_price==null?'0.00':item.team_product_price}}" onchange="changes(this)" /></td>
+        <td>
+            <select class="priceTax" lay-filter="price">
+                <option value=""></option>
+            </select>
+        </td>
+        <td class="gstrate"><span>{{item.gstrate==null?'0':item.gstrate}}</span>%</td>
+        <td class="pstrate"><span>{{item.pstrate==null?'0':item.pstrate}}</span>%</td>
+        <td class="hstrate"><span>{{item.hstrate==null?'0':item.hstrate}}</span>%</td>
+        <td class="otx"><span>{{item.otx==null?'0':item.otx}}</span>%</td>
+        <td class="priceBeforeTax">{{item.price_before_tax==null?item.branch_product_price:item.price_before_tax}}</td>
+        <td><textarea class="layui-textarea remark">{{item.remark==null?'':item.remark}}</textarea></td>
+    </tr>
+    {{#  }); }}
+    {{#  if(d.company_order_product_source.length>0){ }}
+        {{#  layui.each(d.company_order_product_source, function(indexs, items){ }}
+        {{#  if(items.is_receivable_company==2){ }}
+        <tr data-number="2" data-id="{{items.company_order_product_source_id}}" data-values="{{indexs}}">
+            <td>{{items.receivable_number==null?'':items.receivable_number}}</td>
+            <td>{$language_tag.index_finance_showReceivableManage_ownexpense}</td>
+            <td>{{items.source_name}}</td>
+            <td>{{items.customer_info.length}}</td>
+            <td>
+                <select class="priceCurrey" lay-verify="required">
+
+                </select>
+            </td>
+            <td class="sourcePrice" price="{{items.source_price}}"><input type="text" lay-verify="required" class="layui-input" value="{{items.source_price==null?'0.00':items.source_price}}" onchange="changes(this)" /></td>
+            <td>
+                <select class="priceTax" lay-filter="price">
+                    <option value=""></option>
+                </select>
+            </td>
+            <td class="gstrate"><span>{{items.gstrate==null?'0':items.gstrate}}</span>%</td>
+            <td class="pstrate"><span>{{items.pstrate==null?'0':items.pstrate}}</span>%</td>
+            <td class="hstrate"><span>{{items.hstrate==null?'0':items.hstrate}}</span>%</td>
+            <td class="otx"><span>{{items.otx==null?'0':items.otx}}</span>%</td>
+            <td class="priceBeforeTax">{{items.price_before_tax==null?items.source_price:items.price_before_tax}}</td>
+            <td><textarea class="layui-textarea remark">{{items.remark==null?'':items.remark}}</textarea></td>
+        </tr>
+        {{#  } }}
+        {{#  }); }}
+    {{#  } }}
+    {{#  if(d.company_order_product_diy&&d.company_order_product_diy.length>0){ }}
+    {{#  layui.each(d.company_order_product_diy, function(indexs, items){ }}
+    <tr data-number="3" data-id="{{items.company_order_product_diy_number}}" data-values="{{indexs}}">
+        <td>{{items.receivable_number==null?'':items.receivable_number}}</td>
+        <td>其他</td>
+        <td>{{items.diy_name}}</td>
+        <td>{{items.customer_info.length}}</td>
+        <td>
+            <select class="priceCurrey" lay-verify="required">
+
+            </select>
+        </td>
+        <td class="sourcePrice" price="{{items.diy_price}}"><input type="text" lay-verify="required" class="layui-input" value="{{items.diy_price==null?'0.00':items.diy_price}}" onchange="changes(this)" /></td>
+        <td>
+            <select class="priceTax" lay-filter="price">
+                <option value=""></option>
+            </select>
+        </td>
+        <td class="gstrate"><span>{{items.gstrate==null?'0':items.gstrate}}</span>%</td>
+        <td class="pstrate"><span>{{items.pstrate==null?'0':items.pstrate}}</span>%</td>
+        <td class="hstrate"><span>{{items.hstrate==null?'0':items.hstrate}}</span>%</td>
+        <td class="otx"><span>{{items.otx==null?'0':items.otx}}</span>%</td>
+        <td class="priceBeforeTax">{{items.price_before_tax==null?items.diy_price:items.price_before_tax}}</td>
+        <td><textarea class="layui-textarea remark">{{items.remark==null?'':items.remark}}</textarea></td>
+    </tr>
+    {{#  }); }}
+    {{#  } }}
+</script>--><!--new-->
+<script id="priceTr" type="text/html">
+    {{#  layui.each(d, function(index, item){ }}
+    <tr data-id="{{item.company_order_product_id}}" data-num="{{index}}">
+        <td>{{item.receivable_number==null?'':item.receivable_number}}</td>
+        <td>{$language_tag.index_branchcompany_showBranchProductManage_branchProduct}</td>
+        <td>{{item.branch_product_name}}</td>
+        <td>{{item.customer_info.length}}</td>
+        {{#  if(d.locked==0){ }}
+        <td>
+            <select class="priceCurrey" lay-verify="required">
+
+            </select>
+        </td>
+        <td class="sourcePrice" price="{{item.branch_product_price}}"><input type="text" lay-verify="required" class="layui-input" value="{{item.branch_product_price==null?'0.00':item.branch_product_price}}" onchange="changes(this)" /></td>
+        <td>
+            <select class="priceTax" lay-filter="price">
+                <option value=""></option>
+            </select>
+        </td>
+        {{#  } else { }}
+        <td>{{item.price_currency_name}}</td>
+        <td>{{item.branch_product_price==null?'0.00':item.branch_product_price}}</td>
+        <td class="table-input-none">
+            <select class="priceTax" lay-filter="price" disabled>
+                <option value="">&nbsp;</option>
+            </select>
+        </td>
+        {{#  } }}
+        <td class="gstrate"><span>{{item.gstrate==null?'0':item.gstrate}}</span>%</td>
+        <td class="pstrate"><span>{{item.pstrate==null?'0':item.pstrate}}</span>%</td>
+        <td class="hstrate"><span>{{item.hstrate==null?'0':item.hstrate}}</span>%</td>
+        <td class="otx"><span>{{item.otx==null?'0':item.otx}}</span>%</td>
+        <td class="priceBeforeTax">{{item.price_before_tax==null?item.branch_product_price:item.price_before_tax}}</td>
+        {{#  if(d.locked==0){ }}
+        <td><textarea class="layui-textarea remark">{{item.remark==null?'':item.remark}}</textarea></td>
+        {{#  } else { }}
+        <td>{{item.remark==null?'':item.remark}}</td>
+        {{#  } }}
+        <td><input type="text" name="substribe_time"  value="{{item.substribe_time==null?'':item.substribe_time==''?'':date('Y-m-d',item.substribe_time)}}" placeholder="Y-m-d" class="layui-input sales-date substribe_time"></td>
+    </tr>
+    {{#  if(item.children.length>0){ }}
+    {{#  layui.each(item.children, function(indexs, items){ }}
+    {{#  if(items.is_receivable_company==2&&items.supplier_type_id==11){ }}
+    <tr data-id="{{items.company_order_product_source_id}}" data-childNum="{{index}}" data-children="{{indexs}}">
+        <td>{{items.receivable_number==null?'':items.receivable_number}}</td>
+        <td>{$language_tag.index_finance_showReceivableManage_ownexpense}</td>
+        <td>{{items.source_name}}</td>
+        <td>{{items.customer_info.length}}</td>
+        {{#  if(d.locked==0){ }}
+        <td>
+            <select class="priceCurrey" lay-verify="required">
+
+            </select>
+        </td>
+        <td class="sourcePrice" price="{{items.source_price}}"><input type="text" lay-verify="required" class="layui-input" value="{{items.source_price==null?'0.00':items.source_price}}" onchange="changes(this)" /></td>
+        <td>
+            <select class="priceTax" lay-filter="price">
+                <option value=""></option>
+            </select>
+        </td>
+        {{#  } else { }}
+        <td>{{item.price_currency_name}}</td>
+        <td>{{items.source_price==null?'0.00':items.source_price}}</td>
+        <td class="table-input-none">
+            <select class="priceTax" lay-filter="price" disabled>
+                <option value="">&nbsp;</option>
+            </select>
+        </td>
+        {{#  } }}
+        <td class="gstrate"><span>{{items.gstrate==null?'0':items.gstrate}}</span>%</td>
+        <td class="pstrate"><span>{{items.pstrate==null?'0':items.pstrate}}</span>%</td>
+        <td class="hstrate"><span>{{items.hstrate==null?'0':items.hstrate}}</span>%</td>
+        <td class="otx"><span>{{items.otx==null?'0':items.otx}}</span>%</td>
+        <td class="priceBeforeTax">{{items.price_before_tax==null?items.source_price:items.price_before_tax}}</td>
+        {{#  if(d.locked==0){ }}
+        <td><textarea class="layui-textarea remark">{{items.remark==null?'':items.remark}}</textarea></td>
+        {{#  } else { }}
+        <td>{{items.remark==null?'':items.remark}}</td>
+        {{#  } }}
+        <td><input type="text" name="substribe_time" value="{{items.substribe_time==null?'':items.substribe_time==''?'':date('Y-m-d',items.substribe_time)}}" placeholder="Y-m-d" class="layui-input sales-date substribe_time"></td>
+    </tr>
+    {{#  } }}
+    {{#  }); }}
+    {{#  } }}
+    {{#  }); }}
+    <!--{{#  if(d.company_order_product_diy&&d.company_order_product_diy.length>0){ }}
+    {{#  layui.each(d.company_order_product_diy, function(indexs, items){ }}
+    <tr data-id="{{items.company_order_product_diy_number}}" data-diy="{{indexs}}">
+        <td>{{items.receivable_number==null?'':items.receivable_number}}</td>
+        <td>{$language_tag.index_finance_showAgentExpenseManage_other}</td>
+        <td>{{items.diy_name}}</td>
+        <td>{{items.customer_info.length}}</td>
+        <td>
+            <select class="priceCurrey" lay-verify="required">
+
+            </select>
+        </td>
+        <td class="sourcePrice" price="{{items.diy_price}}"><input type="text" lay-verify="required" class="layui-input" value="{{items.diy_price==null?'0.00':items.diy_price}}" onchange="changes(this)" /></td>
+        <td>
+            <select class="priceTax" lay-filter="price">
+                <option value=""></option>
+            </select>
+        </td>
+        <td class="gstrate"><span>{{items.gstrate==null?'0':items.gstrate}}</span>%</td>
+        <td class="pstrate"><span>{{items.pstrate==null?'0':items.pstrate}}</span>%</td>
+        <td class="hstrate"><span>{{items.hstrate==null?'0':items.hstrate}}</span>%</td>
+        <td class="otx"><span>{{items.otx==null?'0':items.otx}}</span>%</td>
+        <td class="priceBeforeTax">{{items.price_before_tax==null?items.diy_price:items.price_before_tax}}</td>
+        <td><textarea class="layui-textarea remark">{{items.remark==null?'':items.remark}}</textarea></td>
+    </tr>
+    {{#  }); }}
+    {{#  } }}-->
+    {{#  if(d.company_order_product_team&&d.company_order_product_team.length>0){ }}
+    {{#  layui.each(d.company_order_product_team, function(indexs, items){ }}
+    <tr data-id="{{items.company_order_product_team_id}}" data-team="{{indexs}}">
+        <td>{{items.receivable_number==null?'':items.receivable_number}}</td>
+        <td>{$language_tag.index_booking_companyOrderManageAdd_teamProduct}</td>
+        <td>{{items.team_product_name}}</td>
+        <td>{{items.customer_info.length}}</td>
+        {{#  if(d.locked==0){ }}
+        <td>
+            <select class="priceCurrey" lay-verify="required">
+
+            </select>
+        </td>
+        <td class="sourcePrice" price="{{items.team_product_price}}"><input type="text" lay-verify="required" class="layui-input" value="{{items.team_product_price==null?'0.00':items.team_product_price}}" onchange="changes(this)" /></td>
+        <td>
+            <select class="priceTax" lay-filter="price">
+                <option value=""></option>
+            </select>
+        </td>
+        {{#  } else { }}
+        <td>{{items.price_currency_name}}</td>
+        <td>{{items.team_product_price==null?'0.00':items.team_product_price}}</td>
+        <td class="table-input-none">
+            <select class="priceTax" lay-filter="price" disabled>
+                <option value="">&nbsp;</option>
+            </select>
+        </td>
+        {{#  } }}
+        <td class="gstrate"><span>{{items.gstrate==null?'0':items.gstrate}}</span>%</td>
+        <td class="pstrate"><span>{{items.pstrate==null?'0':items.pstrate}}</span>%</td>
+        <td class="hstrate"><span>{{items.hstrate==null?'0':items.hstrate}}</span>%</td>
+        <td class="otx"><span>{{items.otx==null?'0':items.otx}}</span>%</td>
+        <td class="priceBeforeTax">{{items.price_before_tax}}</td>
+        {{#  if(d.locked==0){ }}
+        <td><textarea class="layui-textarea remark">{{items.remark==null?'':items.remark}}</textarea></td>
+        {{#  } else { }}
+        <td>{{items.remark==null?'':items.remark}}</td>
+        {{#  } }}
+        <td><input type="text" name="substribe_time" value="{{items.substribe_time==null?'':items.substribe_time==''?'':date('Y-m-d',items.substribe_time)}}" placeholder="Y-m-d" class="layui-input sales-date substribe_time"></td>
+    </tr>
+    {{#  if(items.children.length>0){ }}
+    {{#  layui.each(items.children, function(indexss, itemss){ }}
+    {{#  if(itemss.supplier_type_id==11){ }}
+    <tr data-id="{{itemss.company_order_product_source_id}}" data-childNum="{{indexs}}" data-teamChildren="{{indexss}}">
+        <td>{{itemss.receivable_number==null?'':itemss.receivable_number}}</td>
+        <td>{$language_tag.index_finance_showReceivableManage_ownexpense}</td>
+        <td>{{itemss.source_name}}</td>
+        <td>{{itemss.customer_info.length}}</td>
+        {{#  if(d.locked==0){ }}
+        <td>
+            <select class="priceCurrey" lay-verify="required">
+
+            </select>
+        </td>
+        <td class="sourcePrice" price="{{itemss.source_price}}"><input type="text" lay-verify="required" class="layui-input" value="{{itemss.source_price==null?'0.00':itemss.source_price}}" onchange="changes(this)" /></td>
+        <td>
+            <select class="priceTax" lay-filter="price">
+                <option value=""></option>
+            </select>
+        </td>
+        {{#  } else { }}
+        <td>{{itemss.price_currency_name}}</td>
+        <td>{{itemss.source_price==null?'0.00':itemss.source_price}}</td>
+        <td class="table-input-none">
+            <select class="priceTax" lay-filter="price" disabled>
+                <option value="">&nbsp;</option>
+            </select>
+        </td>
+        {{#  } }}
+        <td class="gstrate"><span>{{itemss.gstrate==null?'0':itemss.gstrate}}</span>%</td>
+        <td class="pstrate"><span>{{itemss.pstrate==null?'0':itemss.pstrate}}</span>%</td>
+        <td class="hstrate"><span>{{itemss.hstrate==null?'0':itemss.hstrate}}</span>%</td>
+        <td class="otx"><span>{{itemss.otx==null?'0':items.otx}}</span>%</td>
+        <td class="priceBeforeTax">{{itemss.price_before_tax}}</td>
+        {{#  if(d.locked==0){ }}
+        <td><textarea class="layui-textarea remark">{{itemss.remark==null?'':itemss.remark}}</textarea></td>
+        {{#  } else { }}
+        <td>{{itemss.remark==null?'':itemss.remark}}</td>
+        {{#  } }}
+        <td><input type="text" name="substribe_time"  value="{{itemss.substribe_time==null?'':itemss.substribe_time==''?'':date('Y-m-d',itemss.substribe_time)}}" placeholder="Y-m-d" class="layui-input sales-date substribe_time"></td>
+    </tr>
+    {{#  } }}
+    {{#  }); }}
+    {{#  } }}
+    {{#  }); }}
+    {{#  } }}
+</script><!--old-->
+<!--添加销售收款-->
+<script id="addSales" type="text/html">
+    <form class="layui-form">
+        <br>
+        <div class="layui-row">
+            <div class="layui-col-md9 layui-col-md-offset1">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">SN：</label>
+                    <div class="layui-input-block">
+                        <input id="saleSN" name="saleSN" placeholder="" class="layui-input" />
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label input-required">{$language_tag.index_branchcompany_showCompanyOrderManage_corresponding_receivableNumber}：</label>
+                    <div class="layui-input-block">
+                        <textarea id="saleNumber" name="saleNumber" lay-verify="required" placeholder="" class="layui-input"></textarea>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">凭证编号：</label>
+                    <div class="layui-input-block">
+                        <input type="text" id="" name="" placeholder="" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">{$language_tag.index_finance_showReceivableAllManage_voucher_time}：</label>
+                    <div class="layui-input-block">
+                        <input type="text" id="saleDate" name="saleTime" placeholder="Y-m-d" class="layui-input sales-date">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">{$language_tag.index_public_supplier}：</label>
+                    <div class="layui-input-block">
+                        <select name="fSupplierId" id="saleSupplier" lay-search="" lay-filter="fSupplierId">
+                            <option value="">{$language_tag.index_public_select}</option>
+
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label input-required">{$language_tag.index_branchcompany_showCompanyOrderManage_paymentType}：</label>
+                    <div class="layui-input-block">
+                        <select name="saleStage" id="saleStage" lay-verify="required">
+                            <option value="">{$language_tag.index_public_select}</option>
+                            <option value="1">Balance</option>
+                            <option value="2">Deposit</option>
+                            <option value="3">Fullpmt</option>
+                            <option value="4">Gratuities</option>
+                            <option value="5">Insurance</option>
+                            <option value="6">Partpmt</option>
+                            <option value="7">Rebate</option>
+                            <option value="8">Tkt</option>
+                            <option value="9">Visa</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label input-required">{$language_tag.index_branchcompany_showCompanyOrderManage_addEdit_payment}：</label>
+                    <div class="layui-input-block">
+                        <select name="saleMode" id="saleMode" lay-verify="required">
+                            <option value="">{$language_tag.index_public_select}</option>
+                            <option value="1">cash</option>
+                            <option value="2">check</option>
+                            <option value="3">debit card</option>
+                            <option value="4">credit card(mc)</option>
+                            <option value="5">credit card(vs)</option>
+                            <option value="6">credit card(ax)</option>
+                            <option value="7">direct depsit</option>
+                            <option value="8">others</option>
+                        </select>
+                    </div>
+                </div>
+                <input type="hidden" id="salesRMB" /><!--币种-->
+                <input type="hidden" id="zum" /><!--选择应收编号的总价-->
+                <div class="layui-form-item">
+                    <label class="layui-form-label input-required">{$language_tag.index_branchcompany_showCompanyOrderManage_salesReceived_amount}：</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="salesPMT" class="layui-input" lay-verify="required" id="salePMT" />
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">{$language_tag.index_public_mark}：</label>
+                    <div class="layui-input-block">
+                        <textarea name="remark" class="layui-textarea" id="saleRemark"></textarea>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">附件：</label>
+                    <div class="layui-input-block">
+                        <a class="layui-btn test">{$language_tag.index_source_showVisaSourceManage_upload}</a>
+                        <a id="download" style="display: none" href="" target="_blank" class="layui-btn layui-btn-danger">{$language_tag.index_source_showVisaSourceManage_download}</a>
+                        <input type="hidden" name="file_url" id="uploadVisa" />
+                    </div>
+                </div>
+                <br>
+                <div class="all-button-center">
+                    <a class="layui-btn nav-submit" lay-submit="" onclick="addSales()">{$language_tag.index_public_ok}</a>
+                    <button type="button" class="layui-btn layui-btn-primary" onclick="popBack()">{$language_tag.index_public_back}</button>
+                </div>
+            </div>
+        </div>
+    </form>
+</script>
+<!--打印弹出-->
+<script id="put" type="text/html">
+    <form class="layui-form puts">
+        <div class="layui-row">
+            <div class="layui-col-md10">
+                <label class="layui-form-label">{$language_tag.index_branchcompany_showCompanyOrderManage_invoiceTitle}:</label>
+                <div class="layui-input-block">
+                    <select name="put" id="bill_template_id">
+                        <option value="">-{$language_tag.index_public_select}-</option>
+
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="layui-row">
+            <div class="layui-col-md10 all-button-right" id="putCheckbox">
+                <input type="checkbox" name="putCheckbox" value="1" title="{$language_tag.index_branchcompany_showCompanyOrderManage_default_header}" lay-skin="primary" checked id="default_bill_template_id" />
+            </div>
+        </div>
+    </form>
+    <div id="receipt_box" style="width: 1000px;height:1414px;"></div>
+</script>
+<!--发票-->
+<script id="receipt" type="text/html">
+    <div id="piao">
+        <div id="bill_template_title_pic" style="height:100px;background: #ccc;">
+            {{#  if(d.bill_template_title_pic !=null){ }}
+            <!--<img crossorigin='anonymous' src="{{d.bill_template_title_pic}}" width="100%" height="110px" />-->
+            {{#  } }}
+        </div>
+        <div class="receipt_message clear" style="overflow: hidden;width: 100%">
+            <div class="fl" style="float: left;">
+                <div style="height:26px"> </div>
+                <div>To:</div>
+                <div>{{fn(d.content_name)}}</div>
+                <div>{{fn(d.city_name)}}</div>
+                <div>{{fn(d.country_name)}}</div>
+                <div>{{fn(d.tel)}}</div>
+                <div>{{fn(d.email)}}</div>
+            </div>
+            <div class="fl" style="float:left;">
+                <div style="color:#0070E6!important;font-size:28px!important;">Invoice</div>
+                <div>No:{{fn(d.receivable_voucher)}}</div>
+                <div>Booking Date:{{date('Y-m-d',d.create_time)}}</div>
+                <div>Product Code:{{fn(d.branch_product_name)}}</div>
+                <div>Tour Code:{{fn(d.branch_product_number)}}</div>
+                <div>Depart Date:{{date('Y-m-d',d.begin_time)}}</div>
+                <div>Sales agent:{{fn(d.create_user_name)}}</div>
+                <div>Description:{{fn(d.description)}}</div>
+            </div>
+        </div>
+        <!--游客信息-->
+        <div class="tourist_information">
+            <div class="bill_tourist_title">
+                <span>Clients Name List:</span>
+                <span>Person(s):{{fn(d.customer_count)}}</span>
+            </div>
+            <table class="layui-table">
+                <thead>
+                <tr>
+                    <th>SN</th>
+                    <th>Gender</th>
+                    <th>FirstName</th>
+                    <th>LastName</th>
+                    <th>RoomType</th>
+                </tr>
+                </thead>
+                <tbody>
+                {{#  layui.each(d.customer_info, function(index, item){ }}
+                <tr>
+                    <td>{{fn(item.company_order_lineup_number)}}</td>
+                    <td>{{genders(item.gender)}}</td>
+                    <td>{{fn(item.customer_first_name)}}</td>
+                    <td>{{fn(item.customer_last_name)}}</td>
+                    <td>{{roomType(item.room_type)}}</td>
+                </tr>
+                {{#  }); }}
+                </tbody>
+            </table>
+        </div>
+        <!--报价信息-->
+        <div class="tourist_Quotation">
+            <div>Pricing List:</div>
+            <table class="layui-table">
+                <thead>
+                <tr>
+                    <th>Item</th>
+                    <th>Currency</th>
+                    <th>Price</th>
+                    <th>Total</th>
+                    <th>Note</th>
+                </tr>
+                </thead>
+                <tbody>
+                {{#  layui.each(d.company_order_price, function(index, item){ }}
+                <tr>
+                    <td>{{fn(item.product_name)}}</td>
+                    <td>{{fn(item.currency_name)}}</td>
+                    <td>{{fn(item.price)}}</td>
+                    <td>{{fn(item.total)}}</td>
+                    <td>{{fn(item.remark)}}</td>
+                </tr>
+                {{#  }); }}
+                </tbody>
+            </table>
+        </div>
+        <div class="tourist_sales">
+            <div>Payment Record:</div>
+            <table class="layui-table">
+                <thead>
+                <tr>
+                    <th>PmtDate</th>
+                    <th>Currency</th>
+                    <th>Amount</th>
+                    <th>PmtMode</th>
+                    <th>PmtNum</th>
+                    <th>Agent</th>
+                    <th>Note</th>
+                </tr>
+                </thead>
+                <tbody>
+                {{#  layui.each(d.sale_info, function(index, item){ }}
+                <tr>
+                    <td>{{fn(item.payment_time)}}</td>
+                    <td>{{fn(item.currency_name)}}</td>
+                    <td>{{fn(item.amount)}}</td>
+                    <td>{{fnPayment(item.payment_type)}}</td>
+                    <td>{{fn(item.payment_number)}}</td>
+                    <td>{{fn(item.receivable_user_name)}}</td>
+                    <td>{{fn(item.remark)}}</td>
+                </tr>
+                {{#  }); }}
+                </tbody>
+            </table>
+        </div>
+        <div style="height:100px"></div>
+        <div class="clear footer" style="border-top:3px solid #000;border-bottom:3px solid #000;padding:10px 0px;overflow: hidden;width: 100%">
+            <div id="bill_template_foot_pic" class="fl" style="width:78%;height:100px;background: #ccc;float: left;">
+                {{#  if(d.bill_template_foot_pic !=null){ }}
+                <!--<img crossorigin='anonymous' src="{{d.bill_template_foot_pic}}" width="100%" height="110px" />-->
+                {{#  } }}
+            </div>
+            <div class="fr footer-right" style="width: 22%;vertical-align: bottom;float: right;">
+                <div><span>Price</span><em>{{fn(d.price)}}</em></div>
+                <div><span>Tax</span><em>{{fn(d.tax)}}</em></div>
+                <div><span>Total</span><em>{{fn(d.total)}}</em></div>
+                <div><span>Paid</span><em>{{fn(d.paid)}}</em></div>
+                {{#  layui.each(d.balance, function(index, item){ }}
+                <div><span>Balance({{fn(item.unit)}})</span><em>{{fn(item.balance_money)}}</em></div>
+                {{#  }); }}
+            </div>
+        </div>
+    </div>
+</script>
+<!--销售收款table-->
+<script id="salesTr" type="text/html">
+    {{#  layui.each(d, function(index, item){ }}
+    <tr class="receivable" data-value="{{item.receivable_info_id}}" data-del="{{item.finance_approve_id}}">
+        <td>{{item.is_finance_approve==1?'审批通过':item.is_finance_approve==2?'审批中':item.is_finance_approve==3?'审批未过':''}}</td>
+        <td>{{fn(item.sn_number)}}</td>
+        <td>{{fn(item.receivable_voucher)}}</td>
+        <td>{{item.voucher_time==''?'':item.voucher_time==null?'':date('Y-m-d',item.voucher_time)}}</td>
+        <td>{{stage(item.payment_stage)}}</td>
+        <td>{{item.payment_currency_name}}</td>
+        <td>{{fn(item.supplier_name)}}</td>
+        <td>{{item.payment_money}}</td>
+        <td>{{fnPayment(item.payment_type)}}</td>
+        <td>{{item.create_user_name}}</td>
+        <td>{{item.receivable_number}}</td>
+        <td>{{item.remark==null?'':item.remark}}</td>
+        {{#  if(item.attachment==''||item.attachment==null){ }}
+        <td></td>
+        {{#  } else { }}
+        <td><a href="{{item.attachment}}">附件</a></td>
+        {{#  } }}
+        <td>
+            {{#  if(item.is_locked==1){ }}
+                <input type="checkbox" lay-skin="primary" disabled checked lay-filter="primarys">
+            {{#  } else { }}
+                <input type="checkbox" lay-skin="primary" disabled lay-filter="primarys">
+            {{#  } }}
+        </td>
+        <td>
+            {{#  if(item.is_finance_approve==1){ }}
+            <button class="layui-btn layui-btn-sm nav-del layui-btn-primary" onclick="lock(this)">{$language_tag.index_public_lock}</button>
+            <button class="layui-btn layui-btn-sm nav-del layui-btn-primary" onclick="delocking(this)">{$language_tag.index_branchcompany_showBranchProductManage_unlock}</button>
+            <button class="layui-btn layui-btn-sm nav-del layui-btn-primary" onclick="email(this)">{$language_tag.index_branchcompany_showBranchProductManage_email}</button>
+            {{# } }}
+            {{#  if(item.is_finance_approve==1){ }}
+            <button class="layui-btn hover-edit layui-btn-sm layui-btn-primary" data-disabled="false" id="buttonPut" onclick="put(this)">{$language_tag.index_public_put}</button>
+            {{# } }}
+            <!--{{#  if(item.is_locked==1){ }}
+                <button class="layui-btn layui-btn-sm nav-del layui-btn-primary" disabled>编辑</button>
+            {{#  } else { }}
+                <button class="layui-btn layui-btn-sm nav-del layui-btn-primary" onclick="addSale(this,'edit')">编辑</button>
+            {{#  } }}-->
+            {{#  if(item.is_finance_approve==3){ }}
+            <button class="layui-btn layui-btn-sm hover-edit layui-btn-primary" onclick="sales_del(this,'sales')">{$language_tag.index_public_del}</button>
+            {{#  } }}
+        </td>
+    </tr>
+    {{#  }); }}
+</script>
+<!--选择对应应收弹窗-->
+<script id="popSaleNumber" type="text/html">
+    <div class="layui-row" style="margin:20px;height: 410px;overflow-y: auto">
+        <table class="layui-table layui-form">
+            <thead>
+            <th><input lay-filter="filterSale" type="checkbox" value='' name="checkbox" id="allNumber"  class='layui-checkbox' lay-skin="primary" ></th>
+            <th>{$language_tag.index_finance_showReceivableManage_receivable_number}</th>
+            <th>{$language_tag.index_branchcompany_showBranchProductManage_productName}</th>
+            <th>{$language_tag.index_branchcompany_showBranchProductManage_visitorNumber}</th>
+            <th>{$language_tag.index_finance_showReceivableManage_receivable_money}</th>
+            </thead>
+            <tbody id="popSaleTr">
+            {{#  layui.each(d, function(index, item){ }}
+            <tr>
+                <td data-number="{{item.receivable_number}}" data-currency="{{item.unit}}"><input type="checkbox" lay-filter="saleList" value='' name="checkbox"  lay-skin="primary" ></td>
+                <td class="receivable_number">{{item.receivable_number}}</td>
+                <td>{{item.product_name}}</td>
+                <td>{{user(item.customer_info)}}</td>
+                <td class="money" sales="{{curey(item.currency_name)}}" money="{{item.receivable_money-item.true_receipt}}">{{item.currency_unit}}{{item.receivable_money-item.true_receipt}}</td>
+            </tr>
+            {{#  }); }}
+            </tbody>
+        </table>
+    </div>
+    <br>
+    <div class="all-button-center visitorBottom">
+        <a class="layui-btn nav-submit" lay-submit="" onclick="numberOk()">{$language_tag.index_public_ok}</a>
+        <button type="button" class="layui-btn layui-btn-primary" onclick="popBack()">{$language_tag.index_public_back}</button>
+    </div>
+</script>
+<!--财务收款table-->
+<script type="text/html" id="financialTbody">
+    {{#  layui.each(d, function(index, item){ }}
+    {{#  if(item.indexs==1){ }}
+        <tr data-receivable="{{item.receivable_info_id}}">
+            <td rowspan="{{item.children.length+1}}">{{isNull(item.sn_number)}}</td>
+            <td rowspan="{{item.children.length+1}}">{{stage(item.payment_stage)}}</td>
+            <td rowspan="{{item.children.length+1}}">{{isNull(item.payment_currency_name)}}</td>
+            <td rowspan="{{item.children.length+1}}">{{isNull(item.supplier_name)}}</td>
+            <td rowspan="{{item.children.length+1}}">{{maxprice(item.payment_money,item.children)}}</td>
+            <td rowspan="{{item.children.length+1}}">{{fnPayment(item.payment_type)}}</td>
+            <td rowspan="{{item.children.length+1}}">{{isNull(item.payment_number)}}</td>
+            <td rowspan="{{item.children.length+1}}">{{isNull(item.create_user_name)}}</td>
+            <td>
+                {{#  if(item.pts==1){ }}
+                    <input type="checkbox" lay-skin="primary" checked lay-filter="pts" />
+                {{#  } else { }}
+                    <input type="checkbox" lay-skin="primary" lay-filter="pts" />
+                {{#  } }}
+            </td>
+            <td>
+                {{#  if(item.is_locked==1){ }}
+                    <input type="checkbox" lay-skin="primary" checked lay-filter="paid" />
+                {{#  } else { }}
+                    <input type="checkbox" lay-skin="primary" lay-filter="paid" />
+                {{#  } }}
+            </td>
+            <td rowspan="{{item.children.length+1}}">{{isNull(item.exg_rate_gain)}}</td>
+            <td rowspan="{{item.children.length+1}}">{{item.payment_time!=null?date('Y-m-d',item.payment_time):''}}</td>
+            <td rowspan="{{item.children.length+1}}">{{isNull(item.remark)}}</td>
+            <td rowspan="{{item.children.length+1}}">{{isNull(item.account_number)}}</td>
+            <td>{{item.receivable_number}}</td>
+            <td>-
+                <!--<button class="layui-btn layui-btn-sm hover-edit layui-btn-primary" onclick="financialAdd(this,'edit')">{$language_tag.index_public_update}</button>
+                <button class="layui-btn layui-btn-sm nav-del layui-btn-primary" data-infoId="{{item.receivable_info_id}}" onclick="financial_del(this,'receivable')">{$language_tag.index_public_del}</button>-->
+            </td>
+        </tr>
+    {{#  if(item.children.length>0){ }}
+    {{#  layui.each(item.children, function(indexs, items){ }}
+    <tr data-receivable="{{items.receivable_info_id}}">
+        <td>
+            {{#  if(items.pts==1){ }}
+            <input type="checkbox" lay-skin="primary" checked lay-filter="pts" />
+            {{#  } else { }}
+            <input type="checkbox" lay-skin="primary" lay-filter="pts" />
+            {{#  } }}
+        </td>
+        <td>
+            {{#  if(items.is_locked==1){ }}
+            <input type="checkbox" lay-skin="primary" checked lay-filter="paid" />
+            {{#  } else { }}
+            <input type="checkbox" lay-skin="primary" lay-filter="paid" />
+            {{#  } }}
+        </td>
+        <td>{{items.receivable_number}}</td>
+        <td>-
+            <!--<button class="layui-btn layui-btn-sm hover-edit layui-btn-primary" onclick="financialAdd(this,'edit')">{$language_tag.index_public_update}</button>
+            <button class="layui-btn layui-btn-sm nav-del layui-btn-primary" data-infoId="{{items.receivable_info_id}}" onclick="financial_del(this,'receivable')">{$language_tag.index_public_del}</button>-->
+        </td>
+    </tr>
+    {{#  }); }}
+    {{#  } }}
+    {{#  } }}
+    {{#  }); }}
+</script>
+<!--添加销售收款弹窗-->
+<script id="addFinancial" type="text/html">
+    <form class="layui-form" style="margin-right:70px;">
+        <br>
+        <div class="layui-row">
+            <div class="layui-col-md6">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">SN：</label>
+                    <div class="layui-input-block">
+                        <input type="text" id="SN" name="SN" placeholder="" class="layui-input">
+                    </div>
+                </div>
+            </div>
+            <div class="layui-col-md6">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">{$language_tag.index_branchcompany_showCompanyOrderManage_addEdit_timeOfPayment}：</label>
+                    <div class="layui-input-block">
+                        <input type="text" id="financialTime" name="saleTime" placeholder="Y-m-d" class="layui-input sales-date">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="layui-row">
+            <div class="layui-col-md6">
+                <div class="layui-form-item">
+                    <label class="layui-form-label input-required">{$language_tag.index_branchcompany_showCompanyOrderManage_paymentType}：</label>
+                    <div class="layui-input-block">
+                        <select name="saleStage" id="financialType" lay-verify="required">
+                            <option value="">{$language_tag.index_public_select}</option>
+                            <option value="1">Balance</option>
+                            <option value="2">Deposit</option>
+                            <option value="3">Fullpmt</option>
+                            <option value="4">Gratuities</option>
+                            <option value="5">Insurance</option>
+                            <option value="6">Partpmt</option>
+                            <option value="7">Rebate</option>
+                            <option value="8">Tkt</option>
+                            <option value="9">Visa</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-col-md6">
+                <div class="layui-form-item">
+                    <label class="layui-form-label input-required">{$language_tag.index_branchcompany_showCompanyOrderManage_addEdit_payment}：</label>
+                    <div class="layui-input-block">
+                        <select name="saleMode" id="financialPayment" lay-verify="required">
+                            <option value="">{$language_tag.index_public_select}</option>
+                            <option value="1">cash</option>
+                            <option value="2">check</option>
+                            <option value="3">debit card</option>
+                            <option value="4">credit card(mc)</option>
+                            <option value="5">credit card(vs)</option>
+                            <option value="6">credit card(ax)</option>
+                            <option value="7">direct depsit</option>
+                            <option value="8">others</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="layui-row">
+            <div class="layui-col-md6">
+                <div class="layui-form-item">
+                    <label class="layui-form-label input-required">AccountNumber：</label>
+                    <div class="layui-input-block">
+                        <input type="text" id="accountNumber" name="accountNumber" placeholder="" class="layui-input">
+                    </div>
+                </div>
+            </div>
+            <div class="layui-col-md6">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">{$language_tag.index_finance_showMustpayAllManage_payment_type_number}：</label>
+                    <div class="layui-input-block">
+                        <input type="text" id="payNumber" name="payNumber" placeholder="" class="layui-input">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="layui-row">
+            <div class="layui-col-md6">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">{$language_tag.index_public_supplier}：</label>
+                    <div class="layui-input-block">
+                        <select name="fSupplierId" id="supplier" lay-search="" lay-filter="fSupplierId">
+                            <option value="">{$language_tag.index_public_select}</option>
+
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-col-md6">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">{$language_tag.index_branchcompany_showCompanyOrderManage_money}：</label>
+                    <div class="layui-input-block">
+                        <input type="text" id="amount" name="amount" placeholder="" class="layui-input">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="layui-row">
+            <div class="layui-col-md6">
+                <div class="layui-form-item">
+                    <label class="layui-form-label input-required">{$language_tag.index_branchcompany_showCompanyOrderManage_corresponding_receivableNumber}：</label>
+                    <div class="layui-input-block">
+                        <textarea id="financialNumber" name="saleNumber" lay-verify="required" placeholder="" class="layui-input"></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-col-md6">
+                <div class="layui-form-item">
+                    <label class="layui-form-label input-required">{$language_tag.index_branchcompany_showCompanyOrderManage_exchange}：</label>
+                    <div class="layui-input-block">
+                        <input type="text" id="huidui" name="huidui" placeholder="" class="layui-input">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="layui-row">
+            <div class="layui-col-md12">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">{$language_tag.index_public_mark}：</label>
+                    <div class="layui-input-block">
+                        <textarea name="remark" class="layui-textarea" id="financialRemark"></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br>
+        <input type="hidden" id="financialRMB">
+        <input type="hidden" id="financialZum">
+        <div class="all-button-center">
+            <a class="layui-btn nav-submit" lay-submit="" id="financialOk" onclick="addFinancial(this)">{$language_tag.index_public_ok}</a>
+            <button type="button" class="layui-btn layui-btn-primary" onclick="popBack()">{$language_tag.index_public_back}</button>
+        </div>
+    </form>
+</script>
+
+<!--留言板表格tr-->
+<script type="text/html" id="message_tr">
+    {{#  layui.each(d, function(index, item){ }}
+    <tr>
+        <td>{{item.comment}}</td>
+        <td>{{item.create_time==null?'':date('Y-m-d',item.create_time)}}</td>
+        <td>{{item.username}}</td>
+    </tr>
+    {{#  }); }}
+</script>
+<!--添加留言板-->
+<script type="text/html" id="addMessage">
+    <form class="layui-form addMessage-form">
+        <div class="layui-row">
+            <textarea class="layui-textarea" id="message_content" placeholder="请留言"></textarea>
+        </div>
+        <div class="layui-row buttonPost">
+            <a class="layui-btn nav-submit" onclick="addMessageA()">Post Message</a>
+        </div>
+    </form>
+</script>
+<!--附件表格-->
+<script type="text/html" id="attachment">
+    {{#  layui.each(d, function(index, item){ }}
+    <tr>
+        <td>{{item.files==undefined?'':item.files}}</td>
+        <td>{{item.create_time==null?'':date('Y-m-d',item.create_time)}}</td>
+        <td>{{item.username==undefined?'':item.username}}</td>
+        <td>
+            <a class="layui-btn attachment">{$language_tag.index_source_showVisaSourceManage_upload}</a>
+            <a id="download_attachment" href="{{item.url==undefined?'':item.url}}" target="_blank" class="layui-btn layui-btn-danger">{$language_tag.index_source_showVisaSourceManage_download}</a>
+            <input type="hidden" name="file_url" id="uploadVisa_attachment" />
+            <a class="layui-btn nav-del" data-ids="{{item.company_order_annex_id}}" onclick="delSttachment(this)">{$language_tag.index_public_del}</a>
+        </td>
+    </tr>
+    {{#  }); }}
+</script>
+
+<script>
+
+    var hotel = '{$language_tag.index_finance_showReceivableManage_hotel}';
+    var dining = '{$language_tag.index_finance_showReceivableManage_dining}';
+    var flight = '{$language_tag.index_finance_showReceivableManage_flight}';
+    var cruise = '{$language_tag.index_finance_showReceivableManage_cruise}';
+    var visa = '{$language_tag.index_finance_showReceivableManage_visa}';
+    var scenic_spot = '{$language_tag.index_finance_showReceivableManage_scenic_spot}';
+    var vehicle = '{$language_tag.index_finance_showReceivableManage_vehicle}';
+    var tourguide = '{$language_tag.index_finance_showReceivableManage_tourguide}';
+    var singlesource = '{$language_tag.index_finance_showReceivableManage_singlesource}';
+    var ownexpense = "{$language_tag.index_finance_showReceivableManage_ownexpense}";
+    var other = '{$language_tag.index_finance_showReceivableManage_other}';
+
+</script>
+
+{include file='public/foot_js' /}
+<script type="text/javascript" src="__STATIC__/javascript/data.js"></script>
+<script type="text/javascript" src="__STATIC__/javascript/booking/company_order_manage.js"></script>
+<script type="text/javascript" src="__STATIC__/javascript/booking/html2canvas.js"></script>
+<script type="text/javascript" src="__STATIC__/javascript/booking/jsPdf.debug.js"></script>
+<script>
+    layui.use(['laydate','element','form'], function(){
+        var laydate = layui.laydate;
+        var element = layui.element;
+        var formSelects = layui.formSelects;
+
+        lay('.sales-date').each(function(){
+            laydate.render({
+                elem: this
+                ,trigger: 'click'
+                ,done: function(value, date){
+                    console.log(date)
+                }
+            });
+        });
+
+    });
+
+
+
+
+    function OperationsListAjax(){
+        layer.load(2);
+        $.post('/operations/OperationsListAjax',{company_order_number:(window.location.search).split("=")[1]},function(a){
+            $('.operations').html(a);
+            //拖拽上传
+            $('.upload').each(function(){
+                upload.render({
+                    elem: this
+                    ,url: '/operations/upload_operations_attachments/?company_order_operations_id='+$(this).data('info')+'&company_order_id='+$('#ii-company_order_id').val()
+                    ,accept: 'file'
+                    ,before: function(obj){ //obj参数包含的信息，跟 choose回调完全一致，可参见上文。
+                        layer.load(2); //上传loading
+                    }
+                    ,error: function(res){
+                        //请求异常回调
+                        console.log(res);
+                        layer.closeAll('loading'); //关闭loading
+                    }
+                    ,done: function(res){
+                        console.log(res);
+                        layer.closeAll('loading'); //关闭loading
+                        if(res.code == 200){
+                            var h = '<div><a href="'+res.data+'" target="_blank">'+res.image_name+'</a>&nbsp;<a class="layui-btn layui-btn-xs layui-btn-primary del-attachments" data-info="'+res.company_order_operations_attachments_id.data+'">{$language_tag.index_public_del}</a></div>';
+                            $('#upload-'+res.get.company_order_operations_id).append(h);
+                            del_company_order_operations_attachments(); //附件删除
+                        }
+                    }
+                });
+            });
+
+            del_company_order_operations_attachments(); //附件删除
+            up_email_template_id(); //修改待办邮件模板
+            operations_remark(); //待办备注
+            upRemindTo(); //修改订单提醒谁
+            upStatus(); //修改订单状态
+            ToDoTypeSwitching(); //待办类型切换
+            dispatchOperationsEmail(); //待办邮件发送
+
+            form.render();
+            layer.closeAll('loading');
+        });
+    }
+
+    //待办类型切换
+    function ToDoTypeSwitching(){
+        form.on('radio(radio-operations_type)',function(data){
+            var operations_type_id = data.value;
+            $.post('/operations/upCompanyOrderOperationsTypeId?company_order_number={$_GET["company_order_number"]}',{operations_type_id:operations_type_id},function(a){
+                OperationsListAjax();
+            });
+
+
+        });
+    }
+
+
+    var d_attachments;
+    //附件删除
+    function del_company_order_operations_attachments(){
+        $('.del-attachments').on('click',function(){
+            layer.load(2);
+            var company_order_operations_attachments_id = $(this).data('info');
+            d_attachments  = $(this);
+            $.post('/operations/delCompanyOrderOperationsAttachmentsAjax',{company_order_operations_attachments_id:company_order_operations_attachments_id},function(a){
+                d_attachments.parent().remove();
+                layer.closeAll('loading');
+            });
+            form.render();
+
+        });
+    }
+
+    //修改待办邮件模板
+    function up_email_template_id(){
+        form.on('select(operations-email_template_id)', function(data){
+            console.log(data);
+            var company_order_operations_id = $(data.elem).data('info');
+            var v = data.value;
+            layer.load(2);
+            $.post('/operations/upEmailTemplateIdAjax',{company_order_operations_id:company_order_operations_id,email_template_id:v},function(a){
+                layer.closeAll('loading');
+            });
+
+        });
+    }
+
+    //待办备注
+    function operations_remark(){
+        $('.operations-remark').on('blur',function(){
+            var remark = $(this).val();
+            var company_order_operations_id = $(this).data('info');
+            layer.load(2);
+            $.post('/operations/upRemarkAjax',{company_order_operations_id:company_order_operations_id,remark:remark},function(a){
+                layer.closeAll('loading');
+            });
+
+        });
+    }
+
+
+    //修改订单提醒谁
+    function upRemindTo(){
+        form.on('select(operations-user_id)', function (data) {
+            var remind_to = data.value;
+            var company_order_operations_id = $(data.elem).data('info');
+            layer.load(2);
+            $.post('/operations/upRemindTo',{company_order_operations_id:company_order_operations_id,remind_to:remind_to},function(a){
+                layer.closeAll('loading');
+            });
+
+        });
+    }
+
+    //修改新单待办状态
+    function upStatus(){
+        form.on('checkbox(company_order_operations_status)', function(data){
+            var s = 1;
+            if(data.elem.checked){
+                var s = 2;
+            }
+            var company_order_operations_id = data.value;
+            $.post('/operations/upStatus',{company_order_operations_id:company_order_operations_id,status:s},function(a){
+                layer.closeAll('loading');
+            });
+
+        });
+    }
+
+    //待办邮件发送
+    function dispatchOperationsEmail(){
+        $('.dispatch-operationsEmail').on('click',function(){
+            var company_order_operations_id = $(this).data('info');
+            layer.open({
+                title: '发送邮件'
+                ,type: 2
+                ,content: '/operations/dispatchOperationsEmail?company_order_operations_id='+company_order_operations_id+'&company_order_number={$_GET["company_order_number"]}'
+                ,area: ['800px', '500px']
+            });
+        });
+
+    }
+    
+    function email(obj) {
+        layer.open({
+            title: '发送邮件'
+            ,type: 2
+            ,content: '/operations/dispatchOperationsEmail?find=find'
+            ,area: ['800px', '500px']
+        });
+    }
+
+    //关闭发送邮件窗口
+    function close_emali(){
+        layer.closeAll();
+    }
+
+
+</script>
+
+</body>
+</html>

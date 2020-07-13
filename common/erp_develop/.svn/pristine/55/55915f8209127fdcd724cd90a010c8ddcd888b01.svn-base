@@ -1,0 +1,172 @@
+/****************** My Info *********************/
+#myinfo_div {
+	width: 1180px;
+}
+#myinfo_table {
+	margin-left:5px;
+    margin-bottom: 20px;
+    margin-top: -20px;
+	margin-right:auto;
+    font-size: 12px;
+    /*background-color: #f3f1ee;*/
+    color: #807370;
+    padding: 10px 20px 10px 20px;
+    /*border: 1px solid #e2dfda;*/
+    -moz-border-radius-bottomright: 3px;
+    border-bottom-right-radius: 3px;
+    -moz-border-radius-bottomleft: 3px;
+    border-bottom-left-radius: 3px;
+    -moz-border-radius-topright: 3px;
+    border-top-right-radius: 3px;
+    -moz-border-radius-topleft: 3px;
+    border-top-left-radius: 3px;
+	font-weight:200;
+}
+#myinfo_table tr th{
+    color: #382f2d;
+    text-align: left;
+    padding: 5px 0 10px 0; 
+}
+#myinfo_table tr td{
+  	/*border-collapse:collapse;*/
+	
+	
+}
+#myinfo_table tr td:first-child {
+    width: 200px;
+}
+#myinfo_table input[type="text"] {
+	font-size:14px;
+    margin-left: 5px;
+    padding: 5px;
+	height: 20px;
+    width: 380px;
+    border: 1px solid #e1deda;
+    background-color: #edeae6;
+    -moz-border-radius-bottomright: 2px;
+    border-bottom-right-radius: 2px;
+    -moz-border-radius-bottomleft: 2px;
+    border-bottom-left-radius: 2px;
+    -moz-border-radius-topright: 2px;
+    border-top-right-radius: 2px;
+    -moz-border-radius-topleft: 2px;
+    border-top-left-radius: 2px;
+}
+
+/*#myinfo_div input[type=image] {
+    display: block;
+    background-image: url(http://localhost/ci.booknexus.com.au/assets/images/update_btn_100p1.png);
+    background-repeat: no-repeat;
+    background-position: 20% 10%;
+    width: 120px;
+    height: 36px;
+    font-size:0px;
+    border: 0px solid #e1deda;
+     
+}
+
+#myinfo_div input[type=image]:hover,
+#myinfo_div input[type=image]:active,
+#myinfo_div input[type=image]:focus {
+    display: block;
+    background-image: url(http://localhost/ci.booknexus.com.au/assets/images/update_btn_100p2.png);
+}​
+#myinfo_div input[type=text]:hover,
+#myinfo_div input[type=text]:active,
+#myinfo_div input[type=text]:focus {
+    background-color: #fff;
+    color: #807370;
+}*/
+#myinfo_div input[type=image] {
+    display: block;
+    background-image: url(http://localhost/ci.booknexus.com.au/assets/images/submit_btn_100p1.png);
+    background-repeat: no-repeat;
+    background-position: 20% 10%;
+    width: 120px;
+    height: 36px;
+    font-size:0px;
+    border: 0px solid #e1deda;
+     
+}
+
+#myinfo_div input[type=image]:hover,
+#myinfo_div input[type=image]:active,
+#myinfo_div input[type=image]:focus {
+    display: block;
+    background-image: url(http://localhost/ci.booknexus.com.au/assets/images/submit_btn_100p2.png);
+}​
+#myinfo_div input[type=text]:hover,
+#myinfo_div input[type=text]:active,
+#myinfo_div input[type=text]:focus {
+    background-color: #fff;
+    color: #807370;
+}
+
+
+
+#myinfo_table select.myinfo_select {
+	background-color: #edeae6;
+	border: 1px solid #e1deda;
+	height: 30px;
+    width: 392px;
+    padding: 5px 2px 5px 2px;
+    margin-left:5px;
+}
+#myinfo_table select.myinfo_select:focus {
+	background-color: #fff;
+}
+
+#myinfo_div em {
+    color: red;
+}
+#myinfo_div .top_text {
+	margin-left: 255px;
+}
+
+#myinfo_div .error {
+	/*border-radius: 5px;
+    border: 2px solid #ffd3c3;
+    background: #fef6f3;*/
+    /*color: #005702;*/
+	color: #fff;
+	/*background-color: #d64b45; */
+	font-size: 16px;
+	padding: 5px;
+	border: 1px solid #b0352f;
+	font-weight: bold;
+    -moz-border-radius-bottomright: 3px;
+    border-bottom-right-radius: 3px;
+    -moz-border-radius-bottomleft: 3px;
+    border-bottom-left-radius: 3px;
+    -moz-border-radius-topright: 3px;
+    border-top-right-radius: 3px;
+    -moz-border-radius-topleft: 3px;
+    border-top-left-radius: 3px;
+	
+}
+#myinfo_div .success {
+	/*color: #005702;*/
+	color: #fff;
+	background-color: #5db75d; 
+	font-size: 16px;
+	padding: 5px;
+	border: 1px solid #4e974e;
+	font-weight: bold;
+    -moz-border-radius-bottomright: 3px;
+    border-bottom-right-radius: 3px;
+    -moz-border-radius-bottomleft: 3px;
+    border-bottom-left-radius: 3px;
+    -moz-border-radius-topright: 3px;
+    border-top-right-radius: 3px;
+    -moz-border-radius-topleft: 3px;
+    border-top-left-radius: 3px;
+}
+
+
+#myinfo_div input.needsfilled {
+    color: red;
+}
+#myinfo_div div.no_display {
+    display: none;
+}
+

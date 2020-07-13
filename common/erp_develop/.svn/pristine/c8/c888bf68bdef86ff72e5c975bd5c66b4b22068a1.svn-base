@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {include file='public/head' /}
+    <title>修改旅游产品分类</title>
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+
+    <div class="layui-header">
+        {include file='public/header' /}
+    </div>
+
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll">
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            {include file='public/left_menu_web' /}
+        </div>
+    </div>
+
+    <div class="layui-body">
+
+        <!-- 内容主体区域 -->
+        <div style="padding: 15px;">
+            <div class='layui-form-item'>
+		   		<span class="layui-breadcrumb" lay-separator="-">
+                    <a>首页</a>
+                    <a>旅游产品</a>
+                    <a>旅游产品分类</a>
+                    <a><cite>修改旅游产品分类</cite></a>
+				</span>
+            </div>
+
+            <br/>
+            <br/>
+            <br/>
+            <form class="layui-form" id="form1" onSubmit="return edit()">
+                <input type="hidden" value="{$type_info.ota_product_type_id}" name="id">
+                <input type="hidden" value="{$type_info.uuid}" name="uuid">
+                <div class="layui-row layui-col-space10">
+                    <div class="layui-col-md10">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label input-required">产品分类:</label>
+                            <div class="layui-input-block layui-form">
+                                <input class="layui-input" type="text" value="{$type_info.type_name}" name="type_name"  lay-verify="required"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-col-md10">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">所属上级:</label>
+                            <div class="layui-input-block layui-form">
+                                <select name="pid" class="layui-select" >
+                                    <option value="0">请选择</option>
+
+                                    {foreach $type_list as $v}
+                                    <option value={$v.ota_product_type_id}{if condition="$type_info.pid eq $v.ota_product_type_id"} selected='selected' {/if}><?= str_repeat('----------', $v['level']).$v['type_name']?></option>
+                                    {/foreach}
+
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-col-md10">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label input-required">状态:</label>
+                            <div class="layui-input-block layui-form">
+                                <select name="status" class="layui-select" >
+                                    <option value="1" {if condition="$type_info.status eq 1"}selected='selected' {/if}>{$language_tag.index_public_show}</option>
+                                    <option value="0" {if condition="$type_info.status eq 0"}selected='selected' {/if}>{$language_tag.index_public_disabled}</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="layui-col-md10">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label input-required">样式:</label>
+                            <div class="layui-input-block layui-form">
+                                <select name="" class="layui-select" >
+                                    <option value="1">默认</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-col-md10">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">目的地:</label>
+                            <div class="layui-input-block layui-form">
+                                <div class="destinationList" style="display: inline-block;">
+                                    {foreach $destination as $v}
+                                    <span style="border: 1px solid #ccc; border-radius: 15px; padding: 3px 6px; display: inline-block; margin-top: 5px;">{$v.destination_name}<i class="layui-icon layui-icon-close"></i>
+                                <input type="hidden" name="destination_uuid[]" value="{$v.uuid}">
+                                </span>
+                                    {/foreach}
+                                </div>
+
+                                <span style="border: 1px solid #ccc; border-radius: 15px; padding: 3px 6px; display: inline-block; margin-top: 5px;"><i class="layui-icon layui-icon-add-1 destination_add"></i>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="layui-col-md10">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">景点:</label>
+                            <div class="layui-input-block layui-form">
+                                <div class="scenicSpotList" style="display: inline-block;">
+                                    {foreach $scenic_spot as $v1}
+                                    <span class="tag" style="border: 1px solid #ccc; border-radius: 15px; padding: 3px 6px; display: inline-block; margin-top: 5px;">{$v1.scenic_spot_name}<i class="layui-icon layui-icon-close"></i>
+                                <input type="hidden" name="scenic_spot_uuid[]" value="{$v1.uuid}">
+                                </span>
+                                    {/foreach}
+                                </div>
+                                <span style="border: 1px solid #ccc; border-radius: 15px; padding: 3px 6px; display: inline-block; margin-top: 5px;"><i class="layui-icon layui-icon-add-1 scenic_spot_add"></i>
+                                </span>
+                            </div>
+
+                        </div>
+                    </div>
+
+
+                    <div class="layui-col-md10">
+                        <div class="layui-input-block all-button-center">
+                            <button class="layui-btn nav-submit" lay-submit="" lay-filter="formDemo" id="addBut">提交</button>
+                            <a href="/ota_product/types?status=1"><button type="button" class="layui-btn layui-btn-primary">取消</button></a>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+    <div class="layui-footer">
+        <!-- 底部固定区域 -->
+        © layui.com - 底部固定区域
+    </div>
+</div>
+{include file='public/foot_js' /}
+
+
+<script>
+
+    !function() {
+        var layer = layui.layer;
+        var form = layui.form;
+        var laydate = layui.laydate;
+
+
+
+    }();
+    var destination = '';
+
+    function edit() {
+        layer.load(2);
+        $.ajax({
+            type: "POST",
+            url: '/ota_product/editTypeAjax',
+            data: $('#form1').serializeArray(),
+            success: function (data) {
+                layer.closeAll();
+                if(data.code!=200){
+                    layer.msg(data.msg)
+                    return false;
+                }else if(data.code==200){
+                    layer.msg('{$language_tag.index_public_success}',{time:1,end : function(layero, index){
+                        history.back(-1);
+                    }
+                    });
+                }
+            },
+            error:function(XMLHttpRequest, textStatus, errorThrown){
+                layer.closeAll();
+                //console.log(errorThrown)
+                layer.msg('{$language_tag.index_public_verificationFailure}')
+
+            }
+        });
+        return false;
+    }
+
+    $('.layui-icon-close').on('click', function () {
+        var self = this;
+        $(self).parent().remove();
+    });
+
+    $('.destination_add').click(function () {
+        layer.prompt(function(val, index){
+            var text = '<span style="border: 1px solid #ccc; border-radius: 15px; padding: 3px 6px; display: inline-block; margin-top: 5px;">'+ val +'<i class="layui-icon layui-icon-close"></i></span><input type="hidden" name="destination[]" value="'+ val +'">';
+            $('.destinationList').append(text);
+            layer.close(index);
+        });
+    });
+
+    $('.scenic_spot_add').click(function () {
+        layer.prompt(function(val, index){
+            var text = '<span style="border: 1px solid #ccc; border-radius: 15px; padding: 3px 6px; display: inline-block; margin-top: 5px;">'+ val +'<i class="layui-icon layui-icon-close"></i></span><input type="hidden" name="scenic_spot[]" value="'+ val +'">';
+            $('.scenicSpotList').append(text);
+            layer.close(index);
+        });
+    });
+
+
+
+</script>
+
+
+</body>
+</html>
+
